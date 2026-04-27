@@ -12,17 +12,21 @@ import { buildCreatureFilterParams, defaultCreatureFilters, parseCreatureFilterP
 import { filterCreatures, getUniqueAttributes, getUniqueObtainMethods } from "@/lib/creature-query";
 import type { AvailabilityStatus, Creature, CreatureAttribute, CreatureFilters } from "@/types/creature";
 
+const PAGE_SIZE = 48;
+
 export function CreatureExplorer() {
   const searchParams = useSearchParams();
   const initialFilters = useMemo(() => parseCreatureFilterParams(new URLSearchParams(searchParams.toString())), [searchParams]);
   const [creatures, setCreatures] = useState<Creature[]>([]);
   const [filters, setFilters] = useState<CreatureFilters>({ ...defaultCreatureFilters, ...initialFilters });
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const pathname = usePathname();
   const router = useRouter();
 
   const attributes = useMemo(() => getUniqueAttributes(creatures), [creatures]);
   const obtainMethods = useMemo(() => getUniqueObtainMethods(creatures), [creatures]);
   const results = useMemo(() => filterCreatures(creatures, filters), [creatures, filters]);
+  const visibleResults = results.slice(0, visibleCount);
   const activeFilters = getActiveCreatureFilters(filters);
 
   const initialRender = useRef(true);
@@ -59,6 +63,7 @@ export function CreatureExplorer() {
   };
 
   const updateFilter = <K extends keyof CreatureFilters>(key: K, value: CreatureFilters[K]) => {
+    setVisibleCount(PAGE_SIZE);
     setFilters((current) => ({ ...current, [key]: value }));
   };
 
@@ -159,16 +164,25 @@ export function CreatureExplorer() {
 
       <div className="flex items-center justify-between gap-3">
         <p className="text-sm text-slate-600">
-          当前显示 <span className="font-semibold text-slate-950">{results.length}</span> / {creatures.length} 只精灵
+          当前显示 <span className="font-semibold text-slate-950">{visibleResults.length}</span> / {results.length} 只精灵
         </p>
       </div>
 
       {results.length > 0 ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {results.map((creature) => (
-            <CreatureCard key={creature.id} creature={creature} />
-          ))}
-        </div>
+        <>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {visibleResults.map((creature) => (
+              <CreatureCard key={creature.id} creature={creature} />
+            ))}
+          </div>
+          {visibleResults.length < results.length ? (
+            <div className="flex justify-center">
+              <Button type="button" variant="secondary" onClick={() => setVisibleCount((current) => current + PAGE_SIZE)}>
+                加载更多
+              </Button>
+            </div>
+          ) : null}
+        </>
       ) : (
         <div className="rounded-lg border border-dashed border-slate-300 bg-white p-10 text-center text-slate-600">
           <p className="font-semibold text-slate-800">没有找到匹配的精灵</p>
