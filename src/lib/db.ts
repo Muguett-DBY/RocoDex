@@ -2,13 +2,11 @@ import { Redis } from "@upstash/redis";
 import fs from "node:fs";
 import path from "node:path";
 
-// Use Upstash Redis in production, JSON file in development
-const useRedis = !!(process.env.UPSTASH_REDIS_URL && process.env.UPSTASH_REDIS_TOKEN);
+const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_URL;
+const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_TOKEN;
+const useRedis = !!(redisUrl && redisToken);
 
-const redis = useRedis ? new Redis({
-  url: process.env.UPSTASH_REDIS_URL!,
-  token: process.env.UPSTASH_REDIS_TOKEN!,
-}) : null;
+const redis = useRedis ? new Redis({ url: redisUrl!, token: redisToken! }) : null;
 
 // Local fallback storage
 const DATA_DIR = path.join(process.cwd(), "data");
