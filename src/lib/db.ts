@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR = path.join(process.env.VERCEL ? "/tmp" : process.cwd(), "data");
 const USERS_FILE = path.join(DATA_DIR, "users.json");
 
 export interface User {
