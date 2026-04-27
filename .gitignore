@@ -56,3 +56,11 @@ next-env.d.ts
 /debug_template.txt
 /field_names.txt
 /merge_preview.json
+
+# vercel
+.vercel
+
+# database
+/data/
+
+/src/generated/prisma
