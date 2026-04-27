@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { BookOpen, Database, GitCompare, Info, LogIn, LogOut, ScrollText, Search, Shield, Sparkles, Swords, UserPlus, User } from "lucide-react";
+import { BookOpen, Database, GitCompare, Info, LogIn, LogOut, ScrollText, Search, Shield, Sparkles, Swords, UserPlus, User, Brain } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useSession, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
@@ -14,6 +14,7 @@ const navItems = [
   { href: "/skills", label: "技能", icon: Search },
   { href: "/compare", label: "对比", icon: GitCompare },
   { href: "/discover", label: "发现", icon: Sparkles },
+  { href: "/rkti", label: "洛克测试", icon: Brain },
   { href: "/data-status", label: "数据状态", icon: Database },
   { href: "/about", label: "关于", icon: Info },
 ];
