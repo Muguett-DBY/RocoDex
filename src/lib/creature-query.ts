@@ -1,6 +1,5 @@
 import type { Creature, CreatureAttribute, CreatureFilters, DataGap } from "@/types/creature";
-
-const normalize = (value: string) => value.trim().toLocaleLowerCase("zh-Hans-CN");
+import { normalize } from "@/lib/utils";
 
 const tristateMatches = (value: Creature["isCatchable"], filter?: CreatureFilters["isCatchable"]) => {
   if (!filter || filter === "all") return true;

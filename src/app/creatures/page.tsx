@@ -13,7 +13,7 @@ export default function CreaturesPage() {
             <Badge tone="blue" className="w-fit">
               精灵列表
             </Badge>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-950">前 50 只精灵</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-950">全 347 只精灵</h1>
             <p className="max-w-3xl text-sm leading-6 text-slate-600">
               支持按中文名称、编号、捕捉地点、获得方式关键词搜索，并可按属性、捕捉状态、活动限定和绝版状态筛选。
             </p>

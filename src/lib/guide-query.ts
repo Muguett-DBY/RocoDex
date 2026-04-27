@@ -1,11 +1,10 @@
 import type { CreatureAttribute } from "@/types/creature";
 import type { GuideConfidence, GuideCreatureBuild, GuideFilters, GuideMode, GuideStats, GuideTier } from "@/types/guide";
+import { normalize } from "@/lib/utils";
 
 export const guideTierOrder: GuideTier[] = ["S", "A", "B", "C", "D", "未评级"];
 
 const confidenceOrder: GuideConfidence[] = ["confirmed", "partial", "analysis", "unknown"];
-
-const normalize = (value: string) => value.trim().toLocaleLowerCase("zh-Hans-CN");
 
 const tierForMode = (build: GuideCreatureBuild, mode: GuideMode) => (mode === "pvp" ? build.pvpTier : build.pveTier);
 

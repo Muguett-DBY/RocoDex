@@ -25,17 +25,18 @@ describe("creature seed data", () => {
   });
 
   it("records per-creature source pages and upgrades verified facts without guessing", () => {
-    const meow = creatures.find((creature) => creature.id === "002");
-    const spark = creatures.find((creature) => creature.id === "005");
+    const dimo = creatures.find((creature) => creature.id === "001");
+    const mao = creatures.find((creature) => creature.id === "032");
+    const water = creatures.find((creature) => creature.id === "008");
 
     expect(creatures.every((creature) => creature.sources.some((source) => source.kind === "creature-page"))).toBe(true);
     expect(creatures.every((creature) => creature.updatedAt)).toBe(true);
-    expect(meow?.captureLocations).toContain("风息山口");
-    expect(meow?.description).toContain("喜欢阳光");
-    expect(spark?.captureLocations).toContain("岚语峰西侧");
-    expect(spark?.evolutionMethods).toEqual(["16 级进化为焰火；36 级进化为火神"]);
-    expect(creatures.find((creature) => creature.id === "010")?.skills.map((skill) => skill.name)).toEqual(
-      expect.arrayContaining(["防御", "拍击", "甩水"]),
+    expect(mao?.captureLocations).toContain("常见于果树下");
+    expect(mao?.description).toContain("触角");
+    expect(water?.captureLocations).toContain("岚语峰西侧");
+    expect(water?.evolutionMethods).toEqual(["16 级进化为波波拉；36 级进化为水灵"]);
+    expect(dimo?.skills.map((skill) => skill.name)).toEqual(
+      expect.arrayContaining(["猛烈撞击", "闪光", "折射"]),
     );
   });
 });

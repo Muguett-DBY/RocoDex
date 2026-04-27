@@ -1,4 +1,5 @@
 import type { Confidence, Creature, CreatureAttribute } from "@/types/creature";
+import { normalize } from "@/lib/utils";
 
 export type SkillSearchFilters = {
   query?: string;
@@ -16,8 +17,6 @@ export type SkillSearchResult = {
   confidence: Confidence;
   description: string;
 };
-
-const normalize = (value: string) => value.trim().toLocaleLowerCase("zh-Hans-CN");
 
 export function searchCreatureSkills(creatures: Creature[], filters: SkillSearchFilters = {}): SkillSearchResult[] {
   const query = normalize(filters.query ?? "");

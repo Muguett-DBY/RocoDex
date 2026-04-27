@@ -14,8 +14,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "用户名需 2-20 个字符" }, { status: 400 });
     }
 
-    if (password.length < 6) {
-      return NextResponse.json({ error: "密码至少 6 位" }, { status: 400 });
+    if (password.length < 6 || password.length > 128) {
+      return NextResponse.json({ error: "密码需 6-128 位" }, { status: 400 });
     }
 
     const existing = findUserByUsername(username);

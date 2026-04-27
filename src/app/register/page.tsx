@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -108,9 +109,9 @@ export default function RegisterPage() {
 
         <p className="mt-6 text-center text-sm text-slate-500">
           已有账号？{" "}
-          <a href="/login" className="font-semibold text-emerald-600 hover:text-emerald-700">
+          <Link href="/login" className="font-semibold text-emerald-600 hover:text-emerald-700">
             登录
-          </a>
+          </Link>
         </p>
       </div>
     </div>
