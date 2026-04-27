@@ -15,7 +15,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        const user = findUserByUsername(credentials.username as string);
+        const user = await findUserByUsername(credentials.username as string);
 
         if (!user) return null;
 

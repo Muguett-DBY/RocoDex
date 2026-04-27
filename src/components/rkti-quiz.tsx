@@ -15,7 +15,7 @@ export function RktiQuiz() {
   const [phase, setPhase] = useState<Phase>("intro");
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [scores, setScores] = useState<DimensionScores>({
-    battle: 0, range: 0, explore: 0, social: 0, raise: 0, aesthetic: 0,
+    battle: 0, range: 0, role: 0, train: 0, adventure: 0, aesthetic: 0,
   });
   const [result, setResult] = useState<RktiResult | null>(null);
 
@@ -45,7 +45,7 @@ export function RktiQuiz() {
   const reset = useCallback(() => {
     setPhase("intro");
     setCurrentQuestion(0);
-    setScores({ battle: 0, range: 0, explore: 0, social: 0, raise: 0, aesthetic: 0 });
+    setScores({ battle: 0, range: 0, role: 0, train: 0, adventure: 0, aesthetic: 0 });
     setResult(null);
   }, []);
 

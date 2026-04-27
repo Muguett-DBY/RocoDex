@@ -126,22 +126,22 @@ export function RktiResultCard({ result, scores, onRetake }: { result: RktiResul
         </div>
       </div>
 
-      {/* Battle Style */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-xl border border-slate-200 bg-white p-6">
-          <h3 className="mb-3 text-lg font-bold text-slate-950">战斗风格</h3>
-          <p className="text-sm leading-7 text-slate-700">{result.battleStyle}</p>
-        </div>
-        <div className="rounded-xl border border-slate-200 bg-white p-6">
-          <h3 className="mb-3 text-lg font-bold text-slate-950">队伍定位</h3>
-          <p className="text-sm leading-7 text-slate-700">{result.teamRole}</p>
-        </div>
+      {/* Battle Analysis */}
+      <div className="rounded-xl border border-slate-200 bg-white p-6">
+        <h3 className="mb-3 text-lg font-bold text-slate-950">战斗分析</h3>
+        <p className="text-sm leading-7 text-slate-700">{result.battleAnalysis}</p>
       </div>
 
-      {/* Raise Advice */}
+      {/* Team Role */}
       <div className="rounded-xl border border-slate-200 bg-white p-6">
-        <h3 className="mb-3 text-lg font-bold text-slate-950">培育建议</h3>
-        <p className="text-sm leading-7 text-slate-700">{result.raiseAdvice}</p>
+        <h3 className="mb-3 text-lg font-bold text-slate-950">队伍定位</h3>
+        <p className="text-sm leading-7 text-slate-700">{result.teamRole}</p>
+      </div>
+
+      {/* Train Advice */}
+      <div className="rounded-xl border border-slate-200 bg-white p-6">
+        <h3 className="mb-3 text-lg font-bold text-slate-950">培养建议</h3>
+        <p className="text-sm leading-7 text-slate-700">{result.trainAdvice}</p>
       </div>
 
       {/* Actions */}

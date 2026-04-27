@@ -18,7 +18,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "密码需 6-128 位" }, { status: 400 });
     }
 
-    const existing = findUserByUsername(username);
+    const existing = await findUserByUsername(username);
 
     if (existing) {
       return NextResponse.json({ error: "该用户名已被注册" }, { status: 409 });
@@ -26,7 +26,7 @@ export async function POST(request: Request) {
 
     const hashed = await bcrypt.hash(password, 10);
 
-    const user = createUser(username, hashed);
+    const user = await createUser(username, hashed);
 
     return NextResponse.json({
       success: true,
