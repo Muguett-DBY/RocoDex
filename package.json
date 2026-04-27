@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "next:build": "next build",
-    "build": "opennextjs-cloudflare build",
+    "build": "next build",
+    "pages:build": "next build",
+    "pages:deploy": "wrangler pages deploy out --project-name rocodex",
     "cf:build": "opennextjs-cloudflare build",
     "cf:deploy": "opennextjs-cloudflare deploy",
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",

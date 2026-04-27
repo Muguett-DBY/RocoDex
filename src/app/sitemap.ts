@@ -7,6 +7,8 @@ import { pvpTeamSlug } from "@/lib/pvp-query";
 
 const BASE_URL = "https://rocodex.app";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE_URL, lastModified: "2026-04-26", changeFrequency: "weekly", priority: 1 },
