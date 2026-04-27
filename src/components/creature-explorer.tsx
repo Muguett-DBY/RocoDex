@@ -1,18 +1,21 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Filter, Search } from "lucide-react";
 import { CreatureCard } from "@/components/creature-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 import { availabilityStatusLabel } from "@/lib/display-labels";
-import { buildCreatureFilterParams, defaultCreatureFilters } from "@/lib/filter-params";
+import { buildCreatureFilterParams, defaultCreatureFilters, parseCreatureFilterParams } from "@/lib/filter-params";
 import { filterCreatures, getUniqueAttributes, getUniqueObtainMethods } from "@/lib/creature-query";
 import type { AvailabilityStatus, Creature, CreatureAttribute, CreatureFilters } from "@/types/creature";
 
-export function CreatureExplorer({ creatures, initialFilters = defaultCreatureFilters }: { creatures: Creature[]; initialFilters?: CreatureFilters }) {
+export function CreatureExplorer() {
+  const searchParams = useSearchParams();
+  const initialFilters = useMemo(() => parseCreatureFilterParams(new URLSearchParams(searchParams.toString())), [searchParams]);
+  const [creatures, setCreatures] = useState<Creature[]>([]);
   const [filters, setFilters] = useState<CreatureFilters>({ ...defaultCreatureFilters, ...initialFilters });
   const pathname = usePathname();
   const router = useRouter();
@@ -23,6 +26,23 @@ export function CreatureExplorer({ creatures, initialFilters = defaultCreatureFi
   const activeFilters = getActiveCreatureFilters(filters);
 
   const initialRender = useRef(true);
+  const hasLoadedInitialFilters = useRef(false);
+
+  useEffect(() => {
+    let active = true;
+    import("@/data/creatures").then((module) => {
+      if (active) setCreatures(module.creatures);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (hasLoadedInitialFilters.current) return;
+    setFilters({ ...defaultCreatureFilters, ...initialFilters });
+    hasLoadedInitialFilters.current = true;
+  }, [initialFilters]);
 
   useEffect(() => {
     if (initialRender.current) {
@@ -41,6 +61,14 @@ export function CreatureExplorer({ creatures, initialFilters = defaultCreatureFi
   const updateFilter = <K extends keyof CreatureFilters>(key: K, value: CreatureFilters[K]) => {
     setFilters((current) => ({ ...current, [key]: value }));
   };
+
+  if (creatures.length === 0) {
+    return (
+      <div className="rounded-lg border border-slate-200 bg-white p-8 text-sm text-slate-600 shadow-sm">
+        正在加载图鉴数据...
+      </div>
+    );
+  }
 
   return (
     <section className="space-y-6">

@@ -1,24 +1,16 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { CopyShareLink } from "@/components/copy-share-link";
 import { GuideExplorer } from "@/components/guide-explorer";
 import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
-import { guideBuilds } from "@/data/guide-builds";
-import { paramsFromSearchParams, parseGuideFilterParams } from "@/lib/filter-params";
 
 export const metadata: Metadata = {
   title: "攻略中心 - 洛克图鉴",
   description: "《洛克王国世界》PVE 与 PVP 强度榜、培养建议和资料可信度整理。",
 };
 
-type GuidesPageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
-export default async function GuidesPage({ searchParams }: GuidesPageProps) {
-  const params = await searchParams;
-  const initialFilters = parseGuideFilterParams(paramsFromSearchParams(params));
-
+export default function GuidesPage() {
   return (
     <PageShell>
       <main className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -32,8 +24,18 @@ export default async function GuidesPage({ searchParams }: GuidesPageProps) {
           </div>
           <CopyShareLink />
         </div>
-        <GuideExplorer builds={guideBuilds} initialFilters={initialFilters} />
+        <Suspense fallback={<ExplorerLoading />}>
+          <GuideExplorer />
+        </Suspense>
       </main>
     </PageShell>
+  );
+}
+
+function ExplorerLoading() {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-8 text-sm text-slate-600 shadow-sm">
+      正在加载攻略数据...
+    </div>
   );
 }

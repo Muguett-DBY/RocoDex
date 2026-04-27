@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ExternalLink, ShieldAlert, Sparkles } from "lucide-react";
 import type { PvpArchetype, PvpStrength, PvpTeam, SourceFreshness, SourceTier } from "@/types/pvp-team";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select } from "@/components/ui/select";
 import { sourceFreshnessLabel, sourceTierLabel } from "@/lib/display-labels";
-import { buildPvpFilterParams, defaultPvpFilters, type PvpFilters } from "@/lib/filter-params";
+import { buildPvpFilterParams, defaultPvpFilters, parsePvpFilterParams, type PvpFilters } from "@/lib/filter-params";
 import { pvpTeamSlug } from "@/lib/pvp-query";
 
 const strengthTone: Record<PvpStrength, "emerald" | "amber" | "blue"> = {
@@ -20,10 +20,30 @@ const strengthTone: Record<PvpStrength, "emerald" | "amber" | "blue"> = {
   T2: "amber",
 };
 
-export function PvpTeamExplorer({ teams, initialFilters = defaultPvpFilters }: { teams: PvpTeam[]; initialFilters?: PvpFilters }) {
+export function PvpTeamExplorer() {
+  const searchParams = useSearchParams();
+  const initialFilters = useMemo(() => parsePvpFilterParams(new URLSearchParams(searchParams.toString())), [searchParams]);
+  const [teams, setTeams] = useState<PvpTeam[]>([]);
   const [filters, setFilters] = useState<PvpFilters>({ ...defaultPvpFilters, ...initialFilters });
   const pathname = usePathname();
   const router = useRouter();
+  const hasLoadedInitialFilters = useRef(false);
+
+  useEffect(() => {
+    let active = true;
+    import("@/data/pvp-teams").then((module) => {
+      if (active) setTeams([...module.pvpTeams, ...module.archivedPvpTeams]);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (hasLoadedInitialFilters.current) return;
+    setFilters({ ...defaultPvpFilters, ...initialFilters });
+    hasLoadedInitialFilters.current = true;
+  }, [initialFilters]);
 
   const archetypes = useMemo(() => Array.from(new Set(teams.map((team) => team.archetype))), [teams]);
   const sourceTiers = useMemo(() => Array.from(new Set(teams.map((team) => team.sourceTier))), [teams]);
@@ -49,6 +69,14 @@ export function PvpTeamExplorer({ teams, initialFilters = defaultPvpFilters }: {
       return nextFilters;
     });
   };
+
+  if (teams.length === 0) {
+    return (
+      <div className="rounded-lg border border-slate-200 bg-white p-8 text-sm text-slate-600 shadow-sm">
+        正在加载阵容数据...
+      </div>
+    );
+  }
 
   return (
     <section className="space-y-6">

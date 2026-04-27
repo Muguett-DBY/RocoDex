@@ -3,8 +3,6 @@ import { CopyShareLink } from "@/components/copy-share-link";
 import { CreatureCompareTool } from "@/components/creature-compare-tool";
 import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
-import { creatures } from "@/data/creatures";
-import { guideBuilds } from "@/data/guide-builds";
 
 export const metadata: Metadata = {
   title: "精灵对比 - 洛克图鉴",
@@ -23,7 +21,7 @@ export default function ComparePage() {
           </div>
           <CopyShareLink />
         </div>
-        <CreatureCompareTool creatures={creatures} guideBuilds={guideBuilds} />
+        <CreatureCompareTool />
       </main>
     </PageShell>
   );

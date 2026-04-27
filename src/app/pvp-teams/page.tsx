@@ -1,24 +1,16 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { CopyShareLink } from "@/components/copy-share-link";
 import { PageShell } from "@/components/page-shell";
 import { PvpTeamExplorer } from "@/components/pvp-team-explorer";
 import { Badge } from "@/components/ui/badge";
-import { archivedPvpTeams, pvpTeams } from "@/data/pvp-teams";
-import { paramsFromSearchParams, parsePvpFilterParams } from "@/lib/filter-params";
 
 export const metadata: Metadata = {
   title: "PVP阵容 - 洛克图鉴",
   description: "《洛克王国世界》2026-04-15 之后 PVP META 阵容整理。",
 };
 
-type PvpTeamsPageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
-export default async function PvpTeamsPage({ searchParams }: PvpTeamsPageProps) {
-  const params = await searchParams;
-  const initialFilters = parsePvpFilterParams(paramsFromSearchParams(params));
-
+export default function PvpTeamsPage() {
   return (
     <PageShell>
       <main className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -31,15 +23,25 @@ export default async function PvpTeamsPage({ searchParams }: PvpTeamsPageProps) 
               等社区资料会标明来源等级；性格、天分和部分补位为本站分析，不等同于官方或来源原文。
             </p>
             <div className="mt-4 flex flex-wrap gap-2 text-xs">
-              <Badge tone="emerald">当前 META：{pvpTeams.length} 套</Badge>
-              <Badge tone="amber">历史归档：{archivedPvpTeams.length} 套</Badge>
+              <Badge tone="emerald">当前 META</Badge>
+              <Badge tone="amber">历史归档</Badge>
               <Badge tone="blue">最低来源日期：2026-04-15</Badge>
             </div>
           </div>
           <CopyShareLink />
         </div>
-        <PvpTeamExplorer teams={[...pvpTeams, ...archivedPvpTeams]} initialFilters={initialFilters} />
+        <Suspense fallback={<ExplorerLoading />}>
+          <PvpTeamExplorer />
+        </Suspense>
       </main>
     </PageShell>
+  );
+}
+
+function ExplorerLoading() {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-8 text-sm text-slate-600 shadow-sm">
+      正在加载阵容数据...
+    </div>
   );
 }

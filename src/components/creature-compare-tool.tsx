@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,9 +10,31 @@ import { compareCreatures } from "@/lib/creature-compare";
 import type { Creature } from "@/types/creature";
 import type { GuideCreatureBuild } from "@/types/guide";
 
-export function CreatureCompareTool({ creatures, guideBuilds }: { creatures: Creature[]; guideBuilds: GuideCreatureBuild[] }) {
+export function CreatureCompareTool() {
+  const [creatures, setCreatures] = useState<Creature[]>([]);
+  const [guideBuilds, setGuideBuilds] = useState<GuideCreatureBuild[]>([]);
   const [ids, setIds] = useState<string[]>(["001", "005", "008"]);
   const comparison = useMemo(() => compareCreatures(creatures, guideBuilds, ids), [creatures, guideBuilds, ids]);
+
+  useEffect(() => {
+    let active = true;
+    Promise.all([import("@/data/creatures"), import("@/data/guide-builds")]).then(([creatureModule, guideModule]) => {
+      if (!active) return;
+      setCreatures(creatureModule.creatures);
+      setGuideBuilds(guideModule.guideBuilds);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  if (creatures.length === 0 || guideBuilds.length === 0) {
+    return (
+      <div className="rounded-lg border border-slate-200 bg-white p-8 text-sm text-slate-600 shadow-sm">
+        正在加载对比数据...
+      </div>
+    );
+  }
 
   return (
     <section className="space-y-6">

@@ -1,18 +1,10 @@
+import { Suspense } from "react";
 import { CopyShareLink } from "@/components/copy-share-link";
 import { CreatureExplorer } from "@/components/creature-explorer";
 import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
-import { creatures } from "@/data/creatures";
-import { paramsFromSearchParams, parseCreatureFilterParams } from "@/lib/filter-params";
 
-type CreaturesPageProps = {
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
-};
-
-export default async function CreaturesPage({ searchParams }: CreaturesPageProps) {
-  const params = await searchParams;
-  const initialFilters = parseCreatureFilterParams(paramsFromSearchParams(params));
-
+export default function CreaturesPage() {
   return (
     <PageShell>
       <main className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -28,8 +20,18 @@ export default async function CreaturesPage({ searchParams }: CreaturesPageProps
           </div>
           <CopyShareLink />
         </div>
-        <CreatureExplorer creatures={creatures} initialFilters={initialFilters} />
+        <Suspense fallback={<ExplorerLoading />}>
+          <CreatureExplorer />
+        </Suspense>
       </main>
     </PageShell>
+  );
+}
+
+function ExplorerLoading() {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-8 text-sm text-slate-600 shadow-sm">
+      正在加载图鉴数据...
+    </div>
   );
 }

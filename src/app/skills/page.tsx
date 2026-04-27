@@ -3,7 +3,6 @@ import { CopyShareLink } from "@/components/copy-share-link";
 import { PageShell } from "@/components/page-shell";
 import { SkillExplorer } from "@/components/skill-explorer";
 import { Badge } from "@/components/ui/badge";
-import { creatures } from "@/data/creatures";
 
 export const metadata: Metadata = {
   title: "技能筛选 - 洛克图鉴",
@@ -22,7 +21,7 @@ export default function SkillsPage() {
           </div>
           <CopyShareLink />
         </div>
-        <SkillExplorer creatures={creatures} />
+        <SkillExplorer />
       </main>
     </PageShell>
   );

@@ -1,6 +1,4 @@
 import type { Creature, CreatureAttribute, FormStage } from "@/types/creature";
-import { existsSync } from "node:fs";
-import { join } from "node:path";
 
 const LIST_SOURCE = "https://wiki.biligame.com/rocom/%E7%B2%BE%E7%81%B5%E5%9B%BE%E9%89%B4";
 const DIMO_SOURCE = "https://wiki.biligame.com/rocom/%E8%BF%AA%E8%8E%AB";
@@ -39,14 +37,9 @@ const imageFilePageUrl = (creatureName: string, formName: string) => {
   return wikiPageUrl(fileName);
 };
 
-const PLACEHOLDER_IMAGE = "/images/creatures/placeholder.svg";
-
 const formImage = (id: string, formIndex: number): { path: string; status: "local" | "placeholder" } => {
   const pngPath = `/images/creatures/${id}-${String(formIndex + 1).padStart(2, "0")}.png`;
-  if (existsSync(join(process.cwd(), "public", pngPath))) {
-    return { path: pngPath, status: "local" };
-  }
-  return { path: PLACEHOLDER_IMAGE, status: "placeholder" };
+  return { path: pngPath, status: "local" };
 };
 
 const createCreature = (entry: SeedEntry): Creature => {

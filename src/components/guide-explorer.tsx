@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ExternalLink, Filter, Search, ShieldAlert, Sparkles } from "lucide-react";
 import { AttributeBadges } from "@/components/attribute-badges";
 import { Badge } from "@/components/ui/badge";
@@ -19,7 +19,7 @@ import {
   groupGuideBuildsByTier,
   guideTierOrder,
 } from "@/lib/guide-query";
-import { buildGuideFilterParams, defaultGuideFilters } from "@/lib/filter-params";
+import { buildGuideFilterParams, defaultGuideFilters, parseGuideFilterParams } from "@/lib/filter-params";
 import { guideConfidenceLabel } from "@/lib/display-labels";
 import { guideBuildSlug } from "@/lib/seo-pages";
 import type { CreatureAttribute } from "@/types/creature";
@@ -41,9 +41,12 @@ const confidenceTone: Record<GuideConfidence, "emerald" | "blue" | "amber" | "sl
   unknown: "slate",
 };
 
-export function GuideExplorer({ builds, initialFilters = defaultGuideFilters }: { builds: GuideCreatureBuild[]; initialFilters?: GuideFilters }) {
+export function GuideExplorer() {
+  const searchParams = useSearchParams();
+  const initialFilters = useMemo(() => parseGuideFilterParams(new URLSearchParams(searchParams.toString())), [searchParams]);
+  const [builds, setBuilds] = useState<GuideCreatureBuild[]>([]);
   const [filters, setFilters] = useState<GuideFilters>({ ...defaultGuideFilters, ...initialFilters });
-  const [selectedId, setSelectedId] = useState(builds.find((build) => build.pvpTier !== "未评级")?.id ?? builds[0]?.id ?? "");
+  const [selectedId, setSelectedId] = useState("");
   const pathname = usePathname();
   const router = useRouter();
 
@@ -55,6 +58,23 @@ export function GuideExplorer({ builds, initialFilters = defaultGuideFilters }: 
   const selectedBuild = filtered.find((build) => build.id === selectedId) ?? filtered[0];
   const activeFilters = getActiveGuideFilters(filters);
   const initialRender = useRef(true);
+  const hasLoadedInitialFilters = useRef(false);
+
+  useEffect(() => {
+    let active = true;
+    import("@/data/guide-builds").then((module) => {
+      if (active) setBuilds(module.guideBuilds);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (hasLoadedInitialFilters.current) return;
+    setFilters({ ...defaultGuideFilters, ...initialFilters });
+    hasLoadedInitialFilters.current = true;
+  }, [initialFilters]);
 
   useEffect(() => {
     if (initialRender.current) {
@@ -77,6 +97,14 @@ export function GuideExplorer({ builds, initialFilters = defaultGuideFilters }: 
   const setMode = (mode: GuideMode) => {
     setFilters((current) => ({ ...current, mode, tier: "all" as const }));
   };
+
+  if (builds.length === 0) {
+    return (
+      <div className="rounded-lg border border-slate-200 bg-white p-8 text-sm text-slate-600 shadow-sm">
+        正在加载攻略数据...
+      </div>
+    );
+  }
 
   return (
     <section className="space-y-6">
