@@ -3,222 +3,737 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CSTD</title>
+<title>CSTD | 奶黄包的奇思妙想实验田</title>
+<meta name="description" content="CSTD 是 custard 的个人项目集，记录技术、设计、文化与游戏相关的混合实验，包括洛克图鉴 RocoDex 与奶黄包摄影。">
+<meta name="theme-color" content="#fff3cf">
+<link rel="canonical" href="https://custard.top/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CSTD">
+<meta property="og:title" content="CSTD | 奶黄包的奇思妙想实验田">
+<meta property="og:description" content="从奶黄包出发，孵化技术、设计、文化与游戏的个人项目实验田。">
+<meta property="og:url" content="https://custard.top/">
+<meta property="og:image" content="https://custard.top/cstd-og.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CSTD | 奶黄包的奇思妙想实验田">
+<meta name="twitter:description" content="从奶黄包出发，孵化技术、设计、文化与游戏的个人项目实验田。">
+<meta name="twitter:image" content="https://custard.top/cstd-og.svg">
 <style>
-  :root { --cream: #fff7e6; --custard: #f5c842; --caramel: #c78c3c; --dark: #3d2b1f; --light: #fffdf7; }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --paper: #fffaf0;
+    --paper-deep: #fff0c9;
+    --custard: #f6bf3f;
+    --custard-deep: #d98528;
+    --ink: #2f241d;
+    --muted: #7b6656;
+    --line: #ead6ad;
+    --mint: #dff8ed;
+    --mint-ink: #047857;
+    --rose: #ffe7ec;
+    --rose-ink: #be4563;
+    --sky: #e3f2ff;
+    --sky-ink: #2563eb;
+    --white: #fffdf7;
+    --shadow: 0 16px 38px rgba(97, 61, 22, .13);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
-    background: var(--cream);
-    color: var(--dark);
+    margin: 0;
     min-height: 100vh;
     overflow-x: hidden;
+    background:
+      linear-gradient(90deg, rgba(47, 36, 29, .035) 1px, transparent 1px),
+      linear-gradient(180deg, rgba(47, 36, 29, .035) 1px, transparent 1px),
+      linear-gradient(135deg, #fffaf0 0%, #fff3cf 44%, #f7fbf2 100%);
+    background-size: 28px 28px, 28px 28px, auto;
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  }
+
+  a { color: inherit; text-underline-offset: 4px; }
+
+  .page {
+    width: min(1120px, calc(100% - 40px));
+    margin: 0 auto;
+  }
+
+  .site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 22px 0 8px;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .brand-mark {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    place-items: center;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--custard);
+    box-shadow: 5px 5px 0 rgba(47, 36, 29, .12);
+    color: var(--ink);
+    font-size: 1.1rem;
+    font-weight: 900;
+  }
+
+  .brand strong {
+    display: block;
+    font-size: .96rem;
+    letter-spacing: .08em;
+  }
+
+  .brand span {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: .76rem;
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .nav a,
+  .button {
+    display: inline-flex;
+    min-height: 38px;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: rgba(255, 253, 247, .78);
+    padding: 8px 12px;
+    color: var(--ink);
+    font-size: .86rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  }
+
+  .nav a:hover,
+  .button:hover {
+    border-color: var(--custard-deep);
+    box-shadow: 3px 3px 0 rgba(47, 36, 29, .1);
+    transform: translateY(-1px);
+  }
+
+  .button.primary {
+    border-color: #1b4332;
+    background: #0f8f64;
+    color: #fff;
+  }
+
+  .button.soft {
+    background: var(--sky);
+    color: var(--sky-ink);
   }
 
   .hero {
-    text-align: center;
-    padding: 5rem 1.5rem 3rem;
     position: relative;
-  }
-  .hero::before {
-    content: "";
-    position: absolute;
-    top: -120px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, var(--custard) 0%, transparent 70%);
-    opacity: .25;
-    border-radius: 50%;
-    pointer-events: none;
-  }
-  .logo {
-    width: 100px;
-    height: 100px;
-    background: linear-gradient(135deg, var(--custard), #f0b830);
-    border-radius: 50%;
-    margin: 0 auto 1.5rem;
-    display: flex;
+    display: grid;
+    min-height: 520px;
+    grid-template-columns: minmax(0, 1fr) 360px;
     align-items: center;
-    justify-content: center;
-    font-size: 2.2rem;
-    font-weight: 900;
-    color: #fff;
-    box-shadow: 0 8px 32px rgba(245,200,66,.4);
-    position: relative;
-    animation: float 3s ease-in-out infinite;
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-  .hero h1 {
-    font-size: 3rem;
-    font-weight: 900;
-    letter-spacing: 4px;
-    background: linear-gradient(135deg, var(--caramel), var(--custard), #e8a830);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .hero .tagline {
-    margin-top: .75rem;
-    font-size: 1.1rem;
-    color: var(--caramel);
-    font-weight: 500;
-  }
-  .hero .desc {
-    margin: 1.25rem auto 0;
-    max-width: 420px;
-    font-size: .95rem;
-    line-height: 1.7;
-    color: #8a6d52;
+    gap: 44px;
+    padding: 34px 0 40px;
   }
 
-  main {
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 1rem 1.5rem 3rem;
-    display: grid;
-    gap: .9rem;
-  }
-  .section-title {
-    grid-column: 1 / -1;
-    font-size: .8rem;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--caramel);
-    margin-top: 1rem;
-  }
-  .card {
-    background: var(--light);
-    border: 1px solid #f0e0c0;
-    border-radius: 14px;
-    padding: 1.4rem 1.5rem;
-    text-decoration: none;
-    display: block;
-    color: inherit;
-    transition: all .2s;
+  .hero-copy {
     position: relative;
-    overflow: hidden;
+    z-index: 1;
+    max-width: 660px;
   }
-  .card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(199,140,60,.12);
-    border-color: var(--custard);
+
+  .kicker,
+  .section-kicker,
+  .card-kicker {
+    margin: 0;
+    color: var(--custard-deep);
+    font-size: .78rem;
+    font-weight: 900;
+    letter-spacing: .16em;
+    text-transform: uppercase;
   }
-  .card h2 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: .6rem;
+
+  h1 {
+    margin: 14px 0 0;
+    font-size: clamp(4rem, 12vw, 8.4rem);
+    line-height: .82;
+    letter-spacing: .03em;
+    text-shadow: 7px 7px 0 rgba(246, 191, 63, .35);
   }
-  .card h2 .icon {
-    width: 36px; height: 36px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    flex-shrink: 0;
+
+  .tagline {
+    margin: 18px 0 0;
+    font-size: clamp(1.4rem, 3.4vw, 2.55rem);
+    font-weight: 900;
+    line-height: 1.18;
   }
-  .card p {
-    margin-top: .5rem;
-    font-size: .88rem;
-    color: #8a6d52;
-    line-height: 1.6;
+
+  .desc {
+    max-width: 560px;
+    margin: 18px 0 0;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.85;
   }
-  .tags {
-    margin-top: .6rem;
+
+  .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: .4rem;
+    gap: 10px;
+    margin-top: 24px;
   }
-  .tag {
-    font-size: .72rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    border-radius: 20px;
-    background: #fef3d5;
-    color: var(--caramel);
-  }
-  .tag.green { background: #ecfdf5; color: #059669; }
 
-  .placeholder {
-    border-style: dashed;
-    opacity: .5;
+  .hero-notes {
+    display: grid;
+    max-width: 630px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin: 26px 0 0;
   }
+
+  .note {
+    border: 1px dashed rgba(47, 36, 29, .24);
+    border-radius: 8px;
+    background: rgba(255, 253, 247, .76);
+    padding: 12px;
+  }
+
+  .note strong {
+    display: block;
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .note span {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: .78rem;
+    line-height: 1.45;
+  }
+
+  .hero-scene {
+    position: relative;
+    min-height: 360px;
+  }
+
+  .mascot {
+    display: block;
+    width: min(100%, 350px);
+    margin: 0 auto;
+    filter: drop-shadow(16px 18px 0 rgba(47, 36, 29, .09));
+  }
+
+  .sticker {
+    position: absolute;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--white);
+    padding: 8px 10px;
+    box-shadow: 5px 5px 0 rgba(47, 36, 29, .12);
+    font-size: .82rem;
+    font-weight: 900;
+    transform: rotate(-5deg);
+  }
+
+  .sticker.one { left: 4px; top: 22px; background: var(--mint); color: var(--mint-ink); }
+  .sticker.two { right: 4px; top: 138px; background: var(--rose); color: var(--rose-ink); transform: rotate(6deg); }
+  .sticker.three { bottom: 20px; left: 38px; background: var(--sky); color: var(--sky-ink); transform: rotate(3deg); }
+
+  .projects {
+    padding: 18px 0 52px;
+  }
+
+  .section-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-bottom: 16px;
+  }
+
+  .section-head h2 {
+    margin: 7px 0 0;
+    font-size: clamp(1.65rem, 3vw, 2.25rem);
+    line-height: 1.12;
+  }
+
+  .section-head p {
+    max-width: 430px;
+    margin: 0;
+    color: var(--muted);
+    font-size: .92rem;
+    line-height: 1.7;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+    gap: 16px;
+  }
+
+  .project-card {
+    position: relative;
+    overflow: hidden;
+    border: 2px solid rgba(47, 36, 29, .12);
+    border-radius: 8px;
+    background: rgba(255, 253, 247, .9);
+    box-shadow: var(--shadow);
+  }
+
+  .project-card.featured {
+    grid-row: span 2;
+    background:
+      linear-gradient(135deg, rgba(223, 248, 237, .72), rgba(255, 253, 247, .95) 42%),
+      var(--white);
+  }
+
+  .project-card.placeholder {
+    background: rgba(255, 253, 247, .58);
+    border-style: dashed;
+    box-shadow: none;
+  }
+
+  .project-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 8px;
+    background: repeating-linear-gradient(90deg, var(--custard) 0 18px, var(--mint) 18px 36px, var(--rose) 36px 54px, var(--sky) 54px 72px);
+  }
+
+  .project-content {
+    position: relative;
+    padding: 28px;
+  }
+
+  .project-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .project-icon {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    place-items: center;
+    border: 1px solid rgba(47, 36, 29, .08);
+    border-radius: 8px;
+    background: var(--mint);
+    font-size: 1.35rem;
+  }
+
+  .project-card:nth-child(2) .project-icon { background: var(--rose); }
+  .project-card:nth-child(3) .project-icon { background: var(--paper-deep); }
+
+  .card-kicker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    letter-spacing: 0;
+    text-transform: none;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, .72);
+    padding: 3px 7px;
+    color: var(--muted);
+    font-size: .72rem;
+    font-weight: 900;
+  }
+
+  .pill.live { background: #dff8ed; color: var(--mint-ink); }
+  .pill.photo { background: #ffe7ec; color: var(--rose-ink); }
+  .pill.draft { background: #fff0c9; color: var(--custard-deep); }
+
+  .project-card h3 {
+    margin: 8px 0 0;
+    font-size: 1.55rem;
+    line-height: 1.18;
+  }
+
+  .project-card p {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: .94rem;
+    line-height: 1.78;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 18px;
+  }
+
+  .metric {
+    border: 1px solid rgba(47, 36, 29, .1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, .68);
+    padding: 11px;
+  }
+
+  .metric strong {
+    display: block;
+    font-size: 1.35rem;
+    line-height: 1;
+  }
+
+  .metric span {
+    display: block;
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: .74rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 18px;
+  }
+
+  .tag-groups {
+    display: grid;
+    gap: 9px;
+    margin-top: 18px;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tag-label {
+    color: var(--muted);
+    font-size: .72rem;
+    font-weight: 900;
+  }
+
+  .tag {
+    border-radius: 6px;
+    background: #fff0c9;
+    padding: 4px 8px;
+    color: var(--custard-deep);
+    font-size: .72rem;
+    font-weight: 800;
+  }
+
+  .tag.tech { background: var(--mint); color: var(--mint-ink); }
+  .tag.design { background: var(--rose); color: var(--rose-ink); }
+  .tag.platform { background: var(--sky); color: var(--sky-ink); }
 
   footer {
+    border-top: 1px solid rgba(47, 36, 29, .12);
+    padding: 28px 0 34px;
+    color: var(--muted);
+    font-size: .82rem;
     text-align: center;
-    padding: 2rem 1.5rem;
-    font-size: .78rem;
-    color: #c7a87a;
-    border-top: 1px solid #f0e0c0;
-    margin-top: 1rem;
   }
-  footer span { margin: 0 .4rem; }
+
+  footer span { color: var(--custard-deep); font-weight: 900; }
+
+  @media (max-width: 860px) {
+    .page { width: min(100% - 32px, 720px); }
+
+    .site-header {
+      align-items: flex-start;
+      padding-top: 16px;
+    }
+
+    .nav { gap: 6px; }
+
+    .nav a { min-height: 34px; padding: 7px 9px; font-size: .8rem; }
+
+    .hero {
+      min-height: 0;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 24px 0 20px;
+    }
+
+    .hero-scene {
+      order: -1;
+      min-height: 128px;
+    }
+
+    .mascot {
+      width: 150px;
+      margin-left: 0;
+    }
+
+    .sticker { padding: 6px 8px; font-size: .74rem; }
+    .sticker.one { left: 132px; top: 6px; }
+    .sticker.two { right: 4px; top: 60px; }
+    .sticker.three { display: none; }
+
+    h1 { margin-top: 10px; font-size: clamp(3.45rem, 19vw, 5.1rem); }
+
+    .tagline { font-size: clamp(1.25rem, 7vw, 1.75rem); }
+
+    .desc { margin-top: 12px; font-size: .94rem; line-height: 1.72; }
+
+    .hero-actions { margin-top: 18px; }
+
+    .hero-notes {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+      margin-top: 18px;
+    }
+
+    .note { padding: 9px; }
+    .note strong { font-size: 1.05rem; }
+    .note span { font-size: .68rem; }
+
+    .projects { padding-top: 8px; }
+
+    .section-head {
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .section-head p { margin-top: 8px; }
+
+    .project-grid { grid-template-columns: 1fr; }
+
+    .project-card.featured { grid-row: auto; }
+
+    .project-content { padding: 22px; }
+
+    .metrics { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 460px) {
+    .page { width: min(100% - 24px, 420px); }
+
+    .site-header { display: block; }
+    .nav { justify-content: flex-start; margin-top: 10px; }
+    .nav a { min-height: 32px; padding: 6px 8px; }
+
+    .hero { padding-top: 14px; }
+    .hero-scene { min-height: 108px; }
+    .mascot { width: 126px; }
+    .sticker.one { left: 108px; top: 0; }
+    .sticker.two { right: 0; top: 52px; }
+    .sticker { font-size: .68rem; }
+
+    h1 { font-size: clamp(3.1rem, 16vw, 4rem); }
+    .tagline { font-size: clamp(1.16rem, 6vw, 1.42rem); }
+    .desc { font-size: .9rem; line-height: 1.62; }
+
+    .hero-actions .button { flex: 1 1 150px; }
+
+    .hero-notes {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 12px;
+    }
+    .note { padding: 7px 6px; }
+    .note strong { font-size: .98rem; }
+    .note span { font-size: .63rem; }
+    .note:last-child { grid-column: auto; }
+
+    .section-head p { display: none; }
+
+    .project-top { gap: 10px; }
+    .project-icon { width: 38px; height: 38px; font-size: 1.1rem; }
+    .project-card h3 { font-size: 1.25rem; }
+  }
 </style>
 </head>
 <body>
+  <div class="page">
+    <header class="site-header" aria-label="CSTD 顶部导航">
+      <a class="brand" href="https://custard.top/" aria-label="CSTD 首页">
+        <span class="brand-mark">C</span>
+        <span>
+          <strong>CSTD</strong>
+          <span>custard.top</span>
+        </span>
+      </a>
+      <nav class="nav" aria-label="项目导航">
+        <a href="#projects">Projects</a>
+        <a href="https://rocodex.custard.top">RocoDex</a>
+        <a href="https://shoot.custard.top">Photography</a>
+      </nav>
+    </header>
 
-<div class="hero">
-  <div class="logo">C</div>
-  <h1>CSTD</h1>
-  <p class="tagline">奶黄包的奇思妙想实验田</p>
-  <p class="desc">从一只软乎乎的奶黄包出发，孵化技术、设计、文化与游戏的混合实验。这里的每一个项目，都带着奶黄包的甜糯基因。</p>
-</div>
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="kicker">Custard studio</p>
+          <h1 id="hero-title">CSTD</h1>
+          <p class="tagline">奶黄包的奇思妙想实验田</p>
+          <p class="desc">
+            从一只软乎乎的奶黄包出发，孵化技术、设计、文化与游戏的混合实验。这里收纳正在生长的产品、视觉练习和小型工具，每个项目都带一点甜糯的手作痕迹。
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#projects">看项目</a>
+            <a class="button soft" href="https://rocodex.custard.top">打开 RocoDex</a>
+          </div>
+          <div class="hero-notes" aria-label="项目集状态">
+            <div class="note">
+              <strong>02</strong>
+              <span>个在线项目</span>
+            </div>
+            <div class="note">
+              <strong>347</strong>
+              <span>只精灵资料</span>
+            </div>
+            <div class="note">
+              <strong>Mix</strong>
+              <span>技术 / 设计 / 游戏</span>
+            </div>
+          </div>
+        </div>
 
-<main>
-  <div class="section-title">Projects</div>
+        <div class="hero-scene" aria-hidden="true">
+          <img class="mascot" src="/cstd-mascot.svg" alt="">
+          <span class="sticker one">fresh build</span>
+          <span class="sticker two">soft launch</span>
+          <span class="sticker three">made by custard</span>
+        </div>
+      </section>
 
-  <a class="card" href="https://rocodex.custard.top">
-    <h2>
-      <span class="icon" style="background:#ecfdf5">&#x1F409;</span>
-      洛克图鉴 / RocoDex
-    </h2>
-    <p>面向《洛克王国世界》的中文精灵资料库。收录 347 只精灵的完整数据，支持名称与属性搜索筛选、精灵对比、PVP 阵容探索、技能浏览和洛克性格测试。</p>
-    <div class="tags">
-      <span class="tag green">Next.js 16</span>
-      <span class="tag green">Tailwind</span>
-      <span class="tag green">Upstash Redis</span>
-      <span class="tag">Vercel</span>
-      <span class="tag">Cloudflare DNS</span>
-    </div>
-  </a>
+      <section id="projects" class="projects" aria-labelledby="projects-title">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Projects</p>
+            <h2 id="projects-title">正在发酵的项目</h2>
+          </div>
+          <p>优先展示已经上线、可直接打开的作品；实验中的想法会先留在这里，等它长出更明确的形状。</p>
+        </div>
 
-  <a class="card" href="https://shoot.custard.top">
-    <h2>
-      <span class="icon" style="background:#fff0f1">&#x1F4F7;</span>
-      奶黄包摄影
-    </h2>
-    <p>南京女生写真与情侣约拍。柔雾胶片感、自然陪拍、江南感写真和情侣纪念，用清晰的套餐、作品展示和预约入口承载更温柔的拍摄体验。</p>
-    <div class="tags">
-      <span class="tag">Photography</span>
-      <span class="tag">Portrait</span>
-      <span class="tag">Nanjing</span>
-      <span class="tag green">Cloudflare Pages</span>
-    </div>
-  </a>
+        <div class="project-grid">
+          <article class="project-card featured">
+            <div class="project-content">
+              <div class="project-top">
+                <div class="project-icon" aria-hidden="true">🧭</div>
+                <div>
+                  <p class="card-kicker">
+                    <span class="pill live">Live</span>
+                    <span class="pill">Game data tool</span>
+                    <span class="pill">Primary project</span>
+                  </p>
+                  <h3>洛克图鉴 / RocoDex</h3>
+                  <p>
+                    面向《洛克王国世界》的中文精灵资料库。支持名称与属性搜索筛选、精灵对比、PVP 阵容探索、技能浏览和洛克性格测试。
+                  </p>
+                </div>
+              </div>
 
-  <div class="card placeholder">
-    <h2>
-      <span class="icon" style="background:#fff3e0">&#x2728;</span>
-      更多项目孵化中
-    </h2>
-    <p>奶黄包正在酝酿更多有意思的创意——可能是小工具、小游戏，也可能是某个奇怪但有趣的灵感。敬请期待。</p>
-    <div class="tags">
-      <span class="tag">coming soon</span>
-    </div>
+              <div class="metrics" aria-label="RocoDex 项目数据">
+                <div class="metric">
+                  <strong>347</strong>
+                  <span>只精灵</span>
+                </div>
+                <div class="metric">
+                  <strong>402</strong>
+                  <span>个形态</span>
+                </div>
+                <div class="metric">
+                  <strong>PVP</strong>
+                  <span>阵容与攻略</span>
+                </div>
+              </div>
+
+              <div class="actions">
+                <a class="button primary" href="https://rocodex.custard.top">打开图鉴</a>
+                <a class="button soft" href="https://rocodex.custard.top/pvp-teams">查看 PVP 阵容</a>
+              </div>
+
+              <div class="tag-groups" aria-label="RocoDex 技术与平台标签">
+                <div class="tag-row">
+                  <span class="tag-label">Stack</span>
+                  <span class="tag tech">Next.js 16</span>
+                  <span class="tag tech">Tailwind</span>
+                  <span class="tag tech">Upstash Redis</span>
+                </div>
+                <div class="tag-row">
+                  <span class="tag-label">Deploy</span>
+                  <span class="tag platform">Vercel</span>
+                  <span class="tag platform">Cloudflare DNS</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-content">
+              <div class="project-top">
+                <div class="project-icon" aria-hidden="true">📷</div>
+                <div>
+                  <p class="card-kicker">
+                    <span class="pill live photo">Live</span>
+                    <span class="pill">Photography</span>
+                  </p>
+                  <h3>奶黄包摄影</h3>
+                  <p>南京女生写真与情侣约拍。柔雾胶片感、自然陪拍、江南感写真和情侣纪念，用清晰的套餐、作品展示和预约入口承载更温柔的拍摄体验。</p>
+                </div>
+              </div>
+              <div class="actions">
+                <a class="button" href="https://shoot.custard.top">查看摄影站</a>
+              </div>
+              <div class="tag-row" aria-label="摄影项目标签">
+                <span class="tag design">Portrait</span>
+                <span class="tag design">Nanjing</span>
+                <span class="tag platform">Cloudflare Pages</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card placeholder">
+            <div class="project-content">
+              <div class="project-top">
+                <div class="project-icon" aria-hidden="true">✨</div>
+                <div>
+                  <p class="card-kicker">
+                    <span class="pill draft">Incubating</span>
+                    <span class="pill">Coming soon</span>
+                  </p>
+                  <h3>更多项目孵化中</h3>
+                  <p>可能是小工具、小游戏，也可能是某个奇怪但有趣的灵感。等它能被清楚使用时，再放进这个实验田。</p>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      Made with <span>custard</span> by custard · custard.top
+    </footer>
   </div>
-</main>
-
-<footer>
-  Made with<span>&#x1F95F;</span>by custard<span>&#x2022;</span>custard.top
-</footer>
-
 </body>
 </html>

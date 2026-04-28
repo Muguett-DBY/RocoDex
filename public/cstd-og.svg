@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">CSTD 社交分享图</title>
+  <desc id="desc">CSTD 奶黄包的奇思妙想实验田社交分享预览图。</desc>
+  <rect width="1200" height="630" fill="#fff6df"/>
+  <path d="M0 0h1200v630H0z" fill="none"/>
+  <g opacity=".28" stroke="#2f241d" stroke-width="2">
+    <path d="M0 70h1200M0 140h1200M0 210h1200M0 280h1200M0 350h1200M0 420h1200M0 490h1200M0 560h1200"/>
+    <path d="M80 0v630M160 0v630M240 0v630M320 0v630M400 0v630M480 0v630M560 0v630M640 0v630M720 0v630M800 0v630M880 0v630M960 0v630M1040 0v630M1120 0v630"/>
+  </g>
+  <rect x="86" y="76" width="1028" height="478" rx="24" fill="#fffdf7" stroke="#2f241d" stroke-width="8"/>
+  <path d="M86 120h1028" stroke="#2f241d" stroke-width="8"/>
+  <circle cx="126" cy="98" r="10" fill="#f6bf3f"/>
+  <circle cx="160" cy="98" r="10" fill="#dff8ed"/>
+  <circle cx="194" cy="98" r="10" fill="#ffe7ec"/>
+
+  <g transform="translate(816 152)">
+    <path d="M120 0c76 0 138 61 138 136 0 26-8 51-22 72 10 14 15 30 15 47 0 55-51 99-116 99-38 0-72-15-93-39-52-10-91-55-91-109 0-37 18-70 48-90C9 50 60 0 120 0Z" fill="#f6bf3f" stroke="#2f241d" stroke-width="10" stroke-linejoin="round"/>
+    <path d="M64 114c34-46 92-72 156-67 25 2 48 9 68 21C267 20 221 0 166 0 109 0 60 46 49 108c-26 17-43 44-49 76 14-25 35-44 64-70Z" fill="#ffe08a" opacity=".9"/>
+    <path d="M104 144c14 16 31 24 51 24 23 0 44-10 61-30" fill="none" stroke="#2f241d" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="92" cy="103" r="12" fill="#2f241d"/>
+    <circle cx="226" cy="103" r="12" fill="#2f241d"/>
+  </g>
+
+  <text x="142" y="236" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="128" font-weight="900" fill="#2f241d" letter-spacing="6">CSTD</text>
+  <text x="148" y="310" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="42" font-weight="900" fill="#2f241d">奶黄包的奇思妙想实验田</text>
+  <text x="150" y="370" font-family="Arial, 'Microsoft YaHei', sans-serif" font-size="27" fill="#7b6656">技术、设计、文化与游戏的个人项目集</text>
+
+  <g font-family="Arial, 'Microsoft YaHei', sans-serif" font-weight="900" font-size="24">
+    <rect x="150" y="424" width="178" height="46" rx="10" fill="#dff8ed"/>
+    <text x="176" y="455" fill="#047857">RocoDex</text>
+    <rect x="346" y="424" width="176" height="46" rx="10" fill="#ffe7ec"/>
+    <text x="372" y="455" fill="#be4563">Photography</text>
+    <rect x="540" y="424" width="156" height="46" rx="10" fill="#e3f2ff"/>
+    <text x="568" y="455" fill="#2563eb">custard.top</text>
+  </g>
+</svg>

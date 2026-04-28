@@ -24,7 +24,7 @@ export default function Home() {
                 洛克图鉴 / RocoDex
               </h1>
               <p className="mt-5 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">
-                面向《洛克王国世界》的中文精灵资料整理项目。当前版本聚焦前 50 个图鉴编号、搜索筛选、详情页和数据可信度标记。
+                面向《洛克王国世界》的中文精灵资料整理项目。当前版本收录 347 只精灵，支持搜索筛选、详情页、数据可信度标记与玩家工具。
               </p>
               <div className="mt-8 max-w-2xl">
                 <HomeSearch />
@@ -46,7 +46,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-3xl font-bold text-slate-950">{stats.total}</p>
-                  <p className="mt-2 text-sm text-slate-600">覆盖 NO.001 至 NO.050</p>
+                  <p className="mt-2 text-sm text-slate-600">当前收录 347 只精灵</p>
                 </CardContent>
               </Card>
               <Card>
