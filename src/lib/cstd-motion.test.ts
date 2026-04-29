@@ -14,10 +14,10 @@ describe("CSTD motion preferences", () => {
     expect(CSTD_INTRO_SEEN_KEY).toBe("cstd.introSeen");
   });
 
-  test("plays the intro only when motion is allowed and the intro has not been seen", () => {
+  test("plays the intro on every page load when motion is allowed", () => {
     expect(shouldPlayCstdIntro({ reducedMotion: false, motionPreference: null, introSeen: null })).toBe(true);
     expect(shouldPlayCstdIntro({ reducedMotion: false, motionPreference: "enabled", introSeen: null })).toBe(true);
-    expect(shouldPlayCstdIntro({ reducedMotion: false, motionPreference: "enabled", introSeen: "true" })).toBe(false);
+    expect(shouldPlayCstdIntro({ reducedMotion: false, motionPreference: "enabled", introSeen: "true" })).toBe(true);
     expect(shouldPlayCstdIntro({ reducedMotion: false, motionPreference: "disabled", introSeen: null })).toBe(false);
     expect(shouldPlayCstdIntro({ reducedMotion: true, motionPreference: "enabled", introSeen: null })).toBe(false);
   });

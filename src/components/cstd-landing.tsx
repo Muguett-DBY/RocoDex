@@ -5,7 +5,6 @@ import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Camera, Pause, Play, RotateCcw, Sparkles } from "lucide-react";
 import {
-  CSTD_INTRO_SEEN_KEY,
   CSTD_MOTION_PREFERENCE_KEY,
   type CstdMotionPreference,
   getCstdIntroControlLabel,
@@ -119,7 +118,6 @@ export function CstdLanding() {
       shouldPlayCstdIntro({
         reducedMotion,
         motionPreference: preference,
-        introSeen: window.localStorage.getItem(CSTD_INTRO_SEEN_KEY),
       }),
     );
   }, [reducedMotion]);
@@ -127,7 +125,6 @@ export function CstdLanding() {
   useEffect(() => {
     if (!introVisible) return;
     const timer = window.setTimeout(() => {
-      window.localStorage.setItem(CSTD_INTRO_SEEN_KEY, "true");
       setIntroVisible(false);
     }, 3400);
 
@@ -144,7 +141,6 @@ export function CstdLanding() {
     const replayPreference: CstdMotionPreference = "enabled";
     setMotionPreference(replayPreference);
     window.localStorage.setItem(CSTD_MOTION_PREFERENCE_KEY, replayPreference);
-    window.localStorage.setItem(CSTD_INTRO_SEEN_KEY, "false");
     setIntroVisible(shouldPlayCstdIntroReplay({ reducedMotion: prefersReducedMotion, motionPreference: replayPreference }));
   }
 
@@ -156,7 +152,6 @@ export function CstdLanding() {
   }
 
   function skipIntro() {
-    window.localStorage.setItem(CSTD_INTRO_SEEN_KEY, "true");
     setIntroVisible(false);
   }
 

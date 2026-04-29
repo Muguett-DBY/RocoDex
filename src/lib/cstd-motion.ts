@@ -6,7 +6,7 @@ export type CstdMotionPreference = "enabled" | "disabled";
 type IntroDecision = {
   reducedMotion: boolean;
   motionPreference: string | null;
-  introSeen: string | null;
+  introSeen?: string | null;
 };
 
 type IntroReplayDecision = {
@@ -23,10 +23,10 @@ type PointerTiltInput = {
   rectHeight: number;
 };
 
-export function shouldPlayCstdIntro({ reducedMotion, motionPreference, introSeen }: IntroDecision) {
+export function shouldPlayCstdIntro({ reducedMotion, motionPreference }: IntroDecision) {
   if (reducedMotion) return false;
   if (motionPreference === "disabled") return false;
-  return introSeen !== "true";
+  return true;
 }
 
 export function shouldPlayCstdIntroReplay({ motionPreference }: IntroReplayDecision) {
