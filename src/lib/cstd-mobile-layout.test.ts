@@ -9,6 +9,10 @@ import {
   cstdNavLinkClassName,
   cstdPageShellClassName,
   cstdProjectGridClassName,
+  cstdProjectMetricGridClassName,
+  cstdProjectMetricLabelClassName,
+  cstdProjectMetricTileClassName,
+  cstdProjectMetricValueClassName,
 } from "./cstd-mobile-layout";
 
 describe("CSTD mobile layout rules", () => {
@@ -51,5 +55,15 @@ describe("CSTD mobile layout rules", () => {
   test("renders all project cards with equal grid weight", () => {
     expect(cstdProjectGridClassName).toBe("grid gap-4 md:grid-cols-2 xl:grid-cols-3");
     expect(cstdProjectGridClassName).not.toContain("col-span");
+  });
+
+  test("keeps project metric text inside its tile at narrow card widths", () => {
+    expect(cstdProjectMetricGridClassName).toContain("grid-cols-1");
+    expect(cstdProjectMetricGridClassName).toContain("sm:grid-cols-3");
+    expect(cstdProjectMetricTileClassName).toContain("min-w-0");
+    expect(cstdProjectMetricValueClassName).toContain("min-w-0");
+    expect(cstdProjectMetricValueClassName).toContain("break-words");
+    expect(cstdProjectMetricLabelClassName).toContain("min-w-0");
+    expect(cstdProjectMetricLabelClassName).toContain("break-words");
   });
 });

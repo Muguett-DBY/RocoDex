@@ -23,6 +23,10 @@ import {
   cstdPageShellClassName,
   cstdProjectCards,
   cstdProjectGridClassName,
+  cstdProjectMetricGridClassName,
+  cstdProjectMetricLabelClassName,
+  cstdProjectMetricTileClassName,
+  cstdProjectMetricValueClassName,
 } from "@/lib/cstd-mobile-layout";
 
 type MascotMood = "curious" | "happy" | "working";
@@ -776,7 +780,7 @@ function ProjectCard({
           <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${toneClasses} to-white shadow-inner`}>
             <Icon className="h-5 w-5" />
           </span>
-          <div>
+          <div className="min-w-0">
             <div className="flex flex-wrap gap-2">
               <span className="rounded-md bg-[#dff8ed] px-2 py-1 text-xs font-black text-[#047857]">{project.status}</span>
               <span className="rounded-md bg-white/80 px-2 py-1 text-xs font-black text-[#7b6656]">{project.kicker}</span>
@@ -786,11 +790,11 @@ function ProjectCard({
           </div>
         </div>
 
-        <div className="mt-5 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
+        <div className={cstdProjectMetricGridClassName}>
           {project.metrics.map(([value, label]) => (
-            <div key={value} className="rounded-lg border border-[#ead6ad] bg-white/72 p-3 sm:rounded-xl sm:p-4">
-              <strong className="block text-lg font-black sm:text-2xl">{value}</strong>
-              <span className="mt-1 block text-xs font-semibold text-[#7b6656]">{label}</span>
+            <div key={value} className={cstdProjectMetricTileClassName}>
+              <strong className={cstdProjectMetricValueClassName}>{value}</strong>
+              <span className={cstdProjectMetricLabelClassName}>{label}</span>
             </div>
           ))}
         </div>

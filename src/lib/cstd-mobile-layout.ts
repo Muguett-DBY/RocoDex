@@ -19,6 +19,14 @@ export const cstdMascotShellClassName =
 
 export const cstdProjectGridClassName = "grid gap-4 md:grid-cols-2 xl:grid-cols-3";
 
+export const cstdProjectMetricGridClassName = "mt-5 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-3 sm:gap-3";
+
+export const cstdProjectMetricTileClassName = "min-w-0 rounded-lg border border-[#ead6ad] bg-white/72 p-3 sm:rounded-xl sm:p-4 xl:px-2.5 xl:py-3";
+
+export const cstdProjectMetricValueClassName = "block min-w-0 break-words text-lg font-black leading-tight sm:text-xl xl:text-lg";
+
+export const cstdProjectMetricLabelClassName = "mt-1 block min-w-0 break-words text-xs font-semibold leading-snug text-[#7b6656]";
+
 export const cstdProjectCards = [
   {
     title: "洛克图鉴 / RocoDex",
