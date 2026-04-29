@@ -23,8 +23,7 @@ type PointerTiltInput = {
   rectHeight: number;
 };
 
-export function shouldPlayCstdIntro({ reducedMotion, motionPreference }: IntroDecision) {
-  if (reducedMotion) return false;
+export function shouldPlayCstdIntro({ motionPreference }: IntroDecision) {
   if (motionPreference === "disabled") return false;
   return true;
 }

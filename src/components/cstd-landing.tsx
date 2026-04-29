@@ -163,7 +163,7 @@ export function CstdLanding() {
 
   return (
     <main className="relative isolate min-h-screen overflow-hidden bg-[#fff6df] text-[#2f241d]">
-      <AnimatePresence>{introVisible ? <CstdIntro onSkip={skipIntro} /> : null}</AnimatePresence>
+      <AnimatePresence>{introVisible ? <CstdIntro motionDisabled={motionDisabled} onSkip={skipIntro} /> : null}</AnimatePresence>
 
       <motion.div
         aria-hidden="true"
@@ -464,13 +464,14 @@ function InteractiveCustardModel({
   );
 }
 
-function CstdIntro({ onSkip }: { onSkip: () => void }) {
+function CstdIntro({ motionDisabled, onSkip }: { motionDisabled: boolean; onSkip: () => void }) {
   return (
     <motion.div
       className="fixed inset-0 z-50 grid place-items-center overflow-hidden bg-[#fff4cf]"
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.03, filter: "blur(10px)" }}
-      transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
+      initial={motionDisabled ? { opacity: 0 } : { opacity: 1 }}
+      animate={{ opacity: 1 }}
+      exit={motionDisabled ? { opacity: 0 } : { opacity: 0, scale: 1.03, filter: "blur(10px)" }}
+      transition={motionDisabled ? { duration: 0.18 } : { duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
     >
       <motion.div
         aria-hidden="true"
@@ -491,37 +492,37 @@ function CstdIntro({ onSkip }: { onSkip: () => void }) {
       <div className="relative grid w-[min(90vw,560px)] place-items-center">
         <motion.div
           className="absolute h-72 w-72 rounded-[40px] border-[10px] border-[#2f241d] bg-[#f0b34a] shadow-[18px_18px_0_rgba(47,36,29,.12)]"
-          initial={{ scaleX: 0.08, scaleY: 0.72, borderRadius: 999 }}
-          animate={{ scaleX: [0.08, 1, 1.08, 1], scaleY: [0.72, 1, 0.95, 1], borderRadius: ["999px", "42px", "52px", "40px"] }}
-          transition={{ duration: 1.45, ease: [0.2, 0.8, 0.2, 1] }}
+          initial={motionDisabled ? false : { scaleX: 0.08, scaleY: 0.72, borderRadius: 999 }}
+          animate={motionDisabled ? undefined : { scaleX: [0.08, 1, 1.08, 1], scaleY: [0.72, 1, 0.95, 1], borderRadius: ["999px", "42px", "52px", "40px"] }}
+          transition={motionDisabled ? undefined : { duration: 1.45, ease: [0.2, 0.8, 0.2, 1] }}
         />
         <motion.div
           className="absolute h-[330px] w-[330px] rounded-[48px] border-[12px] border-[#2f241d] bg-[#fffaf0]"
-          initial={{ rotate: 0, scale: 0.92 }}
-          animate={{ rotate: [0, -2, 2, 0], scale: [0.92, 1, 1, 1.03] }}
-          transition={{ delay: 1.1, duration: 1.35, ease: "easeInOut" }}
+          initial={motionDisabled ? false : { rotate: 0, scale: 0.92 }}
+          animate={motionDisabled ? undefined : { rotate: [0, -2, 2, 0], scale: [0.92, 1, 1, 1.03] }}
+          transition={motionDisabled ? undefined : { delay: 1.1, duration: 1.35, ease: "easeInOut" }}
         />
         <motion.img
           src="/cstd-mascot.svg"
           alt=""
           className="relative z-10 w-72 drop-shadow-[14px_16px_0_rgba(47,36,29,.12)]"
-          initial={{ y: 52, opacity: 0, rotate: -8, scale: 0.72 }}
-          animate={{ y: [52, -16, 0, -8, 0], opacity: 1, rotate: [-8, 4, 0, -2, 0], scale: [0.72, 1.06, 1, 1.03, 1] }}
-          transition={{ delay: 0.34, duration: 1.85, ease: [0.2, 0.8, 0.2, 1] }}
+          initial={motionDisabled ? false : { y: 52, opacity: 0, rotate: -8, scale: 0.72 }}
+          animate={motionDisabled ? undefined : { y: [52, -16, 0, -8, 0], opacity: 1, rotate: [-8, 4, 0, -2, 0], scale: [0.72, 1.06, 1, 1.03, 1] }}
+          transition={motionDisabled ? undefined : { delay: 0.34, duration: 1.85, ease: [0.2, 0.8, 0.2, 1] }}
         />
         <motion.div
           className="relative z-20 mt-[340px] rounded-xl border-2 border-[#2f241d] bg-[#dff8ed] px-6 py-3 text-2xl font-black tracking-[0.16em] text-[#047857] shadow-[8px_8px_0_rgba(47,36,29,.12)]"
-          initial={{ opacity: 0, scale: 2.6, rotate: -14 }}
-          animate={{ opacity: [0, 1, 1], scale: [2.6, 1, 1.05], rotate: [-14, 3, 0] }}
-          transition={{ delay: 2.0, duration: 0.58 }}
+          initial={motionDisabled ? false : { opacity: 0, scale: 2.6, rotate: -14 }}
+          animate={motionDisabled ? undefined : { opacity: [0, 1, 1], scale: [2.6, 1, 1.05], rotate: [-14, 3, 0] }}
+          transition={motionDisabled ? undefined : { delay: 2.0, duration: 0.58 }}
         >
           CSTD
         </motion.div>
         <motion.p
           className="absolute -bottom-14 text-center text-sm font-black uppercase tracking-[0.22em] text-[#d98528]"
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.45, duration: 0.42 }}
+          initial={motionDisabled ? false : { opacity: 0, y: 8 }}
+          animate={motionDisabled ? undefined : { opacity: 1, y: 0 }}
+          transition={motionDisabled ? undefined : { delay: 2.45, duration: 0.42 }}
         >
           custard is ready
         </motion.p>

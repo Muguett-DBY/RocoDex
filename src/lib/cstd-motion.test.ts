@@ -19,7 +19,7 @@ describe("CSTD motion preferences", () => {
     expect(shouldPlayCstdIntro({ reducedMotion: false, motionPreference: "enabled", introSeen: null })).toBe(true);
     expect(shouldPlayCstdIntro({ reducedMotion: false, motionPreference: "enabled", introSeen: "true" })).toBe(true);
     expect(shouldPlayCstdIntro({ reducedMotion: false, motionPreference: "disabled", introSeen: null })).toBe(false);
-    expect(shouldPlayCstdIntro({ reducedMotion: true, motionPreference: "enabled", introSeen: null })).toBe(false);
+    expect(shouldPlayCstdIntro({ reducedMotion: true, motionPreference: "enabled", introSeen: null })).toBe(true);
   });
 
   test("allows explicit replay even when automatic intro is skipped for reduced motion", () => {
