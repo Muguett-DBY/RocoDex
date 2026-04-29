@@ -13,6 +13,17 @@ import {
   shouldPlayCstdIntro,
   shouldPlayCstdIntroReplay,
 } from "@/lib/cstd-motion";
+import {
+  cstdHeaderNavClassName,
+  cstdHeroActionsClassName,
+  cstdHeroSectionClassName,
+  cstdMascotAsideClassName,
+  cstdMascotShellClassName,
+  cstdNavLinkClassName,
+  cstdPageShellClassName,
+  cstdProjectCards,
+  cstdProjectGridClassName,
+} from "@/lib/cstd-mobile-layout";
 
 type MascotMood = "curious" | "happy" | "working";
 
@@ -28,7 +39,7 @@ const neutralTilt = {
 const projects = [
   {
     title: "洛克图鉴 / RocoDex",
-    kicker: "Primary project",
+    kicker: cstdProjectCards[0].kicker,
     status: "Live",
     href: "https://rocodex.custard.top",
     action: "打开图鉴",
@@ -47,7 +58,7 @@ const projects = [
   },
   {
     title: "奶黄包摄影",
-    kicker: "Photography",
+    kicker: cstdProjectCards[1].kicker,
     status: "Live",
     href: "https://shoot.custard.top",
     action: "查看摄影站",
@@ -64,7 +75,7 @@ const projects = [
   },
   {
     title: "更多项目孵化中",
-    kicker: "Incubating",
+    kicker: cstdProjectCards[2].kicker,
     status: "Next",
     href: "#projects",
     action: "继续发酵",
@@ -170,7 +181,7 @@ export function CstdLanding() {
       />
       <FloatingBits motionDisabled={motionDisabled} />
 
-      <div className="mx-auto w-[min(1160px,calc(100%-32px))]">
+      <div className={cstdPageShellClassName}>
         <header className="flex flex-wrap items-center justify-between gap-4 py-5 sm:py-7">
           <Link href="https://custard.top/" className="group inline-flex items-center gap-3 no-underline" aria-label="CSTD 首页">
             <motion.span
@@ -185,14 +196,14 @@ export function CstdLanding() {
             </span>
           </Link>
 
-          <nav className="flex flex-wrap items-center gap-2" aria-label="项目导航">
+          <nav className={cstdHeaderNavClassName} aria-label="项目导航">
             <NavLink href="#projects">Projects</NavLink>
             <NavLink href="https://rocodex.custard.top">RocoDex</NavLink>
             <NavLink href="https://shoot.custard.top">Photography</NavLink>
           </nav>
         </header>
 
-        <section className="grid min-h-[calc(100vh-88px)] items-center gap-8 pb-12 pt-3 lg:grid-cols-[minmax(0,1fr)_420px] lg:gap-14 lg:pb-16">
+        <section className={cstdHeroSectionClassName}>
           <motion.div
             initial={motionDisabled ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
@@ -202,7 +213,7 @@ export function CstdLanding() {
             <p className="font-black uppercase tracking-[0.22em] text-[#d98528]">Custard studio</p>
             <div className="mt-4 overflow-hidden">
               <motion.h1
-                className="text-[clamp(4.6rem,17vw,10rem)] font-black leading-[0.78] tracking-[0.03em] text-[#2f241d] drop-shadow-[9px_9px_0_rgba(246,191,63,.38)]"
+                className="text-[clamp(3.45rem,20vw,5.4rem)] font-black leading-[0.8] tracking-[0.03em] text-[#2f241d] drop-shadow-[7px_7px_0_rgba(246,191,63,.34)] sm:text-[clamp(4.6rem,17vw,10rem)] sm:leading-[0.78] sm:drop-shadow-[9px_9px_0_rgba(246,191,63,.38)]"
                 initial={motionDisabled ? false : { y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ delay: 0.08, duration: 0.75, ease: [0.2, 0.8, 0.2, 1] }}
@@ -211,15 +222,16 @@ export function CstdLanding() {
               </motion.h1>
             </div>
             <motion.p
-              className="mt-5 max-w-3xl text-[clamp(1.45rem,5.4vw,3.45rem)] font-black leading-tight"
+              className="mt-4 max-w-full break-all text-[clamp(1.45rem,7.4vw,2.25rem)] font-black leading-tight sm:mt-5 sm:max-w-3xl sm:text-[clamp(1.45rem,5.4vw,3.45rem)]"
               initial={motionDisabled ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.22, duration: 0.55 }}
             >
-              奶黄包的奇思妙想实验田
+              <span className="block">奶黄包的奇思</span>
+              <span className="block">妙想实验田</span>
             </motion.p>
             <motion.p
-              className="mt-5 max-w-2xl text-base leading-8 text-[#6f5b4a] sm:text-lg"
+              className="mt-4 max-w-full break-all text-sm leading-7 text-[#6f5b4a] sm:mt-5 sm:max-w-2xl sm:text-lg sm:leading-8"
               initial={motionDisabled ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.32, duration: 0.55 }}
@@ -228,7 +240,7 @@ export function CstdLanding() {
             </motion.p>
 
             <motion.div
-              className="mt-8 flex flex-wrap gap-3"
+              className={cstdHeroActionsClassName}
               initial={motionDisabled ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.42, duration: 0.5 }}
@@ -240,14 +252,14 @@ export function CstdLanding() {
             </motion.div>
 
             <motion.div
-              className="mt-6 grid max-w-2xl grid-cols-3 gap-2 sm:gap-3"
+              className="mt-5 grid max-w-2xl grid-cols-2 gap-2 sm:mt-6 sm:grid-cols-3 sm:gap-3"
               initial={motionDisabled ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
             >
               {noteItems.map(([value, label]) => (
-                <div key={value} className="rounded-lg border border-dashed border-[#cdb58c] bg-white/65 p-3 shadow-[3px_3px_0_rgba(47,36,29,.05)]">
-                  <strong className="block text-lg font-black sm:text-2xl">{value}</strong>
+                <div key={value} className="min-w-0 rounded-lg border border-dashed border-[#cdb58c] bg-white/65 p-3 shadow-[3px_3px_0_rgba(47,36,29,.05)]">
+                  <strong className="block break-all text-lg font-black sm:text-2xl">{value}</strong>
                   <span className="mt-1 block text-[0.68rem] font-medium text-[#7b6656] sm:text-xs">{label}</span>
                 </div>
               ))}
@@ -255,7 +267,7 @@ export function CstdLanding() {
           </motion.div>
 
           <motion.aside
-            className="relative order-first min-h-[255px] sm:min-h-[330px] lg:order-none lg:min-h-[560px]"
+            className={cstdMascotAsideClassName}
             initial={motionDisabled ? false : { opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: 0.18, duration: 0.65 }}
@@ -269,7 +281,7 @@ export function CstdLanding() {
               soft launch
             </motion.div>
             <motion.div
-              className="absolute left-3 top-10 rounded-xl border-2 border-[#2f241d] bg-[#dff8ed] px-4 py-2 text-sm font-black text-[#047857] shadow-[6px_6px_0_rgba(47,36,29,.12)]"
+              className="absolute left-3 top-10 hidden rounded-xl border-2 border-[#2f241d] bg-[#dff8ed] px-4 py-2 text-sm font-black text-[#047857] shadow-[6px_6px_0_rgba(47,36,29,.12)] sm:block"
               animate={motionDisabled ? undefined : { rotate: [-5, -1, -5], y: [0, 8, 0] }}
               transition={{ repeat: Infinity, duration: 3.8, ease: "easeInOut" }}
             >
@@ -295,7 +307,7 @@ export function CstdLanding() {
             <MotionControls motionPreference={motionPreference} onToggle={toggleMotion} onReplay={replayIntro} />
           </div>
 
-          <div className="grid gap-4 lg:grid-cols-2">
+          <div className={cstdProjectGridClassName}>
             {projects.map((project, index) => (
               <ProjectCard key={project.title} project={project} index={index} motionDisabled={motionDisabled} />
             ))}
@@ -351,7 +363,7 @@ function InteractiveCustardModel({
       onPointerEnter={() => onMoodChange("working")}
       onPointerLeave={handlePointerLeave}
       onPointerMove={handlePointerMove}
-      className="group absolute left-1/2 top-7 grid w-[min(100%,280px)] -translate-x-1/2 place-items-center overflow-hidden rounded-[28px] border-2 border-[#ead6ad] bg-white/55 p-3 shadow-[14px_14px_0_rgba(97,61,22,.08)] backdrop-blur-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0f8f64] sm:top-12 sm:w-[min(100%,340px)] sm:p-4 lg:top-20 lg:w-[min(100%,420px)] lg:rounded-[36px] lg:p-5 lg:shadow-[18px_18px_0_rgba(97,61,22,.08)]"
+      className={cstdMascotShellClassName}
       whileHover={motionDisabled ? undefined : { y: -6 }}
       whileTap={{ scale: 0.97 }}
       style={{ perspective: 920 }}
@@ -373,7 +385,7 @@ function InteractiveCustardModel({
 
       <motion.span
         aria-hidden="true"
-        className="relative z-10 block h-[242px] w-[250px] sm:h-[300px] sm:w-[315px] lg:h-[380px] lg:w-[390px]"
+        className="relative z-10 block h-[210px] w-[220px] sm:h-[270px] sm:w-[285px] lg:h-[380px] lg:w-[390px]"
         animate={{
           rotateX: tilt.rotateX,
           rotateY: tilt.rotateY,
@@ -565,7 +577,7 @@ function NavLink({ href, children }: { href: string; children: ReactNode }) {
   return (
     <Link
       href={href}
-      className="inline-flex min-h-10 items-center rounded-lg border border-[#ead6ad] bg-white/70 px-3 text-sm font-black text-[#2f241d] no-underline shadow-[3px_3px_0_rgba(47,36,29,.06)] transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-white"
+      className={cstdNavLinkClassName}
     >
       {children}
     </Link>
@@ -576,7 +588,7 @@ function HeroButton({ href, children, primary = false }: { href: string; childre
   return (
     <Link
       href={href}
-      className={`inline-flex min-h-11 items-center justify-center rounded-lg border px-5 text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 ${
+      className={`inline-flex min-h-11 w-full items-center justify-center rounded-lg border px-5 text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 sm:w-auto ${
         primary ? "border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59]" : "border-[#b8d7f5] bg-[#e3f2ff] text-[#2563eb] hover:border-[#2563eb]"
       }`}
     >
@@ -597,12 +609,12 @@ function MotionControls({
   const introEnabled = motionPreference !== "disabled";
 
   return (
-    <div className="flex flex-wrap gap-2 rounded-xl border border-[#ead6ad] bg-white/65 p-2 shadow-[5px_5px_0_rgba(47,36,29,.06)]">
+    <div className="grid w-full grid-cols-2 gap-2 rounded-xl border border-[#ead6ad] bg-white/65 p-2 shadow-[5px_5px_0_rgba(47,36,29,.06)] sm:w-auto sm:flex sm:flex-wrap">
       <button
         type="button"
         onClick={onToggle}
         aria-pressed={introEnabled}
-        className="inline-flex min-h-9 items-center gap-2 rounded-lg bg-[#fff0c9] px-3 text-xs font-black text-[#8a4b15] transition hover:bg-[#ffe08a]"
+        className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-[#fff0c9] px-2 text-xs font-black text-[#8a4b15] transition hover:bg-[#ffe08a] sm:px-3"
       >
         {introEnabled ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
         {getCstdIntroControlLabel(motionPreference)}
@@ -611,7 +623,7 @@ function MotionControls({
         type="button"
         onClick={onReplay}
         disabled={!introEnabled}
-        className="inline-flex min-h-9 items-center gap-2 rounded-lg bg-[#dff8ed] px-3 text-xs font-black text-[#047857] transition hover:bg-[#c8f3df] disabled:cursor-not-allowed disabled:opacity-50"
+        className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-[#dff8ed] px-2 text-xs font-black text-[#047857] transition hover:bg-[#c8f3df] disabled:cursor-not-allowed disabled:opacity-50 sm:px-3"
       >
         <RotateCcw className="h-3.5 w-3.5" />
         播放开场
@@ -630,7 +642,6 @@ function ProjectCard({
   motionDisabled: boolean;
 }) {
   const Icon = project.icon;
-  const featured = index === 0;
   const toneClasses = {
     mint: "from-[#dff8ed]/90 text-[#047857]",
     rose: "from-[#ffe7ec]/90 text-[#be4563]",
@@ -639,9 +650,7 @@ function ProjectCard({
 
   return (
     <motion.article
-      className={`group relative overflow-hidden rounded-xl border-2 border-[#ead6ad] bg-white/78 shadow-[0_22px_55px_rgba(97,61,22,.12)] backdrop-blur-sm ${
-        featured ? "lg:col-span-2" : ""
-      }`}
+      className="group relative overflow-hidden rounded-xl border-2 border-[#ead6ad] bg-white/78 shadow-[0_18px_42px_rgba(97,61,22,.1)] backdrop-blur-sm sm:shadow-[0_22px_55px_rgba(97,61,22,.12)]"
       initial={motionDisabled ? false : { opacity: 0, y: 34 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
@@ -656,8 +665,8 @@ function ProjectCard({
         whileHover={motionDisabled ? undefined : { x: "520%" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       />
-      <div className="relative p-6 sm:p-8">
-        <div className="flex items-start gap-4">
+      <div className="relative p-4 sm:p-6 xl:p-7">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
           <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${toneClasses} to-white shadow-inner`}>
             <Icon className="h-5 w-5" />
           </span>
@@ -666,22 +675,22 @@ function ProjectCard({
               <span className="rounded-md bg-[#dff8ed] px-2 py-1 text-xs font-black text-[#047857]">{project.status}</span>
               <span className="rounded-md bg-white/80 px-2 py-1 text-xs font-black text-[#7b6656]">{project.kicker}</span>
             </div>
-            <h3 className="mt-3 text-2xl font-black tracking-tight sm:text-3xl">{project.title}</h3>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-[#6f5b4a] sm:text-base">{project.description}</p>
+            <h3 className="mt-3 text-xl font-black tracking-tight sm:text-2xl xl:text-3xl">{project.title}</h3>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-[#6f5b4a] sm:mt-4 sm:text-base">{project.description}</p>
           </div>
         </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        <div className="mt-5 grid grid-cols-3 gap-2 sm:mt-6 sm:gap-3">
           {project.metrics.map(([value, label]) => (
-            <div key={value} className="rounded-xl border border-[#ead6ad] bg-white/72 p-4">
-              <strong className="block text-2xl font-black">{value}</strong>
+            <div key={value} className="rounded-lg border border-[#ead6ad] bg-white/72 p-3 sm:rounded-xl sm:p-4">
+              <strong className="block text-lg font-black sm:text-2xl">{value}</strong>
               <span className="mt-1 block text-xs font-semibold text-[#7b6656]">{label}</span>
             </div>
           ))}
         </div>
 
-        <div className="mt-6 flex flex-wrap gap-3">
-          <HeroButton href={project.href} primary={featured}>
+        <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap">
+          <HeroButton href={project.href}>
             {project.action}
           </HeroButton>
           {"softHref" in project && project.softHref ? <HeroButton href={project.softHref}>{project.softAction}</HeroButton> : null}
