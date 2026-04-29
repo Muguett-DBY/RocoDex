@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Camera, Pause, Play, RotateCcw, Sparkles } from "lucide-react";
+import { playCstdIntroSound } from "@/lib/cstd-intro-sound";
 import {
   CSTD_MOTION_PREFERENCE_KEY,
   type CstdMotionPreference,
   getCstdIntroControlLabel,
-  getCstdPointerTilt,
   shouldPlayCstdIntro,
   shouldPlayCstdIntroReplay,
 } from "@/lib/cstd-motion";
@@ -25,15 +26,7 @@ import {
 } from "@/lib/cstd-mobile-layout";
 
 type MascotMood = "curious" | "happy" | "working";
-
-const neutralTilt = {
-  x: 0,
-  y: 0,
-  rotateX: 0,
-  rotateY: 0,
-  glowX: 50,
-  glowY: 50,
-};
+type CstdIntroPhase = "idle" | "playing";
 
 const projects = [
   {
@@ -97,10 +90,23 @@ const noteItems = [
   ["Motion", "可爱动效实验"],
 ] as const;
 
+const CstdCustardStage = dynamic(
+  () => import("@/components/cstd-custard-stage").then((module) => module.CstdCustardStage),
+  {
+    ssr: false,
+    loading: () => (
+      <div className={`${cstdMascotShellClassName} min-h-[286px] sm:min-h-[374px] lg:min-h-[486px]`}>
+        <motion.img src="/cstd-mascot.svg" alt="" className="relative z-10 w-56 drop-shadow-[12px_14px_0_rgba(47,36,29,.1)] sm:w-72 lg:w-96" />
+      </div>
+    ),
+  },
+);
+
 export function CstdLanding() {
   const reducedMotion = usePrefersReducedMotion();
   const initialized = useRef(false);
   const [introVisible, setIntroVisible] = useState(false);
+  const [introPhase, setIntroPhase] = useState<CstdIntroPhase>("idle");
   const [motionPreference, setMotionPreference] = useState<CstdMotionPreference>("enabled");
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
   const prefersReducedMotion = reducedMotion ?? true;
@@ -113,23 +119,25 @@ export function CstdLanding() {
 
     const storedPreference = window.localStorage.getItem(CSTD_MOTION_PREFERENCE_KEY);
     const preference: CstdMotionPreference = storedPreference === "disabled" ? "disabled" : "enabled";
+    const shouldShowIntro = shouldPlayCstdIntro({
+      reducedMotion,
+      motionPreference: preference,
+    });
     setMotionPreference(preference);
-    setIntroVisible(
-      shouldPlayCstdIntro({
-        reducedMotion,
-        motionPreference: preference,
-      }),
-    );
+    setIntroVisible(shouldShowIntro);
+    setIntroPhase("idle");
   }, [reducedMotion]);
 
   useEffect(() => {
     if (!introVisible) return;
+    if (introPhase !== "playing") return;
     const timer = window.setTimeout(() => {
       setIntroVisible(false);
-    }, 3400);
+      setIntroPhase("idle");
+    }, 4300);
 
     return () => window.clearTimeout(timer);
-  }, [introVisible]);
+  }, [introPhase, introVisible]);
 
   const mascotCopy = useMemo(() => {
     if (mascotMood === "happy") return "奶黄包收到了你的点击，正在加糖。";
@@ -139,20 +147,31 @@ export function CstdLanding() {
 
   function replayIntro() {
     const replayPreference: CstdMotionPreference = "enabled";
+    const shouldReplayIntro = shouldPlayCstdIntroReplay({ reducedMotion: prefersReducedMotion, motionPreference: replayPreference });
     setMotionPreference(replayPreference);
     window.localStorage.setItem(CSTD_MOTION_PREFERENCE_KEY, replayPreference);
-    setIntroVisible(shouldPlayCstdIntroReplay({ reducedMotion: prefersReducedMotion, motionPreference: replayPreference }));
+    if (shouldReplayIntro) beginIntroPlayback();
   }
 
   function toggleMotion() {
     const nextPreference: CstdMotionPreference = motionPreference === "disabled" ? "enabled" : "disabled";
     setMotionPreference(nextPreference);
     window.localStorage.setItem(CSTD_MOTION_PREFERENCE_KEY, nextPreference);
-    if (nextPreference === "disabled") setIntroVisible(false);
+    if (nextPreference === "disabled") {
+      setIntroVisible(false);
+      setIntroPhase("idle");
+    }
+  }
+
+  function beginIntroPlayback() {
+    setIntroVisible(true);
+    setIntroPhase("playing");
+    void playCstdIntroSound();
   }
 
   function skipIntro() {
     setIntroVisible(false);
+    setIntroPhase("idle");
   }
 
   function pokeMascot() {
@@ -163,7 +182,7 @@ export function CstdLanding() {
 
   return (
     <main className="relative isolate min-h-screen overflow-hidden bg-[#fff6df] text-[#2f241d]">
-      <AnimatePresence>{introVisible ? <CstdIntro motionDisabled={motionDisabled} onSkip={skipIntro} /> : null}</AnimatePresence>
+      <AnimatePresence>{introVisible ? <CstdIntro phase={introPhase} onSkip={skipIntro} onStart={beginIntroPlayback} /> : null}</AnimatePresence>
 
       <motion.div
         aria-hidden="true"
@@ -283,7 +302,7 @@ export function CstdLanding() {
               fresh build
             </motion.div>
 
-            <InteractiveCustardModel
+            <CstdCustardStage
               mascotCopy={mascotCopy}
               mascotMood={mascotMood}
               motionDisabled={motionDisabled}
@@ -317,171 +336,61 @@ export function CstdLanding() {
   );
 }
 
-function InteractiveCustardModel({
-  mascotCopy,
-  mascotMood,
-  motionDisabled,
-  onMoodChange,
-  onPoke,
+function CstdIntro({
+  onSkip,
+  onStart,
+  phase,
 }: {
-  mascotCopy: string;
-  mascotMood: MascotMood;
-  motionDisabled: boolean;
-  onMoodChange: (mood: MascotMood) => void;
-  onPoke: () => void;
+  onSkip: () => void;
+  onStart: () => void;
+  phase: CstdIntroPhase;
 }) {
-  const [tilt, setTilt] = useState(neutralTilt);
+  const introPlaying = phase === "playing";
 
-  function handlePointerMove(event: ReactPointerEvent<HTMLButtonElement>) {
-    const rect = event.currentTarget.getBoundingClientRect();
-    setTilt(
-      getCstdPointerTilt({
-        clientX: event.clientX,
-        clientY: event.clientY,
-        rectLeft: rect.left,
-        rectTop: rect.top,
-        rectWidth: rect.width,
-        rectHeight: rect.height,
-      }),
-    );
-  }
-
-  function handlePointerLeave() {
-    setTilt(neutralTilt);
-    onMoodChange("curious");
-  }
-
-  return (
-    <motion.button
-      type="button"
-      onClick={onPoke}
-      onPointerEnter={() => onMoodChange("working")}
-      onPointerLeave={handlePointerLeave}
-      onPointerMove={handlePointerMove}
-      className={cstdMascotShellClassName}
-      whileHover={motionDisabled ? undefined : { y: -6 }}
-      whileTap={{ scale: 0.97 }}
-      style={{ perspective: 920 }}
-      aria-label="点击奶黄包互动"
-    >
-      <motion.span
-        aria-hidden="true"
-        className="absolute inset-0 opacity-80"
-        style={{
-          background: `radial-gradient(circle at ${tilt.glowX}% ${tilt.glowY}%, rgba(255,255,255,.95), rgba(255,240,201,.42) 28%, transparent 62%)`,
-        }}
-      />
-      <motion.span
-        aria-hidden="true"
-        className="absolute inset-x-9 bottom-8 h-14 rounded-full bg-[#d98528]/18 blur-xl"
-        animate={motionDisabled ? undefined : { scale: [1, 1.14, 1], opacity: [0.42, 0.76, 0.42] }}
-        transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
-      />
-
-      <motion.span
-        aria-hidden="true"
-        className="relative z-10 block h-[210px] w-[220px] sm:h-[270px] sm:w-[285px] lg:h-[380px] lg:w-[390px]"
-        animate={{
-          rotateX: tilt.rotateX,
-          rotateY: tilt.rotateY,
-          y: !motionDisabled && mascotMood === "happy" ? [-5, -24, -5] : 0,
-        }}
-        transition={{ type: "spring", stiffness: 150, damping: 18 }}
-        style={{ transformStyle: "preserve-3d" }}
-      >
-        <motion.span
-          className="absolute left-1/2 top-0 h-12 w-4 -translate-x-1/2 rounded-full bg-white/80"
-          animate={motionDisabled ? undefined : { y: [0, -10, 0], opacity: [0.35, 0.85, 0.35] }}
-          transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
-        />
-        <motion.span
-          className="absolute left-[34%] top-5 h-9 w-3 -translate-x-1/2 rotate-[-18deg] rounded-full bg-white/70"
-          animate={motionDisabled ? undefined : { y: [0, -8, 0], opacity: [0.25, 0.7, 0.25] }}
-          transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut", delay: 0.35 }}
-        />
-        <motion.span
-          className="absolute right-[32%] top-8 h-8 w-3 rotate-[20deg] rounded-full bg-white/70"
-          animate={motionDisabled ? undefined : { y: [0, -7, 0], opacity: [0.2, 0.68, 0.2] }}
-          transition={{ repeat: Infinity, duration: 3, ease: "easeInOut", delay: 0.65 }}
-        />
-
-        <span
-          className="absolute bottom-8 left-5 right-5 h-[34%] rotate-[-2deg] border-[5px] border-[#2f241d] bg-gradient-to-br from-[#e9fff7] via-[#dff8ed] to-[#b9eee0] shadow-[0_18px_0_rgba(47,36,29,.1),inset_0_-18px_26px_rgba(4,120,87,.1)] sm:border-[6px] lg:border-[7px]"
-          style={{ borderRadius: "52% 48% 42% 46% / 48% 48% 58% 54%", transform: "translateZ(10px)" }}
-        >
-          <span className="absolute bottom-7 left-1/2 h-8 w-[58%] -translate-x-1/2 rounded-[50%] border-b-[5px] border-[#9fc9bd] opacity-65" />
-          <span className="absolute bottom-4 left-1/2 -translate-x-1/2 text-sm font-black tracking-[0.22em] text-[#2f241d] sm:text-base">CSTD</span>
-        </span>
-
-        <motion.span
-          className="absolute left-[18%] top-[43%] h-4 w-16 origin-right rounded-full border-[4px] border-[#2f241d] border-r-0 bg-[#f6bf3f] sm:h-5 sm:w-20"
-          animate={motionDisabled ? undefined : { rotate: mascotMood === "happy" ? [-10, -28, -10] : [-8, -15, -8] }}
-          transition={{ repeat: mascotMood === "happy" ? 0 : Infinity, duration: 2.8, ease: "easeInOut" }}
-        />
-        <motion.span
-          className="absolute right-[18%] top-[43%] h-4 w-16 origin-left rounded-full border-[4px] border-[#2f241d] border-l-0 bg-[#f6bf3f] sm:h-5 sm:w-20"
-          animate={motionDisabled ? undefined : { rotate: mascotMood === "happy" ? [10, 28, 10] : [8, 15, 8] }}
-          transition={{ repeat: mascotMood === "happy" ? 0 : Infinity, duration: 2.8, ease: "easeInOut" }}
-        />
-
-        <span
-          className="absolute left-1/2 top-[18%] h-[54%] w-[54%] -translate-x-1/2 border-[6px] border-[#2f241d] bg-gradient-to-br from-[#ffe38a] via-[#f6bf3f] to-[#e59b20] shadow-[inset_18px_18px_24px_rgba(255,255,255,.24),inset_-18px_-18px_24px_rgba(138,75,21,.14),0_20px_0_rgba(47,36,29,.1)] sm:border-[7px]"
-          style={{
-            borderRadius: "48% 54% 48% 52% / 44% 42% 58% 56%",
-            transform: "translateX(-50%) translateZ(52px)",
-          }}
-        >
-          <span
-            className="absolute left-[28%] top-[35%] h-3.5 w-3.5 rounded-full bg-[#2f241d] sm:h-4 sm:w-4"
-            style={{ transform: `translate(${tilt.x * 5}px, ${tilt.y * 3}px)` }}
-          />
-          <span
-            className="absolute right-[28%] top-[35%] h-3.5 w-3.5 rounded-full bg-[#2f241d] sm:h-4 sm:w-4"
-            style={{ transform: `translate(${tilt.x * 5}px, ${tilt.y * 3}px)` }}
-          />
-          <span className="absolute left-[20%] top-[48%] h-5 w-8 rounded-full bg-[#ff9db2]/45 blur-[1px]" />
-          <span className="absolute right-[20%] top-[48%] h-5 w-8 rounded-full bg-[#ff9db2]/45 blur-[1px]" />
-          <span
-            className="absolute left-1/2 top-[48%] h-9 w-16 -translate-x-1/2 rounded-b-full border-b-[6px] border-[#2f241d] sm:h-10 sm:w-20"
-            style={{ transform: `translate(calc(-50% + ${tilt.x * 2}px), ${tilt.y * 2}px)` }}
-          />
-          <span className="absolute right-[17%] top-[15%] h-9 w-7 rotate-[24deg] rounded-full bg-white/35 blur-[1px]" />
-        </span>
-
-        <motion.span
-          className="absolute left-[16%] top-[33%] grid h-11 w-11 place-items-center rounded-xl border-[4px] border-[#2f241d] bg-white text-[#f6bf3f] shadow-[5px_5px_0_rgba(47,36,29,.08)] sm:h-14 sm:w-14"
-          animate={motionDisabled ? undefined : { rotate: [-8, 8, -8], scale: [1, 1.08, 1] }}
-          transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut" }}
-        >
-          <Sparkles className="h-6 w-6 sm:h-7 sm:w-7" />
-        </motion.span>
-      </motion.span>
-
-      <span className="relative z-10 mt-1 rounded-full border border-[#ead6ad] bg-[#fffaf0]/92 px-3 py-1.5 text-[0.66rem] font-black text-[#7b6656] shadow-sm sm:px-4 sm:py-2 sm:text-xs">
-        {mascotCopy}
-      </span>
-    </motion.button>
-  );
-}
-
-function CstdIntro({ motionDisabled, onSkip }: { motionDisabled: boolean; onSkip: () => void }) {
   return (
     <motion.div
       className="fixed inset-0 z-50 grid place-items-center overflow-hidden bg-[#fff4cf]"
-      initial={motionDisabled ? { opacity: 0 } : { opacity: 1 }}
-      animate={{ opacity: 1 }}
-      exit={motionDisabled ? { opacity: 0 } : { opacity: 0, scale: 1.03, filter: "blur(10px)" }}
-      transition={motionDisabled ? { duration: 0.18 } : { duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.03, filter: "blur(10px)" }}
+      transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
     >
       <motion.div
         aria-hidden="true"
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 50% 45%, rgba(246,191,63,.4), transparent 24%), linear-gradient(90deg, rgba(47,36,29,.05) 1px, transparent 1px), linear-gradient(180deg, rgba(47,36,29,.05) 1px, transparent 1px)",
+            "radial-gradient(circle at 50% 42%, rgba(246,191,63,.5), transparent 23%), radial-gradient(circle at 22% 70%, rgba(223,248,237,.85), transparent 28%), radial-gradient(circle at 78% 22%, rgba(255,231,236,.82), transparent 24%), linear-gradient(90deg, rgba(47,36,29,.05) 1px, transparent 1px), linear-gradient(180deg, rgba(47,36,29,.05) 1px, transparent 1px)",
           backgroundSize: "auto, 34px 34px, 34px 34px",
         }}
       />
+      <motion.div
+        aria-hidden="true"
+        className="absolute left-[-8%] top-[16%] h-24 w-[116%] rounded-full border-y border-[#ead6ad]/80 bg-white/20 blur-sm"
+        animate={introPlaying ? { x: ["-8%", "9%", "-6%"], opacity: [0.2, 0.8, 0.18] } : { opacity: 0.28 }}
+        transition={{ duration: 3.6, ease: "easeInOut" }}
+      />
+      {Array.from({ length: 18 }, (_, index) => (
+        <motion.span
+          key={index}
+          aria-hidden="true"
+          className="absolute rounded-sm border border-[#2f241d]/35 shadow-[4px_4px_0_rgba(47,36,29,.06)]"
+          style={{
+            background: ["#f6bf3f", "#dff8ed", "#ffe7ec", "#fffaf0"][index % 4],
+            height: 8 + (index % 3) * 5,
+            left: `${8 + ((index * 17) % 86)}%`,
+            top: `${14 + ((index * 23) % 74)}%`,
+            width: 8 + (index % 4) * 4,
+          }}
+          initial={{ opacity: 0, scale: 0.4, y: 16, rotate: -18 }}
+          animate={
+            introPlaying
+              ? { opacity: [0, 0.95, 0], scale: [0.4, 1, 0.7], y: [16, -36 - (index % 4) * 20], rotate: [-18, 120 + index * 18] }
+              : { opacity: 0 }
+          }
+          transition={{ delay: 1.95 + index * 0.025, duration: 1.35, ease: "easeOut" }}
+        />
+      ))}
+      {introPlaying ? <IntroSoundWaves /> : null}
       <button
         type="button"
         onClick={onSkip}
@@ -489,45 +398,114 @@ function CstdIntro({ motionDisabled, onSkip }: { motionDisabled: boolean; onSkip
       >
         跳过
       </button>
-      <div className="relative grid w-[min(90vw,560px)] place-items-center">
-        <motion.div
-          className="absolute h-72 w-72 rounded-[40px] border-[10px] border-[#2f241d] bg-[#f0b34a] shadow-[18px_18px_0_rgba(47,36,29,.12)]"
-          initial={motionDisabled ? false : { scaleX: 0.08, scaleY: 0.72, borderRadius: 999 }}
-          animate={motionDisabled ? undefined : { scaleX: [0.08, 1, 1.08, 1], scaleY: [0.72, 1, 0.95, 1], borderRadius: ["999px", "42px", "52px", "40px"] }}
-          transition={motionDisabled ? undefined : { duration: 1.45, ease: [0.2, 0.8, 0.2, 1] }}
-        />
-        <motion.div
-          className="absolute h-[330px] w-[330px] rounded-[48px] border-[12px] border-[#2f241d] bg-[#fffaf0]"
-          initial={motionDisabled ? false : { rotate: 0, scale: 0.92 }}
-          animate={motionDisabled ? undefined : { rotate: [0, -2, 2, 0], scale: [0.92, 1, 1, 1.03] }}
-          transition={motionDisabled ? undefined : { delay: 1.1, duration: 1.35, ease: "easeInOut" }}
-        />
-        <motion.img
-          src="/cstd-mascot.svg"
-          alt=""
-          className="relative z-10 w-72 drop-shadow-[14px_16px_0_rgba(47,36,29,.12)]"
-          initial={motionDisabled ? false : { y: 52, opacity: 0, rotate: -8, scale: 0.72 }}
-          animate={motionDisabled ? undefined : { y: [52, -16, 0, -8, 0], opacity: 1, rotate: [-8, 4, 0, -2, 0], scale: [0.72, 1.06, 1, 1.03, 1] }}
-          transition={motionDisabled ? undefined : { delay: 0.34, duration: 1.85, ease: [0.2, 0.8, 0.2, 1] }}
-        />
-        <motion.div
-          className="relative z-20 mt-[340px] rounded-xl border-2 border-[#2f241d] bg-[#dff8ed] px-6 py-3 text-2xl font-black tracking-[0.16em] text-[#047857] shadow-[8px_8px_0_rgba(47,36,29,.12)]"
-          initial={motionDisabled ? false : { opacity: 0, scale: 2.6, rotate: -14 }}
-          animate={motionDisabled ? undefined : { opacity: [0, 1, 1], scale: [2.6, 1, 1.05], rotate: [-14, 3, 0] }}
-          transition={motionDisabled ? undefined : { delay: 2.0, duration: 0.58 }}
-        >
-          CSTD
-        </motion.div>
-        <motion.p
-          className="absolute -bottom-14 text-center text-sm font-black uppercase tracking-[0.22em] text-[#d98528]"
-          initial={motionDisabled ? false : { opacity: 0, y: 8 }}
-          animate={motionDisabled ? undefined : { opacity: 1, y: 0 }}
-          transition={motionDisabled ? undefined : { delay: 2.45, duration: 0.42 }}
-        >
-          custard is ready
-        </motion.p>
+      <div className="relative grid w-[min(90vw,620px)] place-items-center">
+        {introPlaying ? (
+          <motion.div key="playing" className="relative min-h-[460px] w-full">
+            <motion.div
+              className="absolute left-1/2 top-[42%] z-30 -mt-[236px] -translate-x-1/2 rounded-full border border-[#f6bf3f]/70 bg-white/75 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#d98528] shadow-[6px_6px_0_rgba(47,36,29,.08)]"
+              initial={{ opacity: 0, y: 8, scale: 0.88 }}
+              animate={{ opacity: [0, 1, 1, 0], y: [8, 0, 0, -8], scale: [0.88, 1.05, 1, 0.96] }}
+              transition={{ duration: 1.45, ease: "easeOut" }}
+            >
+              已唤醒
+            </motion.div>
+            <motion.div
+              className="absolute left-1/2 top-[42%] -ml-36 -mt-36 h-72 w-72 rounded-[40px] border-[10px] border-[#2f241d] bg-[#f0b34a] shadow-[18px_18px_0_rgba(47,36,29,.12)] sm:-ml-40 sm:-mt-40 sm:h-80 sm:w-80"
+              initial={{ scaleX: 0.08, scaleY: 0.72, borderRadius: 999 }}
+              animate={{ scaleX: [0.08, 1, 1.08, 1], scaleY: [0.72, 1, 0.95, 1], borderRadius: ["999px", "42px", "52px", "40px"] }}
+              transition={{ duration: 1.45, ease: [0.2, 0.8, 0.2, 1] }}
+            />
+            <motion.div
+              className="absolute left-1/2 top-[42%] -ml-[165px] -mt-[165px] h-[330px] w-[330px] rounded-[48px] border-[12px] border-[#2f241d] bg-[#fffaf0] shadow-[22px_22px_0_rgba(97,61,22,.1)] sm:-ml-[180px] sm:-mt-[180px] sm:h-[360px] sm:w-[360px]"
+              initial={{ rotate: 0, scale: 0.92 }}
+              animate={{ rotate: [0, -2, 2, 0], scale: [0.92, 1, 1, 1.03] }}
+              transition={{ delay: 1.1, duration: 1.35, ease: "easeInOut" }}
+            />
+            <motion.img
+              src="/cstd-mascot.svg"
+              alt=""
+              className="absolute left-1/2 top-[42%] z-10 -ml-36 -mt-40 w-72 drop-shadow-[14px_16px_0_rgba(47,36,29,.12)] sm:-ml-40 sm:-mt-44 sm:w-80"
+              initial={{ y: 70, opacity: 0, rotate: -12, scale: 0.6 }}
+              animate={{ y: [70, -26, 0, -12, 0], opacity: 1, rotate: [-12, 7, 0, -3, 0], scale: [0.6, 1.12, 0.96, 1.05, 1] }}
+              transition={{ delay: 0.28, duration: 1.95, ease: [0.2, 0.8, 0.2, 1] }}
+            />
+            <div className="absolute left-1/2 top-[42%] z-20 mt-[188px] -translate-x-1/2">
+              <motion.div
+                className="rounded-xl border-2 border-[#2f241d] bg-[#dff8ed] px-6 py-3 text-2xl font-black tracking-[0.16em] text-[#047857] shadow-[8px_8px_0_rgba(47,36,29,.12)]"
+                initial={{ opacity: 0, scale: 2.8, rotate: -16 }}
+                animate={{ opacity: [0, 1, 1], scale: [2.8, 0.94, 1.08], rotate: [-16, 4, 0], x: [0, -5, 5, 0] }}
+                transition={{ delay: 2.04, duration: 0.68, ease: [0.18, 0.9, 0.24, 1] }}
+              >
+                CSTD
+              </motion.div>
+            </div>
+            <div className="absolute left-1/2 top-[42%] mt-[270px] w-80 -translate-x-1/2 text-center">
+              <motion.p
+                className="text-sm font-black uppercase tracking-[0.22em] text-[#d98528]"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 2.55, duration: 0.42 }}
+              >
+                custard is ready
+              </motion.p>
+            </div>
+          </motion.div>
+        ) : (
+          <motion.div key="idle" className="grid place-items-center text-center" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.48 }}>
+            <motion.img
+              src="/cstd-mascot.svg"
+              alt=""
+              className="w-64 drop-shadow-[14px_16px_0_rgba(47,36,29,.12)] sm:w-80"
+              animate={{ y: [0, -10, 0], rotate: [-2, 2, -2] }}
+              transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
+            />
+            <p className="mt-4 text-sm font-black uppercase tracking-[0.22em] text-[#d98528]">tap to wake the custard</p>
+            <h2 className="mt-2 text-4xl font-black tracking-tight text-[#2f241d] sm:text-6xl">CSTD</h2>
+            <button
+              type="button"
+              onClick={onStart}
+              className="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl border-2 border-[#2f241d] bg-[#0f8f64] px-7 text-base font-black text-white shadow-[7px_7px_0_rgba(47,36,29,.14)] transition hover:-translate-y-0.5 hover:bg-[#0d7d59]"
+            >
+              开启 CSTD
+            </button>
+          </motion.div>
+        )}
       </div>
     </motion.div>
+  );
+}
+
+function IntroSoundWaves() {
+  const waveDelays = [0.04, 0.18, 0.34, 0.52];
+
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+      {waveDelays.map((delay, index) => (
+        <motion.span
+          key={delay}
+          className="absolute left-1/2 top-[42%] h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d98528]/55"
+          initial={{ opacity: 0, scale: 0.25 }}
+          animate={{ opacity: [0, 0.58, 0], scale: [0.25, 1.2 + index * 0.22, 1.75 + index * 0.28] }}
+          transition={{ delay, duration: 1.05, ease: "easeOut" }}
+        />
+      ))}
+      {Array.from({ length: 14 }, (_, index) => (
+        <motion.span
+          key={index}
+          className="absolute left-1/2 top-[42%] h-2.5 w-2.5 rounded-sm border border-[#2f241d]/25"
+          style={{ background: ["#f6bf3f", "#dff8ed", "#ffe7ec", "#fffaf0"][index % 4] }}
+          initial={{ opacity: 0, x: 0, y: 0, rotate: 0, scale: 0.4 }}
+          animate={{
+            opacity: [0, 1, 0],
+            x: Math.cos((index / 14) * Math.PI * 2) * (100 + (index % 4) * 24),
+            y: Math.sin((index / 14) * Math.PI * 2) * (78 + (index % 3) * 18),
+            rotate: 120 + index * 22,
+            scale: [0.4, 1.15, 0.7],
+          }}
+          transition={{ delay: 0.12 + index * 0.018, duration: 1.25, ease: "easeOut" }}
+        />
+      ))}
+    </div>
   );
 }
 
