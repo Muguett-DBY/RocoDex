@@ -1,213 +1,195 @@
+type AudioConstructor = new (src?: string) => HTMLAudioElement;
+
 type AudioWindow = Window &
   typeof globalThis & {
-    webkitAudioContext?: typeof AudioContext;
+    Audio?: AudioConstructor;
   };
 
-let sharedAudioContext: AudioContext | null = null;
+const CSTD_AUDIO_PREFERENCE_KEY = "cstd.audioPreference";
+const CSTD_INTRO_SOUND_SRC = "/cstd-audio/intro-custard-stinger.wav";
+const CSTD_BGM_SOUND_SRC = "/cstd-audio/custard-warm-loop.wav";
+const CSTD_POKE_SOUND_SRC = "/cstd-audio/custard-pop.wav";
+const CSTD_INTRO_VOLUME = 0.78;
+const CSTD_POKE_VOLUME = 0.58;
+const CSTD_BGM_DEFAULT_VOLUME = 0.12;
+const CSTD_BGM_MAX_VOLUME = 0.22;
+
+let bgmAudio: HTMLAudioElement | null = null;
+let bgmPlaying = false;
+let bgmVolume = CSTD_BGM_DEFAULT_VOLUME;
+let activeOneShots: HTMLAudioElement[] = [];
 
 export async function unlockCstdAudio() {
-  const context = getCstdAudioContext();
-  if (!context) return false;
-
-  try {
-    const resumed = await beginCstdAudioResume(context);
-    if (!resumed) return false;
-  } catch {
-    sharedAudioContext = null;
-    return false;
-  }
-
-  return Boolean(context);
+  if (isCstdAudioPreferenceDisabled()) return false;
+  return Boolean(getAudioConstructor());
 }
 
 export async function playCstdIntroSound() {
-  const context = getCstdAudioContext();
-  if (!context) return false;
-
-  try {
-    const resumePromise = beginCstdAudioResume(context);
-    const start = context.currentTime + 0.025;
-    const master = createMasterGain(context, start, 0.14, 1.05);
-
-    scheduleTone(context, master, {
-      delay: 0,
-      duration: 0.26,
-      fromFrequency: 196,
-      toFrequency: 124,
-      gain: 0.92,
-      type: "sine",
-    });
-    scheduleTone(context, master, {
-      delay: 0.035,
-      duration: 0.18,
-      fromFrequency: 294,
-      toFrequency: 202,
-      gain: 0.42,
-      type: "sine",
-    });
-    scheduleTone(context, master, {
-      delay: 0.17,
-      duration: 0.18,
-      fromFrequency: 720,
-      toFrequency: 1080,
-      gain: 0.54,
-      type: "triangle",
-    });
-    scheduleTone(context, master, {
-      delay: 0.3,
-      duration: 0.2,
-      fromFrequency: 1040,
-      toFrequency: 1510,
-      gain: 0.42,
-      type: "sine",
-    });
-    scheduleTone(context, master, {
-      delay: 0.44,
-      duration: 0.14,
-      fromFrequency: 1480,
-      toFrequency: 2200,
-      gain: 0.3,
-      type: "triangle",
-    });
-    scheduleTone(context, master, {
-      delay: 0.54,
-      duration: 0.18,
-      fromFrequency: 1880,
-      toFrequency: 2680,
-      gain: 0.24,
-      type: "sine",
-    });
-
-    if (!(await resumePromise)) return false;
-    scheduleDisconnect(master, 1180);
-    return true;
-  } catch {
-    sharedAudioContext = null;
-    return false;
-  }
+  return playCstdOneShot(CSTD_INTRO_SOUND_SRC, CSTD_INTRO_VOLUME);
 }
 
 export async function playCstdPokeSound() {
-  const context = getCstdAudioContext();
-  if (!context) return false;
+  return playCstdOneShot(CSTD_POKE_SOUND_SRC, CSTD_POKE_VOLUME);
+}
+
+export async function startCstdBgm(volume = CSTD_BGM_DEFAULT_VOLUME) {
+  if (isCstdAudioPreferenceDisabled()) return false;
+
+  const nextVolume = normalizeBgmVolume(volume);
+  bgmVolume = nextVolume;
 
   try {
-    const resumePromise = beginCstdAudioResume(context);
-    const start = context.currentTime + 0.02;
-    const master = createMasterGain(context, start, 0.085, 0.52);
+    if (!bgmAudio) {
+      bgmAudio = createCstdAudio(CSTD_BGM_SOUND_SRC, {
+        loop: true,
+        preload: "auto",
+        volume: nextVolume,
+      });
+    }
 
-    scheduleTone(context, master, {
-      delay: 0,
-      duration: 0.15,
-      fromFrequency: 360,
-      toFrequency: 190,
-      gain: 0.62,
-      type: "sine",
-    });
-    scheduleTone(context, master, {
-      delay: 0.1,
-      duration: 0.16,
-      fromFrequency: 980,
-      toFrequency: 1540,
-      gain: 0.44,
-      type: "triangle",
-    });
-    scheduleTone(context, master, {
-      delay: 0.23,
-      duration: 0.12,
-      fromFrequency: 1680,
-      toFrequency: 2260,
-      gain: 0.26,
-      type: "sine",
-    });
+    if (!bgmAudio) return false;
 
-    if (!(await resumePromise)) return false;
-    scheduleDisconnect(master, 680);
+    bgmAudio.loop = true;
+    bgmAudio.volume = nextVolume;
+
+    if (bgmPlaying) return true;
+
+    const playResult = bgmAudio.play();
+    if (playResult) await playResult;
+    bgmPlaying = true;
     return true;
   } catch {
-    sharedAudioContext = null;
+    bgmPlaying = false;
+    bgmAudio = null;
     return false;
   }
 }
 
-function getCstdAudioContext() {
-  if (typeof window === "undefined") return false;
-
-  const audioWindow = window as AudioWindow;
-  const AudioContextConstructor = audioWindow.AudioContext ?? audioWindow.webkitAudioContext;
-  if (!AudioContextConstructor) return false;
+export function stopCstdBgm() {
+  if (!bgmAudio) {
+    bgmPlaying = false;
+    return;
+  }
 
   try {
-    const context = sharedAudioContext ?? new AudioContextConstructor();
-    sharedAudioContext = context;
-    return context;
+    bgmAudio.pause();
   } catch {
-    sharedAudioContext = null;
+    // Decorative audio must never interrupt page interaction.
+  }
+
+  try {
+    bgmAudio.currentTime = 0;
+  } catch {
+    // Some browsers can reject currentTime before metadata is ready.
+  }
+
+  bgmPlaying = false;
+  bgmAudio = null;
+}
+
+export function setCstdAudioVolume(volume: number) {
+  bgmVolume = normalizeBgmVolume(volume);
+
+  if (!bgmAudio) return;
+
+  try {
+    bgmAudio.volume = bgmVolume;
+  } catch {
+    // Volume changes are non-critical.
+  }
+}
+
+export function isCstdBgmPlaying() {
+  return bgmPlaying;
+}
+
+function playCstdOneShot(src: string, volume: number) {
+  if (isCstdAudioPreferenceDisabled()) return Promise.resolve(false);
+
+  return playOneShotAsset(src, volume);
+}
+
+async function playOneShotAsset(src: string, volume: number) {
+  try {
+    const audio = createCstdAudio(src, {
+      loop: false,
+      preload: "auto",
+      volume: normalizeOneShotVolume(volume),
+    });
+    if (!audio) return false;
+
+    activeOneShots.push(audio);
+    cleanupOneShot(audio);
+
+    const playResult = audio.play();
+    if (playResult) await playResult;
+    return true;
+  } catch {
     return false;
   }
 }
 
-function beginCstdAudioResume(context: AudioContext) {
-  if (context.state === "suspended") {
-    return context.resume().then(
-      () => true,
-      () => {
-        sharedAudioContext = null;
-        return false;
-      },
-    );
-  }
-
-  return Promise.resolve(true);
-}
-
-function createMasterGain(context: AudioContext, start: number, peakGain: number, duration: number) {
-  const master = context.createGain();
-  master.gain.setValueAtTime(0.0001, start);
-  master.gain.exponentialRampToValueAtTime(peakGain, start + 0.025);
-  master.gain.exponentialRampToValueAtTime(0.0001, start + duration);
-  master.connect(context.destination);
-  return master;
-}
-
-function scheduleDisconnect(node: AudioNode, delay: number) {
-  window.setTimeout(() => node.disconnect(), delay);
-}
-
-function scheduleTone(
-  context: AudioContext,
-  destination: AudioNode,
+function createCstdAudio(
+  src: string,
   {
-    delay,
-    duration,
-    fromFrequency,
-    gain,
-    toFrequency,
-    type,
+    loop,
+    preload,
+    volume,
   }: {
-    delay: number;
-    duration: number;
-    fromFrequency: number;
-    gain: number;
-    toFrequency: number;
-    type: OscillatorType;
+    loop: boolean;
+    preload: "auto" | "metadata" | "none";
+    volume: number;
   },
 ) {
-  const start = context.currentTime + 0.025 + delay;
-  const end = start + duration;
-  const oscillator = context.createOscillator();
-  const envelope = context.createGain();
+  const AudioConstructor = getAudioConstructor();
+  if (!AudioConstructor) return null;
 
-  oscillator.type = type;
-  oscillator.frequency.setValueAtTime(fromFrequency, start);
-  oscillator.frequency.exponentialRampToValueAtTime(toFrequency, end);
+  const audio = new AudioConstructor(src);
+  audio.preload = preload;
+  audio.loop = loop;
+  audio.volume = volume;
+  return audio;
+}
 
-  envelope.gain.setValueAtTime(0.0001, start);
-  envelope.gain.exponentialRampToValueAtTime(gain, start + 0.025);
-  envelope.gain.exponentialRampToValueAtTime(0.0001, end);
+function getAudioConstructor() {
+  if (typeof window === "undefined") return null;
 
-  oscillator.connect(envelope);
-  envelope.connect(destination);
-  oscillator.start(start);
-  oscillator.stop(end + 0.03);
+  const audioWindow = window as AudioWindow;
+  return audioWindow.Audio ?? null;
+}
+
+function isCstdAudioPreferenceDisabled() {
+  if (typeof window === "undefined") return false;
+
+  try {
+    return window.localStorage?.getItem(CSTD_AUDIO_PREFERENCE_KEY) === "disabled";
+  } catch {
+    return false;
+  }
+}
+
+function cleanupOneShot(audio: HTMLAudioElement) {
+  const removeAudio = () => {
+    activeOneShots = activeOneShots.filter((item) => item !== audio);
+  };
+
+  try {
+    audio.addEventListener?.("ended", removeAudio, { once: true });
+  } catch {
+    // Older test doubles and browsers can omit addEventListener on Audio.
+  }
+
+  if (typeof window !== "undefined" && typeof window.setTimeout === "function") {
+    window.setTimeout(removeAudio, 7000);
+  }
+}
+
+function normalizeBgmVolume(volume: number) {
+  if (!Number.isFinite(volume)) return CSTD_BGM_DEFAULT_VOLUME;
+  return Math.min(CSTD_BGM_MAX_VOLUME, Math.max(0, volume));
+}
+
+function normalizeOneShotVolume(volume: number) {
+  if (!Number.isFinite(volume)) return 0.6;
+  return Math.min(0.92, Math.max(0, volume));
 }

@@ -1,0 +1,42 @@
+
+> rocodex-app@0.1.0 dev
+> next dev --hostname 127.0.0.1 --port 3010
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://127.0.0.1:3010
+- Network:       http://127.0.0.1:3010
+✓ Ready in 358ms
+
+ GET /cstd 200 in 468ms (next.js: 145ms, proxy.ts: 57ms, application-code: 266ms)
+ GET /cstd 200 in 52ms (next.js: 3ms, proxy.ts: 5ms, application-code: 45ms)
+ GET /cstd 200 in 78ms (next.js: 2ms, proxy.ts: 2ms, application-code: 73ms)
+ GET /cstd 200 in 55ms (next.js: 3ms, proxy.ts: 3ms, application-code: 49ms)
+ GET /cstd 200 in 76ms (next.js: 3ms, proxy.ts: 4ms, application-code: 69ms)
+✓ Compiled in 66ms
+ GET /cstd 200 in 169ms (next.js: 68ms, proxy.ts: 46ms, application-code: 55ms)
+✓ Compiled in 44ms
+✓ Compiled in 47ms
+ GET /cstd 200 in 156ms (next.js: 77ms, proxy.ts: 25ms, application-code: 54ms)
+✓ Compiled in 47ms
+ GET /cstd 200 in 137ms (next.js: 87ms, proxy.ts: 11ms, application-code: 39ms)
+✓ Compiled in 78ms
+ GET /cstd 200 in 118ms (next.js: 56ms, proxy.ts: 12ms, application-code: 50ms)
+✓ Compiled in 71ms
+✓ Compiled in 50ms
+ GET /cstd 200 in 159ms (next.js: 80ms, proxy.ts: 17ms, application-code: 62ms)
+ GET /cstd 200 in 184ms (next.js: 4ms, proxy.ts: 3ms, application-code: 177ms)
+ GET /cstd 200 in 53ms (next.js: 2ms, proxy.ts: 4ms, application-code: 47ms)
+ GET /cstd 200 in 74ms (next.js: 5ms, proxy.ts: 3ms, application-code: 66ms)
+ GET /cstd 200 in 89ms (next.js: 6ms, proxy.ts: 17ms, application-code: 66ms)
+ GET /cstd 200 in 52ms (next.js: 1782µs, proxy.ts: 1973µs, application-code: 48ms)
+ GET /cstd 200 in 52ms (next.js: 2ms, proxy.ts: 3ms, application-code: 47ms)
+ GET /cstd 200 in 47ms (next.js: 1803µs, proxy.ts: 2ms, application-code: 44ms)
+ GET /cstd 200 in 78ms (next.js: 4ms, proxy.ts: 9ms, application-code: 65ms)
+ GET /cstd 200 in 50ms (next.js: 2ms, proxy.ts: 3ms, application-code: 45ms)
+ GET /cstd 200 in 47ms (next.js: 2ms, proxy.ts: 1951µs, application-code: 43ms)
+✓ Compiled in 53ms
+ GET /cstd 200 in 169ms (next.js: 78ms, proxy.ts: 42ms, application-code: 49ms)
+✓ Compiled in 49ms
+ GET /cstd 200 in 115ms (next.js: 57ms, proxy.ts: 21ms, application-code: 37ms)
+ GET /cstd 200 in 136ms (next.js: 1943µs, proxy.ts: 1583µs, application-code: 132ms)
+ GET /cstd 200 in 51ms (next.js: 3ms, proxy.ts: 1944µs, application-code: 45ms)

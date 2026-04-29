@@ -27,12 +27,14 @@ const neutralPointer: PointerState = {
 };
 
 export function CstdCustardStage({
+  audioEnabled = true,
   mascotCopy,
   mascotMood,
   motionDisabled,
   onMoodChange,
   onPoke,
 }: {
+  audioEnabled?: boolean;
   mascotCopy: string;
   mascotMood: MascotMood;
   motionDisabled: boolean;
@@ -63,7 +65,7 @@ export function CstdCustardStage({
 
   function handlePoke() {
     setClickPulse((value) => value + 1);
-    void playCstdPokeSound();
+    if (audioEnabled) void playCstdPokeSound();
     onPoke();
   }
 
@@ -146,15 +148,60 @@ function CustardScene({
 }) {
   return (
     <>
-      <ambientLight intensity={1.35} />
-      <directionalLight color="#fff4cf" intensity={3.2} position={[-2.4, 3.8, 4.6]} />
-      <pointLight color="#dff8ed" intensity={24} position={[2.8, 1.8, 2.2]} />
-      <pointLight color="#ffe7ec" intensity={11} position={[-2.2, -0.8, 2.8]} />
+      <ambientLight intensity={1.48} />
+      <directionalLight color="#fff4cf" intensity={3.6} position={[-2.4, 3.8, 4.6]} />
+      <spotLight angle={0.48} color="#fff2b4" intensity={38} penumbra={0.75} position={[0, 3.8, 3.2]} />
+      <pointLight color="#dff8ed" intensity={28} position={[2.8, 1.8, 2.2]} />
+      <pointLight color="#ffe7ec" intensity={14} position={[-2.2, -0.8, 2.8]} />
+      <pointLight color="#fffaf0" intensity={16} position={[0, -0.2, 3.4]} />
       <StageRings motionDisabled={motionDisabled} pointer={pointer} />
+      <SoftContactShadow pointer={pointer} />
+      <StageGlow motionDisabled={motionDisabled} />
       <SteamTrails motionDisabled={motionDisabled} />
       <CustardModel clickPulse={clickPulse} motionDisabled={motionDisabled} mood={mood} pointer={pointer} />
       <SugarOrbit motionDisabled={motionDisabled} />
     </>
+  );
+}
+
+function SoftContactShadow({ pointer }: { pointer: PointerState }) {
+  const shadow = useRef<THREE.Mesh>(null);
+
+  useFrame((_, delta) => {
+    if (!shadow.current) return;
+    const ease = Math.min(delta * 6, 1);
+    shadow.current.position.x = THREE.MathUtils.lerp(shadow.current.position.x, pointer.x * 0.08, ease);
+    shadow.current.scale.x = THREE.MathUtils.lerp(shadow.current.scale.x, 1.62 + Math.abs(pointer.x) * 0.1, ease);
+  });
+
+  return (
+    <mesh ref={shadow} position={[0, -1.04, -0.18]} rotation={[-Math.PI / 2, 0, 0]} scale={[1.62, 0.62, 1]}>
+      <circleGeometry args={[1, 64]} />
+      <meshBasicMaterial color="#7a4a20" depthWrite={false} transparent opacity={0.18} />
+    </mesh>
+  );
+}
+
+function StageGlow({ motionDisabled }: { motionDisabled: boolean }) {
+  const group = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (!group.current || motionDisabled) return;
+    group.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.45) * 0.05;
+    group.current.scale.setScalar(1 + Math.sin(state.clock.elapsedTime * 0.9) * 0.025);
+  });
+
+  return (
+    <group ref={group} position={[0, 0.24, -0.62]}>
+      <mesh scale={[1.72, 1.72, 0.04]}>
+        <sphereGeometry args={[1, 48, 24]} />
+        <meshBasicMaterial color="#fff2b4" depthWrite={false} transparent opacity={0.16} />
+      </mesh>
+      <mesh position={[0.38, 0.48, 0.08]} scale={[0.54, 0.3, 0.04]} rotation={[0, 0, -0.24]}>
+        <sphereGeometry args={[1, 36, 12]} />
+        <meshBasicMaterial color="#ffffff" depthWrite={false} transparent opacity={0.28} />
+      </mesh>
+    </group>
   );
 }
 
@@ -262,8 +309,15 @@ function CustardModel({
 
     const eyeX = pointer.x * 0.055;
     const eyeY = -pointer.y * 0.035;
-    if (leftEye.current) leftEye.current.position.set(-0.26 + eyeX, 0.78 + eyeY, 0.82);
-    if (rightEye.current) rightEye.current.position.set(0.26 + eyeX, 0.78 + eyeY, 0.82);
+    const blink = motionDisabled ? 1 : Math.max(0.18, 1 - Math.pow(Math.max(0, Math.sin(time * 2.15)), 36) * 0.86);
+    if (leftEye.current) {
+      leftEye.current.position.set(-0.26 + eyeX, 0.78 + eyeY, 0.82);
+      leftEye.current.scale.set(0.075, 0.09 * blink, 0.035);
+    }
+    if (rightEye.current) {
+      rightEye.current.position.set(0.26 + eyeX, 0.78 + eyeY, 0.82);
+      rightEye.current.scale.set(0.075, 0.09 * blink, 0.035);
+    }
 
     if (leftArm.current) leftArm.current.rotation.z = THREE.MathUtils.lerp(leftArm.current.rotation.z, mood === "happy" ? 0.85 : 0.42, ease);
     if (rightArm.current) rightArm.current.rotation.z = THREE.MathUtils.lerp(rightArm.current.rotation.z, mood === "happy" ? -0.85 : -0.42, ease);
@@ -292,7 +346,7 @@ function CustardModel({
 
       <mesh ref={body} position={[0, 0.44, 0]} scale={[1.02, 0.9, 0.86]}>
         <sphereGeometry args={[1, 64, 64]} />
-        <meshStandardMaterial color="#f7bf37" roughness={0.42} metalness={0.02} />
+        <meshStandardMaterial color="#f7bf37" emissive="#f6bf3f" emissiveIntensity={0.08} roughness={0.36} metalness={0.02} />
       </mesh>
 
       <mesh position={[-0.34, 0.92, -0.02]} scale={[0.48, 0.34, 0.42]} rotation={[0.02, 0.12, -0.2]}>

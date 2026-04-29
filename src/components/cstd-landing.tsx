@@ -4,8 +4,8 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Camera, Pause, Play, RotateCcw, Sparkles } from "lucide-react";
-import { playCstdIntroSound } from "@/lib/cstd-intro-sound";
+import { Camera, Pause, Play, RotateCcw, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import {
   CSTD_MOTION_PREFERENCE_KEY,
   type CstdMotionPreference,
@@ -27,6 +27,11 @@ import {
 
 type MascotMood = "curious" | "happy" | "working";
 type CstdIntroPhase = "idle" | "playing";
+type CstdAudioPreference = "enabled" | "disabled";
+
+const CSTD_AUDIO_PREFERENCE_KEY = "cstd.audioPreference";
+const CSTD_BGM_NORMAL_VOLUME = 0.12;
+const CSTD_BGM_DUCKED_VOLUME = 0.035;
 
 const projects = [
   {
@@ -108,6 +113,8 @@ export function CstdLanding() {
   const [introVisible, setIntroVisible] = useState(false);
   const [introPhase, setIntroPhase] = useState<CstdIntroPhase>("idle");
   const [motionPreference, setMotionPreference] = useState<CstdMotionPreference>("enabled");
+  const [audioPreference, setAudioPreference] = useState<CstdAudioPreference>("enabled");
+  const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
   const prefersReducedMotion = reducedMotion ?? true;
   const motionDisabled = prefersReducedMotion;
@@ -119,11 +126,14 @@ export function CstdLanding() {
 
     const storedPreference = window.localStorage.getItem(CSTD_MOTION_PREFERENCE_KEY);
     const preference: CstdMotionPreference = storedPreference === "disabled" ? "disabled" : "enabled";
+    const storedAudioPreference = window.localStorage.getItem(CSTD_AUDIO_PREFERENCE_KEY);
+    const audioPreference: CstdAudioPreference = storedAudioPreference === "disabled" ? "disabled" : "enabled";
     const shouldShowIntro = shouldPlayCstdIntro({
       reducedMotion,
       motionPreference: preference,
     });
     setMotionPreference(preference);
+    setAudioPreference(audioPreference);
     setIntroVisible(shouldShowIntro);
     setIntroPhase("idle");
   }, [reducedMotion]);
@@ -134,10 +144,23 @@ export function CstdLanding() {
     const timer = window.setTimeout(() => {
       setIntroVisible(false);
       setIntroPhase("idle");
-    }, 4300);
+    }, 5600);
 
     return () => window.clearTimeout(timer);
   }, [introPhase, introVisible]);
+
+  useEffect(() => {
+    if (audioPreference === "disabled" || !bgmActive) return;
+
+    const syncVolumeToVisibility = () => {
+      setCstdAudioVolume(document.hidden ? CSTD_BGM_DUCKED_VOLUME : CSTD_BGM_NORMAL_VOLUME);
+    };
+
+    syncVolumeToVisibility();
+    document.addEventListener("visibilitychange", syncVolumeToVisibility);
+
+    return () => document.removeEventListener("visibilitychange", syncVolumeToVisibility);
+  }, [audioPreference, bgmActive]);
 
   const mascotCopy = useMemo(() => {
     if (mascotMood === "happy") return "奶黄包收到了你的点击，正在加糖。";
@@ -163,10 +186,27 @@ export function CstdLanding() {
     }
   }
 
+  function toggleAudio() {
+    const nextPreference: CstdAudioPreference = audioPreference === "disabled" ? "enabled" : "disabled";
+    setAudioPreference(nextPreference);
+    window.localStorage.setItem(CSTD_AUDIO_PREFERENCE_KEY, nextPreference);
+
+    if (nextPreference === "disabled") {
+      stopCstdBgm();
+      setBgmActive(false);
+      return;
+    }
+
+    void startCstdBgm(CSTD_BGM_NORMAL_VOLUME).then(setBgmActive);
+  }
+
   function beginIntroPlayback() {
     setIntroVisible(true);
     setIntroPhase("playing");
+    if (audioPreference === "disabled") return;
+
     void playCstdIntroSound();
+    void startCstdBgm(CSTD_BGM_NORMAL_VOLUME).then(setBgmActive);
   }
 
   function skipIntro() {
@@ -303,6 +343,7 @@ export function CstdLanding() {
             </motion.div>
 
             <CstdCustardStage
+              audioEnabled={audioPreference !== "disabled"}
               mascotCopy={mascotCopy}
               mascotMood={mascotMood}
               motionDisabled={motionDisabled}
@@ -318,7 +359,14 @@ export function CstdLanding() {
               <p className="font-black uppercase tracking-[0.18em] text-[#d98528]">Projects</p>
               <h2 className="mt-2 text-3xl font-black tracking-tight sm:text-5xl">正在发酵的项目</h2>
             </div>
-            <MotionControls motionPreference={motionPreference} onToggle={toggleMotion} onReplay={replayIntro} />
+            <MotionControls
+              audioPreference={audioPreference}
+              bgmActive={bgmActive}
+              motionPreference={motionPreference}
+              onAudioToggle={toggleAudio}
+              onReplay={replayIntro}
+              onToggle={toggleMotion}
+            />
           </div>
 
           <div className={cstdProjectGridClassName}>
@@ -349,123 +397,140 @@ function CstdIntro({
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 grid place-items-center overflow-hidden bg-[#fff4cf]"
+      className="fixed inset-0 z-50 grid place-items-center overflow-hidden bg-[#fff4cf] text-[#2f241d]"
       initial={{ opacity: 1 }}
-      exit={{ opacity: 0, scale: 1.03, filter: "blur(10px)" }}
-      transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }}
+      exit={{ opacity: 0, scale: 1.018, filter: "blur(12px)" }}
+      transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
     >
       <motion.div
         aria-hidden="true"
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(circle at 50% 42%, rgba(246,191,63,.5), transparent 23%), radial-gradient(circle at 22% 70%, rgba(223,248,237,.85), transparent 28%), radial-gradient(circle at 78% 22%, rgba(255,231,236,.82), transparent 24%), linear-gradient(90deg, rgba(47,36,29,.05) 1px, transparent 1px), linear-gradient(180deg, rgba(47,36,29,.05) 1px, transparent 1px)",
-          backgroundSize: "auto, 34px 34px, 34px 34px",
+            "radial-gradient(circle at 50% 42%, rgba(255,216,121,.72), transparent 20%), radial-gradient(circle at 30% 28%, rgba(255,255,255,.86), transparent 22%), radial-gradient(circle at 22% 72%, rgba(223,248,237,.86), transparent 28%), radial-gradient(circle at 78% 22%, rgba(255,231,236,.84), transparent 25%), linear-gradient(90deg, rgba(47,36,29,.045) 1px, transparent 1px), linear-gradient(180deg, rgba(47,36,29,.045) 1px, transparent 1px)",
+          backgroundSize: "auto, auto, auto, auto, 34px 34px, 34px 34px",
         }}
       />
       <motion.div
         aria-hidden="true"
-        className="absolute left-[-8%] top-[16%] h-24 w-[116%] rounded-full border-y border-[#ead6ad]/80 bg-white/20 blur-sm"
-        animate={introPlaying ? { x: ["-8%", "9%", "-6%"], opacity: [0.2, 0.8, 0.18] } : { opacity: 0.28 }}
-        transition={{ duration: 3.6, ease: "easeInOut" }}
+        className="absolute inset-x-[-20%] top-[6%] h-28 rotate-[-5deg] rounded-full border-y border-white/70 bg-white/24 blur-xl"
+        animate={introPlaying ? { x: ["-7%", "9%", "-4%"], opacity: [0.18, 0.72, 0.2] } : { opacity: 0.26 }}
+        transition={{ duration: 4.8, ease: "easeInOut" }}
       />
-      {Array.from({ length: 18 }, (_, index) => (
-        <motion.span
-          key={index}
-          aria-hidden="true"
-          className="absolute rounded-sm border border-[#2f241d]/35 shadow-[4px_4px_0_rgba(47,36,29,.06)]"
-          style={{
-            background: ["#f6bf3f", "#dff8ed", "#ffe7ec", "#fffaf0"][index % 4],
-            height: 8 + (index % 3) * 5,
-            left: `${8 + ((index * 17) % 86)}%`,
-            top: `${14 + ((index * 23) % 74)}%`,
-            width: 8 + (index % 4) * 4,
-          }}
-          initial={{ opacity: 0, scale: 0.4, y: 16, rotate: -18 }}
-          animate={
-            introPlaying
-              ? { opacity: [0, 0.95, 0], scale: [0.4, 1, 0.7], y: [16, -36 - (index % 4) * 20], rotate: [-18, 120 + index * 18] }
-              : { opacity: 0 }
-          }
-          transition={{ delay: 1.95 + index * 0.025, duration: 1.35, ease: "easeOut" }}
-        />
-      ))}
+      <CinematicSteam active={introPlaying} />
       {introPlaying ? <IntroSoundWaves /> : null}
+      {introPlaying ? <CinematicSugarBurst delay={2.28} /> : null}
       <button
         type="button"
         onClick={onSkip}
-        className="absolute right-5 top-5 rounded-full border border-[#ead6ad] bg-white/80 px-4 py-2 text-sm font-black text-[#7b6656] shadow-sm transition hover:border-[#d98528] hover:text-[#2f241d]"
+        className="absolute right-4 top-4 z-30 rounded-full border border-[#ead6ad] bg-white/82 px-4 py-2 text-sm font-black text-[#7b6656] shadow-sm backdrop-blur transition hover:border-[#d98528] hover:text-[#2f241d] sm:right-5 sm:top-5"
       >
         跳过
       </button>
-      <div className="relative grid w-[min(90vw,620px)] place-items-center">
+      <div className="relative grid min-h-[520px] w-[min(94vw,760px)] place-items-center sm:min-h-[630px]">
         {introPlaying ? (
-          <motion.div key="playing" className="relative min-h-[460px] w-full">
+          <motion.div key="playing" className="relative h-[520px] w-full sm:h-[630px]">
             <motion.div
-              className="absolute left-1/2 top-[42%] z-30 -mt-[236px] -translate-x-1/2 rounded-full border border-[#f6bf3f]/70 bg-white/75 px-4 py-2 text-xs font-black uppercase tracking-[0.18em] text-[#d98528] shadow-[6px_6px_0_rgba(47,36,29,.08)]"
+              aria-hidden="true"
+              className="absolute left-1/2 top-[47%] h-[350px] w-[350px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#ffd66f]/35 blur-3xl sm:h-[460px] sm:w-[460px]"
+              initial={{ opacity: 0, scale: 0.62 }}
+              animate={{ opacity: [0, 0.96, 0.78, 0.98], scale: [0.62, 1.05, 0.92, 1.16] }}
+              transition={{ duration: 4.9, ease: "easeInOut" }}
+            />
+            <motion.div
+              className="absolute left-1/2 top-[7%] z-30 -translate-x-1/2 rounded-full border border-[#f6bf3f]/70 bg-white/82 px-4 py-2 text-[0.65rem] font-black uppercase tracking-[0.18em] text-[#d98528] shadow-[6px_6px_0_rgba(47,36,29,.08)] sm:text-xs"
               initial={{ opacity: 0, y: 8, scale: 0.88 }}
-              animate={{ opacity: [0, 1, 1, 0], y: [8, 0, 0, -8], scale: [0.88, 1.05, 1, 0.96] }}
-              transition={{ duration: 1.45, ease: "easeOut" }}
+              animate={{ opacity: [0, 1, 1, 0], y: [8, 0, 0, -8], scale: [0.88, 1.04, 1, 0.96] }}
+              transition={{ duration: 1.52, ease: "easeOut" }}
             >
-              已唤醒
+              custard premiere
             </motion.div>
             <motion.div
-              className="absolute left-1/2 top-[42%] -ml-36 -mt-36 h-72 w-72 rounded-[40px] border-[10px] border-[#2f241d] bg-[#f0b34a] shadow-[18px_18px_0_rgba(47,36,29,.12)] sm:-ml-40 sm:-mt-40 sm:h-80 sm:w-80"
-              initial={{ scaleX: 0.08, scaleY: 0.72, borderRadius: 999 }}
-              animate={{ scaleX: [0.08, 1, 1.08, 1], scaleY: [0.72, 1, 0.95, 1], borderRadius: ["999px", "42px", "52px", "40px"] }}
-              transition={{ duration: 1.45, ease: [0.2, 0.8, 0.2, 1] }}
+              aria-hidden="true"
+              className="absolute left-1/2 top-[58%] h-24 w-[360px] -translate-x-1/2 rounded-[100%] bg-[#8a4b15]/16 blur-xl sm:w-[520px]"
+              initial={{ opacity: 0, scaleX: 0.5 }}
+              animate={{ opacity: [0, 0.46, 0.34], scaleX: [0.5, 1.04, 0.96] }}
+              transition={{ delay: 0.18, duration: 1.7, ease: "easeOut" }}
             />
             <motion.div
-              className="absolute left-1/2 top-[42%] -ml-[165px] -mt-[165px] h-[330px] w-[330px] rounded-[48px] border-[12px] border-[#2f241d] bg-[#fffaf0] shadow-[22px_22px_0_rgba(97,61,22,.1)] sm:-ml-[180px] sm:-mt-[180px] sm:h-[360px] sm:w-[360px]"
-              initial={{ rotate: 0, scale: 0.92 }}
-              animate={{ rotate: [0, -2, 2, 0], scale: [0.92, 1, 1, 1.03] }}
-              transition={{ delay: 1.1, duration: 1.35, ease: "easeInOut" }}
+              className="absolute left-1/2 top-[54%] h-[112px] w-[360px] -translate-x-1/2 rounded-[48%_52%_42%_46%/52%_52%_48%_48%] border-[7px] border-[#2f241d] bg-gradient-to-b from-[#eafff7] via-[#dff8ed] to-[#aee8d8] shadow-[16px_18px_0_rgba(47,36,29,.12)] sm:h-[136px] sm:w-[500px] sm:border-[9px]"
+              initial={{ y: 92, scaleX: 0.78, opacity: 0 }}
+              animate={{ y: [92, 0, 0, 4], scaleX: [0.78, 1.04, 0.98, 1], opacity: 1 }}
+              transition={{ delay: 0.16, duration: 1.15, ease: [0.2, 0.8, 0.2, 1] }}
             />
+            <motion.div
+              className="absolute left-1/2 top-[34%] z-20 h-[90px] w-[315px] -translate-x-1/2 rounded-[50%] border-[7px] border-[#2f241d] bg-gradient-to-b from-[#fffaf0] via-[#ffe7b1] to-[#f6bf3f] shadow-[12px_14px_0_rgba(47,36,29,.1)] sm:h-[112px] sm:w-[430px] sm:border-[9px]"
+              initial={{ y: 54, rotate: 0, opacity: 0 }}
+              animate={{ y: [54, 0, -96, -126], rotate: [0, 0, -8, -16], opacity: [0, 1, 1, 0] }}
+              transition={{ delay: 0.1, duration: 1.6, ease: [0.18, 0.9, 0.24, 1] }}
+            >
+              <span className="absolute left-1/2 top-[-24px] h-12 w-24 -translate-x-1/2 rounded-full border-[6px] border-[#2f241d] bg-[#fffaf0] sm:top-[-30px] sm:h-16 sm:w-32" />
+            </motion.div>
             <motion.img
               src="/cstd-mascot.svg"
               alt=""
-              className="absolute left-1/2 top-[42%] z-10 -ml-36 -mt-40 w-72 drop-shadow-[14px_16px_0_rgba(47,36,29,.12)] sm:-ml-40 sm:-mt-44 sm:w-80"
-              initial={{ y: 70, opacity: 0, rotate: -12, scale: 0.6 }}
-              animate={{ y: [70, -26, 0, -12, 0], opacity: 1, rotate: [-12, 7, 0, -3, 0], scale: [0.6, 1.12, 0.96, 1.05, 1] }}
-              transition={{ delay: 0.28, duration: 1.95, ease: [0.2, 0.8, 0.2, 1] }}
+              className="absolute left-1/2 top-[37%] z-10 w-60 -translate-x-1/2 -translate-y-1/2 drop-shadow-[14px_16px_0_rgba(47,36,29,.12)] sm:w-80"
+              initial={{ y: 118, opacity: 0, rotate: -12, scale: 0.52, filter: "blur(3px)" }}
+              animate={{
+                y: [118, -34, 2, -18, 0, -10, 0],
+                opacity: 1,
+                rotate: [-12, 8, 0, -3, 0, 2, 0],
+                scale: [0.52, 1.12, 0.96, 1.05, 1, 1.03, 1],
+                filter: ["blur(3px)", "blur(0px)", "blur(0px)", "blur(0px)", "blur(0px)", "blur(0px)", "blur(0px)"],
+              }}
+              transition={{ delay: 0.62, duration: 2.85, ease: [0.2, 0.8, 0.2, 1] }}
             />
-            <div className="absolute left-1/2 top-[42%] z-20 mt-[188px] -translate-x-1/2">
+            <div className="absolute left-1/2 top-[37%] z-20 mt-[164px] -translate-x-1/2 sm:mt-[212px]">
               <motion.div
-                className="rounded-xl border-2 border-[#2f241d] bg-[#dff8ed] px-6 py-3 text-2xl font-black tracking-[0.16em] text-[#047857] shadow-[8px_8px_0_rgba(47,36,29,.12)]"
-                initial={{ opacity: 0, scale: 2.8, rotate: -16 }}
-                animate={{ opacity: [0, 1, 1], scale: [2.8, 0.94, 1.08], rotate: [-16, 4, 0], x: [0, -5, 5, 0] }}
-                transition={{ delay: 2.04, duration: 0.68, ease: [0.18, 0.9, 0.24, 1] }}
+                className="rounded-xl border-2 border-[#2f241d] bg-[#fffaf0] px-6 py-3 text-2xl font-black tracking-[0.14em] text-[#047857] shadow-[8px_8px_0_rgba(47,36,29,.12)] sm:px-8 sm:text-3xl"
+                initial={{ opacity: 0, scale: 3.2, rotate: -18, y: -8 }}
+                animate={{ opacity: [0, 1, 1], scale: [3.2, 0.9, 1.1], rotate: [-18, 5, 0], x: [0, -7, 7, 0], y: [-8, 0, 0] }}
+                transition={{ delay: 2.34, duration: 0.72, ease: [0.18, 0.9, 0.24, 1] }}
               >
                 CSTD
               </motion.div>
             </div>
-            <div className="absolute left-1/2 top-[42%] mt-[270px] w-80 -translate-x-1/2 text-center">
+            <motion.div
+              aria-hidden="true"
+              className="absolute inset-x-[-12%] bottom-[-8%] z-40 h-[46%] rounded-t-[55%] border-t-2 border-white/80 bg-gradient-to-t from-[#fffaf0] via-[#fff4cf] to-[#fffaf0]/78 shadow-[0_-18px_55px_rgba(246,191,63,.24)]"
+              initial={{ y: "112%" }}
+              animate={{ y: ["112%", "112%", "0%"] }}
+              transition={{ delay: 4.28, duration: 0.82, ease: [0.2, 0.8, 0.2, 1] }}
+            />
+            <div className="absolute left-1/2 top-[37%] z-50 mt-[254px] w-80 -translate-x-1/2 text-center sm:mt-[316px]">
               <motion.p
-                className="text-sm font-black uppercase tracking-[0.22em] text-[#d98528]"
+                className="text-xs font-black uppercase tracking-[0.2em] text-[#d98528] sm:text-sm"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 2.55, duration: 0.42 }}
+                transition={{ delay: 3.35, duration: 0.44 }}
               >
-                custard is ready
+                warm launch sequence
               </motion.p>
             </div>
           </motion.div>
         ) : (
           <motion.div key="idle" className="grid place-items-center text-center" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.48 }}>
+            <motion.div
+              aria-hidden="true"
+              className="absolute left-1/2 top-1/2 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#f6bf3f]/35 bg-white/24 shadow-[0_0_70px_rgba(246,191,63,.24)]"
+              animate={{ scale: [0.96, 1.04, 0.96], opacity: [0.62, 0.9, 0.62] }}
+              transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
+            />
             <motion.img
               src="/cstd-mascot.svg"
               alt=""
-              className="w-64 drop-shadow-[14px_16px_0_rgba(47,36,29,.12)] sm:w-80"
+              className="relative w-64 drop-shadow-[14px_16px_0_rgba(47,36,29,.12)] sm:w-80"
               animate={{ y: [0, -10, 0], rotate: [-2, 2, -2] }}
               transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
             />
-            <p className="mt-4 text-sm font-black uppercase tracking-[0.22em] text-[#d98528]">tap to wake the custard</p>
+            <p className="relative mt-4 text-sm font-black uppercase tracking-[0.2em] text-[#d98528]">tap to wake the custard</p>
             <h2 className="mt-2 text-4xl font-black tracking-tight text-[#2f241d] sm:text-6xl">CSTD</h2>
             <button
               type="button"
               onClick={onStart}
-              className="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl border-2 border-[#2f241d] bg-[#0f8f64] px-7 text-base font-black text-white shadow-[7px_7px_0_rgba(47,36,29,.14)] transition hover:-translate-y-0.5 hover:bg-[#0d7d59]"
+              className="group relative mt-6 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-xl border-2 border-[#2f241d] bg-[#0f8f64] px-7 text-base font-black text-white shadow-[7px_7px_0_rgba(47,36,29,.14)] transition hover:-translate-y-0.5 hover:bg-[#0d7d59]"
             >
+              <span className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/24 transition group-hover:left-full" />
               开启 CSTD
             </button>
           </motion.div>
@@ -476,33 +541,81 @@ function CstdIntro({
 }
 
 function IntroSoundWaves() {
-  const waveDelays = [0.04, 0.18, 0.34, 0.52];
+  const waveDelays = [0.18, 0.32, 2.34, 2.48, 3.68, 4.28];
 
   return (
     <div aria-hidden="true" className="pointer-events-none absolute inset-0">
       {waveDelays.map((delay, index) => (
         <motion.span
           key={delay}
-          className="absolute left-1/2 top-[42%] h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d98528]/55"
+          className="absolute left-1/2 top-[43%] h-52 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#d98528]/45 sm:h-72 sm:w-72"
           initial={{ opacity: 0, scale: 0.25 }}
-          animate={{ opacity: [0, 0.58, 0], scale: [0.25, 1.2 + index * 0.22, 1.75 + index * 0.28] }}
-          transition={{ delay, duration: 1.05, ease: "easeOut" }}
+          animate={{ opacity: [0, 0.58, 0], scale: [0.25, 1.05 + index * 0.12, 1.55 + index * 0.18] }}
+          transition={{ delay, duration: index > 3 ? 1.35 : 1.05, ease: "easeOut" }}
         />
       ))}
-      {Array.from({ length: 14 }, (_, index) => (
+      {Array.from({ length: 18 }, (_, index) => (
         <motion.span
           key={index}
-          className="absolute left-1/2 top-[42%] h-2.5 w-2.5 rounded-sm border border-[#2f241d]/25"
+          className="absolute left-1/2 top-[43%] h-2.5 w-2.5 rounded-sm border border-[#2f241d]/25 shadow-[3px_3px_0_rgba(47,36,29,.06)]"
           style={{ background: ["#f6bf3f", "#dff8ed", "#ffe7ec", "#fffaf0"][index % 4] }}
           initial={{ opacity: 0, x: 0, y: 0, rotate: 0, scale: 0.4 }}
           animate={{
             opacity: [0, 1, 0],
-            x: Math.cos((index / 14) * Math.PI * 2) * (100 + (index % 4) * 24),
-            y: Math.sin((index / 14) * Math.PI * 2) * (78 + (index % 3) * 18),
+            x: Math.cos((index / 18) * Math.PI * 2) * (116 + (index % 4) * 28),
+            y: Math.sin((index / 18) * Math.PI * 2) * (86 + (index % 3) * 22),
             rotate: 120 + index * 22,
             scale: [0.4, 1.15, 0.7],
           }}
-          transition={{ delay: 0.12 + index * 0.018, duration: 1.25, ease: "easeOut" }}
+          transition={{ delay: 2.34 + index * 0.018, duration: 1.28, ease: "easeOut" }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function CinematicSteam({ active }: { active: boolean }) {
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+      {Array.from({ length: 8 }, (_, index) => (
+        <motion.span
+          key={index}
+          className="absolute bottom-[22%] h-40 w-6 rounded-full border-l border-white/50 bg-white/10 blur-[1px]"
+          style={{ left: `${20 + index * 8}%` }}
+          initial={{ opacity: 0, y: 42, rotate: -10 + index * 3 }}
+          animate={
+            active
+              ? { opacity: [0, 0.62, 0], y: [42, -120 - (index % 3) * 18], x: [0, index % 2 ? 24 : -24], rotate: [-10 + index * 3, 12 - index * 2] }
+              : { opacity: [0.14, 0.3, 0.14], y: [18, -16, 18] }
+          }
+          transition={{ repeat: active ? 0 : Infinity, delay: active ? 0.2 + index * 0.07 : index * 0.18, duration: active ? 2.45 : 4.2, ease: "easeInOut" }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function CinematicSugarBurst({ delay }: { delay: number }) {
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0">
+      {Array.from({ length: 24 }, (_, index) => (
+        <motion.span
+          key={index}
+          className="absolute left-1/2 top-[43%] rounded-sm border border-[#2f241d]/30 shadow-[4px_4px_0_rgba(47,36,29,.06)]"
+          style={{
+            background: ["#f6bf3f", "#dff8ed", "#ffe7ec", "#e3f2ff", "#fffaf0"][index % 5],
+            height: 7 + (index % 3) * 5,
+            width: 7 + (index % 4) * 4,
+          }}
+          initial={{ opacity: 0, x: 0, y: 0, rotate: -18, scale: 0.32 }}
+          animate={{
+            opacity: [0, 0.96, 0],
+            x: Math.cos((index / 24) * Math.PI * 2) * (130 + (index % 5) * 26),
+            y: Math.sin((index / 24) * Math.PI * 2) * (94 + (index % 4) * 22) - 18,
+            rotate: 160 + index * 19,
+            scale: [0.32, 1.05, 0.66],
+          }}
+          transition={{ delay: delay + index * 0.012, duration: 1.38, ease: "easeOut" }}
         />
       ))}
     </div>
@@ -572,18 +685,25 @@ function HeroButton({ href, children, primary = false }: { href: string; childre
 }
 
 function MotionControls({
+  audioPreference,
+  bgmActive,
   motionPreference,
+  onAudioToggle,
   onToggle,
   onReplay,
 }: {
+  audioPreference: CstdAudioPreference;
+  bgmActive: boolean;
   motionPreference: CstdMotionPreference;
+  onAudioToggle: () => void;
   onToggle: () => void;
   onReplay: () => void;
 }) {
   const introEnabled = motionPreference !== "disabled";
+  const audioEnabled = audioPreference !== "disabled";
 
   return (
-    <div className="grid w-full grid-cols-2 gap-2 rounded-xl border border-[#ead6ad] bg-white/65 p-2 shadow-[5px_5px_0_rgba(47,36,29,.06)] sm:w-auto sm:flex sm:flex-wrap">
+    <div className="grid w-full grid-cols-2 gap-2 rounded-xl border border-[#ead6ad] bg-white/65 p-2 shadow-[5px_5px_0_rgba(47,36,29,.06)] sm:w-auto sm:grid-cols-[auto_auto_auto]">
       <button
         type="button"
         onClick={onToggle}
@@ -595,13 +715,25 @@ function MotionControls({
       </button>
       <button
         type="button"
+        onClick={onAudioToggle}
+        aria-pressed={audioEnabled}
+        className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-[#e3f2ff] px-2 text-xs font-black text-[#2563eb] transition hover:bg-[#d5eaff] sm:px-3"
+      >
+        {audioEnabled ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
+        声音：{audioEnabled ? "开" : "关"}
+      </button>
+      <button
+        type="button"
         onClick={onReplay}
         disabled={!introEnabled}
-        className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-[#dff8ed] px-2 text-xs font-black text-[#047857] transition hover:bg-[#c8f3df] disabled:cursor-not-allowed disabled:opacity-50 sm:px-3"
+        className="col-span-2 inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-[#dff8ed] px-2 text-xs font-black text-[#047857] transition hover:bg-[#c8f3df] disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-1 sm:px-3"
       >
         <RotateCcw className="h-3.5 w-3.5" />
         播放开场
       </button>
+      <span className="col-span-2 inline-flex min-h-7 items-center justify-center rounded-lg bg-white/70 px-2 text-[0.68rem] font-black text-[#7b6656] sm:col-span-3">
+        {audioEnabled ? (bgmActive ? "奶油音乐轻轻播放中" : "点击后播放开场音和奶油音乐") : "声音已关闭"}
+      </span>
     </div>
   );
 }
