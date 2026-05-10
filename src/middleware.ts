@@ -1,21 +1,44 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getCstdRewritePath } from "@/lib/cstd-routing";
+import { getCstdRouteDecision } from "@/lib/cstd-routing";
+
+const CSTD_NOT_FOUND_HTML = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 Not Found</title>
+</head>
+<body>
+<main>
+<h1>404 Not Found</h1>
+<p>This path is not available on custard.top.</p>
+</main>
+</body>
+</html>`;
 
 export function middleware(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const path = request.nextUrl.pathname;
-  const cstdRewritePath = getCstdRewritePath(host, path);
+  const cstdRouteDecision = getCstdRouteDecision(host, path);
 
-  // Landing page: custard.top (root domain, not subdomain)
-  if (cstdRewritePath) {
-    return NextResponse.rewrite(new URL(cstdRewritePath, request.url));
+  if (cstdRouteDecision.kind === "rewrite") {
+    return NextResponse.rewrite(new URL(cstdRouteDecision.path, request.url));
   }
 
-  // Subdomain: rocodex.custard.top serves main app as usual
+  if (cstdRouteDecision.kind === "not-found") {
+    return new NextResponse(CSTD_NOT_FOUND_HTML, {
+      status: 404,
+      headers: {
+        "content-type": "text/html; charset=utf-8",
+        "x-robots-tag": "noindex",
+      },
+    });
+  }
+
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!_next/static|_next/image).*)"],
 };
