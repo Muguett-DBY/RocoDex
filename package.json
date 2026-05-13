@@ -44,5 +44,8 @@
     "typescript": "^6.0.3",
     "vitest": "^4.1.5",
     "wrangler": "^4.90.0"
+  },
+  "overrides": {
+    "postcss": "8.5.14"
   }
 }
