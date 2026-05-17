@@ -1,7 +1,7 @@
 export const cstdPageShellClassName =
   "mx-auto w-[calc(100%_-_48px)] max-w-[342px] sm:w-[min(1160px,calc(100%_-_32px))] sm:max-w-none";
 
-export const cstdHeaderNavClassName = "grid w-full grid-cols-3 gap-2 sm:w-auto sm:flex sm:flex-wrap";
+export const cstdHeaderNavClassName = "grid w-full grid-cols-2 gap-2 sm:w-auto sm:flex sm:flex-wrap";
 
 export const cstdNavLinkClassName =
   "inline-flex min-h-10 min-w-0 items-center justify-center rounded-lg border border-[#ead6ad] bg-white/70 px-2 text-xs font-black text-[#2f241d] no-underline shadow-[3px_3px_0_rgba(47,36,29,.06)] transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-white sm:px-3 sm:text-sm";
@@ -35,6 +35,10 @@ export const cstdProjectCards = [
   {
     title: "奶黄包摄影",
     kicker: "Photography",
+  },
+  {
+    title: "CSTD Alpha",
+    kicker: "Investment research",
   },
   {
     title: "更多项目孵化中",

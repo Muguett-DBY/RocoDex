@@ -33,7 +33,7 @@ describe("CSTD mobile layout rules", () => {
   });
 
   test("keeps mobile navigation and hero actions inside narrow viewports", () => {
-    expect(cstdHeaderNavClassName).toContain("grid-cols-3");
+    expect(cstdHeaderNavClassName).toContain("grid-cols-2");
     expect(cstdHeaderNavClassName).toContain("w-full");
     expect(cstdHeaderNavClassName).toContain("sm:flex");
     expect(cstdNavLinkClassName).toContain("min-w-0");

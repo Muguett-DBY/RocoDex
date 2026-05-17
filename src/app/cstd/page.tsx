@@ -3,7 +3,7 @@ import { CstdLanding } from "@/components/cstd-landing";
 
 export const metadata: Metadata = {
   title: "CSTD | 奶黄包的奇思妙想实验田",
-  description: "CSTD 是 custard 的个人项目集，记录技术、设计、文化与游戏相关的混合实验。",
+  description: "CSTD 是 custard 的个人项目集，记录技术、设计、文化、投资研究与游戏相关的混合实验。",
   alternates: {
     canonical: "https://custard.top/",
   },
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     type: "website",
     siteName: "CSTD",
     title: "CSTD | 奶黄包的奇思妙想实验田",
-    description: "从奶黄包出发，孵化技术、设计、文化与游戏的个人项目实验田。",
+    description: "从奶黄包出发，孵化技术、设计、文化、投资研究与游戏的个人项目实验田。",
     url: "https://custard.top/",
     images: [
       {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "CSTD | 奶黄包的奇思妙想实验田",
-    description: "从奶黄包出发，孵化技术、设计、文化与游戏的个人项目实验田。",
+    description: "从奶黄包出发，孵化技术、设计、文化、投资研究与游戏的个人项目实验田。",
     images: ["https://custard.top/cstd-og.svg"],
   },
 };

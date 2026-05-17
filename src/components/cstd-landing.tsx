@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Camera, Pause, Play, RotateCcw, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { Camera, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX } from "lucide-react";
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import {
   CSTD_MOTION_PREFERENCE_KEY,
@@ -75,8 +75,25 @@ const projects = [
     tags: ["Portrait", "Nanjing", "Cloudflare Pages"],
   },
   {
-    title: "更多项目孵化中",
+    title: "CSTD Alpha",
     kicker: cstdProjectCards[2].kicker,
+    status: "Live",
+    href: "https://alpha.custard.top",
+    action: "打开 Alpha",
+    icon: TrendingUp,
+    tone: "teal",
+    description:
+      "中文公司深度评分报告工具。先确认上市主体，再结合公开行情、财务数据和 DeepSeek 生成模板化研究报告、评分、估值区间与图表驾驶舱。",
+    metrics: [
+      ["AI", "深度报告"],
+      ["20", "项评分"],
+      ["Charts", "图表驾驶舱"],
+    ],
+    tags: ["AI Research", "Company scoring", "Cloudflare Pages"],
+  },
+  {
+    title: "更多项目孵化中",
+    kicker: cstdProjectCards[3].kicker,
     status: "Next",
     href: "#projects",
     action: "继续发酵",
@@ -94,9 +111,9 @@ const projects = [
 ] as const;
 
 const noteItems = [
-  ["02", "个在线项目"],
+  ["03", "个在线项目"],
   ["347", "只精灵资料"],
-  ["Motion", "可爱动效实验"],
+  ["Mix", "技术 / 设计 / 研究"],
 ] as const;
 
 const CstdCustardStage = dynamic(
@@ -258,6 +275,7 @@ export function CstdLanding() {
             <NavLink href="#projects">Projects</NavLink>
             <NavLink href="https://rocodex.custard.top">RocoDex</NavLink>
             <NavLink href="https://shoot.custard.top">Photography</NavLink>
+            <NavLink href="https://alpha.custard.top">Alpha</NavLink>
           </nav>
         </header>
 
@@ -294,7 +312,7 @@ export function CstdLanding() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.32, duration: 0.55 }}
             >
-              从一只软乎乎的奶黄包出发，孵化技术、设计、文化与游戏的混合实验。这里收纳正在生长的产品、视觉练习和小型工具，每个项目都带一点甜糯的手作痕迹。
+              从一只软乎乎的奶黄包出发，孵化技术、设计、投资研究、文化与游戏的混合实验。这里收纳正在生长的产品、视觉练习和小型工具，每个项目都带一点甜糯的手作痕迹。
             </motion.p>
 
             <motion.div
@@ -307,6 +325,7 @@ export function CstdLanding() {
                 看项目
               </HeroButton>
               <HeroButton href="https://rocodex.custard.top">打开 RocoDex</HeroButton>
+              <HeroButton href="https://alpha.custard.top">打开 Alpha</HeroButton>
             </motion.div>
 
             <motion.div
@@ -362,6 +381,9 @@ export function CstdLanding() {
             <div>
               <p className="font-black uppercase tracking-[0.18em] text-[#d98528]">Projects</p>
               <h2 className="mt-2 text-3xl font-black tracking-tight sm:text-5xl">正在发酵的项目</h2>
+              <p className="mt-3 max-w-2xl text-sm leading-7 text-[#6f5b4a] sm:text-base">
+                工具、影像与研究类项目分开放置，方便从主站快速进入。
+              </p>
             </div>
             <MotionControls
               audioPreference={audioPreference}
@@ -755,6 +777,7 @@ function ProjectCard({
   const toneClasses = {
     mint: "from-[#dff8ed]/90 text-[#047857]",
     rose: "from-[#ffe7ec]/90 text-[#be4563]",
+    teal: "from-[#d9f6f2]/90 text-[#0f766e]",
     sky: "from-[#e3f2ff]/90 text-[#2563eb]",
   }[project.tone];
 
