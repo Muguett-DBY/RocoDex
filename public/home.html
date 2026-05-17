@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>CSTD | 奶黄包的奇思妙想实验田</title>
-<meta name="description" content="CSTD 是 custard 的个人项目集，记录技术、设计、文化与游戏相关的混合实验，包括洛克图鉴 RocoDex 与奶黄包摄影。">
+<meta name="description" content="CSTD 是 custard 的个人项目集，记录技术、设计、文化与游戏相关的混合实验，包括洛克图鉴 RocoDex、奶黄包摄影与 CSTD Alpha。">
 <meta name="theme-color" content="#fff3cf">
 <link rel="canonical" href="https://custard.top/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="CSTD">
 <meta property="og:title" content="CSTD | 奶黄包的奇思妙想实验田">
-<meta property="og:description" content="从奶黄包出发，孵化技术、设计、文化与游戏的个人项目实验田。">
+<meta property="og:description" content="从奶黄包出发，孵化技术、设计、文化、投资研究与游戏的个人项目实验田。">
 <meta property="og:url" content="https://custard.top/">
 <meta property="og:image" content="https://custard.top/cstd-og.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="CSTD | 奶黄包的奇思妙想实验田">
-<meta name="twitter:description" content="从奶黄包出发，孵化技术、设计、文化与游戏的个人项目实验田。">
+<meta name="twitter:description" content="从奶黄包出发，孵化技术、设计、文化、投资研究与游戏的个人项目实验田。">
 <meta name="twitter:image" content="https://custard.top/cstd-og.svg">
 <style>
   :root {
@@ -34,6 +34,8 @@
     --rose-ink: #be4563;
     --sky: #e3f2ff;
     --sky-ink: #2563eb;
+    --teal: #d9f6f2;
+    --teal-ink: #0f766e;
     --white: #fffdf7;
     --shadow: 0 16px 38px rgba(97, 61, 22, .13);
   }
@@ -292,7 +294,7 @@
 
   .project-grid {
     display: grid;
-    grid-template-columns: minmax(0, 1.2fr) minmax(300px, .8fr);
+    grid-template-columns: minmax(0, 1.08fr) minmax(280px, .96fr);
     gap: 16px;
   }
 
@@ -313,6 +315,7 @@
   }
 
   .project-card.placeholder {
+    grid-column: 1 / -1;
     background: rgba(255, 253, 247, .58);
     border-style: dashed;
     box-shadow: none;
@@ -350,7 +353,8 @@
   }
 
   .project-card:nth-child(2) .project-icon { background: var(--rose); }
-  .project-card:nth-child(3) .project-icon { background: var(--paper-deep); }
+  .project-card:nth-child(3) .project-icon { background: var(--teal); }
+  .project-card:nth-child(4) .project-icon { background: var(--paper-deep); }
 
   .card-kicker {
     display: flex;
@@ -373,6 +377,7 @@
 
   .pill.live { background: #dff8ed; color: var(--mint-ink); }
   .pill.photo { background: #ffe7ec; color: var(--rose-ink); }
+  .pill.alpha { background: var(--teal); color: var(--teal-ink); }
   .pill.draft { background: #fff0c9; color: var(--custard-deep); }
 
   .project-card h3 {
@@ -453,6 +458,7 @@
   .tag.tech { background: var(--mint); color: var(--mint-ink); }
   .tag.design { background: var(--rose); color: var(--rose-ink); }
   .tag.platform { background: var(--sky); color: var(--sky-ink); }
+  .tag.research { background: var(--teal); color: var(--teal-ink); }
 
   footer {
     border-top: 1px solid rgba(47, 36, 29, .12);
@@ -585,6 +591,7 @@
         <a href="#projects">Projects</a>
         <a href="https://rocodex.custard.top">RocoDex</a>
         <a href="https://shoot.custard.top">Photography</a>
+        <a href="https://alpha.custard.top">Alpha</a>
       </nav>
     </header>
 
@@ -595,15 +602,16 @@
           <h1 id="hero-title">CSTD</h1>
           <p class="tagline">奶黄包的奇思妙想实验田</p>
           <p class="desc">
-            从一只软乎乎的奶黄包出发，孵化技术、设计、文化与游戏的混合实验。这里收纳正在生长的产品、视觉练习和小型工具，每个项目都带一点甜糯的手作痕迹。
+            从一只软乎乎的奶黄包出发，孵化技术、设计、投资研究、文化与游戏的混合实验。这里收纳正在生长的产品、视觉练习和小型工具，每个项目都带一点甜糯的手作痕迹。
           </p>
           <div class="hero-actions">
             <a class="button primary" href="#projects">看项目</a>
             <a class="button soft" href="https://rocodex.custard.top">打开 RocoDex</a>
+            <a class="button" href="https://alpha.custard.top">打开 Alpha</a>
           </div>
           <div class="hero-notes" aria-label="项目集状态">
             <div class="note">
-              <strong>02</strong>
+              <strong>03</strong>
               <span>个在线项目</span>
             </div>
             <div class="note">
@@ -612,7 +620,7 @@
             </div>
             <div class="note">
               <strong>Mix</strong>
-              <span>技术 / 设计 / 游戏</span>
+              <span>技术 / 设计 / 研究</span>
             </div>
           </div>
         </div>
@@ -631,7 +639,7 @@
             <p class="section-kicker">Projects</p>
             <h2 id="projects-title">正在发酵的项目</h2>
           </div>
-          <p>优先展示已经上线、可直接打开的作品；实验中的想法会先留在这里，等它长出更明确的形状。</p>
+          <p>优先展示已经上线、可直接打开的作品；工具、影像与研究类项目分开放置，方便从主站快速进入。</p>
         </div>
 
         <div class="project-grid">
@@ -707,6 +715,30 @@
               <div class="tag-row" aria-label="摄影项目标签">
                 <span class="tag design">Portrait</span>
                 <span class="tag design">Nanjing</span>
+                <span class="tag platform">Cloudflare Pages</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="project-card">
+            <div class="project-content">
+              <div class="project-top">
+                <div class="project-icon" aria-hidden="true">α</div>
+                <div>
+                  <p class="card-kicker">
+                    <span class="pill live alpha">Live</span>
+                    <span class="pill">Investment research</span>
+                  </p>
+                  <h3>CSTD Alpha</h3>
+                  <p>中文公司深度评分报告工具。先确认上市主体，再结合公开行情、财务数据和 DeepSeek 生成模板化研究报告、评分、估值区间与图表驾驶舱。</p>
+                </div>
+              </div>
+              <div class="actions">
+                <a class="button" href="https://alpha.custard.top">打开 Alpha</a>
+              </div>
+              <div class="tag-row" aria-label="Alpha 项目标签">
+                <span class="tag research">AI Research</span>
+                <span class="tag research">Company scoring</span>
                 <span class="tag platform">Cloudflare Pages</span>
               </div>
             </div>
