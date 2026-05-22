@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Camera, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX } from "lucide-react";
-import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
+import { listenForCstdAudioActivation, playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import {
   CSTD_MOTION_PREFERENCE_KEY,
   type CstdMotionPreference,
@@ -135,6 +135,7 @@ export function CstdLanding() {
   const [introPhase, setIntroPhase] = useState<CstdIntroPhase>("idle");
   const [motionPreference, setMotionPreference] = useState<CstdMotionPreference>("enabled");
   const [audioPreference, setAudioPreference] = useState<CstdAudioPreference>("enabled");
+  const [preferencesReady, setPreferencesReady] = useState(false);
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
   const prefersReducedMotion = reducedMotion ?? true;
@@ -155,6 +156,7 @@ export function CstdLanding() {
     });
     setMotionPreference(preference);
     setAudioPreference(audioPreference);
+    setPreferencesReady(true);
     setIntroVisible(shouldShowIntro);
     setIntroPhase("idle");
   }, [reducedMotion]);
@@ -182,6 +184,30 @@ export function CstdLanding() {
 
     return () => document.removeEventListener("visibilitychange", syncVolumeToVisibility);
   }, [audioPreference, bgmActive]);
+
+  useEffect(() => {
+    if (!preferencesReady) return;
+    if (audioPreference === "disabled" || bgmActive) return;
+
+    let cancelled = false;
+    let cleanupActivation = () => {};
+
+    const tryStartBgm = () => {
+      void startCstdBgm(CSTD_BGM_NORMAL_VOLUME).then((started) => {
+        if (cancelled) return;
+        setBgmActive(started);
+        if (started) cleanupActivation();
+      });
+    };
+
+    tryStartBgm();
+    cleanupActivation = listenForCstdAudioActivation(tryStartBgm);
+
+    return () => {
+      cancelled = true;
+      cleanupActivation();
+    };
+  }, [audioPreference, bgmActive, preferencesReady]);
 
   const mascotCopy = useMemo(() => {
     if (mascotMood === "happy") return "奶黄包收到了你的点击，正在加糖。";
@@ -758,7 +784,7 @@ function MotionControls({
         播放开场
       </button>
       <span className="col-span-2 inline-flex min-h-7 items-center justify-center rounded-lg bg-white/70 px-2 text-[0.68rem] font-black text-[#7b6656] sm:col-span-3">
-        {audioEnabled ? (bgmActive ? "奶油音乐轻轻播放中" : "点击后播放开场音和奶油音乐") : "声音已关闭"}
+        {audioEnabled ? (bgmActive ? "奶油音乐轻轻播放中" : "声音已开启，点击页面后播放奶油音乐") : "声音已关闭"}
       </span>
     </div>
   );

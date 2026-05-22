@@ -13,6 +13,7 @@ const CSTD_INTRO_VOLUME = 0.78;
 const CSTD_POKE_VOLUME = 0.58;
 const CSTD_BGM_DEFAULT_VOLUME = 0.12;
 const CSTD_BGM_MAX_VOLUME = 0.22;
+const CSTD_AUDIO_ACTIVATION_EVENTS = ["pointerdown", "keydown", "touchstart"] as const;
 
 let bgmAudio: HTMLAudioElement | null = null;
 let bgmPlaying = false;
@@ -63,6 +64,36 @@ export async function startCstdBgm(volume = CSTD_BGM_DEFAULT_VOLUME) {
     bgmAudio = null;
     return false;
   }
+}
+
+export function listenForCstdAudioActivation(
+  onActivate: () => void,
+  target: Pick<Window, "addEventListener" | "removeEventListener"> | null = getAudioActivationTarget(),
+) {
+  if (!target) return () => {};
+
+  const activationTarget = target;
+  let cleanedUp = false;
+  const handleActivation: EventListener = () => {
+    if (cleanedUp) return;
+    onActivate();
+  };
+
+  const options: AddEventListenerOptions = { capture: true, passive: true };
+
+  for (const eventName of CSTD_AUDIO_ACTIVATION_EVENTS) {
+    activationTarget.addEventListener(eventName, handleActivation, options);
+  }
+
+  function cleanup() {
+    if (cleanedUp) return;
+    cleanedUp = true;
+    for (const eventName of CSTD_AUDIO_ACTIVATION_EVENTS) {
+      activationTarget.removeEventListener(eventName, handleActivation, options);
+    }
+  }
+
+  return cleanup;
 }
 
 export function stopCstdBgm() {
@@ -156,6 +187,11 @@ function getAudioConstructor() {
 
   const audioWindow = window as AudioWindow;
   return audioWindow.Audio ?? null;
+}
+
+function getAudioActivationTarget() {
+  if (typeof window === "undefined") return null;
+  return window;
 }
 
 function isCstdAudioPreferenceDisabled() {

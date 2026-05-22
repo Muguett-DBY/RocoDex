@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test, vi } from "vitest";
 import {
   isCstdBgmPlaying,
+  listenForCstdAudioActivation,
   playCstdIntroSound,
   playCstdPokeSound,
   setCstdAudioVolume,
@@ -22,6 +23,12 @@ type FakeAudioRecord = {
   preload: string;
   src: string;
   volume: number;
+};
+
+type ListenerRecord = {
+  listener: EventListenerOrEventListenerObject;
+  options?: AddEventListenerOptions | boolean;
+  type: string;
 };
 
 const audioInstances: FakeAudioRecord[] = [];
@@ -136,5 +143,37 @@ describe("CSTD intro sound", () => {
 
     expect(audioInstances).toHaveLength(0);
     expect(isCstdBgmPlaying()).toBe(false);
+  });
+
+  test("keeps activation listeners available until playback succeeds or cleanup runs", () => {
+    const listeners: ListenerRecord[] = [];
+    const target = {
+      addEventListener: vi.fn((type: string, listener: EventListenerOrEventListenerObject, options?: AddEventListenerOptions | boolean) => {
+        listeners.push({ listener, options, type });
+      }),
+      removeEventListener: vi.fn((type: string, listener: EventListenerOrEventListenerObject, options?: AddEventListenerOptions | boolean) => {
+        const index = listeners.findIndex((record) => record.type === type && record.listener === listener && record.options === options);
+        if (index >= 0) listeners.splice(index, 1);
+      }),
+    };
+    const onActivate = vi.fn();
+
+    const cleanup = listenForCstdAudioActivation(onActivate, target);
+
+    expect(target.addEventListener).toHaveBeenCalledTimes(3);
+    expect(listeners.map((listener) => listener.type)).toEqual(["pointerdown", "keydown", "touchstart"]);
+    expect(listeners.every((listener) => listener.options && typeof listener.options === "object" && listener.options.capture === true)).toBe(true);
+
+    const firstListener = listeners[0].listener;
+    if (typeof firstListener === "function") firstListener(new Event("pointerdown"));
+
+    expect(onActivate).toHaveBeenCalledTimes(1);
+    expect(target.removeEventListener).not.toHaveBeenCalled();
+    expect(listeners).toHaveLength(3);
+
+    cleanup();
+    expect(onActivate).toHaveBeenCalledTimes(1);
+    expect(target.removeEventListener).toHaveBeenCalledTimes(3);
+    expect(listeners).toHaveLength(0);
   });
 });
