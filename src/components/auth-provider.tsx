@@ -3,11 +3,13 @@
 import { usePathname } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 import type { ReactNode } from "react";
+import { shouldDisableSessionProvider } from "@/lib/auth-provider-routing";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  const hostname = typeof window === "undefined" ? "" : window.location.hostname;
 
-  if (pathname === "/cstd") {
+  if (shouldDisableSessionProvider(pathname, hostname)) {
     return <>{children}</>;
   }
 
