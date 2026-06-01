@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import Image from "next/image";
 import { RefreshCw, Share2, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { AttributeBadges } from "@/components/attribute-badges";
 import { dimensions, type DimensionScores, type RktiResult } from "@/data/rkti";
 import { creatures } from "@/data/creatures";

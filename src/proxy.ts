@@ -17,7 +17,7 @@ const CSTD_NOT_FOUND_HTML = `<!doctype html>
 </body>
 </html>`;
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const path = request.nextUrl.pathname;
   const cstdRouteDecision = getCstdRouteDecision(host, path);

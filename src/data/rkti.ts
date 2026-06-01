@@ -1,5 +1,3 @@
-import type { Creature } from "@/types/creature";
-
 export const dimensions = [
   { key: "battle" as const, label: "战斗节奏", left: "速攻爆发", right: "持久消耗", emoji: "⚔️" },
   { key: "range" as const, label: "输出方式", left: "物攻近战", right: "魔攻远程", emoji: "🎯" },
