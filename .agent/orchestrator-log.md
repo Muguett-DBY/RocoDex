@@ -34,10 +34,14 @@
   - Browser mobile: 390px viewport showed both new projects, no horizontal overflow, and no framework error text.
   - Browser interaction: clicking `看项目` scrolled toward the projects section and kept both new cards visible.
   - Console: no error-level logs; the existing Three.js `Clock` deprecation warning remained non-blocking.
-- Commit: pending
-- Push: pending
-- Remote check: pending
-- Status: in progress
+- Commit: `a6d2711 feat: add personal homepage project links`
+- Push: `origin/main` updated to `a6d271196219767786757f0218882b0ad211da4d`
+- Remote check:
+  - `gh run list --branch main --limit 5` showed no new GitHub Actions run for `a6d2711`; only older GitHub Pages runs were present.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Commit check-runs: `0`.
+- Status: closed
+- Next stage after closure: Stage 2 UIUX
 
 ## Run
 

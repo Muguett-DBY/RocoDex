@@ -21,6 +21,8 @@
 - `npm test` passed 20 files / 80 tests.
 - `npm run build` exited `0` and generated 735 static pages.
 - Browser verification covered `/cstd`, both new project cards, `05 个在线项目`, project-anchor interaction, 390px mobile overflow, and console error checks.
+- Commit `a6d2711` was pushed to `origin/main`.
+- GitHub remote check found no new Actions run for `a6d2711`; Vercel commit status completed successfully.
 
 ### Follow-up candidates
 
