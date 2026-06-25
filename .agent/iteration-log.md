@@ -121,3 +121,24 @@
 - Browser smoke covered mobile header, collection share import, compare handoff, auth fallback, and console errors `0`.
 - Commit `f097cee` was pushed to `origin/main`.
 - GitHub remote check found no Actions run for `f097cee`; Vercel commit status completed successfully.
+
+## 2026-06-26 — Stage 6 / 6 — IMPROVE
+
+### Scope
+
+- Added guide shortcuts from collection items to existing guide detail pages.
+- Kept guide slug construction centralized through the existing SEO helper.
+
+### Changed surfaces
+
+- `/collection`
+- README collection documentation
+
+### Verification evidence
+
+- Focused TDD run failed before implementation because `src/lib/collection-guide-links.ts` did not exist.
+- Focused TDD run passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 20 files / 79 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered collection import, two rendered guide shortcuts, guide detail navigation for `迪莫`, no horizontal overflow, and console errors `0`.
