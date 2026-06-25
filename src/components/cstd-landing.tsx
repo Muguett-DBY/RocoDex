@@ -30,6 +30,7 @@ import {
   getCstdProjectFilterSummary,
   type CstdProjectFilter,
 } from "@/lib/cstd-project-filter";
+import { cstdProjectGuides } from "@/lib/cstd-project-guide";
 import {
   cstdHeaderNavClassName,
   cstdHeaderClassName,
@@ -455,6 +456,8 @@ export function CstdLanding() {
               onToggle={toggleMotion}
             />
           </div>
+
+          <ProjectGuide onFocus={focusProject} />
 
           <div className="mb-5 rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[6px_6px_0_rgba(47,36,29,.05)] backdrop-blur-sm sm:p-4">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
@@ -883,6 +886,42 @@ function MotionControls({
       <span className="col-span-2 inline-flex min-h-7 items-center justify-center rounded-lg bg-white/70 px-2 text-[0.68rem] font-black text-[#7b6656] sm:col-span-3">
         {audioEnabled ? (bgmActive ? "奶油音乐轻轻播放中" : "声音已开启，点击页面后播放奶油音乐") : "声音已关闭"}
       </span>
+    </div>
+  );
+}
+
+function ProjectGuide({ onFocus }: { onFocus: (projectId: string) => void }) {
+  return (
+    <div className="mb-5">
+      <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#0f8f64]">Goal guide</p>
+          <h3 className="mt-1 text-xl font-black text-[#2f241d] sm:text-2xl">按目标找项目</h3>
+        </div>
+        <p className="text-xs font-semibold text-[#7b6656]">4 条路径</p>
+      </div>
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        {cstdProjectGuides.map((guide) => {
+          const project = cstdProjects.find((item) => item.id === guide.projectId);
+          if (!project) return null;
+
+          return (
+            <button
+              key={guide.goal}
+              type="button"
+              onClick={() => onFocus(guide.projectId)}
+              className="group min-w-0 rounded-lg border border-[#ead6ad] bg-white/72 p-4 text-left shadow-[5px_5px_0_rgba(47,36,29,.05)] transition hover:-translate-y-0.5 hover:border-[#0f8f64] hover:bg-[#fffaf0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+              aria-label={`${guide.goal}，查看${project.title}案例`}
+            >
+              <span className="block min-w-0 text-sm font-black text-[#2f241d]">{guide.goal}</span>
+              <span className="mt-2 block min-w-0 text-xs font-semibold leading-5 text-[#6f5b4a]">{guide.reason}</span>
+              <span className="mt-3 inline-flex min-h-7 items-center rounded-md bg-[#dff8ed] px-2 text-xs font-black text-[#047857]">
+                {project.title}
+              </span>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 }
