@@ -1,5 +1,26 @@
 # RocoDex Agent Orchestrator Log
 
+## Run — 2026-06-26 — Short 2-stage homepage continuation
+
+- Sequence: `IMPROVE → UIUX`
+- Branch: `main`
+- Baseline: clean worktree; `git fetch --prune` and `git pull --ff-only` reported already up to date
+- Prompt source: `C:\Users\12031\Desktop\AGENT_ORCHESTRATOR_3_LEVELS_V2\01_SHORT_2_STAGE_MAIN_V2.txt`
+- Required prompt files read: `AGENT_IMPROVE_MAIN.txt`, `AGENT_UIUX_MAIN.txt`
+
+### Stage 1
+
+- Stage number: 1 / 2
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: turn the cinematic overlay into a first-visit experience, preserve explicit replay, and remove the repeat-visit barrier to the project directory.
+- Start state:
+  - `CSTD_INTRO_SEEN_KEY` existed but was ignored.
+  - Automatic intro logic returned true on every page load unless the manual motion preference was disabled.
+  - Reduced-motion visitors were still shown the full-screen intro choice.
+  - The existing project filters and manual replay control provide a stable follow-on path.
+- Status: in progress
+
 ## Run — 2026-06-26 — Short 2-stage homepage pass
 
 - Sequence: `IMPROVE → UIUX`

@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Building2, Camera, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX } from "lucide-react";
 import { listenForCstdAudioActivation, playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import {
+  CSTD_INTRO_SEEN_KEY,
   CSTD_MOTION_PREFERENCE_KEY,
   type CstdMotionPreference,
   getCstdIntroControlLabel,
@@ -197,9 +198,11 @@ export function CstdLanding() {
     const preference: CstdMotionPreference = storedPreference === "disabled" ? "disabled" : "enabled";
     const storedAudioPreference = window.localStorage.getItem(CSTD_AUDIO_PREFERENCE_KEY);
     const audioPreference: CstdAudioPreference = storedAudioPreference === "disabled" ? "disabled" : "enabled";
+    const introSeen = window.localStorage.getItem(CSTD_INTRO_SEEN_KEY);
     const shouldShowIntro = shouldPlayCstdIntro({
       reducedMotion,
       motionPreference: preference,
+      introSeen,
     });
     setMotionPreference(preference);
     setAudioPreference(audioPreference);
@@ -297,6 +300,7 @@ export function CstdLanding() {
   }
 
   function beginIntroPlayback() {
+    window.localStorage.setItem(CSTD_INTRO_SEEN_KEY, "true");
     setIntroVisible(true);
     setIntroPhase("playing");
     if (audioPreference === "disabled") return;
@@ -306,6 +310,7 @@ export function CstdLanding() {
   }
 
   function skipIntro() {
+    window.localStorage.setItem(CSTD_INTRO_SEEN_KEY, "true");
     setIntroVisible(false);
     setIntroPhase("idle");
   }
@@ -557,7 +562,7 @@ function CstdIntro({
         onClick={onSkip}
         className="absolute right-4 top-4 z-30 rounded-full border border-[#ead6ad] bg-white/82 px-4 py-2 text-sm font-black text-[#7b6656] shadow-sm backdrop-blur transition hover:border-[#d98528] hover:text-[#2f241d] sm:right-5 sm:top-5"
       >
-        跳过
+        直接浏览项目
       </button>
       <div className="relative grid min-h-[520px] w-[min(94vw,760px)] place-items-center sm:min-h-[630px]">
         {introPlaying ? (
