@@ -92,7 +92,13 @@
   - Local gates: `npm run lint` exited `0`; `npm test` passed 25 files / 94 tests; `npm run build` generated 735 static pages.
   - Browser desktop: card preview omitted full problem/outcome text, focused panel preserved both, and project-specific button labels resolved correctly.
   - Browser mobile: CRM card preview rendered at 390 px without horizontal overflow and console errors were `0`.
-- Status: pending commit and remote check
+- Commit: `cb6096d feat: compact personal homepage project cards`
+- Push: `origin/main` updated to `cb6096d`.
+- Remote check:
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Commit check-runs: `0`; `gh run list` showed no new current GitHub Actions run for the commit.
+- Status: closed
+- Next stage after closure: Stage 4 IMPROVE
 
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
