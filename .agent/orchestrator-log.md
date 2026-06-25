@@ -40,6 +40,19 @@
 - Status: closed
 - Next stage after closure: Stage 2 UIUX
 
+### Stage 2
+
+- Stage number: 2 / 2
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: recover the mobile first viewport and make project navigation persistent, compact, and accessible.
+- Start state:
+  - The mobile header permanently rendered six navigation buttons in a two-column, three-row grid.
+  - Navigation consumed substantial first-viewport space before the CSTD brand statement.
+  - The header did not remain available while browsing the project directory.
+  - Desktop shortcuts were useful and should remain visible at larger breakpoints.
+- Status: in progress
+
 ## Run — 2026-06-26 — Short 2-stage homepage pass
 
 - Sequence: `IMPROVE → UIUX`
