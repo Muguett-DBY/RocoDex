@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { Copy, GitCompare, Heart, Trash2 } from "lucide-react";
+import { BookOpen, Copy, GitCompare, Heart, Trash2 } from "lucide-react";
 import { CreatureCard } from "@/components/creature-card";
 import { CollectionInsightsPanel } from "@/components/collection-insights-panel";
 import { Button } from "@/components/ui/button";
 import { useCreatureCollection } from "@/hooks/use-creature-collection";
+import { getCollectionGuideHref } from "@/lib/collection-guide-links";
 import { summarizeCollectionInsights } from "@/lib/collection-insights";
 import { buildCollectionCompareHref, buildCollectionShareHref } from "@/lib/creature-collection";
 import type { Creature } from "@/types/creature";
@@ -145,18 +146,30 @@ export function CollectionWorkspace({ sharedIds = [] }: { sharedIds?: string[] }
         {savedCreatures.map((creature) => {
           const selected = validSelectedIds.includes(creature.id);
           const selectionDisabled = !selected && validSelectedIds.length >= 4;
+          const guideHref = guideBuilds ? getCollectionGuideHref(creature.id, guideBuilds) : null;
           return (
             <div key={creature.id} className="space-y-2">
-              <label className="flex cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700">
-                <input
-                  type="checkbox"
-                  checked={selected}
-                  disabled={selectionDisabled}
-                  onChange={() => toggleSelected(creature.id)}
-                  className="h-4 w-4 accent-emerald-600"
-                />
-                {selected ? "已加入对比" : selectionDisabled ? "最多选择 4 项" : "选择用于对比"}
-              </label>
+              <div className="flex flex-wrap items-center gap-2">
+                <label className="flex min-h-10 flex-1 cursor-pointer items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700">
+                  <input
+                    type="checkbox"
+                    checked={selected}
+                    disabled={selectionDisabled}
+                    onChange={() => toggleSelected(creature.id)}
+                    className="h-4 w-4 accent-emerald-600"
+                  />
+                  {selected ? "已加入对比" : selectionDisabled ? "最多选择 4 项" : "选择用于对比"}
+                </label>
+                {guideHref ? (
+                  <Link
+                    href={guideHref}
+                    className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800 transition hover:bg-emerald-100"
+                  >
+                    <BookOpen className="h-4 w-4" />
+                    查看攻略
+                  </Link>
+                ) : null}
+              </div>
               <CreatureCard creature={creature} />
             </div>
           );

@@ -5,7 +5,7 @@ RocoDex 是一个非官方《洛克王国世界》中文精灵图鉴 MVP，用�
 当前版本包含首页、精灵列表、精灵详情、中文搜索、筛选、本地收藏、数据状态页、关于/免责声明页面，以及前 50 个图鉴编号的本地 TypeScript seed data。
 同时包含 `/pvp-teams` 页面，用于整理当前版本公开攻略中的 PVP META 阵容。
 `/guides` 页面用于汇总 PVE / PVP 强度榜和培养建议；缺少可靠资料的精灵显示为“未评级 / 待复核”。
-`/collection` 页面提供当前浏览器内的本地收藏工作台，用户可从精灵卡片或详情页收藏候选，复制 `/collection?ids=...` 分享链接，导入他人分享清单，并查看属性/角色/攻略覆盖洞察，再将 2-4 只收藏精灵带入 `/compare` 对比。
+`/collection` 页面提供当前浏览器内的本地收藏工作台，用户可从精灵卡片或详情页收藏候选，复制 `/collection?ids=...` 分享链接，导入他人分享清单，查看属性/角色/攻略覆盖洞察，并直接打开每只收藏精灵的培养攻略，再将 2-4 只收藏精灵带入 `/compare` 对比。
 
 ## 技术栈
 
@@ -69,6 +69,7 @@ npm run test
 - 本地收藏存储逻辑：`src/lib/creature-collection.ts`
 - 本地收藏浏览器 Hook：`src/hooks/use-creature-collection.ts`
 - 本地收藏洞察逻辑：`src/lib/collection-insights.ts`
+- 本地收藏攻略链接：`src/lib/collection-guide-links.ts`
 
 ## 数据说明
 
