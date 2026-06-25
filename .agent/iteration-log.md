@@ -1,5 +1,26 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Stage 1 / 6 — IMPROVE
+
+### Scope
+
+- Added honest case-study evidence to every live CSTD project.
+- Extracted project metadata from the large landing component into a tested library module.
+
+### Verification evidence
+
+- TDD red/green completed for the missing project evidence module.
+- `npm run lint` exited `0`.
+- `npm test` passed 23 files / 89 tests.
+- `npm run build` generated 735 static pages.
+- Browser verification covered desktop, 390 px mobile, operations filtering, evidence content, overflow, and console errors.
+- Commit `414c876` was pushed to `origin/main`; Vercel completed successfully and no new GitHub Actions run was created.
+
+### Follow-up candidates
+
+- Add a focused, shareable case-study view for one project at a time.
+- Reduce the visual height of the full project grid through a clearer master-detail browsing pattern.
+
 ## 2026-06-26 — Homepage Continuation Stage 2 / 2 — UIUX
 
 ### Scope

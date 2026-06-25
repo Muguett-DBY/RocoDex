@@ -20,7 +20,25 @@
   - Previous recommended flagship was a focused project case-study layer.
   - Project cards exposed descriptions, metrics, links, and technology tags but did not state role, problem, or delivered outcome.
   - All project metadata lived inside `src/components/cstd-landing.tsx`.
-- Status: in progress
+- Implemented:
+  - Added role, problem, delivered outcome, and current-state evidence to all five live projects.
+  - Kept the incubating project explicitly exploratory instead of claiming shipped results.
+  - Moved typed, serializable project metadata into `src/lib/cstd-projects.ts`.
+  - Replaced component references in data with stable icon keys and a render-time Lucide map.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-projects.test.ts` failed because the project module did not exist.
+  - TDD green: project evidence tests passed 2 / 2; related layout and filtering tests passed 12 / 12.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 23 files / 89 tests; `npm run build` generated 735 static pages.
+  - Browser desktop and mobile: evidence rendered, 390 px had no horizontal overflow, and console errors were `0`.
+  - Browser interaction: the operations filter showed only CRM and preserved its complete evidence block.
+  - Known warning: React Three Fiber 9.6.1 still emits the upstream `THREE.Clock` deprecation warning.
+- Commit: `414c876 feat: add project case study evidence`
+- Push: `origin/main` updated to `414c876`.
+- Remote check:
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Commit check-runs: `0`; no new GitHub Actions run was created.
+- Status: closed
+- Next stage after closure: Stage 2 IMPROVE
 
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
