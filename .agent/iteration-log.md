@@ -1,5 +1,25 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Stage 3 / 6 — UIUX
+
+### Scope
+
+- Converted project cards from full evidence blocks into compact role/current-status previews.
+- Added project-specific accessible names for the repeated `查看案例` controls.
+
+### Verification evidence
+
+- TDD failed before the card helper existed and passed 2 / 2 after implementation.
+- Related project, focus, and layout tests passed 15 / 15.
+- `npm run lint` exited `0`.
+- `npm test` passed 25 files / 94 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered compact card copy, preserved focus-panel details, accessible button labels, desktop and 390 px mobile screenshots, overflow, and console errors.
+
+### Follow-up candidates
+
+- Add goal-based project recommendations above the grid so visitors can choose by intent instead of project name.
+
 ## 2026-06-26 — Long Homepage Stage 2 / 6 — IMPROVE
 
 ### Scope

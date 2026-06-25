@@ -70,6 +70,30 @@
 - Status: closed
 - Next stage after closure: Stage 3 UIUX
 
+### Stage 3
+
+- Stage number: 3 / 6
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: reduce the project directory's card height and make repeated case-study controls easier to distinguish.
+- Start state:
+  - Stage 2 added a focused case-study panel, but project cards still repeated all four evidence rows.
+  - Mobile browsing remained longer than necessary for a directory.
+  - Multiple visible `查看案例` buttons shared the same accessible name.
+- Implemented:
+  - Added a tested project-card helper for compact evidence previews and project-specific focus labels.
+  - Reduced card evidence from full role/problem/outcome/current detail to role/current preview.
+  - Preserved complete problem and delivered-outcome evidence in the focused case-study panel.
+  - Added project-specific `aria-label` values to each case-study button while keeping the short visible label.
+  - Tightened card evidence spacing to match the preview role.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-card.test.ts` failed because the card helper module did not exist.
+  - TDD green: project-card tests passed 2 / 2; related project/layout/focus tests passed 15 / 15.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 25 files / 94 tests; `npm run build` generated 735 static pages.
+  - Browser desktop: card preview omitted full problem/outcome text, focused panel preserved both, and project-specific button labels resolved correctly.
+  - Browser mobile: CRM card preview rendered at 390 px without horizontal overflow and console errors were `0`.
+- Status: pending commit and remote check
+
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
 - Sequence: `IMPROVE → UIUX`
