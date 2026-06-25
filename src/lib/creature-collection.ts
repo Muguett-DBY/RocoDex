@@ -36,8 +36,24 @@ export function toggleCreatureCollectionId(ids: string[], id: string) {
   return normalized.includes(id) ? normalized.filter((item) => item !== id) : [...normalized, id];
 }
 
+export function parseSharedCollectionIds(value: string | string[] | null | undefined) {
+  const raw = Array.isArray(value) ? value[0] : value;
+  if (!raw) return [];
+  return normalizeCreatureCollectionIds(raw.split(",").map((item) => item.trim()));
+}
+
+export function mergeCreatureCollectionIds(currentIds: string[], incomingIds: string[]) {
+  return normalizeCreatureCollectionIds([...currentIds, ...incomingIds]);
+}
+
 export function buildCollectionCompareHref(ids: string[]) {
   const normalized = normalizeCreatureCollectionIds(ids).slice(0, 4);
   if (normalized.length < 2) return null;
   return `/compare?ids=${encodeURIComponent(normalized.join(","))}`;
+}
+
+export function buildCollectionShareHref(ids: string[]) {
+  const normalized = normalizeCreatureCollectionIds(ids);
+  if (normalized.length === 0) return "/collection";
+  return `/collection?ids=${encodeURIComponent(normalized.join(","))}`;
 }

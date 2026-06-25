@@ -2,21 +2,23 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { GitCompare, Heart, Trash2 } from "lucide-react";
+import { Copy, GitCompare, Heart, Trash2 } from "lucide-react";
 import { CreatureCard } from "@/components/creature-card";
 import { CollectionInsightsPanel } from "@/components/collection-insights-panel";
 import { Button } from "@/components/ui/button";
 import { useCreatureCollection } from "@/hooks/use-creature-collection";
 import { summarizeCollectionInsights } from "@/lib/collection-insights";
-import { buildCollectionCompareHref } from "@/lib/creature-collection";
+import { buildCollectionCompareHref, buildCollectionShareHref } from "@/lib/creature-collection";
 import type { Creature } from "@/types/creature";
 import type { GuideCreatureBuild } from "@/types/guide";
 
-export function CollectionWorkspace() {
-  const { ids, hydrated, clear } = useCreatureCollection();
+export function CollectionWorkspace({ sharedIds = [] }: { sharedIds?: string[] }) {
+  const { ids, hydrated, addMany, clear } = useCreatureCollection();
   const [creatures, setCreatures] = useState<Creature[]>([]);
   const [guideBuilds, setGuideBuilds] = useState<GuideCreatureBuild[] | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [importDismissed, setImportDismissed] = useState(false);
+  const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "failed">("idle");
 
   useEffect(() => {
     let active = true;
@@ -39,6 +41,22 @@ export function CollectionWorkspace() {
   const validSelectedIds = selectedIds.filter((id) => creatureById.has(id) && ids.includes(id));
   const compareHref = buildCollectionCompareHref(validSelectedIds);
   const insights = guideBuilds ? summarizeCollectionInsights(ids, creatures, guideBuilds) : null;
+  const importableSharedIds = sharedIds.filter((id) => creatureById.has(id) && !ids.includes(id));
+  const shareHref = buildCollectionShareHref(ids);
+
+  const importSharedIds = () => {
+    addMany(importableSharedIds);
+    setImportDismissed(true);
+  };
+
+  const copyShareLink = async () => {
+    try {
+      await navigator.clipboard.writeText(new URL(shareHref, window.location.origin).toString());
+      setShareStatus("copied");
+    } catch {
+      setShareStatus("failed");
+    }
+  };
 
   const toggleSelected = (id: string) => {
     setSelectedIds((current) => {
@@ -54,24 +72,39 @@ export function CollectionWorkspace() {
 
   if (savedCreatures.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center shadow-sm">
-        <Heart className="mx-auto h-10 w-10 text-emerald-600" />
-        <h2 className="mt-5 text-xl font-bold text-slate-950">还没有收藏精灵</h2>
-        <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-slate-600">
-          在精灵列表或详情页点击心形按钮，即可建立当前浏览器里的培养候选清单。
-        </p>
-        <Link
-          href="/creatures"
-          className="mt-6 inline-flex h-10 items-center justify-center rounded-md bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
-        >
-          浏览精灵列表
-        </Link>
-      </div>
+      <section className="space-y-4">
+        <SharedImportBanner
+          importableCount={importableSharedIds.length}
+          dismissed={importDismissed}
+          onDismiss={() => setImportDismissed(true)}
+          onImport={importSharedIds}
+        />
+        <div className="rounded-xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center shadow-sm">
+          <Heart className="mx-auto h-10 w-10 text-emerald-600" />
+          <h2 className="mt-5 text-xl font-bold text-slate-950">还没有收藏精灵</h2>
+          <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-slate-600">
+            在精灵列表或详情页点击心形按钮，即可建立当前浏览器里的培养候选清单。
+          </p>
+          <Link
+            href="/creatures"
+            className="mt-6 inline-flex h-10 items-center justify-center rounded-md bg-emerald-600 px-4 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+          >
+            浏览精灵列表
+          </Link>
+        </div>
+      </section>
     );
   }
 
   return (
     <section className="space-y-6">
+      <SharedImportBanner
+        importableCount={importableSharedIds.length}
+        dismissed={importDismissed}
+        onDismiss={() => setImportDismissed(true)}
+        onImport={importSharedIds}
+      />
+
       <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -97,6 +130,10 @@ export function CollectionWorkspace() {
             <Button type="button" variant="secondary" onClick={clear}>
               <Trash2 className="h-4 w-4" />
               清空收藏
+            </Button>
+            <Button type="button" variant="secondary" onClick={copyShareLink}>
+              <Copy className="h-4 w-4" />
+              {shareStatus === "copied" ? "已复制" : shareStatus === "failed" ? "复制失败" : "复制分享链接"}
             </Button>
           </div>
         </div>
@@ -126,5 +163,38 @@ export function CollectionWorkspace() {
         })}
       </div>
     </section>
+  );
+}
+
+function SharedImportBanner({
+  importableCount,
+  dismissed,
+  onDismiss,
+  onImport,
+}: {
+  importableCount: number;
+  dismissed: boolean;
+  onDismiss: () => void;
+  onImport: () => void;
+}) {
+  if (dismissed || importableCount === 0) return null;
+
+  return (
+    <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-900 shadow-sm">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <p className="font-semibold">检测到分享清单</p>
+          <p className="mt-1 text-emerald-800">可导入 {importableCount} 只当前还未收藏的精灵，导入后会与本地收藏合并。</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" onClick={onImport}>
+            导入分享清单
+          </Button>
+          <Button type="button" variant="secondary" onClick={onDismiss}>
+            暂不导入
+          </Button>
+        </div>
+      </div>
+    </div>
   );
 }

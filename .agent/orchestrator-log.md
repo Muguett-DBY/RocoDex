@@ -94,3 +94,24 @@
   - `gh run list --branch main` showed no GitHub Actions run for `a5478ba`.
   - Commit status `Vercel` completed successfully with description “Deployment has completed”.
 - Status: closed
+
+## Stage 4
+
+- Stage number: 4 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add shareable local collection links that import normalized creature IDs only after explicit user action.
+- Design: `docs/superpowers/specs/2026-06-26-collection-sharing-design.md`
+- Plan: `docs/superpowers/plans/2026-06-26-collection-sharing.md`
+- Implemented:
+  - Added shared-link parsing, merging, and href-building helpers.
+  - Added `addMany` to the collection hook.
+  - Passed `/collection?ids=...` query IDs into the collection workspace.
+  - Added import prompt and copy-share-link action.
+  - Updated README with share-link behavior.
+- Verification recorded before commit:
+  - TDD red: focused collection test failed because new share helper exports did not exist.
+  - TDD green: focused collection test passed after helper implementation.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 19 files / 77 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser: `/collection?ids=008,009` showed the import prompt for 2 unsaved creatures; clicking “导入分享清单” saved `水蓝蓝` and `波波拉`, removed the prompt, showed “已收藏 2 只精灵”, exposed “复制分享链接”, had no horizontal overflow, and console errors `0`.
+- Status: pending diff review, commit, push, and remote check

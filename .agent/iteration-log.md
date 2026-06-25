@@ -78,3 +78,25 @@
 - Browser verification covered 375px mobile collapsed/open header, captured screenshot, confirmed no horizontal overflow, and console errors `0`.
 - Commit `a5478ba` was pushed to `origin/main`.
 - GitHub remote check found no Actions run for `a5478ba`; Vercel commit status completed successfully.
+
+## 2026-06-26 — Stage 4 / 6 — IMPROVE
+
+### Scope
+
+- Added shareable collection links using `/collection?ids=...`.
+- Added explicit import UI that merges shared IDs into local browser collection only after user action.
+- Added a copy-share-link action for populated collections.
+
+### Changed surfaces
+
+- `/collection`
+- README collection documentation
+
+### Verification evidence
+
+- Focused TDD run failed before implementation because the new share helper exports did not exist.
+- Focused TDD run passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 19 files / 77 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered `/collection?ids=008,009`, confirmed import prompt, import action, saved count, imported creature names, copy-share action, no horizontal overflow, and console errors `0`.
