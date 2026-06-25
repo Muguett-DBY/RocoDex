@@ -114,4 +114,9 @@
   - TDD green: focused collection test passed after helper implementation.
   - Local gates: `npm run lint` exited `0`; `npm test` passed 19 files / 77 tests; `npm run build` exited `0` and generated 735 static pages.
   - Browser: `/collection?ids=008,009` showed the import prompt for 2 unsaved creatures; clicking “导入分享清单” saved `水蓝蓝` and `波波拉`, removed the prompt, showed “已收藏 2 只精灵”, exposed “复制分享链接”, had no horizontal overflow, and console errors `0`.
-- Status: pending diff review, commit, push, and remote check
+- Commit: `4217bd1 feat: add shareable collection imports`
+- Push: `origin/main` updated to `4217bd1e33db27b0344d5e083a5c6d030f1001a1`
+- Remote check:
+  - `gh run list --branch main` showed no GitHub Actions run for `4217bd1`.
+  - Commit status `Vercel` completed successfully with description “Deployment has completed”.
+- Status: closed

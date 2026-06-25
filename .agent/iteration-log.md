@@ -100,3 +100,5 @@
 - `npm test` passed 19 files / 77 tests.
 - `npm run build` exited `0` and generated 735 static pages.
 - Browser verification covered `/collection?ids=008,009`, confirmed import prompt, import action, saved count, imported creature names, copy-share action, no horizontal overflow, and console errors `0`.
+- Commit `4217bd1` was pushed to `origin/main`.
+- GitHub remote check found no Actions run for `4217bd1`; Vercel commit status completed successfully.
