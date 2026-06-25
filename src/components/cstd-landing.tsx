@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Building2, Camera, Check, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
 import { listenForCstdAudioActivation, playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
+import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
 import {
   buildCstdProjectDirectoryHref,
   buildCstdProjectFocusHref,
@@ -898,6 +899,7 @@ function ProjectCard({
   onFocus: (projectId: string) => void;
 }) {
   const Icon = projectIcons[project.icon];
+  const evidencePreview = getCstdProjectCardPreview(project);
   const toneClasses = {
     mint: "from-[#dff8ed]/90 text-[#047857]",
     rose: "from-[#ffe7ec]/90 text-[#be4563]",
@@ -949,16 +951,16 @@ function ProjectCard({
         </div>
 
         <dl className={cstdProjectEvidenceClassName}>
-          <ProjectEvidence label="负责" value={project.evidence.role} />
-          <ProjectEvidence label="问题" value={project.evidence.problem} />
-          <ProjectEvidence label="已交付" value={project.evidence.outcome} />
-          <ProjectEvidence label="现在" value={project.evidence.current} />
+          {evidencePreview.map((item) => (
+            <ProjectEvidence key={item.label} label={item.label} value={item.value} />
+          ))}
         </dl>
 
         <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap">
           <button
             type="button"
             onClick={() => onFocus(project.id)}
+            aria-label={getCstdProjectFocusButtonLabel(project)}
             className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-5 text-sm font-black text-white shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
           >
             查看案例

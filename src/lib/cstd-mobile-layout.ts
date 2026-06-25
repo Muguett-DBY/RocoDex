@@ -36,6 +36,6 @@ export const cstdProjectMetricValueClassName = "block min-w-0 break-words text-l
 export const cstdProjectMetricLabelClassName = "mt-1 block min-w-0 break-words text-xs font-semibold leading-snug text-[#7b6656]";
 
 export const cstdProjectEvidenceClassName =
-  "mt-5 grid gap-3 rounded-xl border border-[#ead6ad] bg-[#fffaf0]/72 p-4 text-sm sm:mt-6";
+  "mt-4 grid gap-2 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/72 p-3 text-sm sm:mt-5";
 
 export const cstdProjectCards = cstdProjects.map(({ title, kicker }) => ({ title, kicker }));
