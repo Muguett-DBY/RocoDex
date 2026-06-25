@@ -44,3 +44,12 @@ export function compareCreatures(creatures: Creature[], guideBuilds: GuideCreatu
       }),
   };
 }
+
+export function parseComparisonIds(value: string | undefined, creatures: Creature[]) {
+  if (!value) return [];
+
+  const validIds = new Set(creatures.map((creature) => creature.id));
+  const uniqueIds = Array.from(new Set(value.split(",").map((id) => id.trim()))).filter((id) => validIds.has(id)).slice(0, 4);
+
+  return uniqueIds.length >= 2 ? uniqueIds : [];
+}

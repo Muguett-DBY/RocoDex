@@ -13,6 +13,7 @@ import { buildEvolutionChain } from "@/lib/evolution-chain";
 import { getCreatureById } from "@/lib/creature-query";
 import { availabilityStatusLabel, confidenceLabel, triStateLabel } from "@/lib/display-labels";
 import { getAttributeMatchupProfile } from "@/lib/matchup";
+import { CollectionButton } from "@/components/collection-button";
 
 type CreatureDetailProps = {
   params: Promise<{ id: string }>;
@@ -71,7 +72,10 @@ export default async function CreatureDetailPage({ params }: CreatureDetailProps
 
           <div className="space-y-5">
             <div>
-              <Badge tone="emerald">NO.{creature.id}</Badge>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <Badge tone="emerald">NO.{creature.id}</Badge>
+                <CollectionButton creatureId={creature.id} creatureName={creature.name} />
+              </div>
               <h1 className="mt-3 text-4xl font-bold tracking-tight text-slate-950">{creature.name}</h1>
               <div className="mt-4">
                 <AttributeBadges attributes={creature.attributes} />

@@ -6,13 +6,20 @@ import { AttributeBadges } from "@/components/attribute-badges";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { availabilityStatusLabel, confidenceLabel, triStateLabel } from "@/lib/display-labels";
+import { CollectionButton } from "@/components/collection-button";
 
 export function CreatureCard({ creature }: { creature: Creature }) {
   const primaryForm = creature.forms[0];
 
   return (
-    <Link href={`/creatures/${creature.id}`} className="group block">
-      <Card className="h-full overflow-hidden transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md">
+    <Card className="group relative h-full overflow-hidden transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md">
+      <CollectionButton
+        creatureId={creature.id}
+        creatureName={creature.name}
+        compact
+        className="absolute right-3 top-3 z-10 shadow-sm"
+      />
+      <Link href={`/creatures/${creature.id}`} className="block h-full">
         <div className="flex aspect-[4/3] items-center justify-center bg-gradient-to-br from-emerald-50 via-sky-50 to-amber-50 p-6">
           <Image
             src={primaryForm.image}
@@ -43,7 +50,7 @@ export function CreatureCard({ creature }: { creature: Creature }) {
             <p>状态：{availabilityStatusLabel[creature.availabilityStatus]} · 更新 {creature.updatedAt}</p>
           </div>
         </div>
-      </Card>
-    </Link>
+      </Link>
+    </Card>
   );
 }

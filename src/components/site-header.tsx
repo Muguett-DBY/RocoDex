@@ -5,6 +5,7 @@ import { BookOpen, Database, GitCompare, Info, LogIn, LogOut, ScrollText, Search
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useSession, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
+import { CollectionNavLink } from "@/components/collection-nav-link";
 
 const navItems = [
   { href: "/creatures", label: "精灵列表", icon: BookOpen },
@@ -19,21 +20,7 @@ const navItems = [
   { href: "/about", label: "关于", icon: Info },
 ];
 
-export function SiteHeader() {
-  const { data: session } = useSession();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
+export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-[#f7f6f1]/95 backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/95">
       <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-8">
@@ -42,8 +29,8 @@ export function SiteHeader() {
             RD
           </span>
           <span>
-            <span className="block text-base font-bold text-slate-950">洛克图鉴</span>
-            <span className="block text-xs text-slate-500">RocoDex</span>
+            <span className="block text-base font-bold text-slate-950 dark:text-white">洛克图鉴</span>
+            <span className="block text-xs text-slate-500 dark:text-slate-400">RocoDex</span>
           </span>
         </Link>
         <nav className="flex flex-wrap items-center gap-2">
@@ -60,9 +47,31 @@ export function SiteHeader() {
               </Link>
             );
           })}
+          <CollectionNavLink />
           <ThemeToggle />
+          {authEnabled ? <AuthControls /> : null}
+        </nav>
+      </div>
+    </header>
+  );
+}
 
-          {session?.user ? (
+function AuthControls() {
+  const { data: session } = useSession();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClick = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  return session?.user ? (
             <div className="relative" ref={menuRef}>
               <button
                 type="button"
@@ -102,9 +111,5 @@ export function SiteHeader() {
                 注册
               </Link>
             </div>
-          )}
-        </nav>
-      </div>
-    </header>
-  );
+          );
 }

@@ -5,11 +5,11 @@ import { SessionProvider } from "next-auth/react";
 import type { ReactNode } from "react";
 import { shouldDisableSessionProvider } from "@/lib/auth-provider-routing";
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children, enabled }: { children: ReactNode; enabled: boolean }) {
   const pathname = usePathname();
   const hostname = typeof window === "undefined" ? "" : window.location.hostname;
 
-  if (shouldDisableSessionProvider(pathname, hostname)) {
+  if (!enabled || shouldDisableSessionProvider(pathname, hostname)) {
     return <>{children}</>;
   }
 
