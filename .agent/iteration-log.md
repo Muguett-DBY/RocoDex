@@ -1,5 +1,32 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Homepage Continuation Stage 2 / 2 — UIUX
+
+### Scope
+
+- Replaced the permanent six-button CSTD mobile navigation grid with an accessible collapsible project menu.
+- Added a sticky mobile header while preserving desktop project shortcuts.
+
+### Verification evidence
+
+- Focused TDD failed before implementation and passed 2 / 2 after the navigation helper was added.
+- Mobile layout tests passed 7 / 7.
+- `npm run lint` exited `0`.
+- `npm test` passed 22 files / 86 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered collapsed/open/closed states, six navigation links, `#projects` handoff, sticky positioning, 390 × 844 overflow, keyboard focus outline, desktop visibility, screenshots, and console errors.
+- Commit `14b8ddf` was pushed to `origin/main`; Vercel completed successfully and no new GitHub Actions run was created.
+
+### Follow-up candidates
+
+- Add concise case-study evidence for selected projects: role, problem, outcome, and current status.
+- Revisit the React Three Fiber `Clock` warning when upstream ships a supported `Timer` migration.
+- Consider pausing background audio until a deliberate user gesture to further reduce first-load work.
+
+### Recommended next flagship
+
+- Build a focused project case-study layer that adds credibility and outcomes without expanding the homepage into a dense dashboard.
+
 ## 2026-06-26 — Homepage Continuation Stage 1 / 2 — IMPROVE
 
 ### Scope

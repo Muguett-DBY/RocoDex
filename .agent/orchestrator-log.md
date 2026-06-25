@@ -51,7 +51,27 @@
   - Navigation consumed substantial first-viewport space before the CSTD brand statement.
   - The header did not remain available while browsing the project directory.
   - Desktop shortcuts were useful and should remain visible at larger breakpoints.
-- Status: in progress
+- Implemented:
+  - Replaced the permanent mobile navigation grid with a compact menu icon and collapsible single-column panel.
+  - Centralized the six project destinations and accessible toggle labels in a tested navigation helper.
+  - Added `aria-expanded`, `aria-controls`, open/close labels, visible focus styling, and close-on-navigation behavior.
+  - Made the mobile header sticky with a restrained translucent surface.
+  - Preserved the full desktop shortcut navigation from `sm` upward.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-navigation.test.ts` failed because the navigation helper did not exist.
+  - TDD green: the focused navigation test passed 2 / 2 and the mobile layout test passed 7 / 7.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 22 files / 86 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser mobile: 390 × 844 default state showed one collapsed menu button, `aria-expanded="false"`, and no panel.
+  - Browser interaction: opening the menu showed six links and a close label; selecting Projects closed the panel after its exit transition and set `#projects`.
+  - Browser responsive/accessibility: no horizontal overflow, computed header position was `sticky`, focused toggle had a solid 2 px outline, and console errors were `0`.
+  - Browser desktop: desktop project navigation remained visible and the mobile toggle was hidden.
+- Commit: `14b8ddf feat: upgrade personal homepage navigation`
+- Push: `origin/main` updated to `14b8ddf`.
+- Remote check:
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Commit check-runs: `0`; `gh run list` showed no new GitHub Actions run for the commit.
+- Status: closed
+- Next recommended flagship: add richer project case-study detail and outcome evidence without turning the homepage into a dashboard.
 
 ## Run — 2026-06-26 — Short 2-stage homepage pass
 
