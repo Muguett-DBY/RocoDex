@@ -147,7 +147,15 @@
   - TDD green: workflow test passed 1 / 1.
   - Local gates: `npm run lint` exited `0`; `npm test` passed 27 files / 97 tests; `npm run build` generated 735 static pages.
   - Browser smoke: `/cstd` loaded at 390 px with no horizontal overflow and console errors were `0`.
-- Status: pending commit, GitHub Actions run, and remote check
+- Commit: `cc13bde ci: add github actions verification`
+- Push: `origin/main` updated to `cc13bde`.
+- Remote check:
+  - GitHub Actions run `28206365913` completed successfully for `Lint, test, and build`.
+  - Commit check-runs: `1` success.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Known annotation: GitHub reported that `actions/checkout@v4` and `actions/setup-node@v4` target Node.js 20 internally while runners force Node.js 24; no job failure.
+- Status: closed
+- Next stage after closure: Stage 6 IMPROVE
 
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
