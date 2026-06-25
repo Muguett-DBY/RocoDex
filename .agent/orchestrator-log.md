@@ -88,4 +88,9 @@
   - TDD green: focused test passed after helper implementation.
   - Local gates: `npm run lint` exited `0`; `npm test` passed 19 files / 76 tests; `npm run build` exited `0` and generated 735 static pages.
   - Browser mobile: at 375px, collapsed header showed no mobile nav panel; menu button opened `mobile-site-navigation`; close button aria label existed; no horizontal overflow; console errors `0`.
-- Status: pending diff review, commit, push, and remote check
+- Commit: `a5478ba feat: improve mobile header navigation`
+- Push: `origin/main` updated to `a5478ba1e73706faccdc65b93d977bc82db47793`
+- Remote check:
+  - `gh run list --branch main` showed no GitHub Actions run for `a5478ba`.
+  - Commit status `Vercel` completed successfully with description “Deployment has completed”.
+- Status: closed
