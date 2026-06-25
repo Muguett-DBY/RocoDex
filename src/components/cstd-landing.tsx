@@ -1,12 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Building2, Camera, Menu, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
+import { Bot, Building2, Camera, Check, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
 import { listenForCstdAudioActivation, playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
+import {
+  buildCstdProjectDirectoryHref,
+  buildCstdProjectFocusHref,
+  copyCstdProjectLink,
+  parseCstdProjectFocus,
+  type CstdProjectCopyResult,
+} from "@/lib/cstd-project-focus";
 import { cstdProjects, type CstdProjectIconKey } from "@/lib/cstd-projects";
 import {
   CSTD_INTRO_SEEN_KEY,
@@ -78,12 +85,15 @@ const CstdCustardStage = dynamic(
 export function CstdLanding() {
   const reducedMotion = usePrefersReducedMotion();
   const initialized = useRef(false);
+  const projectFocusRef = useRef<HTMLElement>(null);
   const [introVisible, setIntroVisible] = useState(false);
   const [introPhase, setIntroPhase] = useState<CstdIntroPhase>("idle");
   const [motionPreference, setMotionPreference] = useState<CstdMotionPreference>("enabled");
   const [audioPreference, setAudioPreference] = useState<CstdAudioPreference>("enabled");
   const [activeProjectFilter, setActiveProjectFilter] = useState<CstdProjectFilter>("all");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [projectCopyResult, setProjectCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [preferencesReady, setPreferencesReady] = useState(false);
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
@@ -111,6 +121,21 @@ export function CstdLanding() {
     setIntroVisible(shouldShowIntro);
     setIntroPhase("idle");
   }, [reducedMotion]);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      setSelectedProjectId(parseCstdProjectFocus(window.location.search));
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
+  useEffect(() => {
+    if (!selectedProjectId || window.location.hash !== "#project-focus") return;
+    const frame = window.requestAnimationFrame(() => {
+      projectFocusRef.current?.scrollIntoView({ behavior: motionDisabled ? "auto" : "smooth", block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [motionDisabled, selectedProjectId]);
 
   useEffect(() => {
     if (!introVisible) return;
@@ -167,6 +192,10 @@ export function CstdLanding() {
   }, [mascotMood]);
   const visibleProjects = useMemo(() => filterCstdProjects(cstdProjects, activeProjectFilter), [activeProjectFilter]);
   const projectFilterSummary = useMemo(() => getCstdProjectFilterSummary(cstdProjects, activeProjectFilter), [activeProjectFilter]);
+  const selectedProject = useMemo(
+    () => cstdProjects.find((project) => project.id === selectedProjectId) ?? null,
+    [selectedProjectId],
+  );
   const mobileNavigationToggle = getCstdMobileNavigationToggleState(mobileNavOpen);
 
   function replayIntro() {
@@ -221,6 +250,29 @@ export function CstdLanding() {
     setMascotMood("happy");
     window.setTimeout(() => setMascotMood("working"), 900);
     window.setTimeout(() => setMascotMood("curious"), 2200);
+  }
+
+  function focusProject(projectId: string) {
+    const href = buildCstdProjectFocusHref(projectId, window.location.pathname);
+    window.history.replaceState(null, "", href);
+    setProjectCopyResult(null);
+    setSelectedProjectId(projectId);
+  }
+
+  function closeProjectFocus() {
+    window.history.replaceState(null, "", buildCstdProjectDirectoryHref(window.location.pathname));
+    setSelectedProjectId(null);
+    setProjectCopyResult(null);
+  }
+
+  async function copyProjectFocusLink() {
+    if (!selectedProject) return;
+    const href = buildCstdProjectFocusHref(selectedProject.id, window.location.pathname);
+    const result = await copyCstdProjectLink(
+      navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
+      `${window.location.origin}${href}`,
+    );
+    setProjectCopyResult(result);
   }
 
   return (
@@ -432,9 +484,23 @@ export function CstdLanding() {
             </div>
           </div>
 
+          <AnimatePresence initial={false}>
+            {selectedProject ? (
+              <ProjectFocus
+                key={selectedProject.id}
+                project={selectedProject}
+                copyResult={projectCopyResult}
+                focusRef={projectFocusRef}
+                motionDisabled={motionDisabled}
+                onClose={closeProjectFocus}
+                onCopy={copyProjectFocusLink}
+              />
+            ) : null}
+          </AnimatePresence>
+
           <div className={cstdProjectGridClassName}>
             {visibleProjects.map((project, index) => (
-              <ProjectCard key={project.title} project={project} index={index} motionDisabled={motionDisabled} />
+              <ProjectCard key={project.title} project={project} index={index} motionDisabled={motionDisabled} onFocus={focusProject} />
             ))}
           </div>
         </section>
@@ -824,10 +890,12 @@ function ProjectCard({
   project,
   index,
   motionDisabled,
+  onFocus,
 }: {
   project: (typeof cstdProjects)[number];
   index: number;
   motionDisabled: boolean;
+  onFocus: (projectId: string) => void;
 }) {
   const Icon = projectIcons[project.icon];
   const toneClasses = {
@@ -888,6 +956,13 @@ function ProjectCard({
         </dl>
 
         <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap">
+          <button
+            type="button"
+            onClick={() => onFocus(project.id)}
+            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-5 text-sm font-black text-white shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
+          >
+            查看案例
+          </button>
           <HeroButton href={project.href}>
             {project.action}
           </HeroButton>
@@ -907,6 +982,93 @@ function ProjectCard({
         </div>
       </div>
     </motion.article>
+  );
+}
+
+function ProjectFocus({
+  project,
+  copyResult,
+  focusRef,
+  motionDisabled,
+  onClose,
+  onCopy,
+}: {
+  project: (typeof cstdProjects)[number];
+  copyResult: CstdProjectCopyResult | null;
+  focusRef: RefObject<HTMLElement | null>;
+  motionDisabled: boolean;
+  onClose: () => void;
+  onCopy: () => void;
+}) {
+  const Icon = projectIcons[project.icon];
+  const copyMessage = {
+    copied: "案例链接已复制",
+    unsupported: "浏览器不支持自动复制，请复制当前地址",
+    failed: "复制失败，请手动复制当前地址",
+  }[copyResult ?? "copied"];
+
+  return (
+    <motion.section
+      ref={focusRef}
+      id="project-focus"
+      aria-labelledby={`project-focus-${project.id}`}
+      className="scroll-mt-24 mb-6 overflow-hidden rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/96 shadow-[10px_10px_0_rgba(47,36,29,.1)]"
+      initial={motionDisabled ? false : { opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={motionDisabled ? { opacity: 0 } : { opacity: 0, y: -10 }}
+      transition={{ duration: 0.24 }}
+    >
+      <div className="flex items-start justify-between gap-4 border-b border-[#ead6ad] bg-[#f6bf3f]/18 p-4 sm:p-6">
+        <div className="flex min-w-0 items-start gap-3">
+          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-[#0f8f64] shadow-sm">
+            <Icon className="h-5 w-5" />
+          </span>
+          <div className="min-w-0">
+            <p className="text-xs font-black uppercase text-[#d98528]">Project case study</p>
+            <h3 id={`project-focus-${project.id}`} className="mt-1 text-2xl font-black sm:text-3xl">
+              {project.title}
+            </h3>
+            <p className="mt-2 text-sm font-semibold text-[#6f5b4a]">{project.evidence.current}</p>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="关闭案例焦点"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#ead6ad] bg-white text-[#2f241d] transition hover:border-[#d98528] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+        >
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      <div className="grid gap-5 p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+        <dl className="grid gap-4">
+          <ProjectEvidence label="负责" value={project.evidence.role} />
+          <ProjectEvidence label="解决问题" value={project.evidence.problem} />
+          <ProjectEvidence label="已交付" value={project.evidence.outcome} />
+        </dl>
+        <div className="flex flex-col gap-3 rounded-xl border border-[#ead6ad] bg-white/75 p-4">
+          <p className="text-sm font-black text-[#2f241d]">继续查看</p>
+          <HeroButton href={project.href}>
+            <ExternalLink className="mr-2 h-4 w-4" />
+            {project.action}
+          </HeroButton>
+          <button
+            type="button"
+            onClick={onCopy}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff] px-4 text-sm font-black text-[#2563eb] transition hover:border-[#2563eb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+          >
+            {copyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            复制案例链接
+          </button>
+          {copyResult ? (
+            <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
+              {copyMessage}
+            </p>
+          ) : null}
+        </div>
+      </div>
+    </motion.section>
   );
 }
 
