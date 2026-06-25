@@ -120,7 +120,13 @@
   - Local gates: `npm run lint` exited `0`; `npm test` passed 26 files / 96 tests; `npm run build` generated 735 static pages.
   - Browser desktop: the CRM guide opened `?project=crm#project-focus` and rendered the CRM case-study panel.
   - Browser mobile: guide rendered at 390 px without horizontal overflow and console errors were `0`.
-- Status: pending commit and remote check
+- Commit: `e98b67c feat: add personal homepage goal guide`
+- Push: `origin/main` updated to `e98b67c`.
+- Remote check:
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Commit check-runs: `0`; `gh run list` showed no new current GitHub Actions run for the commit.
+- Status: closed
+- Next stage after closure: Stage 5 CHECK
 
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
