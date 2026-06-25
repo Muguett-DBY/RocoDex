@@ -1,5 +1,27 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Stage 2 / 6 — IMPROVE
+
+### Scope
+
+- Added shareable project case-study focus URLs with `?project=<id>#project-focus`.
+- Added an inline project focus panel with close, visit, copy-link, and copy-result states.
+
+### Verification evidence
+
+- TDD failed before the project-focus helper existed and passed 3 / 3 after implementation.
+- Related project evidence and filtering tests passed 6 / 6.
+- `npm run lint` exited `0`.
+- `npm test` passed 24 files / 92 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered RocoDex card focus, CRM deep link, copy feedback, close-to-directory URL cleanup, 390 px mobile overflow, screenshots, and console errors.
+- Commit `fbaa939` was pushed to `origin/main`; Vercel completed successfully and no current GitHub Actions run was created.
+
+### Follow-up candidates
+
+- Compact the project cards now that full evidence can live in the focused case-study panel.
+- Improve project card button accessible names so repeated `查看案例` controls are easier to distinguish in automation and assistive tech.
+
 ## 2026-06-26 — Long Homepage Stage 1 / 6 — IMPROVE
 
 ### Scope

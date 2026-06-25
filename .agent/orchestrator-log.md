@@ -62,7 +62,13 @@
   - Browser desktop: project card `查看案例` opened `?project=rocodex#project-focus`, rendered evidence, copied the share URL, and closed back to `#projects`.
   - Browser deep link: `/cstd?project=crm#project-focus` opened the CRM case-study panel directly.
   - Browser mobile: `/cstd?project=design#project-focus` at 390 px had no horizontal overflow and console errors were `0`.
-- Status: pending commit and remote check
+- Commit: `fbaa939 feat: add shareable project case studies`
+- Push: `origin/main` updated to `fbaa939`.
+- Remote check:
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Commit check-runs: `0`; `gh run list` showed no new current GitHub Actions run for the commit.
+- Status: closed
+- Next stage after closure: Stage 3 UIUX
 
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
