@@ -102,3 +102,20 @@
 - Browser verification covered `/collection?ids=008,009`, confirmed import prompt, import action, saved count, imported creature names, copy-share action, no horizontal overflow, and console errors `0`.
 - Commit `4217bd1` was pushed to `origin/main`.
 - GitHub remote check found no Actions run for `4217bd1`; Vercel commit status completed successfully.
+
+## 2026-06-26 — Stage 5 / 6 — CHECK
+
+### Scope
+
+- Ran a production-style check across local gates, dependency audit, source hygiene, HTTP routes, and Browser/IAB flows.
+- No product code fix was required.
+
+### Verification evidence
+
+- `npm run lint` exited `0`.
+- `npm test` passed 19 files / 77 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- `npm audit --omit=dev` found 0 vulnerabilities.
+- Source hygiene scan found no TODO/FIXME/console.log/debugger matches.
+- 13 key routes returned HTTP `200` from local production server.
+- Browser smoke covered mobile header, collection share import, compare handoff, auth fallback, and console errors `0`.
