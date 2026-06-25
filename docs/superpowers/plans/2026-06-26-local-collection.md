@@ -81,4 +81,4 @@
 - [x] Run `npm run build`.
 - [x] Verify collection save/remove, persistence, compare handoff, desktop/mobile layout, and clean console in Browser/IAB.
 - [x] Review `git status`, `git diff`, and staged diff for unrelated changes, secrets, and temporary code.
-- [ ] Commit with a focused IMPROVE message, push `main`, inspect GitHub Actions/Pages, and record the result.
+- [x] Commit with a focused IMPROVE message, push `main`, inspect GitHub Actions/Pages, and record the result.

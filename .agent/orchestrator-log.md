@@ -35,5 +35,12 @@
   - Browser: saved `迪莫` and `火花`, collection count reached 2, selected both, opened `/compare?ids=001%2C005`, and verified initial selected values `001`, `005`.
   - Browser mobile: `/collection` at 390px had no horizontal overflow.
   - Browser auth fallback: `/login` displayed “账号功能暂未启用” and console errors were `0`.
-- Status: pending commit, push, and GitHub Pages check
+- Commit: `8e87ee8 feat: add local creature collection workspace`
+- Push: `origin/main` updated to `8e87ee8d41ffce36153d4c45cbb44fdff1ebd731`
+- Remote check:
+  - `gh run list --branch main` showed no run for `8e87ee8` after polling.
+  - Commit check-runs: `0`.
+  - Commit statuses: `0`.
+  - Root `.github/workflows` directory is absent, so there was no repository CI workflow to repair for this stage.
+- Status: closed
 - Next stage after closure: Stage 2 IMPROVE

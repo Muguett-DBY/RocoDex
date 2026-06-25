@@ -25,6 +25,8 @@
 - `npm test` passed 17 files / 73 tests.
 - `npm run build` exited `0` and generated 735 static pages.
 - Browser verification covered save/remove controls, collection count, collection-to-compare handoff, 390px mobile overflow, auth-unavailable fallback, and console error checks.
+- Commit `8e87ee8` was pushed to `origin/main`.
+- GitHub remote check found no Actions run for `8e87ee8`; root `.github/workflows` is absent, and commit check-runs/statuses were both `0`.
 
 ### Follow-up candidates
 
