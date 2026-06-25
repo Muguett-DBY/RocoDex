@@ -128,6 +128,27 @@
 - Status: closed
 - Next stage after closure: Stage 5 CHECK
 
+### Stage 5
+
+- Stage number: 5 / 6
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN.txt`
+- Goal: close the real repository verification gap where GitHub check-runs were always `0`.
+- Start state:
+  - `.github/workflows` did not exist.
+  - Vercel commit statuses completed successfully, but GitHub Actions had no current workflow signal for homepage changes.
+  - `gh auth status` confirmed workflow-capable GitHub CLI authentication.
+- Implemented:
+  - Added `.github/workflows/ci.yml` for push and pull request events on `main`.
+  - CI runs `npm ci`, `npm run lint`, `npm test`, and `npm run build` on Node.js 22.
+  - Added a static Vitest check to prevent accidental removal or weakening of the CI workflow.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/github-ci-workflow.test.ts` failed because `.github/workflows/ci.yml` did not exist.
+  - TDD green: workflow test passed 1 / 1.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 27 files / 97 tests; `npm run build` generated 735 static pages.
+  - Browser smoke: `/cstd` loaded at 390 px with no horizontal overflow and console errors were `0`.
+- Status: pending commit, GitHub Actions run, and remote check
+
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
 - Sequence: `IMPROVE → UIUX`

@@ -1,5 +1,24 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Stage 5 / 6 — CHECK
+
+### Scope
+
+- Added a GitHub Actions CI workflow for `main` and pull requests.
+- Added a static test that guards the workflow's lint/test/build gates.
+
+### Verification evidence
+
+- TDD failed before `.github/workflows/ci.yml` existed and passed 1 / 1 after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 27 files / 97 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser smoke verified `/cstd` at 390 px with no horizontal overflow and no console errors.
+
+### Follow-up candidates
+
+- After push, watch the new GitHub Actions run to completion and record its run ID.
+
 ## 2026-06-26 — Long Homepage Stage 4 / 6 — IMPROVE
 
 ### Scope
