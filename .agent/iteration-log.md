@@ -1,5 +1,26 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Homepage Continuation Stage 1 / 2 — IMPROVE
+
+### Scope
+
+- Converted the CSTD cinematic intro from an every-load blocker into a first-visit experience.
+- Preserved explicit replay and made reduced-motion visits enter the homepage directly.
+
+### Verification evidence
+
+- Focused TDD failed before implementation and passed 5 / 5 after the decision logic changed.
+- `npm run lint` exited `0`.
+- `npm test` passed 21 files / 84 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered fresh visit, direct browse, repeat reload, manual replay, 390 × 844 reduced-motion layout, overflow, and console errors.
+- Commit `b39adba` was pushed to `origin/main`; Vercel completed successfully and no new GitHub Actions run was created.
+
+### Follow-up candidates
+
+- Upgrade the homepage section navigation and project browsing ergonomics in the UI/UX stage.
+- Revisit the React Three Fiber clock warning when upstream provides a supported Timer migration.
+
 ## 2026-06-26 — Short Run Stage 2 / 2 — UIUX
 
 ### Scope

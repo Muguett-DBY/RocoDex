@@ -19,7 +19,26 @@
   - Automatic intro logic returned true on every page load unless the manual motion preference was disabled.
   - Reduced-motion visitors were still shown the full-screen intro choice.
   - The existing project filters and manual replay control provide a stable follow-on path.
-- Status: in progress
+- Implemented:
+  - Automatic intro now appears only for a motion-enabled first visit.
+  - Starting or bypassing the intro records completion in local storage.
+  - Repeat visits enter the homepage directly while the existing replay control remains available.
+  - Reduced-motion visitors no longer receive the full-screen automatic overlay.
+  - The bypass action now states its result as `直接浏览项目`.
+- Verification recorded before commit:
+  - TDD red: the focused motion test failed because repeat visits and reduced-motion visits still returned `true`.
+  - TDD green: `npm test -- src/lib/cstd-motion.test.ts` passed 5 / 5 tests.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 21 files / 84 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser: a fresh non-reduced-motion context showed the intro choice; bypass closed it; reload kept it closed; manual replay reopened it.
+  - Browser mobile: 390 × 844 reduced-motion context entered the homepage directly with `scrollWidth === innerWidth` and no console errors.
+  - Known warning: React Three Fiber 9.6.1 creates `THREE.Clock` internally; upstream issue `pmndrs/react-three-fiber#3741` remains open, so no local dependency patch or Three.js downgrade was applied.
+- Commit: `b39adba feat: streamline personal homepage entry`
+- Push: `origin/main` updated to `b39adba`.
+- Remote check:
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Commit check-runs: `0`; `gh run list` showed no new GitHub Actions run for the commit.
+- Status: closed
+- Next stage after closure: Stage 2 UIUX
 
 ## Run — 2026-06-26 — Short 2-stage homepage pass
 
