@@ -1,11 +1,13 @@
 import { describe, expect, test } from "vitest";
 import {
   cstdProjectCards,
+  cstdHeaderClassName,
   cstdHeaderNavClassName,
   cstdHeroActionsClassName,
   cstdHeroSectionClassName,
   cstdMascotAsideClassName,
   cstdMascotShellClassName,
+  cstdMobileNavClassName,
   cstdNavLinkClassName,
   cstdPageShellClassName,
   cstdProjectGridClassName,
@@ -47,13 +49,16 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdHeroSectionClassName).not.toContain("order-first");
   });
 
-  test("keeps mobile navigation and hero actions inside narrow viewports", () => {
-    expect(cstdHeaderNavClassName).toContain("grid-cols-2");
-    expect(cstdHeaderNavClassName).toContain("w-full");
+  test("keeps mobile navigation compact while preserving desktop shortcuts", () => {
+    expect(cstdHeaderClassName).toContain("sticky");
+    expect(cstdHeaderClassName).toContain("backdrop-blur-md");
+    expect(cstdHeaderClassName).toContain("sm:static");
+    expect(cstdHeaderNavClassName).toContain("hidden");
     expect(cstdHeaderNavClassName).toContain("sm:flex");
+    expect(cstdMobileNavClassName).toContain("sm:hidden");
+    expect(cstdMobileNavClassName).toContain("grid");
     expect(cstdNavLinkClassName).toContain("min-w-0");
-    expect(cstdNavLinkClassName).toContain("justify-center");
-    expect(cstdNavLinkClassName).toContain("text-xs");
+    expect(cstdNavLinkClassName).toContain("focus-visible:outline");
     expect(cstdHeroActionsClassName).toContain("w-full");
     expect(cstdHeroActionsClassName).not.toContain("max-w-[320px]");
   });

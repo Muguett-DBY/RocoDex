@@ -1,10 +1,16 @@
 export const cstdPageShellClassName =
   "mx-auto w-[calc(100%_-_48px)] max-w-[342px] sm:w-[min(1160px,calc(100%_-_32px))] sm:max-w-none";
 
-export const cstdHeaderNavClassName = "grid w-full grid-cols-2 gap-2 sm:w-auto sm:flex sm:flex-wrap";
+export const cstdHeaderClassName =
+  "sticky top-0 z-30 -mx-3 border-b border-[#ead6ad]/80 bg-[#fff6df]/92 px-3 py-3 backdrop-blur-md sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-7 sm:backdrop-blur-none";
+
+export const cstdHeaderNavClassName = "hidden items-center gap-2 sm:flex sm:flex-wrap sm:justify-end";
+
+export const cstdMobileNavClassName =
+  "mt-3 grid gap-2 rounded-xl border border-[#ead6ad] bg-[#fffaf0]/96 p-3 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:hidden";
 
 export const cstdNavLinkClassName =
-  "inline-flex min-h-10 min-w-0 items-center justify-center rounded-lg border border-[#ead6ad] bg-white/70 px-2 text-xs font-black text-[#2f241d] no-underline shadow-[3px_3px_0_rgba(47,36,29,.06)] transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-white sm:px-3 sm:text-sm";
+  "inline-flex min-h-10 min-w-0 items-center rounded-lg border border-[#ead6ad] bg-white/75 px-3 text-sm font-black text-[#2f241d] no-underline shadow-[3px_3px_0_rgba(47,36,29,.06)] transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]";
 
 export const cstdHeroSectionClassName =
   "grid min-h-0 items-start gap-7 pb-10 pt-2 lg:min-h-[calc(100vh-88px)] lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center lg:gap-14 lg:pb-16 lg:pt-3";

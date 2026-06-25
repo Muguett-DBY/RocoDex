@@ -4,8 +4,9 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Building2, Camera, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX } from "lucide-react";
+import { Bot, Building2, Camera, Menu, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX, X } from "lucide-react";
 import { listenForCstdAudioActivation, playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
+import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import {
   CSTD_INTRO_SEEN_KEY,
   CSTD_MOTION_PREFERENCE_KEY,
@@ -22,10 +23,12 @@ import {
 } from "@/lib/cstd-project-filter";
 import {
   cstdHeaderNavClassName,
+  cstdHeaderClassName,
   cstdHeroActionsClassName,
   cstdHeroSectionClassName,
   cstdMascotAsideClassName,
   cstdMascotShellClassName,
+  cstdMobileNavClassName,
   cstdNavLinkClassName,
   cstdPageShellClassName,
   cstdProjectCards,
@@ -183,6 +186,7 @@ export function CstdLanding() {
   const [motionPreference, setMotionPreference] = useState<CstdMotionPreference>("enabled");
   const [audioPreference, setAudioPreference] = useState<CstdAudioPreference>("enabled");
   const [activeProjectFilter, setActiveProjectFilter] = useState<CstdProjectFilter>("all");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [preferencesReady, setPreferencesReady] = useState(false);
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
@@ -266,6 +270,7 @@ export function CstdLanding() {
   }, [mascotMood]);
   const visibleProjects = useMemo(() => filterCstdProjects(projects, activeProjectFilter), [activeProjectFilter]);
   const projectFilterSummary = useMemo(() => getCstdProjectFilterSummary(projects, activeProjectFilter), [activeProjectFilter]);
+  const mobileNavigationToggle = getCstdMobileNavigationToggleState(mobileNavOpen);
 
   function replayIntro() {
     const replayPreference: CstdMotionPreference = "enabled";
@@ -337,28 +342,52 @@ export function CstdLanding() {
       <FloatingBits motionDisabled={motionDisabled} />
 
       <div className={cstdPageShellClassName}>
-        <header className="flex flex-wrap items-center justify-between gap-4 py-5 sm:py-7">
-          <Link href="https://custard.top/" className="group inline-flex items-center gap-3 no-underline" aria-label="CSTD 首页">
-            <motion.span
-              className="grid h-12 w-12 place-items-center rounded-xl border-2 border-[#2f241d] bg-[#f6bf3f] text-sm font-black shadow-[6px_6px_0_rgba(47,36,29,.12)]"
-              whileHover={motionDisabled ? undefined : { rotate: -4, y: -2 }}
-            >
-              C
-            </motion.span>
-            <span>
-              <span className="block text-base font-black tracking-[0.18em]">CSTD</span>
-              <span className="mt-0.5 block text-xs font-semibold text-[#7b6656]">custard.top</span>
-            </span>
-          </Link>
+        <header className={cstdHeaderClassName}>
+          <div className="flex items-center justify-between gap-3">
+            <Link href="https://custard.top/" className="group inline-flex min-w-0 items-center gap-3 no-underline" aria-label="CSTD 首页">
+              <motion.span
+                className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border-2 border-[#2f241d] bg-[#f6bf3f] text-sm font-black shadow-[5px_5px_0_rgba(47,36,29,.12)] sm:h-12 sm:w-12 sm:shadow-[6px_6px_0_rgba(47,36,29,.12)]"
+                whileHover={motionDisabled ? undefined : { rotate: -4, y: -2 }}
+              >
+                C
+              </motion.span>
+              <span className="min-w-0">
+                <span className="block text-base font-black tracking-[0.18em]">CSTD</span>
+                <span className="mt-0.5 block text-xs font-semibold text-[#7b6656]">custard.top</span>
+              </span>
+            </Link>
 
-          <nav className={cstdHeaderNavClassName} aria-label="项目导航">
-            <NavLink href="#projects">Projects</NavLink>
-            <NavLink href="https://rocodex.custard.top">RocoDex</NavLink>
-            <NavLink href="https://shoot.custard.top">Photography</NavLink>
-            <NavLink href="https://alpha.custard.top">Alpha</NavLink>
-            <NavLink href="https://design.custard.top">Design</NavLink>
-            <NavLink href="https://cfzzs.custard.top">CRM</NavLink>
-          </nav>
+            <nav className={cstdHeaderNavClassName} aria-label="项目导航">
+              <CstdNavigationLinks />
+            </nav>
+
+            <button
+              type="button"
+              aria-expanded={mobileNavigationToggle.expanded}
+              aria-controls="cstd-mobile-navigation"
+              aria-label={mobileNavigationToggle.label}
+              onClick={() => setMobileNavOpen((open) => !open)}
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border-2 border-[#2f241d] bg-white/85 text-[#2f241d] shadow-[4px_4px_0_rgba(47,36,29,.1)] transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#0f8f64] sm:hidden"
+            >
+              {mobileNavOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
+
+          <AnimatePresence initial={false}>
+            {mobileNavOpen ? (
+              <motion.nav
+                id="cstd-mobile-navigation"
+                aria-label="移动项目导航"
+                className={cstdMobileNavClassName}
+                initial={motionDisabled ? false : { opacity: 0, y: -8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={motionDisabled ? { opacity: 0 } : { opacity: 0, y: -8 }}
+                transition={{ duration: 0.18 }}
+              >
+                <CstdNavigationLinks mobile onNavigate={() => setMobileNavOpen(false)} />
+              </motion.nav>
+            ) : null}
+          </AnimatePresence>
         </header>
 
         <section className={cstdHeroSectionClassName}>
@@ -797,11 +826,30 @@ function FloatingBits({ motionDisabled }: { motionDisabled: boolean }) {
   );
 }
 
-function NavLink({ href, children }: { href: string; children: ReactNode }) {
+function CstdNavigationLinks({ mobile = false, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {
+  return cstdNavigationItems.map((item) => (
+    <NavLink key={item.href} href={item.href} mobile={mobile} onNavigate={onNavigate}>
+      {item.label}
+    </NavLink>
+  ));
+}
+
+function NavLink({
+  href,
+  children,
+  mobile,
+  onNavigate,
+}: {
+  href: string;
+  children: ReactNode;
+  mobile: boolean;
+  onNavigate?: () => void;
+}) {
   return (
     <Link
       href={href}
-      className={cstdNavLinkClassName}
+      onClick={onNavigate}
+      className={`${cstdNavLinkClassName} ${mobile ? "w-full justify-start px-4" : "justify-center"}`}
     >
       {children}
     </Link>
