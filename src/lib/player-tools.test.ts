@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { creatures } from "@/data/creatures";
 import { guideBuilds } from "@/data/guide-builds";
 import { compareCreatures } from "@/lib/creature-compare";
+import { parseComparisonIds } from "@/lib/creature-compare";
 import { buildEvolutionChain } from "@/lib/evolution-chain";
 import { getAttributeMatchupProfile, getEffectiveness } from "@/lib/matchup";
 import { searchCreatureSkills } from "@/lib/skill-search";
@@ -41,5 +42,11 @@ describe("player decision tools", () => {
       pvpTier: expect.any(String),
       verifiedSkillCount: expect.any(Number),
     });
+  });
+
+  it("parses a comparison query into two to four existing unique creatures", () => {
+    expect(parseComparisonIds("001,005,001,999,008,010,011", creatures)).toEqual(["001", "005", "008", "010"]);
+    expect(parseComparisonIds("001", creatures)).toEqual([]);
+    expect(parseComparisonIds(undefined, creatures)).toEqual([]);
   });
 });

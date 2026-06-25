@@ -2,9 +2,10 @@
 
 RocoDex 是一个非官方《洛克王国世界》中文精灵图鉴 MVP，用于学习、研究和个人资料整理。
 
-当前版本包含首页、精灵列表、精灵详情、中文搜索、筛选、数据状态页、关于/免责声明页面，以及前 50 个图鉴编号的本地 TypeScript seed data。
+当前版本包含首页、精灵列表、精灵详情、中文搜索、筛选、本地收藏、数据状态页、关于/免责声明页面，以及前 50 个图鉴编号的本地 TypeScript seed data。
 同时包含 `/pvp-teams` 页面，用于整理当前版本公开攻略中的 PVP META 阵容。
 `/guides` 页面用于汇总 PVE / PVP 强度榜和培养建议；缺少可靠资料的精灵显示为“未评级 / 待复核”。
+`/collection` 页面提供当前浏览器内的本地收藏工作台，用户可从精灵卡片或详情页收藏候选，并将 2-4 只收藏精灵带入 `/compare` 对比。
 
 ## 技术栈
 
@@ -46,6 +47,12 @@ npm run lint
 npm run test
 ```
 
+## 账号与本地收藏
+
+收藏功能只把精灵编号保存在当前浏览器的 `localStorage` 中，不需要登录，也不会上传账号或设备信息。
+
+账号登录/注册依赖 NextAuth 认证密钥。未配置 `AUTH_SECRET` 或 `NEXTAUTH_SECRET` 时，页面会隐藏账号入口，并在 `/login`、`/register` 显示“账号功能暂未启用”的降级说明；配置密钥后保留原有账号表单能力。
+
 ## 数据在哪里修改
 
 - 精灵数据：`src/data/creatures.ts`
@@ -59,6 +66,8 @@ npm run test
 - 攻略页查询逻辑：`src/lib/guide-query.ts`
 - 攻略页来源说明：`docs/guide_sources.md`
 - 攻略页缺口记录：`docs/guide_gaps.md`
+- 本地收藏存储逻辑：`src/lib/creature-collection.ts`
+- 本地收藏浏览器 Hook：`src/hooks/use-creature-collection.ts`
 
 ## 数据说明
 

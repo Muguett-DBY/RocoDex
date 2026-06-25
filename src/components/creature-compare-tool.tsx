@@ -10,10 +10,10 @@ import { compareCreatures } from "@/lib/creature-compare";
 import type { Creature } from "@/types/creature";
 import type { GuideCreatureBuild } from "@/types/guide";
 
-export function CreatureCompareTool() {
+export function CreatureCompareTool({ initialIds = ["001", "005", "008"] }: { initialIds?: string[] }) {
   const [creatures, setCreatures] = useState<Creature[]>([]);
   const [guideBuilds, setGuideBuilds] = useState<GuideCreatureBuild[]>([]);
-  const [ids, setIds] = useState<string[]>(["001", "005", "008"]);
+  const [ids, setIds] = useState<string[]>(initialIds);
   const comparison = useMemo(() => compareCreatures(creatures, guideBuilds, ids), [creatures, guideBuilds, ids]);
 
   useEffect(() => {

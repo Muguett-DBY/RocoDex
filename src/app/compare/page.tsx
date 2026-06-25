@@ -3,13 +3,18 @@ import { CopyShareLink } from "@/components/copy-share-link";
 import { CreatureCompareTool } from "@/components/creature-compare-tool";
 import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
+import { creatures } from "@/data/creatures";
+import { parseComparisonIds } from "@/lib/creature-compare";
 
 export const metadata: Metadata = {
   title: "精灵对比 - 洛克图鉴",
   description: "并排比较 2-4 只《洛克王国世界》精灵的属性、获得状态、评级和技能完整度。",
 };
 
-export default function ComparePage() {
+export default async function ComparePage({ searchParams }: { searchParams: Promise<{ ids?: string }> }) {
+  const { ids } = await searchParams;
+  const initialIds = parseComparisonIds(ids, creatures);
+
   return (
     <PageShell>
       <main className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
@@ -21,7 +26,7 @@ export default function ComparePage() {
           </div>
           <CopyShareLink />
         </div>
-        <CreatureCompareTool />
+        <CreatureCompareTool initialIds={initialIds.length > 0 ? initialIds : undefined} />
       </main>
     </PageShell>
   );
