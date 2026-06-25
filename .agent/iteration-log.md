@@ -20,6 +20,8 @@
 - `npm test` passed 21 files / 84 tests.
 - `npm run build` exited `0` and generated 735 static pages.
 - Browser verification covered default 6/6 project state, `运营系统` filtered 1/6 state, restored `全部` state, 390px mobile overflow, focusable filter buttons, and console error checks.
+- Commit `1867d4c` was pushed to `origin/main`.
+- GitHub remote check found no new Actions run for `1867d4c`; Vercel commit status completed successfully.
 
 ### Follow-up candidates
 

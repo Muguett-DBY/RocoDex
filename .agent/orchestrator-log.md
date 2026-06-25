@@ -66,10 +66,13 @@
   - Browser interaction: after skipping the intro overlay, clicking `运营系统` showed `当前显示 1 / 6 个项目`, kept `产业园区招商 CRM` visible, and hid `私人 AI 创作工作台`; clicking `全部` restored `当前显示 6 / 6 个项目`.
   - Browser mobile: 390px viewport showed the filter controls and no horizontal overflow.
   - Console: no error-level logs; the existing Three.js `Clock` deprecation warning remained non-blocking.
-- Commit: pending
-- Push: pending
-- Remote check: pending
-- Status: in progress
+- Commit: `1867d4c feat: add project directory filters`
+- Push: `origin/main` updated to `1867d4c75a9925a2eedfffee8b9d13c9d21c63ba`
+- Remote check:
+  - `gh run list --branch main --limit 5` showed no new GitHub Actions run for `1867d4c`; only older GitHub Pages runs were present.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Commit check-runs: `0`.
+- Status: closed
 
 ## Run
 
