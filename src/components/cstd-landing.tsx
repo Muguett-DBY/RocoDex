@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Camera, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX } from "lucide-react";
+import { Bot, Building2, Camera, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX } from "lucide-react";
 import { listenForCstdAudioActivation, playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import {
   CSTD_MOTION_PREFERENCE_KEY,
@@ -92,8 +92,42 @@ const projects = [
     tags: ["AI Research", "Company scoring", "Cloudflare Pages"],
   },
   {
-    title: "更多项目孵化中",
+    title: "私人 AI 创作工作台",
     kicker: cstdProjectCards[3].kicker,
+    status: "Live",
+    href: "https://design.custard.top",
+    action: "打开工作台",
+    icon: Bot,
+    tone: "violet",
+    description:
+      "个人中文 AI 创作工作台，整合流式对话、图片生成、视频生成和素材库管理，用单密码私有访问承载长期创作资料。",
+    metrics: [
+      ["Chat", "智能对话"],
+      ["Image", "图片生成"],
+      ["Video", "视频生成"],
+    ],
+    tags: ["React 19", "Cloudflare Pages", "D1 + R2"],
+  },
+  {
+    title: "产业园区招商 CRM",
+    kicker: cstdProjectCards[4].kicker,
+    status: "Live",
+    href: "https://cfzzs.custard.top",
+    action: "打开 CRM",
+    icon: Building2,
+    tone: "amber",
+    description:
+      "面向产业园区招商的线索管理系统，覆盖仪表盘、线索流转、联系人、空间资源、导入导出、RBAC 权限和管理后台。",
+    metrics: [
+      ["RBAC", "权限"],
+      ["D1", "业务数据"],
+      ["E2E", "流程验证"],
+    ],
+    tags: ["React 19", "Hono", "Cloudflare Pages"],
+  },
+  {
+    title: "更多项目孵化中",
+    kicker: cstdProjectCards[5].kicker,
     status: "Next",
     href: "#projects",
     action: "继续发酵",
@@ -111,7 +145,7 @@ const projects = [
 ] as const;
 
 const noteItems = [
-  ["03", "个在线项目"],
+  ["05", "个在线项目"],
   ["347", "只精灵资料"],
   ["Mix", "技术 / 设计 / 研究"],
 ] as const;
@@ -302,6 +336,8 @@ export function CstdLanding() {
             <NavLink href="https://rocodex.custard.top">RocoDex</NavLink>
             <NavLink href="https://shoot.custard.top">Photography</NavLink>
             <NavLink href="https://alpha.custard.top">Alpha</NavLink>
+            <NavLink href="https://design.custard.top">Design</NavLink>
+            <NavLink href="https://cfzzs.custard.top">CRM</NavLink>
           </nav>
         </header>
 
@@ -804,6 +840,8 @@ function ProjectCard({
     mint: "from-[#dff8ed]/90 text-[#047857]",
     rose: "from-[#ffe7ec]/90 text-[#be4563]",
     teal: "from-[#d9f6f2]/90 text-[#0f766e]",
+    violet: "from-[#ede9fe]/90 text-[#6d28d9]",
+    amber: "from-[#fff0c9]/90 text-[#b45309]",
     sky: "from-[#e3f2ff]/90 text-[#2563eb]",
   }[project.tone];
 

@@ -41,6 +41,14 @@ export const cstdProjectCards = [
     kicker: "Investment research",
   },
   {
+    title: "私人 AI 创作工作台",
+    kicker: "AI creation",
+  },
+  {
+    title: "产业园区招商 CRM",
+    kicker: "CRM system",
+  },
+  {
     title: "更多项目孵化中",
     kicker: "Incubating",
   },
