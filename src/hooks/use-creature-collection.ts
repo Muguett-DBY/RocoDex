@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import {
   CREATURE_COLLECTION_STORAGE_KEY,
+  mergeCreatureCollectionIds,
   parseCreatureCollection,
   serializeCreatureCollection,
   toggleCreatureCollectionId,
@@ -58,11 +59,16 @@ export function useCreatureCollection() {
     write(ids.filter((item) => item !== id));
   }, [ids, write]);
 
+  const addMany = useCallback((nextIds: string[]) => {
+    write(mergeCreatureCollectionIds(ids, nextIds));
+  }, [ids, write]);
+
   const clear = useCallback(() => write([]), [write]);
 
   return {
     ids,
     hydrated,
+    addMany,
     toggle,
     remove,
     clear,
