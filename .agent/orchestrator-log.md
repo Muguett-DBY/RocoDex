@@ -100,6 +100,28 @@
 - Status: closed
 - Next stage after closure: Stage 4 IMPROVE
 
+### Stage 4
+
+- Stage number: 4 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a goal-based project guide so visitors can choose by intent instead of knowing project names first.
+- Start state:
+  - Filtering worked by project category, but visitors still had to infer which project fit their goal.
+  - Stage 2's focus panel provided a reusable destination for recommendation clicks.
+- Implemented:
+  - Added typed goal-guide data covering game-data tools, company research, AI creation, and CRM operations.
+  - Rendered a compact `按目标找项目` guide above the project index.
+  - Reused the project focus action so guide clicks update the URL and open the matching case-study panel.
+  - Kept guide targets tied to existing project IDs with tests to prevent drift.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-guide.test.ts` failed because the guide module did not exist.
+  - TDD green: project-guide tests passed 2 / 2; related project/card/focus tests passed 7 / 7.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 26 files / 96 tests; `npm run build` generated 735 static pages.
+  - Browser desktop: the CRM guide opened `?project=crm#project-focus` and rendered the CRM case-study panel.
+  - Browser mobile: guide rendered at 390 px without horizontal overflow and console errors were `0`.
+- Status: pending commit and remote check
+
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
 - Sequence: `IMPROVE → UIUX`

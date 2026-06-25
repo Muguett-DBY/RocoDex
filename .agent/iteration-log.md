@@ -1,5 +1,25 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Stage 4 / 6 — IMPROVE
+
+### Scope
+
+- Added a goal-based project guide above the project index.
+- Routed guide clicks into the existing shareable project focus panel.
+
+### Verification evidence
+
+- TDD failed before the goal-guide module existed and passed 2 / 2 after implementation.
+- Related project, card, and focus tests passed 7 / 7.
+- `npm run lint` exited `0`.
+- `npm test` passed 26 files / 96 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered guide rendering, CRM guide-to-focus flow, final concise guide status copy, 390 px mobile overflow, screenshots, and console errors.
+
+### Follow-up candidates
+
+- Add repository CI so homepage changes receive a current GitHub Actions signal instead of relying only on Vercel commit statuses.
+
 ## 2026-06-26 — Long Homepage Stage 3 / 6 — UIUX
 
 ### Scope
