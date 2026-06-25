@@ -49,4 +49,4 @@
 - [x] Run `npm run build`.
 - [x] Verify mobile collapsed/open header in Browser/IAB and capture a screenshot.
 - [x] Review diff/staged diff/secret scan.
-- [ ] Commit Stage 3, push `main`, inspect GitHub Actions/checks/Vercel status, and record the result.
+- [x] Commit Stage 3, push `main`, inspect GitHub Actions/checks/Vercel status, and record the result.
