@@ -1,5 +1,27 @@
 # RocoDex Agent Orchestrator Log
 
+## Run — 2026-06-26 — Long 6-stage homepage strengthening
+
+- Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`
+- Branch: `main`
+- Baseline: clean worktree; `git fetch --prune` and `git pull --ff-only` reported already up to date
+- Prompt source: `C:\Users\12031\Desktop\AGENT_ORCHESTRATOR_3_LEVELS_V2\03_LONG_6_STAGE_MAIN_V2.txt`
+- Prompt pack: `C:\Users\12031\Desktop\AGENT_PROMPTS_MAIN_PACK`
+- Required prompt files read: `AGENT_IMPROVE_MAIN.txt`, `AGENT_UIUX_MAIN.txt`, `AGENT_CHECK_MAIN.txt`, `AGENT_CI_FIX_MAIN.txt`
+- Remote baseline: Vercel status `success`; commit check-runs `0`; no current repository workflow exists.
+
+### Stage 1
+
+- Stage number: 1 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add honest case-study evidence to the live project directory and move project metadata out of the large landing component.
+- Start state:
+  - Previous recommended flagship was a focused project case-study layer.
+  - Project cards exposed descriptions, metrics, links, and technology tags but did not state role, problem, or delivered outcome.
+  - All project metadata lived inside `src/components/cstd-landing.tsx`.
+- Status: in progress
+
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
 - Sequence: `IMPROVE → UIUX`

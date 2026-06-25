@@ -11,6 +11,7 @@ import {
   cstdNavLinkClassName,
   cstdPageShellClassName,
   cstdProjectGridClassName,
+  cstdProjectEvidenceClassName,
   cstdProjectMetricGridClassName,
   cstdProjectMetricLabelClassName,
   cstdProjectMetricTileClassName,
@@ -85,5 +86,11 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectMetricValueClassName).toContain("break-words");
     expect(cstdProjectMetricLabelClassName).toContain("min-w-0");
     expect(cstdProjectMetricLabelClassName).toContain("break-words");
+  });
+
+  test("keeps project evidence in a readable stacked block", () => {
+    expect(cstdProjectEvidenceClassName).toContain("grid");
+    expect(cstdProjectEvidenceClassName).toContain("text-sm");
+    expect(cstdProjectEvidenceClassName).not.toContain("grid-cols-3");
   });
 });
