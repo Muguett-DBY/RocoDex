@@ -69,3 +69,23 @@
   - `gh run list --branch main` showed no GitHub Actions run for `909d65b`.
   - Commit status `Vercel` moved from `pending` to `success` with description “Deployment has completed”.
 - Status: closed
+
+## Stage 3
+
+- Stage number: 3 / 6
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: improve mobile header usability by replacing the always-wrapped navigation block with an accessible collapsible menu while preserving desktop navigation.
+- Design: `docs/superpowers/specs/2026-06-26-mobile-header-design.md`
+- Plan: `docs/superpowers/plans/2026-06-26-mobile-header.md`
+- Implemented:
+  - Added testable site navigation metadata and mobile menu toggle labels.
+  - Added mobile-only header menu button and collapsible nav panel.
+  - Kept desktop nav visible at `md+`.
+  - Made `CollectionNavLink` reusable in desktop and mobile nav contexts.
+- Verification recorded before commit:
+  - TDD red: focused test failed because `src/lib/site-navigation.ts` did not exist.
+  - TDD green: focused test passed after helper implementation.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 19 files / 76 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser mobile: at 375px, collapsed header showed no mobile nav panel; menu button opened `mobile-site-navigation`; close button aria label existed; no horizontal overflow; console errors `0`.
+- Status: pending diff review, commit, push, and remote check
