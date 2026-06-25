@@ -142,3 +142,6 @@
 - `npm test` passed 20 files / 79 tests.
 - `npm run build` exited `0` and generated 735 static pages.
 - Browser verification covered collection import, two rendered guide shortcuts, guide detail navigation for `迪莫`, no horizontal overflow, and console errors `0`.
+- Commit `b9c8306` was pushed to `origin/main`.
+- GitHub remote check found no Actions run for `b9c8306`; Vercel commit status completed successfully.
+- Final completion audit recorded in `.agent/final-completion-audit.md`.

@@ -159,4 +159,10 @@
   - TDD green: focused test passed after helper implementation.
   - Local gates: `npm run lint` exited `0`; `npm test` passed 20 files / 79 tests; `npm run build` exited `0` and generated 735 static pages.
   - Browser: after importing `/collection?ids=001,005`, two “查看攻略” links rendered; the first link opened `/guides/creature-001-%E8%BF%AA%E8%8E%AB`, showed `迪莫` guide content, had no horizontal overflow, and console errors `0`.
-- Status: pending diff review, final audit, commit, push, and remote check
+- Commit: `b9c8306 feat: add collection guide shortcuts`
+- Push: `origin/main` updated to `b9c83064d240098fa5e91570b846ab1743ae6350`
+- Remote check:
+  - `gh run list --branch main` showed no GitHub Actions run for `b9c8306`.
+  - Commit status `Vercel` completed successfully with description “Deployment has completed”.
+- Final audit: `.agent/final-completion-audit.md`
+- Status: closed

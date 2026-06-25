@@ -39,7 +39,7 @@
 
 - [x] Mention guide shortcuts in README.
 - [x] Record Stage 6 scope, local gates, browser check, commit, push, and remote status.
-- [ ] Run final completion audit across all six stages before marking the active goal complete.
+- [x] Run final completion audit across all six stages before marking the active goal complete.
 
 ### Task 4: Stage verification and delivery
 
@@ -48,4 +48,4 @@
 - [x] Run `npm run build`.
 - [x] Browser-check collection import plus guide shortcut navigation.
 - [x] Review diff/staged diff/secret scan.
-- [ ] Commit Stage 6, push `main`, inspect GitHub Actions/checks/Vercel status, and record the result.
+- [x] Commit Stage 6, push `main`, inspect GitHub Actions/checks/Vercel status, and record the result.
