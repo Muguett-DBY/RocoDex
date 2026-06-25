@@ -1,5 +1,44 @@
 # RocoDex Agent Orchestrator Log
 
+## Run — 2026-06-26 — Short 2-stage homepage pass
+
+- Sequence: `IMPROVE → UIUX`
+- Branch: `main`
+- Baseline: clean worktree, `git pull --ff-only` reported already up to date
+- Prompt source: `C:\Users\12031\Desktop\AGENT_ORCHESTRATOR_3_LEVELS_V2\01_SHORT_2_STAGE_MAIN_V2.txt`
+- Prompt pack: `C:\Users\12031\Desktop\AGENT_PROMPTS_MAIN_PACK`
+- Required prompt files read: `AGENT_IMPROVE_MAIN.txt`, `AGENT_UIUX_MAIN.txt`
+
+### Stage 1
+
+- Stage number: 1 / 2
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add the `cstd-design` and `ZJDCRM` live projects to the CSTD personal homepage and keep the project directory count accurate.
+- Start state:
+  - Personal homepage was found at `/cstd`; `custard.top` root rewrites to it through `src/proxy.ts`.
+  - Project card rendering lived in `src/components/cstd-landing.tsx`.
+  - Project metadata/layout tests lived in `src/lib/cstd-mobile-layout.test.ts`.
+  - Existing homepage listed RocoDex, photography, CSTD Alpha, and an incubating placeholder.
+- Implemented:
+  - Added `私人 AI 创作工作台` linking to `https://design.custard.top`.
+  - Added `产业园区招商 CRM` linking to `https://cfzzs.custard.top`.
+  - Updated the homepage live project count from `03` to `05`.
+  - Added top navigation shortcuts for Design and CRM.
+  - Kept project cards equal-weight in the existing responsive grid.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-mobile-layout.test.ts` failed because the two new project metadata entries were absent.
+  - TDD green: the focused test passed after implementation.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 20 files / 80 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser: `/cstd` on local production server rendered both new projects and `05 个在线项目`.
+  - Browser mobile: 390px viewport showed both new projects, no horizontal overflow, and no framework error text.
+  - Browser interaction: clicking `看项目` scrolled toward the projects section and kept both new cards visible.
+  - Console: no error-level logs; the existing Three.js `Clock` deprecation warning remained non-blocking.
+- Commit: pending
+- Push: pending
+- Remote check: pending
+- Status: in progress
+
 ## Run
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

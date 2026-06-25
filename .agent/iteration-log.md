@@ -1,5 +1,32 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Short Run Stage 1 / 2 — IMPROVE
+
+### Scope
+
+- Added `cstd-design` and `ZJDCRM` to the CSTD personal homepage project directory.
+- Updated homepage live project count and top navigation to expose Design and CRM directly.
+
+### Changed surfaces
+
+- `/cstd`
+- `custard.top` homepage via middleware rewrite
+- CSTD project metadata/layout tests
+
+### Verification evidence
+
+- Focused TDD run failed before implementation because the new project metadata entries did not exist.
+- Focused TDD run passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 20 files / 80 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered `/cstd`, both new project cards, `05 个在线项目`, project-anchor interaction, 390px mobile overflow, and console error checks.
+
+### Follow-up candidates
+
+- Use the UI/UX stage to improve the larger six-card project directory scan path.
+- Consider replacing the existing Three.js `Clock` usage with `Timer` in a future maintenance pass.
+
 ## 2026-06-26 — Stage 1 / 6 — IMPROVE
 
 ### Scope

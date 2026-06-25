@@ -22,6 +22,21 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectCards.map((project) => project.kicker).join(" ")).not.toMatch(/primary|main/i);
   });
 
+  test("includes the live personal AI workspace and招商 CRM project cards", () => {
+    expect(cstdProjectCards).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          title: "私人 AI 创作工作台",
+          kicker: "AI creation",
+        }),
+        expect.objectContaining({
+          title: "产业园区招商 CRM",
+          kicker: "CRM system",
+        }),
+      ]),
+    );
+  });
+
   test("keeps mobile hero content natural-flow while preserving desktop split hero", () => {
     expect(cstdPageShellClassName).toContain("calc(100%_-_48px)");
     expect(cstdPageShellClassName).toContain("max-w-[342px]");
