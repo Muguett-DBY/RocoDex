@@ -43,6 +43,34 @@
 - Status: closed
 - Next stage after closure: Stage 2 UIUX
 
+### Stage 2
+
+- Stage number: 2 / 2
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: make the expanded six-card CSTD project directory easier to scan on desktop and mobile.
+- Start state:
+  - Stage 1 expanded the project directory from four cards to six cards.
+  - The project area still rendered as one undifferentiated card grid, so users had to visually scan every card to find tools, creative projects, research projects, operations systems, or incubating work.
+- Implemented:
+  - Added a tested project filter model with categories for data tools, creative/image work, research analysis, operations systems, and incubating projects.
+  - Added a compact segmented filter surface above the project grid.
+  - Added visible and assistive count feedback such as `当前显示 1 / 6 个项目`.
+  - Added pressed states and keyboard-visible focus styling for filter buttons.
+  - Kept the filter responsive with a two-column mobile layout and wrapping desktop layout.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-filter.test.ts` failed because `src/lib/cstd-project-filter.ts` did not exist.
+  - TDD green: the focused filter test passed after helper implementation.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 21 files / 84 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser: `/cstd` rendered the filter summary and both Stage 1 project cards.
+  - Browser interaction: after skipping the intro overlay, clicking `运营系统` showed `当前显示 1 / 6 个项目`, kept `产业园区招商 CRM` visible, and hid `私人 AI 创作工作台`; clicking `全部` restored `当前显示 6 / 6 个项目`.
+  - Browser mobile: 390px viewport showed the filter controls and no horizontal overflow.
+  - Console: no error-level logs; the existing Three.js `Clock` deprecation warning remained non-blocking.
+- Commit: pending
+- Push: pending
+- Remote check: pending
+- Status: in progress
+
 ## Run
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

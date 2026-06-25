@@ -14,6 +14,12 @@ import {
   shouldPlayCstdIntroReplay,
 } from "@/lib/cstd-motion";
 import {
+  cstdProjectFilters,
+  filterCstdProjects,
+  getCstdProjectFilterSummary,
+  type CstdProjectFilter,
+} from "@/lib/cstd-project-filter";
+import {
   cstdHeaderNavClassName,
   cstdHeroActionsClassName,
   cstdHeroSectionClassName,
@@ -48,6 +54,7 @@ const projects = [
     softHref: "https://rocodex.custard.top/pvp-teams",
     icon: Sparkles,
     tone: "mint",
+    category: "data",
     description:
       "面向《洛克王国世界》的中文精灵资料库，支持搜索筛选、精灵对比、PVP 阵容探索、技能浏览和洛克性格测试。",
     metrics: [
@@ -65,6 +72,7 @@ const projects = [
     action: "查看摄影站",
     icon: Camera,
     tone: "rose",
+    category: "creative",
     description:
       "南京女生写真与情侣约拍。柔雾胶片感、自然陪拍、江南感写真和情侣纪念，用清晰的套餐、作品展示和预约入口承载更温柔的拍摄体验。",
     metrics: [
@@ -82,6 +90,7 @@ const projects = [
     action: "打开 Alpha",
     icon: TrendingUp,
     tone: "teal",
+    category: "research",
     description:
       "中文公司深度评分报告工具。先确认上市主体，再结合公开行情、财务数据和 DeepSeek 生成模板化研究报告、评分、估值区间与图表驾驶舱。",
     metrics: [
@@ -99,6 +108,7 @@ const projects = [
     action: "打开工作台",
     icon: Bot,
     tone: "violet",
+    category: "creative",
     description:
       "个人中文 AI 创作工作台，整合流式对话、图片生成、视频生成和素材库管理，用单密码私有访问承载长期创作资料。",
     metrics: [
@@ -116,6 +126,7 @@ const projects = [
     action: "打开 CRM",
     icon: Building2,
     tone: "amber",
+    category: "operations",
     description:
       "面向产业园区招商的线索管理系统，覆盖仪表盘、线索流转、联系人、空间资源、导入导出、RBAC 权限和管理后台。",
     metrics: [
@@ -133,6 +144,7 @@ const projects = [
     action: "继续发酵",
     icon: RotateCcw,
     tone: "sky",
+    category: "incubating",
     description:
       "小工具、小动画、小交互和某些奇怪但有趣的灵感会先在这里冒泡，等它能被清楚使用时，再放进这个实验田。",
     metrics: [
@@ -169,6 +181,7 @@ export function CstdLanding() {
   const [introPhase, setIntroPhase] = useState<CstdIntroPhase>("idle");
   const [motionPreference, setMotionPreference] = useState<CstdMotionPreference>("enabled");
   const [audioPreference, setAudioPreference] = useState<CstdAudioPreference>("enabled");
+  const [activeProjectFilter, setActiveProjectFilter] = useState<CstdProjectFilter>("all");
   const [preferencesReady, setPreferencesReady] = useState(false);
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
@@ -248,6 +261,8 @@ export function CstdLanding() {
     if (mascotMood === "working") return "奶黄包正在把项目烤得更香。";
     return "点一点奶黄包，它会给页面加一点甜。";
   }, [mascotMood]);
+  const visibleProjects = useMemo(() => filterCstdProjects(projects, activeProjectFilter), [activeProjectFilter]);
+  const projectFilterSummary = useMemo(() => getCstdProjectFilterSummary(projects, activeProjectFilter), [activeProjectFilter]);
 
   function replayIntro() {
     const replayPreference: CstdMotionPreference = "enabled";
@@ -457,8 +472,37 @@ export function CstdLanding() {
             />
           </div>
 
+          <div className="mb-5 rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[6px_6px_0_rgba(47,36,29,.05)] backdrop-blur-sm sm:p-4">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d98528]">Project index</p>
+              <p className="text-xs font-bold text-[#7b6656]" aria-live="polite">
+                {projectFilterSummary}
+              </p>
+            </div>
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+              {cstdProjectFilters.map((filter) => {
+                const selected = activeProjectFilter === filter.id;
+                return (
+                  <button
+                    key={filter.id}
+                    type="button"
+                    onClick={() => setActiveProjectFilter(filter.id)}
+                    aria-pressed={selected}
+                    className={`inline-flex min-h-10 items-center justify-center rounded-lg border px-3 text-xs font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] ${
+                      selected
+                        ? "border-[#1b4332] bg-[#0f8f64] text-white shadow-[4px_4px_0_rgba(47,36,29,.1)]"
+                        : "border-[#ead6ad] bg-white/76 text-[#2f241d] hover:-translate-y-0.5 hover:border-[#d98528]"
+                    }`}
+                  >
+                    {filter.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <div className={cstdProjectGridClassName}>
-            {projects.map((project, index) => (
+            {visibleProjects.map((project, index) => (
               <ProjectCard key={project.title} project={project} index={index} motionDisabled={motionDisabled} />
             ))}
           </div>

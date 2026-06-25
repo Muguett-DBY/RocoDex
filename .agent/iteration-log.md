@@ -1,5 +1,31 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Short Run Stage 2 / 2 — UIUX
+
+### Scope
+
+- Added a segmented category filter to the CSTD project directory.
+- Improved the scan path for the expanded six-card homepage with visible count feedback and pressed/focus states.
+
+### Changed surfaces
+
+- `/cstd`
+- CSTD project filter helper and tests
+
+### Verification evidence
+
+- Focused TDD run failed before implementation because the project filter helper did not exist.
+- Focused TDD run passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 21 files / 84 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered default 6/6 project state, `运营系统` filtered 1/6 state, restored `全部` state, 390px mobile overflow, focusable filter buttons, and console error checks.
+
+### Follow-up candidates
+
+- Replace the existing Three.js `Clock` usage with `Timer` to remove the deprecation warning.
+- Consider a lighter first-visit path for users who only want to browse the project directory without the intro layer.
+
 ## 2026-06-26 — Short Run Stage 1 / 2 — IMPROVE
 
 ### Scope
