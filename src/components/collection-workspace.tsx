@@ -4,20 +4,26 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { GitCompare, Heart, Trash2 } from "lucide-react";
 import { CreatureCard } from "@/components/creature-card";
+import { CollectionInsightsPanel } from "@/components/collection-insights-panel";
 import { Button } from "@/components/ui/button";
 import { useCreatureCollection } from "@/hooks/use-creature-collection";
+import { summarizeCollectionInsights } from "@/lib/collection-insights";
 import { buildCollectionCompareHref } from "@/lib/creature-collection";
 import type { Creature } from "@/types/creature";
+import type { GuideCreatureBuild } from "@/types/guide";
 
 export function CollectionWorkspace() {
   const { ids, hydrated, clear } = useCreatureCollection();
   const [creatures, setCreatures] = useState<Creature[]>([]);
+  const [guideBuilds, setGuideBuilds] = useState<GuideCreatureBuild[] | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   useEffect(() => {
     let active = true;
-    import("@/data/creatures").then((module) => {
-      if (active) setCreatures(module.creatures);
+    Promise.all([import("@/data/creatures"), import("@/data/guide-builds")]).then(([creatureModule, guideModule]) => {
+      if (!active) return;
+      setCreatures(creatureModule.creatures);
+      setGuideBuilds(guideModule.guideBuilds);
     });
     return () => {
       active = false;
@@ -32,6 +38,7 @@ export function CollectionWorkspace() {
   const staleCount = ids.length - savedCreatures.length;
   const validSelectedIds = selectedIds.filter((id) => creatureById.has(id) && ids.includes(id));
   const compareHref = buildCollectionCompareHref(validSelectedIds);
+  const insights = guideBuilds ? summarizeCollectionInsights(ids, creatures, guideBuilds) : null;
 
   const toggleSelected = (id: string) => {
     setSelectedIds((current) => {
@@ -41,7 +48,7 @@ export function CollectionWorkspace() {
     });
   };
 
-  if (!hydrated || creatures.length === 0) {
+  if (!hydrated || creatures.length === 0 || !guideBuilds) {
     return <div className="rounded-lg border border-slate-200 bg-white p-8 text-sm text-slate-600 shadow-sm">正在加载收藏...</div>;
   }
 
@@ -94,6 +101,8 @@ export function CollectionWorkspace() {
           </div>
         </div>
       </div>
+
+      {insights ? <CollectionInsightsPanel insights={insights} /> : null}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {savedCreatures.map((creature) => {

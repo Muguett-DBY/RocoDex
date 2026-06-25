@@ -44,3 +44,23 @@
   - Root `.github/workflows` directory is absent, so there was no repository CI workflow to repair for this stage.
 - Status: closed
 - Next stage after closure: Stage 2 IMPROVE
+
+## Stage 2
+
+- Stage number: 2 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: extend the local collection into a useful planning surface by summarizing guide coverage, PVP rating coverage, role coverage, attribute coverage, and next actions.
+- Design: `docs/superpowers/specs/2026-06-26-collection-insights-design.md`
+- Plan: `docs/superpowers/plans/2026-06-26-collection-insights.md`
+- Implemented:
+  - Added `summarizeCollectionInsights` pure helper with TDD red/green coverage.
+  - Added `CollectionInsightsPanel` to `/collection`.
+  - Loaded static guide builds alongside creature data in the collection workspace.
+  - Updated README to describe collection insights.
+- Verification recorded before commit:
+  - TDD red: focused test failed because `src/lib/collection-insights.ts` did not exist.
+  - TDD green: focused test passed after helper implementation.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 18 files / 74 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser: `/collection` with `迪莫` and `火花` saved rendered “收藏洞察”, “培养准备度概览”, effective saved count `2/2`, next-action text, no horizontal overflow, and console errors `0`.
+- Status: pending diff review, commit, push, and remote check

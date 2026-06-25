@@ -32,3 +32,24 @@
 
 - Add richer collection grouping or notes once account sync requirements are explicit.
 - Consider a compact mobile navigation treatment in the UI/UX stage.
+
+## 2026-06-26 — Stage 2 / 6 — IMPROVE
+
+### Scope
+
+- Added collection insights so saved creatures show guide coverage, PVP rating coverage, role coverage, attribute coverage, and next actions.
+- Kept the implementation local/static; no auth, database, or network dependency was introduced.
+
+### Changed surfaces
+
+- `/collection`
+- README collection documentation
+
+### Verification evidence
+
+- Focused TDD run failed before implementation because `src/lib/collection-insights.ts` did not exist.
+- Focused TDD run passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 18 files / 74 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered `/collection` with two saved creatures, confirmed the insight panel, next-action text, no horizontal overflow, and console errors `0`.
