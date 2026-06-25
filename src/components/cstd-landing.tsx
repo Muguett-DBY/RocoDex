@@ -4,9 +4,10 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Building2, Camera, Menu, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX, X } from "lucide-react";
+import { Bot, Building2, Camera, Menu, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
 import { listenForCstdAudioActivation, playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
+import { cstdProjects, type CstdProjectIconKey } from "@/lib/cstd-projects";
 import {
   CSTD_INTRO_SEEN_KEY,
   CSTD_MOTION_PREFERENCE_KEY,
@@ -31,7 +32,7 @@ import {
   cstdMobileNavClassName,
   cstdNavLinkClassName,
   cstdPageShellClassName,
-  cstdProjectCards,
+  cstdProjectEvidenceClassName,
   cstdProjectGridClassName,
   cstdProjectMetricGridClassName,
   cstdProjectMetricLabelClassName,
@@ -47,118 +48,14 @@ const CSTD_AUDIO_PREFERENCE_KEY = "cstd.audioPreference";
 const CSTD_BGM_NORMAL_VOLUME = 0.12;
 const CSTD_BGM_DUCKED_VOLUME = 0.035;
 
-const projects = [
-  {
-    title: "洛克图鉴 / RocoDex",
-    kicker: cstdProjectCards[0].kicker,
-    status: "Live",
-    href: "https://rocodex.custard.top",
-    action: "打开图鉴",
-    softAction: "查看 PVP 阵容",
-    softHref: "https://rocodex.custard.top/pvp-teams",
-    icon: Sparkles,
-    tone: "mint",
-    category: "data",
-    description:
-      "面向《洛克王国世界》的中文精灵资料库，支持搜索筛选、精灵对比、PVP 阵容探索、技能浏览和洛克性格测试。",
-    metrics: [
-      ["347", "只精灵"],
-      ["402", "个形态"],
-      ["PVP", "阵容与攻略"],
-    ],
-    tags: ["Next.js 16", "Tailwind", "Upstash Redis", "Cloudflare DNS"],
-  },
-  {
-    title: "奶黄包摄影",
-    kicker: cstdProjectCards[1].kicker,
-    status: "Live",
-    href: "https://shoot.custard.top",
-    action: "查看摄影站",
-    icon: Camera,
-    tone: "rose",
-    category: "creative",
-    description:
-      "南京女生写真与情侣约拍。柔雾胶片感、自然陪拍、江南感写真和情侣纪念，用清晰的套餐、作品展示和预约入口承载更温柔的拍摄体验。",
-    metrics: [
-      ["Portrait", "人像"],
-      ["Nanjing", "城市"],
-      ["Soft", "胶片感"],
-    ],
-    tags: ["Portrait", "Nanjing", "Cloudflare Pages"],
-  },
-  {
-    title: "CSTD Alpha",
-    kicker: cstdProjectCards[2].kicker,
-    status: "Live",
-    href: "https://alpha.custard.top",
-    action: "打开 Alpha",
-    icon: TrendingUp,
-    tone: "teal",
-    category: "research",
-    description:
-      "中文公司深度评分报告工具。先确认上市主体，再结合公开行情、财务数据和 DeepSeek 生成模板化研究报告、评分、估值区间与图表驾驶舱。",
-    metrics: [
-      ["AI", "深度报告"],
-      ["20", "项评分"],
-      ["Charts", "图表驾驶舱"],
-    ],
-    tags: ["AI Research", "Company scoring", "Cloudflare Pages"],
-  },
-  {
-    title: "私人 AI 创作工作台",
-    kicker: cstdProjectCards[3].kicker,
-    status: "Live",
-    href: "https://design.custard.top",
-    action: "打开工作台",
-    icon: Bot,
-    tone: "violet",
-    category: "creative",
-    description:
-      "个人中文 AI 创作工作台，整合流式对话、图片生成、视频生成和素材库管理，用单密码私有访问承载长期创作资料。",
-    metrics: [
-      ["Chat", "智能对话"],
-      ["Image", "图片生成"],
-      ["Video", "视频生成"],
-    ],
-    tags: ["React 19", "Cloudflare Pages", "D1 + R2"],
-  },
-  {
-    title: "产业园区招商 CRM",
-    kicker: cstdProjectCards[4].kicker,
-    status: "Live",
-    href: "https://cfzzs.custard.top",
-    action: "打开 CRM",
-    icon: Building2,
-    tone: "amber",
-    category: "operations",
-    description:
-      "面向产业园区招商的线索管理系统，覆盖仪表盘、线索流转、联系人、空间资源、导入导出、RBAC 权限和管理后台。",
-    metrics: [
-      ["RBAC", "权限"],
-      ["D1", "业务数据"],
-      ["E2E", "流程验证"],
-    ],
-    tags: ["React 19", "Hono", "Cloudflare Pages"],
-  },
-  {
-    title: "更多项目孵化中",
-    kicker: cstdProjectCards[5].kicker,
-    status: "Next",
-    href: "#projects",
-    action: "继续发酵",
-    icon: RotateCcw,
-    tone: "sky",
-    category: "incubating",
-    description:
-      "小工具、小动画、小交互和某些奇怪但有趣的灵感会先在这里冒泡，等它能被清楚使用时，再放进这个实验田。",
-    metrics: [
-      ["UI", "实验"],
-      ["Motion", "动效"],
-      ["Tiny", "小工具"],
-    ],
-    tags: ["Prototype", "Visual lab", "Cute systems"],
-  },
-] as const;
+const projectIcons: Record<CstdProjectIconKey, LucideIcon> = {
+  sparkles: Sparkles,
+  camera: Camera,
+  "trending-up": TrendingUp,
+  bot: Bot,
+  building: Building2,
+  rotate: RotateCcw,
+};
 
 const noteItems = [
   ["05", "个在线项目"],
@@ -268,8 +165,8 @@ export function CstdLanding() {
     if (mascotMood === "working") return "奶黄包正在把项目烤得更香。";
     return "点一点奶黄包，它会给页面加一点甜。";
   }, [mascotMood]);
-  const visibleProjects = useMemo(() => filterCstdProjects(projects, activeProjectFilter), [activeProjectFilter]);
-  const projectFilterSummary = useMemo(() => getCstdProjectFilterSummary(projects, activeProjectFilter), [activeProjectFilter]);
+  const visibleProjects = useMemo(() => filterCstdProjects(cstdProjects, activeProjectFilter), [activeProjectFilter]);
+  const projectFilterSummary = useMemo(() => getCstdProjectFilterSummary(cstdProjects, activeProjectFilter), [activeProjectFilter]);
   const mobileNavigationToggle = getCstdMobileNavigationToggleState(mobileNavOpen);
 
   function replayIntro() {
@@ -928,11 +825,11 @@ function ProjectCard({
   index,
   motionDisabled,
 }: {
-  project: (typeof projects)[number];
+  project: (typeof cstdProjects)[number];
   index: number;
   motionDisabled: boolean;
 }) {
-  const Icon = project.icon;
+  const Icon = projectIcons[project.icon];
   const toneClasses = {
     mint: "from-[#dff8ed]/90 text-[#047857]",
     rose: "from-[#ffe7ec]/90 text-[#be4563]",
@@ -983,6 +880,13 @@ function ProjectCard({
           ))}
         </div>
 
+        <dl className={cstdProjectEvidenceClassName}>
+          <ProjectEvidence label="负责" value={project.evidence.role} />
+          <ProjectEvidence label="问题" value={project.evidence.problem} />
+          <ProjectEvidence label="已交付" value={project.evidence.outcome} />
+          <ProjectEvidence label="现在" value={project.evidence.current} />
+        </dl>
+
         <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap">
           <HeroButton href={project.href}>
             {project.action}
@@ -1003,5 +907,14 @@ function ProjectCard({
         </div>
       </div>
     </motion.article>
+  );
+}
+
+function ProjectEvidence({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="grid gap-1 sm:grid-cols-[4rem_minmax(0,1fr)] sm:gap-3">
+      <dt className="font-black text-[#d98528]">{label}</dt>
+      <dd className="m-0 min-w-0 leading-6 text-[#5f4b3d]">{value}</dd>
+    </div>
   );
 }

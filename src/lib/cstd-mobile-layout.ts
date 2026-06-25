@@ -1,3 +1,5 @@
+import { cstdProjects } from "./cstd-projects";
+
 export const cstdPageShellClassName =
   "mx-auto w-[calc(100%_-_48px)] max-w-[342px] sm:w-[min(1160px,calc(100%_-_32px))] sm:max-w-none";
 
@@ -33,29 +35,7 @@ export const cstdProjectMetricValueClassName = "block min-w-0 break-words text-l
 
 export const cstdProjectMetricLabelClassName = "mt-1 block min-w-0 break-words text-xs font-semibold leading-snug text-[#7b6656]";
 
-export const cstdProjectCards = [
-  {
-    title: "洛克图鉴 / RocoDex",
-    kicker: "Data app",
-  },
-  {
-    title: "奶黄包摄影",
-    kicker: "Photography",
-  },
-  {
-    title: "CSTD Alpha",
-    kicker: "Investment research",
-  },
-  {
-    title: "私人 AI 创作工作台",
-    kicker: "AI creation",
-  },
-  {
-    title: "产业园区招商 CRM",
-    kicker: "CRM system",
-  },
-  {
-    title: "更多项目孵化中",
-    kicker: "Incubating",
-  },
-] as const;
+export const cstdProjectEvidenceClassName =
+  "mt-5 grid gap-3 rounded-xl border border-[#ead6ad] bg-[#fffaf0]/72 p-4 text-sm sm:mt-6";
+
+export const cstdProjectCards = cstdProjects.map(({ title, kicker }) => ({ title, kicker }));
