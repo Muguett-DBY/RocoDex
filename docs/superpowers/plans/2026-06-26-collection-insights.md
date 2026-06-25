@@ -77,4 +77,4 @@ Expected: 1 test file passes.
 - [x] Run `npm run build`.
 - [x] Verify `/collection` in Browser/IAB with saved creatures and confirm the insight panel plus console error count.
 - [x] Review `git status`, `git diff`, staged diff, and secret scan.
-- [ ] Commit Stage 2, push `main`, inspect GitHub Actions/checks, and record the result.
+- [x] Commit Stage 2, push `main`, inspect GitHub Actions/checks, and record the result.

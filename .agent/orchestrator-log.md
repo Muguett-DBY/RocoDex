@@ -63,4 +63,9 @@
   - TDD green: focused test passed after helper implementation.
   - Local gates: `npm run lint` exited `0`; `npm test` passed 18 files / 74 tests; `npm run build` exited `0` and generated 735 static pages.
   - Browser: `/collection` with `迪莫` and `火花` saved rendered “收藏洞察”, “培养准备度概览”, effective saved count `2/2`, next-action text, no horizontal overflow, and console errors `0`.
-- Status: pending diff review, commit, push, and remote check
+- Commit: `909d65b feat: add collection insights panel`
+- Push: `origin/main` updated to `909d65b43eef48449274b56c4282ca99508500e0`
+- Remote check:
+  - `gh run list --branch main` showed no GitHub Actions run for `909d65b`.
+  - Commit status `Vercel` moved from `pending` to `success` with description “Deployment has completed”.
+- Status: closed
