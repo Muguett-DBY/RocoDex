@@ -51,4 +51,4 @@
 - [x] Run `npm run build`.
 - [x] Verify `/collection?ids=001,005` import flow in Browser/IAB.
 - [x] Review diff/staged diff/secret scan.
-- [ ] Commit Stage 4, push `main`, inspect GitHub Actions/checks/Vercel status, and record the result.
+- [x] Commit Stage 4, push `main`, inspect GitHub Actions/checks/Vercel status, and record the result.
