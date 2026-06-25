@@ -135,4 +135,9 @@
   - HTTP smoke: 13 key routes returned `200`.
   - Browser smoke: mobile header, collection share import, compare handoff, and auth fallback passed against local production server; console errors `0`.
 - Findings: no code defects found; no product code fix required.
-- Status: pending report commit, push, and remote check
+- Commit: `f097cee chore: record stage 5 production check`
+- Push: `origin/main` updated to `f097cee430dca705f3b7f7cf013c600f1ddeebd5`
+- Remote check:
+  - `gh run list --branch main` showed no GitHub Actions run for `f097cee`.
+  - Commit status `Vercel` completed successfully with description “Deployment has completed”.
+- Status: closed

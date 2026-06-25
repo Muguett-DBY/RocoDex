@@ -32,4 +32,4 @@
 - [x] Create `.agent/stage5-check-report.md` with commands, route results, browser results, findings, and fix decision.
 - [x] Update `.agent/orchestrator-log.md` and `.agent/iteration-log.md`.
 - [x] Review diff/staged diff/secret scan.
-- [ ] Commit Stage 5 report, push `main`, inspect GitHub Actions/checks/Vercel status, and record the result.
+- [x] Commit Stage 5 report, push `main`, inspect GitHub Actions/checks/Vercel status, and record the result.
