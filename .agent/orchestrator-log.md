@@ -40,6 +40,30 @@
 - Status: closed
 - Next stage after closure: Stage 2 IMPROVE
 
+### Stage 2
+
+- Stage number: 2 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a shareable inline project focus state with deep-link initialization and explicit copy feedback.
+- Start state:
+  - Stage 1 added credible evidence but all six cards remained in one long reading flow.
+  - There was no way to point someone directly to one project context.
+  - Clipboard support and invalid project IDs had no defined behavior.
+- Implemented:
+  - Added `?project=<id>#project-focus` parsing and URL building with invalid ID fallback.
+  - Added an inline focused project case-study panel with close, external visit, and copy-link actions.
+  - Added clipboard result handling for copied, unsupported, and failed states.
+  - Preserved the full project directory while allowing one project to be highlighted and shared.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-focus.test.ts` failed because the focus helper module did not exist.
+  - TDD green: project focus tests passed 3 / 3; project evidence and filtering tests passed 6 / 6.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 24 files / 92 tests; `npm run build` generated 735 static pages.
+  - Browser desktop: project card `查看案例` opened `?project=rocodex#project-focus`, rendered evidence, copied the share URL, and closed back to `#projects`.
+  - Browser deep link: `/cstd?project=crm#project-focus` opened the CRM case-study panel directly.
+  - Browser mobile: `/cstd?project=design#project-focus` at 390 px had no horizontal overflow and console errors were `0`.
+- Status: pending commit and remote check
+
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
 - Sequence: `IMPROVE → UIUX`
