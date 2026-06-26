@@ -129,7 +129,9 @@ export function CstdLanding() {
     const storedAudioPreference = window.localStorage.getItem(CSTD_AUDIO_PREFERENCE_KEY);
     const audioPreference: CstdAudioPreference = storedAudioPreference === "disabled" ? "disabled" : "enabled";
     const introSeen = window.localStorage.getItem(CSTD_INTRO_SEEN_KEY);
+    const hasProjectFocus = parseCstdProjectFocus(window.location.search) !== null;
     const shouldShowIntro = shouldPlayCstdIntro({
+      hasProjectFocus,
       reducedMotion,
       motionPreference: preference,
       introSeen,
