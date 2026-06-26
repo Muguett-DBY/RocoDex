@@ -23,6 +23,7 @@ import {
 import { cstdProjects, type CstdProjectIconKey } from "@/lib/cstd-projects";
 import { getCstdProjectEvidenceOverview } from "@/lib/cstd-project-evidence-overview";
 import { buildCstdProjectPortfolioBrief } from "@/lib/cstd-project-portfolio-brief";
+import { getCstdProjectProofTimeline } from "@/lib/cstd-project-proof-timeline";
 import {
   CSTD_INTRO_SEEN_KEY,
   CSTD_MOTION_PREFERENCE_KEY,
@@ -87,6 +88,7 @@ const noteItems = [
 const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
 const homepageCapabilitySummary = getCstdHomepageCapabilitySummary(cstdHomepageCapabilities);
 const projectEvidenceOverview = getCstdProjectEvidenceOverview(cstdProjects);
+const projectProofTimeline = getCstdProjectProofTimeline(cstdProjects);
 
 const CstdCustardStage = dynamic(
   () => import("@/components/cstd-custard-stage").then((module) => module.CstdCustardStage),
@@ -566,6 +568,22 @@ export function CstdLanding() {
                 className="mt-3 min-h-44 w-full resize-y rounded-lg border border-[#ead6ad] bg-[#fffaf0] p-3 text-xs font-semibold leading-5 text-[#4f3d31] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
               />
             ) : null}
+            <div className="mt-4 rounded-lg border border-[#d6eadf] bg-[#eefbf4]/78 p-3" aria-label={projectProofTimeline.summary}>
+              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-[#047857]">Proof timeline</p>
+                <p className="text-xs font-bold text-[#4c6b5d]">{projectProofTimeline.summary}</p>
+              </div>
+              <ol className="mt-3 grid gap-2 lg:grid-cols-5">
+                {projectProofTimeline.items.map((item, index) => (
+                  <li key={item.projectId} className="min-w-0 rounded-lg border border-[#b7decf] bg-white/82 p-3">
+                    <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-[#0f8f64] px-2 text-xs font-black text-white">{index + 1}</span>
+                    <p className="mt-2 text-sm font-black leading-5 text-[#1b4332]">{item.title}</p>
+                    <p className="mt-1 text-xs font-black leading-5 text-[#047857]">{item.signal}</p>
+                    <p className="mt-2 line-clamp-3 text-xs font-semibold leading-5 text-[#4c6b5d]">{item.proof}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
           </div>
 
           <div className="mb-5 rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[6px_6px_0_rgba(47,36,29,.05)] backdrop-blur-sm sm:p-4">
