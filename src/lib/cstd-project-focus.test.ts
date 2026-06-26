@@ -3,6 +3,7 @@ import {
   buildCstdProjectBrief,
   buildCstdProjectDirectoryHref,
   buildCstdProjectFocusHref,
+  buildCstdProjectLinkDirectory,
   copyCstdProjectLink,
   getCstdProjectEvidenceChecklist,
   getCstdProjectEvidenceChecklistSummary,
@@ -71,6 +72,21 @@ describe("CSTD project focus", () => {
 
     expect(buildCstdProjectBrief(project)).toBe(
       "产业园区招商 CRM\n当前：生产环境持续验证与迭代\n负责：业务建模、权限设计与全栈交付\n解决问题：招商线索分散，权限边界不清晰。\n已交付：交付覆盖线索全周期和角色权限的运营系统。\n链接：https://cfzzs.custard.top",
+    );
+  });
+
+  test("builds a copyable directory of project focus links", () => {
+    const projects = [
+      { id: "design", title: "私人 AI 创作工作台", status: "Live" },
+      { id: "crm", title: "产业园区招商 CRM", status: "Live" },
+      { id: "incubator", title: "更多项目孵化中", status: "Next" },
+    ] as const;
+
+    expect(buildCstdProjectLinkDirectory(projects, "https://custard.top", "/")).toBe(
+      "custard.top 项目深链目录\n私人 AI 创作工作台：https://custard.top/?project=design#project-focus\n产业园区招商 CRM：https://custard.top/?project=crm#project-focus",
+    );
+    expect(buildCstdProjectLinkDirectory(projects, "https://rocodex.custard.top", "/cstd")).toContain(
+      "https://rocodex.custard.top/cstd?project=crm#project-focus",
     );
   });
 

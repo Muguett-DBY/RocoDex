@@ -18,6 +18,11 @@ type CstdProjectBriefSource = {
 };
 
 type CstdProjectEvidenceSource = Pick<CstdProjectBriefSource, "evidence">;
+type CstdProjectLinkDirectorySource = {
+  id: string;
+  title: string;
+  status: "Live" | "Next";
+};
 
 export function parseCstdProjectFocus(search: string) {
   const projectId = new URLSearchParams(search).get("project");
@@ -56,6 +61,16 @@ export function buildCstdProjectBrief(project: CstdProjectBriefSource) {
     `已交付：${project.evidence.outcome}`,
     `链接：${project.href}`,
   ].join("\n");
+}
+
+export function buildCstdProjectLinkDirectory(
+  projects: readonly CstdProjectLinkDirectorySource[],
+  origin: string,
+  pathname: string,
+) {
+  const liveProjects = projects.filter((project) => project.status === "Live");
+  const lines = liveProjects.map((project) => `${project.title}：${origin}${buildCstdProjectFocusHref(project.id, pathname)}`);
+  return ["custard.top 项目深链目录", ...lines].join("\n");
 }
 
 export function getCstdProjectEvidenceChecklist(project: CstdProjectEvidenceSource) {
