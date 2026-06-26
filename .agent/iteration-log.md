@@ -1,5 +1,22 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 2 Stage 3 / 6 — UIUX
+
+### Scope
+
+- Added a compact active-state strip for the `/cstd` project directory controls.
+- The strip names default, category-only, search-only, and combined filter/search states.
+- Added one reset command that clears both category and keyword controls.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `getCstdProjectControlSummary` did not exist, then passed after implementation.
+- Focused project filter and focus tests passed 11 / 11.
+- `npm run lint` exited `0`.
+- `npm test` passed 28 files / 102 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered combined `创作影像` + `南京` state, reset to `浏览全部项目`, desktop/mobile overflow, and console errors `0`.
+
 ## 2026-06-26 — Long Homepage Round 2 Stage 2 / 6 — IMPROVE
 
 ### Scope

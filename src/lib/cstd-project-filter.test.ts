@@ -1,5 +1,12 @@
 import { describe, expect, test } from "vitest";
-import { cstdProjectFilters, filterCstdProjects, getCstdProjectFilterSummary, type CstdProjectFilter } from "./cstd-project-filter";
+import {
+  cstdProjectFilters,
+  filterCstdProjects,
+  getCstdProjectControlSummary,
+  getCstdProjectFilterSummary,
+  hasActiveCstdProjectControls,
+  type CstdProjectFilter,
+} from "./cstd-project-filter";
 
 const sampleProjects = [
   { title: "RocoDex", category: "data", description: "中文精灵资料库", tags: ["PVP", "Next.js"] },
@@ -44,5 +51,15 @@ describe("CSTD project filtering", () => {
     expect(filterCstdProjects(sampleProjects, "operations", "招商").map((project) => project.title)).toEqual(["CRM"]);
     expect(filterCstdProjects(sampleProjects, "creative", "招商")).toEqual([]);
     expect(getCstdProjectFilterSummary(sampleProjects, "creative", "招商")).toBe("没有匹配项目，可清空搜索或切换分类");
+  });
+
+  test("summarizes active controls for responsive project toolbar", () => {
+    expect(getCstdProjectControlSummary("all", "")).toBe("浏览全部项目");
+    expect(getCstdProjectControlSummary("creative", "")).toBe("筛选：创作影像");
+    expect(getCstdProjectControlSummary("all", " 南京 ")).toBe("搜索：南京");
+    expect(getCstdProjectControlSummary("operations", " CRM ")).toBe("筛选：运营系统 · 搜索：CRM");
+    expect(hasActiveCstdProjectControls("all", "")).toBe(false);
+    expect(hasActiveCstdProjectControls("all", "CRM")).toBe(true);
+    expect(hasActiveCstdProjectControls("research", "")).toBe(true);
   });
 });

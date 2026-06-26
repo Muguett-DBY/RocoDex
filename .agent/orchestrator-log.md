@@ -71,6 +71,31 @@
   - Commit status `Vercel` completed successfully with description `Deployment has completed`.
 - Status: closed
 
+### Stage 3
+
+- Stage number: 3 / 6
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: improve the responsive information architecture of the CSTD project directory controls.
+- Start state:
+  - Stage 1 added keyword search and Stage 2 improved focused project browsing.
+  - Active search/filter state was still split across chip state, input value, and count summary.
+  - Mobile users had no compact one-line explanation of the active directory controls.
+- Design: `docs/superpowers/specs/2026-06-26-cstd-project-controls-uiux-design.md`
+- Plan: `docs/superpowers/plans/2026-06-26-cstd-project-controls-uiux.md`
+- Implemented:
+  - Added `getCstdProjectControlSummary` and `hasActiveCstdProjectControls` for default, filter-only, search-only, and combined control states.
+  - Added a compact `当前视图` status strip to the project index panel.
+  - Added a single reset command that clears both category filter and keyword search.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-filter.test.ts` failed because `getCstdProjectControlSummary` did not exist.
+  - TDD green: focused project filter and focus tests passed 11 / 11.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 28 files / 102 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser desktop: selecting `创作影像` and searching `南京` showed `筛选：创作影像 · 搜索：南京`; reset restored `浏览全部项目` and `当前显示 6 / 6 个项目`; no horizontal overflow; console errors `0`.
+  - Browser mobile: 390px viewport showed the combined summary, reset action, and `奶黄包摄影`; no horizontal overflow; console errors `0`.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched files.
+- Status: commit, push, and remote verification pending
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`
