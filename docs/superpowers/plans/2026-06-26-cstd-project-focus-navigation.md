@@ -63,6 +63,6 @@ Run focused tests, `npm run lint`, `npm test`, and `npm run build`.
 
 Verify `/cstd?project=design#project-focus` adjacent navigation, desktop/mobile overflow, and console health.
 
-- [ ] **Step 3: Commit, push, and check CI**
+- [x] **Step 3: Commit, push, and check CI**
 
 Commit only Stage 2 files, push to `main`, watch GitHub Actions, and check Vercel status.
