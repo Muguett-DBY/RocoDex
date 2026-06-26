@@ -158,7 +158,12 @@
   - HTTP smoke: 13 key routes returned `200`.
   - Browser smoke: Browser plugin attach timed out; Playwright fallback was blocked by missing bundled `playwright-core`; Chrome/Edge CDP fallback exited before opening a debugging port. Recorded as tool/browser-runtime blocked, not an app failure.
   - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched files.
-- Status: commit, push, and remote verification pending
+- Commit: `0dba81d chore: stabilize ci workflow`
+- Push: `origin/main` updated to `0dba81d`
+- Remote check:
+  - GitHub Actions CI for `0dba81d` completed successfully using the updated workflow.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 

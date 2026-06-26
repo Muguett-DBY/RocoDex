@@ -53,3 +53,5 @@ Stage 5 checks the current CI, local validation, and deployment pipeline after t
 - CI workflow and lockfile were updated.
 - Local CI-equivalent validation passed.
 - Browser-specific Stage 5 smoke is recorded as tool/browser-runtime blocked, not an application failure.
+- Commit `0dba81d` was pushed to `origin/main`.
+- GitHub Actions CI for `0dba81d` and Vercel deployment status both completed successfully.

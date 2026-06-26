@@ -18,4 +18,4 @@
 - [x] Upgrade `.github/workflows/ci.yml` action pins.
 - [x] Run CI-equivalent local gates.
 - [x] Run HTTP and Browser smoke checks.
-- [ ] Commit, push, and verify GitHub Actions plus Vercel.
+- [x] Commit, push, and verify GitHub Actions plus Vercel.

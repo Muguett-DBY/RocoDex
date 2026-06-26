@@ -18,6 +18,8 @@
 - `npm run build` exited `0` and generated 735 static pages.
 - HTTP smoke returned `200` for 13 key routes.
 - Browser smoke was blocked by browser tooling/runtime issues: Browser attach timeout, incomplete bundled Playwright package, and Chrome/Edge CDP startup failure.
+- Commit `0dba81d` was pushed to `origin/main`.
+- GitHub Actions CI and Vercel deployment status both completed successfully.
 
 ## 2026-06-26 — Long Homepage Round 2 Stage 4 / 6 — IMPROVE
 
