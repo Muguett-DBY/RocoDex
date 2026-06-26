@@ -112,6 +112,29 @@
 - Status: closed
 - Next stage: Stage 5 / 6 `CHECK`
 
+### Stage 5
+
+- Stage number: 5 / 6
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN.txt`
+- Goal: run a systematic CI/stability check and fix the local Windows CI install risk found during `npm ci`.
+- Start state:
+  - Latest 10 GitHub Actions CI runs on `main` were successful.
+  - `npm audit --json` reported 0 vulnerabilities.
+  - Initial `npm ci` failed locally with `EPERM unlink` on `@next/swc-win32-x64-msvc` because a stale `next start --port 3000` process from this repo still held the binary.
+- Implemented:
+  - Added `scripts/stop-local-next.ps1` to stop only current-repo Node/Next processes before local clean installs.
+  - Added `npm run ci:local` for Windows-safe local CI install parity.
+  - Added a regression test guarding the helper and its current-repo process filter.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/local-ci-helper.test.ts` failed because `scripts/stop-local-next.ps1` was missing.
+  - First script run exposed an npm/cmd quoting bug; fixed `ci:local` to use PowerShell `-Command`.
+  - `npm run ci:local` completed `npm ci` successfully with 0 vulnerabilities; npm still emitted allow-scripts review warnings for `sharp` and `unrs-resolver`.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 34 files / 116 tests; `npm run build` exited `0` and generated 735 static pages.
+  - HTTP route smoke: 13 key routes returned `200`.
+  - Browser verification: local Chrome loaded `/cstd?project=crm#project-focus` on 1366px and 390px viewports; intro was not visible, focus panel and copy status were visible, horizontal overflow was `false`, and console errors were `0`.
+- Status: ready for commit and remote CI check.
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

@@ -1,5 +1,22 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 4 Stage 5 / 6 — CHECK
+
+### Scope
+
+- Fixed a Windows local CI install risk where stale `next start` processes from this repo can lock Next's SWC binary and make `npm ci` fail with `EPERM unlink`.
+- Added `npm run ci:local` and `scripts/stop-local-next.ps1` to stop only current-repo Next processes before clean install.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `scripts/stop-local-next.ps1` was missing, then passed after implementation.
+- `npm run ci:local` completed `npm ci` successfully with 0 vulnerabilities; npm emitted allow-scripts review warnings for `sharp` and `unrs-resolver`.
+- `npm run lint` exited `0`.
+- `npm test` passed 34 files / 116 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- 13 key routes returned HTTP `200`.
+- Browser verification in local Chrome covered desktop and 390px mobile `/cstd?project=crm#project-focus`; intro was skipped, focus panel and copy status were visible, no horizontal overflow, and console errors were `0`.
+
 ## 2026-06-26 — Long Homepage Round 4 Stage 4 / 6 — IMPROVE
 
 ### Scope
