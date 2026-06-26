@@ -28,7 +28,9 @@ import {
 import {
   cstdProjectFilters,
   filterCstdProjects,
+  getCstdProjectControlSummary,
   getCstdProjectFilterSummary,
+  hasActiveCstdProjectControls,
   type CstdProjectFilter,
 } from "@/lib/cstd-project-filter";
 import { cstdProjectGuides } from "@/lib/cstd-project-guide";
@@ -170,6 +172,8 @@ export function CstdLanding() {
   }, [mascotMood]);
   const visibleProjects = useMemo(() => filterCstdProjects(cstdProjects, activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const projectFilterSummary = useMemo(() => getCstdProjectFilterSummary(cstdProjects, activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
+  const projectControlSummary = useMemo(() => getCstdProjectControlSummary(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
+  const hasProjectControlState = useMemo(() => hasActiveCstdProjectControls(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const selectedProject = useMemo(
     () => cstdProjects.find((project) => project.id === selectedProjectId) ?? null,
     [selectedProjectId],
@@ -252,6 +256,11 @@ export function CstdLanding() {
     window.history.replaceState(null, "", buildCstdProjectDirectoryHref(window.location.pathname));
     setSelectedProjectId(null);
     setProjectCopyResult(null);
+  }
+
+  function resetProjectControls() {
+    setProjectSearchQuery("");
+    setActiveProjectFilter("all");
   }
 
   async function copyProjectFocusLink() {
@@ -453,6 +462,25 @@ export function CstdLanding() {
                 {projectFilterSummary}
               </p>
             </div>
+            <div className="mt-3 flex flex-col gap-2 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/78 p-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#9a5a18]">当前视图</p>
+                <p className="mt-1 break-words text-sm font-black text-[#2f241d]" aria-live="polite">
+                  {projectControlSummary}
+                </p>
+              </div>
+              {hasProjectControlState ? (
+                <button
+                  type="button"
+                  onClick={resetProjectControls}
+                  aria-label="重置项目搜索和筛选"
+                  className="inline-flex min-h-9 shrink-0 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:-translate-y-0.5 hover:bg-[#eefbf4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  重置
+                </button>
+              ) : null}
+            </div>
             <label className="mt-3 flex min-h-11 items-center gap-2 rounded-lg border border-[#ead6ad] bg-white/82 px-3 text-sm shadow-inner focus-within:border-[#0f8f64] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#0f8f64]">
               <Search className="h-4 w-4 shrink-0 text-[#0f8f64]" />
               <span className="sr-only">搜索项目</span>
@@ -522,10 +550,7 @@ export function CstdLanding() {
                 <p className="mt-2 text-sm font-semibold leading-6 text-[#6f5b4a]">试试清空搜索词，或切换到全部分类继续浏览。</p>
                 <button
                   type="button"
-                  onClick={() => {
-                    setProjectSearchQuery("");
-                    setActiveProjectFilter("all");
-                  }}
+                  onClick={resetProjectControls}
                   className="mt-4 inline-flex min-h-10 items-center justify-center rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
                 >
                   重置项目筛选

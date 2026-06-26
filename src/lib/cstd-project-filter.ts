@@ -54,6 +54,22 @@ export function getCstdProjectFilterSummary<TProject extends CstdFilterableProje
   return `当前显示 ${visibleCount} / ${projects.length} 个项目`;
 }
 
+export function getCstdProjectControlSummary(filter: CstdProjectFilter, query = "") {
+  const trimmedQuery = query.trim();
+  const filterLabel = cstdProjectFilters.find((option) => option.id === filter)?.label ?? "全部";
+  const hasFilter = filter !== "all";
+  const hasQuery = trimmedQuery.length > 0;
+
+  if (!hasFilter && !hasQuery) return "浏览全部项目";
+  if (hasFilter && hasQuery) return `筛选：${filterLabel} · 搜索：${trimmedQuery}`;
+  if (hasFilter) return `筛选：${filterLabel}`;
+  return `搜索：${trimmedQuery}`;
+}
+
+export function hasActiveCstdProjectControls(filter: CstdProjectFilter, query = "") {
+  return filter !== "all" || query.trim().length > 0;
+}
+
 function getCstdProjectSearchText(project: CstdFilterableProject) {
   return normalizeProjectQuery(
     [
