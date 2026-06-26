@@ -165,6 +165,31 @@
   - Commit status `Vercel` completed successfully with description `Deployment has completed`.
 - Status: closed
 
+### Stage 6
+
+- Stage number: 6 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a compact latest-updates strip to the CSTD homepage hero and complete final verification.
+- Start state:
+  - Stages 1-4 added project search, focus navigation, responsive controls, and brief copy.
+  - Stage 5 stabilized CI workflow pins and dependency audit state.
+  - The hero did not yet surface this latest homepage work as a concise current-state signal.
+- Plan: `docs/superpowers/plans/2026-06-26-cstd-final-update-strip.md`
+- Implemented:
+  - Added `cstdHomepageUpdates` and `getCstdHomepageUpdateSummary`.
+  - Rendered a compact `Latest updates` strip in the CSTD hero for project search, case navigation, brief copy, and green CI.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-homepage-updates.test.ts` failed because `cstd-homepage-updates` did not exist.
+  - TDD green: focused homepage updates test passed 1 / 1.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 29 files / 104 tests; `npm run build` exited `0` and generated 735 static pages.
+  - HTTP/content smoke: `/cstd` returned `200` and contained `最近优化 4 项`, `项目搜索`, and `CI 绿色`.
+  - HTTP route smoke: 13 key routes returned `200`.
+  - Full `npm audit --json` reported 0 vulnerabilities.
+  - Browser note: browser runtimes remained unavailable from Stage 5 tooling checks, so final UI presence was verified by production-rendered HTTP content.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched files.
+- Status: commit, push, and remote verification pending
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

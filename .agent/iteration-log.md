@@ -1,5 +1,22 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 2 Stage 6 / 6 — IMPROVE
+
+### Scope
+
+- Added a CSTD hero `Latest updates` strip summarizing this round's homepage improvements.
+- The strip surfaces project search, case navigation, project brief copy, and green CI/deployment status.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `cstd-homepage-updates` did not exist, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 29 files / 104 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- `/cstd` production-rendered HTTP content contained `最近优化 4 项`, `项目搜索`, and `CI 绿色`.
+- 13 key routes returned HTTP `200`.
+- Full `npm audit --json` reported 0 vulnerabilities.
+
 ## 2026-06-26 — Long Homepage Round 2 Stage 5 / 6 — CHECK
 
 ### Scope
