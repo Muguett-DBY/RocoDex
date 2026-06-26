@@ -79,7 +79,13 @@
   - TDD green: focused mobile layout tests passed 10 / 10.
   - Local gates: `npm run lint` exited `0`; `npm test` passed 32 files / 114 tests; `npm run build` exited `0` and generated 735 static pages.
   - Browser verification: local Chrome covered 1366px and 390px `/cstd`; `项目分享中心`, `Portfolio brief`, and `Deep links` were visible, both copy statuses appeared, horizontal overflow was `false`, and console errors were `0`.
-- Status: ready for commit and remote CI check.
+- Commit: `0273c39 feat: improve evidence share center ui`
+- Push: `origin/main` updated to `0273c39`
+- Remote check:
+  - GitHub Actions CI run `28235364518` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 4 / 6 `IMPROVE`
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
