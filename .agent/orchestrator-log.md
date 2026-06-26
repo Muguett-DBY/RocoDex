@@ -53,7 +53,13 @@
   - TDD green: focused project focus tests passed 8 / 8.
   - Local gates: `npm run lint` exited `0`; `npm test` passed 32 files / 113 tests; `npm run build` exited `0` and generated 735 static pages.
   - Browser verification: local Chrome loaded `/cstd` on 1366px and 390px viewports, copied the project deep-link directory, confirmed CRM and Design focus links in the clipboard, excluded the incubating project, had no horizontal overflow, and console errors were `0`.
-- Status: ready for commit and remote CI check.
+- Commit: `b9f587a feat: add project deep link directory`
+- Push: `origin/main` updated to `b9f587a`
+- Remote check:
+  - GitHub Actions CI run `28234985262` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 3 / 6 `UIUX`
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
