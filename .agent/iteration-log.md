@@ -1,5 +1,22 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 3 Stage 1 / 6 — IMPROVE
+
+### Scope
+
+- Added an `Evidence overview` panel to the `/cstd` project section.
+- The panel summarizes live projects, complete case-study evidence, and covered core usage scenarios before visitors use search or filters.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `cstd-project-evidence-overview` did not exist, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 30 files / 105 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- `/cstd` production-rendered HTTP content contained the new evidence overview and summary text.
+- 13 key routes returned HTTP `200`.
+- Full `npm audit --json` reported 0 vulnerabilities.
+
 ## 2026-06-26 — Long Homepage Round 2 Stage 6 / 6 — IMPROVE
 
 ### Scope

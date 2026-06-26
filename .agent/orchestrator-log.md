@@ -1,5 +1,40 @@
 # RocoDex Agent Orchestrator Log
 
+## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
+
+- Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
+- Branch: `main`
+- Baseline: clean worktree; `git fetch --prune` and `git pull --ff-only` reported already up to date
+- Prompt source: `C:\Users\12031\Desktop\AGENT_ORCHESTRATOR_3_LEVELS_V2\03_LONG_6_STAGE_MAIN_V2.txt`
+- Prompt pack: `C:\Users\12031\Desktop\AGENT_PROMPTS_MAIN_PACK`
+- Required prompt files read: `AGENT_IMPROVE_MAIN.txt`, `AGENT_UIUX_MAIN.txt`, `AGENT_CHECK_MAIN.txt`, `AGENT_CI_FIX_MAIN.txt`
+- Remote baseline: latest local/remote commit `b66d5fc`; previous round recorded successful GitHub Actions and Vercel checks.
+
+### Stage 1
+
+- Stage number: 1 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a visible project evidence overview to make the homepage's project proof easier to scan.
+- Start state:
+  - Previous recommended flagship was richer project case-study detail and outcome evidence.
+  - The project section had individual role/problem/outcome evidence, search, filters, focus navigation, and copyable briefs.
+  - Visitors still had no compact section-level proof that live projects have complete delivery evidence.
+- Plan: `docs/superpowers/plans/2026-06-26-cstd-evidence-overview-round3.md`
+- Implemented:
+  - Added `getCstdProjectEvidenceOverview` to summarize live project count, complete case-study evidence count, and covered core scenarios.
+  - Rendered an `Evidence overview` panel above the project index so visitors see delivery proof before search/filtering.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-evidence-overview.test.ts` failed because `cstd-project-evidence-overview` did not exist.
+  - TDD green: focused evidence overview test passed 1 / 1.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 30 files / 105 tests; `npm run build` exited `0` and generated 735 static pages.
+  - HTTP/content smoke: `/cstd` returned `200` and contained `Evidence overview`, `5 个已上线项目都有角色、问题、交付和当前状态证据`, `完整案例证据`, and `核心使用场景`.
+  - HTTP route smoke: 13 key routes returned `200`.
+  - Full `npm audit --json` reported 0 vulnerabilities.
+  - Browser note: no callable browser plugin tools were exposed in this turn; production-rendered HTTP checks were used as the local UI presence fallback.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
+- Status: ready to commit
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

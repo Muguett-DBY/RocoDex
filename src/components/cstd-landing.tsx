@@ -19,6 +19,7 @@ import {
   type CstdProjectCopyResult,
 } from "@/lib/cstd-project-focus";
 import { cstdProjects, type CstdProjectIconKey } from "@/lib/cstd-projects";
+import { getCstdProjectEvidenceOverview } from "@/lib/cstd-project-evidence-overview";
 import {
   CSTD_INTRO_SEEN_KEY,
   CSTD_MOTION_PREFERENCE_KEY,
@@ -78,6 +79,7 @@ const noteItems = [
 ] as const;
 
 const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
+const projectEvidenceOverview = getCstdProjectEvidenceOverview(cstdProjects);
 
 const CstdCustardStage = dynamic(
   () => import("@/components/cstd-custard-stage").then((module) => module.CstdCustardStage),
@@ -491,6 +493,23 @@ export function CstdLanding() {
           </div>
 
           <ProjectGuide onFocus={focusProject} />
+
+          <div className="mb-5 rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/84 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div className="min-w-0">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d98528]">Evidence overview</p>
+                <p className="mt-2 text-lg font-black leading-7 text-[#2f241d]">{projectEvidenceOverview.summary}</p>
+              </div>
+              <div className="grid gap-2 sm:grid-cols-3 lg:w-[28rem]">
+                {projectEvidenceOverview.stats.map((stat) => (
+                  <div key={stat.label} className="rounded-lg border border-[#ead6ad] bg-white/78 p-3">
+                    <strong className="block text-2xl font-black text-[#0f8f64]">{stat.value}</strong>
+                    <span className="mt-1 block text-xs font-black text-[#7b6656]">{stat.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
 
           <div className="mb-5 rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[6px_6px_0_rgba(47,36,29,.05)] backdrop-blur-sm sm:p-4">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
