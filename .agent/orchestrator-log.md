@@ -1,5 +1,35 @@
 # RocoDex Agent Orchestrator Log
 
+## Run — 2026-06-26 — Long 6-stage homepage strengthening round 4
+
+- Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
+- Branch: `main`
+- Baseline: clean worktree; `git fetch --prune` and `git pull --ff-only` reported already up to date
+- Prompt source: `C:\Users\12031\Desktop\AGENT_ORCHESTRATOR_3_LEVELS_V2\03_LONG_6_STAGE_MAIN_V2.txt`
+- Prompt pack: `C:\Users\12031\Desktop\AGENT_PROMPTS_MAIN_PACK`
+- Required prompt files read: `AGENT_IMPROVE_MAIN.txt`, `AGENT_UIUX_MAIN.txt`, `AGENT_CHECK_MAIN.txt`, `AGENT_CI_FIX_MAIN.txt`
+- Remote baseline: latest local/remote commit `0b7ee66`; previous round recorded successful GitHub Actions and Vercel checks.
+
+### Stage 1
+
+- Stage number: 1 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a visible project proof timeline so visitors can judge the live projects by current status and delivery evidence.
+- Start state:
+  - Previous recommended direction was to keep strengthening personal homepage project credibility and verifiable project evidence.
+  - The homepage had project evidence overview, individual case evidence, deep links, and copyable briefs.
+  - Visitors still lacked a compact recent-proof path showing which live projects are actively maintained or production-verified.
+- Implemented:
+  - Added `getCstdProjectProofTimeline` to order live projects into a compact proof timeline.
+  - Rendered a `Proof timeline` block inside the evidence overview with project title, current signal, and delivery proof.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-proof-timeline.test.ts` failed because `cstd-project-proof-timeline` did not exist.
+  - TDD green: focused proof timeline test passed 1 / 1.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 32 files / 112 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome loaded `/cstd` on 1366px and 390px viewports; `Proof timeline`, the proof summary, and `产业园区招商 CRM` were visible, horizontal overflow was `false`, and console errors were `0`.
+- Status: ready for commit and remote CI check.
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

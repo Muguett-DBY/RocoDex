@@ -1,5 +1,20 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 4 Stage 1 / 6 — IMPROVE
+
+### Scope
+
+- Added a `Proof timeline` to the `/cstd` evidence overview.
+- The timeline orders live projects by current production/verification signal and shows each project's delivery proof.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `cstd-project-proof-timeline` did not exist, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 32 files / 112 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile `/cstd`; `Proof timeline` and the proof summary were visible, no horizontal overflow, and console errors were `0`.
+
 ## 2026-06-26 — Long Homepage Round 3 Stage 6 / 6 — IMPROVE
 
 ### Scope
