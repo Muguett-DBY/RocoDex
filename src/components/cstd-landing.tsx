@@ -9,6 +9,7 @@ import { cstdHomepageCapabilities, cstdHomepageUpdates, getCstdHomepageCapabilit
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
+import { getCstdProjectCapabilityIndex } from "@/lib/cstd-project-capability-index";
 import {
   buildCstdProjectBrief,
   buildCstdProjectDirectoryHref,
@@ -92,6 +93,7 @@ const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
 const homepageCapabilitySummary = getCstdHomepageCapabilitySummary(cstdHomepageCapabilities);
 const projectEvidenceOverview = getCstdProjectEvidenceOverview(cstdProjects);
 const projectProofTimeline = getCstdProjectProofTimeline(cstdProjects);
+const projectCapabilityIndex = getCstdProjectCapabilityIndex(cstdProjects);
 
 const CstdCustardStage = dynamic(
   () => import("@/components/cstd-custard-stage").then((module) => module.CstdCustardStage),
@@ -535,6 +537,8 @@ export function CstdLanding() {
               onToggle={toggleMotion}
             />
           </div>
+
+          <ProjectCapabilityIndex onFocus={focusProject} />
 
           <ProjectGuide onFocus={focusProject} />
 
@@ -1155,6 +1159,40 @@ function ProjectGuide({ onFocus }: { onFocus: (projectId: string) => void }) {
             </button>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+function ProjectCapabilityIndex({ onFocus }: { onFocus: (projectId: string) => void }) {
+  return (
+    <div className="mb-5 rounded-xl border-2 border-[#2f241d] bg-white/76 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5" aria-label={projectCapabilityIndex.summary}>
+      <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d98528]">Capability index</p>
+          <h3 className="mt-1 text-xl font-black text-[#2f241d] sm:text-2xl">按能力看项目</h3>
+        </div>
+        <p className="text-xs font-bold text-[#7b6656]">{projectCapabilityIndex.summary}</p>
+      </div>
+      <div className="mt-4 grid gap-3 lg:grid-cols-3">
+        {projectCapabilityIndex.lanes.map((lane) => (
+          <div key={lane.id} className="min-w-0 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/78 p-3">
+            <p className="text-sm font-black text-[#2f241d]">{lane.label}</p>
+            <p className="mt-2 text-xs font-semibold leading-5 text-[#6f5b4a]">{lane.description}</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {lane.projects.map((project) => (
+                <button
+                  key={`${lane.id}-${project.id}`}
+                  type="button"
+                  onClick={() => onFocus(project.id)}
+                  className="inline-flex min-h-8 items-center rounded-md border border-[#b7decf] bg-white px-2.5 text-xs font-black text-[#047857] transition hover:-translate-y-0.5 hover:border-[#0f8f64] hover:bg-[#eefbf4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                >
+                  {project.title}
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
