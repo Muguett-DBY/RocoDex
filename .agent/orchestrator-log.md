@@ -121,7 +121,13 @@
   - Browser verification: first pass found the intro overlay intercepting direct clicks; after setting `cstd.introSeen`, local Chrome copied the portfolio brief on 1366px and 390px viewports, status was visible, clipboard contained portfolio and CRM evidence, horizontal overflow was `false`, and console errors were `0`.
   - HTTP route smoke: 13 key routes returned `200`; `npm audit --json` reported 0 vulnerabilities.
   - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
-- Status: ready to commit
+- Commit: `f6e6b3b feat: add portfolio brief copy`
+- Push: `origin/main` updated to `f6e6b3b`
+- Remote check:
+  - GitHub Actions CI run `28232842747` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 5 / 6 `CHECK`
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 
