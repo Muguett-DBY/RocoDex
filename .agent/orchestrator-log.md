@@ -36,6 +36,25 @@
 - Status: closed
 - Next stage: Stage 2 / 6 `IMPROVE`
 
+### Stage 2
+
+- Stage number: 2 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a copyable project deep-link directory so visitors can share every live project case link without opening cards one by one.
+- Start state:
+  - Stage 1 added a proof timeline and closed with successful CI/Vercel on the feature and record commits.
+  - Individual project focus links existed, but the homepage had no single copy action for all case-study deep links.
+- Implemented:
+  - Added `buildCstdProjectLinkDirectory` for live project focus URLs.
+  - Added `复制项目深链目录` to the evidence overview with status feedback and manual-copy fallback.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-focus.test.ts` failed because `buildCstdProjectLinkDirectory` was not a function.
+  - TDD green: focused project focus tests passed 8 / 8.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 32 files / 113 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome loaded `/cstd` on 1366px and 390px viewports, copied the project deep-link directory, confirmed CRM and Design focus links in the clipboard, excluded the incubating project, had no horizontal overflow, and console errors were `0`.
+- Status: ready for commit and remote CI check.
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

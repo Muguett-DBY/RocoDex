@@ -13,6 +13,7 @@ import {
   buildCstdProjectBrief,
   buildCstdProjectDirectoryHref,
   buildCstdProjectFocusHref,
+  buildCstdProjectLinkDirectory,
   copyCstdProjectLink,
   getCstdProjectEvidenceChecklist,
   getCstdProjectEvidenceChecklistSummary,
@@ -117,6 +118,7 @@ export function CstdLanding() {
   const [projectCopyResult, setProjectCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [projectBriefCopyResult, setProjectBriefCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [portfolioCopyResult, setPortfolioCopyResult] = useState<CstdProjectCopyResult | null>(null);
+  const [projectLinkDirectoryCopyResult, setProjectLinkDirectoryCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
   const prefersReducedMotion = reducedMotion ?? true;
@@ -309,6 +311,15 @@ export function CstdLanding() {
       buildCstdProjectPortfolioBrief(cstdProjects),
     );
     setPortfolioCopyResult(result);
+  }
+
+  async function copyProjectLinkDirectory() {
+    const directory = buildCstdProjectLinkDirectory(cstdProjects, window.location.origin, window.location.pathname);
+    const result = await copyCstdProjectLink(
+      navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
+      directory,
+    );
+    setProjectLinkDirectoryCopyResult(result);
   }
 
   return (
@@ -566,6 +577,34 @@ export function CstdLanding() {
                 readOnly
                 value={buildCstdProjectPortfolioBrief(cstdProjects)}
                 className="mt-3 min-h-44 w-full resize-y rounded-lg border border-[#ead6ad] bg-[#fffaf0] p-3 text-xs font-semibold leading-5 text-[#4f3d31] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+              />
+            ) : null}
+            <div className="mt-3 flex flex-col gap-2 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/74 p-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm font-semibold leading-6 text-[#315b7f]">需要发给别人看时，可以直接复制每个项目的案例深链。</p>
+              <button
+                type="button"
+                onClick={copyProjectLinkDirectory}
+                className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-4 text-sm font-black text-[#2563eb] transition hover:-translate-y-0.5 hover:bg-[#f2f8ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
+              >
+                {projectLinkDirectoryCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                复制项目深链目录
+              </button>
+            </div>
+            {projectLinkDirectoryCopyResult ? (
+              <p role="status" className="mt-2 text-xs font-semibold leading-5 text-[#6f5b4a]">
+                {{
+                  copied: "项目深链目录已复制",
+                  unsupported: "浏览器不支持自动复制，请手动复制项目深链目录",
+                  failed: "项目深链目录复制失败，请手动复制",
+                }[projectLinkDirectoryCopyResult]}
+              </p>
+            ) : null}
+            {projectLinkDirectoryCopyResult && projectLinkDirectoryCopyResult !== "copied" ? (
+              <textarea
+                aria-label="项目深链目录文本"
+                readOnly
+                value={typeof window === "undefined" ? "" : buildCstdProjectLinkDirectory(cstdProjects, window.location.origin, window.location.pathname)}
+                className="mt-3 min-h-36 w-full resize-y rounded-lg border border-[#b8d7f5] bg-[#f2f8ff] p-3 text-xs font-semibold leading-5 text-[#315b7f] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
               />
             ) : null}
             <div className="mt-4 rounded-lg border border-[#d6eadf] bg-[#eefbf4]/78 p-3" aria-label={projectProofTimeline.summary}>

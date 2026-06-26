@@ -1,5 +1,20 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 4 Stage 2 / 6 — IMPROVE
+
+### Scope
+
+- Added `复制项目深链目录` to the `/cstd` evidence overview.
+- The copied directory includes every live project's focus URL and excludes the incubating placeholder.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `buildCstdProjectLinkDirectory` was missing, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 32 files / 113 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile copy flows; clipboard content included CRM and Design focus links, excluded the incubating project, no horizontal overflow, and console errors were `0`.
+
 ## 2026-06-26 — Long Homepage Round 4 Stage 1 / 6 — IMPROVE
 
 ### Scope
