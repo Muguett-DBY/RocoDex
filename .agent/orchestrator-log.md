@@ -157,6 +157,30 @@
 - Status: closed
 - Next stage after closure: Stage 6 IMPROVE
 
+### Stage 6
+
+- Stage number: 6 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: keep decorative background audio behind explicit user actions and reduce first-load audio work.
+- Start state:
+  - The landing component attempted to start BGM when preferences became ready.
+  - The component registered global pointer/key/touch activation listeners to retry audio on ordinary page interaction.
+  - The idle status copy said visitors could click the page to play music.
+- Implemented:
+  - Removed the landing component's global audio activation listener and automatic BGM start effect.
+  - Kept intro audio on the explicit intro start action.
+  - Changed the sound control so `声音：待播` starts BGM, active audio can be stopped, and disabled audio can be re-enabled explicitly.
+  - Updated idle audio status to `奶油音乐待播放`.
+  - Added a static audio-policy test that guards against reintroducing automatic activation listeners.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-audio-policy.test.ts` failed because `listenForCstdAudioActivation` and `tryStartBgm` were still present.
+  - TDD green: audio-policy test passed 1 / 1 and existing intro-sound tests passed 7 / 7.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 28 files / 98 tests; `npm run build` generated 735 static pages.
+  - Browser audio policy: with a fake `Audio` constructor, `/cstd` constructed no audio on load and constructed/played only `/cstd-audio/custard-warm-loop.wav` after clicking `声音：待播`.
+  - Browser mobile: 390 px had no horizontal overflow and console errors were `0`.
+- Status: pending commit, GitHub Actions run, and remote check
+
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
 - Sequence: `IMPROVE → UIUX`

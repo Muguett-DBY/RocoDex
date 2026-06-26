@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Building2, Camera, Check, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
-import { listenForCstdAudioActivation, playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
+import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
 import {
@@ -96,7 +96,6 @@ export function CstdLanding() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [projectCopyResult, setProjectCopyResult] = useState<CstdProjectCopyResult | null>(null);
-  const [preferencesReady, setPreferencesReady] = useState(false);
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
   const prefersReducedMotion = reducedMotion ?? true;
@@ -119,7 +118,6 @@ export function CstdLanding() {
     });
     setMotionPreference(preference);
     setAudioPreference(audioPreference);
-    setPreferencesReady(true);
     setIntroVisible(shouldShowIntro);
     setIntroPhase("idle");
   }, [reducedMotion]);
@@ -163,30 +161,6 @@ export function CstdLanding() {
     return () => document.removeEventListener("visibilitychange", syncVolumeToVisibility);
   }, [audioPreference, bgmActive]);
 
-  useEffect(() => {
-    if (!preferencesReady) return;
-    if (audioPreference === "disabled" || bgmActive) return;
-
-    let cancelled = false;
-    let cleanupActivation = () => {};
-
-    const tryStartBgm = () => {
-      void startCstdBgm(CSTD_BGM_NORMAL_VOLUME).then((started) => {
-        if (cancelled) return;
-        setBgmActive(started);
-        if (started) cleanupActivation();
-      });
-    };
-
-    tryStartBgm();
-    cleanupActivation = listenForCstdAudioActivation(tryStartBgm);
-
-    return () => {
-      cancelled = true;
-      cleanupActivation();
-    };
-  }, [audioPreference, bgmActive, preferencesReady]);
-
   const mascotCopy = useMemo(() => {
     if (mascotMood === "happy") return "奶黄包收到了你的点击，正在加糖。";
     if (mascotMood === "working") return "奶黄包正在把项目烤得更香。";
@@ -219,17 +193,24 @@ export function CstdLanding() {
   }
 
   function toggleAudio() {
-    const nextPreference: CstdAudioPreference = audioPreference === "disabled" ? "enabled" : "disabled";
-    setAudioPreference(nextPreference);
-    window.localStorage.setItem(CSTD_AUDIO_PREFERENCE_KEY, nextPreference);
-
-    if (nextPreference === "disabled") {
-      stopCstdBgm();
-      setBgmActive(false);
+    if (audioPreference === "disabled") {
+      const nextPreference: CstdAudioPreference = "enabled";
+      setAudioPreference(nextPreference);
+      window.localStorage.setItem(CSTD_AUDIO_PREFERENCE_KEY, nextPreference);
+      void startCstdBgm(CSTD_BGM_NORMAL_VOLUME).then(setBgmActive);
       return;
     }
 
-    void startCstdBgm(CSTD_BGM_NORMAL_VOLUME).then(setBgmActive);
+    if (!bgmActive) {
+      void startCstdBgm(CSTD_BGM_NORMAL_VOLUME).then(setBgmActive);
+      return;
+    }
+
+    const nextPreference: CstdAudioPreference = "disabled";
+    setAudioPreference(nextPreference);
+    window.localStorage.setItem(CSTD_AUDIO_PREFERENCE_KEY, nextPreference);
+    stopCstdBgm();
+    setBgmActive(false);
   }
 
   function beginIntroPlayback() {
@@ -853,6 +834,7 @@ function MotionControls({
 }) {
   const introEnabled = motionPreference !== "disabled";
   const audioEnabled = audioPreference !== "disabled";
+  const audioLabel = !audioEnabled ? "关" : bgmActive ? "开" : "待播";
 
   return (
     <div className="grid w-full grid-cols-2 gap-2 rounded-xl border border-[#ead6ad] bg-white/65 p-2 shadow-[5px_5px_0_rgba(47,36,29,.06)] sm:w-auto sm:grid-cols-[auto_auto_auto]">
@@ -872,7 +854,7 @@ function MotionControls({
         className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-[#e3f2ff] px-2 text-xs font-black text-[#2563eb] transition hover:bg-[#d5eaff] sm:px-3"
       >
         {audioEnabled ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
-        声音：{audioEnabled ? "开" : "关"}
+        声音：{audioLabel}
       </button>
       <button
         type="button"
@@ -884,7 +866,7 @@ function MotionControls({
         播放开场
       </button>
       <span className="col-span-2 inline-flex min-h-7 items-center justify-center rounded-lg bg-white/70 px-2 text-[0.68rem] font-black text-[#7b6656] sm:col-span-3">
-        {audioEnabled ? (bgmActive ? "奶油音乐轻轻播放中" : "声音已开启，点击页面后播放奶油音乐") : "声音已关闭"}
+        {audioEnabled ? (bgmActive ? "奶油音乐轻轻播放中" : "奶油音乐待播放") : "声音已关闭"}
       </span>
     </div>
   );

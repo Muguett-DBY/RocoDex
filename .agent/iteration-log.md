@@ -1,5 +1,25 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Stage 6 / 6 — IMPROVE
+
+### Scope
+
+- Removed automatic background-music startup and global audio activation listeners from the CSTD landing page.
+- Made the sound control explicitly start idle audio and stop active audio.
+
+### Verification evidence
+
+- TDD failed while `listenForCstdAudioActivation` and `tryStartBgm` were still present, then passed 1 / 1 after removal.
+- Existing intro-sound tests passed 7 / 7.
+- `npm run lint` exited `0`.
+- `npm test` passed 28 files / 98 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification proved no `Audio` construction on load, BGM construction only after clicking `声音：待播`, no mobile overflow, and no console errors.
+
+### Follow-up candidates
+
+- Revisit the GitHub Actions annotation when `actions/checkout` and `actions/setup-node` publish major versions that no longer target Node.js 20 internally.
+
 ## 2026-06-26 — Long Homepage Stage 5 / 6 — CHECK
 
 ### Scope
