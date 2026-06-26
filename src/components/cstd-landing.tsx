@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } 
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Building2, Camera, Check, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
+import { Bot, Building2, Camera, Check, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
@@ -93,6 +93,7 @@ export function CstdLanding() {
   const [motionPreference, setMotionPreference] = useState<CstdMotionPreference>("enabled");
   const [audioPreference, setAudioPreference] = useState<CstdAudioPreference>("enabled");
   const [activeProjectFilter, setActiveProjectFilter] = useState<CstdProjectFilter>("all");
+  const [projectSearchQuery, setProjectSearchQuery] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [projectCopyResult, setProjectCopyResult] = useState<CstdProjectCopyResult | null>(null);
@@ -166,8 +167,8 @@ export function CstdLanding() {
     if (mascotMood === "working") return "奶黄包正在把项目烤得更香。";
     return "点一点奶黄包，它会给页面加一点甜。";
   }, [mascotMood]);
-  const visibleProjects = useMemo(() => filterCstdProjects(cstdProjects, activeProjectFilter), [activeProjectFilter]);
-  const projectFilterSummary = useMemo(() => getCstdProjectFilterSummary(cstdProjects, activeProjectFilter), [activeProjectFilter]);
+  const visibleProjects = useMemo(() => filterCstdProjects(cstdProjects, activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
+  const projectFilterSummary = useMemo(() => getCstdProjectFilterSummary(cstdProjects, activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const selectedProject = useMemo(
     () => cstdProjects.find((project) => project.id === selectedProjectId) ?? null,
     [selectedProjectId],
@@ -447,6 +448,26 @@ export function CstdLanding() {
                 {projectFilterSummary}
               </p>
             </div>
+            <label className="mt-3 flex min-h-11 items-center gap-2 rounded-lg border border-[#ead6ad] bg-white/82 px-3 text-sm shadow-inner focus-within:border-[#0f8f64] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#0f8f64]">
+              <Search className="h-4 w-4 shrink-0 text-[#0f8f64]" />
+              <span className="sr-only">搜索项目</span>
+              <input
+                value={projectSearchQuery}
+                onChange={(event) => setProjectSearchQuery(event.target.value)}
+                placeholder="搜索项目、标签或问题，例如 CRM、南京、估值"
+                className="min-w-0 flex-1 bg-transparent font-semibold text-[#2f241d] outline-none placeholder:text-[#9a8776]"
+              />
+              {projectSearchQuery ? (
+                <button
+                  type="button"
+                  onClick={() => setProjectSearchQuery("")}
+                  aria-label="清空项目搜索"
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#7b6656] transition hover:bg-[#fff0c9] hover:text-[#2f241d]"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              ) : null}
+            </label>
             <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
               {cstdProjectFilters.map((filter) => {
                 const selected = activeProjectFilter === filter.id;
@@ -484,9 +505,26 @@ export function CstdLanding() {
           </AnimatePresence>
 
           <div className={cstdProjectGridClassName}>
-            {visibleProjects.map((project, index) => (
-              <ProjectCard key={project.title} project={project} index={index} motionDisabled={motionDisabled} onFocus={focusProject} />
-            ))}
+            {visibleProjects.length > 0 ? (
+              visibleProjects.map((project, index) => (
+                <ProjectCard key={project.title} project={project} index={index} motionDisabled={motionDisabled} onFocus={focusProject} />
+              ))
+            ) : (
+              <div className="rounded-xl border-2 border-dashed border-[#d7c19d] bg-white/72 p-6 text-center md:col-span-2 xl:col-span-3">
+                <p className="text-lg font-black text-[#2f241d]">没有找到匹配项目</p>
+                <p className="mt-2 text-sm font-semibold leading-6 text-[#6f5b4a]">试试清空搜索词，或切换到全部分类继续浏览。</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProjectSearchQuery("");
+                    setActiveProjectFilter("all");
+                  }}
+                  className="mt-4 inline-flex min-h-10 items-center justify-center rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                >
+                  重置项目筛选
+                </button>
+              </div>
+            )}
           </div>
         </section>
 

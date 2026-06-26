@@ -1,5 +1,22 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 2 Stage 1 / 6 — IMPROVE
+
+### Scope
+
+- Added keyword search to the `/cstd` project directory.
+- Search now composes with category filters and covers titles, descriptions, tags, metrics, and evidence text.
+- Added a clearable search input plus a resettable no-result state.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `filterCstdProjects` ignored the query argument, then passed 6 / 6 after implementation.
+- Related mobile layout tests passed in the focused regression run.
+- `npm run lint` exited `0`.
+- `npm test` passed 28 files / 100 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser plugin loaded `/cstd` successfully; Playwright fallback completed search, empty-state reset, 390px mobile overflow, and console-error verification after Browser screenshot capture timed out.
+
 ## 2026-06-26 — Long Homepage Stage 6 / 6 — IMPROVE
 
 ### Scope

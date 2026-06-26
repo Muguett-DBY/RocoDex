@@ -1,5 +1,41 @@
 # RocoDex Agent Orchestrator Log
 
+## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
+
+- Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`
+- Branch: `main`
+- Baseline: clean worktree; `git fetch --prune` and `git pull --ff-only` reported already up to date
+- Prompt source: `C:\Users\12031\Desktop\AGENT_ORCHESTRATOR_3_LEVELS_V2\03_LONG_6_STAGE_MAIN_V2.txt`
+- Prompt pack: `C:\Users\12031\Desktop\AGENT_PROMPTS_MAIN_PACK`
+- Required prompt files read: `AGENT_IMPROVE_MAIN.txt`, `AGENT_UIUX_MAIN.txt`, `AGENT_CHECK_MAIN.txt`
+- Remote baseline: GitHub Actions and Vercel were successful on `c3e0f07`.
+
+### Stage 1
+
+- Stage number: 1 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add searchable project discovery to the CSTD homepage project directory.
+- Start state:
+  - Previous round left CI annotation follow-up as a maintenance item.
+  - The project directory already had category filters, goal guide, and focus panels, but no keyword search.
+  - Visitors still had to scan cards when remembering terms like `CRM`, `南京`, `估值`, or `RBAC`.
+- Implemented:
+  - Extended `filterCstdProjects` with query search across title, kicker, description, tags, metrics, and evidence.
+  - Added project search input, clear control, and live summary integration to the CSTD project index.
+  - Added a resettable empty state when category + search has no matching project.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-filter.test.ts` failed because the helper ignored the query argument.
+  - TDD green: project filter tests passed 6 / 6; related mobile layout tests passed 8 / 8.
+  - `npm run lint` exited `0`.
+  - Local gates: `npm test` passed 28 files / 100 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser plugin smoke: `/cstd` loaded with the new search input and project cards visible; console errors `0`.
+  - Browser fallback reason: Browser plugin screenshot capture timed out on `Page.captureScreenshot`, so Playwright was used for interaction and responsive verification.
+  - Playwright desktop: searching `rbac` showed `当前显示 1 / 6 个项目` and `产业园区招商 CRM`; searching a missing keyword showed the no-result empty state and reset restored `当前显示 6 / 6 个项目`.
+  - Playwright mobile: 390px viewport search for `南京` showed `奶黄包摄影`, had no horizontal overflow, and console errors `0`.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no new TODO/FIXME/console/debugger or real secret matches in touched source/docs.
+- Status: commit, push, and remote verification pending
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

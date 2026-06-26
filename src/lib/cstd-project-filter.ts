@@ -8,6 +8,17 @@ export type CstdProjectFilterOption = {
 
 type CstdFilterableProject = {
   category: CstdProjectCategory;
+  description?: string;
+  evidence?: {
+    current: string;
+    outcome: string;
+    problem: string;
+    role: string;
+  };
+  kicker?: string;
+  metrics?: readonly (readonly [string, string])[];
+  tags?: readonly string[];
+  title?: string;
 };
 
 export const cstdProjectFilters: readonly CstdProjectFilterOption[] = [
@@ -22,15 +33,45 @@ export const cstdProjectFilters: readonly CstdProjectFilterOption[] = [
 export function filterCstdProjects<TProject extends CstdFilterableProject>(
   projects: readonly TProject[],
   filter: CstdProjectFilter,
+  query = "",
 ): readonly TProject[] {
-  if (filter === "all") return projects;
-  return projects.filter((project) => project.category === filter);
+  const normalizedQuery = normalizeProjectQuery(query);
+
+  return projects.filter((project) => {
+    if (filter !== "all" && project.category !== filter) return false;
+    if (!normalizedQuery) return true;
+    return getCstdProjectSearchText(project).includes(normalizedQuery);
+  });
 }
 
 export function getCstdProjectFilterSummary<TProject extends CstdFilterableProject>(
   projects: readonly TProject[],
   filter: CstdProjectFilter,
+  query = "",
 ): string {
-  const visibleCount = filterCstdProjects(projects, filter).length;
+  const visibleCount = filterCstdProjects(projects, filter, query).length;
+  if (visibleCount === 0 && normalizeProjectQuery(query)) return "没有匹配项目，可清空搜索或切换分类";
   return `当前显示 ${visibleCount} / ${projects.length} 个项目`;
+}
+
+function getCstdProjectSearchText(project: CstdFilterableProject) {
+  return normalizeProjectQuery(
+    [
+      project.title,
+      project.kicker,
+      project.description,
+      ...(project.tags ?? []),
+      ...(project.metrics ?? []).flatMap(([value, label]) => [value, label]),
+      project.evidence?.role,
+      project.evidence?.problem,
+      project.evidence?.outcome,
+      project.evidence?.current,
+    ]
+      .filter(Boolean)
+      .join(" "),
+  );
+}
+
+function normalizeProjectQuery(value: string) {
+  return value.toLocaleLowerCase("zh-Hans-CN").replace(/\s+/g, "");
 }
