@@ -34,7 +34,12 @@
   - Playwright desktop: searching `rbac` showed `当前显示 1 / 6 个项目` and `产业园区招商 CRM`; searching a missing keyword showed the no-result empty state and reset restored `当前显示 6 / 6 个项目`.
   - Playwright mobile: 390px viewport search for `南京` showed `奶黄包摄影`, had no horizontal overflow, and console errors `0`.
   - Diff check: `git diff --check` exited `0`; source hygiene found no new TODO/FIXME/console/debugger or real secret matches in touched source/docs.
-- Status: commit, push, and remote verification pending
+- Commit: `2187c2a feat: add homepage project search`
+- Push: `origin/main` updated to `2187c2a19acb6fa5bf0adbeabc8b9671d991453d`
+- Remote check:
+  - GitHub Actions CI run `28209172739` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
