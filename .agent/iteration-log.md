@@ -1,5 +1,23 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 3 Stage 4 / 6 — IMPROVE
+
+### Scope
+
+- Added a copyable `项目组合摘要` to the `/cstd` evidence overview.
+- The summary packages live project count, complete evidence count, each live project's current status, delivery evidence, and external link.
+- Added success feedback and unsupported/failure fallback text area for manual copying.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `cstd-project-portfolio-brief` did not exist, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 31 files / 109 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile copy flows after setting intro as seen; clipboard content was correct, no horizontal overflow, and console errors were `0`.
+- 13 key routes returned HTTP `200`.
+- Full `npm audit --json` reported 0 vulnerabilities.
+
 ## 2026-06-26 — Long Homepage Round 3 Stage 3 / 6 — UIUX
 
 ### Scope

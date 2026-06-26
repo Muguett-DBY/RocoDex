@@ -22,6 +22,7 @@ import {
 } from "@/lib/cstd-project-focus";
 import { cstdProjects, type CstdProjectIconKey } from "@/lib/cstd-projects";
 import { getCstdProjectEvidenceOverview } from "@/lib/cstd-project-evidence-overview";
+import { buildCstdProjectPortfolioBrief } from "@/lib/cstd-project-portfolio-brief";
 import {
   CSTD_INTRO_SEEN_KEY,
   CSTD_MOTION_PREFERENCE_KEY,
@@ -112,6 +113,7 @@ export function CstdLanding() {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [projectCopyResult, setProjectCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [projectBriefCopyResult, setProjectBriefCopyResult] = useState<CstdProjectCopyResult | null>(null);
+  const [portfolioCopyResult, setPortfolioCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
   const prefersReducedMotion = reducedMotion ?? true;
@@ -294,6 +296,14 @@ export function CstdLanding() {
       buildCstdProjectBrief(selectedProject),
     );
     setProjectBriefCopyResult(result);
+  }
+
+  async function copyPortfolioBrief() {
+    const result = await copyCstdProjectLink(
+      navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
+      buildCstdProjectPortfolioBrief(cstdProjects),
+    );
+    setPortfolioCopyResult(result);
   }
 
   return (
@@ -514,6 +524,34 @@ export function CstdLanding() {
                 ))}
               </div>
             </div>
+            <div className="mt-4 flex flex-col gap-2 rounded-lg border border-[#ead6ad] bg-white/72 p-3 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm font-semibold leading-6 text-[#6f5b4a]">把已上线项目、当前状态、交付证据和链接复制成一段组合摘要。</p>
+              <button
+                type="button"
+                onClick={copyPortfolioBrief}
+                className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+              >
+                {portfolioCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                复制项目组合摘要
+              </button>
+            </div>
+            {portfolioCopyResult ? (
+              <p role="status" className="mt-2 text-xs font-semibold leading-5 text-[#6f5b4a]">
+                {{
+                  copied: "项目组合摘要已复制",
+                  unsupported: "浏览器不支持自动复制，请手动复制摘要",
+                  failed: "组合摘要复制失败，请手动复制",
+                }[portfolioCopyResult]}
+              </p>
+            ) : null}
+            {portfolioCopyResult && portfolioCopyResult !== "copied" ? (
+              <textarea
+                aria-label="项目组合摘要文本"
+                readOnly
+                value={buildCstdProjectPortfolioBrief(cstdProjects)}
+                className="mt-3 min-h-44 w-full resize-y rounded-lg border border-[#ead6ad] bg-[#fffaf0] p-3 text-xs font-semibold leading-5 text-[#4f3d31] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+              />
+            ) : null}
           </div>
 
           <div className="mb-5 rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[6px_6px_0_rgba(47,36,29,.05)] backdrop-blur-sm sm:p-4">

@@ -100,6 +100,29 @@
 - Status: closed
 - Next stage: Stage 4 / 6 `IMPROVE`
 
+### Stage 4
+
+- Stage number: 4 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a copyable portfolio brief to the CSTD homepage evidence overview.
+- Start state:
+  - Stages 1-3 made project evidence visible and easier to scan.
+  - The evidence overview was still view-only.
+  - Sharing the whole project portfolio required manually collecting live project status, evidence, and links.
+- Plan: `docs/superpowers/plans/2026-06-26-cstd-portfolio-brief-copy.md`
+- Implemented:
+  - Added `buildCstdProjectPortfolioBrief` for a shareable live-project portfolio summary.
+  - Added `复制项目组合摘要` to the evidence overview with success feedback and unsupported/failure textarea fallback.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-portfolio-brief.test.ts` failed because `cstd-project-portfolio-brief` did not exist.
+  - TDD green: focused portfolio brief test passed 1 / 1.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 31 files / 109 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: first pass found the intro overlay intercepting direct clicks; after setting `cstd.introSeen`, local Chrome copied the portfolio brief on 1366px and 390px viewports, status was visible, clipboard contained portfolio and CRM evidence, horizontal overflow was `false`, and console errors were `0`.
+  - HTTP route smoke: 13 key routes returned `200`; `npm audit --json` reported 0 vulnerabilities.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
+- Status: ready to commit
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`
