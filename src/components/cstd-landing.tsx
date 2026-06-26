@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Building2, Camera, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
+import { cstdHomepageUpdates, getCstdHomepageUpdateSummary } from "@/lib/cstd-homepage-updates";
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
@@ -75,6 +76,8 @@ const noteItems = [
   ["347", "只精灵资料"],
   ["Mix", "技术 / 设计 / 研究"],
 ] as const;
+
+const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
 
 const CstdCustardStage = dynamic(
   () => import("@/components/cstd-custard-stage").then((module) => module.CstdCustardStage),
@@ -411,6 +414,27 @@ export function CstdLanding() {
                   <span className="mt-1 block text-[0.68rem] font-medium text-[#7b6656] sm:text-xs">{label}</span>
                 </div>
               ))}
+            </motion.div>
+
+            <motion.div
+              className="mt-4 max-w-2xl rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[5px_5px_0_rgba(47,36,29,.05)] sm:mt-5 sm:p-4"
+              initial={motionDisabled ? false : { opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.58, duration: 0.5 }}
+              aria-label={homepageUpdateSummary}
+            >
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">Latest updates</p>
+                <p className="text-xs font-bold text-[#7b6656]">{homepageUpdateSummary}</p>
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {cstdHomepageUpdates.map((update) => (
+                  <div key={update.label} className="min-w-0 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/84 p-2.5">
+                    <p className="text-sm font-black text-[#2f241d]">{update.label}</p>
+                    <p className="mt-1 text-xs font-semibold leading-5 text-[#6f5b4a]">{update.detail}</p>
+                  </div>
+                ))}
+              </div>
             </motion.div>
           </motion.div>
 
