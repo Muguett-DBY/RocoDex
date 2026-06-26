@@ -62,7 +62,13 @@
   - HTTP route smoke: 13 key routes returned `200`; `npm audit --json` reported 0 vulnerabilities.
   - Browser verification: local Chrome via Playwright loaded `/cstd?project=crm#project-focus` on 1366px and 390px viewports; `证据清单` and `业务建模、权限设计与全栈交付` were visible; horizontal overflow was `false`; console errors were `0`.
   - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
-- Status: ready to commit
+- Commit: `d95320c feat: add project evidence checklist`
+- Push: `origin/main` updated to `d95320c`
+- Remote check:
+  - GitHub Actions CI run `28221433932` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 3 / 6 `UIUX`
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 

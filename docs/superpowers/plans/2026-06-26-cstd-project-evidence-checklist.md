@@ -8,4 +8,4 @@ Checklist:
 - [x] Implement checklist generation from the focused project's evidence fields.
 - [x] Render the checklist in the focus panel so visitors can verify what proof exists before opening a project.
 - [x] Run focused tests, lint, full tests, build, browser/HTTP smoke, diff, and hygiene checks.
-- [ ] Commit, push `main`, and verify GitHub Actions plus Vercel.
+- [x] Commit, push `main`, and verify GitHub Actions plus Vercel.
