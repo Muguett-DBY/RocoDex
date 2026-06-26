@@ -8,4 +8,4 @@ Checklist:
 - [x] Implement the evidence overview helper from the canonical project list.
 - [x] Render the overview above the project index so visitors can scan delivery strength before filtering.
 - [x] Run focused tests, lint, full tests, build, HTTP smoke, diff, and hygiene checks.
-- [ ] Commit, push `main`, and verify GitHub Actions plus Vercel.
+- [x] Commit, push `main`, and verify GitHub Actions plus Vercel.
