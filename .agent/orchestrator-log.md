@@ -101,6 +101,31 @@
   - Commit status `Vercel` completed successfully with description `Deployment has completed`.
 - Status: closed
 
+### Stage 4
+
+- Stage number: 4 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a copyable evidence-based project brief to the CSTD project focus panel.
+- Start state:
+  - Stage 2 made project focus links navigable and Stage 3 clarified directory controls.
+  - The focus panel could copy a URL, but not the project evidence itself.
+  - Sharing a project outside the page still required manually rewriting role, problem, outcome, and link.
+- Design: `docs/superpowers/specs/2026-06-26-cstd-project-brief-copy-design.md`
+- Plan: `docs/superpowers/plans/2026-06-26-cstd-project-brief-copy.md`
+- Implemented:
+  - Added `buildCstdProjectBrief` to generate a plain-text evidence brief with title, current state, role, problem, outcome, and link.
+  - Added independent brief-copy state and `复制案例摘要` action to the project focus panel.
+  - Added a read-only summary fallback when clipboard writes are unsupported or fail.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-focus.test.ts` failed because `buildCstdProjectBrief` did not exist.
+  - TDD green: focused project focus and filter tests passed 12 / 12.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 28 files / 103 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser desktop: `/cstd?project=crm#project-focus` exposed `复制案例摘要`; clicking it showed `案例摘要已复制`; clipboard text contained title, role, problem, outcome, and `https://cfzzs.custard.top`; no horizontal overflow; console errors `0`.
+  - Browser mobile: 390px viewport showed the CRM focus panel and brief-copy button; no horizontal overflow; console errors `0`.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched files.
+- Status: commit, push, and remote verification pending
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

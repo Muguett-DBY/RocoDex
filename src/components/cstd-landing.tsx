@@ -9,6 +9,7 @@ import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } fro
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
 import {
+  buildCstdProjectBrief,
   buildCstdProjectDirectoryHref,
   buildCstdProjectFocusHref,
   copyCstdProjectLink,
@@ -100,6 +101,7 @@ export function CstdLanding() {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [projectCopyResult, setProjectCopyResult] = useState<CstdProjectCopyResult | null>(null);
+  const [projectBriefCopyResult, setProjectBriefCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
   const prefersReducedMotion = reducedMotion ?? true;
@@ -249,6 +251,7 @@ export function CstdLanding() {
     const href = buildCstdProjectFocusHref(projectId, window.location.pathname);
     window.history.replaceState(null, "", href);
     setProjectCopyResult(null);
+    setProjectBriefCopyResult(null);
     setSelectedProjectId(projectId);
   }
 
@@ -256,6 +259,7 @@ export function CstdLanding() {
     window.history.replaceState(null, "", buildCstdProjectDirectoryHref(window.location.pathname));
     setSelectedProjectId(null);
     setProjectCopyResult(null);
+    setProjectBriefCopyResult(null);
   }
 
   function resetProjectControls() {
@@ -271,6 +275,15 @@ export function CstdLanding() {
       `${window.location.origin}${href}`,
     );
     setProjectCopyResult(result);
+  }
+
+  async function copyProjectBrief() {
+    if (!selectedProject) return;
+    const result = await copyCstdProjectLink(
+      navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
+      buildCstdProjectBrief(selectedProject),
+    );
+    setProjectBriefCopyResult(result);
   }
 
   return (
@@ -528,11 +541,13 @@ export function CstdLanding() {
               <ProjectFocus
                 key={selectedProject.id}
                 project={selectedProject}
+                briefCopyResult={projectBriefCopyResult}
                 copyResult={projectCopyResult}
                 focusRef={projectFocusRef}
                 motionDisabled={motionDisabled}
                 navigation={selectedProjectNavigation}
                 onClose={closeProjectFocus}
+                onCopyBrief={copyProjectBrief}
                 onCopy={copyProjectFocusLink}
                 onNavigate={focusProject}
               />
@@ -1080,15 +1095,18 @@ function ProjectCard({
 
 function ProjectFocus({
   project,
+  briefCopyResult,
   copyResult,
   focusRef,
   motionDisabled,
   navigation,
   onClose,
+  onCopyBrief,
   onCopy,
   onNavigate,
 }: {
   project: (typeof cstdProjects)[number];
+  briefCopyResult: CstdProjectCopyResult | null;
   copyResult: CstdProjectCopyResult | null;
   focusRef: RefObject<HTMLElement | null>;
   motionDisabled: boolean;
@@ -1097,6 +1115,7 @@ function ProjectFocus({
     next: (typeof cstdProjects)[number] | null;
   };
   onClose: () => void;
+  onCopyBrief: () => void;
   onCopy: () => void;
   onNavigate: (projectId: string) => void;
 }) {
@@ -1106,6 +1125,12 @@ function ProjectFocus({
     unsupported: "浏览器不支持自动复制，请复制当前地址",
     failed: "复制失败，请手动复制当前地址",
   }[copyResult ?? "copied"];
+  const briefCopyMessage = {
+    copied: "案例摘要已复制",
+    unsupported: "浏览器不支持自动复制，请手动复制摘要",
+    failed: "摘要复制失败，请手动复制",
+  }[briefCopyResult ?? "copied"];
+  const projectBriefText = buildCstdProjectBrief(project);
 
   return (
     <motion.section
@@ -1169,6 +1194,27 @@ function ProjectFocus({
             <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
               {copyMessage}
             </p>
+          ) : null}
+          <button
+            type="button"
+            onClick={onCopyBrief}
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#ead6ad] bg-white px-4 text-sm font-black text-[#2f241d] transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-[#fff7df] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+          >
+            {briefCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            复制案例摘要
+          </button>
+          {briefCopyResult ? (
+            <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
+              {briefCopyMessage}
+            </p>
+          ) : null}
+          {briefCopyResult && briefCopyResult !== "copied" ? (
+            <textarea
+              aria-label="案例摘要文本"
+              readOnly
+              value={projectBriefText}
+              className="min-h-36 resize-y rounded-lg border border-[#ead6ad] bg-[#fffaf0] p-3 text-xs font-semibold leading-5 text-[#4f3d31] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+            />
           ) : null}
         </div>
       </div>

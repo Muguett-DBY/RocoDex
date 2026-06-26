@@ -6,6 +6,17 @@ type CstdProjectNavigationItem = {
   title: string;
 };
 
+type CstdProjectBriefSource = {
+  title: string;
+  href: string;
+  evidence: {
+    current: string;
+    outcome: string;
+    problem: string;
+    role: string;
+  };
+};
+
 export function parseCstdProjectFocus(search: string) {
   const projectId = new URLSearchParams(search).get("project");
   if (!projectId) return null;
@@ -32,6 +43,17 @@ export function getCstdProjectFocusNavigation<TProject extends CstdProjectNaviga
     previous: projects[currentIndex - 1] ?? null,
     next: projects[currentIndex + 1] ?? null,
   };
+}
+
+export function buildCstdProjectBrief(project: CstdProjectBriefSource) {
+  return [
+    project.title,
+    `当前：${project.evidence.current}`,
+    `负责：${project.evidence.role}`,
+    `解决问题：${project.evidence.problem}`,
+    `已交付：${project.evidence.outcome}`,
+    `链接：${project.href}`,
+  ].join("\n");
 }
 
 export async function copyCstdProjectLink(

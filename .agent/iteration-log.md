@@ -1,5 +1,22 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 2 Stage 4 / 6 — IMPROVE
+
+### Scope
+
+- Added a copyable plain-text project brief to the `/cstd` focus panel.
+- The brief includes title, current state, role, problem, delivered outcome, and project link.
+- Added separate brief-copy feedback and a read-only fallback when browser clipboard access fails.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `buildCstdProjectBrief` did not exist, then passed after implementation.
+- Focused project focus and filter tests passed 12 / 12.
+- `npm run lint` exited `0`.
+- `npm test` passed 28 files / 103 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered CRM focus brief copy, clipboard content, 390px mobile overflow, and console errors `0`.
+
 ## 2026-06-26 — Long Homepage Round 2 Stage 3 / 6 — UIUX
 
 ### Scope
