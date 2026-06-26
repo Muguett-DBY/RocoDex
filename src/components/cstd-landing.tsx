@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } 
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Building2, Camera, Check, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
+import { Bot, Building2, Camera, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
@@ -12,6 +12,7 @@ import {
   buildCstdProjectDirectoryHref,
   buildCstdProjectFocusHref,
   copyCstdProjectLink,
+  getCstdProjectFocusNavigation,
   parseCstdProjectFocus,
   type CstdProjectCopyResult,
 } from "@/lib/cstd-project-focus";
@@ -172,6 +173,10 @@ export function CstdLanding() {
   const selectedProject = useMemo(
     () => cstdProjects.find((project) => project.id === selectedProjectId) ?? null,
     [selectedProjectId],
+  );
+  const selectedProjectNavigation = useMemo(
+    () => (selectedProject ? getCstdProjectFocusNavigation(cstdProjects, selectedProject.id) : { previous: null, next: null }),
+    [selectedProject],
   );
   const mobileNavigationToggle = getCstdMobileNavigationToggleState(mobileNavOpen);
 
@@ -498,8 +503,10 @@ export function CstdLanding() {
                 copyResult={projectCopyResult}
                 focusRef={projectFocusRef}
                 motionDisabled={motionDisabled}
+                navigation={selectedProjectNavigation}
                 onClose={closeProjectFocus}
                 onCopy={copyProjectFocusLink}
+                onNavigate={focusProject}
               />
             ) : null}
           </AnimatePresence>
@@ -1051,15 +1058,22 @@ function ProjectFocus({
   copyResult,
   focusRef,
   motionDisabled,
+  navigation,
   onClose,
   onCopy,
+  onNavigate,
 }: {
   project: (typeof cstdProjects)[number];
   copyResult: CstdProjectCopyResult | null;
   focusRef: RefObject<HTMLElement | null>;
   motionDisabled: boolean;
+  navigation: {
+    previous: (typeof cstdProjects)[number] | null;
+    next: (typeof cstdProjects)[number] | null;
+  };
   onClose: () => void;
   onCopy: () => void;
+  onNavigate: (projectId: string) => void;
 }) {
   const Icon = projectIcons[project.icon];
   const copyMessage = {
@@ -1110,6 +1124,10 @@ function ProjectFocus({
         </dl>
         <div className="flex flex-col gap-3 rounded-xl border border-[#ead6ad] bg-white/75 p-4">
           <p className="text-sm font-black text-[#2f241d]">继续查看</p>
+          <div className="grid gap-2">
+            <ProjectFocusNavigationButton direction="previous" project={navigation.previous} onNavigate={onNavigate} />
+            <ProjectFocusNavigationButton direction="next" project={navigation.next} onNavigate={onNavigate} />
+          </div>
           <HeroButton href={project.href}>
             <ExternalLink className="mr-2 h-4 w-4" />
             {project.action}
@@ -1130,6 +1148,43 @@ function ProjectFocus({
         </div>
       </div>
     </motion.section>
+  );
+}
+
+function ProjectFocusNavigationButton({
+  direction,
+  project,
+  onNavigate,
+}: {
+  direction: "previous" | "next";
+  project: (typeof cstdProjects)[number] | null;
+  onNavigate: (projectId: string) => void;
+}) {
+  if (!project) {
+    return (
+      <div className="flex min-h-12 items-center gap-2 rounded-lg border border-dashed border-[#ead6ad] bg-[#fffaf0]/70 px-3 text-xs font-black text-[#9a8776]">
+        {direction === "previous" ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+        <span>{direction === "previous" ? "已经是第一个项目" : "已经是最后一个项目"}</span>
+      </div>
+    );
+  }
+
+  return (
+    <button
+      type="button"
+      aria-label={`${direction === "previous" ? "查看上一个项目" : "查看下一个项目"}：${project.title}`}
+      onClick={() => onNavigate(project.id)}
+      className="group flex min-h-12 items-center gap-2 rounded-lg border border-[#ead6ad] bg-white px-3 text-left transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-[#fff7df] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+    >
+      {direction === "previous" ? <ChevronLeft className="h-4 w-4 shrink-0 text-[#d98528]" /> : null}
+      <span className="min-w-0 flex-1">
+        <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#9a5a18]">
+          {direction === "previous" ? "上一个项目" : "下一个项目"}
+        </span>
+        <span className="mt-0.5 block truncate text-sm font-black text-[#2f241d]">{project.title}</span>
+      </span>
+      {direction === "next" ? <ChevronRight className="h-4 w-4 shrink-0 text-[#d98528]" /> : null}
+    </button>
   );
 }
 

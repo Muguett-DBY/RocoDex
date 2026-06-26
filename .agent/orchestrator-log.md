@@ -41,6 +41,31 @@
   - Commit status `Vercel` completed successfully with description `Deployment has completed`.
 - Status: closed
 
+### Stage 2
+
+- Stage number: 2 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add adjacent project navigation to the CSTD project focus panel.
+- Start state:
+  - Stage 1 made project discovery searchable.
+  - The focused case-study panel still behaved as a single-project dead end.
+  - Visitors opening a deep link had to close the panel and rescan the directory to compare adjacent projects.
+- Design: `docs/superpowers/specs/2026-06-26-cstd-project-focus-navigation-design.md`
+- Plan: `docs/superpowers/plans/2026-06-26-cstd-project-focus-navigation.md`
+- Implemented:
+  - Added `getCstdProjectFocusNavigation` to derive nullable previous/next project summaries from the canonical project order.
+  - Added previous/next controls to the project focus panel, including edge-state text for the first and last projects.
+  - Reused the existing focus handler so adjacent navigation updates `?project=...#project-focus` and clears stale copy feedback.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-focus.test.ts` failed because `getCstdProjectFocusNavigation` did not exist.
+  - TDD green: focused project focus and filter tests passed 10 / 10.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 28 files / 101 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser desktop: `/cstd?project=design#project-focus` exposed `CSTD Alpha` as previous and `产业园区招商 CRM` as next; clicking next updated the URL to `?project=crm#project-focus`, clicking previous returned to `?project=design#project-focus`, and console errors were `0`.
+  - Browser mobile: 390px viewport showed the same adjacent controls, no horizontal overflow, and console errors `0`.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched files.
+- Status: commit, push, and remote verification pending
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

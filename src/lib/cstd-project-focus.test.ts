@@ -3,6 +3,7 @@ import {
   buildCstdProjectDirectoryHref,
   buildCstdProjectFocusHref,
   copyCstdProjectLink,
+  getCstdProjectFocusNavigation,
   parseCstdProjectFocus,
 } from "./cstd-project-focus";
 
@@ -26,5 +27,30 @@ describe("CSTD project focus", () => {
     expect(writeText).toHaveBeenCalledWith("https://custard.top/?project=crm#project-focus");
     await expect(copyCstdProjectLink(undefined, "https://custard.top/")).resolves.toBe("unsupported");
     await expect(copyCstdProjectLink(vi.fn().mockRejectedValue(new Error("denied")), "https://custard.top/")).resolves.toBe("failed");
+  });
+
+  test("returns adjacent focus navigation without wrapping the project list", () => {
+    const projects = [
+      { id: "rocodex", title: "RocoDex" },
+      { id: "photography", title: "Photo" },
+      { id: "crm", title: "CRM" },
+    ] as const;
+
+    expect(getCstdProjectFocusNavigation(projects, "rocodex")).toEqual({
+      previous: null,
+      next: { id: "photography", title: "Photo" },
+    });
+    expect(getCstdProjectFocusNavigation(projects, "photography")).toEqual({
+      previous: { id: "rocodex", title: "RocoDex" },
+      next: { id: "crm", title: "CRM" },
+    });
+    expect(getCstdProjectFocusNavigation(projects, "crm")).toEqual({
+      previous: { id: "photography", title: "Photo" },
+      next: null,
+    });
+    expect(getCstdProjectFocusNavigation(projects, "unknown")).toEqual({
+      previous: null,
+      next: null,
+    });
   });
 });

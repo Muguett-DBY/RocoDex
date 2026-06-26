@@ -1,5 +1,21 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 2 Stage 2 / 6 — IMPROVE
+
+### Scope
+
+- Added previous/next navigation inside the `/cstd` project focus panel.
+- Navigation follows the canonical project order, updates the focus URL, and preserves the existing close/copy/external actions.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `getCstdProjectFocusNavigation` did not exist, then passed after implementation.
+- Focused project focus and filter tests passed 10 / 10.
+- `npm run lint` exited `0`.
+- `npm test` passed 28 files / 101 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered `/cstd?project=design#project-focus`, next navigation to `crm`, previous navigation back to `design`, 390px mobile overflow, and console errors `0`.
+
 ## 2026-06-26 — Long Homepage Round 2 Stage 1 / 6 — IMPROVE
 
 ### Scope
