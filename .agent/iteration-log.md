@@ -1,5 +1,24 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 2 Stage 5 / 6 — CHECK
+
+### Scope
+
+- Audited GitHub Actions, local CI parity, dependency audit, HTTP smoke, and browser smoke options.
+- Upgraded CI action pins to `actions/checkout@v7` and `actions/setup-node@v6`.
+- Updated the workflow guard test and lockfile; full `npm audit` now reports 0 vulnerabilities.
+
+### Verification evidence
+
+- Latest 10 baseline GitHub Actions runs on `main` were already successful.
+- TDD failed while workflow action pins were still v4, then passed after upgrading the pins.
+- `npm ci` passed after stopping a local production server that locked Next's Windows SWC binary.
+- `npm run lint` exited `0`.
+- `npm test` passed 28 files / 103 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- HTTP smoke returned `200` for 13 key routes.
+- Browser smoke was blocked by browser tooling/runtime issues: Browser attach timeout, incomplete bundled Playwright package, and Chrome/Edge CDP startup failure.
+
 ## 2026-06-26 — Long Homepage Round 2 Stage 4 / 6 — IMPROVE
 
 ### Scope

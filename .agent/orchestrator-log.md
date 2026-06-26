@@ -131,6 +131,35 @@
   - Commit status `Vercel` completed successfully with description `Deployment has completed`.
 - Status: closed
 
+### Stage 5
+
+- Stage number: 5 / 6
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN.txt` and `AGENT_CI_FIX_MAIN.txt`
+- Goal: audit CI stability and remove the stale GitHub Actions action-version maintenance item.
+- Start state:
+  - Latest 10 GitHub Actions CI runs on `main` were successful.
+  - Latest baseline Vercel commit status for `5133ca2` was successful.
+  - Workflow still used `actions/checkout@v4` and `actions/setup-node@v4`.
+  - GitHub API reported latest releases `actions/checkout@v7.0.0` and `actions/setup-node@v6.4.0`.
+- Plan: `docs/superpowers/plans/2026-06-26-stage5-ci-stability-round2.md`
+- Report: `.agent/stage5-round2-ci-report.md`
+- Implemented:
+  - Upgraded `.github/workflows/ci.yml` from `actions/checkout@v4` to `actions/checkout@v7`.
+  - Upgraded `.github/workflows/ci.yml` from `actions/setup-node@v4` to `actions/setup-node@v6`.
+  - Strengthened `src/lib/github-ci-workflow.test.ts` to guard those current action major pins.
+  - Ran `npm audit fix` to remove the dev-only Vite advisory from the lockfile.
+- Verification recorded before commit:
+  - TDD red: workflow guard failed while action pins were still v4.
+  - TDD green: workflow guard passed after action pin upgrades.
+  - `npm ci` passed after stopping the local Next production server that had locked `next-swc.win32-x64-msvc.node`.
+  - `npm audit --omit=dev --json` and full `npm audit --json` both reported 0 vulnerabilities after the lockfile update.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 28 files / 103 tests; `npm run build` exited `0` and generated 735 static pages.
+  - HTTP smoke: 13 key routes returned `200`.
+  - Browser smoke: Browser plugin attach timed out; Playwright fallback was blocked by missing bundled `playwright-core`; Chrome/Edge CDP fallback exited before opening a debugging port. Recorded as tool/browser-runtime blocked, not an app failure.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched files.
+- Status: commit, push, and remote verification pending
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`
