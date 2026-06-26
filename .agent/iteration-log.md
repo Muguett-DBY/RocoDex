@@ -16,6 +16,8 @@
 - `npm test` passed 28 files / 102 tests.
 - `npm run build` exited `0` and generated 735 static pages.
 - Browser verification covered combined `创作影像` + `南京` state, reset to `浏览全部项目`, desktop/mobile overflow, and console errors `0`.
+- Commit `0f1e5c9` was pushed to `origin/main`.
+- GitHub Actions CI and Vercel deployment status both completed successfully.
 
 ## 2026-06-26 — Long Homepage Round 2 Stage 2 / 6 — IMPROVE
 

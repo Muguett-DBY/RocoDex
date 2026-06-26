@@ -94,7 +94,12 @@
   - Browser desktop: selecting `创作影像` and searching `南京` showed `筛选：创作影像 · 搜索：南京`; reset restored `浏览全部项目` and `当前显示 6 / 6 个项目`; no horizontal overflow; console errors `0`.
   - Browser mobile: 390px viewport showed the combined summary, reset action, and `奶黄包摄影`; no horizontal overflow; console errors `0`.
   - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched files.
-- Status: commit, push, and remote verification pending
+- Commit: `0f1e5c9 feat: clarify project directory controls`
+- Push: `origin/main` updated to `0f1e5c9`
+- Remote check:
+  - GitHub Actions CI for `0f1e5c9` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
