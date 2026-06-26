@@ -28,7 +28,13 @@
   - TDD green: focused proof timeline test passed 1 / 1.
   - Local gates: `npm run lint` exited `0`; `npm test` passed 32 files / 112 tests; `npm run build` exited `0` and generated 735 static pages.
   - Browser verification: local Chrome loaded `/cstd` on 1366px and 390px viewports; `Proof timeline`, the proof summary, and `产业园区招商 CRM` were visible, horizontal overflow was `false`, and console errors were `0`.
-- Status: ready for commit and remote CI check.
+- Commit: `859f568 feat: add project proof timeline`
+- Push: `origin/main` updated to `859f568`
+- Remote check:
+  - GitHub Actions CI run `28234623735` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 2 / 6 `IMPROVE`
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
