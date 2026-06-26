@@ -8,4 +8,4 @@ Checklist:
 - [x] Implement capability data for search, evidence, copy, deep links, and CI.
 - [x] Render the checklist in the hero latest-updates strip.
 - [x] Run focused tests, lint, full tests, build, browser smoke, diff, and hygiene checks.
-- [ ] Commit, push `main`, and verify GitHub Actions plus Vercel.
+- [x] Commit, push `main`, and verify GitHub Actions plus Vercel.

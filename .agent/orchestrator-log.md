@@ -181,7 +181,13 @@
   - Browser verification: local Chrome loaded `/cstd` on 1366px and 390px viewports; `Capability checklist` and `可深链` were visible, horizontal overflow was `false`, and console errors were `0`.
   - HTTP route smoke: 13 key routes returned `200`; `npm audit --json` reported 0 vulnerabilities.
   - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
-- Status: ready to commit
+- Commit: `8965b6d feat: add homepage capability checklist`
+- Push: `origin/main` updated to `8965b6d`
+- Remote check:
+  - GitHub Actions CI run `28234061879` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Final state: all 6 stages closed with local gates, browser/HTTP checks, pushes to `main`, GitHub Actions success, and Vercel success.
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 
