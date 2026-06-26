@@ -124,7 +124,12 @@
   - Browser desktop: `/cstd?project=crm#project-focus` exposed `复制案例摘要`; clicking it showed `案例摘要已复制`; clipboard text contained title, role, problem, outcome, and `https://cfzzs.custard.top`; no horizontal overflow; console errors `0`.
   - Browser mobile: 390px viewport showed the CRM focus panel and brief-copy button; no horizontal overflow; console errors `0`.
   - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched files.
-- Status: commit, push, and remote verification pending
+- Commit: `e4e6cfe feat: add project brief copy`
+- Push: `origin/main` updated to `e4e6cfe`
+- Remote check:
+  - GitHub Actions CI for `e4e6cfe` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
