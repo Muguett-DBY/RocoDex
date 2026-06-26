@@ -5,6 +5,7 @@ import {
   buildCstdProjectFocusHref,
   copyCstdProjectLink,
   getCstdProjectEvidenceChecklist,
+  getCstdProjectEvidenceChecklistSummary,
   getCstdProjectFocusNavigation,
   parseCstdProjectFocus,
 } from "./cstd-project-focus";
@@ -89,5 +90,16 @@ describe("CSTD project focus", () => {
       { label: "交付", value: "交付覆盖线索全周期和角色权限的运营系统。", complete: true },
       { label: "现状", value: "生产环境持续验证与迭代", complete: true },
     ]);
+  });
+
+  test("summarizes checklist completeness for the focus panel header", () => {
+    expect(
+      getCstdProjectEvidenceChecklistSummary([
+        { label: "角色", value: "产品", complete: true },
+        { label: "问题", value: "资料分散", complete: true },
+        { label: "交付", value: "上线", complete: true },
+        { label: "现状", value: "维护中", complete: true },
+      ]),
+    ).toBe("4 / 4 项证据完整");
   });
 });

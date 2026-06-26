@@ -10,8 +10,11 @@ import {
   cstdMobileNavClassName,
   cstdNavLinkClassName,
   cstdPageShellClassName,
-  cstdProjectGridClassName,
   cstdProjectEvidenceClassName,
+  cstdProjectFocusActionRailClassName,
+  cstdProjectFocusBodyClassName,
+  cstdProjectFocusChecklistGridClassName,
+  cstdProjectGridClassName,
   cstdProjectMetricGridClassName,
   cstdProjectMetricLabelClassName,
   cstdProjectMetricTileClassName,
@@ -92,5 +95,14 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectEvidenceClassName).toContain("grid");
     expect(cstdProjectEvidenceClassName).toContain("text-sm");
     expect(cstdProjectEvidenceClassName).not.toContain("grid-cols-3");
+  });
+
+  test("keeps the focused case study scan-first on mobile and action-stable on desktop", () => {
+    expect(cstdProjectFocusBodyClassName).toContain("grid");
+    expect(cstdProjectFocusBodyClassName).toContain("lg:grid-cols-[minmax(0,1fr)_20rem]");
+    expect(cstdProjectFocusChecklistGridClassName).toContain("grid-cols-1");
+    expect(cstdProjectFocusChecklistGridClassName).toContain("md:grid-cols-2");
+    expect(cstdProjectFocusActionRailClassName).toContain("lg:sticky");
+    expect(cstdProjectFocusActionRailClassName).toContain("lg:top-24");
   });
 });

@@ -15,6 +15,7 @@ import {
   buildCstdProjectFocusHref,
   copyCstdProjectLink,
   getCstdProjectEvidenceChecklist,
+  getCstdProjectEvidenceChecklistSummary,
   getCstdProjectFocusNavigation,
   parseCstdProjectFocus,
   type CstdProjectCopyResult,
@@ -49,6 +50,9 @@ import {
   cstdNavLinkClassName,
   cstdPageShellClassName,
   cstdProjectEvidenceClassName,
+  cstdProjectFocusActionRailClassName,
+  cstdProjectFocusBodyClassName,
+  cstdProjectFocusChecklistGridClassName,
   cstdProjectGridClassName,
   cstdProjectMetricGridClassName,
   cstdProjectMetricLabelClassName,
@@ -1176,6 +1180,7 @@ function ProjectFocus({
   }[briefCopyResult ?? "copied"];
   const projectBriefText = buildCstdProjectBrief(project);
   const evidenceChecklist = getCstdProjectEvidenceChecklist(project);
+  const evidenceChecklistSummary = getCstdProjectEvidenceChecklistSummary(evidenceChecklist);
 
   return (
     <motion.section
@@ -1211,7 +1216,7 @@ function ProjectFocus({
         </button>
       </div>
 
-      <div className="grid gap-5 p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
+      <div className={cstdProjectFocusBodyClassName}>
         <div className="grid gap-5">
           <dl className="grid gap-4">
             <ProjectEvidence label="负责" value={project.evidence.role} />
@@ -1219,8 +1224,11 @@ function ProjectFocus({
             <ProjectEvidence label="已交付" value={project.evidence.outcome} />
           </dl>
           <div className="rounded-xl border border-[#ead6ad] bg-white/72 p-4">
-            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">证据清单</p>
-            <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">证据清单</p>
+              <p className="text-xs font-black text-[#0f8f64]">{evidenceChecklistSummary}</p>
+            </div>
+            <ul className={cstdProjectFocusChecklistGridClassName}>
               {evidenceChecklist.map((item) => (
                 <li key={item.label} className="flex min-w-0 items-start gap-2 rounded-lg bg-[#fffaf0] p-3">
                   <span className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full ${item.complete ? "bg-[#dff8ed] text-[#047857]" : "bg-[#ffe7ec] text-[#be4563]"}`}>
@@ -1235,7 +1243,7 @@ function ProjectFocus({
             </ul>
           </div>
         </div>
-        <div className="flex flex-col gap-3 rounded-xl border border-[#ead6ad] bg-white/75 p-4">
+        <div className={cstdProjectFocusActionRailClassName}>
           <p className="text-sm font-black text-[#2f241d]">继续查看</p>
           <div className="grid gap-2">
             <ProjectFocusNavigationButton direction="previous" project={navigation.previous} onNavigate={onNavigate} />
