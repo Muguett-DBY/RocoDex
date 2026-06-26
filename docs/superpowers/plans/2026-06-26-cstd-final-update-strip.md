@@ -10,4 +10,4 @@
 - [x] Implement homepage update data helper.
 - [x] Render the strip in the CSTD hero.
 - [x] Run focused tests, lint, full tests, build, HTTP smoke, and final checks.
-- [ ] Commit, push, and verify GitHub Actions plus Vercel.
+- [x] Commit, push, and verify GitHub Actions plus Vercel.

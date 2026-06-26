@@ -188,7 +188,12 @@
   - Full `npm audit --json` reported 0 vulnerabilities.
   - Browser note: browser runtimes remained unavailable from Stage 5 tooling checks, so final UI presence was verified by production-rendered HTTP content.
   - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched files.
-- Status: commit, push, and remote verification pending
+- Commit: `0c0079b feat: add homepage update summary`
+- Push: `origin/main` updated to `0c0079b`
+- Remote check:
+  - GitHub Actions CI for `0c0079b` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
