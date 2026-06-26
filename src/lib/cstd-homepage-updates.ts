@@ -8,6 +8,11 @@ export type CstdHomepageCapability = {
   detail: string;
 };
 
+export type CstdHomepageAcceptanceItem = {
+  label: string;
+  detail: string;
+};
+
 export const cstdHomepageUpdates: readonly CstdHomepageUpdate[] = [
   { label: "项目搜索", detail: "按关键词、标签和问题快速定位项目" },
   { label: "案例导航", detail: "焦点面板支持上一个 / 下一个项目" },
@@ -23,10 +28,21 @@ export const cstdHomepageCapabilities: readonly CstdHomepageCapability[] = [
   { label: "可部署", detail: "本地验证、Actions 和 Vercel 持续闭环" },
 ] as const;
 
+export const cstdHomepageAcceptance: readonly CstdHomepageAcceptanceItem[] = [
+  { label: "能力索引", detail: "按产品工程、AI 创作研究和运营系统理解项目组合" },
+  { label: "证据时间线", detail: "线上项目都有当前状态与交付证据" },
+  { label: "深链目录", detail: "每个 live 项目案例都能一键复制分享" },
+  { label: "本地 CI", detail: "Windows clean install 可先清理当前仓库 Next 进程" },
+] as const;
+
 export function getCstdHomepageUpdateSummary(updates: readonly CstdHomepageUpdate[]) {
   return `最近优化 ${updates.length} 项：${updates.map((update) => update.label).join("、")}`;
 }
 
 export function getCstdHomepageCapabilitySummary(capabilities: readonly CstdHomepageCapability[]) {
   return `主页能力 ${capabilities.length} 项：${capabilities.map((capability) => capability.label).join("、")}`;
+}
+
+export function getCstdHomepageAcceptanceSummary(items: readonly CstdHomepageAcceptanceItem[]) {
+  return `本轮验收 ${items.length} 项：${items.map((item) => item.label).join("、")}`;
 }

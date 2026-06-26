@@ -1,5 +1,12 @@
 import { describe, expect, test } from "vitest";
-import { cstdHomepageCapabilities, cstdHomepageUpdates, getCstdHomepageCapabilitySummary, getCstdHomepageUpdateSummary } from "./cstd-homepage-updates";
+import {
+  cstdHomepageAcceptance,
+  cstdHomepageCapabilities,
+  cstdHomepageUpdates,
+  getCstdHomepageAcceptanceSummary,
+  getCstdHomepageCapabilitySummary,
+  getCstdHomepageUpdateSummary,
+} from "./cstd-homepage-updates";
 
 describe("CSTD homepage updates", () => {
   test("summarizes the latest homepage improvements", () => {
@@ -10,5 +17,10 @@ describe("CSTD homepage updates", () => {
   test("summarizes the homepage capability checklist", () => {
     expect(cstdHomepageCapabilities.map((capability) => capability.label)).toEqual(["可搜索", "可验证", "可复制", "可深链", "可部署"]);
     expect(getCstdHomepageCapabilitySummary(cstdHomepageCapabilities)).toBe("主页能力 5 项：可搜索、可验证、可复制、可深链、可部署");
+  });
+
+  test("summarizes the current homepage acceptance state", () => {
+    expect(cstdHomepageAcceptance.map((item) => item.label)).toEqual(["能力索引", "证据时间线", "深链目录", "本地 CI"]);
+    expect(getCstdHomepageAcceptanceSummary(cstdHomepageAcceptance)).toBe("本轮验收 4 项：能力索引、证据时间线、深链目录、本地 CI");
   });
 });
