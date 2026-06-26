@@ -129,6 +129,31 @@
 - Status: closed
 - Next stage: Stage 5 / 6 `CHECK`
 
+### Stage 5
+
+- Stage number: 5 / 6
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN.txt`
+- Goal: run a systematic stability check and fix the project deep-link first-visit overlay issue.
+- Start state:
+  - Latest 10 GitHub Actions CI runs on `main` were successful.
+  - Full `npm audit --json` reported 0 vulnerabilities.
+  - Workflow uses `npm ci`, `npm run lint`, `npm test`, and `npm run build` on Node 22.
+  - Browser verification found direct project/portfolio interactions can be blocked by the automatic intro overlay on first visit.
+- Plan: `docs/superpowers/plans/2026-06-26-stage5-deeplink-check.md`
+- Implemented:
+  - Added a `hasProjectFocus` guard to skip automatic intro for direct project focus links.
+  - Passed parsed project focus state into the CSTD landing initialization path.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-motion.test.ts` failed because project deep links still played the automatic intro.
+  - TDD green: focused motion tests passed 6 / 6.
+  - CI parity: `npm ci` passed with 0 vulnerabilities; npm emitted allow-scripts review warnings for `sharp` and `unrs-resolver` but did not fail.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 31 files / 110 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome loaded `/cstd?project=crm#project-focus` on 1366px and 390px first-visit contexts; intro was not visible, the CRM focus panel was visible, horizontal overflow was `false`, and console errors were `0`.
+  - HTTP route smoke: 13 key routes returned `200`; `npm audit --json` reported 0 vulnerabilities.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
+- Status: ready to commit
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

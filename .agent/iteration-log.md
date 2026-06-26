@@ -1,5 +1,22 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 3 Stage 5 / 6 — CHECK
+
+### Scope
+
+- Ran CI/dependency/history checks: latest 10 GitHub Actions CI runs were successful and `npm audit` reported 0 vulnerabilities.
+- Fixed the first-visit project deep-link overlay issue by skipping automatic intro when a valid `?project=` focus link is present.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because project deep links still played the intro, then passed after implementation.
+- `npm ci` passed with 0 vulnerabilities; npm emitted allow-scripts review warnings for `sharp` and `unrs-resolver`.
+- `npm run lint` exited `0`.
+- `npm test` passed 31 files / 110 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile first-visit `/cstd?project=crm#project-focus`; intro was not visible, focus panel was visible, no horizontal overflow, and console errors were `0`.
+- 13 key routes returned HTTP `200`.
+
 ## 2026-06-26 — Long Homepage Round 3 Stage 4 / 6 — IMPROVE
 
 ### Scope
