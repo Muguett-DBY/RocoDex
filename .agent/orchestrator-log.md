@@ -64,7 +64,12 @@
   - Browser desktop: `/cstd?project=design#project-focus` exposed `CSTD Alpha` as previous and `产业园区招商 CRM` as next; clicking next updated the URL to `?project=crm#project-focus`, clicking previous returned to `?project=design#project-focus`, and console errors were `0`.
   - Browser mobile: 390px viewport showed the same adjacent controls, no horizontal overflow, and console errors `0`.
   - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched files.
-- Status: commit, push, and remote verification pending
+- Commit: `95b654c feat: add project focus navigation`
+- Push: `origin/main` updated to `95b654c032303c660caa0898ae33eaa1c000897d`
+- Remote check:
+  - GitHub Actions CI run `28210682871` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening
 
