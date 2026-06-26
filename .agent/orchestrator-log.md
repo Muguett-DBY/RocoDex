@@ -144,6 +144,25 @@
 - Status: closed
 - Next stage: Stage 6 / 6 `IMPROVE`
 
+### Stage 6
+
+- Stage number: 6 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a visible homepage acceptance summary that closes this six-stage loop.
+- Start state:
+  - Stages 1-5 added proof timeline, deep-link directory, share-center UI, capability index, and local CI cleanup.
+  - The hero did not yet summarize this round's completed acceptance state.
+- Implemented:
+  - Added `cstdHomepageAcceptance` and `getCstdHomepageAcceptanceSummary`.
+  - Rendered an `Acceptance status` block in the hero covering capability index, proof timeline, deep-link directory, and local CI.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-homepage-updates.test.ts` failed because `cstdHomepageAcceptance` was undefined.
+  - TDD green: focused homepage update tests passed 3 / 3.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 34 files / 117 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome covered 1366px and 390px `/cstd`; `Acceptance status`, all four acceptance labels, and the summary were visible, horizontal overflow was `false`, and console errors were `0`.
+- Status: ready for commit and remote CI check.
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

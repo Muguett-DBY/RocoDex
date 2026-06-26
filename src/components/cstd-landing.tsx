@@ -5,7 +5,14 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Building2, Camera, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
-import { cstdHomepageCapabilities, cstdHomepageUpdates, getCstdHomepageCapabilitySummary, getCstdHomepageUpdateSummary } from "@/lib/cstd-homepage-updates";
+import {
+  cstdHomepageAcceptance,
+  cstdHomepageCapabilities,
+  cstdHomepageUpdates,
+  getCstdHomepageAcceptanceSummary,
+  getCstdHomepageCapabilitySummary,
+  getCstdHomepageUpdateSummary,
+} from "@/lib/cstd-homepage-updates";
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
@@ -91,6 +98,7 @@ const noteItems = [
 
 const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
 const homepageCapabilitySummary = getCstdHomepageCapabilitySummary(cstdHomepageCapabilities);
+const homepageAcceptanceSummary = getCstdHomepageAcceptanceSummary(cstdHomepageAcceptance);
 const projectEvidenceOverview = getCstdProjectEvidenceOverview(cstdProjects);
 const projectProofTimeline = getCstdProjectProofTimeline(cstdProjects);
 const projectCapabilityIndex = getCstdProjectCapabilityIndex(cstdProjects);
@@ -480,6 +488,17 @@ export function CstdLanding() {
                       <Check className="h-3.5 w-3.5 text-[#0f8f64]" />
                       {capability.label}
                     </span>
+                  ))}
+                </div>
+              </div>
+              <div className="mt-3 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/78 p-3" aria-label={homepageAcceptanceSummary}>
+                <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#2563eb]">Acceptance status</p>
+                <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                  {cstdHomepageAcceptance.map((item) => (
+                    <div key={item.label} className="min-w-0 rounded-md bg-white/78 px-2.5 py-2">
+                      <p className="text-xs font-black text-[#1d4ed8]">{item.label}</p>
+                      <p className="mt-1 text-[0.68rem] font-semibold leading-4 text-[#315b7f]">{item.detail}</p>
+                    </div>
                   ))}
                 </div>
               </div>

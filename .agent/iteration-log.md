@@ -1,5 +1,20 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 4 Stage 6 / 6 — IMPROVE
+
+### Scope
+
+- Added an `Acceptance status` block to the `/cstd` hero.
+- The block summarizes this round's visible acceptance state: capability index, proof timeline, deep-link directory, and local CI.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `cstdHomepageAcceptance` was undefined, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 34 files / 117 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile `/cstd`; `Acceptance status` and all four acceptance labels were visible, no horizontal overflow, and console errors were `0`.
+
 ## 2026-06-26 — Long Homepage Round 4 Stage 5 / 6 — CHECK
 
 ### Scope
