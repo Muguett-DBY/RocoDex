@@ -87,6 +87,25 @@
 - Status: closed
 - Next stage: Stage 4 / 6 `IMPROVE`
 
+### Stage 4
+
+- Stage number: 4 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a portfolio capability index so visitors can understand the homepage by skill lanes before opening individual projects.
+- Start state:
+  - The homepage had project guides, proof, search, copy actions, and case deep links.
+  - It still lacked a concise personal-portfolio view explaining which capabilities the projects demonstrate.
+- Implemented:
+  - Added `getCstdProjectCapabilityIndex` for product engineering, AI creation/research, and operations system lanes.
+  - Rendered a `Capability index` / `按能力看项目` panel with lane descriptions and project focus buttons.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-capability-index.test.ts` failed because the module did not exist.
+  - TDD green: focused capability index test passed 1 / 1.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 33 files / 115 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome covered 1366px and 390px `/cstd`; the capability index and all three lanes were visible, CRM lane click opened `?project=crm#project-focus`, horizontal overflow was `false`, and console errors were `0`.
+- Status: ready for commit and remote CI check.
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

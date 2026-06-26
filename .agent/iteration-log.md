@@ -1,5 +1,20 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 4 Stage 4 / 6 — IMPROVE
+
+### Scope
+
+- Added a `Capability index` / `按能力看项目` panel to `/cstd`.
+- The panel groups live projects into product engineering, AI creation/research, and operations system lanes with direct case-study focus buttons.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `cstd-project-capability-index` did not exist, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 33 files / 115 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile `/cstd`; all three capability lanes were visible, CRM lane click opened the CRM focus URL, no horizontal overflow, and console errors were `0`.
+
 ## 2026-06-26 — Long Homepage Round 4 Stage 3 / 6 — UIUX
 
 ### Scope
