@@ -53,6 +53,7 @@ import {
   cstdNavLinkClassName,
   cstdPageShellClassName,
   cstdProjectEvidenceClassName,
+  cstdProjectEvidenceShareGridClassName,
   cstdProjectFocusActionRailClassName,
   cstdProjectFocusBodyClassName,
   cstdProjectFocusChecklistGridClassName,
@@ -61,6 +62,7 @@ import {
   cstdProjectMetricLabelClassName,
   cstdProjectMetricTileClassName,
   cstdProjectMetricValueClassName,
+  cstdProjectProofTimelineGridClassName,
 } from "@/lib/cstd-mobile-layout";
 
 type MascotMood = "curious" | "happy" | "working";
@@ -551,26 +553,54 @@ export function CstdLanding() {
                 ))}
               </div>
             </div>
-            <div className="mt-4 flex flex-col gap-2 rounded-lg border border-[#ead6ad] bg-white/72 p-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm font-semibold leading-6 text-[#6f5b4a]">把已上线项目、当前状态、交付证据和链接复制成一段组合摘要。</p>
-              <button
-                type="button"
-                onClick={copyPortfolioBrief}
-                className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
-              >
-                {portfolioCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                复制项目组合摘要
-              </button>
+            <div className={cstdProjectEvidenceShareGridClassName} aria-label="项目分享中心">
+              <div className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-[#ead6ad] bg-white/72 p-3">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">Portfolio brief</p>
+                  <p className="mt-2 text-sm font-semibold leading-6 text-[#6f5b4a]">把已上线项目、当前状态、交付证据和链接复制成一段组合摘要。</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={copyPortfolioBrief}
+                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                >
+                  {portfolioCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  复制项目组合摘要
+                </button>
+                {portfolioCopyResult ? (
+                  <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
+                    {{
+                      copied: "项目组合摘要已复制",
+                      unsupported: "浏览器不支持自动复制，请手动复制摘要",
+                      failed: "组合摘要复制失败，请手动复制",
+                    }[portfolioCopyResult]}
+                  </p>
+                ) : null}
+              </div>
+              <div className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/74 p-3">
+                <div>
+                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#2563eb]">Deep links</p>
+                  <p className="mt-2 text-sm font-semibold leading-6 text-[#315b7f]">需要发给别人看时，可以直接复制每个项目的案例深链。</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={copyProjectLinkDirectory}
+                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-4 text-sm font-black text-[#2563eb] transition hover:-translate-y-0.5 hover:bg-[#f2f8ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
+                >
+                  {projectLinkDirectoryCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  复制项目深链目录
+                </button>
+                {projectLinkDirectoryCopyResult ? (
+                  <p role="status" className="text-xs font-semibold leading-5 text-[#315b7f]">
+                    {{
+                      copied: "项目深链目录已复制",
+                      unsupported: "浏览器不支持自动复制，请手动复制项目深链目录",
+                      failed: "项目深链目录复制失败，请手动复制",
+                    }[projectLinkDirectoryCopyResult]}
+                  </p>
+                ) : null}
+              </div>
             </div>
-            {portfolioCopyResult ? (
-              <p role="status" className="mt-2 text-xs font-semibold leading-5 text-[#6f5b4a]">
-                {{
-                  copied: "项目组合摘要已复制",
-                  unsupported: "浏览器不支持自动复制，请手动复制摘要",
-                  failed: "组合摘要复制失败，请手动复制",
-                }[portfolioCopyResult]}
-              </p>
-            ) : null}
             {portfolioCopyResult && portfolioCopyResult !== "copied" ? (
               <textarea
                 aria-label="项目组合摘要文本"
@@ -578,26 +608,6 @@ export function CstdLanding() {
                 value={buildCstdProjectPortfolioBrief(cstdProjects)}
                 className="mt-3 min-h-44 w-full resize-y rounded-lg border border-[#ead6ad] bg-[#fffaf0] p-3 text-xs font-semibold leading-5 text-[#4f3d31] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
               />
-            ) : null}
-            <div className="mt-3 flex flex-col gap-2 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/74 p-3 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm font-semibold leading-6 text-[#315b7f]">需要发给别人看时，可以直接复制每个项目的案例深链。</p>
-              <button
-                type="button"
-                onClick={copyProjectLinkDirectory}
-                className="inline-flex min-h-10 shrink-0 items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-4 text-sm font-black text-[#2563eb] transition hover:-translate-y-0.5 hover:bg-[#f2f8ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
-              >
-                {projectLinkDirectoryCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                复制项目深链目录
-              </button>
-            </div>
-            {projectLinkDirectoryCopyResult ? (
-              <p role="status" className="mt-2 text-xs font-semibold leading-5 text-[#6f5b4a]">
-                {{
-                  copied: "项目深链目录已复制",
-                  unsupported: "浏览器不支持自动复制，请手动复制项目深链目录",
-                  failed: "项目深链目录复制失败，请手动复制",
-                }[projectLinkDirectoryCopyResult]}
-              </p>
             ) : null}
             {projectLinkDirectoryCopyResult && projectLinkDirectoryCopyResult !== "copied" ? (
               <textarea
@@ -612,7 +622,7 @@ export function CstdLanding() {
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-[#047857]">Proof timeline</p>
                 <p className="text-xs font-bold text-[#4c6b5d]">{projectProofTimeline.summary}</p>
               </div>
-              <ol className="mt-3 grid gap-2 lg:grid-cols-5">
+              <ol className={cstdProjectProofTimelineGridClassName}>
                 {projectProofTimeline.items.map((item, index) => (
                   <li key={item.projectId} className="min-w-0 rounded-lg border border-[#b7decf] bg-white/82 p-3">
                     <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-[#0f8f64] px-2 text-xs font-black text-white">{index + 1}</span>

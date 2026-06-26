@@ -61,6 +61,26 @@
 - Status: closed
 - Next stage: Stage 3 / 6 `UIUX`
 
+### Stage 3
+
+- Stage number: 3 / 6
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: upgrade the evidence overview into a clearer responsive share center and proof timeline layout.
+- Start state:
+  - Stages 1-2 added proof and deep-link copy capability.
+  - The evidence overview stacked multiple copy actions and the timeline at one visual level, which made the action hierarchy weaker on mobile and desktop.
+- Implemented:
+  - Added tested responsive layout constants for the evidence share grid and proof timeline grid.
+  - Reworked copy actions into a two-card `项目分享中心` with clearer labels, action descriptions, and localized status feedback.
+  - Moved the proof timeline onto a 1/2/5-column responsive grid.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-mobile-layout.test.ts` failed because the new layout constants were undefined.
+  - TDD green: focused mobile layout tests passed 10 / 10.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 32 files / 114 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome covered 1366px and 390px `/cstd`; `项目分享中心`, `Portfolio brief`, and `Deep links` were visible, both copy statuses appeared, horizontal overflow was `false`, and console errors were `0`.
+- Status: ready for commit and remote CI check.
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

@@ -11,6 +11,7 @@ import {
   cstdNavLinkClassName,
   cstdPageShellClassName,
   cstdProjectEvidenceClassName,
+  cstdProjectEvidenceShareGridClassName,
   cstdProjectFocusActionRailClassName,
   cstdProjectFocusBodyClassName,
   cstdProjectFocusChecklistGridClassName,
@@ -19,6 +20,7 @@ import {
   cstdProjectMetricLabelClassName,
   cstdProjectMetricTileClassName,
   cstdProjectMetricValueClassName,
+  cstdProjectProofTimelineGridClassName,
 } from "./cstd-mobile-layout";
 
 describe("CSTD mobile layout rules", () => {
@@ -104,5 +106,14 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectFocusChecklistGridClassName).toContain("md:grid-cols-2");
     expect(cstdProjectFocusActionRailClassName).toContain("lg:sticky");
     expect(cstdProjectFocusActionRailClassName).toContain("lg:top-24");
+  });
+
+  test("keeps evidence sharing and proof timeline readable across breakpoints", () => {
+    expect(cstdProjectEvidenceShareGridClassName).toContain("grid");
+    expect(cstdProjectEvidenceShareGridClassName).toContain("lg:grid-cols-2");
+    expect(cstdProjectEvidenceShareGridClassName).toContain("items-stretch");
+    expect(cstdProjectProofTimelineGridClassName).toContain("grid-cols-1");
+    expect(cstdProjectProofTimelineGridClassName).toContain("md:grid-cols-2");
+    expect(cstdProjectProofTimelineGridClassName).toContain("xl:grid-cols-5");
   });
 });

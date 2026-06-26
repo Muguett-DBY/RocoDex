@@ -1,5 +1,20 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 4 Stage 3 / 6 — UIUX
+
+### Scope
+
+- Reworked the `/cstd` evidence overview into a clearer `项目分享中心`.
+- Copy actions now live in two labeled responsive cards, and the proof timeline uses a tested 1/2/5-column responsive grid.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because the share/timeline layout constants were missing, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 32 files / 114 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile `/cstd`; share center labels and both copy statuses were visible, no horizontal overflow, and console errors were `0`.
+
 ## 2026-06-26 — Long Homepage Round 4 Stage 2 / 6 — IMPROVE
 
 ### Scope
