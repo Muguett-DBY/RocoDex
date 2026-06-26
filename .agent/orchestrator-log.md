@@ -179,7 +179,15 @@
   - Local gates: `npm run lint` exited `0`; `npm test` passed 28 files / 98 tests; `npm run build` generated 735 static pages.
   - Browser audio policy: with a fake `Audio` constructor, `/cstd` constructed no audio on load and constructed/played only `/cstd-audio/custard-warm-loop.wav` after clicking `声音：待播`.
   - Browser mobile: 390 px had no horizontal overflow and console errors were `0`.
-- Status: pending commit, GitHub Actions run, and remote check
+- Commit: `d740b9d feat: require explicit homepage audio start`
+- Push: `origin/main` updated to `d740b9d`.
+- Remote check:
+  - GitHub Actions run `28208600682` completed successfully for `Lint, test, and build`.
+  - Commit check-runs: `1` success.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Known annotation: GitHub reported that `actions/checkout@v4` and `actions/setup-node@v4` target Node.js 20 internally while runners force Node.js 24; no job failure.
+- Status: closed
+- Final status: all 6 required stages completed, committed, pushed, and remotely verified.
 
 ## Run — 2026-06-26 — Short 2-stage homepage continuation
 
