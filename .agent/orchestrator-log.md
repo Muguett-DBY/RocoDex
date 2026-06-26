@@ -152,7 +152,13 @@
   - Browser verification: local Chrome loaded `/cstd?project=crm#project-focus` on 1366px and 390px first-visit contexts; intro was not visible, the CRM focus panel was visible, horizontal overflow was `false`, and console errors were `0`.
   - HTTP route smoke: 13 key routes returned `200`; `npm audit --json` reported 0 vulnerabilities.
   - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
-- Status: ready to commit
+- Commit: `c117a29 fix: skip intro for project deep links`
+- Push: `origin/main` updated to `c117a29`
+- Remote check:
+  - GitHub Actions CI run `28233247671` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 6 / 6 `IMPROVE`
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 
