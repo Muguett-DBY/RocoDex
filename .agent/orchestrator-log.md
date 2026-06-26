@@ -70,6 +70,30 @@
 - Status: closed
 - Next stage: Stage 3 / 6 `UIUX`
 
+### Stage 3
+
+- Stage number: 3 / 6
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: improve the focused case-study panel's scan path, responsive layout, and action stability.
+- Start state:
+  - Stage 2 added a per-project evidence checklist.
+  - The focus panel had no checklist completeness summary.
+  - The desktop action column was not visually stabilized while reading longer evidence.
+- Plan: `docs/superpowers/plans/2026-06-26-cstd-focus-panel-uiux.md`
+- Implemented:
+  - Added `getCstdProjectEvidenceChecklistSummary` and rendered `4 / 4 项证据完整` in the focus panel.
+  - Added responsive focus-panel layout helpers for body, checklist grid, and sticky desktop action rail.
+  - Applied a wider action column and sticky desktop rail while preserving mobile-first stacked reading.
+- Verification recorded before commit:
+  - TDD red: focused project/layout tests failed because the summary helper and focus layout classes were missing.
+  - TDD green: focused project focus and mobile layout tests passed 16 / 16.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 30 files / 108 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome via Playwright loaded `/cstd?project=crm#project-focus` on 1366px and 390px viewports; `4 / 4 项证据完整` and `继续查看` were visible; horizontal overflow was `false`; console errors were `0`.
+  - HTTP route smoke: 13 key routes returned `200`; `npm audit --json` reported 0 vulnerabilities.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
+- Status: ready to commit
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

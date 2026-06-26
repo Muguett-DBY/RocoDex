@@ -38,4 +38,11 @@ export const cstdProjectMetricLabelClassName = "mt-1 block min-w-0 break-words t
 export const cstdProjectEvidenceClassName =
   "mt-4 grid gap-2 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/72 p-3 text-sm sm:mt-5";
 
+export const cstdProjectFocusBodyClassName = "grid gap-5 p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_20rem]";
+
+export const cstdProjectFocusChecklistGridClassName = "mt-3 grid grid-cols-1 gap-2 md:grid-cols-2";
+
+export const cstdProjectFocusActionRailClassName =
+  "flex flex-col gap-3 rounded-xl border border-[#ead6ad] bg-white/75 p-4 lg:sticky lg:top-24 lg:self-start";
+
 export const cstdProjectCards = cstdProjects.map(({ title, kicker }) => ({ title, kicker }));

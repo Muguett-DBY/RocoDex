@@ -67,6 +67,11 @@ export function getCstdProjectEvidenceChecklist(project: CstdProjectEvidenceSour
   ] as const;
 }
 
+export function getCstdProjectEvidenceChecklistSummary(checklist: readonly { complete: boolean }[]) {
+  const completeCount = checklist.filter((item) => item.complete).length;
+  return `${completeCount} / ${checklist.length} 项证据完整`;
+}
+
 export async function copyCstdProjectLink(
   writeText: ((text: string) => Promise<void>) | undefined,
   url: string,

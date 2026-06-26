@@ -1,5 +1,22 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 3 Stage 3 / 6 — UIUX
+
+### Scope
+
+- Upgraded the `/cstd` project focus panel into a clearer scan-and-act case-study surface.
+- Added checklist completeness text, responsive focus-panel layout helpers, and a sticky desktop action rail.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because the summary helper and focus layout classes were missing, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 30 files / 108 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile focus panels with no horizontal overflow and console errors `0`.
+- 13 key routes returned HTTP `200`.
+- Full `npm audit --json` reported 0 vulnerabilities.
+
 ## 2026-06-26 — Long Homepage Round 3 Stage 2 / 6 — IMPROVE
 
 ### Scope
