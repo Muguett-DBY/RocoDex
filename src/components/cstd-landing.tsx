@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bot, Building2, Camera, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
-import { cstdHomepageUpdates, getCstdHomepageUpdateSummary } from "@/lib/cstd-homepage-updates";
+import { cstdHomepageCapabilities, cstdHomepageUpdates, getCstdHomepageCapabilitySummary, getCstdHomepageUpdateSummary } from "@/lib/cstd-homepage-updates";
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
@@ -85,6 +85,7 @@ const noteItems = [
 ] as const;
 
 const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
+const homepageCapabilitySummary = getCstdHomepageCapabilitySummary(cstdHomepageCapabilities);
 const projectEvidenceOverview = getCstdProjectEvidenceOverview(cstdProjects);
 
 const CstdCustardStage = dynamic(
@@ -453,6 +454,17 @@ export function CstdLanding() {
                     <p className="mt-1 text-xs font-semibold leading-5 text-[#6f5b4a]">{update.detail}</p>
                   </div>
                 ))}
+              </div>
+              <div className="mt-3 rounded-lg border border-[#d6eadf] bg-[#eefbf4]/82 p-3" aria-label={homepageCapabilitySummary}>
+                <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#047857]">Capability checklist</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {cstdHomepageCapabilities.map((capability) => (
+                    <span key={capability.label} className="inline-flex min-h-8 items-center gap-1.5 rounded-md bg-white/82 px-2.5 text-xs font-black text-[#1b4332]" title={capability.detail}>
+                      <Check className="h-3.5 w-3.5 text-[#0f8f64]" />
+                      {capability.label}
+                    </span>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </motion.div>

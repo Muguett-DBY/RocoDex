@@ -160,6 +160,29 @@
 - Status: closed
 - Next stage: Stage 6 / 6 `IMPROVE`
 
+### Stage 6
+
+- Stage number: 6 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a visible homepage capability checklist that closes the 6-stage homepage improvement loop.
+- Start state:
+  - Stages 1-4 added evidence overview, focus checklist, UI polish, and portfolio copy.
+  - Stage 5 fixed project deep-link first-visit behavior.
+  - The hero update strip did not yet summarize the resulting homepage capabilities as a checklist.
+- Plan: `docs/superpowers/plans/2026-06-26-cstd-homepage-capability-checklist.md`
+- Implemented:
+  - Added `cstdHomepageCapabilities` and `getCstdHomepageCapabilitySummary`.
+  - Rendered a `Capability checklist` strip for searchable, verifiable, copyable, deep-linkable, and deployable homepage capabilities.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-homepage-updates.test.ts` failed because `cstdHomepageCapabilities` was undefined.
+  - TDD green: focused homepage updates tests passed 2 / 2.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 31 files / 111 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome loaded `/cstd` on 1366px and 390px viewports; `Capability checklist` and `可深链` were visible, horizontal overflow was `false`, and console errors were `0`.
+  - HTTP route smoke: 13 key routes returned `200`; `npm audit --json` reported 0 vulnerabilities.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
+- Status: ready to commit
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

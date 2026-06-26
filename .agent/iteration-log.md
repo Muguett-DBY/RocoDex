@@ -1,5 +1,22 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 3 Stage 6 / 6 — IMPROVE
+
+### Scope
+
+- Added a hero `Capability checklist` to summarize the homepage's finished capabilities.
+- The checklist shows the homepage is searchable, verifiable, copyable, deep-linkable, and deployable.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `cstdHomepageCapabilities` was undefined, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 31 files / 111 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile `/cstd`; checklist and `可深链` were visible, no horizontal overflow, and console errors were `0`.
+- 13 key routes returned HTTP `200`.
+- Full `npm audit --json` reported 0 vulnerabilities.
+
 ## 2026-06-26 — Long Homepage Round 3 Stage 5 / 6 — CHECK
 
 ### Scope
