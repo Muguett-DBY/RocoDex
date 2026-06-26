@@ -8,4 +8,4 @@ Checklist:
 - [x] Add layout helpers for the focus body, checklist grid, and action rail.
 - [x] Render checklist summary and apply the improved responsive layout.
 - [x] Run focused tests, lint, full tests, build, browser smoke, diff, and hygiene checks.
-- [ ] Commit, push `main`, and verify GitHub Actions plus Vercel.
+- [x] Commit, push `main`, and verify GitHub Actions plus Vercel.

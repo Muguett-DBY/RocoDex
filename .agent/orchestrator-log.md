@@ -92,7 +92,13 @@
   - Browser verification: local Chrome via Playwright loaded `/cstd?project=crm#project-focus` on 1366px and 390px viewports; `4 / 4 项证据完整` and `继续查看` were visible; horizontal overflow was `false`; console errors were `0`.
   - HTTP route smoke: 13 key routes returned `200`; `npm audit --json` reported 0 vulnerabilities.
   - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
-- Status: ready to commit
+- Commit: `a317a69 feat: improve project focus panel ui`
+- Push: `origin/main` updated to `a317a69`
+- Remote check:
+  - GitHub Actions CI run `28221810953` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 4 / 6 `IMPROVE`
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 
