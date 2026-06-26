@@ -133,7 +133,16 @@
   - Local gates: `npm run lint` exited `0`; `npm test` passed 34 files / 116 tests; `npm run build` exited `0` and generated 735 static pages.
   - HTTP route smoke: 13 key routes returned `200`.
   - Browser verification: local Chrome loaded `/cstd?project=crm#project-focus` on 1366px and 390px viewports; intro was not visible, focus panel and copy status were visible, horizontal overflow was `false`, and console errors were `0`.
-- Status: ready for commit and remote CI check.
+- Commits:
+  - `33086d0 fix: stabilize local ci clean install`
+  - `8ecb184 fix: include local next cleanup script`
+- Push: `origin/main` updated to `8ecb184`
+- Remote check:
+  - GitHub Actions CI run `28238533912` for `8ecb184` completed successfully.
+  - Prior run `28238523036` for `33086d0` was cancelled by workflow concurrency after the follow-up script commit.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 6 / 6 `IMPROVE`
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 

@@ -16,6 +16,8 @@
 - `npm run build` exited `0` and generated 735 static pages.
 - 13 key routes returned HTTP `200`.
 - Browser verification in local Chrome covered desktop and 390px mobile `/cstd?project=crm#project-focus`; intro was skipped, focus panel and copy status were visible, no horizontal overflow, and console errors were `0`.
+- Commits `33086d0` and `8ecb184` were pushed to `origin/main`.
+- GitHub Actions CI run `28238533912` for `8ecb184` and Vercel deployment status both completed successfully; the prior `33086d0` run was cancelled by concurrency after the follow-up script commit.
 
 ## 2026-06-26 — Long Homepage Round 4 Stage 4 / 6 — IMPROVE
 
