@@ -14,6 +14,13 @@
 - `npm test` passed 34 files / 117 tests.
 - `npm run build` exited `0` and generated 735 static pages.
 - Browser verification in local Chrome covered desktop and 390px mobile `/cstd`; `Acceptance status` and all four acceptance labels were visible, no horizontal overflow, and console errors were `0`.
+- Commit `c97aa38` was pushed to `origin/main`.
+- GitHub Actions CI run `28238931144` and Vercel deployment status both completed successfully.
+
+### Follow-up candidates
+
+- Keep the homepage focused: future additions should consolidate proof and navigation rather than add more stacked panels.
+- Consider adding a small public changelog route if the project evidence continues to grow.
 
 ## 2026-06-26 — Long Homepage Round 4 Stage 5 / 6 — CHECK
 

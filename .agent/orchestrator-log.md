@@ -161,7 +161,13 @@
   - TDD green: focused homepage update tests passed 3 / 3.
   - Local gates: `npm run lint` exited `0`; `npm test` passed 34 files / 117 tests; `npm run build` exited `0` and generated 735 static pages.
   - Browser verification: local Chrome covered 1366px and 390px `/cstd`; `Acceptance status`, all four acceptance labels, and the summary were visible, horizontal overflow was `false`, and console errors were `0`.
-- Status: ready for commit and remote CI check.
+- Commit: `c97aa38 feat: add homepage acceptance status`
+- Push: `origin/main` updated to `c97aa38`
+- Remote check:
+  - GitHub Actions CI run `28238931144` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Final state: all 6 stages closed with local gates, browser/HTTP checks, pushes to `main`, GitHub Actions success, and Vercel success.
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
