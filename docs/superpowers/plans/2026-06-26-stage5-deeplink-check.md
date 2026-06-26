@@ -7,4 +7,4 @@ Checklist:
 - [x] Add a failing test that skips automatic intro for direct project deep links.
 - [x] Apply the deep-link skip in the CSTD landing initialization path.
 - [x] Re-run CI-equivalent local gates plus browser verification.
-- [ ] Commit, push `main`, and verify GitHub Actions plus Vercel.
+- [x] Commit, push `main`, and verify GitHub Actions plus Vercel.
