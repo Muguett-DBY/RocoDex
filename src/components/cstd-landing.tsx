@@ -14,6 +14,7 @@ import {
   buildCstdProjectDirectoryHref,
   buildCstdProjectFocusHref,
   copyCstdProjectLink,
+  getCstdProjectEvidenceChecklist,
   getCstdProjectFocusNavigation,
   parseCstdProjectFocus,
   type CstdProjectCopyResult,
@@ -1174,6 +1175,7 @@ function ProjectFocus({
     failed: "摘要复制失败，请手动复制",
   }[briefCopyResult ?? "copied"];
   const projectBriefText = buildCstdProjectBrief(project);
+  const evidenceChecklist = getCstdProjectEvidenceChecklist(project);
 
   return (
     <motion.section
@@ -1210,11 +1212,29 @@ function ProjectFocus({
       </div>
 
       <div className="grid gap-5 p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_18rem]">
-        <dl className="grid gap-4">
-          <ProjectEvidence label="负责" value={project.evidence.role} />
-          <ProjectEvidence label="解决问题" value={project.evidence.problem} />
-          <ProjectEvidence label="已交付" value={project.evidence.outcome} />
-        </dl>
+        <div className="grid gap-5">
+          <dl className="grid gap-4">
+            <ProjectEvidence label="负责" value={project.evidence.role} />
+            <ProjectEvidence label="解决问题" value={project.evidence.problem} />
+            <ProjectEvidence label="已交付" value={project.evidence.outcome} />
+          </dl>
+          <div className="rounded-xl border border-[#ead6ad] bg-white/72 p-4">
+            <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">证据清单</p>
+            <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+              {evidenceChecklist.map((item) => (
+                <li key={item.label} className="flex min-w-0 items-start gap-2 rounded-lg bg-[#fffaf0] p-3">
+                  <span className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full ${item.complete ? "bg-[#dff8ed] text-[#047857]" : "bg-[#ffe7ec] text-[#be4563]"}`}>
+                    <Check className="h-3.5 w-3.5" />
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-xs font-black text-[#2f241d]">{item.label}</span>
+                    <span className="mt-1 block text-xs font-semibold leading-5 text-[#6f5b4a]">{item.value}</span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
         <div className="flex flex-col gap-3 rounded-xl border border-[#ead6ad] bg-white/75 p-4">
           <p className="text-sm font-black text-[#2f241d]">继续查看</p>
           <div className="grid gap-2">

@@ -4,6 +4,7 @@ import {
   buildCstdProjectDirectoryHref,
   buildCstdProjectFocusHref,
   copyCstdProjectLink,
+  getCstdProjectEvidenceChecklist,
   getCstdProjectFocusNavigation,
   parseCstdProjectFocus,
 } from "./cstd-project-focus";
@@ -70,5 +71,23 @@ describe("CSTD project focus", () => {
     expect(buildCstdProjectBrief(project)).toBe(
       "产业园区招商 CRM\n当前：生产环境持续验证与迭代\n负责：业务建模、权限设计与全栈交付\n解决问题：招商线索分散，权限边界不清晰。\n已交付：交付覆盖线索全周期和角色权限的运营系统。\n链接：https://cfzzs.custard.top",
     );
+  });
+
+  test("builds a complete evidence checklist for focused projects", () => {
+    const project = {
+      evidence: {
+        current: "生产环境持续验证与迭代",
+        role: "业务建模、权限设计与全栈交付",
+        problem: "招商线索分散，权限边界不清晰。",
+        outcome: "交付覆盖线索全周期和角色权限的运营系统。",
+      },
+    };
+
+    expect(getCstdProjectEvidenceChecklist(project)).toEqual([
+      { label: "角色", value: "业务建模、权限设计与全栈交付", complete: true },
+      { label: "问题", value: "招商线索分散，权限边界不清晰。", complete: true },
+      { label: "交付", value: "交付覆盖线索全周期和角色权限的运营系统。", complete: true },
+      { label: "现状", value: "生产环境持续验证与迭代", complete: true },
+    ]);
   });
 });

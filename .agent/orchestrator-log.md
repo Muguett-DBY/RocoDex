@@ -41,6 +41,29 @@
 - Status: closed
 - Next stage: Stage 2 / 6 `IMPROVE`
 
+### Stage 2
+
+- Stage number: 2 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a per-project evidence checklist to the CSTD focus panel.
+- Start state:
+  - Stage 1 added section-level evidence overview.
+  - The focused case study showed role/problem/outcome text, but did not expose a compact proof checklist.
+  - Visitors still had to read every paragraph to understand which evidence fields were present.
+- Plan: `docs/superpowers/plans/2026-06-26-cstd-project-evidence-checklist.md`
+- Implemented:
+  - Added `getCstdProjectEvidenceChecklist` for role/problem/outcome/current evidence completeness.
+  - Rendered a `证据清单` block inside the project focus panel.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-focus.test.ts` failed because `getCstdProjectEvidenceChecklist` was not a function.
+  - TDD green: focused project focus tests passed 6 / 6.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 30 files / 106 tests; `npm run build` exited `0` and generated 735 static pages.
+  - HTTP route smoke: 13 key routes returned `200`; `npm audit --json` reported 0 vulnerabilities.
+  - Browser verification: local Chrome via Playwright loaded `/cstd?project=crm#project-focus` on 1366px and 390px viewports; `证据清单` and `业务建模、权限设计与全栈交付` were visible; horizontal overflow was `false`; console errors were `0`.
+  - Diff check: `git diff --check` exited `0`; source hygiene found no TODO/FIXME/console/debugger or secret-pattern matches in touched source/docs.
+- Status: ready to commit
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 2
 
 - Sequence: `IMPROVE → IMPROVE → UIUX → IMPROVE → CHECK → IMPROVE`

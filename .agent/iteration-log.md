@@ -1,5 +1,22 @@
 # RocoDex Iteration Log
 
+## 2026-06-26 — Long Homepage Round 3 Stage 2 / 6 — IMPROVE
+
+### Scope
+
+- Added a per-project `证据清单` to the `/cstd` project focus panel.
+- The checklist makes role, problem, delivered outcome, and current status evidence scannable before opening an external project.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `getCstdProjectEvidenceChecklist` was not a function, then passed after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 30 files / 106 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile focus panels with no horizontal overflow and console errors `0`.
+- 13 key routes returned HTTP `200`.
+- Full `npm audit --json` reported 0 vulnerabilities.
+
 ## 2026-06-26 — Long Homepage Round 3 Stage 1 / 6 — IMPROVE
 
 ### Scope

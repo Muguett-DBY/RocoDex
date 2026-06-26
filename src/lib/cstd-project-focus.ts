@@ -17,6 +17,8 @@ type CstdProjectBriefSource = {
   };
 };
 
+type CstdProjectEvidenceSource = Pick<CstdProjectBriefSource, "evidence">;
+
 export function parseCstdProjectFocus(search: string) {
   const projectId = new URLSearchParams(search).get("project");
   if (!projectId) return null;
@@ -54,6 +56,15 @@ export function buildCstdProjectBrief(project: CstdProjectBriefSource) {
     `已交付：${project.evidence.outcome}`,
     `链接：${project.href}`,
   ].join("\n");
+}
+
+export function getCstdProjectEvidenceChecklist(project: CstdProjectEvidenceSource) {
+  return [
+    { label: "角色", value: project.evidence.role, complete: project.evidence.role.trim().length > 0 },
+    { label: "问题", value: project.evidence.problem, complete: project.evidence.problem.trim().length > 0 },
+    { label: "交付", value: project.evidence.outcome, complete: project.evidence.outcome.trim().length > 0 },
+    { label: "现状", value: project.evidence.current, complete: project.evidence.current.trim().length > 0 },
+  ] as const;
 }
 
 export async function copyCstdProjectLink(
