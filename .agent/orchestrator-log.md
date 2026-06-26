@@ -104,7 +104,13 @@
   - TDD green: focused capability index test passed 1 / 1.
   - Local gates: `npm run lint` exited `0`; `npm test` passed 33 files / 115 tests; `npm run build` exited `0` and generated 735 static pages.
   - Browser verification: local Chrome covered 1366px and 390px `/cstd`; the capability index and all three lanes were visible, CRM lane click opened `?project=crm#project-focus`, horizontal overflow was `false`, and console errors were `0`.
-- Status: ready for commit and remote CI check.
+- Commit: `a860faa feat: add project capability index`
+- Push: `origin/main` updated to `a860faa`
+- Remote check:
+  - GitHub Actions CI run `28235672074` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 5 / 6 `CHECK`
 
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 3
 
