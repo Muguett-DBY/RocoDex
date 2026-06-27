@@ -1,5 +1,27 @@
 # RocoDex Iteration Log
 
+## 2026-06-28 — Long Homepage Round 5 Stage 3 / 6 — UIUX
+
+### Scope
+
+- Added explicit category and keyword condition badges to the `/cstd` project directory toolbar.
+- Stabilized the toolbar actions with stacked full-width controls on narrow mobile screens and compact desktop alignment.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because the badge helper and responsive toolbar constants were missing, then passed 11 / 11 filter tests and 11 / 11 mobile-layout tests after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 34 files / 122 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered desktop and 390px mobile `/cstd?category=operations&q=CRM#projects`; active-condition badges were visible, actions did not overlap, mobile controls stacked cleanly, no horizontal overflow was present, and console errors were `0`.
+- Commit `ac68e81` was pushed to `origin/main`.
+- GitHub Actions CI run `28298689704` and Vercel deployment status both completed successfully.
+
+### Follow-up candidates
+
+- Add a focused two-project comparison flow using existing project evidence instead of adding another broad homepage section.
+- Keep the comparison selection lightweight and reversible, with a strict two-project limit.
+
 ## 2026-06-28 — Long Homepage Round 5 Stage 2 / 6 — IMPROVE
 
 ### Scope

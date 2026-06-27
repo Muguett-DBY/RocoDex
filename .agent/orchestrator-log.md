@@ -66,6 +66,34 @@
 - Status: closed
 - Next stage: Stage 3 / 6 `UIUX`
 
+### Stage 3
+
+- Stage number: 3 / 6
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: make the project directory toolbar compact, responsive, and explicit about the active filter/search state.
+- Start state:
+  - Stage 2 added sharing to a toolbar that already contained search, category filters, and reset.
+  - The active directory state was represented by controls but lacked a compact text summary.
+  - Action buttons needed stable mobile stacking without changing the desktop scanning flow.
+- Implemented:
+  - Added tested active-condition badges for category and keyword state.
+  - Added shared responsive toolbar/action class constants with explicit mobile and desktop layouts.
+  - Rendered copy/reset actions full-width and stacked on narrow screens, then compact and right-aligned at desktop widths.
+- Verification recorded before commit:
+  - TDD red: focused filter and mobile-layout tests failed because the condition badge helper and toolbar class constants were missing.
+  - TDD green: focused tests passed 11 / 11 for project filters and 11 / 11 for mobile layout.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 34 files / 122 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome covered 1366px and 390px `/cstd?category=operations&q=CRM#projects`; `分类 / 运营系统` and `搜索 / CRM` badges were visible, copy/reset actions did not overlap, mobile actions stacked at a stable width, horizontal overflow was `false`, and console errors were `0`.
+  - Browser tooling note: Browser plugin tools were not callable during this stage, so Playwright was used as the frontend verification fallback.
+- Commit: `ac68e81 feat: improve project toolbar state feedback`
+- Push: `origin/main` updated to `ac68e81`
+- Remote check:
+  - GitHub Actions CI run `28298689704` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 4 / 6 `IMPROVE`
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 4
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
