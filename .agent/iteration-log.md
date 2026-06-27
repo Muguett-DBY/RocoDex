@@ -1,5 +1,32 @@
 # RocoDex Iteration Log
 
+## 2026-06-28 — Long Homepage Round 5 Stage 5 / 6 — CHECK
+
+### Scope
+
+- Investigated the `THREE.Clock` browser deprecation warning observed during Stage 4 verification.
+- Fixed the warning by exact-pinning Three.js before the deprecation release while upstream React Three Fiber Timer migration is still unreleased.
+- Added a dependency-policy regression test so the project cannot silently float back to a warning-producing Three.js version.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because `package.json` still specified `three` and `@types/three` as `^0.184.0`, then passed after exact pinning to `0.182.0`.
+- `npm run ci:local` completed a clean `npm ci` with 0 vulnerabilities.
+- `npm run lint` exited `0`.
+- `npm test` passed 36 files / 128 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- `npm audit --json` found 0 vulnerabilities; TODO/FIXME/console.log/debugger and secret-extension scans had no matches.
+- HTTP smoke covered 13 local production routes and all returned `200`.
+- In-app Browser verification covered `/cstd` at 1366x900 and 390x844, mascot click interaction, visible desktop/mobile canvas, mobile menu interaction, no horizontal overflow, and console errors/warnings `0`; the previous `THREE.Clock` warning was gone.
+- Commit `c81cfa5` was pushed to `origin/main`.
+- GitHub Actions CI run `28299933916` completed successfully.
+- Vercel production deployment `dpl_F68Py3DTeCD1TzqcoqXsHoBkKoYX` completed Ready; `https://custard.top`, `https://rocodex.vercel.app/cstd`, and `https://rocodex.custard.top/cstd` returned public CSTD homepage responses.
+
+### Follow-up candidates
+
+- Stage 6 should refresh the visible homepage acceptance summary so it reflects the new comparison flow, runtime-warning check, and green CI/Vercel status.
+- Track upstream React Three Fiber Timer migration and revisit the Three.js pin after a released version removes internal `THREE.Clock` usage.
+
 ## 2026-06-28 — Long Homepage Round 5 Stage 4 / 6 — IMPROVE
 
 ### Scope

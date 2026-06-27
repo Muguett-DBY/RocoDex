@@ -123,6 +123,38 @@
 - Status: closed
 - Next stage: Stage 5 / 6 `CHECK`
 
+### Stage 5
+
+- Stage number: 5 / 6
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN.txt`
+- Goal: run the production-style system check, investigate the verified browser warning from Stage 4, and fix it if the root cause was local-dependency controllable.
+- Investigation:
+  - Browser warning reproduced as `THREE.Clock: This module has been deprecated. Please use THREE.Timer instead.` from the React Three Fiber mascot bundle.
+  - No local `src` code instantiated `THREE.Clock`; evidence traced to `@react-three/fiber@9.6.1` internal state using `new THREE.Clock()`.
+  - `three@0.184.0` introduced the runtime deprecation warning while `@react-three/fiber` still supports older Three versions through its peer range.
+  - Upstream `pmndrs/react-three-fiber#3741` and PR `#3773` show the Timer migration is not yet released.
+- Implemented:
+  - Pinned `three` and `@types/three` exactly to `0.182.0`, before the Clock deprecation warning became active.
+  - Added `src/lib/cstd-three-version.test.ts` to prevent the dependency from floating back to a warning-producing release.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-three-version.test.ts` failed when `package.json` still used `^0.184.0`.
+  - TDD green: focused Three compatibility test passed after exact pinning.
+  - Clean install: `npm run ci:local` completed `npm ci` with 0 vulnerabilities.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 36 files / 128 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Security/hygiene: `npm audit --json` found 0 vulnerabilities; TODO/FIXME/console.log/debugger scan had no matches; secret-extension scan had no matches.
+  - HTTP smoke: 13 key local production routes returned `200`.
+  - Browser verification: in-app Browser covered `/cstd` at 1366x900 and 390x844, desktop and mobile mascot canvas visibility, mobile menu interaction, no horizontal overflow, and console errors/warnings `0`; the previous `THREE.Clock` warning was gone.
+  - Live smoke: `https://custard.top` returned `200` with `X-Matched-Path: /cstd`; `https://rocodex.vercel.app/cstd` and `https://rocodex.custard.top/cstd` returned `200` with CSTD homepage content.
+  - Residual note: local Vitest/Next commands still emit Node `[DEP0205] module.register()` deprecation warnings from the toolchain, not from the browser runtime target fixed in this stage.
+- Commit: `c81cfa5 fix: pin three before clock deprecation`
+- Push: `origin/main` updated to `c81cfa5`
+- Remote check:
+  - GitHub Actions CI run `28299933916` completed successfully.
+  - Vercel production deployment `dpl_F68Py3DTeCD1TzqcoqXsHoBkKoYX` completed Ready at `https://rocodex-psrrdmhql-muguett-dbys-projects.vercel.app`.
+- Status: closed
+- Next stage: Stage 6 / 6 `IMPROVE`
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 4
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
