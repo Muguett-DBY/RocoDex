@@ -91,6 +91,10 @@ export function buildCstdProjectDirectoryStateHref(pathname: string, filter: Cst
   return `${pathname}${search ? `?${search}` : ""}#projects`;
 }
 
+export function buildCstdProjectDirectoryShareUrl(origin: string, pathname: string, filter: CstdProjectFilter, query = "") {
+  return `${origin.replace(/\/$/, "")}${buildCstdProjectDirectoryStateHref(pathname, filter, query)}`;
+}
+
 function getCstdProjectSearchText(project: CstdFilterableProject) {
   return normalizeProjectQuery(
     [

@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import {
   cstdProjectFilters,
   buildCstdProjectDirectoryStateHref,
+  buildCstdProjectDirectoryShareUrl,
   filterCstdProjects,
   getCstdProjectControlSummary,
   getCstdProjectFilterSummary,
@@ -84,5 +85,12 @@ describe("CSTD project filtering", () => {
     expect(buildCstdProjectDirectoryStateHref("/cstd", "operations", "招商")).toBe("/cstd?category=operations&q=%E6%8B%9B%E5%95%86#projects");
     expect(buildCstdProjectDirectoryStateHref("/cstd", "all", "")).toBe("/cstd#projects");
     expect(buildCstdProjectDirectoryStateHref("/cstd", "all", " CRM ")).toBe("/cstd?q=CRM#projects");
+  });
+
+  test("builds absolute share urls for the current project directory view", () => {
+    expect(buildCstdProjectDirectoryShareUrl("https://custard.top/", "/cstd", "creative", "南京")).toBe(
+      "https://custard.top/cstd?category=creative&q=%E5%8D%97%E4%BA%AC#projects",
+    );
+    expect(buildCstdProjectDirectoryShareUrl("https://custard.top", "/cstd", "all", "")).toBe("https://custard.top/cstd#projects");
   });
 });

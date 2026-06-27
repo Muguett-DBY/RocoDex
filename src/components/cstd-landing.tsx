@@ -42,6 +42,7 @@ import {
 } from "@/lib/cstd-motion";
 import {
   buildCstdProjectDirectoryStateHref,
+  buildCstdProjectDirectoryShareUrl,
   cstdProjectFilters,
   filterCstdProjects,
   getCstdProjectControlSummary,
@@ -132,6 +133,7 @@ export function CstdLanding() {
   const [projectBriefCopyResult, setProjectBriefCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [portfolioCopyResult, setPortfolioCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [projectLinkDirectoryCopyResult, setProjectLinkDirectoryCopyResult] = useState<CstdProjectCopyResult | null>(null);
+  const [projectDirectoryCopyResult, setProjectDirectoryCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
   const prefersReducedMotion = reducedMotion ?? true;
@@ -288,6 +290,7 @@ export function CstdLanding() {
     setProjectCopyResult(null);
     setProjectBriefCopyResult(null);
     setSelectedProjectId(projectId);
+    setProjectDirectoryCopyResult(null);
   }
 
   function closeProjectFocus() {
@@ -295,6 +298,7 @@ export function CstdLanding() {
     setSelectedProjectId(null);
     setProjectCopyResult(null);
     setProjectBriefCopyResult(null);
+    setProjectDirectoryCopyResult(null);
   }
 
   function updateProjectDirectoryControls(filter: CstdProjectFilter, query: string) {
@@ -304,6 +308,7 @@ export function CstdLanding() {
     setSelectedProjectId(null);
     setProjectCopyResult(null);
     setProjectBriefCopyResult(null);
+    setProjectDirectoryCopyResult(null);
   }
 
   function resetProjectControls() {
@@ -344,6 +349,15 @@ export function CstdLanding() {
       directory,
     );
     setProjectLinkDirectoryCopyResult(result);
+  }
+
+  async function copyProjectDirectoryView() {
+    const href = buildCstdProjectDirectoryShareUrl(window.location.origin, window.location.pathname, activeProjectFilter, projectSearchQuery);
+    const result = await copyCstdProjectLink(
+      navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
+      href,
+    );
+    setProjectDirectoryCopyResult(result);
   }
 
   return (
@@ -684,18 +698,51 @@ export function CstdLanding() {
                   {projectControlSummary}
                 </p>
               </div>
-              {hasProjectControlState ? (
+              <div className="flex shrink-0 flex-wrap gap-2">
                 <button
                   type="button"
-                  onClick={resetProjectControls}
-                  aria-label="重置项目搜索和筛选"
-                  className="inline-flex min-h-9 shrink-0 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:-translate-y-0.5 hover:bg-[#eefbf4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                  onClick={copyProjectDirectoryView}
+                  className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-3 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
                 >
-                  <RotateCcw className="h-3.5 w-3.5" />
-                  重置
+                  <Copy className="h-3.5 w-3.5" />
+                  复制当前视图
                 </button>
-              ) : null}
+                {hasProjectControlState ? (
+                  <button
+                    type="button"
+                    onClick={resetProjectControls}
+                    aria-label="重置项目搜索和筛选"
+                    className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:-translate-y-0.5 hover:bg-[#eefbf4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" />
+                    重置
+                  </button>
+                ) : null}
+              </div>
             </div>
+            {projectDirectoryCopyResult ? (
+              <p className="mt-2 text-xs font-bold text-[#0f8f64]" aria-live="polite">
+                {
+                  {
+                    copied: "当前项目视图链接已复制",
+                    unsupported: "当前浏览器不支持自动复制，请手动复制",
+                    failed: "当前项目视图链接复制失败，请手动复制",
+                  }[projectDirectoryCopyResult]
+                }
+              </p>
+            ) : null}
+            {projectDirectoryCopyResult && projectDirectoryCopyResult !== "copied" ? (
+              <textarea
+                aria-label="当前项目视图链接"
+                readOnly
+                value={
+                  typeof window === "undefined"
+                    ? ""
+                    : buildCstdProjectDirectoryShareUrl(window.location.origin, window.location.pathname, activeProjectFilter, projectSearchQuery)
+                }
+                className="mt-2 min-h-20 w-full resize-y rounded-lg border border-[#b8d7f5] bg-[#f2f8ff] p-3 text-xs font-semibold leading-5 text-[#315b7f] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
+              />
+            ) : null}
             <label className="mt-3 flex min-h-11 items-center gap-2 rounded-lg border border-[#ead6ad] bg-white/82 px-3 text-sm shadow-inner focus-within:border-[#0f8f64] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#0f8f64]">
               <Search className="h-4 w-4 shrink-0 text-[#0f8f64]" />
               <span className="sr-only">搜索项目</span>
