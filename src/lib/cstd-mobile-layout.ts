@@ -47,6 +47,11 @@ export const cstdProjectToolbarClassName =
 
 export const cstdProjectToolbarActionsClassName = "grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:flex sm:flex-wrap sm:justify-end";
 
+export const cstdProjectComparisonClassName =
+  "mb-4 min-w-0 overflow-hidden rounded-xl border border-[#b7decf] bg-[#eefbf4]/82 shadow-[6px_6px_0_rgba(47,36,29,.05)]";
+
+export const cstdProjectComparisonColumnsClassName = "grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2";
+
 export const cstdProjectFocusBodyClassName = "grid gap-5 p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_20rem]";
 
 export const cstdProjectFocusChecklistGridClassName = "mt-3 grid grid-cols-1 gap-2 md:grid-cols-2";
