@@ -1,10 +1,12 @@
 import { describe, expect, test } from "vitest";
 import {
   cstdProjectFilters,
+  buildCstdProjectDirectoryStateHref,
   filterCstdProjects,
   getCstdProjectControlSummary,
   getCstdProjectFilterSummary,
   hasActiveCstdProjectControls,
+  parseCstdProjectDirectoryState,
   type CstdProjectFilter,
 } from "./cstd-project-filter";
 
@@ -61,5 +63,26 @@ describe("CSTD project filtering", () => {
     expect(hasActiveCstdProjectControls("all", "")).toBe(false);
     expect(hasActiveCstdProjectControls("all", "CRM")).toBe(true);
     expect(hasActiveCstdProjectControls("research", "")).toBe(true);
+  });
+
+  test("parses project directory state from URL parameters", () => {
+    expect(parseCstdProjectDirectoryState("?category=creative&q=%E5%8D%97%E4%BA%AC")).toEqual({
+      filter: "creative",
+      query: "南京",
+    });
+    expect(parseCstdProjectDirectoryState("?category=unknown&q=%20CRM%20")).toEqual({
+      filter: "all",
+      query: "CRM",
+    });
+    expect(parseCstdProjectDirectoryState("")).toEqual({
+      filter: "all",
+      query: "",
+    });
+  });
+
+  test("builds shareable project directory state hrefs", () => {
+    expect(buildCstdProjectDirectoryStateHref("/cstd", "operations", "招商")).toBe("/cstd?category=operations&q=%E6%8B%9B%E5%95%86#projects");
+    expect(buildCstdProjectDirectoryStateHref("/cstd", "all", "")).toBe("/cstd#projects");
+    expect(buildCstdProjectDirectoryStateHref("/cstd", "all", " CRM ")).toBe("/cstd?q=CRM#projects");
   });
 });

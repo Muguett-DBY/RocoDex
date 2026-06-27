@@ -19,7 +19,6 @@ import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib
 import { getCstdProjectCapabilityIndex } from "@/lib/cstd-project-capability-index";
 import {
   buildCstdProjectBrief,
-  buildCstdProjectDirectoryHref,
   buildCstdProjectFocusHref,
   buildCstdProjectLinkDirectory,
   copyCstdProjectLink,
@@ -42,11 +41,13 @@ import {
   shouldPlayCstdIntroReplay,
 } from "@/lib/cstd-motion";
 import {
+  buildCstdProjectDirectoryStateHref,
   cstdProjectFilters,
   filterCstdProjects,
   getCstdProjectControlSummary,
   getCstdProjectFilterSummary,
   hasActiveCstdProjectControls,
+  parseCstdProjectDirectoryState,
   type CstdProjectFilter,
 } from "@/lib/cstd-project-filter";
 import { cstdProjectGuides } from "@/lib/cstd-project-guide";
@@ -161,6 +162,9 @@ export function CstdLanding() {
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
+      const directoryState = parseCstdProjectDirectoryState(window.location.search);
+      setActiveProjectFilter(directoryState.filter);
+      setProjectSearchQuery(directoryState.query);
       setSelectedProjectId(parseCstdProjectFocus(window.location.search));
     });
     return () => window.cancelAnimationFrame(frame);
@@ -287,15 +291,23 @@ export function CstdLanding() {
   }
 
   function closeProjectFocus() {
-    window.history.replaceState(null, "", buildCstdProjectDirectoryHref(window.location.pathname));
+    window.history.replaceState(null, "", buildCstdProjectDirectoryStateHref(window.location.pathname, activeProjectFilter, projectSearchQuery));
+    setSelectedProjectId(null);
+    setProjectCopyResult(null);
+    setProjectBriefCopyResult(null);
+  }
+
+  function updateProjectDirectoryControls(filter: CstdProjectFilter, query: string) {
+    window.history.replaceState(null, "", buildCstdProjectDirectoryStateHref(window.location.pathname, filter, query));
+    setActiveProjectFilter(filter);
+    setProjectSearchQuery(query);
     setSelectedProjectId(null);
     setProjectCopyResult(null);
     setProjectBriefCopyResult(null);
   }
 
   function resetProjectControls() {
-    setProjectSearchQuery("");
-    setActiveProjectFilter("all");
+    updateProjectDirectoryControls("all", "");
   }
 
   async function copyProjectFocusLink() {
@@ -689,14 +701,14 @@ export function CstdLanding() {
               <span className="sr-only">搜索项目</span>
               <input
                 value={projectSearchQuery}
-                onChange={(event) => setProjectSearchQuery(event.target.value)}
+                onChange={(event) => updateProjectDirectoryControls(activeProjectFilter, event.target.value)}
                 placeholder="搜索项目、标签或问题，例如 CRM、南京、估值"
                 className="min-w-0 flex-1 bg-transparent font-semibold text-[#2f241d] outline-none placeholder:text-[#9a8776]"
               />
               {projectSearchQuery ? (
                 <button
                   type="button"
-                  onClick={() => setProjectSearchQuery("")}
+                  onClick={() => updateProjectDirectoryControls(activeProjectFilter, "")}
                   aria-label="清空项目搜索"
                   className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#7b6656] transition hover:bg-[#fff0c9] hover:text-[#2f241d]"
                 >
@@ -711,7 +723,7 @@ export function CstdLanding() {
                   <button
                     key={filter.id}
                     type="button"
-                    onClick={() => setActiveProjectFilter(filter.id)}
+                    onClick={() => updateProjectDirectoryControls(filter.id, projectSearchQuery)}
                     aria-pressed={selected}
                     className={`inline-flex min-h-10 items-center justify-center rounded-lg border px-3 text-xs font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] ${
                       selected

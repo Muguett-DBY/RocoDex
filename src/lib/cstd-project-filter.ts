@@ -70,6 +70,27 @@ export function hasActiveCstdProjectControls(filter: CstdProjectFilter, query = 
   return filter !== "all" || query.trim().length > 0;
 }
 
+export function parseCstdProjectDirectoryState(search: string): { filter: CstdProjectFilter; query: string } {
+  const params = new URLSearchParams(search);
+  const category = params.get("category");
+
+  return {
+    filter: isCstdProjectFilter(category) ? category : "all",
+    query: (params.get("q") ?? "").trim(),
+  };
+}
+
+export function buildCstdProjectDirectoryStateHref(pathname: string, filter: CstdProjectFilter, query = "") {
+  const params = new URLSearchParams();
+  const trimmedQuery = query.trim();
+
+  if (filter !== "all") params.set("category", filter);
+  if (trimmedQuery) params.set("q", trimmedQuery);
+
+  const search = params.toString();
+  return `${pathname}${search ? `?${search}` : ""}#projects`;
+}
+
 function getCstdProjectSearchText(project: CstdFilterableProject) {
   return normalizeProjectQuery(
     [
@@ -90,4 +111,8 @@ function getCstdProjectSearchText(project: CstdFilterableProject) {
 
 function normalizeProjectQuery(value: string) {
   return value.toLocaleLowerCase("zh-Hans-CN").replace(/\s+/g, "");
+}
+
+function isCstdProjectFilter(value: string | null): value is CstdProjectFilter {
+  return cstdProjectFilters.some((option) => option.id === value);
 }
