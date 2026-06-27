@@ -20,6 +20,8 @@ import {
   cstdProjectMetricLabelClassName,
   cstdProjectMetricTileClassName,
   cstdProjectMetricValueClassName,
+  cstdProjectComparisonClassName,
+  cstdProjectComparisonColumnsClassName,
   cstdProjectProofTimelineGridClassName,
   cstdProjectToolbarActionsClassName,
   cstdProjectToolbarClassName,
@@ -126,5 +128,12 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectToolbarActionsClassName).toContain("grid");
     expect(cstdProjectToolbarActionsClassName).toContain("min-[420px]:grid-cols-2");
     expect(cstdProjectToolbarActionsClassName).toContain("sm:flex");
+  });
+
+  test("keeps project comparison readable without horizontal scrolling", () => {
+    expect(cstdProjectComparisonClassName).toContain("min-w-0");
+    expect(cstdProjectComparisonClassName).toContain("overflow-hidden");
+    expect(cstdProjectComparisonColumnsClassName).toContain("grid-cols-1");
+    expect(cstdProjectComparisonColumnsClassName).toContain("sm:grid-cols-2");
   });
 });

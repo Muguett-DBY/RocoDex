@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } 
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Building2, Camera, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
+import { Bot, Building2, Camera, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, GitCompareArrows, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
 import {
   cstdHomepageAcceptance,
   cstdHomepageCapabilities,
@@ -17,6 +17,12 @@ import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } fro
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
 import { getCstdProjectCapabilityIndex } from "@/lib/cstd-project-capability-index";
+import {
+  getCstdProjectComparison,
+  getCstdProjectComparisonControl,
+  toggleCstdProjectComparison,
+  type CstdProjectComparison as CstdProjectComparisonData,
+} from "@/lib/cstd-project-comparison";
 import {
   buildCstdProjectBrief,
   buildCstdProjectFocusHref,
@@ -65,6 +71,8 @@ import {
   cstdPageShellClassName,
   cstdProjectEvidenceClassName,
   cstdProjectEvidenceShareGridClassName,
+  cstdProjectComparisonClassName,
+  cstdProjectComparisonColumnsClassName,
   cstdProjectFocusActionRailClassName,
   cstdProjectFocusBodyClassName,
   cstdProjectFocusChecklistGridClassName,
@@ -132,6 +140,7 @@ export function CstdLanding() {
   const [projectSearchQuery, setProjectSearchQuery] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [comparedProjectIds, setComparedProjectIds] = useState<string[]>([]);
   const [projectCopyResult, setProjectCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [projectBriefCopyResult, setProjectBriefCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [portfolioCopyResult, setPortfolioCopyResult] = useState<CstdProjectCopyResult | null>(null);
@@ -217,6 +226,7 @@ export function CstdLanding() {
   const projectControlSummary = useMemo(() => getCstdProjectControlSummary(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const projectControlBadges = useMemo(() => getCstdProjectControlBadges(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const hasProjectControlState = useMemo(() => hasActiveCstdProjectControls(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
+  const projectComparison = useMemo(() => getCstdProjectComparison(cstdProjects, comparedProjectIds), [comparedProjectIds]);
   const selectedProject = useMemo(
     () => cstdProjects.find((project) => project.id === selectedProjectId) ?? null,
     [selectedProjectId],
@@ -317,6 +327,10 @@ export function CstdLanding() {
 
   function resetProjectControls() {
     updateProjectDirectoryControls("all", "");
+  }
+
+  function toggleProjectComparison(projectId: string) {
+    setComparedProjectIds((selectedIds) => toggleCstdProjectComparison(selectedIds, projectId));
   }
 
   async function copyProjectFocusLink() {
@@ -817,10 +831,26 @@ export function CstdLanding() {
             ) : null}
           </AnimatePresence>
 
+          {projectComparison.projects.length > 0 ? (
+            <ProjectComparison
+              comparison={projectComparison}
+              onClear={() => setComparedProjectIds([])}
+              onRemove={toggleProjectComparison}
+            />
+          ) : null}
+
           <div className={cstdProjectGridClassName}>
             {visibleProjects.length > 0 ? (
               visibleProjects.map((project, index) => (
-                <ProjectCard key={project.title} project={project} index={index} motionDisabled={motionDisabled} onFocus={focusProject} />
+                <ProjectCard
+                  key={project.title}
+                  project={project}
+                  comparedProjectIds={comparedProjectIds}
+                  index={index}
+                  motionDisabled={motionDisabled}
+                  onFocus={focusProject}
+                  onToggleComparison={toggleProjectComparison}
+                />
               ))
             ) : (
               <div className="rounded-xl border-2 border-dashed border-[#d7c19d] bg-white/72 p-6 text-center md:col-span-2 xl:col-span-3">
@@ -1290,19 +1320,101 @@ function ProjectCapabilityIndex({ onFocus }: { onFocus: (projectId: string) => v
   );
 }
 
+function ProjectComparison({
+  comparison,
+  onClear,
+  onRemove,
+}: {
+  comparison: CstdProjectComparisonData;
+  onClear: () => void;
+  onRemove: (projectId: string) => void;
+}) {
+  return (
+    <section className={cstdProjectComparisonClassName} aria-labelledby="project-comparison-heading">
+      <div className="flex flex-col gap-3 border-b border-[#b7decf] p-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#047857]">Decision view</p>
+          <h3 id="project-comparison-heading" className="mt-1 text-lg font-black text-[#1b4332]">
+            项目对比
+          </h3>
+          <p className="mt-1 text-xs font-bold text-[#4c6b5d]" aria-live="polite">
+            {comparison.summary}
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onClear}
+          className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:bg-[#f7fffb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
+        >
+          <X className="h-3.5 w-3.5" />
+          清空对比
+        </button>
+      </div>
+
+      <div className="p-4">
+        <ul className={cstdProjectComparisonColumnsClassName} aria-label="已选对比项目">
+          {comparison.projects.map((project) => (
+            <li key={project.id} className="flex min-w-0 items-center justify-between gap-3 border-b border-[#b7decf] bg-white/68 px-3 py-2.5">
+              <span className="min-w-0 break-words text-sm font-black text-[#1b4332]">{project.title}</span>
+              <button
+                type="button"
+                onClick={() => onRemove(project.id)}
+                aria-label={`移出对比：${project.title}`}
+                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#4c6b5d] transition hover:bg-[#dff8ed] hover:text-[#047857] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        {comparison.ready ? (
+          <dl className="mt-4 border-t border-[#b7decf]">
+            {comparison.rows.map((row) => (
+              <div key={row.label} className="grid min-w-0 gap-2 border-b border-[#b7decf] py-3 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-3">
+                <dt className="text-xs font-black text-[#047857]">{row.label}</dt>
+                <dd className={cstdProjectComparisonColumnsClassName}>
+                  {row.values.map((value, index) => {
+                    const project = comparison.projects[index];
+                    return (
+                      <div key={project.id} className="min-w-0 break-words text-sm font-semibold leading-6 text-[#355b4a]">
+                        <span className="mb-1 block text-[0.68rem] font-black text-[#047857] sm:sr-only">{project.title}</span>
+                        {value}
+                      </div>
+                    );
+                  })}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        ) : (
+          <p className="mt-4 text-sm font-bold text-[#4c6b5d]" role="status">
+            再选择 1 个已上线项目即可对比
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function ProjectCard({
   project,
+  comparedProjectIds,
   index,
   motionDisabled,
   onFocus,
+  onToggleComparison,
 }: {
   project: (typeof cstdProjects)[number];
+  comparedProjectIds: readonly string[];
   index: number;
   motionDisabled: boolean;
   onFocus: (projectId: string) => void;
+  onToggleComparison: (projectId: string) => void;
 }) {
   const Icon = projectIcons[project.icon];
   const evidencePreview = getCstdProjectCardPreview(project);
+  const comparisonControl = getCstdProjectComparisonControl(comparedProjectIds, project.id);
   const toneClasses = {
     mint: "from-[#dff8ed]/90 text-[#047857]",
     rose: "from-[#ffe7ec]/90 text-[#be4563]",
@@ -1368,6 +1480,23 @@ function ProjectCard({
           >
             查看案例
           </button>
+          {project.status === "Live" ? (
+            <button
+              type="button"
+              onClick={() => onToggleComparison(project.id)}
+              aria-label={`${comparisonControl.label}：${project.title}`}
+              aria-pressed={comparisonControl.selected}
+              disabled={comparisonControl.disabled}
+              className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border px-5 text-sm font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto ${
+                comparisonControl.selected
+                  ? "border-[#1b4332] bg-[#dff8ed] text-[#047857]"
+                  : "border-[#1b4332] bg-white text-[#0f8f64] hover:-translate-y-0.5 hover:bg-[#eefbf4]"
+              }`}
+            >
+              {comparisonControl.selected ? <Check className="h-4 w-4" /> : <GitCompareArrows className="h-4 w-4" />}
+              {comparisonControl.label}
+            </button>
+          ) : null}
           <HeroButton href={project.href}>
             {project.action}
           </HeroButton>
