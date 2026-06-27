@@ -1,5 +1,27 @@
 # RocoDex Iteration Log
 
+## 2026-06-28 — Long Homepage Round 5 Stage 1 / 6 — IMPROVE
+
+### Scope
+
+- Made the `/cstd` project directory category/search state recoverable from URL parameters.
+- Added URL helpers for `category` and `q`, and wired filter/search/reset/focus-close interactions to stable `#projects` links.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because the URL state helpers were missing, then passed 9 / 9 after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 34 files / 119 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile `/cstd?category=creative&q=南京#projects`; the directory restored `创作影像 + 南京`, URL updates worked after editing search, no horizontal overflow, and console errors were `0`.
+- Commit `40f7461` was pushed to `origin/main`.
+- GitHub Actions CI run `28298205378` and Vercel deployment status both completed successfully.
+
+### Follow-up candidates
+
+- Add a one-click share action for the current filtered project directory view.
+- Keep future homepage additions focused on navigation, proof, and reuse instead of new stacked panels.
+
 ## 2026-06-26 — Long Homepage Round 4 Stage 6 / 6 — IMPROVE
 
 ### Scope

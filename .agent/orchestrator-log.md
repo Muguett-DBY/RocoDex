@@ -1,5 +1,43 @@
 # RocoDex Agent Orchestrator Log
 
+## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
+
+- Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
+- Branch: `main`
+- Baseline: clean worktree; local `main` matched `origin/main` at start of the round.
+- Prompt source: `C:\Users\12031\Desktop\AGENT_ORCHESTRATOR_3_LEVELS_V2\03_LONG_6_STAGE_MAIN_V2.txt`
+- Prompt pack: `C:\Users\12031\Desktop\AGENT_PROMPTS_MAIN_PACK`
+- Required prompt files read: `AGENT_IMPROVE_MAIN.txt`, `AGENT_UIUX_MAIN.txt`, `AGENT_CHECK_MAIN.txt`, `AGENT_CI_FIX_MAIN.txt`
+- Remote baseline: latest local/remote commit `9788aac`; previous round recorded successful GitHub Actions and Vercel checks.
+
+### Stage 1
+
+- Stage number: 1 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: make the CSTD project directory filter and search state recoverable from the URL.
+- Start state:
+  - The homepage had a strong project directory with category filters and keyword search.
+  - Individual project focus links were shareable, but directory views such as `创作影像 + 南京` were not recoverable after reload or share.
+  - Reset and close actions returned to the generic project directory instead of the visitor's current filtered directory state.
+- Implemented:
+  - Added `parseCstdProjectDirectoryState` and `buildCstdProjectDirectoryStateHref`.
+  - Initialized `/cstd` directory controls from `category` and `q` URL parameters.
+  - Synchronized filter, search, clear, reset, and focus-close interactions back to URL state.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-filter.test.ts` failed because the new URL state helpers were missing.
+  - TDD green: focused project filter tests passed 9 / 9.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 34 files / 119 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome covered 1366px and 390px `/cstd?category=creative&q=南京#projects`; search restored to `南京`, `创作影像` was pressed, `当前显示 1 / 6 个项目` and `奶黄包摄影` were visible, editing search updated the URL to `q=CRM`, horizontal overflow was `false`, and console errors were `0`.
+  - Browser tooling note: Browser plugin tools were not callable in this turn, so Playwright was used as the frontend verification fallback.
+- Commit: `40f7461 feat: persist project directory state`
+- Push: `origin/main` updated to `40f7461`
+- Remote check:
+  - GitHub Actions CI run `28298205378` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 2 / 6 `IMPROVE`
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 4
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
