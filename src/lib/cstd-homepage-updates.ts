@@ -14,25 +14,25 @@ export type CstdHomepageAcceptanceItem = {
 };
 
 export const cstdHomepageUpdates: readonly CstdHomepageUpdate[] = [
-  { label: "项目搜索", detail: "按关键词、标签和问题快速定位项目" },
-  { label: "案例导航", detail: "焦点面板支持上一个 / 下一个项目" },
-  { label: "摘要复制", detail: "一键复制项目角色、问题、交付和链接" },
-  { label: "CI 绿色", detail: "GitHub Actions 与 Vercel 已验证" },
+  { label: "视图记忆", detail: "筛选和搜索写入 URL，可刷新恢复" },
+  { label: "当前视图", detail: "一键复制带条件的项目目录链接" },
+  { label: "项目对比", detail: "两个 live 项目可并排查看证据" },
+  { label: "运行时清洁", detail: "3D 奶黄包控制台告警已清零" },
 ] as const;
 
 export const cstdHomepageCapabilities: readonly CstdHomepageCapability[] = [
   { label: "可搜索", detail: "分类、关键词和问题证据都能检索" },
+  { label: "可分享", detail: "目录视图、项目焦点和案例摘要都能复制" },
+  { label: "可对比", detail: "live 项目能用同一证据结构决策" },
   { label: "可验证", detail: "每个上线项目有角色、问题、交付和现状" },
-  { label: "可复制", detail: "案例摘要和项目组合摘要可带走" },
-  { label: "可深链", detail: "项目焦点链接可直接打开" },
-  { label: "可部署", detail: "本地验证、Actions 和 Vercel 持续闭环" },
+  { label: "可上线", detail: "本地验证、Actions 和 Vercel 持续闭环" },
 ] as const;
 
 export const cstdHomepageAcceptance: readonly CstdHomepageAcceptanceItem[] = [
-  { label: "能力索引", detail: "按产品工程、AI 创作研究和运营系统理解项目组合" },
-  { label: "证据时间线", detail: "线上项目都有当前状态与交付证据" },
-  { label: "深链目录", detail: "每个 live 项目案例都能一键复制分享" },
-  { label: "本地 CI", detail: "Windows clean install 可先清理当前仓库 Next 进程" },
+  { label: "目录深链", detail: "分类和搜索状态可恢复、可分享" },
+  { label: "项目对比", detail: "两项 live 项目证据矩阵已上线" },
+  { label: "3D 运行时", detail: "浏览器控制台无 Three.js Clock 告警" },
+  { label: "远端绿色", detail: "GitHub Actions 与 Vercel 生产部署已通过" },
 ] as const;
 
 export function getCstdHomepageUpdateSummary(updates: readonly CstdHomepageUpdate[]) {
