@@ -155,6 +155,35 @@
 - Status: closed
 - Next stage: Stage 6 / 6 `IMPROVE`
 
+### Stage 6
+
+- Stage number: 6 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: refresh the visible homepage acceptance summary so the first-screen status reflects this round's URL-state, sharing, comparison, runtime, CI, and deployment work.
+- Start state:
+  - Stage 5 fixed the browser runtime warning and closed local/remote checks.
+  - The hero's existing update, capability, and acceptance blocks still described an older round: project search, case navigation, summary copy, and local CI.
+  - The final stage needed to reuse those existing blocks instead of adding another stacked homepage panel.
+- Implemented:
+  - Updated `cstdHomepageUpdates` to `视图记忆`, `当前视图`, `项目对比`, and `运行时清洁`.
+  - Updated `cstdHomepageCapabilities` to emphasize search, sharing, comparison, evidence verification, and online delivery.
+  - Updated `cstdHomepageAcceptance` to record directory deep links, the live-project comparison matrix, the clean 3D runtime, and green remote checks.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-homepage-updates.test.ts` failed against the old homepage summary labels.
+  - TDD green: focused homepage summary tests passed 3 / 3 after updating the data.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 36 files / 128 tests; `npm run build` exited `0` and generated 735 static pages.
+  - HTTP verification: local `/cstd` returned `200` and included `视图记忆`, `项目对比`, `运行时清洁`, and `远端绿色`.
+  - Browser verification: in-app Browser covered 1366x900 and 390x844 `/cstd`; new labels were visible, summary aria-labels matched, no framework overlay was present, no horizontal overflow was present, and console errors/warnings were `0`.
+- Commit: `669b1e2 feat: refresh homepage acceptance summary`
+- Push: `origin/main` updated to `669b1e2`
+- Remote check:
+  - GitHub Actions CI run `28300188342` completed successfully.
+  - Vercel production deployment `dpl_7i3UA8kn9noM7UavFPtCkiWpiWBd` completed Ready.
+  - Live smoke returned `200` with new Stage 6 text on `https://custard.top`, `https://rocodex.vercel.app/cstd`, and `https://rocodex.custard.top/cstd`.
+- Status: closed
+- Final status: all 6 stages completed with local tests, browser verification, commits, pushes, GitHub Actions, and Vercel checks.
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 4
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

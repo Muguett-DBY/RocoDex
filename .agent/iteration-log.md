@@ -1,5 +1,31 @@
 # RocoDex Iteration Log
 
+## 2026-06-28 — Long Homepage Round 5 Stage 6 / 6 — IMPROVE
+
+### Scope
+
+- Refreshed the existing `/cstd` hero status blocks instead of adding another panel.
+- Updated latest improvements to highlight URL view recovery, current-view sharing, project comparison, and the clean 3D runtime.
+- Updated capability and acceptance summaries to reflect searchable/shareable/comparable evidence, clean browser runtime, and green GitHub Actions/Vercel status.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because the homepage summary data still had the old labels, then passed 3 / 3 after updating the data.
+- `npm run lint` exited `0`.
+- `npm test` passed 36 files / 128 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local HTTP `/cstd` returned `200` and included `视图记忆`, `项目对比`, `运行时清洁`, and `远端绿色`.
+- In-app Browser verification covered 1366x900 and 390x844 `/cstd`; new labels were visible, summary aria-labels matched, no horizontal overflow was present, and console errors/warnings were `0`.
+- Commit `669b1e2` was pushed to `origin/main`.
+- GitHub Actions CI run `28300188342` completed successfully.
+- Vercel production deployment `dpl_7i3UA8kn9noM7UavFPtCkiWpiWBd` completed Ready.
+- Live smoke passed on `https://custard.top`, `https://rocodex.vercel.app/cstd`, and `https://rocodex.custard.top/cstd` with the new Stage 6 summary text.
+
+### Follow-up candidates
+
+- Revisit the exact Three.js pin after React Three Fiber releases its Timer migration.
+- Keep future homepage work inside the existing evidence/navigation surfaces unless a genuinely new workflow appears.
+
 ## 2026-06-28 — Long Homepage Round 5 Stage 5 / 6 — CHECK
 
 ### Scope
