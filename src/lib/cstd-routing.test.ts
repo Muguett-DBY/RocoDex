@@ -14,12 +14,15 @@ describe("CSTD host routing", () => {
     expect(getCstdRouteDecision("custard.top", "/index.html")).toEqual({ kind: "rewrite", path: "/cstd" });
   });
 
+  test("serves the CSTD landing route on both canonical and explicit CSTD paths", () => {
+    expect(getCstdRouteDecision("custard.top", "/cstd")).toEqual({ kind: "next" });
+  });
+
   test("returns not found for CSTD paths that belong on the RocoDex subdomain", () => {
     expect(getCstdRouteDecision("custard.top", "/creatures")).toEqual({ kind: "not-found" });
     expect(getCstdRouteDecision("custard.top", "/guides/example")).toEqual({ kind: "not-found" });
     expect(getCstdRouteDecision("custard.top", "/login")).toEqual({ kind: "not-found" });
     expect(getCstdRouteDecision("custard.top", "/api/register")).toEqual({ kind: "not-found" });
-    expect(getCstdRouteDecision("custard.top", "/cstd")).toEqual({ kind: "not-found" });
   });
 
   test("allows CSTD assets and SEO endpoints on the apex domain", () => {
