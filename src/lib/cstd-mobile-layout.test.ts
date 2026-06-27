@@ -21,6 +21,8 @@ import {
   cstdProjectMetricTileClassName,
   cstdProjectMetricValueClassName,
   cstdProjectProofTimelineGridClassName,
+  cstdProjectToolbarActionsClassName,
+  cstdProjectToolbarClassName,
 } from "./cstd-mobile-layout";
 
 describe("CSTD mobile layout rules", () => {
@@ -115,5 +117,14 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectProofTimelineGridClassName).toContain("grid-cols-1");
     expect(cstdProjectProofTimelineGridClassName).toContain("md:grid-cols-2");
     expect(cstdProjectProofTimelineGridClassName).toContain("xl:grid-cols-5");
+  });
+
+  test("keeps the project directory toolbar compact and action-stable", () => {
+    expect(cstdProjectToolbarClassName).toContain("grid");
+    expect(cstdProjectToolbarClassName).toContain("sm:grid-cols-[minmax(0,1fr)_auto]");
+    expect(cstdProjectToolbarClassName).toContain("min-w-0");
+    expect(cstdProjectToolbarActionsClassName).toContain("grid");
+    expect(cstdProjectToolbarActionsClassName).toContain("min-[420px]:grid-cols-2");
+    expect(cstdProjectToolbarActionsClassName).toContain("sm:flex");
   });
 });

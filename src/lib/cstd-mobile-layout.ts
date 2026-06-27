@@ -42,6 +42,11 @@ export const cstdProjectEvidenceShareGridClassName = "mt-4 grid items-stretch ga
 
 export const cstdProjectProofTimelineGridClassName = "mt-3 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-5";
 
+export const cstdProjectToolbarClassName =
+  "mt-3 grid min-w-0 gap-3 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/78 p-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center";
+
+export const cstdProjectToolbarActionsClassName = "grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:flex sm:flex-wrap sm:justify-end";
+
 export const cstdProjectFocusBodyClassName = "grid gap-5 p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_20rem]";
 
 export const cstdProjectFocusChecklistGridClassName = "mt-3 grid grid-cols-1 gap-2 md:grid-cols-2";

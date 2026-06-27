@@ -66,6 +66,17 @@ export function getCstdProjectControlSummary(filter: CstdProjectFilter, query = 
   return `搜索：${trimmedQuery}`;
 }
 
+export function getCstdProjectControlBadges(filter: CstdProjectFilter, query = "") {
+  const trimmedQuery = query.trim();
+  const filterLabel = cstdProjectFilters.find((option) => option.id === filter)?.label ?? "全部";
+  const badges: { label: string; value: string }[] = [];
+
+  if (filter !== "all") badges.push({ label: "分类", value: filterLabel });
+  if (trimmedQuery) badges.push({ label: "搜索", value: trimmedQuery });
+
+  return badges;
+}
+
 export function hasActiveCstdProjectControls(filter: CstdProjectFilter, query = "") {
   return filter !== "all" || query.trim().length > 0;
 }
