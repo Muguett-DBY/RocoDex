@@ -5,6 +5,7 @@ import {
   buildCstdProjectDirectoryShareUrl,
   filterCstdProjects,
   getCstdProjectControlSummary,
+  getCstdProjectControlBadges,
   getCstdProjectFilterSummary,
   hasActiveCstdProjectControls,
   parseCstdProjectDirectoryState,
@@ -64,6 +65,16 @@ describe("CSTD project filtering", () => {
     expect(hasActiveCstdProjectControls("all", "")).toBe(false);
     expect(hasActiveCstdProjectControls("all", "CRM")).toBe(true);
     expect(hasActiveCstdProjectControls("research", "")).toBe(true);
+  });
+
+  test("builds compact badges for active project directory controls", () => {
+    expect(getCstdProjectControlBadges("all", "")).toEqual([]);
+    expect(getCstdProjectControlBadges("creative", "")).toEqual([{ label: "分类", value: "创作影像" }]);
+    expect(getCstdProjectControlBadges("all", " 南京 ")).toEqual([{ label: "搜索", value: "南京" }]);
+    expect(getCstdProjectControlBadges("operations", " CRM ")).toEqual([
+      { label: "分类", value: "运营系统" },
+      { label: "搜索", value: "CRM" },
+    ]);
   });
 
   test("parses project directory state from URL parameters", () => {

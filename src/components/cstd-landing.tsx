@@ -45,6 +45,7 @@ import {
   buildCstdProjectDirectoryShareUrl,
   cstdProjectFilters,
   filterCstdProjects,
+  getCstdProjectControlBadges,
   getCstdProjectControlSummary,
   getCstdProjectFilterSummary,
   hasActiveCstdProjectControls,
@@ -73,6 +74,8 @@ import {
   cstdProjectMetricTileClassName,
   cstdProjectMetricValueClassName,
   cstdProjectProofTimelineGridClassName,
+  cstdProjectToolbarActionsClassName,
+  cstdProjectToolbarClassName,
 } from "@/lib/cstd-mobile-layout";
 
 type MascotMood = "curious" | "happy" | "working";
@@ -212,6 +215,7 @@ export function CstdLanding() {
   const visibleProjects = useMemo(() => filterCstdProjects(cstdProjects, activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const projectFilterSummary = useMemo(() => getCstdProjectFilterSummary(cstdProjects, activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const projectControlSummary = useMemo(() => getCstdProjectControlSummary(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
+  const projectControlBadges = useMemo(() => getCstdProjectControlBadges(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const hasProjectControlState = useMemo(() => hasActiveCstdProjectControls(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const selectedProject = useMemo(
     () => cstdProjects.find((project) => project.id === selectedProjectId) ?? null,
@@ -691,18 +695,28 @@ export function CstdLanding() {
                 {projectFilterSummary}
               </p>
             </div>
-            <div className="mt-3 flex flex-col gap-2 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/78 p-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className={cstdProjectToolbarClassName}>
               <div className="min-w-0">
                 <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#9a5a18]">当前视图</p>
                 <p className="mt-1 break-words text-sm font-black text-[#2f241d]" aria-live="polite">
                   {projectControlSummary}
                 </p>
+                {projectControlBadges.length > 0 ? (
+                  <div className="mt-2 flex flex-wrap gap-1.5" aria-label="当前项目目录条件">
+                    {projectControlBadges.map((badge) => (
+                      <span key={`${badge.label}-${badge.value}`} className="inline-flex max-w-full items-center gap-1 rounded-md border border-[#ead6ad] bg-white/82 px-2 py-1 text-[0.68rem] font-black text-[#7b6656]">
+                        <span className="shrink-0 text-[#9a5a18]">{badge.label}</span>
+                        <span className="min-w-0 truncate text-[#2f241d]">{badge.value}</span>
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
               </div>
-              <div className="flex shrink-0 flex-wrap gap-2">
+              <div className={cstdProjectToolbarActionsClassName}>
                 <button
                   type="button"
                   onClick={copyProjectDirectoryView}
-                  className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-3 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                  className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-3 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
                 >
                   <Copy className="h-3.5 w-3.5" />
                   复制当前视图
@@ -712,7 +726,7 @@ export function CstdLanding() {
                     type="button"
                     onClick={resetProjectControls}
                     aria-label="重置项目搜索和筛选"
-                    className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:-translate-y-0.5 hover:bg-[#eefbf4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                    className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:-translate-y-0.5 hover:bg-[#eefbf4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
                   >
                     <RotateCcw className="h-3.5 w-3.5" />
                     重置
