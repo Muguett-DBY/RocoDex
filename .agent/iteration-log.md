@@ -1,5 +1,27 @@
 # RocoDex Iteration Log
 
+## 2026-06-28 — Long Homepage Round 5 Stage 2 / 6 — IMPROVE
+
+### Scope
+
+- Added `复制当前视图` to the `/cstd` project directory toolbar.
+- The action copies an absolute URL for the current `category` and `q` state, with success feedback and manual-copy fallback.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because the absolute share URL helper was missing, then passed 10 / 10 after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 34 files / 120 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification in local Chrome covered desktop and 390px mobile `/cstd?category=operations&q=CRM#projects`; clipboard content matched the current filtered view URL, no horizontal overflow, and console errors were `0`.
+- Commit `ec84a84` was pushed to `origin/main`.
+- GitHub Actions CI run `28298430484` and Vercel deployment status both completed successfully.
+
+### Follow-up candidates
+
+- Use the UI/UX stage to make the project toolbar more compact and visually stable now that it has search, filters, reset, and share controls.
+- Consider exposing the current view URL as a small non-copy permalink only if browser clipboard fallback evidence shows repeated failures.
+
 ## 2026-06-28 — Long Homepage Round 5 Stage 1 / 6 — IMPROVE
 
 ### Scope

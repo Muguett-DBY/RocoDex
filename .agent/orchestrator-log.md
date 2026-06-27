@@ -38,6 +38,34 @@
 - Status: closed
 - Next stage: Stage 2 / 6 `IMPROVE`
 
+### Stage 2
+
+- Stage number: 2 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a one-click share action for the current filtered project directory view.
+- Start state:
+  - Stage 1 made directory views recoverable with `category` and `q` URL parameters.
+  - Visitors could reload/share a manually copied URL, but the page did not provide a dedicated copy action for the current directory view.
+  - The project section already had portfolio/deep-link copy actions, so this needed to stay compact and scoped to the directory toolbar.
+- Implemented:
+  - Added `buildCstdProjectDirectoryShareUrl` for absolute current-view URLs.
+  - Added `复制当前视图` to the project directory state strip.
+  - Added clipboard success, unsupported, and failure feedback plus a manual-copy textarea fallback.
+- Verification recorded before commit:
+  - TDD red: `npm test -- src/lib/cstd-project-filter.test.ts` failed because `buildCstdProjectDirectoryShareUrl` was missing.
+  - TDD green: focused project filter tests passed 10 / 10.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 34 files / 120 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: local Chrome covered 1366px and 390px `/cstd?category=operations&q=CRM#projects`; `复制当前视图` copied `http://localhost:3100/cstd?category=operations&q=CRM#projects`, success feedback was visible, reset stayed available, horizontal overflow was `false`, and console errors were `0`.
+  - Browser tooling note: Browser plugin tools were not callable in this turn, so Playwright was used as the frontend verification fallback.
+- Commit: `ec84a84 feat: share current project directory view`
+- Push: `origin/main` updated to `ec84a84`
+- Remote check:
+  - GitHub Actions CI run `28298430484` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 3 / 6 `UIUX`
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 4
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
