@@ -94,6 +94,35 @@
 - Status: closed
 - Next stage: Stage 4 / 6 `IMPROVE`
 
+### Stage 4
+
+- Stage number: 4 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a lightweight two-project comparison flow that turns existing delivery evidence into decision support.
+- Start state:
+  - The homepage exposed filters, project focus, capability lanes, and evidence summaries.
+  - Visitors could inspect projects individually but could not compare two live projects in one stable view.
+  - The comparison needed to reuse existing evidence and avoid another independently maintained content source.
+- Implemented:
+  - Added tested two-project selection, limit, removal, and control-state helpers.
+  - Added a decision matrix for project type, current state, responsibility, delivered outcome, and technology tags.
+  - Added accessible `aria-pressed` card controls, a strict two-project limit, single-item removal, and clear-all behavior.
+  - Added responsive comparison layout rules with mobile stacking and desktop two-column evidence.
+- Verification recorded before commit:
+  - TDD red: focused tests first failed because the comparison module, control helper, and responsive layout constants were missing.
+  - TDD green: comparison tests passed 4 / 4 and mobile-layout tests passed 12 / 12.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 35 files / 127 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Browser verification: the in-app Browser covered 1366x900 and 390x844 `/cstd?category=all#projects`; selecting `私人 AI 创作工作台` and `产业园区招商 CRM` rendered all five evidence rows, disabled third-project selection, then removal and clear restored controls. Both viewports had no horizontal overflow and console errors were `0`.
+  - Browser observation for Stage 5: one existing `THREE.Clock` deprecation warning was captured from the mascot bundle.
+- Commit: `a6a1d84 feat: compare homepage projects`
+- Push: `origin/main` updated to `a6a1d84`
+- Remote check:
+  - GitHub Actions CI run `28299182654` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+- Status: closed
+- Next stage: Stage 5 / 6 `CHECK`
+
 ## Run — 2026-06-26 — Long 6-stage homepage strengthening round 4
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

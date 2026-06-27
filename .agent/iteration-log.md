@@ -1,5 +1,28 @@
 # RocoDex Iteration Log
 
+## 2026-06-28 — Long Homepage Round 5 Stage 4 / 6 — IMPROVE
+
+### Scope
+
+- Added a strict two-project comparison flow for live `/cstd` projects.
+- Reused existing project evidence to compare type, current state, responsibility, delivered outcome, and technology tags.
+- Added accessible selection/removal controls and responsive one-column mobile / two-column desktop presentation.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because the comparison module, control helper, and layout constants were missing, then passed 4 / 4 comparison tests and 12 / 12 mobile-layout tests.
+- `npm run lint` exited `0`.
+- `npm test` passed 35 files / 127 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- In-app Browser verification covered 1366x900 and 390x844; the full two-project matrix rendered, third selection was disabled, remove/clear restored state, no horizontal overflow was present, and console errors were `0`.
+- Commit `a6a1d84` was pushed to `origin/main`.
+- GitHub Actions CI run `28299182654` and Vercel deployment status both completed successfully.
+
+### Follow-up candidates
+
+- Investigate the observed `THREE.Clock` deprecation warning during the Stage 5 production check.
+- Keep comparison data derived from the canonical project records so homepage proof does not drift.
+
 ## 2026-06-28 — Long Homepage Round 5 Stage 3 / 6 — UIUX
 
 ### Scope
