@@ -853,3 +853,31 @@
 - Commit `b9c8306` was pushed to `origin/main`.
 - GitHub remote check found no Actions run for `b9c8306`; Vercel commit status completed successfully.
 - Final completion audit recorded in `.agent/final-completion-audit.md`.
+
+## 2026-06-28 — Preflight Risk Closure
+
+### Scope
+
+- Fixed the remaining public route risk by serving the explicit CSTD entry page at `custard.top/cstd`.
+- Removed the local `DEP0205 module.register()` verification warning by exact-pinning the current Next, eslint-config-next, Vitest, Tailwind, and Tailwind PostCSS patch releases.
+- Added a toolchain policy test so future installs cannot silently drift away from the verified Node/npm and patch-version baseline.
+
+### Changed surfaces
+
+- `custard.top/cstd` routing behavior
+- package version policy
+- local verification output hygiene
+
+### Verification evidence
+
+- Focused TDD run failed before implementation for the apex `/cstd` route and missing toolchain policy.
+- Focused TDD run passed after implementation.
+- `node --trace-deprecation .\node_modules\vitest\vitest.mjs run src/lib/cstd-routing.test.ts` passed with no `DEP0205` output.
+- `npm run ci:local` completed clean install and audit with 0 vulnerabilities.
+- `npm run lint` exited `0`.
+- `npm test` passed 37 files / 130 tests.
+- `npm audit --json` reported 0 vulnerabilities.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local production HTTP checks confirmed the intended CSTD host behavior, including `custard.top/cstd` returning CSTD content and `custard.top/creatures` staying `404`.
+- Browser verification covered `/cstd` at 1366px, visible CSTD content, visible canvas, no horizontal overflow, and console errors/warnings `0`.
+- Upstream R3F Timer work remains open, so `three@0.182.0` remains the verified mitigation.

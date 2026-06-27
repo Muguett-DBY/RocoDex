@@ -1,6 +1,7 @@
 const CSTD_HOST = "custard.top";
 const UNSUPPORTED_CSTD_HOSTS = new Set(["www.custard.top"]);
 const CSTD_ENTRY_PATHS = new Set(["/", "/index.html"]);
+const CSTD_EXPLICIT_ENTRY_PATHS = new Set(["/cstd"]);
 const CSTD_ALLOWED_PATHS = new Set(["/cstd-mascot.svg", "/cstd-og.svg", "/favicon.ico", "/sitemap.xml"]);
 
 export type CstdRouteDecision =
@@ -18,6 +19,7 @@ export function getCstdRouteDecision(host: string, path: string): CstdRouteDecis
   if (UNSUPPORTED_CSTD_HOSTS.has(normalizedHost)) return { kind: "not-found" };
   if (normalizedHost !== CSTD_HOST) return { kind: "next" };
   if (CSTD_ENTRY_PATHS.has(path)) return { kind: "rewrite", path: "/cstd" };
+  if (CSTD_EXPLICIT_ENTRY_PATHS.has(path)) return { kind: "next" };
   if (isAllowedCstdPath(path)) return { kind: "next" };
 
   return { kind: "not-found" };

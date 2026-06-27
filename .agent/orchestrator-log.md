@@ -1239,3 +1239,23 @@
   - Commit status `Vercel` completed successfully with description “Deployment has completed”.
 - Final audit: `.agent/final-completion-audit.md`
 - Status: closed
+
+## 2026-06-28 Preflight Risk Closure
+
+- Type: risk-fix before rerunning `03_LONG_6_STAGE_MAIN_V2.txt`
+- Goal: close the known residual risks before starting the next required 6-stage loop.
+- Implemented:
+  - Allowed the explicit CSTD entry route `https://custard.top/cstd` while keeping unrelated apex RocoDex routes blocked.
+  - Added `toolchain-version-policy` coverage for Node/npm policy and patch-level pins used by local and CI verification.
+  - Upgraded and exact-pinned Next, eslint-config-next, Vitest, Tailwind, and Tailwind PostCSS packages to remove the local `DEP0205 module.register()` warning.
+  - Added `packageManager` and Node `engines` policy to `package.json`.
+- Verification recorded before commit:
+  - TDD red: focused routing and toolchain tests failed before implementation.
+  - TDD green: focused routing and toolchain tests passed after implementation.
+  - Deprecation trace: `node --trace-deprecation .\node_modules\vitest\vitest.mjs run src/lib/cstd-routing.test.ts` passed with no `DEP0205` output.
+  - Clean install: `npm run ci:local` completed with 0 vulnerabilities.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 37 files / 130 tests; `npm audit --json` reported 0 vulnerabilities; `npm run build` exited `0` and generated 735 static pages.
+  - Local production HTTP: host-header checks confirmed `custard.top/`, `custard.top/cstd`, and `rocodex.custard.top/cstd` return CSTD content while `custard.top/creatures` remains `404`.
+  - Browser: `/cstd` rendered the CSTD homepage at 1366px with visible canvas, no horizontal overflow, and console errors/warnings `0`.
+  - Upstream Three/R3F check: react-three-fiber Timer PR `pmndrs/react-three-fiber#3773` and issue `#3741` remain open, so the existing exact `three@0.182.0` mitigation stays in place.
+- Status: ready for risk-fix commit
