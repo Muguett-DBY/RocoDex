@@ -1,4 +1,6 @@
 import { describe, expect, test } from "vitest";
+import { getCstdProjectComparisonFit } from "./cstd-project-comparison-fit";
+import { cstdProjectGuides } from "./cstd-project-guide";
 import { cstdProjects } from "./cstd-projects";
 import {
   CSTD_PROJECT_COMPARISON_LIMIT,
@@ -80,10 +82,15 @@ describe("CSTD project comparison", () => {
 
   test("builds a copyable comparison decision brief with matrix evidence", () => {
     const comparison = getCstdProjectComparison(cstdProjects, ["design", "crm"]);
+    const fit = getCstdProjectComparisonFit(
+      cstdProjectGuides.find((guide) => guide.id === "ai-creation")!,
+      comparison.projects,
+    );
 
     expect(
       buildCstdProjectComparisonBrief({
         comparison,
+        fit,
         goalLabel: "目标路径：整理 AI 创作素材",
         projectLabel: "对比项目：私人 AI 创作工作台 / 产业园区招商 CRM",
         url: "https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison",
@@ -95,6 +102,11 @@ describe("CSTD project comparison", () => {
         "对比项目：私人 AI 创作工作台 / 产业园区招商 CRM",
         "状态：已选择 2 / 2 个项目",
         "链接：https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison",
+        "",
+        "目标判断",
+        "整理 AI 创作素材：私人 AI 创作工作台是当前目标直达项目",
+        "- 私人 AI 创作工作台 [目标直达]：用私人工作台连接对话、图片、视频和素材库。",
+        "- 产业园区招商 CRM [横向参照]：当前目标不直接指向该项目；保留用于对照业务建模、权限设计与全栈交付的交付证据。",
         "",
         "项目类型",
         "- 私人 AI 创作工作台：AI creation",

@@ -1,4 +1,5 @@
 import { cstdProjects, type CstdProject } from "./cstd-projects";
+import type { CstdProjectComparisonFit } from "./cstd-project-comparison-fit";
 
 export const CSTD_PROJECT_COMPARISON_LIMIT = 2;
 
@@ -14,6 +15,7 @@ export type CstdProjectComparison = {
 
 export type CstdProjectComparisonBriefInput = {
   comparison: CstdProjectComparison;
+  fit?: CstdProjectComparisonFit;
   goalLabel: string;
   projectLabel: string;
   url: string | null;
@@ -82,6 +84,7 @@ export function getCstdProjectComparison(projects: readonly CstdProject[], selec
 
 export function buildCstdProjectComparisonBrief({
   comparison,
+  fit,
   goalLabel,
   projectLabel,
   url,
@@ -102,6 +105,14 @@ export function buildCstdProjectComparisonBrief({
     `状态：${comparison.summary}`,
     ...(url ? [`链接：${url}`] : []),
     ...(!comparison.ready ? ["", "下一步：再选择 1 个已上线项目即可形成完整对比。"] : []),
+    ...(fit
+      ? [
+          "",
+          "目标判断",
+          fit.summary,
+          ...fit.items.map((item) => `- ${item.title} [${item.label}]：${item.detail}`),
+        ]
+      : []),
     ...matrixLines,
   ].join("\n");
 }
