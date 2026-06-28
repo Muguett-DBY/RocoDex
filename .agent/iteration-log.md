@@ -936,6 +936,10 @@
 - `npm test` passed 38 files / 135 tests.
 - `npm run build` exited `0` and generated 735 static pages.
 - Local production Browser verification covered desktop direct comparison links, recommendation-to-compare handoff, adding a second project, browser back restoration, 390 px mobile rendering, no horizontal overflow, and console warnings/errors `0`.
+- Commit `411d032` was pushed to `origin/main`.
+- GitHub Actions CI run `28307243942` completed successfully.
+- Vercel commit status completed successfully with description `Deployment has completed`.
+- Live custom-domain Browser verification covered `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#projects`, the selected recommendation comparison state, the ready 2 / 2 matrix, no horizontal overflow, and console warnings/errors `0`.
 
 ### Next direction
 

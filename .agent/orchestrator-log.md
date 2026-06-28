@@ -1321,6 +1321,11 @@
   - Local gates: `npm run lint` exited `0`; `npm test` passed 38 files / 135 tests; `npm run build` generated 735 static pages.
   - Browser desktop: local production `/cstd?goal=ai-creation&compare=design%2Ccrm#projects` restored a ready 2 / 2 comparison; recommendation "加入对比" wrote `compare=design`; adding CRM restored the full matrix; browser back returned to the 1 / 2 comparison; page horizontal overflow was `0`; console warnings/errors `0`.
   - Browser mobile: 390 x 844 direct comparison deep link rendered the project comparison with no horizontal overflow and console warnings/errors `0`.
-- Remote check: pending commit and push.
+- Commit: `411d032 feat: persist project comparison state`
+- Push: `origin/main` updated to `411d032`.
+- Remote check:
+  - GitHub Actions CI run `28307243942` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Live Browser verification on `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#projects` confirmed the selected goal, recommendation comparison state, ready 2 / 2 comparison matrix, no horizontal overflow, and console warnings/errors `0`.
 - Next flagship: use the UI/UX stage to reduce scanning cost across capability, goal, evidence, and comparison surfaces without adding another broad homepage section.
-- Status: local verification complete
+- Status: closed

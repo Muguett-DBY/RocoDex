@@ -44,6 +44,6 @@
 - [x] Run `npm test`.
 - [x] Run `npm run build`.
 - [x] Run local production Browser verification for desktop and 390px mobile.
-- [ ] Review `git diff`, `git diff --check`, and source hygiene.
-- [ ] Commit, push `main`, and verify GitHub Actions plus Vercel.
-- [ ] Update iteration and orchestrator logs with Stage 2 evidence.
+- [x] Review `git diff`, `git diff --check`, and source hygiene.
+- [x] Commit, push `main`, and verify GitHub Actions plus Vercel.
+- [x] Update iteration and orchestrator logs with Stage 2 evidence.
