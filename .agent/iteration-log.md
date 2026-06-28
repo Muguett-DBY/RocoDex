@@ -972,4 +972,8 @@
 
 ### Next direction
 
-- Commit and verify Stage 3 on GitHub/Vercel before starting the Stage 4 improvement pass.
+- Commit `85c0820` was pushed to `origin/main`.
+- GitHub Actions CI run `28312834949` completed successfully.
+- Vercel commit status completed successfully with description `Deployment has completed`.
+- Live custom-domain Browser verification covered desktop and 390 px mobile summary layout, comparison-before-evidence order, responsive heading behavior, no horizontal overflow, console warnings/errors `0`, and the `1 / 2` to `2 / 2` comparison interaction.
+- Turn the workflow summary into contextual navigation and a clear next-step action so visitors can move directly from status to the relevant existing project surface.

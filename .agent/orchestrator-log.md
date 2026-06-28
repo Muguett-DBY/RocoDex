@@ -1352,4 +1352,13 @@
   - Local Browser mobile: 390 px layout stacked the four workflow tiles, kept the comparison visible in the decision flow, reported no horizontal overflow, and console warnings/errors `0`.
   - Local Browser interaction: removing the matched AI project changed the URL to `compare=crm` and the summary to `1 / 2`; adding it back restored `2 / 2`, while the comparison heading remained before `Evidence overview` in DOM order.
   - Stale local browser cache showed an older project-heading class after a clean rebuild; direct local HTTP output for the current build confirmed the emitted static page contains `text-2xl` and no old `text-3xl` project heading class.
-- Status: local verification complete; remote verification pending commit and push.
+- Commit: `85c0820 feat: clarify cstd project flow`
+- Push: `origin/main` updated to `85c0820d4003c2f0a56fb2f1edc45c34f1ee84a0`.
+- Remote check:
+  - GitHub Actions CI run `28312834949` completed successfully; install, lint, test, and build all passed.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Live Browser desktop at `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#projects` confirmed the workflow summary, updated `text-2xl` / `sm:text-5xl` heading contract, comparison-before-evidence order, horizontal overflow `0`, and console warnings/errors `0`.
+  - Live Browser mobile at 390 x 844 confirmed four stacked workflow tiles, a readable project heading, horizontal overflow `0`, and console warnings/errors `0`.
+  - Live interaction removed the matched AI project to `compare=crm` with summary `1 / 2`, then restored a ready `2 / 2` comparison.
+- Next flagship: turn the workflow summary into contextual navigation and a clear next-step action so visitors can move directly from status to goal matching, comparison, evidence, or the filtered directory.
+- Status: closed
