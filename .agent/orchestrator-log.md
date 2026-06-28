@@ -36,6 +36,7 @@
   - GitHub Actions CI run `28298205378` completed successfully.
   - Commit status `Vercel` completed successfully with description `Deployment has completed`.
 - Status: closed
+
 - Next stage: Stage 2 / 6 `IMPROVE`
 
 ### Stage 2
@@ -64,6 +65,7 @@
   - GitHub Actions CI run `28298430484` completed successfully.
   - Commit status `Vercel` completed successfully with description `Deployment has completed`.
 - Status: closed
+
 - Next stage: Stage 3 / 6 `UIUX`
 
 ### Stage 3
@@ -1258,4 +1260,38 @@
   - Local production HTTP: host-header checks confirmed `custard.top/`, `custard.top/cstd`, and `rocodex.custard.top/cstd` return CSTD content while `custard.top/creatures` remains `404`.
   - Browser: `/cstd` rendered the CSTD homepage at 1366px with visible canvas, no horizontal overflow, and console errors/warnings `0`.
   - Upstream Three/R3F check: react-three-fiber Timer PR `pmndrs/react-three-fiber#3773` and issue `#3741` remain open, so the existing exact `three@0.182.0` mitigation stays in place.
-- Status: ready for risk-fix commit
+- Commit: `5056844 fix: close homepage risk checks`
+- Push: `origin/main` updated to `5056844`.
+- Remote check:
+  - GitHub Actions run `28305671284` completed successfully; install, lint, test, and build all passed.
+  - Vercel production deployment `dpl_B34XRY811YFBjcdSDhe5UofKbHL7` reached `Ready`.
+  - `custard.top`, `custard.top/cstd`, `rocodex.custard.top/cstd`, and `rocodex.vercel.app/cstd` returned the intended CSTD content.
+  - Live Browser verification at `https://custard.top/cstd` confirmed the title, CSTD content, visible canvas, no horizontal overflow, and console errors/warnings `0`.
+- Status: closed
+
+## 2026-06-28 Long Homepage Cycle — Stage 1 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Previous direction: keep homepage work inside the existing evidence and navigation surfaces; revisit the exact Three pin only after upstream R3F Timer support lands.
+- Upstream status: the Timer work remains open, so this stage advances the executable evidence/navigation direction instead of removing the verified Three pin.
+- Flagship goal: turn the static goal guide into a shareable project-match workflow and make in-page history restorable.
+- Design: `docs/superpowers/specs/2026-06-28-cstd-project-match-design.md`
+- Plan: `docs/superpowers/plans/2026-06-28-cstd-project-match.md`
+- Implemented:
+  - Added stable goal identifiers and safe goal lookup.
+  - Added a unified URL state model for category, query, goal, and focused project.
+  - Upgraded goal choices to a single-select recommendation panel with current-status, delivered-outcome, case-study, live-project, and clear actions.
+  - Preserved directory and goal context when focusing or sharing a project.
+  - Added `popstate` synchronization so browser back/forward restores recommendations and focused cases.
+  - Kept recommendation detail conditional and memoized the current share href so the initial project directory does not render unused match detail.
+- Real issue fixed: the homepage previously read URL state only on mount and used `replaceState`, so browser back/forward could not restore in-page navigation.
+- Verification recorded before commit:
+  - TDD red: goal IDs were `undefined` and the unified view-state module did not exist.
+  - TDD green: focused tests passed 2 files / 6 tests.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 38 files / 134 tests; `npm run build` generated 735 static pages.
+  - Browser desktop: goal selection, recommendation evidence, direct project link, focus navigation, back/forward restoration, and 1366 × 900 overflow passed; console warnings/errors `0`.
+  - Browser mobile: 390 × 844 recommendation actions and fallback share URL passed; page horizontal overflow `0`; console warnings/errors `0`.
+- Remote check: pending commit and push.
+- Next flagship: make project comparison state URL-backed and refresh-safe, then connect goal recommendations to an explicit compare path without adding a new homepage section.
+- Status: local verification complete

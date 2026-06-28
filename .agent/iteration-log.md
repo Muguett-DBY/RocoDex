@@ -881,3 +881,33 @@
 - Local production HTTP checks confirmed the intended CSTD host behavior, including `custard.top/cstd` returning CSTD content and `custard.top/creatures` staying `404`.
 - Browser verification covered `/cstd` at 1366px, visible CSTD content, visible canvas, no horizontal overflow, and console errors/warnings `0`.
 - Upstream R3F Timer work remains open, so `three@0.182.0` remains the verified mitigation.
+- Commit `5056844` was pushed to `origin/main`.
+- GitHub Actions run `28305671284` passed install, lint, test, and build.
+- Vercel deployment `dpl_B34XRY811YFBjcdSDhe5UofKbHL7` reached `Ready`; live custom-domain browser verification passed with no console errors or overflow.
+
+## 2026-06-28 — Long Homepage Cycle Stage 1 / 6 — IMPROVE
+
+### Scope
+
+- Continued the prior evidence/navigation direction because upstream R3F Timer support is still not available.
+- Converted the existing goal guide into a selectable, shareable project-match workflow.
+- Fixed in-page navigation history so browser back/forward restores goal and case-study state.
+
+### User-visible change
+
+- A selected visitor goal now reveals one matched project with rationale, current status, delivered outcome, a focused case-study action, a direct live-project action, and a clear action.
+- Goal, filter, search, and project focus context share one validated URL model.
+
+### Verification evidence
+
+- TDD red/green completed for stable goal IDs and unified project view state; focused tests passed 6 / 6.
+- `npm run lint` exited `0`.
+- `npm test` passed 38 files / 134 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Browser verification covered desktop and 390 px mobile goal selection, recommendation content, project focus, copy fallback, history back/forward, overflow, and console warnings/errors `0`.
+
+### Next direction
+
+- Make project comparison URL-backed and refresh-safe, preserving it across directory and focus navigation.
+- Connect a matched project to a clear comparison handoff inside the existing project directory.
+- Use the UI/UX stage to reduce scanning cost across capability, goal, evidence, and comparison surfaces.
