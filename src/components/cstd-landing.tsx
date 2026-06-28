@@ -18,6 +18,7 @@ import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/c
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
 import { getCstdProjectCapabilityIndex } from "@/lib/cstd-project-capability-index";
 import {
+  CSTD_PROJECT_COMPARISON_LIMIT,
   getCstdProjectComparison,
   getCstdProjectComparisonControl,
   toggleCstdProjectComparison,
@@ -36,6 +37,7 @@ import { cstdProjects, type CstdProjectIconKey } from "@/lib/cstd-projects";
 import { getCstdProjectEvidenceOverview } from "@/lib/cstd-project-evidence-overview";
 import { buildCstdProjectPortfolioBrief } from "@/lib/cstd-project-portfolio-brief";
 import { getCstdProjectProofTimeline } from "@/lib/cstd-project-proof-timeline";
+import { getCstdProjectWorkflowSummary, type CstdProjectWorkflowSummaryItem } from "@/lib/cstd-project-workflow-summary";
 import {
   CSTD_INTRO_SEEN_KEY,
   CSTD_MOTION_PREFERENCE_KEY,
@@ -73,6 +75,7 @@ import {
   cstdProjectFocusBodyClassName,
   cstdProjectFocusChecklistGridClassName,
   cstdProjectGridClassName,
+  cstdProjectHeadingClassName,
   cstdProjectMetricGridClassName,
   cstdProjectMetricLabelClassName,
   cstdProjectMetricTileClassName,
@@ -80,6 +83,7 @@ import {
   cstdProjectProofTimelineGridClassName,
   cstdProjectToolbarActionsClassName,
   cstdProjectToolbarClassName,
+  cstdProjectWorkflowSummaryGridClassName,
 } from "@/lib/cstd-mobile-layout";
 
 type MascotMood = "curious" | "happy" | "working";
@@ -231,6 +235,19 @@ export function CstdLanding() {
   const projectControlBadges = useMemo(() => getCstdProjectControlBadges(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const hasProjectControlState = useMemo(() => hasActiveCstdProjectControls(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const projectComparison = useMemo(() => getCstdProjectComparison(cstdProjects, comparedProjectIds), [comparedProjectIds]);
+  const selectedGuide = useMemo(() => getCstdProjectGuide(selectedGuideId), [selectedGuideId]);
+  const projectWorkflowSummary = useMemo(
+    () =>
+      getCstdProjectWorkflowSummary({
+        compareCount: projectComparison.projects.length,
+        compareLimit: CSTD_PROJECT_COMPARISON_LIMIT,
+        guideGoal: selectedGuide?.goal ?? null,
+        liveEvidenceCount: cstdProjects.filter((project) => project.status === "Live").length,
+        totalProjectCount: cstdProjects.length,
+        visibleProjectCount: visibleProjects.length,
+      }),
+    [projectComparison.projects.length, selectedGuide?.goal, visibleProjects.length],
+  );
   const selectedProject = useMemo(
     () => cstdProjects.find((project) => project.id === selectedProjectId) ?? null,
     [selectedProjectId],
@@ -682,7 +699,7 @@ export function CstdLanding() {
           <div className="mb-5 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
               <p className="font-black uppercase tracking-[0.18em] text-[#d98528]">Projects</p>
-              <h2 className="mt-2 text-3xl font-black tracking-tight sm:text-5xl">正在发酵的项目</h2>
+              <h2 className={cstdProjectHeadingClassName}>正在发酵的项目</h2>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-[#6f5b4a] sm:text-base">
                 工具、影像与研究类项目分开放置，方便从主站快速进入。
               </p>
@@ -697,7 +714,7 @@ export function CstdLanding() {
             />
           </div>
 
-          <ProjectCapabilityIndex onFocus={focusProject} />
+          <ProjectWorkflowSummary items={projectWorkflowSummary} />
 
           <ProjectGuide
             comparedProjectIds={comparedProjectIds}
@@ -707,6 +724,16 @@ export function CstdLanding() {
             onSelect={selectProjectGuide}
             onToggleComparison={toggleProjectComparison}
           />
+
+          {projectComparison.projects.length > 0 ? (
+            <ProjectComparison
+              comparison={projectComparison}
+              onClear={() => updateProjectComparison([])}
+              onRemove={toggleProjectComparison}
+            />
+          ) : null}
+
+          <ProjectCapabilityIndex onFocus={focusProject} />
 
           <div className="mb-5 rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/84 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -933,14 +960,6 @@ export function CstdLanding() {
               />
             ) : null}
           </AnimatePresence>
-
-          {projectComparison.projects.length > 0 ? (
-            <ProjectComparison
-              comparison={projectComparison}
-              onClear={() => updateProjectComparison([])}
-              onRemove={toggleProjectComparison}
-            />
-          ) : null}
 
           <div className={cstdProjectGridClassName}>
             {visibleProjects.length > 0 ? (
@@ -1349,6 +1368,20 @@ function MotionControls({
       <span className="col-span-2 inline-flex min-h-7 items-center justify-center rounded-lg bg-white/70 px-2 text-[0.68rem] font-black text-[#7b6656] sm:col-span-3">
         {audioEnabled ? (bgmActive ? "奶油音乐轻轻播放中" : "奶油音乐待播放") : "声音已关闭"}
       </span>
+    </div>
+  );
+}
+
+function ProjectWorkflowSummary({ items }: { items: readonly CstdProjectWorkflowSummaryItem[] }) {
+  return (
+    <div className={cstdProjectWorkflowSummaryGridClassName} aria-label="项目决策导览">
+      {items.map((item) => (
+        <div key={item.id} className="min-w-0 rounded-xl border border-[#ead6ad] bg-white/72 p-3 shadow-[5px_5px_0_rgba(47,36,29,.05)]">
+          <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#d98528]">{item.label}</p>
+          <p className="mt-2 min-w-0 break-words text-lg font-black leading-6 text-[#2f241d]">{item.value}</p>
+          <p className="mt-1 text-xs font-semibold leading-5 text-[#6f5b4a]">{item.detail}</p>
+        </div>
+      ))}
     </div>
   );
 }

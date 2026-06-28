@@ -27,6 +27,10 @@ export const cstdMascotShellClassName =
 
 export const cstdProjectGridClassName = "grid gap-4 md:grid-cols-2 xl:grid-cols-3";
 
+export const cstdProjectHeadingClassName = "mt-2 max-w-full break-words text-2xl font-black tracking-tight sm:text-5xl";
+
+export const cstdProjectWorkflowSummaryGridClassName = "mb-5 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4";
+
 export const cstdProjectMetricGridClassName = "mt-5 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-3 sm:gap-3";
 
 export const cstdProjectMetricTileClassName = "min-w-0 rounded-lg border border-[#ead6ad] bg-white/72 p-3 sm:rounded-xl sm:p-4 xl:px-2.5 xl:py-3";

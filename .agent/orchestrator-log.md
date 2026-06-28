@@ -1329,3 +1329,27 @@
   - Live Browser verification on `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#projects` confirmed the selected goal, recommendation comparison state, ready 2 / 2 comparison matrix, no horizontal overflow, and console warnings/errors `0`.
 - Next flagship: use the UI/UX stage to reduce scanning cost across capability, goal, evidence, and comparison surfaces without adding another broad homepage section.
 - Status: closed
+
+## 2026-06-28 Long Homepage Cycle — Stage 3 / 6
+
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Previous direction: reduce scanning cost across capability, goal, evidence, and comparison surfaces without adding another broad homepage section.
+- Flagship goal: make the project decision flow scannable at the top of the project section and keep active comparison close to goal matching.
+- Design: `docs/superpowers/specs/2026-06-28-cstd-project-flow-ui-design.md`
+- Plan: `docs/superpowers/plans/2026-06-28-cstd-project-flow-ui.md`
+- Implemented:
+  - Added a compact project workflow summary showing active goal path, live-project evidence count, comparison readiness, and current directory scope.
+  - Moved the active comparison matrix directly after the goal guide, before capability/evidence/share surfaces.
+  - Centralized the project heading and workflow summary responsive class contracts in `src/lib/cstd-mobile-layout.ts`.
+  - Tightened the project heading mobile size to avoid narrow-width visual cropping while preserving the existing desktop scale.
+- Real issue fixed: comparison deep links previously restored the matrix below several other project surfaces, making the goal-to-comparison decision path harder to scan.
+- Verification recorded before commit:
+  - TDD red: focused tests failed because `src/lib/cstd-project-workflow-summary.ts` and exported summary/heading layout contracts did not exist or did not match the new mobile-size requirement.
+  - TDD green: focused tests passed 2 files / 16 tests after the helper and layout contracts were implemented.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 39 files / 139 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Local Browser desktop: `/cstd?goal=ai-creation&compare=design%2Ccrm#projects` rendered the project workflow summary, placed comparison before evidence, reported no horizontal overflow, and console warnings/errors `0`.
+  - Local Browser mobile: 390 px layout stacked the four workflow tiles, kept the comparison visible in the decision flow, reported no horizontal overflow, and console warnings/errors `0`.
+  - Local Browser interaction: removing the matched AI project changed the URL to `compare=crm` and the summary to `1 / 2`; adding it back restored `2 / 2`, while the comparison heading remained before `Evidence overview` in DOM order.
+  - Stale local browser cache showed an older project-heading class after a clean rebuild; direct local HTTP output for the current build confirmed the emitted static page contains `text-2xl` and no old `text-3xl` project heading class.
+- Status: local verification complete; remote verification pending commit and push.

@@ -945,3 +945,31 @@
 
 - Use the UI/UX stage to reduce scanning cost across capability, goal, evidence, and comparison surfaces.
 - Keep future improvements inside existing homepage surfaces unless a new workflow has clear decision value.
+
+## 2026-06-28 — Long Homepage Cycle Stage 3 / 6 — UIUX
+
+### Scope
+
+- Added a compact project workflow summary near the project section heading.
+- Moved the active comparison matrix directly after goal matching so deep-linked comparisons read as part of the decision path.
+- Centralized responsive layout contracts for the summary grid and project heading.
+
+### User-visible change
+
+- Visitors now see the active goal path, evidence base, comparison readiness, and directory scope before scanning the full project index.
+- Shared comparison links surface the decision matrix earlier, before the broader evidence and share blocks.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because the workflow summary helper and responsive class contracts were missing or too large for the narrow heading requirement.
+- Focused TDD passed 2 files / 16 tests after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 39 files / 139 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local production Browser verification covered desktop and 390 px mobile direct comparison links, workflow summary rendering, comparison-before-evidence order, no horizontal overflow, and console warnings/errors `0`.
+- The recommendation comparison control was exercised in both directions: the URL and summary changed to `1 / 2` after removal and returned to `2 / 2` after adding the project back.
+- Direct local HTTP output confirmed the current build emits the updated `text-2xl` project heading class and no old `text-3xl` project heading class after cleaning stale local build/browser state.
+
+### Next direction
+
+- Commit and verify Stage 3 on GitHub/Vercel before starting the Stage 4 improvement pass.
