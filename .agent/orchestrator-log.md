@@ -1401,3 +1401,28 @@
   - Live screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-live-desktop.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-live-mobile.png`.
 - Next flagship: use the CHECK stage to audit URL hydration and navigation-state edge cases, then fix any verified defect before the final improvement stage.
 - Status: closed
+
+## 2026-06-28 Long Homepage Cycle — Stage 5 / 6
+
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Previous direction: audit URL hydration and navigation-state edge cases, then fix any verified defect before the final improvement stage.
+- Finding: live Stage 4 verification observed a direct project deep link briefly exposing the default workflow summary before URL-backed goal/comparison state restored.
+- Real issue targeted: the initial project view-state sync was delayed with `requestAnimationFrame(syncViewState)`, which can leave the new state-aware next action stale during hydration.
+- Fix direction: run initial URL sync immediately in a client layout effect and keep workflow navigation hidden until URL state has synchronized once.
+- Design: `docs/superpowers/specs/2026-06-28-cstd-url-state-hydration-check.md`
+- Plan: `docs/superpowers/plans/2026-06-28-cstd-url-state-hydration-check.md`
+- Implemented:
+  - Added a URL-sync regression test for `CstdLanding`.
+  - Added an isomorphic client layout-effect alias and removed frame-delayed initial URL sync.
+  - Added `projectViewStateSynced` so state-aware workflow navigation is only rendered after URL state has synchronized once.
+  - Preserved browser `popstate` synchronization for back/forward restoration.
+- Verification recorded before commit:
+  - TDD red: focused URL-sync test failed while `requestAnimationFrame(syncViewState)` remained and the synchronized render guard did not exist.
+  - TDD green: focused URL-sync plus related view-state, workflow-summary, and mobile-layout tests passed 4 files / 25 tests.
+  - Local gates: `git diff --check` exited `0`; source hygiene checks found no matches; `npm run lint` exited `0`; `npm test` passed 40 files / 145 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Local Browser desktop: after a production rebuild and server restart, the first post-load sample for `/cstd?goal=ai-creation&compare=design%2Ccrm#projects` already showed `整理 AI 创作素材`, `2 / 2`, and `查看对比矩阵`; `defaultStateVisible` was `false`, horizontal overflow was `0`, and console warnings/errors were `0`.
+  - Local Browser interaction: the next action clicked to `#project-comparison` with a real target and target top around `96`.
+  - Local Browser mobile: 390 x 844 first and delayed samples stayed on the hydrated deep-link state, `defaultStateVisible` was `false`, horizontal overflow was `0`, and console warnings/errors were `0`.
+  - Local screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-local-desktop.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-local-mobile.png`.
+- Status: in progress

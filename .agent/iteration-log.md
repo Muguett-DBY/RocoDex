@@ -1010,3 +1010,32 @@
 - Vercel commit status completed successfully with description `Deployment has completed`.
 - Live custom-domain Browser verification covered hydrated desktop navigation, all four status-link destinations, the next action, 390 px mobile layout, no horizontal overflow, console warnings/errors `0`, and the no-goal/goal-only/partial-comparison action states.
 - Use the CHECK stage to audit URL hydration and navigation-state edge cases, then fix any verified defect before the final improvement stage.
+
+## 2026-06-28 — Long Homepage Cycle Stage 5 / 6 — CHECK
+
+### Scope
+
+- Investigated the deep-link hydration edge case surfaced during Stage 4 live Browser verification.
+- Added a regression test to keep initial CSTD project URL-state restoration out of `requestAnimationFrame`.
+- Changed the initial project view-state sync to run immediately in a client layout effect while preserving `popstate`.
+- Hid the state-aware workflow navigation until URL state has synchronized once, preventing the default next action from being exposed on shared deep links.
+
+### User-visible change
+
+- Shared CSTD project links should restore their goal, comparison, filter, search, and focused-project state before the workflow next action is visible as the wrong default state.
+
+### Verification evidence
+
+- Focused regression test failed before the implementation change because `requestAnimationFrame(syncViewState)` was still present.
+- Focused regression test failed again until the synchronized-render guard was added.
+- Focused regression test passed after switching to immediate client layout sync and hiding the workflow navigation until URL state has synchronized once.
+- Related URL-state, workflow-summary, mobile-layout, and URL-sync tests passed 4 files / 25 tests.
+- `git diff --check` exited `0`; source hygiene checks found no matches.
+- `npm run lint` exited `0`.
+- `npm test` passed 40 files / 145 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local production Browser verification confirmed the first desktop and 390 px mobile post-load deep-link samples were already hydrated, `defaultStateVisible` was `false`, no horizontal overflow was present, and console warnings/errors were `0`.
+
+### Next direction
+
+- Push Stage 5, then verify GitHub Actions, Vercel deployment status, and the live custom domain before closing this stage.
