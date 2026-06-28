@@ -13,4 +13,10 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain("{projectViewStateSynced ? (");
     expect(source).not.toContain("requestAnimationFrame(syncViewState)");
   });
+
+  test("guards clipboard access for browser environments without navigator", () => {
+    expect(source).toContain("function getCstdClipboardWriter()");
+    expect(source).toContain('if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) return undefined;');
+    expect(source).not.toContain("navigator.clipboard ?");
+  });
 });

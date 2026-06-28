@@ -50,4 +50,20 @@ describe("CSTD project view state", () => {
       }),
     ).toBe("/#projects");
   });
+
+  it("serializes comparison matrix anchors for decision handoffs", () => {
+    expect(
+      buildCstdProjectViewHref(
+        "/cstd",
+        {
+          filter: "all",
+          query: "",
+          guideId: "ai-creation",
+          projectId: null,
+          compareProjectIds: ["design", "crm"],
+        },
+        "project-comparison",
+      ),
+    ).toBe("/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison");
+  });
 });
