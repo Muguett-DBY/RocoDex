@@ -44,6 +44,6 @@
 - [x] Run `npm run lint`, `npm test`, and `npm run build`.
 - [x] Run `git diff --check` and source hygiene checks.
 - [x] Verify all four summary destinations and the contextual action in Browser on desktop and 390px mobile.
-- [ ] Commit with `feat: add cstd workflow navigation` and push `main`.
-- [ ] Verify GitHub Actions, Vercel, and the live custom domain.
-- [ ] Record Stage 4 evidence and next direction.
+- [x] Commit with `feat: add cstd workflow navigation` and push `main`.
+- [x] Verify GitHub Actions, Vercel, and the live custom domain.
+- [x] Record Stage 4 evidence and next direction.
