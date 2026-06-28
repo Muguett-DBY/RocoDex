@@ -37,6 +37,6 @@
 - [x] Run `git diff --check` and source hygiene checks.
 - [x] Run `npm run lint`, `npm test`, and `npm run build`.
 - [x] Verify direct comparison deep links in Browser on desktop and 390px mobile.
-- [ ] Commit with `feat: add cstd comparison context` and push `main`.
-- [ ] Verify GitHub Actions, Vercel, and the live custom domain.
-- [ ] Record final Stage 6 evidence and final status.
+- [x] Commit with `feat: add cstd comparison context` and push `main`.
+- [x] Verify GitHub Actions, Vercel, and the live custom domain.
+- [x] Record final Stage 6 evidence and final status.
