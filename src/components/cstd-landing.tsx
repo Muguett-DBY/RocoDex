@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
@@ -98,6 +98,7 @@ type CstdAudioPreference = "enabled" | "disabled";
 const CSTD_AUDIO_PREFERENCE_KEY = "cstd.audioPreference";
 const CSTD_BGM_NORMAL_VOLUME = 0.12;
 const CSTD_BGM_DUCKED_VOLUME = 0.035;
+const useCstdClientLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 const projectIcons: Record<CstdProjectIconKey, LucideIcon> = {
   sparkles: Sparkles,
@@ -143,6 +144,7 @@ export function CstdLanding() {
   const [audioPreference, setAudioPreference] = useState<CstdAudioPreference>("enabled");
   const [activeProjectFilter, setActiveProjectFilter] = useState<CstdProjectFilter>("all");
   const [projectSearchQuery, setProjectSearchQuery] = useState("");
+  const [projectViewStateSynced, setProjectViewStateSynced] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [selectedGuideId, setSelectedGuideId] = useState<CstdProjectGuideId | null>(null);
@@ -180,7 +182,7 @@ export function CstdLanding() {
     setIntroPhase("idle");
   }, [reducedMotion]);
 
-  useEffect(() => {
+  useCstdClientLayoutEffect(() => {
     const syncViewState = () => {
       const viewState = parseCstdProjectViewState(window.location.search);
       setActiveProjectFilter(viewState.filter);
@@ -188,11 +190,11 @@ export function CstdLanding() {
       setSelectedGuideId(viewState.guideId);
       setSelectedProjectId(viewState.projectId);
       setComparedProjectIds(viewState.compareProjectIds);
+      setProjectViewStateSynced(true);
     };
-    const frame = window.requestAnimationFrame(syncViewState);
+    syncViewState();
     window.addEventListener("popstate", syncViewState);
     return () => {
-      window.cancelAnimationFrame(frame);
       window.removeEventListener("popstate", syncViewState);
     };
   }, []);
@@ -724,7 +726,9 @@ export function CstdLanding() {
             />
           </div>
 
-          <ProjectWorkflowSummary action={projectWorkflowAction} items={projectWorkflowSummary} />
+          {projectViewStateSynced ? (
+            <ProjectWorkflowSummary action={projectWorkflowAction} items={projectWorkflowSummary} />
+          ) : null}
 
           <ProjectGuide
             comparedProjectIds={comparedProjectIds}
