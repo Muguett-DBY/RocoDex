@@ -1043,3 +1043,29 @@
 - Vercel commit status completed successfully with description `Deployment has completed`.
 - Live custom-domain Browser verification confirmed desktop and 390 px mobile first post-load deep-link samples were already hydrated, `defaultStateVisible` was `false`, the next action landed on `#project-comparison`, no horizontal overflow was present, and console warnings/errors were `0`.
 - Use the final IMPROVE stage to make deep-linked project decisions more self-contained after the comparison jump, without changing the URL-state contract.
+
+## 2026-06-28 — Long Homepage Cycle Stage 6 / 6 — IMPROVE
+
+### Scope
+
+- Add a comparison-local context line for the active goal and selected project names.
+- Keep the change inside the existing comparison matrix and do not alter the URL-state contract.
+
+### User-visible change
+
+- Direct comparison links can be understood after jumping to the matrix because the comparison section itself names the goal path and selected projects.
+
+### Verification evidence
+
+- TDD red: focused comparison-context test failed because the helper did not exist.
+- TDD green: focused helper test passed 1 file / 2 tests.
+- Related comparison-context, workflow-summary, URL-sync, and mobile-layout tests passed 4 files / 24 tests.
+- `git diff --check` exited `0`; source hygiene checks found no matches.
+- `npm run lint` exited `0`.
+- `npm test` passed 41 files / 147 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local production Browser verification covered desktop and 390 px mobile comparison jumps, goal/project context visibility, no horizontal overflow, and console warnings/errors `0`.
+
+### Final status
+
+- In progress.

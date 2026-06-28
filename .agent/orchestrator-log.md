@@ -1436,3 +1436,25 @@
   - Live screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-live-desktop.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-live-mobile.png`.
 - Next flagship: use the final IMPROVE stage to make deep-linked project decisions more self-contained after the comparison jump, without changing the URL-state contract.
 - Status: closed
+
+## 2026-06-28 Long Homepage Cycle — Stage 6 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Previous direction: make deep-linked project decisions more self-contained after the comparison jump, without changing the URL-state contract.
+- Flagship goal: add comparison-local context so the matrix carries the active goal and selected project names when opened directly.
+- Design: `docs/superpowers/specs/2026-06-28-cstd-comparison-context-design.md`
+- Plan: `docs/superpowers/plans/2026-06-28-cstd-comparison-context.md`
+- Implemented:
+  - Added `getCstdProjectComparisonContext` for goal-backed and manual comparison labels.
+  - Passed the active guide goal into the existing comparison matrix.
+  - Rendered goal path and selected project titles in the comparison header with mobile-safe wrapping.
+- Verification so far:
+  - TDD red: focused comparison-context test failed because the helper did not exist.
+  - TDD green: focused helper test passed 1 file / 2 tests.
+  - Related tests passed 4 files / 24 tests.
+  - Local gates: `git diff --check` exited `0`; source hygiene checks found no matches; `npm run lint` exited `0`; `npm test` passed 41 files / 147 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Local Browser desktop: direct comparison deep link restored, next action clicked to `#project-comparison`, comparison header showed `目标路径：整理 AI 创作素材` and `对比项目：私人 AI 创作工作台 / 产业园区招商 CRM`, horizontal overflow was `0`, and console warnings/errors were `0`.
+  - Local Browser mobile: 390 x 844 comparison jump showed the same goal/project context with mobile wrapping, horizontal overflow was `0`, and console warnings/errors were `0`.
+  - Local screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-local-desktop.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-local-mobile.png`.
+- Status: in progress

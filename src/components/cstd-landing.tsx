@@ -24,6 +24,7 @@ import {
   toggleCstdProjectComparison,
   type CstdProjectComparison as CstdProjectComparisonData,
 } from "@/lib/cstd-project-comparison";
+import { getCstdProjectComparisonContext } from "@/lib/cstd-project-comparison-context";
 import {
   buildCstdProjectBrief,
   buildCstdProjectLinkDirectory,
@@ -742,6 +743,7 @@ export function CstdLanding() {
           {projectComparison.projects.length > 0 ? (
             <ProjectComparison
               comparison={projectComparison}
+              guideGoal={selectedGuide?.goal ?? null}
               onClear={() => updateProjectComparison([])}
               onRemove={toggleProjectComparison}
             />
@@ -1595,13 +1597,20 @@ function ProjectCapabilityIndex({ onFocus }: { onFocus: (projectId: string) => v
 
 function ProjectComparison({
   comparison,
+  guideGoal,
   onClear,
   onRemove,
 }: {
   comparison: CstdProjectComparisonData;
+  guideGoal: string | null;
   onClear: () => void;
   onRemove: (projectId: string) => void;
 }) {
+  const context = getCstdProjectComparisonContext({
+    guideGoal,
+    projectTitles: comparison.projects.map((project) => project.title),
+  });
+
   return (
     <section id="project-comparison" className={`${cstdProjectComparisonClassName} scroll-mt-24`} aria-labelledby="project-comparison-heading">
       <div className="flex flex-col gap-3 border-b border-[#b7decf] p-4 sm:flex-row sm:items-center sm:justify-between">
@@ -1612,6 +1621,11 @@ function ProjectComparison({
           </h3>
           <p className="mt-1 text-xs font-bold text-[#4c6b5d]" aria-live="polite">
             {comparison.summary}
+          </p>
+          <p className="mt-2 max-w-3xl break-words text-xs font-semibold leading-5 text-[#4c6b5d]">
+            <span className="font-black text-[#047857]">{context.goalLabel}</span>
+            <span aria-hidden="true"> · </span>
+            <span>{context.projectLabel}</span>
           </p>
         </div>
         <button
