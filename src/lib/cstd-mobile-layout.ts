@@ -29,7 +29,7 @@ export const cstdProjectGridClassName = "grid gap-4 md:grid-cols-2 xl:grid-cols-
 
 export const cstdProjectHeadingClassName = "mt-2 max-w-full break-words text-2xl font-black tracking-tight sm:text-5xl";
 
-export const cstdProjectWorkflowSummaryGridClassName = "mb-5 grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4";
+export const cstdProjectWorkflowSummaryGridClassName = "grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4";
 
 export const cstdProjectMetricGridClassName = "mt-5 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-3 sm:gap-3";
 
