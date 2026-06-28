@@ -1,5 +1,6 @@
 import { cstdProjectFilters, type CstdProjectFilter } from "./cstd-project-filter";
 import { getCstdProjectGuide, type CstdProjectGuideId } from "./cstd-project-guide";
+import { normalizeCstdProjectComparisonIds } from "./cstd-project-comparison";
 import { cstdProjects } from "./cstd-projects";
 
 export type CstdProjectViewState = {
@@ -7,6 +8,7 @@ export type CstdProjectViewState = {
   query: string;
   guideId: CstdProjectGuideId | null;
   projectId: string | null;
+  compareProjectIds: string[];
 };
 
 export function parseCstdProjectViewState(search: string): CstdProjectViewState {
@@ -14,12 +16,17 @@ export function parseCstdProjectViewState(search: string): CstdProjectViewState 
   const category = params.get("category");
   const guide = getCstdProjectGuide(params.get("goal"));
   const projectId = params.get("project");
+  const compareProjectIds = (params.get("compare") ?? "")
+    .split(",")
+    .map((id) => id.trim())
+    .filter(Boolean);
 
   return {
     filter: cstdProjectFilters.some((option) => option.id === category) ? (category as CstdProjectFilter) : "all",
     query: (params.get("q") ?? "").trim(),
     guideId: guide?.id ?? null,
     projectId: cstdProjects.some((project) => project.id === projectId) ? projectId : null,
+    compareProjectIds: normalizeCstdProjectComparisonIds(compareProjectIds),
   };
 }
 
@@ -37,6 +44,8 @@ export function buildCstdProjectViewHref(
   if (state.projectId && cstdProjects.some((project) => project.id === state.projectId)) {
     params.set("project", state.projectId);
   }
+  const compareProjectIds = normalizeCstdProjectComparisonIds(state.compareProjectIds);
+  if (compareProjectIds.length > 0) params.set("compare", compareProjectIds.join(","));
 
   const search = params.toString();
   return `${pathname}${search ? `?${search}` : ""}#${hash}`;

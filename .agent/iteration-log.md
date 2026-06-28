@@ -915,3 +915,29 @@
 - Make project comparison URL-backed and refresh-safe, preserving it across directory and focus navigation.
 - Connect a matched project to a clear comparison handoff inside the existing project directory.
 - Use the UI/UX stage to reduce scanning cost across capability, goal, evidence, and comparison surfaces.
+
+## 2026-06-28 — Long Homepage Cycle Stage 2 / 6 — IMPROVE
+
+### Scope
+
+- Made `/cstd` project comparison selection URL-backed with a normalized `compare` parameter.
+- Preserved comparison state across filtering, search, goal selection, focus navigation, copy-current-view, clear/remove, and browser back/forward.
+- Added a comparison action to the selected goal recommendation so matched projects can enter the existing decision matrix directly.
+
+### User-visible change
+
+- Visitors can now share or reload a project comparison such as `?goal=ai-creation&compare=design%2Ccrm#projects`.
+- The recommendation panel no longer dead-ends at case-study/live-project actions; it can seed the comparison workflow in one click.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because comparison ID normalization and `compare` URL state did not exist, then passed 8 / 8 after implementation.
+- `npm run lint` exited `0`.
+- `npm test` passed 38 files / 135 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local production Browser verification covered desktop direct comparison links, recommendation-to-compare handoff, adding a second project, browser back restoration, 390 px mobile rendering, no horizontal overflow, and console warnings/errors `0`.
+
+### Next direction
+
+- Use the UI/UX stage to reduce scanning cost across capability, goal, evidence, and comparison surfaces.
+- Keep future improvements inside existing homepage surfaces unless a new workflow has clear decision value.

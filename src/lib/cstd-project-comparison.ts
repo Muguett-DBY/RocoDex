@@ -1,4 +1,4 @@
-import type { CstdProject } from "./cstd-projects";
+import { cstdProjects, type CstdProject } from "./cstd-projects";
 
 export const CSTD_PROJECT_COMPARISON_LIMIT = 2;
 
@@ -12,9 +12,25 @@ export type CstdProjectComparison = {
   summary: string;
 };
 
+export function normalizeCstdProjectComparisonIds(projectIds: readonly string[]) {
+  const normalized: string[] = [];
+
+  for (const projectId of projectIds) {
+    if (normalized.includes(projectId)) continue;
+    const project = cstdProjects.find((item) => item.id === projectId && item.status === "Live");
+    if (!project) continue;
+
+    normalized.push(project.id);
+    if (normalized.length >= CSTD_PROJECT_COMPARISON_LIMIT) break;
+  }
+
+  return normalized;
+}
+
 export function getCstdProjectComparisonControl(selectedIds: readonly string[], projectId: string) {
-  const selected = selectedIds.includes(projectId);
-  const disabled = !selected && selectedIds.length >= CSTD_PROJECT_COMPARISON_LIMIT;
+  const normalizedIds = normalizeCstdProjectComparisonIds(selectedIds);
+  const selected = normalizedIds.includes(projectId);
+  const disabled = !selected && normalizedIds.length >= CSTD_PROJECT_COMPARISON_LIMIT;
 
   return {
     selected,
@@ -24,19 +40,21 @@ export function getCstdProjectComparisonControl(selectedIds: readonly string[], 
 }
 
 export function toggleCstdProjectComparison(selectedIds: readonly string[], projectId: string) {
-  if (selectedIds.includes(projectId)) {
-    return selectedIds.filter((selectedId) => selectedId !== projectId);
+  const normalizedIds = normalizeCstdProjectComparisonIds(selectedIds);
+
+  if (normalizedIds.includes(projectId)) {
+    return normalizedIds.filter((selectedId) => selectedId !== projectId);
   }
 
-  if (selectedIds.length >= CSTD_PROJECT_COMPARISON_LIMIT) {
-    return [...selectedIds];
+  if (normalizedIds.length >= CSTD_PROJECT_COMPARISON_LIMIT) {
+    return normalizedIds;
   }
 
-  return [...selectedIds, projectId];
+  return normalizeCstdProjectComparisonIds([...normalizedIds, projectId]);
 }
 
 export function getCstdProjectComparison(projects: readonly CstdProject[], selectedIds: readonly string[]): CstdProjectComparison {
-  const liveProjects = selectedIds
+  const liveProjects = normalizeCstdProjectComparisonIds(selectedIds)
     .map((projectId) => projects.find((project) => project.id === projectId && project.status === "Live"))
     .filter((project): project is CstdProject => project !== undefined)
     .slice(0, CSTD_PROJECT_COMPARISON_LIMIT);

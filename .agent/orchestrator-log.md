@@ -1300,3 +1300,27 @@
   - Live Browser verification on `https://custard.top/cstd?goal=ai-creation#projects` confirmed the selected goal, recommendation panel, direct project link, focused project URL `goal=ai-creation&project=design#project-focus`, no horizontal overflow on desktop and 390px mobile, and console errors/warnings `0`.
 - Next flagship: make project comparison state URL-backed and refresh-safe, then connect goal recommendations to an explicit compare path without adding a new homepage section.
 - Status: closed
+
+## 2026-06-28 Long Homepage Cycle — Stage 2 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Previous direction: make project comparison URL-backed and refresh-safe, preserving it across directory and focus navigation.
+- Flagship goal: make the existing project comparison workflow shareable and connect goal recommendations to the comparison handoff.
+- Design: `docs/superpowers/specs/2026-06-28-cstd-comparison-url-state-design.md`
+- Plan: `docs/superpowers/plans/2026-06-28-cstd-comparison-url-state.md`
+- Implemented:
+  - Added normalized live-project comparison IDs to the unified CSTD homepage URL state.
+  - Serialized comparison state as `compare=<project,project>` alongside category, search, goal, and focused-project state.
+  - Preserved comparison state through filter/search, goal selection, project focus, focus close, copy-current-view, clear, remove, and browser back/forward actions.
+  - Added a recommendation-panel comparison button so a matched project can be added to the existing decision matrix without rescanning cards.
+- Real issue fixed: comparison selections previously lived only in component state, so reload, share, and browser history lost the selected projects.
+- Verification recorded before commit:
+  - TDD red: focused tests failed because `normalizeCstdProjectComparisonIds` was missing and the view-state helper did not parse or serialize `compare`.
+  - TDD green: focused comparison and view-state tests passed 2 files / 8 tests.
+  - Local gates: `npm run lint` exited `0`; `npm test` passed 38 files / 135 tests; `npm run build` generated 735 static pages.
+  - Browser desktop: local production `/cstd?goal=ai-creation&compare=design%2Ccrm#projects` restored a ready 2 / 2 comparison; recommendation "加入对比" wrote `compare=design`; adding CRM restored the full matrix; browser back returned to the 1 / 2 comparison; page horizontal overflow was `0`; console warnings/errors `0`.
+  - Browser mobile: 390 x 844 direct comparison deep link rendered the project comparison with no horizontal overflow and console warnings/errors `0`.
+- Remote check: pending commit and push.
+- Next flagship: use the UI/UX stage to reduce scanning cost across capability, goal, evidence, and comparison surfaces without adding another broad homepage section.
+- Status: local verification complete
