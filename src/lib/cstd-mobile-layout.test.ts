@@ -16,6 +16,7 @@ import {
   cstdProjectFocusBodyClassName,
   cstdProjectFocusChecklistGridClassName,
   cstdProjectGridClassName,
+  cstdProjectHeadingClassName,
   cstdProjectMetricGridClassName,
   cstdProjectMetricLabelClassName,
   cstdProjectMetricTileClassName,
@@ -25,6 +26,7 @@ import {
   cstdProjectProofTimelineGridClassName,
   cstdProjectToolbarActionsClassName,
   cstdProjectToolbarClassName,
+  cstdProjectWorkflowSummaryGridClassName,
 } from "./cstd-mobile-layout";
 
 describe("CSTD mobile layout rules", () => {
@@ -135,5 +137,19 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectComparisonClassName).toContain("overflow-hidden");
     expect(cstdProjectComparisonColumnsClassName).toContain("grid-cols-1");
     expect(cstdProjectComparisonColumnsClassName).toContain("sm:grid-cols-2");
+  });
+
+  test("keeps the project workflow summary scannable across breakpoints", () => {
+    expect(cstdProjectWorkflowSummaryGridClassName).toContain("grid-cols-1");
+    expect(cstdProjectWorkflowSummaryGridClassName).toContain("sm:grid-cols-2");
+    expect(cstdProjectWorkflowSummaryGridClassName).toContain("xl:grid-cols-4");
+  });
+
+  test("keeps the project heading readable at narrow widths", () => {
+    expect(cstdProjectHeadingClassName).toContain("max-w-full");
+    expect(cstdProjectHeadingClassName).toContain("break-words");
+    expect(cstdProjectHeadingClassName).toContain("text-2xl");
+    expect(cstdProjectHeadingClassName).not.toContain("text-3xl");
+    expect(cstdProjectHeadingClassName).toContain("sm:text-5xl");
   });
 });
