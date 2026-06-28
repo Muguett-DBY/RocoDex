@@ -1425,4 +1425,14 @@
   - Local Browser interaction: the next action clicked to `#project-comparison` with a real target and target top around `96`.
   - Local Browser mobile: 390 x 844 first and delayed samples stayed on the hydrated deep-link state, `defaultStateVisible` was `false`, horizontal overflow was `0`, and console warnings/errors were `0`.
   - Local screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-local-desktop.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-local-mobile.png`.
-- Status: in progress
+- Commit: `99d3d12 fix: sync cstd deep links before paint`
+- Push: `origin/main` updated to `99d3d128febeba2e50516e34fdec0b85225181d2`.
+- Remote check:
+  - GitHub Actions CI run `28314564319` completed successfully; install, lint, test, and build all passed.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Live Browser desktop at `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#projects` confirmed the first post-load sample was already hydrated, `defaultStateVisible` was `false`, no framework error overlay was present, horizontal overflow was `0`, and console warnings/errors were `0`.
+  - Live desktop interaction clicked the next action to `#project-comparison` with a real target and target top around `96`.
+  - Live Browser mobile at 390 x 844 confirmed immediate and delayed samples stayed hydrated, `defaultStateVisible` was `false`, horizontal overflow was `0`, and console warnings/errors were `0`.
+  - Live screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-live-desktop.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-live-mobile.png`.
+- Next flagship: use the final IMPROVE stage to make deep-linked project decisions more self-contained after the comparison jump, without changing the URL-state contract.
+- Status: closed

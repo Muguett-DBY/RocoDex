@@ -38,6 +38,6 @@
 - [x] Run `git diff --check` and source hygiene checks.
 - [x] Run `npm run lint`, `npm test`, and `npm run build`.
 - [x] Verify direct deep links in Browser on desktop and 390px mobile.
-- [ ] Commit with `fix: sync cstd deep links before paint` and push `main`.
-- [ ] Verify GitHub Actions, Vercel, and the live custom domain.
-- [ ] Record Stage 5 evidence and next direction.
+- [x] Commit with `fix: sync cstd deep links before paint` and push `main`.
+- [x] Verify GitHub Actions, Vercel, and the live custom domain.
+- [x] Record Stage 5 evidence and next direction.
