@@ -19,6 +19,7 @@ import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib
 import { getCstdProjectCapabilityIndex } from "@/lib/cstd-project-capability-index";
 import {
   CSTD_PROJECT_COMPARISON_LIMIT,
+  buildCstdProjectComparisonBrief,
   getCstdProjectComparison,
   getCstdProjectComparisonControl,
   toggleCstdProjectComparison,
@@ -123,6 +124,11 @@ const projectEvidenceOverview = getCstdProjectEvidenceOverview(cstdProjects);
 const projectProofTimeline = getCstdProjectProofTimeline(cstdProjects);
 const projectCapabilityIndex = getCstdProjectCapabilityIndex(cstdProjects);
 
+function getCstdClipboardWriter() {
+  if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) return undefined;
+  return (text: string) => navigator.clipboard.writeText(text);
+}
+
 const CstdCustardStage = dynamic(
   () => import("@/components/cstd-custard-stage").then((module) => module.CstdCustardStage),
   {
@@ -153,6 +159,7 @@ export function CstdLanding() {
   const [projectCopyResult, setProjectCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [projectBriefCopyResult, setProjectBriefCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [portfolioCopyResult, setPortfolioCopyResult] = useState<CstdProjectCopyResult | null>(null);
+  const [comparisonBriefCopyResult, setComparisonBriefCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [projectLinkDirectoryCopyResult, setProjectLinkDirectoryCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [projectDirectoryCopyResult, setProjectDirectoryCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [bgmActive, setBgmActive] = useState(false);
@@ -429,6 +436,7 @@ export function CstdLanding() {
       ),
     );
     setComparedProjectIds(nextComparedProjectIds);
+    setComparisonBriefCopyResult(null);
     setProjectDirectoryCopyResult(null);
   }
 
@@ -446,6 +454,7 @@ export function CstdLanding() {
     );
     setSelectedGuideId(guideId);
     setSelectedProjectId(null);
+    setComparisonBriefCopyResult(null);
     setProjectDirectoryCopyResult(null);
   }
 
@@ -463,7 +472,7 @@ export function CstdLanding() {
       "project-focus",
     );
     const result = await copyCstdProjectLink(
-      navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
+      getCstdClipboardWriter(),
       `${window.location.origin}${href}`,
     );
     setProjectCopyResult(result);
@@ -472,7 +481,7 @@ export function CstdLanding() {
   async function copyProjectBrief() {
     if (!selectedProject) return;
     const result = await copyCstdProjectLink(
-      navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
+      getCstdClipboardWriter(),
       buildCstdProjectBrief(selectedProject),
     );
     setProjectBriefCopyResult(result);
@@ -480,7 +489,7 @@ export function CstdLanding() {
 
   async function copyPortfolioBrief() {
     const result = await copyCstdProjectLink(
-      navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
+      getCstdClipboardWriter(),
       buildCstdProjectPortfolioBrief(cstdProjects),
     );
     setPortfolioCopyResult(result);
@@ -489,7 +498,7 @@ export function CstdLanding() {
   async function copyProjectLinkDirectory() {
     const directory = buildCstdProjectLinkDirectory(cstdProjects, window.location.origin, window.location.pathname);
     const result = await copyCstdProjectLink(
-      navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
+      getCstdClipboardWriter(),
       directory,
     );
     setProjectLinkDirectoryCopyResult(result);
@@ -498,10 +507,38 @@ export function CstdLanding() {
   async function copyProjectDirectoryView() {
     const href = `${window.location.origin}${projectViewHref}`;
     const result = await copyCstdProjectLink(
-      navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
+      getCstdClipboardWriter(),
       href,
     );
     setProjectDirectoryCopyResult(result);
+  }
+
+  async function copyProjectComparisonBrief() {
+    const context = getCstdProjectComparisonContext({
+      guideGoal: selectedGuide?.goal ?? null,
+      projectTitles: projectComparison.projects.map((project) => project.title),
+    });
+    const href = buildCstdProjectViewHref(
+      window.location.pathname,
+      {
+        filter: activeProjectFilter,
+        query: projectSearchQuery,
+        guideId: selectedGuideId,
+        projectId: null,
+        compareProjectIds: comparedProjectIds,
+      },
+      "project-comparison",
+    );
+    const result = await copyCstdProjectLink(
+      getCstdClipboardWriter(),
+      buildCstdProjectComparisonBrief({
+        comparison: projectComparison,
+        goalLabel: context.goalLabel,
+        projectLabel: context.projectLabel,
+        url: `${window.location.origin}${href}`,
+      }),
+    );
+    setComparisonBriefCopyResult(result);
   }
 
   return (
@@ -743,8 +780,10 @@ export function CstdLanding() {
           {projectComparison.projects.length > 0 ? (
             <ProjectComparison
               comparison={projectComparison}
+              copyResult={comparisonBriefCopyResult}
               guideGoal={selectedGuide?.goal ?? null}
               onClear={() => updateProjectComparison([])}
+              onCopyBrief={copyProjectComparisonBrief}
               onRemove={toggleProjectComparison}
             />
           ) : null}
@@ -1597,19 +1636,28 @@ function ProjectCapabilityIndex({ onFocus }: { onFocus: (projectId: string) => v
 
 function ProjectComparison({
   comparison,
+  copyResult,
   guideGoal,
   onClear,
+  onCopyBrief,
   onRemove,
 }: {
   comparison: CstdProjectComparisonData;
+  copyResult: CstdProjectCopyResult | null;
   guideGoal: string | null;
   onClear: () => void;
+  onCopyBrief: () => void;
   onRemove: (projectId: string) => void;
 }) {
   const context = getCstdProjectComparisonContext({
     guideGoal,
     projectTitles: comparison.projects.map((project) => project.title),
   });
+  const copyMessage = {
+    copied: "对比摘要已复制",
+    failed: "复制失败，请稍后重试",
+    unsupported: "当前浏览器不支持复制",
+  }[copyResult ?? "copied"];
 
   return (
     <section id="project-comparison" className={`${cstdProjectComparisonClassName} scroll-mt-24`} aria-labelledby="project-comparison-heading">
@@ -1628,14 +1676,31 @@ function ProjectComparison({
             <span>{context.projectLabel}</span>
           </p>
         </div>
-        <button
-          type="button"
-          onClick={onClear}
-          className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:bg-[#f7fffb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
-        >
-          <X className="h-3.5 w-3.5" />
-          清空对比
-        </button>
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:items-end">
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
+            <button
+              type="button"
+              onClick={onCopyBrief}
+              className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#0f8f64] bg-[#047857] px-3 text-xs font-black text-white transition hover:bg-[#036747] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
+            >
+              {copyResult === "copied" ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+              复制摘要
+            </button>
+            <button
+              type="button"
+              onClick={onClear}
+              className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:bg-[#f7fffb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
+            >
+              <X className="h-3.5 w-3.5" />
+              清空对比
+            </button>
+          </div>
+          {copyResult ? (
+            <p className="text-xs font-bold text-[#4c6b5d]" aria-live="polite">
+              {copyMessage}
+            </p>
+          ) : null}
+        </div>
       </div>
 
       <div className="p-4">

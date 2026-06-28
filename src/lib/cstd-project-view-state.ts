@@ -10,6 +10,7 @@ export type CstdProjectViewState = {
   projectId: string | null;
   compareProjectIds: string[];
 };
+export type CstdProjectViewHash = "projects" | "project-focus" | "project-comparison";
 
 export function parseCstdProjectViewState(search: string): CstdProjectViewState {
   const params = new URLSearchParams(search);
@@ -33,7 +34,7 @@ export function parseCstdProjectViewState(search: string): CstdProjectViewState 
 export function buildCstdProjectViewHref(
   pathname: string,
   state: CstdProjectViewState,
-  hash: "projects" | "project-focus" = "projects",
+  hash: CstdProjectViewHash = "projects",
 ) {
   const params = new URLSearchParams();
   const query = state.query.trim();

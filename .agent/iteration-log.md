@@ -1073,3 +1073,30 @@
 ### Final status
 
 - Six-stage long homepage cycle completed.
+
+## 2026-06-28 - Long Homepage Cycle 2 Stage 1 / 6 - IMPROVE
+
+### Scope
+
+- Added a pure, tested comparison decision brief built from the active goal and existing comparison matrix.
+- Added a shareable comparison URL that preserves goal and project state and targets the comparison surface.
+- Added a comparison-local copy action and unified guarded clipboard access for all homepage copy controls.
+
+### User-visible change
+
+- Visitors can copy the current two-project decision, including its evidence and direct URL, without rewriting the comparison manually.
+- Incomplete selections remain explicit, and unsupported or failed clipboard actions produce visible feedback.
+
+### Verification evidence
+
+- TDD red failed on two missing brief contracts; TDD green passed the comparison, URL-state, and source-contract suite at 3 files / 13 tests.
+- A production type-check failure exposed and drove the missing comparison-hash contract before final verification.
+- `git diff --check` exited `0` apart from line-ending notices.
+- `npm run lint` exited `0`.
+- `npm test` passed 41 files / 151 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local production Browser verification covered desktop and 390 px mobile comparison deep links, copy feedback, responsive action bounds, no horizontal overflow, no framework error overlay, and console warnings/errors `0`.
+
+### Next direction
+
+- Push the isolated Stage 1 commit, verify GitHub Actions and Vercel, then validate the live custom domain before starting Stage 2.

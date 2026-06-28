@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 import { cstdProjects } from "./cstd-projects";
 import {
   CSTD_PROJECT_COMPARISON_LIMIT,
+  buildCstdProjectComparisonBrief,
   getCstdProjectComparison,
   getCstdProjectComparisonControl,
   normalizeCstdProjectComparisonIds,
@@ -75,5 +76,59 @@ describe("CSTD project comparison", () => {
       selected: false,
     });
     expect(toggleCstdProjectComparison(["incubator", "design"], "crm")).toEqual(["design", "crm"]);
+  });
+
+  test("builds a copyable comparison decision brief with matrix evidence", () => {
+    const comparison = getCstdProjectComparison(cstdProjects, ["design", "crm"]);
+
+    expect(
+      buildCstdProjectComparisonBrief({
+        comparison,
+        goalLabel: "目标路径：整理 AI 创作素材",
+        projectLabel: "对比项目：私人 AI 创作工作台 / 产业园区招商 CRM",
+        url: "https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison",
+      }),
+    ).toBe(
+      [
+        "custard.top 项目对比摘要",
+        "目标路径：整理 AI 创作素材",
+        "对比项目：私人 AI 创作工作台 / 产业园区招商 CRM",
+        "状态：已选择 2 / 2 个项目",
+        "链接：https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison",
+        "",
+        "项目类型",
+        "- 私人 AI 创作工作台：AI creation",
+        "- 产业园区招商 CRM：CRM system",
+        "",
+        "当前状态",
+        "- 私人 AI 创作工作台：持续扩展创作与素材能力",
+        "- 产业园区招商 CRM：生产环境持续验证与迭代",
+        "",
+        "负责",
+        "- 私人 AI 创作工作台：产品架构、生成流程与全栈开发",
+        "- 产业园区招商 CRM：业务建模、权限设计与全栈交付",
+        "",
+        "已交付",
+        "- 私人 AI 创作工作台：交付私有访问的一体化工作台，并把生成记录与素材资产纳入同一套管理流程。",
+        "- 产业园区招商 CRM：交付覆盖线索全周期、空间资源、导入导出、软删除恢复和角色权限的运营系统。",
+        "",
+        "技术标签",
+        "- 私人 AI 创作工作台：React 19 · Cloudflare Pages · D1 + R2",
+        "- 产业园区招商 CRM：React 19 · Hono · Cloudflare Pages",
+      ].join("\n"),
+    );
+  });
+
+  test("keeps incomplete comparison briefs honest", () => {
+    const comparison = getCstdProjectComparison(cstdProjects, ["design"]);
+
+    expect(
+      buildCstdProjectComparisonBrief({
+        comparison,
+        goalLabel: "目标路径：手动选择",
+        projectLabel: "对比项目：私人 AI 创作工作台",
+        url: null,
+      }),
+    ).toContain("下一步：再选择 1 个已上线项目即可形成完整对比。");
   });
 });

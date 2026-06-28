@@ -12,6 +12,13 @@ export type CstdProjectComparison = {
   summary: string;
 };
 
+export type CstdProjectComparisonBriefInput = {
+  comparison: CstdProjectComparison;
+  goalLabel: string;
+  projectLabel: string;
+  url: string | null;
+};
+
 export function normalizeCstdProjectComparisonIds(projectIds: readonly string[]) {
   const normalized: string[] = [];
 
@@ -71,4 +78,30 @@ export function getCstdProjectComparison(projects: readonly CstdProject[], selec
       { label: "技术标签", values: liveProjects.map((project) => project.tags.join(" · ")) },
     ],
   };
+}
+
+export function buildCstdProjectComparisonBrief({
+  comparison,
+  goalLabel,
+  projectLabel,
+  url,
+}: CstdProjectComparisonBriefInput) {
+  const matrixLines = comparison.rows.flatMap((row) => [
+    "",
+    row.label,
+    ...row.values.map((value, index) => {
+      const project = comparison.projects[index];
+      return `- ${project?.title ?? "待选择项目"}：${value}`;
+    }),
+  ]);
+
+  return [
+    "custard.top 项目对比摘要",
+    goalLabel,
+    projectLabel,
+    `状态：${comparison.summary}`,
+    ...(url ? [`链接：${url}`] : []),
+    ...(!comparison.ready ? ["", "下一步：再选择 1 个已上线项目即可形成完整对比。"] : []),
+    ...matrixLines,
+  ].join("\n");
 }

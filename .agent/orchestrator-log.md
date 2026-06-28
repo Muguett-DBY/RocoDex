@@ -1468,3 +1468,26 @@
   - Live screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-live-desktop.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-live-mobile.png`.
 - Final status: six-stage long homepage cycle completed.
 - Status: closed
+
+## 2026-06-28 Long Homepage Cycle 2 - Stage 1 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Previous direction: make the self-contained comparison decision portable without changing its URL-state contract.
+- Flagship goal: add a comparison-local copy action that carries goal, selected projects, evidence rows, and a direct comparison URL.
+- Design: `docs/superpowers/specs/2026-06-28-cstd-comparison-brief-design.md`
+- Plan: `docs/superpowers/plans/2026-06-28-cstd-comparison-brief.md`
+- Implemented:
+  - Added a pure comparison-brief formatter with complete and incomplete selection states.
+  - Extended the project view-state URL helper with the `#project-comparison` target.
+  - Added a comparison-local `复制摘要` action and accessible result feedback.
+  - Routed all CSTD homepage copy actions through one guarded clipboard adapter.
+- Verification recorded before commit:
+  - TDD red: two focused brief tests failed because `buildCstdProjectComparisonBrief` did not exist.
+  - TDD green: comparison, view-state, and source-contract tests passed 3 files / 13 tests.
+  - A first production build exposed the missing comparison-hash type contract; the contract and regression test were added before rerunning the full gates.
+  - `git diff --check` exited `0` apart from existing line-ending notices; `npm run lint` exited `0`; `npm test` passed 41 files / 151 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local Browser desktop at `/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed the direct comparison context, visible copy action and failure feedback in a restricted clipboard environment, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+  - Local Browser mobile at 390 x 844 confirmed full-width stacked actions inside the comparison surface, visible feedback, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+- Status: local verification complete; remote release verification pending
