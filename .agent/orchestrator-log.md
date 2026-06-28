@@ -1362,3 +1362,31 @@
   - Live interaction removed the matched AI project to `compare=crm` with summary `1 / 2`, then restored a ready `2 / 2` comparison.
 - Next flagship: turn the workflow summary into contextual navigation and a clear next-step action so visitors can move directly from status to goal matching, comparison, evidence, or the filtered directory.
 - Status: closed
+
+## 2026-06-28 Long Homepage Cycle — Stage 4 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Previous direction: turn the workflow summary into contextual navigation and a clear next-step action.
+- Flagship goal: connect workflow status directly to the existing goal, evidence, comparison, and directory surfaces without adding a broad homepage section.
+- User-visible increment: four navigable status items plus one state-aware next action.
+- Real issue targeted: Stage 3 summary items expose useful state but provide no direct route to resolve or inspect that state on the long project page.
+- Design: `docs/superpowers/specs/2026-06-28-cstd-workflow-navigation-design.md`
+- Plan: `docs/superpowers/plans/2026-06-28-cstd-workflow-navigation.md`
+- Start status: main is clean and synchronized with `origin/main`; Stage 3 feature and evidence commits passed CI and Vercel.
+- Implemented:
+  - Added safe anchor contracts to the project workflow summary helper.
+  - Added a contextual next-step action for no-goal, goal-only, partial-comparison, and ready-comparison states.
+  - Rendered the workflow summary as semantic in-page navigation with visible focus states and Lucide action affordance.
+  - Added stable scroll targets for project guide, evidence, comparison, and directory surfaces.
+  - Removed summary-grid spacing ownership so the navigation wrapper controls responsive spacing.
+- Verification recorded before commit:
+  - TDD red: focused workflow tests failed because summary item `href` values and contextual actions did not exist.
+  - TDD red: mobile layout test failed while the summary grid still owned `mb-5` spacing.
+  - TDD green: focused workflow and mobile-layout tests passed 2 files / 21 tests.
+  - Local gates: `git diff --check` exited `0`; source hygiene checks found no matches; `npm run lint` exited `0`; `npm test` passed 39 files / 144 tests; `npm run build` exited `0` and generated 735 static pages.
+  - Local Browser desktop: `/cstd?goal=ai-creation&compare=design%2Ccrm#projects` rendered all four navigable status items, found all four target IDs, clicked the next action and each status link to the expected scroll target, reported horizontal overflow `0`, and console warnings/errors `0`.
+  - Local Browser mobile: 390 x 844 stacked the four status links, kept the next action within the viewport, clicked the ready-comparison next action to `#project-comparison`, reported horizontal overflow `0`, and console warnings/errors `0`.
+  - Local Browser state branches: `/cstd#projects` showed `先选择访问目标` to `#project-guide`; `/cstd?goal=ai-creation#projects` showed `加入推荐项目` to `#project-guide`; `/cstd?goal=ai-creation&compare=design#projects` showed `再选 1 个对比项目` to `#project-directory`.
+  - Post-build production recheck: after `npm run build`, restarted `npm run start -- -p 3102`; desktop and 390 px Browser checks still found all anchors, clicked the ready-comparison next action to `#project-comparison`, reported horizontal overflow `0`, and console warnings/errors `0`.
+- Status: in progress

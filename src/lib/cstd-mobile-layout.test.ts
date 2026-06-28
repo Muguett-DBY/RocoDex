@@ -140,6 +140,7 @@ describe("CSTD mobile layout rules", () => {
   });
 
   test("keeps the project workflow summary scannable across breakpoints", () => {
+    expect(cstdProjectWorkflowSummaryGridClassName).not.toContain("mb-5");
     expect(cstdProjectWorkflowSummaryGridClassName).toContain("grid-cols-1");
     expect(cstdProjectWorkflowSummaryGridClassName).toContain("sm:grid-cols-2");
     expect(cstdProjectWorkflowSummaryGridClassName).toContain("xl:grid-cols-4");

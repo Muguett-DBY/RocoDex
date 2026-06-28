@@ -977,3 +977,32 @@
 - Vercel commit status completed successfully with description `Deployment has completed`.
 - Live custom-domain Browser verification covered desktop and 390 px mobile summary layout, comparison-before-evidence order, responsive heading behavior, no horizontal overflow, console warnings/errors `0`, and the `1 / 2` to `2 / 2` comparison interaction.
 - Turn the workflow summary into contextual navigation and a clear next-step action so visitors can move directly from status to the relevant existing project surface.
+
+## 2026-06-28 — Long Homepage Cycle Stage 4 / 6 — IMPROVE
+
+### Scope
+
+- Turned the CSTD project workflow summary into semantic in-page navigation.
+- Added safe anchor contracts for project guide, evidence, comparison, and directory destinations.
+- Added one contextual next-step action derived from the active goal and comparison count.
+
+### User-visible change
+
+- Visitors can now move from workflow status directly to the relevant project surface instead of manually scanning the long project section.
+- The next action changes between choosing a goal, adding a recommended project, completing comparison evidence, and reviewing the ready comparison matrix.
+
+### Verification evidence
+
+- Focused TDD failed before implementation because item `href` contracts and contextual actions were missing.
+- Focused responsive TDD failed while the summary grid still owned outer spacing.
+- Focused TDD passed 2 files / 21 tests after implementation.
+- `git diff --check` exited `0`; source hygiene checks found no matches.
+- `npm run lint` exited `0`.
+- `npm test` passed 39 files / 144 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local production Browser verification covered desktop and 390 px mobile navigation links, all four scroll targets, the ready-comparison next action, the no-goal/goal-only/partial-comparison action branches, no horizontal overflow, and console warnings/errors `0`.
+- After the production build, the local `next start` server was restarted and the desktop plus 390 px Browser checks were repeated successfully before the server was stopped.
+
+### Next direction
+
+- Push Stage 4, then verify GitHub Actions, Vercel deployment status, and the live custom domain before closing this stage.

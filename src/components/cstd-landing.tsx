@@ -4,7 +4,7 @@ import { useEffect, useMemo, useRef, useState, type ReactNode, type RefObject } 
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { Bot, Building2, Camera, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, GitCompareArrows, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
+import { ArrowDownRight, Bot, Building2, Camera, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, GitCompareArrows, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
 import {
   cstdHomepageAcceptance,
   cstdHomepageCapabilities,
@@ -37,7 +37,12 @@ import { cstdProjects, type CstdProjectIconKey } from "@/lib/cstd-projects";
 import { getCstdProjectEvidenceOverview } from "@/lib/cstd-project-evidence-overview";
 import { buildCstdProjectPortfolioBrief } from "@/lib/cstd-project-portfolio-brief";
 import { getCstdProjectProofTimeline } from "@/lib/cstd-project-proof-timeline";
-import { getCstdProjectWorkflowSummary, type CstdProjectWorkflowSummaryItem } from "@/lib/cstd-project-workflow-summary";
+import {
+  getCstdProjectWorkflowAction,
+  getCstdProjectWorkflowSummary,
+  type CstdProjectWorkflowAction,
+  type CstdProjectWorkflowSummaryItem,
+} from "@/lib/cstd-project-workflow-summary";
 import {
   CSTD_INTRO_SEEN_KEY,
   CSTD_MOTION_PREFERENCE_KEY,
@@ -248,6 +253,11 @@ export function CstdLanding() {
       }),
     [projectComparison.projects.length, selectedGuide?.goal, visibleProjects.length],
   );
+  const projectWorkflowAction = getCstdProjectWorkflowAction({
+    compareCount: projectComparison.projects.length,
+    compareLimit: CSTD_PROJECT_COMPARISON_LIMIT,
+    hasGuide: Boolean(selectedGuide),
+  });
   const selectedProject = useMemo(
     () => cstdProjects.find((project) => project.id === selectedProjectId) ?? null,
     [selectedProjectId],
@@ -714,7 +724,7 @@ export function CstdLanding() {
             />
           </div>
 
-          <ProjectWorkflowSummary items={projectWorkflowSummary} />
+          <ProjectWorkflowSummary action={projectWorkflowAction} items={projectWorkflowSummary} />
 
           <ProjectGuide
             comparedProjectIds={comparedProjectIds}
@@ -735,7 +745,7 @@ export function CstdLanding() {
 
           <ProjectCapabilityIndex onFocus={focusProject} />
 
-          <div className="mb-5 rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/84 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5">
+          <div id="project-evidence" className="mb-5 scroll-mt-24 rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/84 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               <div className="min-w-0">
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d98528]">Evidence overview</p>
@@ -832,7 +842,7 @@ export function CstdLanding() {
             </div>
           </div>
 
-          <div className="mb-5 rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[6px_6px_0_rgba(47,36,29,.05)] backdrop-blur-sm sm:p-4">
+          <div id="project-directory" className="mb-5 scroll-mt-24 rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[6px_6px_0_rgba(47,36,29,.05)] backdrop-blur-sm sm:p-4">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d98528]">Project index</p>
               <p className="text-xs font-bold text-[#7b6656]" aria-live="polite">
@@ -1372,17 +1382,46 @@ function MotionControls({
   );
 }
 
-function ProjectWorkflowSummary({ items }: { items: readonly CstdProjectWorkflowSummaryItem[] }) {
+function ProjectWorkflowSummary({
+  action,
+  items,
+}: {
+  action: CstdProjectWorkflowAction;
+  items: readonly CstdProjectWorkflowSummaryItem[];
+}) {
   return (
-    <div className={cstdProjectWorkflowSummaryGridClassName} aria-label="项目决策导览">
-      {items.map((item) => (
-        <div key={item.id} className="min-w-0 rounded-xl border border-[#ead6ad] bg-white/72 p-3 shadow-[5px_5px_0_rgba(47,36,29,.05)]">
-          <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#d98528]">{item.label}</p>
-          <p className="mt-2 min-w-0 break-words text-lg font-black leading-6 text-[#2f241d]">{item.value}</p>
-          <p className="mt-1 text-xs font-semibold leading-5 text-[#6f5b4a]">{item.detail}</p>
+    <nav className="mb-5" aria-label="项目决策导览">
+      <div className={cstdProjectWorkflowSummaryGridClassName}>
+        {items.map((item) => (
+          <a
+            key={item.id}
+            href={item.href}
+            aria-label={`${item.label}：${item.value}，${item.detail}`}
+            className="group flex min-h-32 min-w-0 flex-col rounded-lg border border-[#ead6ad] bg-white/72 p-3 text-[#2f241d] no-underline shadow-[5px_5px_0_rgba(47,36,29,.05)] transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] motion-reduce:transform-none"
+          >
+            <span className="flex items-center justify-between gap-3 text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#d98528]">
+              {item.label}
+              <ArrowDownRight className="h-4 w-4 shrink-0 transition-transform group-hover:translate-x-0.5 group-hover:translate-y-0.5 motion-reduce:transform-none" aria-hidden="true" />
+            </span>
+            <span className="mt-2 min-w-0 break-words text-lg font-black leading-6">{item.value}</span>
+            <span className="mt-auto pt-1 text-xs font-semibold leading-5 text-[#6f5b4a]">{item.detail}</span>
+          </a>
+        ))}
+      </div>
+      <div className="mt-3 flex min-w-0 flex-col gap-3 rounded-lg border-2 border-[#2f241d] bg-[#2f241d] p-3 text-white shadow-[6px_6px_0_rgba(47,36,29,.1)] sm:flex-row sm:items-center sm:justify-between sm:p-4">
+        <div className="min-w-0">
+          <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#ffd98a]">下一步</p>
+          <p className="mt-1 text-sm font-semibold leading-6 text-[#fff6df]">{action.detail}</p>
         </div>
-      ))}
-    </div>
+        <a
+          href={action.href}
+          className="inline-flex min-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-[#ffd98a] bg-[#fff6df] px-4 text-sm font-black text-[#2f241d] no-underline transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transform-none sm:w-auto"
+        >
+          {action.label}
+          <ArrowDownRight className="h-4 w-4" aria-hidden="true" />
+        </a>
+      </div>
+    </nav>
   );
 }
 
@@ -1406,7 +1445,7 @@ function ProjectGuide({
   const comparisonControl = selectedProject ? getCstdProjectComparisonControl(comparedProjectIds, selectedProject.id) : null;
 
   return (
-    <div className="mb-5">
+    <div id="project-guide" className="mb-5 scroll-mt-24">
       <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#0f8f64]">Goal guide</p>
@@ -1560,7 +1599,7 @@ function ProjectComparison({
   onRemove: (projectId: string) => void;
 }) {
   return (
-    <section className={cstdProjectComparisonClassName} aria-labelledby="project-comparison-heading">
+    <section id="project-comparison" className={`${cstdProjectComparisonClassName} scroll-mt-24`} aria-labelledby="project-comparison-heading">
       <div className="flex flex-col gap-3 border-b border-[#b7decf] p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#047857]">Decision view</p>
