@@ -1292,6 +1292,11 @@
   - Local gates: `npm run lint` exited `0`; `npm test` passed 38 files / 134 tests; `npm run build` generated 735 static pages.
   - Browser desktop: goal selection, recommendation evidence, direct project link, focus navigation, back/forward restoration, and 1366 × 900 overflow passed; console warnings/errors `0`.
   - Browser mobile: 390 × 844 recommendation actions and fallback share URL passed; page horizontal overflow `0`; console warnings/errors `0`.
-- Remote check: pending commit and push.
+- Commit: `a0a4bf1 feat: add shareable project matching`
+- Push: `origin/main` updated to `a0a4bf1`.
+- Remote check:
+  - GitHub Actions CI run `28306227178` completed successfully.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Live Browser verification on `https://custard.top/cstd?goal=ai-creation#projects` confirmed the selected goal, recommendation panel, direct project link, focused project URL `goal=ai-creation&project=design#project-focus`, no horizontal overflow on desktop and 390px mobile, and console errors/warnings `0`.
 - Next flagship: make project comparison state URL-backed and refresh-safe, then connect goal recommendations to an explicit compare path without adding a new homepage section.
-- Status: local verification complete
+- Status: closed
