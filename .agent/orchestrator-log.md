@@ -1389,4 +1389,15 @@
   - Local Browser mobile: 390 x 844 stacked the four status links, kept the next action within the viewport, clicked the ready-comparison next action to `#project-comparison`, reported horizontal overflow `0`, and console warnings/errors `0`.
   - Local Browser state branches: `/cstd#projects` showed `先选择访问目标` to `#project-guide`; `/cstd?goal=ai-creation#projects` showed `加入推荐项目` to `#project-guide`; `/cstd?goal=ai-creation&compare=design#projects` showed `再选 1 个对比项目` to `#project-directory`.
   - Post-build production recheck: after `npm run build`, restarted `npm run start -- -p 3102`; desktop and 390 px Browser checks still found all anchors, clicked the ready-comparison next action to `#project-comparison`, reported horizontal overflow `0`, and console warnings/errors `0`.
-- Status: in progress
+- Commit: `a5b878c feat: add cstd workflow navigation`
+- Push: `origin/main` updated to `a5b878c53361a53d7f28ffc0571a0c7d4f60eb5e`.
+- Remote check:
+  - GitHub Actions CI run `28314027392` completed successfully; install, lint, test, and build all passed.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Live Browser desktop at `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#projects` confirmed the hydrated workflow summary, five navigable links, all four target IDs, no framework error overlay, horizontal overflow `0`, and console warnings/errors `0`.
+  - Live desktop interaction clicked next action plus goal, evidence, comparison, and directory links; each landed on the expected hash with target top around `96`.
+  - Live Browser mobile at 390 x 844 confirmed stacked status links, next action width within viewport, ready-comparison action to `#project-comparison`, horizontal overflow `0`, and console warnings/errors `0`.
+  - Live state branches confirmed no-goal `先选择访问目标 -> #project-guide`, goal-only `加入推荐项目 -> #project-guide`, and partial-comparison `再选 1 个对比项目 -> #project-directory`.
+  - Live screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-live-desktop.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-live-mobile.png`.
+- Next flagship: use the CHECK stage to audit URL hydration and navigation-state edge cases, then fix any verified defect before the final improvement stage.
+- Status: closed
