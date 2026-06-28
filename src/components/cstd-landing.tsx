@@ -25,13 +25,11 @@ import {
 } from "@/lib/cstd-project-comparison";
 import {
   buildCstdProjectBrief,
-  buildCstdProjectFocusHref,
   buildCstdProjectLinkDirectory,
   copyCstdProjectLink,
   getCstdProjectEvidenceChecklist,
   getCstdProjectEvidenceChecklistSummary,
   getCstdProjectFocusNavigation,
-  parseCstdProjectFocus,
   type CstdProjectCopyResult,
 } from "@/lib/cstd-project-focus";
 import { cstdProjects, type CstdProjectIconKey } from "@/lib/cstd-projects";
@@ -47,18 +45,16 @@ import {
   shouldPlayCstdIntroReplay,
 } from "@/lib/cstd-motion";
 import {
-  buildCstdProjectDirectoryStateHref,
-  buildCstdProjectDirectoryShareUrl,
   cstdProjectFilters,
   filterCstdProjects,
   getCstdProjectControlBadges,
   getCstdProjectControlSummary,
   getCstdProjectFilterSummary,
   hasActiveCstdProjectControls,
-  parseCstdProjectDirectoryState,
   type CstdProjectFilter,
 } from "@/lib/cstd-project-filter";
-import { cstdProjectGuides } from "@/lib/cstd-project-guide";
+import { cstdProjectGuides, getCstdProjectGuide, type CstdProjectGuideId } from "@/lib/cstd-project-guide";
+import { buildCstdProjectViewHref, parseCstdProjectViewState } from "@/lib/cstd-project-view-state";
 import {
   cstdHeaderNavClassName,
   cstdHeaderClassName,
@@ -140,6 +136,7 @@ export function CstdLanding() {
   const [projectSearchQuery, setProjectSearchQuery] = useState("");
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [selectedGuideId, setSelectedGuideId] = useState<CstdProjectGuideId | null>(null);
   const [comparedProjectIds, setComparedProjectIds] = useState<string[]>([]);
   const [projectCopyResult, setProjectCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [projectBriefCopyResult, setProjectBriefCopyResult] = useState<CstdProjectCopyResult | null>(null);
@@ -161,7 +158,7 @@ export function CstdLanding() {
     const storedAudioPreference = window.localStorage.getItem(CSTD_AUDIO_PREFERENCE_KEY);
     const audioPreference: CstdAudioPreference = storedAudioPreference === "disabled" ? "disabled" : "enabled";
     const introSeen = window.localStorage.getItem(CSTD_INTRO_SEEN_KEY);
-    const hasProjectFocus = parseCstdProjectFocus(window.location.search) !== null;
+    const hasProjectFocus = parseCstdProjectViewState(window.location.search).projectId !== null;
     const shouldShowIntro = shouldPlayCstdIntro({
       hasProjectFocus,
       reducedMotion,
@@ -175,13 +172,19 @@ export function CstdLanding() {
   }, [reducedMotion]);
 
   useEffect(() => {
-    const frame = window.requestAnimationFrame(() => {
-      const directoryState = parseCstdProjectDirectoryState(window.location.search);
-      setActiveProjectFilter(directoryState.filter);
-      setProjectSearchQuery(directoryState.query);
-      setSelectedProjectId(parseCstdProjectFocus(window.location.search));
-    });
-    return () => window.cancelAnimationFrame(frame);
+    const syncViewState = () => {
+      const viewState = parseCstdProjectViewState(window.location.search);
+      setActiveProjectFilter(viewState.filter);
+      setProjectSearchQuery(viewState.query);
+      setSelectedGuideId(viewState.guideId);
+      setSelectedProjectId(viewState.projectId);
+    };
+    const frame = window.requestAnimationFrame(syncViewState);
+    window.addEventListener("popstate", syncViewState);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("popstate", syncViewState);
+    };
   }, []);
 
   useEffect(() => {
@@ -234,6 +237,20 @@ export function CstdLanding() {
   const selectedProjectNavigation = useMemo(
     () => (selectedProject ? getCstdProjectFocusNavigation(cstdProjects, selectedProject.id) : { previous: null, next: null }),
     [selectedProject],
+  );
+  const projectViewHref = useMemo(
+    () =>
+      buildCstdProjectViewHref(
+        typeof window === "undefined" ? "/cstd" : window.location.pathname,
+        {
+          filter: activeProjectFilter,
+          query: projectSearchQuery,
+          guideId: selectedGuideId,
+          projectId: selectedProjectId,
+        },
+        selectedProjectId ? "project-focus" : "projects",
+      ),
+    [activeProjectFilter, projectSearchQuery, selectedGuideId, selectedProjectId],
   );
   const mobileNavigationToggle = getCstdMobileNavigationToggleState(mobileNavOpen);
 
@@ -299,8 +316,17 @@ export function CstdLanding() {
   }
 
   function focusProject(projectId: string) {
-    const href = buildCstdProjectFocusHref(projectId, window.location.pathname);
-    window.history.replaceState(null, "", href);
+    const href = buildCstdProjectViewHref(
+      window.location.pathname,
+      {
+        filter: activeProjectFilter,
+        query: projectSearchQuery,
+        guideId: selectedGuideId,
+        projectId,
+      },
+      "project-focus",
+    );
+    window.history.pushState(null, "", href);
     setProjectCopyResult(null);
     setProjectBriefCopyResult(null);
     setSelectedProjectId(projectId);
@@ -308,7 +334,16 @@ export function CstdLanding() {
   }
 
   function closeProjectFocus() {
-    window.history.replaceState(null, "", buildCstdProjectDirectoryStateHref(window.location.pathname, activeProjectFilter, projectSearchQuery));
+    window.history.pushState(
+      null,
+      "",
+      buildCstdProjectViewHref(window.location.pathname, {
+        filter: activeProjectFilter,
+        query: projectSearchQuery,
+        guideId: selectedGuideId,
+        projectId: null,
+      }),
+    );
     setSelectedProjectId(null);
     setProjectCopyResult(null);
     setProjectBriefCopyResult(null);
@@ -316,7 +351,16 @@ export function CstdLanding() {
   }
 
   function updateProjectDirectoryControls(filter: CstdProjectFilter, query: string) {
-    window.history.replaceState(null, "", buildCstdProjectDirectoryStateHref(window.location.pathname, filter, query));
+    window.history.replaceState(
+      null,
+      "",
+      buildCstdProjectViewHref(window.location.pathname, {
+        filter,
+        query,
+        guideId: selectedGuideId,
+        projectId: null,
+      }),
+    );
     setActiveProjectFilter(filter);
     setProjectSearchQuery(query);
     setSelectedProjectId(null);
@@ -333,9 +377,34 @@ export function CstdLanding() {
     setComparedProjectIds((selectedIds) => toggleCstdProjectComparison(selectedIds, projectId));
   }
 
+  function selectProjectGuide(guideId: CstdProjectGuideId | null) {
+    window.history.pushState(
+      null,
+      "",
+      buildCstdProjectViewHref(window.location.pathname, {
+        filter: activeProjectFilter,
+        query: projectSearchQuery,
+        guideId,
+        projectId: null,
+      }),
+    );
+    setSelectedGuideId(guideId);
+    setSelectedProjectId(null);
+    setProjectDirectoryCopyResult(null);
+  }
+
   async function copyProjectFocusLink() {
     if (!selectedProject) return;
-    const href = buildCstdProjectFocusHref(selectedProject.id, window.location.pathname);
+    const href = buildCstdProjectViewHref(
+      window.location.pathname,
+      {
+        filter: activeProjectFilter,
+        query: projectSearchQuery,
+        guideId: selectedGuideId,
+        projectId: selectedProject.id,
+      },
+      "project-focus",
+    );
     const result = await copyCstdProjectLink(
       navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
       `${window.location.origin}${href}`,
@@ -370,7 +439,7 @@ export function CstdLanding() {
   }
 
   async function copyProjectDirectoryView() {
-    const href = buildCstdProjectDirectoryShareUrl(window.location.origin, window.location.pathname, activeProjectFilter, projectSearchQuery);
+    const href = `${window.location.origin}${projectViewHref}`;
     const result = await copyCstdProjectLink(
       navigator.clipboard ? (text) => navigator.clipboard.writeText(text) : undefined,
       href,
@@ -603,7 +672,12 @@ export function CstdLanding() {
 
           <ProjectCapabilityIndex onFocus={focusProject} />
 
-          <ProjectGuide onFocus={focusProject} />
+          <ProjectGuide
+            motionDisabled={motionDisabled}
+            selectedGuideId={selectedGuideId}
+            onFocus={focusProject}
+            onSelect={selectProjectGuide}
+          />
 
           <div className="mb-5 rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/84 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -766,7 +840,7 @@ export function CstdLanding() {
                 value={
                   typeof window === "undefined"
                     ? ""
-                    : buildCstdProjectDirectoryShareUrl(window.location.origin, window.location.pathname, activeProjectFilter, projectSearchQuery)
+                    : `${window.location.origin}${projectViewHref}`
                 }
                 className="mt-2 min-h-20 w-full resize-y rounded-lg border border-[#b8d7f5] bg-[#f2f8ff] p-3 text-xs font-semibold leading-5 text-[#315b7f] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
               />
@@ -1250,7 +1324,20 @@ function MotionControls({
   );
 }
 
-function ProjectGuide({ onFocus }: { onFocus: (projectId: string) => void }) {
+function ProjectGuide({
+  motionDisabled,
+  selectedGuideId,
+  onFocus,
+  onSelect,
+}: {
+  motionDisabled: boolean;
+  selectedGuideId: CstdProjectGuideId | null;
+  onFocus: (projectId: string) => void;
+  onSelect: (guideId: CstdProjectGuideId | null) => void;
+}) {
+  const selectedGuide = getCstdProjectGuide(selectedGuideId);
+  const selectedProject = selectedGuide ? cstdProjects.find((project) => project.id === selectedGuide.projectId) ?? null : null;
+
   return (
     <div className="mb-5">
       <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
@@ -1267,11 +1354,14 @@ function ProjectGuide({ onFocus }: { onFocus: (projectId: string) => void }) {
 
           return (
             <button
-              key={guide.goal}
+              key={guide.id}
               type="button"
-              onClick={() => onFocus(guide.projectId)}
-              className="group min-w-0 rounded-lg border border-[#ead6ad] bg-white/72 p-4 text-left shadow-[5px_5px_0_rgba(47,36,29,.05)] transition hover:-translate-y-0.5 hover:border-[#0f8f64] hover:bg-[#fffaf0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
-              aria-label={`${guide.goal}，查看${project.title}案例`}
+              onClick={() => onSelect(guide.id)}
+              aria-pressed={selectedGuideId === guide.id}
+              className={`group min-w-0 rounded-lg border p-4 text-left shadow-[5px_5px_0_rgba(47,36,29,.05)] transition hover:-translate-y-0.5 hover:border-[#0f8f64] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] ${
+                selectedGuideId === guide.id ? "border-[#0f8f64] bg-[#dff8ed]" : "border-[#ead6ad] bg-white/72 hover:bg-[#fffaf0]"
+              }`}
+              aria-label={`${guide.goal}，匹配${project.title}`}
             >
               <span className="block min-w-0 text-sm font-black text-[#2f241d]">{guide.goal}</span>
               <span className="mt-2 block min-w-0 text-xs font-semibold leading-5 text-[#6f5b4a]">{guide.reason}</span>
@@ -1282,6 +1372,62 @@ function ProjectGuide({ onFocus }: { onFocus: (projectId: string) => void }) {
           );
         })}
       </div>
+      <AnimatePresence initial={false}>
+        {selectedGuide && selectedProject ? (
+          <motion.section
+            key={selectedGuide.id}
+            aria-labelledby="project-match-heading"
+            aria-live="polite"
+            className="mt-3 overflow-hidden rounded-xl border-2 border-[#0f8f64] bg-[#eefbf4] shadow-[7px_7px_0_rgba(47,36,29,.07)]"
+            initial={motionDisabled ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={motionDisabled ? { opacity: 0 } : { opacity: 0, y: -6 }}
+            transition={{ duration: 0.18 }}
+          >
+            <div className="grid gap-4 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+              <div className="min-w-0">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-[#047857]">推荐匹配</p>
+                <h4 id="project-match-heading" className="mt-1 text-xl font-black text-[#2f241d] sm:text-2xl">
+                  {selectedProject.title}
+                </h4>
+                <p className="mt-2 text-sm font-semibold leading-6 text-[#416354]">{selectedGuide.reason}</p>
+                <dl className="mt-3 grid gap-2 border-t border-[#b7decf] pt-3 sm:grid-cols-2">
+                  <div className="min-w-0">
+                    <dt className="text-xs font-black text-[#047857]">当前状态</dt>
+                    <dd className="mt-1 text-sm font-semibold leading-6 text-[#2f241d]">{selectedProject.evidence.current}</dd>
+                  </div>
+                  <div className="min-w-0">
+                    <dt className="text-xs font-black text-[#047857]">已交付</dt>
+                    <dd className="mt-1 text-sm font-semibold leading-6 text-[#2f241d]">{selectedProject.evidence.outcome}</dd>
+                  </div>
+                </dl>
+              </div>
+              <div className="grid min-w-0 gap-2 sm:grid-cols-3 lg:w-44 lg:grid-cols-1">
+                <button
+                  type="button"
+                  onClick={() => onFocus(selectedProject.id)}
+                  className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#1b4332] bg-[#0f8f64] px-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                >
+                  查看案例
+                </button>
+                <Link
+                  href={selectedProject.href}
+                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#b8d7f5] bg-white px-3 text-sm font-black text-[#2563eb] no-underline transition hover:-translate-y-0.5 hover:border-[#2563eb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
+                >
+                  打开项目 <ExternalLink className="h-4 w-4" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => onSelect(null)}
+                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#ead6ad] bg-white/75 px-3 text-sm font-black text-[#6f5b4a] transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                >
+                  <X className="h-4 w-4" /> 清除匹配
+                </button>
+              </div>
+            </div>
+          </motion.section>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
