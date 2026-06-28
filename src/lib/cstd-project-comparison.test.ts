@@ -4,6 +4,7 @@ import {
   CSTD_PROJECT_COMPARISON_LIMIT,
   getCstdProjectComparison,
   getCstdProjectComparisonControl,
+  normalizeCstdProjectComparisonIds,
   toggleCstdProjectComparison,
 } from "./cstd-project-comparison";
 
@@ -61,5 +62,18 @@ describe("CSTD project comparison", () => {
       label: "加入对比",
       selected: false,
     });
+  });
+
+  test("normalizes comparison ids to unique live projects in order", () => {
+    expect(normalizeCstdProjectComparisonIds(["design", "incubator", "design", "crm", "unknown", "rocodex"])).toEqual([
+      "design",
+      "crm",
+    ]);
+    expect(getCstdProjectComparisonControl(["incubator", "design"], "crm")).toEqual({
+      disabled: false,
+      label: "加入对比",
+      selected: false,
+    });
+    expect(toggleCstdProjectComparison(["incubator", "design"], "crm")).toEqual(["design", "crm"]);
   });
 });

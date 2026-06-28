@@ -178,6 +178,7 @@ export function CstdLanding() {
       setProjectSearchQuery(viewState.query);
       setSelectedGuideId(viewState.guideId);
       setSelectedProjectId(viewState.projectId);
+      setComparedProjectIds(viewState.compareProjectIds);
     };
     const frame = window.requestAnimationFrame(syncViewState);
     window.addEventListener("popstate", syncViewState);
@@ -247,10 +248,11 @@ export function CstdLanding() {
           query: projectSearchQuery,
           guideId: selectedGuideId,
           projectId: selectedProjectId,
+          compareProjectIds: comparedProjectIds,
         },
         selectedProjectId ? "project-focus" : "projects",
       ),
-    [activeProjectFilter, projectSearchQuery, selectedGuideId, selectedProjectId],
+    [activeProjectFilter, comparedProjectIds, projectSearchQuery, selectedGuideId, selectedProjectId],
   );
   const mobileNavigationToggle = getCstdMobileNavigationToggleState(mobileNavOpen);
 
@@ -323,6 +325,7 @@ export function CstdLanding() {
         query: projectSearchQuery,
         guideId: selectedGuideId,
         projectId,
+        compareProjectIds: comparedProjectIds,
       },
       "project-focus",
     );
@@ -342,6 +345,7 @@ export function CstdLanding() {
         query: projectSearchQuery,
         guideId: selectedGuideId,
         projectId: null,
+        compareProjectIds: comparedProjectIds,
       }),
     );
     setSelectedProjectId(null);
@@ -359,6 +363,7 @@ export function CstdLanding() {
         query,
         guideId: selectedGuideId,
         projectId: null,
+        compareProjectIds: comparedProjectIds,
       }),
     );
     setActiveProjectFilter(filter);
@@ -374,7 +379,27 @@ export function CstdLanding() {
   }
 
   function toggleProjectComparison(projectId: string) {
-    setComparedProjectIds((selectedIds) => toggleCstdProjectComparison(selectedIds, projectId));
+    updateProjectComparison(toggleCstdProjectComparison(comparedProjectIds, projectId));
+  }
+
+  function updateProjectComparison(nextComparedProjectIds: string[]) {
+    window.history.pushState(
+      null,
+      "",
+      buildCstdProjectViewHref(
+        window.location.pathname,
+        {
+          filter: activeProjectFilter,
+          query: projectSearchQuery,
+          guideId: selectedGuideId,
+          projectId: selectedProjectId,
+          compareProjectIds: nextComparedProjectIds,
+        },
+        selectedProjectId ? "project-focus" : "projects",
+      ),
+    );
+    setComparedProjectIds(nextComparedProjectIds);
+    setProjectDirectoryCopyResult(null);
   }
 
   function selectProjectGuide(guideId: CstdProjectGuideId | null) {
@@ -386,6 +411,7 @@ export function CstdLanding() {
         query: projectSearchQuery,
         guideId,
         projectId: null,
+        compareProjectIds: comparedProjectIds,
       }),
     );
     setSelectedGuideId(guideId);
@@ -402,6 +428,7 @@ export function CstdLanding() {
         query: projectSearchQuery,
         guideId: selectedGuideId,
         projectId: selectedProject.id,
+        compareProjectIds: comparedProjectIds,
       },
       "project-focus",
     );
@@ -673,10 +700,12 @@ export function CstdLanding() {
           <ProjectCapabilityIndex onFocus={focusProject} />
 
           <ProjectGuide
+            comparedProjectIds={comparedProjectIds}
             motionDisabled={motionDisabled}
             selectedGuideId={selectedGuideId}
             onFocus={focusProject}
             onSelect={selectProjectGuide}
+            onToggleComparison={toggleProjectComparison}
           />
 
           <div className="mb-5 rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/84 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5">
@@ -908,7 +937,7 @@ export function CstdLanding() {
           {projectComparison.projects.length > 0 ? (
             <ProjectComparison
               comparison={projectComparison}
-              onClear={() => setComparedProjectIds([])}
+              onClear={() => updateProjectComparison([])}
               onRemove={toggleProjectComparison}
             />
           ) : null}
@@ -1325,18 +1354,23 @@ function MotionControls({
 }
 
 function ProjectGuide({
+  comparedProjectIds,
   motionDisabled,
   selectedGuideId,
   onFocus,
   onSelect,
+  onToggleComparison,
 }: {
+  comparedProjectIds: readonly string[];
   motionDisabled: boolean;
   selectedGuideId: CstdProjectGuideId | null;
   onFocus: (projectId: string) => void;
   onSelect: (guideId: CstdProjectGuideId | null) => void;
+  onToggleComparison: (projectId: string) => void;
 }) {
   const selectedGuide = getCstdProjectGuide(selectedGuideId);
   const selectedProject = selectedGuide ? cstdProjects.find((project) => project.id === selectedGuide.projectId) ?? null : null;
+  const comparisonControl = selectedProject ? getCstdProjectComparisonControl(comparedProjectIds, selectedProject.id) : null;
 
   return (
     <div className="mb-5">
@@ -1402,7 +1436,7 @@ function ProjectGuide({
                   </div>
                 </dl>
               </div>
-              <div className="grid min-w-0 gap-2 sm:grid-cols-3 lg:w-44 lg:grid-cols-1">
+              <div className="grid min-w-0 gap-2 sm:grid-cols-4 lg:w-48 lg:grid-cols-1">
                 <button
                   type="button"
                   onClick={() => onFocus(selectedProject.id)}
@@ -1410,6 +1444,23 @@ function ProjectGuide({
                 >
                   查看案例
                 </button>
+                {comparisonControl ? (
+                  <button
+                    type="button"
+                    onClick={() => onToggleComparison(selectedProject.id)}
+                    aria-label={`${comparisonControl.label}：${selectedProject.title}`}
+                    aria-pressed={comparisonControl.selected}
+                    disabled={comparisonControl.disabled}
+                    className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] disabled:cursor-not-allowed disabled:opacity-55 ${
+                      comparisonControl.selected
+                        ? "border-[#1b4332] bg-[#dff8ed] text-[#047857]"
+                        : "border-[#1b4332] bg-white text-[#0f8f64] hover:-translate-y-0.5 hover:bg-[#eefbf4]"
+                    }`}
+                  >
+                    {comparisonControl.selected ? <Check className="h-4 w-4" /> : <GitCompareArrows className="h-4 w-4" />}
+                    {comparisonControl.label}
+                  </button>
+                ) : null}
                 <Link
                   href={selectedProject.href}
                   className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#b8d7f5] bg-white px-3 text-sm font-black text-[#2563eb] no-underline transition hover:-translate-y-0.5 hover:border-[#2563eb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
