@@ -1490,4 +1490,12 @@
   - `npm run build` exited `0` and generated 735 static pages.
   - Local Browser desktop at `/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed the direct comparison context, visible copy action and failure feedback in a restricted clipboard environment, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
   - Local Browser mobile at 390 x 844 confirmed full-width stacked actions inside the comparison surface, visible feedback, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
-- Status: local verification complete; remote release verification pending
+- Commit: `a16cb88 feat: add cstd comparison brief`
+- Push: `origin/main` updated to `a16cb88765a258cc0c2e6614d1dfca3f4a8b5eb6`.
+- Remote check:
+  - GitHub Actions CI run `28320833059` completed successfully; install, lint, test, and build all passed.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Live Browser desktop at `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed hydrated goal/project context, the comparison-local copy action, explicit restricted-clipboard feedback, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+  - Live Browser mobile at 390 x 844 confirmed stacked full-width actions stayed within the viewport, explicit copy feedback, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+- Next flagship: turn the copied comparison from a raw evidence handoff into a clearer decision aid by deriving goal-to-project fit signals from existing project evidence.
+- Status: closed
