@@ -39,6 +39,6 @@
 
 - [x] Run `git diff --check`, lint, full tests, and production build.
 - [x] Verify the direct comparison link on desktop and 390px mobile.
-- [ ] Commit and push the Stage 1 feature independently.
-- [ ] Verify GitHub Actions, Vercel, and the live custom domain.
-- [ ] Record final Stage 1 remote evidence before starting Stage 2.
+- [x] Commit and push the Stage 1 feature independently.
+- [x] Verify GitHub Actions, Vercel, and the live custom domain.
+- [x] Record final Stage 1 remote evidence before starting Stage 2.
