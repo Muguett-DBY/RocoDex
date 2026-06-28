@@ -26,6 +26,7 @@ import {
   type CstdProjectComparison as CstdProjectComparisonData,
 } from "@/lib/cstd-project-comparison";
 import { getCstdProjectComparisonContext } from "@/lib/cstd-project-comparison-context";
+import { getCstdProjectComparisonFit, type CstdProjectComparisonFit } from "@/lib/cstd-project-comparison-fit";
 import {
   buildCstdProjectBrief,
   buildCstdProjectLinkDirectory,
@@ -116,6 +117,12 @@ const noteItems = [
   ["347", "只精灵资料"],
   ["Mix", "技术 / 设计 / 研究"],
 ] as const;
+
+const cstdProjectComparisonFitLabelClassNames: Record<CstdProjectComparisonFit["items"][number]["kind"], string> = {
+  direct: "bg-[#dff8ed] text-[#047857]",
+  reference: "bg-[#fff0c9] text-[#8a4b15]",
+  unscoped: "bg-[#e3f2ff] text-[#2563eb]",
+};
 
 const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
 const homepageCapabilitySummary = getCstdHomepageCapabilitySummary(cstdHomepageCapabilities);
@@ -251,6 +258,10 @@ export function CstdLanding() {
   const hasProjectControlState = useMemo(() => hasActiveCstdProjectControls(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const projectComparison = useMemo(() => getCstdProjectComparison(cstdProjects, comparedProjectIds), [comparedProjectIds]);
   const selectedGuide = useMemo(() => getCstdProjectGuide(selectedGuideId), [selectedGuideId]);
+  const projectComparisonFit = useMemo(
+    () => getCstdProjectComparisonFit(selectedGuide, projectComparison.projects),
+    [projectComparison.projects, selectedGuide],
+  );
   const projectWorkflowSummary = useMemo(
     () =>
       getCstdProjectWorkflowSummary({
@@ -292,6 +303,15 @@ export function CstdLanding() {
     [activeProjectFilter, comparedProjectIds, projectSearchQuery, selectedGuideId, selectedProjectId],
   );
   const mobileNavigationToggle = getCstdMobileNavigationToggleState(mobileNavOpen);
+
+  useEffect(() => {
+    if (!projectViewStateSynced || projectComparison.projects.length === 0) return;
+    if (window.location.hash !== "#project-comparison") return;
+    const frame = window.requestAnimationFrame(() => {
+      document.getElementById("project-comparison")?.scrollIntoView({ block: "start" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [projectComparison.projects.length, projectViewStateSynced]);
 
   function replayIntro() {
     const replayPreference: CstdMotionPreference = "enabled";
@@ -533,6 +553,7 @@ export function CstdLanding() {
       getCstdClipboardWriter(),
       buildCstdProjectComparisonBrief({
         comparison: projectComparison,
+        fit: projectComparisonFit,
         goalLabel: context.goalLabel,
         projectLabel: context.projectLabel,
         url: `${window.location.origin}${href}`,
@@ -781,6 +802,7 @@ export function CstdLanding() {
             <ProjectComparison
               comparison={projectComparison}
               copyResult={comparisonBriefCopyResult}
+              fit={projectComparisonFit}
               guideGoal={selectedGuide?.goal ?? null}
               onClear={() => updateProjectComparison([])}
               onCopyBrief={copyProjectComparisonBrief}
@@ -1637,6 +1659,7 @@ function ProjectCapabilityIndex({ onFocus }: { onFocus: (projectId: string) => v
 function ProjectComparison({
   comparison,
   copyResult,
+  fit,
   guideGoal,
   onClear,
   onCopyBrief,
@@ -1644,6 +1667,7 @@ function ProjectComparison({
 }: {
   comparison: CstdProjectComparisonData;
   copyResult: CstdProjectCopyResult | null;
+  fit: CstdProjectComparisonFit;
   guideGoal: string | null;
   onClear: () => void;
   onCopyBrief: () => void;
@@ -1719,6 +1743,25 @@ function ProjectComparison({
             </li>
           ))}
         </ul>
+
+        <div className="mt-4 border-y border-[#b7decf] bg-[#fffaf0]/70" role="group" aria-label="目标匹配判断">
+          <div className="border-b border-[#b7decf] px-3 py-3">
+            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#d98528]">Goal fit</p>
+            <p className="mt-1 text-sm font-black text-[#1b4332]">目标判断</p>
+            <p className="mt-1 break-words text-sm font-semibold leading-6 text-[#4c6b5d]">{fit.summary}</p>
+          </div>
+          <ul className={`${cstdProjectComparisonColumnsClassName} gap-0`} aria-label="目标匹配项目">
+            {fit.items.map((item) => (
+              <li key={item.projectId} className="min-w-0 border-b border-[#b7decf] px-3 py-3 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
+                <div className="flex min-w-0 flex-wrap items-center gap-2">
+                  <span className={`rounded-md px-2 py-1 text-[0.68rem] font-black ${cstdProjectComparisonFitLabelClassNames[item.kind]}`}>{item.label}</span>
+                  <span className="min-w-0 break-words text-sm font-black text-[#1b4332]">{item.title}</span>
+                </div>
+                <p className="mt-2 break-words text-sm font-semibold leading-6 text-[#355b4a]">{item.detail}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
 
         {comparison.ready ? (
           <dl className="mt-4 border-t border-[#b7decf]">

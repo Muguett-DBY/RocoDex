@@ -19,4 +19,17 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain('if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) return undefined;');
     expect(source).not.toContain("navigator.clipboard ?");
   });
+
+  test("renders the tested goal-fit model in the comparison and copied brief", () => {
+    expect(source).toContain("getCstdProjectComparisonFit(selectedGuide, projectComparison.projects)");
+    expect(source).toContain("fit: projectComparisonFit");
+    expect(source).toContain("fit={projectComparisonFit}");
+    expect(source).toContain('aria-label="目标匹配判断"');
+  });
+
+  test("restores the comparison hash after conditional comparison content renders", () => {
+    expect(source).toContain('window.location.hash !== "#project-comparison"');
+    expect(source).toContain('document.getElementById("project-comparison")?.scrollIntoView({ block: "start" });');
+    expect(source).toContain("[projectComparison.projects.length, projectViewStateSynced]");
+  });
 });
