@@ -39,9 +39,17 @@
   - Local production server on port `3102` returned `200` for the CSTD route.
   - Clean Edge desktop and 390 x 844 mobile checks confirmed directory and focus restored receipts, manual reset/navigation clearing, plain `/cstd` without restored receipts, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
   - In-app Browser checks confirmed the 390 px focus receipt and desktop directory receipt, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+- Commit: `36477b1 feat: mark restored cstd directory links`
+- Push: `origin/main` updated to `36477b1b3fbce07d917b91b06ef4fa3ebf0db574`.
+- Remote check:
+  - GitHub Actions CI run `28370400526` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Vercel production deployment `https://rocodex-m2d4lzi0q-muguett-dbys-projects.vercel.app` completed Ready.
+  - HTTP smoke returned `200` on `https://custard.top/cstd?category=operations&q=CRM#projects`.
+  - Live clean Edge desktop and 390 x 844 mobile checks confirmed `筛选视图已恢复` for filtered directory links and `分享案例已恢复` for focused project links, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
 - Risk: receipts intentionally reflect URL-restored entry state only; after manual interaction they are cleared rather than trying to preserve provenance for derived states.
 - Next flagship: use Stage 2 to make restored entry points more actionable by adding a compact “share-entry handoff” next action inside existing directory/focus surfaces.
-- Status: ready for commit
+- Status: closed
 
 - Next stage: Stage 2 / 6 `IMPROVE`
 

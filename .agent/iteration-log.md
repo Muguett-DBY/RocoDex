@@ -24,6 +24,10 @@
 - `npm run build` exited `0` and generated 735 static pages.
 - Local clean Edge desktop/mobile checks confirmed restored receipts, manual clearing, plain `/cstd` without restored receipts, overflow `0`, no framework overlay, and console warnings/errors `0`.
 - In-app Browser checks confirmed the focus and directory receipts with overflow `0` and no warning/error logs.
+- Commit `36477b1` was pushed to `origin/main`.
+- GitHub Actions CI run `28370400526` completed successfully.
+- Vercel deployment `https://rocodex-m2d4lzi0q-muguett-dbys-projects.vercel.app` reached Ready.
+- Live clean Edge desktop/mobile checks on `https://custard.top` confirmed both restored directory and focus receipts, overflow `0`, no framework overlay, and console warnings/errors `0`.
 
 ### Next direction
 
