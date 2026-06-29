@@ -1,6 +1,13 @@
 import { cstdProjects } from "./cstd-projects";
 
 export type CstdProjectCopyResult = "copied" | "unsupported" | "failed";
+export type CstdProjectBriefCopyPresentation = {
+  actionLabel: string;
+  message: string;
+  tone: "success" | "warning";
+  requiresManualCopy: boolean;
+};
+
 type CstdProjectNavigationItem = {
   id: string;
   title: string;
@@ -61,6 +68,28 @@ export function buildCstdProjectBrief(project: CstdProjectBriefSource) {
     `已交付：${project.evidence.outcome}`,
     `链接：${project.href}`,
   ].join("\n");
+}
+
+export function getCstdProjectBriefCopyPresentation(
+  result: CstdProjectCopyResult | null,
+): CstdProjectBriefCopyPresentation | null {
+  if (!result) return null;
+
+  if (result === "copied") {
+    return {
+      actionLabel: "摘要已复制",
+      message: "案例摘要已复制，可继续打开线上项目。",
+      tone: "success",
+      requiresManualCopy: false,
+    };
+  }
+
+  return {
+    actionLabel: "重新复制摘要",
+    message: result === "unsupported" ? "浏览器不支持自动复制，请在下方手动复制摘要。" : "摘要复制失败，请在下方手动复制后继续。",
+    tone: "warning",
+    requiresManualCopy: true,
+  };
 }
 
 export function buildCstdProjectLinkDirectory(

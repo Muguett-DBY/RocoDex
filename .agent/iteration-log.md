@@ -1345,3 +1345,27 @@
 ### Next direction
 
 - Use Stage 4 to strengthen the restored-entry workflow with a useful follow-through that preserves the existing public URL contract.
+
+## 2026-06-30 - Long Homepage Cycle 3 Stage 4 / 6 - IMPROVE
+
+### Scope
+
+- Added explicit copy-outcome presentation for restored case-study summary copying.
+- Added a responsive restored-entry action group for a top copy action plus a live-project continuation link.
+- Kept regular project-focus summary-copy feedback in the existing action rail while restored shared links report at the point of action.
+
+### User-visible change
+
+- Shared case-study links now let recipients copy the case summary, see success/fallback feedback in the restored handoff, and open the live CRM project from the same top-level surface.
+- Mobile restored case actions stack as 44 px full-width controls; desktop keeps the handoff compact.
+
+### Verification evidence
+
+- TDD red was observed before the helper, layout export, and component integration existed; focused tests then passed 3 files / 38 tests and related tests passed 6 files / 60 tests.
+- `git diff --check` passed with only Windows line-ending notices; `npm run lint` passed, `npm test` passed 44 files / 183 tests, and `npm run build` generated 735 static pages.
+- Local in-app Browser verified the restricted-clipboard fallback inside the restored handoff with no duplicate lower action-rail feedback, no horizontal overflow, and zero console warnings/errors.
+- Local 390 x 844 Edge Playwright verified the success state, `打开 CRM` continuation, 44 px controls, 280 px action widths inside a 306 px handoff, no horizontal overflow, and zero console warnings/errors.
+
+### Next direction
+
+- After commit and deployment, verify the same restored case-study handoff on `https://custard.top` before moving to the CHECK stage.

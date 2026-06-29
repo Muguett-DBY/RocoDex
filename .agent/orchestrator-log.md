@@ -135,6 +135,36 @@
 - Status: closed
 - Next stage: Stage 4 / 6 `IMPROVE`
 
+### Stage 4
+
+- Stage number: 4 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Previous direction: give restored entry links a useful follow-through while preserving the public URL-state and receipt-clearing contracts.
+- Flagship goal: complete the restored case-study handoff with point-of-action copy outcomes, inline manual fallback, and direct live-project continuation.
+- New visible increment: add a top-level live-project action for recipients of shared case links.
+- Real issue targeted: the restored top copy action currently renders success/failure feedback and manual fallback only in the lower action rail, outside the mobile viewport where the action was taken.
+- Stability and performance target: model all clipboard outcomes explicitly, avoid duplicate feedback DOM, and build rendered fallback text only when manual copy is required.
+- Design: `docs/superpowers/specs/2026-06-30-cstd-restored-case-handoff-completion-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-cstd-restored-case-handoff-completion.md`
+- Start state: `main` matches `origin/main` at `e3b479d`; Stage 3 implementation and evidence commits passed GitHub Actions and Vercel; worktree is clean.
+- Implemented:
+  - Added `getCstdProjectBriefCopyPresentation` to model copied, unsupported, and failed summary-copy outcomes for restored case links.
+  - Added a shared restored-entry actions layout for stacked mobile actions and compact two-action desktop handoffs.
+  - Extended the restored case handoff with inline copy result messaging, manual-copy fallback, and a direct live-project continuation link.
+  - Kept non-restored case-study summary-copy feedback in the existing action rail and avoided duplicate feedback when a shared case URL is restored.
+- Verification recorded before commit:
+  - TDD red: focused tests failed before the presentation helper, action layout export, and restored handoff integration existed.
+  - TDD green: focused tests passed 3 files / 38 tests; related restored-entry and URL-state suites passed 6 files / 60 tests.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 44 files / 183 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local in-app Browser at `http://127.0.0.1:3100/cstd?project=crm#project-focus` confirmed one restored case handoff, one top copy action, one `打开 CRM` link, restricted-clipboard fallback in the handoff, no lower action-rail duplicate, horizontal overflow `0`, no dialogs, and console warnings/errors `0`.
+  - Local 390 x 844 Edge Playwright confirmed clipboard success state with `摘要已复制`, the `打开 CRM` continuation, 44 px actions, 280 px action widths inside a 306 px handoff, horizontal overflow `0`, and console warnings/errors `0`.
+  - Local screenshot saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-playwright/rocodex-stage4-mobile-focused.png`.
+- Status: local verification complete; pending commit, push, CI, Vercel, and live checks.
+
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

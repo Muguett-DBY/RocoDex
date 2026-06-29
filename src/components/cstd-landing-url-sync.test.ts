@@ -105,4 +105,14 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain('statusLabel="分享案例恢复状态"');
     expect(source).toContain('nextLabel="恢复案例下一步"');
   });
+
+  test("completes restored case copy and continuation inside the handoff", () => {
+    expect(source).toContain("getCstdProjectBriefCopyPresentation");
+    expect(source).toContain("copyPresentation={briefCopyPresentation}");
+    expect(source).toContain("fallbackText={projectBriefText}");
+    expect(source).toContain("secondaryAction={{");
+    expect(source).toContain("href: project.href");
+    expect(source).toContain('aria-label={`${statusLabel}手动复制文本`}');
+    expect(source).toContain("!restoredReceipt && briefCopyResult");
+  });
 });

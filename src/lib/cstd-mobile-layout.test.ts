@@ -25,6 +25,7 @@ import {
   cstdProjectComparisonColumnsClassName,
   cstdProjectProofTimelineGridClassName,
   cstdRestoredEntryActionClassName,
+  cstdRestoredEntryActionsClassName,
   cstdRestoredEntryNextClassName,
   cstdRestoredEntryShellClassName,
   cstdProjectToolbarActionsClassName,
@@ -165,5 +166,9 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdRestoredEntryActionClassName).toContain("min-h-11");
     expect(cstdRestoredEntryActionClassName).toContain("w-full");
     expect(cstdRestoredEntryActionClassName).toContain("sm:w-auto");
+    expect(cstdRestoredEntryActionsClassName).toContain("grid");
+    expect(cstdRestoredEntryActionsClassName).toContain("w-full");
+    expect(cstdRestoredEntryActionsClassName).toContain("sm:w-auto");
+    expect(cstdRestoredEntryActionsClassName).toContain("sm:grid-cols-2");
   });
 });
