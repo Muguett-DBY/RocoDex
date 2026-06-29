@@ -1339,6 +1339,8 @@
 - TDD red was observed before the component and layout exports existed; focused tests then passed 2 files / 28 tests and related tests passed 6 files / 58 tests.
 - `npm run lint` passed, `npm test` passed 44 files / 181 tests, and `npm run build` generated 735 static pages.
 - Local in-app Browser and Edge checks covered directory navigation, copy success/fallback feedback, 1366 x 900 and 390 x 844 layouts, 44 px actions, no horizontal overflow, and zero console warnings/errors.
+- Commit `d0e6e58` was pushed to `origin/main`; GitHub Actions run `28390015571` and the Vercel deployment completed successfully.
+- Live desktop and 390 x 844 checks covered restored directory-to-focus navigation, a 291 px mobile handoff, 44 px actions, copy feedback, no horizontal overflow, and zero console warnings/errors.
 
 ### Next direction
 

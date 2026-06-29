@@ -123,7 +123,17 @@
   - Local production in-app Browser checks confirmed both unique restored-entry regions, directory-to-focus navigation, copy fallback feedback, 44 px actions, horizontal overflow `0`, no dialog overlay, and console warnings/errors `0`.
   - Local Edge at 1366 x 900 and 390 x 844 confirmed the directory transition, successful `案例摘要已复制` feedback, a 291 px mobile focus handoff, no horizontal overflow, and console warnings/errors `0`.
   - The in-app screenshot compositor produced black capture artifacts; Edge screenshots rendered the DOM correctly and were used for authoritative visual review.
-- Status: local verification complete; remote closure pending
+- Commit: `d0e6e58 feat: refine cstd restored entry handoffs`
+- Push: `origin/main` updated to `d0e6e5866a0dc7a8edb3e3fcb998d009b99ad132`.
+- Remote check:
+  - GitHub Actions CI run `28390015571` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live desktop at `https://custard.top/cstd?category=operations&q=CRM#projects` showed one restored directory handoff, a 44 px action, and navigated to `project=crm#project-focus`.
+  - Live 390 x 844 focus verification showed one restored case handoff at about 291 px wide, a 44 px full-width action, explicit copy feedback, horizontal overflow `0`, no dialog overlay, and console warnings/errors `0`.
+- Risk: clipboard capability varies by browser; the existing manual-copy fallback remains available and was reverified.
+- Stage 4 handoff: add a useful follow-through for restored entry links while keeping the public URL-state contract and current receipt-clearing semantics stable.
+- Status: closed
+- Next stage: Stage 4 / 6 `IMPROVE`
 
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 
