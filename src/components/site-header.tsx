@@ -113,7 +113,13 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
               className="h-11 justify-start px-3"
               onClick={closeMobileMenu}
             />
-            {authEnabled ? <AuthControls /> : null}
+            {authEnabled ? (
+              <AuthControls
+                rootClassName="grid gap-2"
+                controlClassName="h-11 justify-start px-3"
+                onNavigate={closeMobileMenu}
+              />
+            ) : null}
           </nav>
         ) : null}
       </div>
@@ -169,7 +175,15 @@ function HeaderNavLinks({
   });
 }
 
-function AuthControls() {
+function AuthControls({
+  rootClassName,
+  controlClassName,
+  onNavigate,
+}: {
+  rootClassName?: string;
+  controlClassName?: string;
+  onNavigate?: () => void;
+} = {}) {
   const { data: session } = useSession();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -184,12 +198,20 @@ function AuthControls() {
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  const handleSignOut = () => {
+    onNavigate?.();
+    signOut({ callbackUrl: "/" });
+  };
+
   return session?.user ? (
-            <div className="relative" ref={menuRef}>
+            <div className={cn("relative", rootClassName)} ref={menuRef}>
               <button
                 type="button"
                 onClick={() => setMenuOpen((v) => !v)}
-                className="inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-slate-700 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                className={cn(
+                  "inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-slate-700 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white",
+                  controlClassName,
+                )}
               >
                 <User className="h-4 w-4" />
                 {session.user.name}
@@ -198,8 +220,11 @@ function AuthControls() {
                 <div className="absolute right-0 top-full mt-1 w-36 rounded-lg border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-900">
                   <button
                     type="button"
-                    onClick={() => signOut({ callbackUrl: "/" })}
-                    className="flex w-full items-center gap-2 px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800"
+                    onClick={handleSignOut}
+                    className={cn(
+                      "flex h-9 w-full items-center gap-2 px-4 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800",
+                      controlClassName,
+                    )}
                   >
                     <LogOut className="h-4 w-4" />
                     退出登录
@@ -208,17 +233,25 @@ function AuthControls() {
               ) : null}
             </div>
           ) : (
-            <div className="flex items-center gap-1">
+            <div className={cn("flex items-center gap-1", rootClassName)}>
               <Link
                 href="/login"
-                className="inline-flex h-9 items-center gap-1.5 rounded-md px-3 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                onClick={onNavigate}
+                className={cn(
+                  "inline-flex h-9 items-center gap-1.5 rounded-md px-3 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white",
+                  controlClassName,
+                )}
               >
                 <LogIn className="h-4 w-4" />
                 登录
               </Link>
               <Link
                 href="/register"
-                className="inline-flex h-9 items-center gap-1.5 rounded-md bg-emerald-600 px-3 text-sm font-semibold text-white transition hover:bg-emerald-700"
+                onClick={onNavigate}
+                className={cn(
+                  "inline-flex h-9 items-center gap-1.5 rounded-md bg-emerald-600 px-3 text-sm font-semibold text-white transition hover:bg-emerald-700",
+                  controlClassName,
+                )}
               >
                 <UserPlus className="h-4 w-4" />
                 注册
