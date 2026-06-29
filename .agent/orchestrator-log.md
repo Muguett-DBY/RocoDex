@@ -226,6 +226,35 @@
 - Real issue targeted: restored comparison links skipped the intro correctly but the top receipt was passive, especially on mobile.
 - Design: `docs/superpowers/specs/2026-06-30-restored-comparison-continuation-design.md`
 - Plan: `docs/superpowers/plans/2026-06-30-restored-comparison-continuation.md`
+- Implemented:
+  - Added a restored-comparison continuation model derived from the existing comparison next-step state.
+  - Rendered a compact `建议下一步` handoff inside the existing restored comparison receipt.
+  - Reused the existing next-step click handler so the top action focuses the target case, aligns a missing target, or returns to goal selection.
+  - Kept the lower decision band unchanged for full reasoning and kept the restored continuation action at the 44 px touch target standard.
+- Verification recorded before commit:
+  - TDD red: focused context and source-contract tests failed because the restored continuation helper and header action did not exist.
+  - TDD green: focused tests passed 2 files / 21 tests; related comparison, view-state, and mobile-layout tests passed 7 files / 56 tests.
+  - `npm run ci:local` completed `npm ci`, reported 0 vulnerabilities, and retained the existing allow-scripts warning for `sharp` and `unrs-resolver`.
+  - `npm run lint` exited `0`.
+  - `npm audit --json` reported 0 vulnerabilities.
+  - `npm test` passed 45 files / 188 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - `git diff --check` exited `0` with only Windows line-ending notices; touched-file source hygiene found no new debug markers or real secrets.
+  - Local in-app Browser desktop on `http://127.0.0.1:3101/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed the restored header action, no horizontal overflow, no framework overlay, and console warnings/errors `0`; clicking the top action changed the URL to `project=design#project-focus` and focused the target case.
+  - Local 390 x 844 in-app Browser on a fresh port `3103` confirmed the restored handoff width stayed inside the viewport, the top action computed to 44 px height, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`; clicking the top action focused the target case.
+  - Note: the first mobile check on port `3101` showed stale cached local JS after rebuild; switching to fresh port `3103` verified the current production bundle.
+- Commit: `af9417e feat: make cstd restored comparisons actionable`
+- Push: `origin/main` updated to `af9417e40c80adee81beefe5a676022a010366bb`.
+- Remote check:
+  - GitHub Actions CI run `28406064593` completed successfully; install, lint, test, and build all passed.
+  - Vercel production deployment `rocodex-3jnehx8ag-muguett-dbys-projects.vercel.app` reached `READY`; GitHub commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - HTTP smoke on `https://rocodex.custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` returned `200` with CSTD/Next content.
+  - Live in-app Browser on `https://rocodex.custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed the restored header continuation, 44 px top action, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`; clicking it changed the URL to `project=design#project-focus` and focused the target case.
+- Risk:
+  - Browser cache can hold stale local static chunks on the same local port after rebuild; use a fresh local port or cache reset for exact post-build visual checks.
+  - The Stage 5 evidence-only Vercel deployment that was stuck in `Building` was superseded by the successful Stage 6 Vercel deployment.
+- Status: closed
+- Next stage: 6-stage cycle complete
 
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 

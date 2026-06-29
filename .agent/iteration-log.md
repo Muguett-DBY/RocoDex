@@ -1394,3 +1394,28 @@
 ### Next direction
 
 - Use the final IMPROVE stage to add one high-value, user-facing continuation improvement without changing the auth boundary.
+
+## 2026-06-30 - Long Homepage Cycle 3 Stage 6 / 6 - IMPROVE
+
+### Scope
+
+- Completed the final continuation direction by making restored comparison links actionable from the existing comparison header.
+- Added a restored-comparison continuation helper that reuses the existing next-step model.
+- Kept the full lower decision band intact while adding a compact top handoff for shared-link recipients.
+
+### User-visible change
+
+- Opening a shared CSTD comparison URL now shows the restored receipt plus an immediate `继续：查看目标直达案例` action.
+- On mobile, the restored continuation action is a 44 px touch target and stays inside the comparison receipt.
+
+### Verification evidence
+
+- TDD red reproduced the missing restored continuation helper/header action; focused tests then passed 2 files / 21 tests and related CSTD tests passed 7 files / 56 tests.
+- `npm run ci:local`, `npm run lint`, `npm audit --json`, `npm test`, and `npm run build` passed; full test count is 45 files / 188 tests, build generated 735 static pages, audit found 0 vulnerabilities.
+- Local desktop and 390 x 844 in-app Browser checks covered restored comparison receipt, 44 px top action, click-through to `project=design#project-focus`, horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
+- Commit `af9417e` was pushed to `origin/main`; GitHub Actions run `28406064593` and Vercel production deployment `rocodex-3jnehx8ag-muguett-dbys-projects.vercel.app` completed successfully.
+- Live `https://rocodex.custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed the restored continuation action and click-through to the target case with no console warnings/errors.
+
+### Next direction
+
+- The 6-stage cycle is complete. Next useful work is a lighter pass on cross-page navigation consistency outside the CSTD project workflow, unless a new product direction supersedes it.

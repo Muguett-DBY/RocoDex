@@ -14,7 +14,7 @@
 
 - [x] Add failing context tests for restored comparison continuation copy.
 - [x] Add failing source-contract tests for the header-level restored continuation action.
-- [ ] Run focused tests and confirm they fail for the expected missing behavior.
+- [x] Run focused tests and confirm they fail for the expected missing behavior.
 
 ### Task 2: Implementation
 
@@ -37,5 +37,5 @@
 - [x] Run focused and related tests.
 - [x] Run lint, full tests, build, diff hygiene, and source hygiene checks.
 - [x] Run local desktop/mobile rendered verification for restored comparison deep links.
-- [ ] Commit and push Stage 6 files to `origin/main`.
-- [ ] Confirm GitHub Actions and Vercel status.
+- [x] Commit and push Stage 6 files to `origin/main`.
+- [x] Confirm GitHub Actions and Vercel status.
