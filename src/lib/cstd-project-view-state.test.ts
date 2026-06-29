@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import {
   buildCstdProjectViewHref,
+  getCstdProjectDirectoryRestoredAction,
   getCstdProjectDirectoryRestoredReceipt,
+  getCstdProjectFocusRestoredAction,
   getCstdProjectFocusRestoredReceipt,
   hasActiveCstdProjectViewState,
   parseCstdProjectViewState,
@@ -110,5 +112,49 @@ describe("CSTD project view state", () => {
     });
 
     expect(getCstdProjectFocusRestoredReceipt("")).toBeNull();
+  });
+
+  it("builds a next action for restored filtered directory links", () => {
+    expect(
+      getCstdProjectDirectoryRestoredAction({
+        firstProjectTitle: "产业园区招商 CRM",
+        visibleProjectCount: 1,
+      }),
+    ).toEqual({
+      label: "查看匹配案例",
+      detail: "产业园区招商 CRM 是当前恢复视图的匹配项目，可直接打开案例证据。",
+      kind: "focus",
+    });
+
+    expect(
+      getCstdProjectDirectoryRestoredAction({
+        firstProjectTitle: "私人 AI 创作工作台",
+        visibleProjectCount: 3,
+      }),
+    ).toEqual({
+      label: "查看首个匹配案例",
+      detail: "当前恢复视图有 3 个项目，先打开私人 AI 创作工作台查看证据。",
+      kind: "focus",
+    });
+
+    expect(
+      getCstdProjectDirectoryRestoredAction({
+        firstProjectTitle: null,
+        visibleProjectCount: 0,
+      }),
+    ).toEqual({
+      label: "重置筛选",
+      detail: "当前恢复视图没有匹配项目，可重置后继续浏览全部案例。",
+      kind: "reset",
+    });
+  });
+
+  it("builds a next action for restored focused project links", () => {
+    expect(getCstdProjectFocusRestoredAction("私人 AI 创作工作台")).toEqual({
+      label: "复制案例摘要",
+      detail: "可直接带走私人 AI 创作工作台的角色、问题与交付摘要。",
+    });
+
+    expect(getCstdProjectFocusRestoredAction("")).toBeNull();
   });
 });

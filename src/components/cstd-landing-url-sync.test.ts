@@ -85,4 +85,15 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain("setProjectFocusRestoredFromUrl(false);");
     expect(source).toContain("setProjectViewStateRestoredFromUrl(false);");
   });
+
+  test("makes restored directory and focus entry points actionable", () => {
+    expect(source).toContain("getCstdProjectDirectoryRestoredAction");
+    expect(source).toContain("getCstdProjectFocusRestoredAction");
+    expect(source).toContain("projectDirectoryRestoredAction");
+    expect(source).toContain("selectedProjectRestoredAction");
+    expect(source).toContain('aria-label="恢复筛选下一步"');
+    expect(source).toContain('aria-label="恢复案例下一步"');
+    expect(source).toContain("onClick={handleRestoredDirectoryAction}");
+    expect(source).toContain("restoredAction={selectedProjectRestoredAction}");
+  });
 });
