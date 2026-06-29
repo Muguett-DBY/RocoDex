@@ -1,5 +1,35 @@
 # RocoDex Iteration Log
 
+## 2026-06-29 - Long Homepage Cycle 3 Stage 1 / 6 - IMPROVE
+
+### Scope
+
+- Continued the previous direction by extending restored-link receipts beyond comparison links.
+- Added pure URL-state receipt helpers for filtered directory links and focused project links.
+- Rendered `筛选视图已恢复` in the existing Project index toolbar and `分享案例已恢复` in the existing Project case study header.
+- Cleared restored-link receipts after manual directory, focus, guide, or comparison changes.
+
+### User-visible change
+
+- Visitors opening shared directory links such as `/cstd?category=operations&q=CRM#projects` now see exactly which filter/search state was restored.
+- Visitors opening shared case-study links such as `/cstd?project=design#project-focus` now see that the focused project was recovered from the link.
+- Plain `/cstd` visits still do not show restored-link receipts.
+
+### Verification evidence
+
+- Focused TDD failed before implementation, then passed 2 files / 18 tests.
+- Related CSTD tests passed 9 files / 75 tests.
+- `npm run lint` exited `0`.
+- `npm test` passed 44 files / 176 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local clean Edge desktop/mobile checks confirmed restored receipts, manual clearing, plain `/cstd` without restored receipts, overflow `0`, no framework overlay, and console warnings/errors `0`.
+- In-app Browser checks confirmed the focus and directory receipts with overflow `0` and no warning/error logs.
+
+### Next direction
+
+- Stage 2 should make these restored entry points more actionable without adding a new homepage panel.
+- Recommended flagship: add compact next-action handoffs for restored directory and focused project views inside the existing Project index / Project case study surfaces.
+
 ## 2026-06-29 - Long Homepage Cycle 2 Stage 6 / 6 - IMPROVE
 
 ### Scope

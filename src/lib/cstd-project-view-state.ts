@@ -11,6 +11,10 @@ export type CstdProjectViewState = {
   compareProjectIds: string[];
 };
 export type CstdProjectViewHash = "projects" | "project-focus" | "project-comparison";
+export type CstdProjectRestoredReceipt = {
+  label: string;
+  detail: string;
+};
 
 export function parseCstdProjectViewState(search: string): CstdProjectViewState {
   const params = new URLSearchParams(search);
@@ -61,4 +65,37 @@ export function buildCstdProjectViewHref(
 
   const search = params.toString();
   return `${pathname}${search ? `?${search}` : ""}#${hash}`;
+}
+
+export function getCstdProjectDirectoryRestoredReceipt({
+  filter,
+  query,
+  visibleProjectCount,
+}: {
+  filter: CstdProjectFilter;
+  query: string;
+  visibleProjectCount: number;
+}): CstdProjectRestoredReceipt | null {
+  const trimmedQuery = query.trim();
+  const restoredParts: string[] = [];
+  const filterLabel = cstdProjectFilters.find((option) => option.id === filter)?.label ?? "全部";
+
+  if (filter !== "all") restoredParts.push(`${filterLabel}分类`);
+  if (trimmedQuery) restoredParts.push(`${trimmedQuery} 搜索`);
+  if (restoredParts.length === 0) return null;
+
+  return {
+    label: "筛选视图已恢复",
+    detail: `${restoredParts.join(" + ")}已从链接恢复，当前显示 ${visibleProjectCount} 个项目。`,
+  };
+}
+
+export function getCstdProjectFocusRestoredReceipt(projectTitle: string): CstdProjectRestoredReceipt | null {
+  const title = projectTitle.trim();
+  if (!title) return null;
+
+  return {
+    label: "分享案例已恢复",
+    detail: `${title}的案例焦点已从链接恢复，可直接查看角色、问题与交付证据。`,
+  };
 }

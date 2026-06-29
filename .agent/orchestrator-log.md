@@ -1,5 +1,50 @@
 # RocoDex Agent Orchestrator Log
 
+## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
+
+- Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
+- Branch: `main`
+- Baseline: clean worktree; `git fetch --prune` and `git pull --ff-only` completed successfully; local `main` matched `origin/main` at `f65c6ca`.
+- Prompt source: `C:\Users\12031\Desktop\AGENT_ORCHESTRATOR_3_LEVELS_V2\03_LONG_6_STAGE_MAIN_V2.txt`
+- Prompt pack: `C:\Users\12031\Desktop\AGENT_PROMPTS_MAIN_PACK`
+- Required prompt files read: `AGENT_IMPROVE_MAIN.txt`, `AGENT_UIUX_MAIN.txt`, `AGENT_CHECK_MAIN.txt`, `AGENT_CI_FIX_MAIN.txt`
+- Previous direction: broaden restored-state receipts to focused project and filtered directory links if those share flows become primary entry points.
+
+### Stage 1
+
+- Stage number: 1 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: extend restored-link receipts to filtered directory and focused project share flows without adding another homepage panel.
+- Start state:
+  - Stage 6 of the previous cycle made restored comparison links self-explanatory after the intro is skipped.
+  - Focused project and filtered directory links also suppress the intro, but they still lacked local receipt text explaining what was restored from the URL.
+  - The worktree was clean on `main`, package scripts are `npm run lint`, `npm test`, and `npm run build`, and CI runs `npm ci`, lint, test, and build on Node 22.
+- Design: `docs/superpowers/specs/2026-06-29-cstd-restored-directory-focus-receipts-design.md`
+- Plan: `docs/superpowers/plans/2026-06-29-cstd-restored-directory-focus-receipts.md`
+- Implemented:
+  - Added pure restored receipt helpers for filtered directory links and focused project links.
+  - Tracked directory, focus, and comparison restored states separately during URL synchronization.
+  - Rendered `筛选视图已恢复` inside the existing Project index toolbar and `分享案例已恢复` inside the existing Project case study header.
+  - Cleared restored-link receipts after manual directory, focus, guide, or comparison state changes so the receipt does not outlive the shared-link state.
+- Verification recorded before commit:
+  - TDD red: focused view-state and landing URL-sync tests failed before directory/focus receipt helpers and component wiring existed.
+  - TDD green: focused tests passed 2 files / 18 tests.
+  - Related CSTD URL, motion, mobile-layout, comparison, filter, focus, and workflow tests passed 9 files / 75 tests.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - Targeted source hygiene scan over touched source and Stage 1 docs found no debug statements or temporary markers.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 44 files / 176 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production server on port `3102` returned `200` for the CSTD route.
+  - Clean Edge desktop and 390 x 844 mobile checks confirmed directory and focus restored receipts, manual reset/navigation clearing, plain `/cstd` without restored receipts, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+  - In-app Browser checks confirmed the 390 px focus receipt and desktop directory receipt, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+- Risk: receipts intentionally reflect URL-restored entry state only; after manual interaction they are cleared rather than trying to preserve provenance for derived states.
+- Next flagship: use Stage 2 to make restored entry points more actionable by adding a compact “share-entry handoff” next action inside existing directory/focus surfaces.
+- Status: ready for commit
+
+- Next stage: Stage 2 / 6 `IMPROVE`
+
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
