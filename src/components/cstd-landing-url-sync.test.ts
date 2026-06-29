@@ -67,4 +67,22 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain("restoredFromUrl={projectViewStateRestoredFromUrl}");
     expect(source).toContain('aria-label="分享视图恢复状态"');
   });
+
+  test("surfaces restored directory and project-focus links in their existing surfaces", () => {
+    expect(source).toContain("projectDirectoryRestoredFromUrl");
+    expect(source).toContain("projectFocusRestoredFromUrl");
+    expect(source).toContain("setProjectDirectoryRestoredFromUrl(hasRestoredProjectViewState && (viewState.filter !== \"all\" || viewState.query.length > 0));");
+    expect(source).toContain("setProjectFocusRestoredFromUrl(hasRestoredProjectViewState && viewState.projectId !== null);");
+    expect(source).toContain("getCstdProjectDirectoryRestoredReceipt");
+    expect(source).toContain("getCstdProjectFocusRestoredReceipt");
+    expect(source).toContain('aria-label="筛选视图恢复状态"');
+    expect(source).toContain('aria-label="分享案例恢复状态"');
+  });
+
+  test("clears restored-link receipts after manual state changes", () => {
+    expect(source).toContain("clearRestoredProjectViewReceipts();");
+    expect(source).toContain("setProjectDirectoryRestoredFromUrl(false);");
+    expect(source).toContain("setProjectFocusRestoredFromUrl(false);");
+    expect(source).toContain("setProjectViewStateRestoredFromUrl(false);");
+  });
 });

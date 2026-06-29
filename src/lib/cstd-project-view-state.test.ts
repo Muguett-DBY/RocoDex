@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { buildCstdProjectViewHref, hasActiveCstdProjectViewState, parseCstdProjectViewState } from "./cstd-project-view-state";
+import {
+  buildCstdProjectViewHref,
+  getCstdProjectDirectoryRestoredReceipt,
+  getCstdProjectFocusRestoredReceipt,
+  hasActiveCstdProjectViewState,
+  parseCstdProjectViewState,
+} from "./cstd-project-view-state";
 
 describe("CSTD project view state", () => {
   it("parses directory, goal, and focused project state from one URL", () => {
@@ -74,5 +80,35 @@ describe("CSTD project view state", () => {
     expect(hasActiveCstdProjectViewState("?q=AI")).toBe(true);
     expect(hasActiveCstdProjectViewState("?category=operations")).toBe(true);
     expect(hasActiveCstdProjectViewState("?project=design")).toBe(true);
+  });
+
+  it("builds a compact restored receipt for filtered directory links", () => {
+    expect(
+      getCstdProjectDirectoryRestoredReceipt({
+        filter: "operations",
+        query: "CRM",
+        visibleProjectCount: 1,
+      }),
+    ).toEqual({
+      label: "筛选视图已恢复",
+      detail: "运营系统分类 + CRM 搜索已从链接恢复，当前显示 1 个项目。",
+    });
+
+    expect(
+      getCstdProjectDirectoryRestoredReceipt({
+        filter: "all",
+        query: "",
+        visibleProjectCount: 6,
+      }),
+    ).toBeNull();
+  });
+
+  it("builds a restored receipt for focused project links only when a project is valid", () => {
+    expect(getCstdProjectFocusRestoredReceipt("私人 AI 创作工作台")).toEqual({
+      label: "分享案例已恢复",
+      detail: "私人 AI 创作工作台的案例焦点已从链接恢复，可直接查看角色、问题与交付证据。",
+    });
+
+    expect(getCstdProjectFocusRestoredReceipt("")).toBeNull();
   });
 });

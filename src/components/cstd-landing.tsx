@@ -70,7 +70,15 @@ import {
   type CstdProjectFilter,
 } from "@/lib/cstd-project-filter";
 import { cstdProjectGuides, getCstdProjectGuide, type CstdProjectGuideId } from "@/lib/cstd-project-guide";
-import { buildCstdProjectViewHref, hasActiveCstdProjectViewState, parseCstdProjectViewState, type CstdProjectViewHash } from "@/lib/cstd-project-view-state";
+import {
+  buildCstdProjectViewHref,
+  getCstdProjectDirectoryRestoredReceipt,
+  getCstdProjectFocusRestoredReceipt,
+  hasActiveCstdProjectViewState,
+  parseCstdProjectViewState,
+  type CstdProjectRestoredReceipt,
+  type CstdProjectViewHash,
+} from "@/lib/cstd-project-view-state";
 import {
   cstdHeaderNavClassName,
   cstdHeaderClassName,
@@ -172,6 +180,8 @@ export function CstdLanding() {
   const [activeProjectFilter, setActiveProjectFilter] = useState<CstdProjectFilter>("all");
   const [projectSearchQuery, setProjectSearchQuery] = useState("");
   const [projectViewStateSynced, setProjectViewStateSynced] = useState(false);
+  const [projectDirectoryRestoredFromUrl, setProjectDirectoryRestoredFromUrl] = useState(false);
+  const [projectFocusRestoredFromUrl, setProjectFocusRestoredFromUrl] = useState(false);
   const [projectViewStateRestoredFromUrl, setProjectViewStateRestoredFromUrl] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
@@ -220,6 +230,8 @@ export function CstdLanding() {
       setSelectedGuideId(viewState.guideId);
       setSelectedProjectId(viewState.projectId);
       setComparedProjectIds(viewState.compareProjectIds);
+      setProjectDirectoryRestoredFromUrl(hasRestoredProjectViewState && (viewState.filter !== "all" || viewState.query.length > 0));
+      setProjectFocusRestoredFromUrl(hasRestoredProjectViewState && viewState.projectId !== null);
       setProjectViewStateRestoredFromUrl(hasRestoredProjectViewState && viewState.compareProjectIds.length > 0);
       setProjectViewStateSynced(true);
     };
@@ -272,6 +284,17 @@ export function CstdLanding() {
   const projectControlSummary = useMemo(() => getCstdProjectControlSummary(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const projectControlBadges = useMemo(() => getCstdProjectControlBadges(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
   const hasProjectControlState = useMemo(() => hasActiveCstdProjectControls(activeProjectFilter, projectSearchQuery), [activeProjectFilter, projectSearchQuery]);
+  const projectDirectoryRestoredReceipt = useMemo(
+    () =>
+      projectDirectoryRestoredFromUrl
+        ? getCstdProjectDirectoryRestoredReceipt({
+            filter: activeProjectFilter,
+            query: projectSearchQuery,
+            visibleProjectCount: visibleProjects.length,
+          })
+        : null,
+    [activeProjectFilter, projectDirectoryRestoredFromUrl, projectSearchQuery, visibleProjects.length],
+  );
   const projectComparison = useMemo(() => getCstdProjectComparison(cstdProjects, comparedProjectIds), [comparedProjectIds]);
   const selectedGuide = useMemo(() => getCstdProjectGuide(selectedGuideId), [selectedGuideId]);
   const projectComparisonFit = useMemo(
@@ -306,6 +329,10 @@ export function CstdLanding() {
   const selectedProject = useMemo(
     () => cstdProjects.find((project) => project.id === selectedProjectId) ?? null,
     [selectedProjectId],
+  );
+  const selectedProjectRestoredReceipt = useMemo(
+    () => (projectFocusRestoredFromUrl && selectedProject ? getCstdProjectFocusRestoredReceipt(selectedProject.title) : null),
+    [projectFocusRestoredFromUrl, selectedProject],
   );
   const selectedProjectNavigation = useMemo(
     () => (selectedProject ? getCstdProjectFocusNavigation(cstdProjects, selectedProject.id) : { previous: null, next: null }),
@@ -398,6 +425,12 @@ export function CstdLanding() {
     window.setTimeout(() => setMascotMood("curious"), 2200);
   }
 
+  function clearRestoredProjectViewReceipts() {
+    setProjectDirectoryRestoredFromUrl(false);
+    setProjectFocusRestoredFromUrl(false);
+    setProjectViewStateRestoredFromUrl(false);
+  }
+
   function focusProject(projectId: string) {
     const href = buildCstdProjectViewHref(
       window.location.pathname,
@@ -415,6 +448,7 @@ export function CstdLanding() {
     setProjectBriefCopyResult(null);
     setSelectedProjectId(projectId);
     setProjectDirectoryCopyResult(null);
+    clearRestoredProjectViewReceipts();
   }
 
   function closeProjectFocus() {
@@ -433,6 +467,7 @@ export function CstdLanding() {
     setProjectCopyResult(null);
     setProjectBriefCopyResult(null);
     setProjectDirectoryCopyResult(null);
+    clearRestoredProjectViewReceipts();
   }
 
   function updateProjectDirectoryControls(filter: CstdProjectFilter, query: string) {
@@ -453,6 +488,7 @@ export function CstdLanding() {
     setProjectCopyResult(null);
     setProjectBriefCopyResult(null);
     setProjectDirectoryCopyResult(null);
+    clearRestoredProjectViewReceipts();
   }
 
   function resetProjectControls() {
@@ -485,6 +521,7 @@ export function CstdLanding() {
     setComparedProjectIds(nextComparedProjectIds);
     setComparisonBriefCopyResult(null);
     setProjectDirectoryCopyResult(null);
+    clearRestoredProjectViewReceipts();
   }
 
   function alignProjectComparisonToGoal(projectId: string) {
@@ -521,6 +558,7 @@ export function CstdLanding() {
     setSelectedProjectId(null);
     setComparisonBriefCopyResult(null);
     setProjectDirectoryCopyResult(null);
+    clearRestoredProjectViewReceipts();
   }
 
   async function copyProjectFocusLink() {
@@ -983,6 +1021,16 @@ export function CstdLanding() {
                     ))}
                   </div>
                 ) : null}
+                {projectDirectoryRestoredReceipt ? (
+                  <p
+                    aria-label="筛选视图恢复状态"
+                    className="mt-2 inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/72 px-3 py-2 text-xs font-bold leading-5 text-[#2563eb]"
+                  >
+                    <Check className="h-3.5 w-3.5 shrink-0" />
+                    <span className="font-black">{projectDirectoryRestoredReceipt.label}</span>
+                    <span className="min-w-0 break-words text-[#315b7f]">{projectDirectoryRestoredReceipt.detail}</span>
+                  </p>
+                ) : null}
               </div>
               <div className={cstdProjectToolbarActionsClassName}>
                 <button
@@ -1081,6 +1129,7 @@ export function CstdLanding() {
                 focusRef={projectFocusRef}
                 motionDisabled={motionDisabled}
                 navigation={selectedProjectNavigation}
+                restoredReceipt={selectedProjectRestoredReceipt}
                 onClose={closeProjectFocus}
                 onCopyBrief={copyProjectBrief}
                 onCopy={copyProjectFocusLink}
@@ -2056,6 +2105,7 @@ function ProjectFocus({
   focusRef,
   motionDisabled,
   navigation,
+  restoredReceipt,
   onClose,
   onCopyBrief,
   onCopy,
@@ -2070,6 +2120,7 @@ function ProjectFocus({
     previous: (typeof cstdProjects)[number] | null;
     next: (typeof cstdProjects)[number] | null;
   };
+  restoredReceipt: CstdProjectRestoredReceipt | null;
   onClose: () => void;
   onCopyBrief: () => void;
   onCopy: () => void;
@@ -2112,6 +2163,16 @@ function ProjectFocus({
               {project.title}
             </h3>
             <p className="mt-2 text-sm font-semibold text-[#6f5b4a]">{project.evidence.current}</p>
+            {restoredReceipt ? (
+              <p
+                aria-label="分享案例恢复状态"
+                className="mt-2 inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-[#9bd9bf] bg-[#dff8ed]/78 px-3 py-2 text-xs font-bold leading-5 text-[#047857]"
+              >
+                <Check className="h-3.5 w-3.5 shrink-0" />
+                <span className="font-black">{restoredReceipt.label}</span>
+                <span className="min-w-0 break-words text-[#355b4a]">{restoredReceipt.detail}</span>
+              </p>
+            ) : null}
           </div>
         </div>
         <button
