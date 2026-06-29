@@ -191,7 +191,16 @@
   - `npm run build` exited `0` and generated 735 static pages.
   - Local production 390 x 844 in-app Browser verification on `/creatures/001` focused the mobile menu `/guides` link, pressed `Escape`, and confirmed the menu disappeared, `aria-expanded="false"`, focus returned to the `打开主导航` button, horizontal overflow `0`, and console warnings/errors `0`.
 - Risk: focus restoration uses `requestAnimationFrame` after state update; this matches the DOM replacement timing observed in the browser and avoids adding a global key listener.
-- Status: local verified, pending commit and remote verification
+- Commit: `1cc1d10 fix: restore focus after mobile nav dismissal`
+- Push: `origin/main` updated to `1cc1d10e4fcac523860275da1344d0a22733fdeb`.
+- Remote check:
+  - GitHub Actions CI run `28410403142` completed successfully; install, lint, test, and build all passed.
+  - Vercel production deployment `https://rocodex-4dsod1kui-muguett-dbys-projects.vercel.app` completed Ready and kept aliases including `https://rocodex.custard.top`.
+  - Live 390 x 844 in-app Browser verification on `https://rocodex.custard.top/creatures/001` focused the mobile menu `/guides` link, pressed `Escape`, and confirmed the menu disappeared, `aria-expanded="false"`, focus returned to the `打开主导航` button, horizontal overflow `0`, and console warnings/errors `0`.
+- Next flagship: use Stage 6 to add one final user-facing continuation polish to the non-CSTD navigation layer while preserving the accessibility contracts validated in Stage 5.
+- Status: closed
+
+- Next stage: Stage 6 / 6 `IMPROVE`
 
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 

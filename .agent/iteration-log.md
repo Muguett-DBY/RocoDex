@@ -20,6 +20,10 @@
 - `npm test` passed 47 files / 201 tests.
 - `npm run build` generated 735 static pages.
 - Local 390 x 844 production-browser verification on `/creatures/001` focused the mobile menu `/guides` link, pressed `Escape`, and confirmed the menu disappeared, `aria-expanded="false"`, focus returned to the `打开主导航` button, horizontal overflow `0`, and zero console warnings/errors.
+- Commit `1cc1d10` was pushed to `origin/main`.
+- GitHub Actions CI run `28410403142` completed successfully.
+- Vercel production deployment `rocodex-4dsod1kui-muguett-dbys-projects.vercel.app` was Ready.
+- Live 390 x 844 verification on `https://rocodex.custard.top/creatures/001` focused the mobile menu `/guides` link, pressed `Escape`, and confirmed the menu disappeared, `aria-expanded="false"`, focus returned to the `打开主导航` button, horizontal overflow `0`, and zero console warnings/errors.
 
 ### Next direction
 
