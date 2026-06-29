@@ -46,6 +46,6 @@
 - [x] Run `git diff --check` and targeted hygiene scans.
 - [x] Run `npm run lint`, `npm test`, and `npm run build`.
 - [x] Verify local production success and clipboard-fallback paths at desktop and 390 px mobile.
-- [ ] Commit and push only Stage 4 files to `origin/main`.
-- [ ] Confirm GitHub Actions and Vercel success.
-- [ ] Verify the live custom domain and record closure evidence.
+- [x] Commit and push only Stage 4 files to `origin/main`.
+- [x] Confirm GitHub Actions and Vercel success.
+- [x] Verify the live custom domain and record closure evidence.

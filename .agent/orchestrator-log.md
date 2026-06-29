@@ -163,7 +163,18 @@
   - Local in-app Browser at `http://127.0.0.1:3100/cstd?project=crm#project-focus` confirmed one restored case handoff, one top copy action, one `打开 CRM` link, restricted-clipboard fallback in the handoff, no lower action-rail duplicate, horizontal overflow `0`, no dialogs, and console warnings/errors `0`.
   - Local 390 x 844 Edge Playwright confirmed clipboard success state with `摘要已复制`, the `打开 CRM` continuation, 44 px actions, 280 px action widths inside a 306 px handoff, horizontal overflow `0`, and console warnings/errors `0`.
   - Local screenshot saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-playwright/rocodex-stage4-mobile-focused.png`.
-- Status: local verification complete; pending commit, push, CI, Vercel, and live checks.
+- Commit: `19df154 feat: complete cstd restored case handoff`
+- Push: `origin/main` updated to `19df154ebc222f0c7e122dd9c56706defbfbfac5`.
+- Remote check:
+  - GitHub Actions CI run `28391638626` completed successfully; install, lint, test, and build all passed.
+  - Vercel production deployment `dpl_i31myKHZfYJpCyTWBXqvung3hAim` reached `READY`; commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Live in-app Browser at `https://custard.top/cstd?project=crm#project-focus` confirmed one restored case handoff, one top copy action, one `打开 CRM` link, restricted-clipboard fallback inside the handoff, no lower action-rail duplicate, horizontal overflow `0`, no dialogs, and console warnings/errors `0`.
+  - Live 390 x 844 Edge Playwright confirmed clipboard success state with `摘要已复制`, the `打开 CRM` continuation, 44 px actions, 280 px action widths inside a 306 px handoff, horizontal overflow `0`, and console warnings/errors `0`.
+  - Live screenshot saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-playwright/rocodex-stage4-live-mobile.png`.
+- Risk: clipboard capability still varies by browser; both automatic-copy success and manual-copy fallback were verified.
+- Stage 5 handoff: audit restored-entry URL-state and accessibility behavior now that copy feedback can appear in either the restored handoff or the ordinary action rail.
+- Status: closed
+- Next stage: Stage 5 / 6 `CHECK`
 
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 

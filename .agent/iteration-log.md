@@ -1365,7 +1365,9 @@
 - `git diff --check` passed with only Windows line-ending notices; `npm run lint` passed, `npm test` passed 44 files / 183 tests, and `npm run build` generated 735 static pages.
 - Local in-app Browser verified the restricted-clipboard fallback inside the restored handoff with no duplicate lower action-rail feedback, no horizontal overflow, and zero console warnings/errors.
 - Local 390 x 844 Edge Playwright verified the success state, `打开 CRM` continuation, 44 px controls, 280 px action widths inside a 306 px handoff, no horizontal overflow, and zero console warnings/errors.
+- Commit `19df154` was pushed to `origin/main`; GitHub Actions run `28391638626` and Vercel deployment `dpl_i31myKHZfYJpCyTWBXqvung3hAim` completed successfully.
+- Live in-app Browser and 390 x 844 Edge checks covered the same restricted-clipboard fallback and clipboard-success paths on `https://custard.top`, with no duplicate lower action-rail feedback, no horizontal overflow, and zero console warnings/errors.
 
 ### Next direction
 
-- After commit and deployment, verify the same restored case-study handoff on `https://custard.top` before moving to the CHECK stage.
+- Use the CHECK stage to audit restored-entry URL-state and accessibility behavior now that copy feedback can appear in either the restored handoff or the ordinary action rail.
