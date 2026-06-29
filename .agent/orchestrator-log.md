@@ -53,6 +53,36 @@
 
 - Next stage: Stage 2 / 6 `IMPROVE`
 
+### Stage 2
+
+- Stage number: 2 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: make restored directory and focused project entry points immediately actionable inside their existing surfaces.
+- Start state:
+  - Stage 1 added restored receipts for filtered directory and focused project links.
+  - Those receipts explained the restored state, but visitors still had to infer the next best action from nearby controls.
+  - The stage should keep the work inside Project index / Project case study and preserve the URL-state contract.
+- Design: `docs/superpowers/specs/2026-06-30-cstd-restored-entry-actions-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-cstd-restored-entry-actions.md`
+- Implemented:
+  - Added pure restored-entry action helpers for filtered directory links and focused project links.
+  - Added a compact `恢复筛选下一步` action inside the existing Project index restored receipt.
+  - Added a scoped `恢复案例下一步` copy action inside the existing Project case-study restored receipt.
+  - Preserved the existing public URL-state contract and manual restored-state clearing behavior.
+- Verification recorded before commit:
+  - TDD red: focused view-state tests failed before restored action helpers existed; landing source-contract tests failed before action rendering and handlers existed.
+  - TDD green: focused tests passed 2 files / 21 tests after implementation.
+  - Related CSTD filter, focus, mobile-layout, motion, comparison-context, and comparison tests passed 6 files / 50 tests.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - Targeted hygiene scan over touched source and Stage 2 docs found no debug statements, conflict markers, or temporary markers.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 44 files / 179 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production server on port `3102` was verified with the in-app Browser: filtered directory action opened `project=crm#project-focus`, focus copy action showed copy feedback, horizontal overflow was `0`, no framework overlay appeared, and console warnings/errors were `0`.
+  - Controlled Edge Playwright checks at 1366 x 900 and 390 x 844 confirmed both restored action regions, unique scoped buttons, directory-to-focus URL transition, focus copy feedback, horizontal overflow `0`, no framework overlay, console warnings/errors `0`, and page errors `0`.
+- Status: local verification complete; commit, push, CI, Vercel, live custom-domain verification pending.
+
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

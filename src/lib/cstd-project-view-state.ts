@@ -15,6 +15,15 @@ export type CstdProjectRestoredReceipt = {
   label: string;
   detail: string;
 };
+export type CstdProjectDirectoryRestoredAction = {
+  label: string;
+  detail: string;
+  kind: "focus" | "reset";
+};
+export type CstdProjectFocusRestoredAction = {
+  label: string;
+  detail: string;
+};
 
 export function parseCstdProjectViewState(search: string): CstdProjectViewState {
   const params = new URLSearchParams(search);
@@ -97,5 +106,46 @@ export function getCstdProjectFocusRestoredReceipt(projectTitle: string): CstdPr
   return {
     label: "分享案例已恢复",
     detail: `${title}的案例焦点已从链接恢复，可直接查看角色、问题与交付证据。`,
+  };
+}
+
+export function getCstdProjectDirectoryRestoredAction({
+  firstProjectTitle,
+  visibleProjectCount,
+}: {
+  firstProjectTitle: string | null;
+  visibleProjectCount: number;
+}): CstdProjectDirectoryRestoredAction {
+  const title = firstProjectTitle?.trim();
+  if (!title || visibleProjectCount <= 0) {
+    return {
+      label: "重置筛选",
+      detail: "当前恢复视图没有匹配项目，可重置后继续浏览全部案例。",
+      kind: "reset",
+    };
+  }
+
+  if (visibleProjectCount === 1) {
+    return {
+      label: "查看匹配案例",
+      detail: `${title} 是当前恢复视图的匹配项目，可直接打开案例证据。`,
+      kind: "focus",
+    };
+  }
+
+  return {
+    label: "查看首个匹配案例",
+    detail: `当前恢复视图有 ${visibleProjectCount} 个项目，先打开${title}查看证据。`,
+    kind: "focus",
+  };
+}
+
+export function getCstdProjectFocusRestoredAction(projectTitle: string): CstdProjectFocusRestoredAction | null {
+  const title = projectTitle.trim();
+  if (!title) return null;
+
+  return {
+    label: "复制案例摘要",
+    detail: `可直接带走${title}的角色、问题与交付摘要。`,
   };
 }

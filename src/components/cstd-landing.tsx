@@ -72,10 +72,13 @@ import {
 import { cstdProjectGuides, getCstdProjectGuide, type CstdProjectGuideId } from "@/lib/cstd-project-guide";
 import {
   buildCstdProjectViewHref,
+  getCstdProjectDirectoryRestoredAction,
   getCstdProjectDirectoryRestoredReceipt,
+  getCstdProjectFocusRestoredAction,
   getCstdProjectFocusRestoredReceipt,
   hasActiveCstdProjectViewState,
   parseCstdProjectViewState,
+  type CstdProjectFocusRestoredAction,
   type CstdProjectRestoredReceipt,
   type CstdProjectViewHash,
 } from "@/lib/cstd-project-view-state";
@@ -295,6 +298,16 @@ export function CstdLanding() {
         : null,
     [activeProjectFilter, projectDirectoryRestoredFromUrl, projectSearchQuery, visibleProjects.length],
   );
+  const projectDirectoryRestoredAction = useMemo(
+    () =>
+      projectDirectoryRestoredReceipt
+        ? getCstdProjectDirectoryRestoredAction({
+            firstProjectTitle: visibleProjects[0]?.title ?? null,
+            visibleProjectCount: visibleProjects.length,
+          })
+        : null,
+    [projectDirectoryRestoredReceipt, visibleProjects],
+  );
   const projectComparison = useMemo(() => getCstdProjectComparison(cstdProjects, comparedProjectIds), [comparedProjectIds]);
   const selectedGuide = useMemo(() => getCstdProjectGuide(selectedGuideId), [selectedGuideId]);
   const projectComparisonFit = useMemo(
@@ -332,6 +345,10 @@ export function CstdLanding() {
   );
   const selectedProjectRestoredReceipt = useMemo(
     () => (projectFocusRestoredFromUrl && selectedProject ? getCstdProjectFocusRestoredReceipt(selectedProject.title) : null),
+    [projectFocusRestoredFromUrl, selectedProject],
+  );
+  const selectedProjectRestoredAction = useMemo(
+    () => (projectFocusRestoredFromUrl && selectedProject ? getCstdProjectFocusRestoredAction(selectedProject.title) : null),
     [projectFocusRestoredFromUrl, selectedProject],
   );
   const selectedProjectNavigation = useMemo(
@@ -493,6 +510,17 @@ export function CstdLanding() {
 
   function resetProjectControls() {
     updateProjectDirectoryControls("all", "");
+  }
+
+  function handleRestoredDirectoryAction() {
+    if (!projectDirectoryRestoredAction) return;
+    if (projectDirectoryRestoredAction.kind === "reset") {
+      resetProjectControls();
+      return;
+    }
+
+    const firstProject = visibleProjects[0];
+    if (firstProject) focusProject(firstProject.id);
   }
 
   function toggleProjectComparison(projectId: string) {
@@ -1022,14 +1050,29 @@ export function CstdLanding() {
                   </div>
                 ) : null}
                 {projectDirectoryRestoredReceipt ? (
-                  <p
+                  <div
                     aria-label="筛选视图恢复状态"
-                    className="mt-2 inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/72 px-3 py-2 text-xs font-bold leading-5 text-[#2563eb]"
+                    className="mt-2 max-w-full rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/72 px-3 py-2 text-xs font-bold leading-5 text-[#2563eb]"
                   >
-                    <Check className="h-3.5 w-3.5 shrink-0" />
-                    <span className="font-black">{projectDirectoryRestoredReceipt.label}</span>
-                    <span className="min-w-0 break-words text-[#315b7f]">{projectDirectoryRestoredReceipt.detail}</span>
-                  </p>
+                    <p className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1">
+                      <Check className="h-3.5 w-3.5 shrink-0" />
+                      <span className="font-black">{projectDirectoryRestoredReceipt.label}</span>
+                      <span className="min-w-0 break-words text-[#315b7f]">{projectDirectoryRestoredReceipt.detail}</span>
+                    </p>
+                    {projectDirectoryRestoredAction ? (
+                      <div className="mt-2 flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between" aria-label="恢复筛选下一步">
+                        <span className="min-w-0 break-words text-[#315b7f]">{projectDirectoryRestoredAction.detail}</span>
+                        <button
+                          type="button"
+                          onClick={handleRestoredDirectoryAction}
+                          className="inline-flex min-h-9 w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-3 text-xs font-black text-[#2563eb] transition hover:-translate-y-0.5 hover:bg-[#f2f8ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb] sm:w-auto"
+                        >
+                          <ArrowDownRight className="h-3.5 w-3.5" />
+                          {projectDirectoryRestoredAction.label}
+                        </button>
+                      </div>
+                    ) : null}
+                  </div>
                 ) : null}
               </div>
               <div className={cstdProjectToolbarActionsClassName}>
@@ -1129,6 +1172,7 @@ export function CstdLanding() {
                 focusRef={projectFocusRef}
                 motionDisabled={motionDisabled}
                 navigation={selectedProjectNavigation}
+                restoredAction={selectedProjectRestoredAction}
                 restoredReceipt={selectedProjectRestoredReceipt}
                 onClose={closeProjectFocus}
                 onCopyBrief={copyProjectBrief}
@@ -2105,6 +2149,7 @@ function ProjectFocus({
   focusRef,
   motionDisabled,
   navigation,
+  restoredAction,
   restoredReceipt,
   onClose,
   onCopyBrief,
@@ -2120,6 +2165,7 @@ function ProjectFocus({
     previous: (typeof cstdProjects)[number] | null;
     next: (typeof cstdProjects)[number] | null;
   };
+  restoredAction: CstdProjectFocusRestoredAction | null;
   restoredReceipt: CstdProjectRestoredReceipt | null;
   onClose: () => void;
   onCopyBrief: () => void;
@@ -2164,14 +2210,29 @@ function ProjectFocus({
             </h3>
             <p className="mt-2 text-sm font-semibold text-[#6f5b4a]">{project.evidence.current}</p>
             {restoredReceipt ? (
-              <p
+              <div
                 aria-label="分享案例恢复状态"
-                className="mt-2 inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-[#9bd9bf] bg-[#dff8ed]/78 px-3 py-2 text-xs font-bold leading-5 text-[#047857]"
+                className="mt-2 max-w-full rounded-lg border border-[#9bd9bf] bg-[#dff8ed]/78 px-3 py-2 text-xs font-bold leading-5 text-[#047857]"
               >
-                <Check className="h-3.5 w-3.5 shrink-0" />
-                <span className="font-black">{restoredReceipt.label}</span>
-                <span className="min-w-0 break-words text-[#355b4a]">{restoredReceipt.detail}</span>
-              </p>
+                <p className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1">
+                  <Check className="h-3.5 w-3.5 shrink-0" />
+                  <span className="font-black">{restoredReceipt.label}</span>
+                  <span className="min-w-0 break-words text-[#355b4a]">{restoredReceipt.detail}</span>
+                </p>
+                {restoredAction ? (
+                  <div className="mt-2 flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between" aria-label="恢复案例下一步">
+                    <span className="min-w-0 break-words text-[#355b4a]">{restoredAction.detail}</span>
+                    <button
+                      type="button"
+                      onClick={onCopyBrief}
+                      className="inline-flex min-h-9 w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:-translate-y-0.5 hover:bg-[#f7fffb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
+                    >
+                      <Copy className="h-3.5 w-3.5" />
+                      {restoredAction.label}
+                    </button>
+                  </div>
+                ) : null}
+              </div>
             ) : null}
           </div>
         </div>
