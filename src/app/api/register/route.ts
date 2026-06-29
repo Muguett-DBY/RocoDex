@@ -1,8 +1,13 @@
 import { createUser, findUserByUsername } from "@/lib/db";
+import { isAuthConfigured } from "@/lib/auth-availability";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
+  if (!isAuthConfigured()) {
+    return NextResponse.json({ error: "账号功能暂未启用" }, { status: 503 });
+  }
+
   try {
     const { username, password } = await request.json();
 
