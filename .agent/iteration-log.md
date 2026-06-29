@@ -1,5 +1,40 @@
 # RocoDex Iteration Log
 
+## 2026-06-29 - Long Homepage Cycle 2 Stage 6 / 6 - IMPROVE
+
+### Scope
+
+- Completed the Stage 5 follow-up direction by making restored comparison links self-explanatory after the intro is skipped.
+- Added a pure restored-link receipt model to the comparison context helper.
+- Rendered `分享视图已恢复` inside the existing CSTD comparison header when a valid URL `compare` state restores the comparison.
+
+### User-visible change
+
+- Visitors opening a shared comparison link now see that the goal path and selected projects were restored from the link before reading the fit band or matrix.
+- Plain `/cstd` visits and manual in-page comparisons do not show the restored-link receipt.
+
+### Verification evidence
+
+- TDD red failed before `receipt`, `restoredFromUrl`, and component wiring existed; focused tests passed 2 files / 13 tests after implementation.
+- Related comparison, URL-state, next-step, scan, motion, and mobile-layout tests passed 9 files / 56 tests.
+- `npm run lint` exited `0`.
+- `npm test` passed 44 files / 172 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local and live clean Edge desktop/mobile checks confirmed direct comparison links showed the restored-link receipt, no intro controls, comparison top `96`, horizontal overflow `0`, no framework overlay, and no console warnings/errors.
+- Local plain `/cstd` confirmed the restored-link receipt is absent and the intro still appears.
+- Commit `5616952` was pushed to `origin/main`; GitHub Actions run `28368972112` passed install, lint, test, and build.
+- Vercel deployment `https://rocodex-37ebyz6n2-muguett-dbys-projects.vercel.app` reached Ready, and live HTTP/browser verification passed on the custom domain.
+
+### Final status
+
+- The six-stage long homepage cycle is complete.
+- Residual risk: the restored receipt currently covers comparison links only; focused project and filtered directory links can get matching receipts later if they become primary shared entry points.
+
+### Next direction
+
+- Broaden restored-state receipts to focused project and filtered directory links if sharing those views becomes a primary homepage workflow.
+- Keep future CSTD homepage work inside existing decision, evidence, and navigation surfaces rather than adding stacked panels.
+
 ## 2026-06-29 - Long Homepage Cycle 2 Stage 5 / 6 - CHECK
 
 ### Scope

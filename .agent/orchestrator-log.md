@@ -62,6 +62,19 @@
   - Clean Edge desktop and 390 x 844 mobile direct comparison links confirmed no intro controls, comparison top `96`, visible restored-link receipt, target-fit and next-action surfaces present, horizontal overflow `0`, no framework overlay, and no console warnings/errors.
   - Clean Edge plain `/cstd` confirmed the restored-link receipt is absent while the intro still appears, with horizontal overflow `0` and no console warnings/errors.
   - Local screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-local-restored-desktop.png`, `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-local-restored-mobile.png`, and `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-local-plain.png`.
+- Commit: `5616952 feat: mark restored cstd comparison links`
+- Push: `origin/main` updated to `5616952263bb73f703af8108b6863aa788e00ef5`.
+- Remote check:
+  - GitHub Actions CI run `28368972112` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Vercel production deployment `https://rocodex-37ebyz6n2-muguett-dbys-projects.vercel.app` completed Ready.
+  - HTTP smoke returned `200` with CSTD content on `https://custard.top`, `https://rocodex.vercel.app/cstd`, and `https://rocodex.custard.top/cstd`.
+  - Live clean Edge desktop and 390 x 844 mobile checks at `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed no intro controls, comparison top `96`, visible restored-link receipt, target-fit and next-action surfaces present, horizontal overflow `0`, no framework overlay, and no console warnings/errors.
+  - Live screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-live-restored-desktop.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-live-restored-mobile.png`.
+- Risk: the receipt intentionally appears only when a comparison selection is restored from URL state; non-comparison restored views still rely on the workflow summary context.
+- Next flagship: broaden the restored-state receipt pattern to focused project and filtered directory links if those share flows become primary entry points.
+- Status: closed
+- Final status: all 6 stages completed with local tests, browser verification, commits, pushes, GitHub Actions, Vercel checks, and live desktop/mobile validation.
 
 - Next stage: Stage 2 / 6 `IMPROVE`
 
