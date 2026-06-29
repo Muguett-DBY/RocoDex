@@ -18,6 +18,6 @@
 - [x] Run diff/source hygiene checks.
 - [x] Run lint, test, and build.
 - [x] Verify local production desktop/mobile restored-entry flows.
-- [ ] Commit, push `main`, check GitHub Actions and Vercel.
-- [ ] Verify the live custom domain.
-- [ ] Update `.agent/orchestrator-log.md` and `.agent/iteration-log.md`.
+- [x] Commit, push `main`, check GitHub Actions and Vercel.
+- [x] Verify the live custom domain.
+- [x] Update `.agent/orchestrator-log.md` and `.agent/iteration-log.md`.
