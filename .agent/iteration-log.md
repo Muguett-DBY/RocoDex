@@ -20,6 +20,10 @@
 - `npm test` passed 46 files / 194 tests.
 - `npm run build` exited `0` and generated 735 static pages.
 - Local 390 x 844 production-browser history navigation confirmed the menu closed, `aria-expanded` reset, the correct route became active, overflow stayed `0`, and console warnings/errors stayed `0`.
+- Commit `2b3f84a` was pushed to `origin/main`.
+- GitHub Actions CI run `28408191121` completed successfully.
+- Vercel commit status completed successfully with description `Deployment has completed`.
+- Live 390 x 844 browser-history verification on `https://rocodex.custard.top` confirmed the same close, accessibility, active-route, overflow, and console behavior.
 
 ### Next direction
 

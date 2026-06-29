@@ -69,9 +69,17 @@
   - `npm test` passed 46 files / 194 tests.
   - `npm run build` exited `0` and generated 735 static pages.
   - Local production verification in the in-app Browser at 390 x 844 opened the menu on `/discover`, navigated back through browser history to `/creatures`, and confirmed the menu closed with `aria-expanded="false"`, the correct active link, horizontal overflow `0`, and console warnings/errors `0`.
+- Commit: `2b3f84a fix: close mobile navigation on route changes`
+- Push: `origin/main` updated to `2b3f84aac193d7ce9763806f1829b70e06b3fc2c`.
+- Remote check:
+  - GitHub Actions CI run `28408191121` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live 390 x 844 verification on `https://rocodex.custard.top` opened the menu on `/discover`, navigated back to `/creatures`, and confirmed the menu closed with `aria-expanded="false"`, the correct active link, horizontal overflow `0`, and console warnings/errors `0`.
 - Risk: visibility is tied to normalized pathname rather than query parameters; this is intentional because App Router `usePathname` does not treat in-page query filter changes as module navigation.
 - Next flagship: use the UIUX stage to improve the mobile header/menu hierarchy and make the current destination easier to scan without increasing header height.
-- Status: local verification complete; remote verification pending
+- Status: closed
+
+- Next stage: Stage 3 / 6 `UIUX`
 
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 
