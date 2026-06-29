@@ -25,7 +25,13 @@ import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import { CollectionNavLink } from "@/components/collection-nav-link";
-import { getMobileNavigationToggleState, getSiteNavigationLinkState, siteNavigationItems } from "@/lib/site-navigation";
+import {
+  getMobileNavigationToggleState,
+  getSiteNavigationLinkState,
+  isMobileNavigationOpenForPath,
+  siteNavigationItems,
+  type MobileNavigationRouteState,
+} from "@/lib/site-navigation";
 import { cn } from "@/lib/utils";
 
 const navIcons: Record<string, LucideIcon> = {
@@ -42,9 +48,15 @@ const navIcons: Record<string, LucideIcon> = {
 };
 
 export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const [mobileMenuState, setMobileMenuState] = useState<MobileNavigationRouteState>({
+    open: false,
+    pathname,
+  });
+  const mobileMenuOpen = isMobileNavigationOpenForPath(mobileMenuState, pathname);
   const mobileToggle = getMobileNavigationToggleState(mobileMenuOpen);
+
+  const closeMobileMenu = () => setMobileMenuState({ open: false, pathname });
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-[#f7f6f1]/95 backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/95">
@@ -64,7 +76,7 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
               aria-expanded={mobileToggle.expanded}
               aria-controls="mobile-site-navigation"
               aria-label={mobileToggle.label}
-              onClick={() => setMobileMenuOpen((open) => !open)}
+              onClick={() => setMobileMenuState({ open: !mobileMenuOpen, pathname })}
               className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800"
             >
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -80,12 +92,12 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
             <HeaderNavLinks
               pathname={pathname}
               itemClassName="h-11 justify-start px-3"
-              onNavigate={() => setMobileMenuOpen(false)}
+              onNavigate={closeMobileMenu}
             />
             <CollectionNavLink
               pathname={pathname}
               className="h-11 justify-start px-3"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={closeMobileMenu}
             />
             {authEnabled ? <AuthControls /> : null}
           </nav>

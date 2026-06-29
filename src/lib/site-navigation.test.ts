@@ -4,6 +4,7 @@ import {
   getMobileNavigationToggleState,
   getSiteNavigationContext,
   getSiteNavigationLinkState,
+  isMobileNavigationOpenForPath,
   siteNavigationItems,
 } from "@/lib/site-navigation";
 
@@ -25,6 +26,14 @@ describe("site navigation metadata", () => {
       expanded: true,
       label: "关闭主导航",
     });
+  });
+
+  it("closes an open mobile menu when the current path changes", () => {
+    expect(isMobileNavigationOpenForPath({ open: true, pathname: "/creatures" }, "/creatures/001")).toBe(false);
+    expect(isMobileNavigationOpenForPath({ open: true, pathname: "/creatures/001" }, "/creatures/001?tab=skills")).toBe(
+      true,
+    );
+    expect(isMobileNavigationOpenForPath({ open: false, pathname: "/guides" }, "/guides")).toBe(false);
   });
 
   it("resolves nested routes to their primary navigation module", () => {

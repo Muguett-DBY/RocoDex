@@ -98,11 +98,23 @@ export type SiteNavigationContext = {
   relatedItems: SiteNavigationItem[];
 };
 
+export type MobileNavigationRouteState = {
+  open: boolean;
+  pathname: string | null | undefined;
+};
+
 export function getMobileNavigationToggleState(open: boolean) {
   return {
     expanded: open,
     label: open ? "关闭主导航" : "打开主导航",
   };
+}
+
+export function isMobileNavigationOpenForPath(
+  state: MobileNavigationRouteState,
+  currentPathname: string | null | undefined,
+) {
+  return state.open && normalizeSitePathname(state.pathname) === normalizeSitePathname(currentPathname);
 }
 
 export function normalizeSitePathname(pathname: string | null | undefined) {
