@@ -51,6 +51,7 @@ const navIcons: Record<string, LucideIcon> = {
 
 export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
   const pathname = usePathname();
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
   const [mobileMenuState, setMobileMenuState] = useState<MobileNavigationRouteState>({
     open: false,
     pathname,
@@ -65,8 +66,12 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
       return;
     }
 
+    event.preventDefault();
     event.stopPropagation();
     closeMobileMenu();
+    requestAnimationFrame(() => {
+      mobileMenuButtonRef.current?.focus();
+    });
   };
 
   return (
@@ -83,6 +88,7 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
           <div className="flex items-center gap-2 md:hidden">
             <ThemeToggle />
             <button
+              ref={mobileMenuButtonRef}
               type="button"
               aria-expanded={mobileToggle.expanded}
               aria-controls="mobile-site-navigation"
