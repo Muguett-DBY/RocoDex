@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   getActiveSiteNavigationItem,
   getMobileNavigationToggleState,
+  getMobileNavigationSummary,
   getSiteNavigationContext,
   getSiteNavigationLinkState,
   isMobileNavigationOpenForPath,
@@ -34,6 +35,14 @@ describe("site navigation metadata", () => {
       true,
     );
     expect(isMobileNavigationOpenForPath({ open: false, pathname: "/guides" }, "/guides")).toBe(false);
+  });
+
+  it("summarizes the current mobile navigation module from route context", () => {
+    expect(getMobileNavigationSummary("/creatures/001?tab=skills")).toEqual({
+      label: "精灵列表",
+      description: "浏览精灵资料、属性、技能和可培养目标。",
+    });
+    expect(getMobileNavigationSummary("/unknown")).toBeNull();
   });
 
   it("resolves nested routes to their primary navigation module", () => {
