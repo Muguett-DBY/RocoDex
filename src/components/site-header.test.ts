@@ -29,4 +29,13 @@ describe("site header mobile navigation", () => {
     expect(siteHeader).toContain("overflow-y-auto");
     expect(siteHeader).toContain("overscroll-contain");
   });
+
+  it("wires Escape dismissal through the mobile header state", () => {
+    const siteHeader = readFileSync(join(process.cwd(), "src", "components", "site-header.tsx"), "utf8");
+
+    expect(siteHeader).toContain("shouldDismissMobileNavigation");
+    expect(siteHeader).toContain("handleMobileNavigationKeyDown");
+    expect(siteHeader).toContain("onKeyDown={handleMobileNavigationKeyDown}");
+    expect(siteHeader).toContain("event.stopPropagation()");
+  });
 });

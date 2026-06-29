@@ -23,13 +23,14 @@ import {
 import { ThemeToggle } from "@/components/theme-toggle";
 import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type KeyboardEvent } from "react";
 import { CollectionNavLink } from "@/components/collection-nav-link";
 import {
   getMobileNavigationSummary,
   getMobileNavigationToggleState,
   getSiteNavigationLinkState,
   isMobileNavigationOpenForPath,
+  shouldDismissMobileNavigation,
   siteNavigationItems,
   type MobileNavigationRouteState,
 } from "@/lib/site-navigation";
@@ -59,10 +60,18 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
   const mobileMenuSummary = getMobileNavigationSummary(pathname);
 
   const closeMobileMenu = () => setMobileMenuState({ open: false, pathname });
+  const handleMobileNavigationKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (!mobileMenuOpen || !shouldDismissMobileNavigation(event.key)) {
+      return;
+    }
+
+    event.stopPropagation();
+    closeMobileMenu();
+  };
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-[#f7f6f1]/95 backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/95">
-      <div className="mx-auto max-w-7xl px-4 py-3 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-3 lg:px-8" onKeyDown={handleMobileNavigationKeyDown}>
         <div className="flex items-center justify-between gap-3">
           <BrandLink />
           <nav className="hidden flex-wrap items-center gap-2 md:flex">
