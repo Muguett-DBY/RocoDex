@@ -1137,3 +1137,27 @@
 - Live desktop Browser verification covered hydrated comparison fit, copy feedback, no horizontal overflow, no framework error overlay, and console warnings/errors `0`.
 - Live 390 px mobile verification used Edge Playwright fallback because the in-app Browser viewport override did not apply to the live tab; it confirmed viewport `390 x 844`, fit band visibility, copy success feedback, horizontal overflow `0`, and console warnings/errors `0`.
 - Use the UIUX stage to make the comparison decision surface easier to scan on small screens, especially the transition from selected project chips into the fit band and evidence rows.
+
+## 2026-06-29 - Long Homepage Cycle 2 Stage 3 / 6 - UIUX
+
+### Scope
+
+- Added a pure comparison scan-summary model for direct match, reference projects, and aligned evidence.
+- Added a semantic three-part scan summary and fit labels to selected comparison rows.
+- Kept the existing comparison state, copied brief, fit band, and evidence matrix intact.
+
+### User-visible change
+
+- Visitors can scan the decision order before reading the full matrix: direct goal match, horizontal reference, then evidence coverage.
+- Selected projects now carry explicit `目标直达` or `横向参照` labels on desktop and mobile.
+
+### Verification evidence
+
+- TDD red failed before the scan helper existed; focused and related tests passed 7 files / 38 tests after implementation.
+- `npm run lint` passed, `npm test` passed 43 files / 160 tests, and `npm run build` generated 735 static pages.
+- Local and live desktop/mobile acceptance covered scan content, fit-labelled rows, copy feedback, direct hash restoration, horizontal overflow `0`, no framework error overlay, and console warnings/errors `0`.
+- Commit `88f89f0` was pushed to `origin/main`; GitHub Actions run `28364021257` and Vercel deployment both completed successfully.
+
+### Next direction
+
+- Add a clear goal-aligned next action that opens the direct-match project from the comparison decision surface without changing the existing URL-state contract.

@@ -1534,3 +1534,35 @@
   - Live 390 x 844 mobile verification used Edge Playwright fallback because the in-app Browser viewport override stayed at 1280 x 720 on the live tab; the fallback confirmed viewport `390 x 844`, section width `342`, copy button bounds within viewport, copy success feedback, horizontal overflow `0`, no intro/framework overlay, and console warnings/errors `0`.
 - Next flagship: use the UIUX stage to make the comparison decision surface easier to scan on small screens, especially the transition from selected project chips into the fit band and evidence rows.
 - Status: closed
+
+## 2026-06-29 Long Homepage Cycle 2 - Stage 3 / 6
+
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Previous direction: make the comparison decision surface easier to scan on small screens, especially the transition from selected projects into fit and evidence.
+- Flagship goal: add a semantic scan summary and fit-labelled selected-project rows without changing the existing comparison state contract.
+- Design: `docs/superpowers/specs/2026-06-29-cstd-comparison-scan-design.md`
+- Plan: `docs/superpowers/plans/2026-06-29-cstd-comparison-scan.md`
+- Implemented:
+  - Added `getCstdProjectComparisonScanSummary` with direct, reference, evidence, no-goal, and missing-direct states.
+  - Added a three-part `对比扫读摘要` to the comparison header.
+  - Added non-color-only fit labels to selected project rows while keeping remove controls stable.
+  - Preserved the existing fit band, copied brief, deep-link state, and evidence matrix.
+- Verification recorded before commit:
+  - TDD red: focused scan-summary tests failed before the helper existed.
+  - TDD green: focused scan-summary tests passed 1 file / 3 tests; focused source contracts passed 2 files / 8 tests; related suites passed 7 files / 38 tests.
+  - `git diff --check` exited `0` apart from line-ending notices; hygiene scans found no temporary markers or secret patterns.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 43 files / 160 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production Browser desktop and 390 x 844 mobile checks confirmed the scan summary, fit-labelled rows, fit band, direct hash restoration, explicit copy feedback, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+- Commit: `88f89f0 feat: improve cstd comparison scan ui`
+- Push: `origin/main` updated to `88f89f06e3fbbc5113a7bc0d26aba6ba8dd9561b`.
+- Remote check:
+  - GitHub Actions CI run `28364021257` completed successfully; install, lint, test, and build all passed.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Live Browser desktop at `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed all three scan items, fit-labelled rows, fit band, direct hash restoration, copy failure feedback in the restricted clipboard environment, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+  - Live 390 x 844 Edge Playwright verification confirmed section width `342`, copy button bounds `41..349`, copy success feedback, horizontal overflow `0`, no intro/framework overlay, and console warnings/errors `0`.
+- Risk: the in-app Browser viewport override remains unreliable on the live custom domain; mobile acceptance used system Edge at an explicit 390 x 844 viewport as the controlled fallback.
+- Next flagship: turn the comparison decision signal into a clear, goal-aligned next action that opens the direct-match project without changing the comparison URL contract.
+- Status: closed
