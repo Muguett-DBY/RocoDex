@@ -81,6 +81,34 @@
 
 - Next stage: Stage 3 / 6 `UIUX`
 
+### Stage 3
+
+- Stage number: 3 / 6
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: make the expanded mobile navigation easier to scan by surfacing the current route context without increasing the closed sticky header height.
+- Start state:
+  - Stage 1 added current-route metadata and a context strip across main site pages outside CSTD.
+  - Stage 2 made mobile menu visibility deterministic across pathname changes.
+  - The expanded mobile menu still read as a flat route list, so nested pages required scanning for the highlighted row to understand the current module.
+- Design: `docs/superpowers/specs/2026-06-30-mobile-navigation-current-summary-uiux-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-mobile-navigation-current-summary-uiux.md`
+- Implemented:
+  - Added a pure mobile navigation summary helper backed by the existing site navigation context.
+  - Rendered a compact current-location summary at the top of the expanded mobile menu only.
+  - Added `aria-label="移动主导航"` to the mobile nav landmark.
+  - Preserved existing active links, explicit close callbacks, collection entry, and 44 px mobile link targets.
+- Verification recorded before commit:
+  - TDD red: focused tests failed before `getMobileNavigationSummary` and the mobile menu summary UI existed.
+  - TDD green: focused tests passed 2 files / 8 tests.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 47 files / 196 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production 390 x 844 in-app Browser verification on `/creatures/001` confirmed the current summary `精灵列表`, the description text, `aria-label="移动主导航"`, `aria-expanded="true"` after opening, the correct current link, 11 menu links, 44 px minimum link height, horizontal overflow `0`, no viewport overflow, and console warnings/errors `0`.
+- Risk: the summary intentionally mirrors curated navigation metadata; any future module that needs richer mobile wording should update the shared route metadata rather than hard-coding header copy.
+- Status: local verified, pending commit and remote verification
+
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

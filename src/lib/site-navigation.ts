@@ -98,6 +98,8 @@ export type SiteNavigationContext = {
   relatedItems: SiteNavigationItem[];
 };
 
+export type MobileNavigationSummary = Pick<SiteNavigationItem, "label" | "description">;
+
 export type MobileNavigationRouteState = {
   open: boolean;
   pathname: string | null | undefined;
@@ -115,6 +117,21 @@ export function isMobileNavigationOpenForPath(
   currentPathname: string | null | undefined,
 ) {
   return state.open && normalizeSitePathname(state.pathname) === normalizeSitePathname(currentPathname);
+}
+
+export function getMobileNavigationSummary(
+  pathname: string | null | undefined,
+): MobileNavigationSummary | null {
+  const context = getSiteNavigationContext(pathname);
+
+  if (!context) {
+    return null;
+  }
+
+  return {
+    label: context.current.label,
+    description: context.current.description,
+  };
 }
 
 export function normalizeSitePathname(pathname: string | null | undefined) {
