@@ -34,5 +34,5 @@
 - [x] Run `npm run ci:local`, `npm run lint`, `npm test`, `npm run build`, and `npm audit --json`.
 - [x] Run a local HTTP smoke for disabled `/api/register`.
 - [x] Review diff hygiene and secrets.
-- [ ] Commit and push Stage 5 files to `origin/main`.
-- [ ] Confirm GitHub Actions and Vercel success.
+- [x] Commit and push Stage 5 files to `origin/main`.
+- [x] Confirm GitHub Actions and Vercel success.
