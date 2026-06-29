@@ -126,6 +126,32 @@
 
 - Next stage: Stage 4 / 6 `IMPROVE`
 
+### Stage 4
+
+- Stage number: 4 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: strengthen mobile navigation interaction resilience with deterministic keyboard dismissal.
+- Start state:
+  - Stage 3 made the expanded mobile menu clearer and constrained within small production viewports.
+  - Keyboard users still needed to tab back to the menu button or use pointer navigation to close an expanded menu.
+- Design: `docs/superpowers/specs/2026-06-30-mobile-navigation-keyboard-dismiss-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-mobile-navigation-keyboard-dismiss.md`
+- Implemented:
+  - Added `shouldDismissMobileNavigation` as a pure helper that only treats `Escape` as the mobile menu dismissal key.
+  - Wired the header container to close the mobile menu on bubbling `Escape` keydown events while preserving the route-bound open state model.
+  - Kept pointer toggling, link navigation, browser-history route closing, desktop nav, active states, and viewport menu constraints unchanged.
+- Verification recorded before commit:
+  - TDD red: focused tests failed before the dismissal helper and header keydown wiring existed.
+  - TDD green: focused tests passed 2 files / 12 tests.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 47 files / 200 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production 390 x 844 in-app Browser verification on `/creatures/001` opened the menu, confirmed focus on the close toggle, pressed `Escape`, and confirmed the menu disappeared, `aria-expanded="false"`, the toggle label returned to `打开主导航`, horizontal overflow `0`, and console warnings/errors `0`.
+- Risk: the key handler intentionally depends on keydown events bubbling from focused header/menu descendants; global Escape capture remains out of scope to avoid intercepting unrelated page interactions.
+- Status: local verified, pending commit and remote verification
+
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

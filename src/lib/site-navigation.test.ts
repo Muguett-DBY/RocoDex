@@ -6,6 +6,7 @@ import {
   getSiteNavigationContext,
   getSiteNavigationLinkState,
   isMobileNavigationOpenForPath,
+  shouldDismissMobileNavigation,
   siteNavigationItems,
 } from "@/lib/site-navigation";
 
@@ -43,6 +44,12 @@ describe("site navigation metadata", () => {
       description: "浏览精灵资料、属性、技能和可培养目标。",
     });
     expect(getMobileNavigationSummary("/unknown")).toBeNull();
+  });
+
+  it("only treats Escape as a mobile navigation dismissal key", () => {
+    expect(shouldDismissMobileNavigation("Escape")).toBe(true);
+    expect(shouldDismissMobileNavigation("Enter")).toBe(false);
+    expect(shouldDismissMobileNavigation("Esc")).toBe(false);
   });
 
   it("resolves nested routes to their primary navigation module", () => {

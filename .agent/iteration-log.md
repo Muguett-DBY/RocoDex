@@ -1,5 +1,30 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 4 Stage 4 / 6 - IMPROVE
+
+### Scope
+
+- Added a pure `Escape` dismissal helper for the mobile navigation.
+- Wired the header container so bubbling `Escape` key events close the expanded mobile menu.
+- Preserved existing pointer toggling, route-change closing, active states, 44 px menu controls, and constrained menu scrolling.
+
+### User-visible change
+
+- Keyboard users can now dismiss the expanded mobile menu with `Escape` without navigating back to the toggle manually.
+
+### Verification evidence
+
+- TDD red failed before the dismissal helper and header keydown wiring existed; focused tests then passed 2 files / 12 tests.
+- `git diff --check` passed with only Windows line-ending notices.
+- `npm run lint` passed.
+- `npm test` passed 47 files / 200 tests.
+- `npm run build` generated 735 static pages.
+- Local 390 x 844 production-browser verification on `/creatures/001` opened the menu, pressed `Escape` from the focused close toggle, and confirmed the menu disappeared, `aria-expanded="false"`, the toggle label returned to `打开主导航`, horizontal overflow `0`, and zero console warnings/errors.
+
+### Next direction
+
+- Stage 5 should perform a CHECK pass over the cross-page navigation work, including auth-enabled mobile menu behavior, keyboard semantics, route transitions, dependency/audit state, and regression gaps.
+
 ## 2026-06-30 - Long Homepage Cycle 4 Stage 3 / 6 - UIUX
 
 ### Scope

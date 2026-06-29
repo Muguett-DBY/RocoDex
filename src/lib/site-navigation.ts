@@ -119,6 +119,10 @@ export function isMobileNavigationOpenForPath(
   return state.open && normalizeSitePathname(state.pathname) === normalizeSitePathname(currentPathname);
 }
 
+export function shouldDismissMobileNavigation(key: string) {
+  return key === "Escape";
+}
+
 export function getMobileNavigationSummary(
   pathname: string | null | undefined,
 ): MobileNavigationSummary | null {
