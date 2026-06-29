@@ -1161,3 +1161,27 @@
 ### Next direction
 
 - Add a clear goal-aligned next action that opens the direct-match project from the comparison decision surface without changing the existing URL-state contract.
+
+## 2026-06-29 - Long Homepage Cycle 2 Stage 4 / 6 - IMPROVE
+
+### Scope
+
+- Added a pure three-state comparison next-step model for direct focus, missing-direct alignment, and goal selection.
+- Added a responsive action band with station-local case study and live-product actions.
+- Fixed comparison-local selection mutations so they preserve `#project-comparison` while the surface remains available.
+
+### User-visible change
+
+- A completed comparison now leads directly to the goal-matched case study and live product.
+- A comparison missing its direct project can repair itself with one action while retaining a horizontal reference.
+
+### Verification evidence
+
+- TDD covered five next-step and alignment cases; related suites passed 7 files / 43 tests.
+- `npm run lint` passed, `npm test` passed 44 files / 167 tests, and `npm run build` generated 735 static pages.
+- Local and live desktop/mobile acceptance covered alignment, removal hash preservation, case focus, live links, responsive action bounds, horizontal overflow `0`, and console warnings/errors `0`.
+- Commit `31476ad` was pushed to `origin/main`; GitHub Actions run `28365280889` and Vercel deployment both completed successfully.
+
+### Next direction
+
+- Use the CHECK stage to audit URL-state edge cases, accessibility semantics, external-link safety, and regression gaps across the recent comparison workflow.

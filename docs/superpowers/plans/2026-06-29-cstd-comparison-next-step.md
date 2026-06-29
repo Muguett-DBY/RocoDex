@@ -43,5 +43,5 @@
 
 - [x] Run diff, hygiene, lint, full tests, and production build.
 - [x] Verify local desktop and 390 x 844 mobile alignment, focus, link, overflow, and console behavior.
-- [ ] Commit `feat: add cstd comparison next actions`, push `main`, and verify GitHub Actions, Vercel, and the live custom domain.
-- [ ] Record Stage 4 evidence and the Stage 5 CHECK handoff.
+- [x] Commit `feat: add cstd comparison next actions`, push `main`, and verify GitHub Actions, Vercel, and the live custom domain.
+- [x] Record Stage 4 evidence and the Stage 5 CHECK handoff.

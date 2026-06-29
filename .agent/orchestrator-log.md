@@ -1588,4 +1588,14 @@
   - `npm run build` exited `0` and generated 735 static pages.
   - Local production Browser desktop confirmed missing-direct alignment from `crm,alpha` to `design,crm`, preserved comparison hashes after alignment and removal, direct case focus at `project=design#project-focus`, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
   - Local 390 x 844 Edge Playwright confirmed the direct action band, 284 px full-width actions inside a 308 px band, live product link, alignment flow, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
-- Status: in progress
+- Commit: `31476ad feat: add cstd comparison next actions`
+- Push: `origin/main` updated to `31476adcc8a1a59ecceeda7670ce3d8e0facf69a`.
+- Remote check:
+  - GitHub Actions CI run `28365280889` completed successfully; install, lint, test, and build all passed.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Live Browser desktop at `https://custard.top/cstd?goal=ai-creation&compare=crm%2Calpha#project-comparison` confirmed the missing-direct action, alignment to `design,crm` with `#project-comparison`, live project link, direct case focus at `project=design#project-focus`, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+  - Live 390 x 844 Edge Playwright confirmed a 308 px action band, two 284 px actions within viewport, alignment flow, horizontal overflow `0`, no intro/framework overlay, and console warnings/errors `0`.
+  - A first animated remote screenshot showed black capture artifacts; a controlled reduced-motion rerun after `document.fonts.ready` rendered correctly, found no black DOM backgrounds, and confirmed the artifact was capture timing rather than product UI.
+- Risk: external project availability is outside this homepage's runtime control; the action uses the catalog's existing live URL.
+- Stage 5 handoff: audit the recent comparison workflow for URL-state edge cases, accessibility semantics, link safety, and regression gaps, then fix verified issues rather than adding another feature.
+- Status: closed
