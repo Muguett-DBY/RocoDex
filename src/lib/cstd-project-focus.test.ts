@@ -7,6 +7,7 @@ import {
   copyCstdProjectLink,
   getCstdProjectEvidenceChecklist,
   getCstdProjectEvidenceChecklistSummary,
+  getCstdProjectBriefCopyPresentation,
   getCstdProjectFocusNavigation,
   parseCstdProjectFocus,
 } from "./cstd-project-focus";
@@ -31,6 +32,28 @@ describe("CSTD project focus", () => {
     expect(writeText).toHaveBeenCalledWith("https://custard.top/?project=crm#project-focus");
     await expect(copyCstdProjectLink(undefined, "https://custard.top/")).resolves.toBe("unsupported");
     await expect(copyCstdProjectLink(vi.fn().mockRejectedValue(new Error("denied")), "https://custard.top/")).resolves.toBe("failed");
+  });
+
+  test("presents restored brief-copy outcomes at the point of action", () => {
+    expect(getCstdProjectBriefCopyPresentation(null)).toBeNull();
+    expect(getCstdProjectBriefCopyPresentation("copied")).toEqual({
+      actionLabel: "摘要已复制",
+      message: "案例摘要已复制，可继续打开线上项目。",
+      tone: "success",
+      requiresManualCopy: false,
+    });
+    expect(getCstdProjectBriefCopyPresentation("unsupported")).toEqual({
+      actionLabel: "重新复制摘要",
+      message: "浏览器不支持自动复制，请在下方手动复制摘要。",
+      tone: "warning",
+      requiresManualCopy: true,
+    });
+    expect(getCstdProjectBriefCopyPresentation("failed")).toEqual({
+      actionLabel: "重新复制摘要",
+      message: "摘要复制失败，请在下方手动复制后继续。",
+      tone: "warning",
+      requiresManualCopy: true,
+    });
   });
 
   test("returns adjacent focus navigation without wrapping the project list", () => {

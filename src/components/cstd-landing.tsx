@@ -37,9 +37,11 @@ import {
   buildCstdProjectBrief,
   buildCstdProjectLinkDirectory,
   copyCstdProjectLink,
+  getCstdProjectBriefCopyPresentation,
   getCstdProjectEvidenceChecklist,
   getCstdProjectEvidenceChecklistSummary,
   getCstdProjectFocusNavigation,
+  type CstdProjectBriefCopyPresentation,
   type CstdProjectCopyResult,
 } from "@/lib/cstd-project-focus";
 import { cstdProjects, type CstdProjectIconKey } from "@/lib/cstd-projects";
@@ -107,6 +109,7 @@ import {
   cstdProjectMetricValueClassName,
   cstdProjectProofTimelineGridClassName,
   cstdRestoredEntryActionClassName,
+  cstdRestoredEntryActionsClassName,
   cstdRestoredEntryNextClassName,
   cstdRestoredEntryShellClassName,
   cstdProjectToolbarActionsClassName,
@@ -165,6 +168,11 @@ const cstdRestoredEntryToneClassNames = {
     button: "border-[#1b4332] text-[#0f8f64] hover:bg-[#f7fffb] focus-visible:outline-[#0f8f64]",
   },
 } as const;
+
+const cstdRestoredEntryFeedbackClassNames: Record<CstdProjectBriefCopyPresentation["tone"], string> = {
+  success: "text-[#047857]",
+  warning: "text-[#8a4b15]",
+};
 
 const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
 const homepageCapabilitySummary = getCstdHomepageCapabilitySummary(cstdHomepageCapabilities);
@@ -2149,6 +2157,9 @@ function ProjectCard({
 function RestoredEntryHandoff({
   receipt,
   action,
+  copyPresentation = null,
+  fallbackText = "",
+  secondaryAction = null,
   tone,
   statusLabel,
   nextLabel,
@@ -2157,6 +2168,9 @@ function RestoredEntryHandoff({
 }: {
   receipt: CstdProjectRestoredReceipt;
   action: { label: string; detail: string } | null;
+  copyPresentation?: CstdProjectBriefCopyPresentation | null;
+  fallbackText?: string;
+  secondaryAction?: { href: string; label: string } | null;
   tone: keyof typeof cstdRestoredEntryToneClassNames;
   statusLabel: string;
   nextLabel: string;
@@ -2164,6 +2178,8 @@ function RestoredEntryHandoff({
   onClick: () => void;
 }) {
   const toneClassNames = cstdRestoredEntryToneClassNames[tone];
+  const PrimaryActionIcon = copyPresentation?.tone === "success" ? Check : ActionIcon;
+  const actionGroupClassName = secondaryAction ? cstdRestoredEntryActionsClassName : "grid w-full grid-cols-1 gap-2 sm:w-auto";
 
   return (
     <div aria-label={statusLabel} aria-live="polite" className={`${cstdRestoredEntryShellClassName} ${toneClassNames.shell}`}>
@@ -2182,10 +2198,37 @@ function RestoredEntryHandoff({
             <span className="block text-[0.68rem] font-black uppercase text-[#6f5b4a]">建议下一步</span>
             <span className={`mt-0.5 block min-w-0 break-words ${toneClassNames.detail}`}>{action.detail}</span>
           </p>
-          <button type="button" onClick={onClick} className={`${cstdRestoredEntryActionClassName} ${toneClassNames.button}`}>
-            <ActionIcon className="h-3.5 w-3.5" />
-            {action.label}
-          </button>
+          <div className={actionGroupClassName}>
+            <button type="button" onClick={onClick} className={`${cstdRestoredEntryActionClassName} ${toneClassNames.button}`}>
+              <PrimaryActionIcon className="h-3.5 w-3.5" />
+              {copyPresentation?.actionLabel ?? action.label}
+            </button>
+            {secondaryAction ? (
+              <Link
+                href={secondaryAction.href}
+                target="_blank"
+                rel="noreferrer"
+                className={`${cstdRestoredEntryActionClassName} ${toneClassNames.button} no-underline`}
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                {secondaryAction.label}
+              </Link>
+            ) : null}
+          </div>
+          {copyPresentation ? (
+            <p role="status" className={`min-w-0 break-words text-xs font-semibold leading-5 sm:col-span-2 ${cstdRestoredEntryFeedbackClassNames[copyPresentation.tone]}`}>
+              {copyPresentation.message}
+            </p>
+          ) : null}
+          {copyPresentation?.requiresManualCopy && fallbackText.length > 0 ? (
+            <textarea
+              aria-label={`${statusLabel}手动复制文本`}
+              readOnly
+              value={fallbackText}
+              onFocus={(event) => event.currentTarget.select()}
+              className="min-h-32 min-w-0 resize-y rounded-lg border border-[#ead6ad] bg-[#fffaf0] p-3 text-xs font-semibold leading-5 text-[#4f3d31] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:col-span-2"
+            />
+          ) : null}
         </div>
       ) : null}
     </div>
@@ -2233,7 +2276,8 @@ function ProjectFocus({
     unsupported: "浏览器不支持自动复制，请手动复制摘要",
     failed: "摘要复制失败，请手动复制",
   }[briefCopyResult ?? "copied"];
-  const projectBriefText = buildCstdProjectBrief(project);
+  const briefCopyPresentation = getCstdProjectBriefCopyPresentation(briefCopyResult);
+  const projectBriefText = briefCopyPresentation?.requiresManualCopy ? buildCstdProjectBrief(project) : "";
   const evidenceChecklist = getCstdProjectEvidenceChecklist(project);
   const evidenceChecklistSummary = getCstdProjectEvidenceChecklistSummary(evidenceChecklist);
 
@@ -2278,6 +2322,12 @@ function ProjectFocus({
             nextLabel="恢复案例下一步"
             actionIcon={Copy}
             onClick={onCopyBrief}
+            copyPresentation={briefCopyPresentation}
+            fallbackText={projectBriefText}
+            secondaryAction={{
+              href: project.href,
+              label: project.action,
+            }}
           />
         ) : null}
       </div>
@@ -2340,16 +2390,17 @@ function ProjectFocus({
             {briefCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             复制案例摘要
           </button>
-          {briefCopyResult ? (
+          {!restoredReceipt && briefCopyResult ? (
             <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
               {briefCopyMessage}
             </p>
           ) : null}
-          {briefCopyResult && briefCopyResult !== "copied" ? (
+          {!restoredReceipt && briefCopyPresentation?.requiresManualCopy && projectBriefText.length > 0 ? (
             <textarea
               aria-label="案例摘要文本"
               readOnly
               value={projectBriefText}
+              onFocus={(event) => event.currentTarget.select()}
               className="min-h-36 resize-y rounded-lg border border-[#ead6ad] bg-[#fffaf0] p-3 text-xs font-semibold leading-5 text-[#4f3d31] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
             />
           ) : null}

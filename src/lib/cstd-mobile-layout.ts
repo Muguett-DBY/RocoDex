@@ -60,6 +60,8 @@ export const cstdRestoredEntryNextClassName =
 export const cstdRestoredEntryActionClassName =
   "inline-flex min-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-lg border bg-white px-3 text-xs font-black transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto";
 
+export const cstdRestoredEntryActionsClassName = "grid w-full grid-cols-1 gap-2 sm:w-auto sm:grid-cols-2";
+
 export const cstdProjectComparisonClassName =
   "mb-4 min-w-0 overflow-hidden rounded-xl border border-[#b7decf] bg-[#eefbf4]/82 shadow-[6px_6px_0_rgba(47,36,29,.05)]";
 
