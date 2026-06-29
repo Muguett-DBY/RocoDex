@@ -1371,3 +1371,24 @@
 ### Next direction
 
 - Use the CHECK stage to audit restored-entry URL-state and accessibility behavior now that copy feedback can appear in either the restored handoff or the ordinary action rail.
+
+## 2026-06-30 - Long Homepage Cycle 3 Stage 5 / 6 - CHECK
+
+### Scope
+
+- Audited CI config, package scripts, dependency/audit state, auth availability, API registration boundary, and recent restored-entry follow-up behavior.
+- Found and fixed a P1 API inconsistency: `/api/register` still accepted registration when auth was disabled by missing Auth.js secrets.
+
+### User-visible change
+
+- When account features are unavailable, direct API registration now returns the same `账号功能暂未启用` state as the login/register UI instead of creating an unusable account record.
+
+### Verification evidence
+
+- TDD red reproduced the disabled-auth registration bug; focused route tests then passed 1 file / 2 tests and related auth/routing tests passed 4 files / 14 tests.
+- `npm run ci:local`, `npm run lint`, `npm test`, `npm run build`, and `npm audit --json` passed; full test count is 45 files / 185 tests, build generated 735 static pages, audit found 0 vulnerabilities.
+- Local production HTTP smoke with no auth secrets returned `503 {"error":"账号功能暂未启用"}` for `POST /api/register`.
+
+### Next direction
+
+- After CI/deploy confirmation, use the final IMPROVE stage to add one high-value, user-facing continuation improvement without changing the auth boundary.

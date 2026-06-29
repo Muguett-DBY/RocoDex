@@ -176,6 +176,34 @@
 - Status: closed
 - Next stage: Stage 5 / 6 `CHECK`
 
+### Stage 5
+
+- Stage number: 5 / 6
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN.txt`
+- Goal: audit stability, CI, security, API boundaries, and recent restored-entry behavior; fix verified defects without adding unrelated product surface.
+- Start state: `main` matches `origin/main` at `0d10e01`; Stage 4 implementation and evidence commits passed GitHub Actions and Vercel; worktree is clean.
+- P1 finding: `/api/register` can still process registration when the account feature is disabled by missing `AUTH_SECRET` / `NEXTAUTH_SECRET`, while the UI correctly hides login/register surfaces.
+- P2 finding: the disabled-auth API boundary is not covered by route tests.
+- Fix plan: add a failing register route test, gate the API with the existing auth availability helper, verify the disabled path does not touch user storage, and preserve the configured-auth registration path.
+- Design: `docs/superpowers/specs/2026-06-30-register-auth-gate-check-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-register-auth-gate-check.md`
+- Implemented:
+  - Added route tests for disabled and configured registration paths.
+  - Gated `POST /api/register` with the existing `isAuthConfigured` helper before parsing credentials or touching storage.
+  - Returned the same unavailable message used by the login/register UI when auth secrets are missing.
+- Verification recorded before commit:
+  - TDD red: disabled-auth route test failed because `/api/register` returned success and called mocked storage while no auth secret was configured.
+  - TDD green: focused route test passed 1 file / 2 tests; related auth and routing tests passed 4 files / 14 tests.
+  - `npm run ci:local` stopped stale local Next processes, completed `npm ci`, and reported 0 vulnerabilities; npm warned that `sharp` and `unrs-resolver` install scripts are not yet covered by local allow-scripts policy.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 45 files / 185 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - `npm audit --json` reported 0 vulnerabilities.
+  - Local production HTTP smoke with no auth secrets returned `503` and `{"error":"账号功能暂未启用"}` for `POST /api/register`.
+  - `git diff --check` exited `0` with only Windows line-ending notices; debug/TODO scan found no new source markers, and secret scan found no real credentials.
+- Status: local verification complete; pending commit, push, CI, Vercel, and remote smoke.
+
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
