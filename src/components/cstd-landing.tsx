@@ -27,6 +27,11 @@ import {
 } from "@/lib/cstd-project-comparison";
 import { getCstdProjectComparisonContext } from "@/lib/cstd-project-comparison-context";
 import { getCstdProjectComparisonFit, type CstdProjectComparisonFit } from "@/lib/cstd-project-comparison-fit";
+import {
+  alignCstdProjectComparisonIds,
+  getCstdProjectComparisonNextStep,
+  type CstdProjectComparisonNextStep,
+} from "@/lib/cstd-project-comparison-next-step";
 import { getCstdProjectComparisonScanSummary, type CstdProjectComparisonScanItem } from "@/lib/cstd-project-comparison-scan";
 import {
   buildCstdProjectBrief,
@@ -65,7 +70,7 @@ import {
   type CstdProjectFilter,
 } from "@/lib/cstd-project-filter";
 import { cstdProjectGuides, getCstdProjectGuide, type CstdProjectGuideId } from "@/lib/cstd-project-guide";
-import { buildCstdProjectViewHref, parseCstdProjectViewState } from "@/lib/cstd-project-view-state";
+import { buildCstdProjectViewHref, parseCstdProjectViewState, type CstdProjectViewHash } from "@/lib/cstd-project-view-state";
 import {
   cstdHeaderNavClassName,
   cstdHeaderClassName,
@@ -274,6 +279,10 @@ export function CstdLanding() {
     () => getCstdProjectComparisonScanSummary(projectComparison, projectComparisonFit),
     [projectComparison, projectComparisonFit],
   );
+  const projectComparisonNextStep = useMemo(
+    () => getCstdProjectComparisonNextStep(selectedGuide, cstdProjects, projectComparison.projects),
+    [projectComparison.projects, selectedGuide],
+  );
   const projectWorkflowSummary = useMemo(
     () =>
       getCstdProjectWorkflowSummary({
@@ -451,7 +460,10 @@ export function CstdLanding() {
     updateProjectComparison(toggleCstdProjectComparison(comparedProjectIds, projectId));
   }
 
-  function updateProjectComparison(nextComparedProjectIds: string[]) {
+  function updateProjectComparison(
+    nextComparedProjectIds: string[],
+    hash: CstdProjectViewHash = selectedProjectId ? "project-focus" : "projects",
+  ) {
     window.history.pushState(
       null,
       "",
@@ -464,12 +476,30 @@ export function CstdLanding() {
           projectId: selectedProjectId,
           compareProjectIds: nextComparedProjectIds,
         },
-        selectedProjectId ? "project-focus" : "projects",
+        hash,
       ),
     );
     setComparedProjectIds(nextComparedProjectIds);
     setComparisonBriefCopyResult(null);
     setProjectDirectoryCopyResult(null);
+  }
+
+  function alignProjectComparisonToGoal(projectId: string) {
+    const nextIds = alignCstdProjectComparisonIds(comparedProjectIds, projectId);
+    updateProjectComparison(nextIds, "project-comparison");
+  }
+
+  function removeProjectFromComparison(projectId: string) {
+    const nextComparedProjectIds = toggleCstdProjectComparison(comparedProjectIds, projectId);
+    if (nextComparedProjectIds.length === 0) {
+      updateProjectComparison(nextComparedProjectIds);
+      return;
+    }
+    updateProjectComparison(nextComparedProjectIds, "project-comparison");
+  }
+
+  function focusProjectGuide() {
+    document.getElementById("project-guide")?.scrollIntoView({ behavior: motionDisabled ? "auto" : "smooth", block: "start" });
   }
 
   function selectProjectGuide(guideId: CstdProjectGuideId | null) {
@@ -816,10 +846,14 @@ export function CstdLanding() {
               copyResult={comparisonBriefCopyResult}
               fit={projectComparisonFit}
               guideGoal={selectedGuide?.goal ?? null}
+              nextStep={projectComparisonNextStep}
               scanSummary={projectComparisonScanSummary}
+              onAlign={alignProjectComparisonToGoal}
               onClear={() => updateProjectComparison([])}
               onCopyBrief={copyProjectComparisonBrief}
-              onRemove={toggleProjectComparison}
+              onFocus={focusProject}
+              onRemove={removeProjectFromComparison}
+              onSelectGoal={focusProjectGuide}
             />
           ) : null}
 
@@ -1674,19 +1708,27 @@ function ProjectComparison({
   copyResult,
   fit,
   guideGoal,
+  nextStep,
   scanSummary,
+  onAlign,
   onClear,
   onCopyBrief,
+  onFocus,
   onRemove,
+  onSelectGoal,
 }: {
   comparison: CstdProjectComparisonData;
   copyResult: CstdProjectCopyResult | null;
   fit: CstdProjectComparisonFit;
   guideGoal: string | null;
+  nextStep: CstdProjectComparisonNextStep;
   scanSummary: CstdProjectComparisonScanItem[];
+  onAlign: (projectId: string) => void;
   onClear: () => void;
   onCopyBrief: () => void;
+  onFocus: (projectId: string) => void;
   onRemove: (projectId: string) => void;
+  onSelectGoal: () => void;
 }) {
   const context = getCstdProjectComparisonContext({
     guideGoal,
@@ -1698,6 +1740,18 @@ function ProjectComparison({
     unsupported: "当前浏览器不支持复制",
   }[copyResult ?? "copied"];
   const fitItemsByProjectId = useMemo(() => new Map(fit.items.map((item) => [item.projectId, item])), [fit.items]);
+
+  function handleNextStep() {
+    if (nextStep.kind === "focus") {
+      onFocus(nextStep.project.id);
+      return;
+    }
+    if (nextStep.kind === "align") {
+      onAlign(nextStep.project.id);
+      return;
+    }
+    onSelectGoal();
+  }
 
   return (
     <section id="project-comparison" className={`${cstdProjectComparisonClassName} scroll-mt-24`} aria-labelledby="project-comparison-heading">
@@ -1796,6 +1850,35 @@ function ProjectComparison({
               </li>
             ))}
           </ul>
+        </div>
+
+        <div className="mt-4 border-y border-[#9bd9bf] bg-[#eefbf4]/78 px-3 py-4 sm:px-4" role="group" aria-label="对比下一步">
+          <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="min-w-0">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#047857]">{nextStep.eyebrow}</p>
+              <p className="mt-1 break-words text-base font-black text-[#1b4332]">{nextStep.title}</p>
+              <p className="mt-1 max-w-3xl break-words text-sm font-semibold leading-6 text-[#355b4a]">{nextStep.detail}</p>
+            </div>
+            <div className="grid w-full shrink-0 gap-2 sm:grid-cols-2 lg:w-auto">
+              <button
+                type="button"
+                onClick={handleNextStep}
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] lg:w-auto"
+              >
+                <ArrowDownRight className="h-4 w-4" />
+                {nextStep.primaryLabel}
+              </button>
+              {nextStep.kind === "focus" ? (
+                <Link
+                  href={nextStep.project.href}
+                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-4 text-sm font-black text-[#2563eb] no-underline transition hover:-translate-y-0.5 hover:bg-[#e3f2ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb] lg:w-auto"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  {nextStep.secondaryLabel}
+                </Link>
+              ) : null}
+            </div>
+          </div>
         </div>
 
         {comparison.ready ? (

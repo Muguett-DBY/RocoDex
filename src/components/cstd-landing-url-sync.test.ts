@@ -39,4 +39,17 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain('aria-label="对比扫读摘要"');
     expect(source).toContain("fitItemsByProjectId");
   });
+
+  test("turns the comparison decision into a goal-aligned next action", () => {
+    expect(source).toContain("getCstdProjectComparisonNextStep(selectedGuide, cstdProjects, projectComparison.projects)");
+    expect(source).toContain("nextStep={projectComparisonNextStep}");
+    expect(source).toContain('aria-label="对比下一步"');
+    expect(source).toContain("onFocus={focusProject}");
+    expect(source).toContain("onAlign={alignProjectComparisonToGoal}");
+  });
+
+  test("keeps comparison-originated selection changes on the comparison hash", () => {
+    expect(source).toContain('updateProjectComparison(nextComparedProjectIds, "project-comparison")');
+    expect(source).toContain('updateProjectComparison(nextIds, "project-comparison")');
+  });
 });
