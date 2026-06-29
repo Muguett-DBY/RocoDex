@@ -21,10 +21,12 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { usePathname } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import { useState, useRef, useEffect } from "react";
 import { CollectionNavLink } from "@/components/collection-nav-link";
-import { getMobileNavigationToggleState, siteNavigationItems } from "@/lib/site-navigation";
+import { getMobileNavigationToggleState, getSiteNavigationLinkState, siteNavigationItems } from "@/lib/site-navigation";
+import { cn } from "@/lib/utils";
 
 const navIcons: Record<string, LucideIcon> = {
   "/creatures": BookOpen,
@@ -41,6 +43,7 @@ const navIcons: Record<string, LucideIcon> = {
 
 export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
   const mobileToggle = getMobileNavigationToggleState(mobileMenuOpen);
 
   return (
@@ -49,8 +52,8 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
         <div className="flex items-center justify-between gap-3">
           <BrandLink />
           <nav className="hidden flex-wrap items-center gap-2 md:flex">
-            <HeaderNavLinks />
-            <CollectionNavLink />
+            <HeaderNavLinks pathname={pathname} />
+            <CollectionNavLink pathname={pathname} />
             <ThemeToggle />
             {authEnabled ? <AuthControls /> : null}
           </nav>
@@ -74,8 +77,16 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
             id="mobile-site-navigation"
             className="mt-3 grid gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm md:hidden dark:border-slate-700 dark:bg-slate-900"
           >
-            <HeaderNavLinks itemClassName="h-11 justify-start px-3" onNavigate={() => setMobileMenuOpen(false)} />
-            <CollectionNavLink className="h-11 justify-start px-3" onClick={() => setMobileMenuOpen(false)} />
+            <HeaderNavLinks
+              pathname={pathname}
+              itemClassName="h-11 justify-start px-3"
+              onNavigate={() => setMobileMenuOpen(false)}
+            />
+            <CollectionNavLink
+              pathname={pathname}
+              className="h-11 justify-start px-3"
+              onClick={() => setMobileMenuOpen(false)}
+            />
             {authEnabled ? <AuthControls /> : null}
           </nav>
         ) : null}
@@ -98,15 +109,32 @@ function BrandLink() {
   );
 }
 
-function HeaderNavLinks({ itemClassName, onNavigate }: { itemClassName?: string; onNavigate?: () => void }) {
+function HeaderNavLinks({
+  pathname,
+  itemClassName,
+  onNavigate,
+}: {
+  pathname: string | null;
+  itemClassName?: string;
+  onNavigate?: () => void;
+}) {
   return siteNavigationItems.map((item) => {
     const Icon = navIcons[item.href];
+    const state = getSiteNavigationLinkState(item, pathname);
+
     return (
       <Link
         key={item.href}
         href={item.href}
+        aria-current={state.ariaCurrent}
         onClick={onNavigate}
-        className={`inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-slate-700 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white ${itemClassName ?? ""}`}
+        className={cn(
+          "inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium transition hover:bg-white hover:text-slate-950 dark:hover:bg-slate-800 dark:hover:text-white",
+          state.current
+            ? "bg-white text-slate-950 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:text-white dark:ring-slate-700"
+            : "text-slate-700 dark:text-slate-300",
+          itemClassName,
+        )}
       >
         <Icon className="h-4 w-4" />
         {item.label}

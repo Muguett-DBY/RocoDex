@@ -3,17 +3,31 @@
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import { useCreatureCollection } from "@/hooks/use-creature-collection";
+import { collectionNavigationItem, getSiteNavigationLinkState } from "@/lib/site-navigation";
 import { cn } from "@/lib/utils";
 
-export function CollectionNavLink({ className, onClick }: { className?: string; onClick?: () => void }) {
+export function CollectionNavLink({
+  pathname,
+  className,
+  onClick,
+}: {
+  pathname?: string | null;
+  className?: string;
+  onClick?: () => void;
+}) {
   const { hydrated, ids } = useCreatureCollection();
+  const state = getSiteNavigationLinkState(collectionNavigationItem, pathname);
 
   return (
     <Link
       href="/collection"
+      aria-current={state.ariaCurrent}
       onClick={onClick}
       className={cn(
-        "inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-slate-700 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white",
+        "inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium transition hover:bg-white hover:text-slate-950 dark:hover:bg-slate-800 dark:hover:text-white",
+        state.current
+          ? "bg-white text-slate-950 shadow-sm ring-1 ring-slate-200 dark:bg-slate-800 dark:text-white dark:ring-slate-700"
+          : "text-slate-700 dark:text-slate-300",
         className,
       )}
     >

@@ -1,5 +1,40 @@
 # RocoDex Agent Orchestrator Log
 
+## Run - 2026-06-30 - Long 6-stage homepage strengthening round 4
+
+- Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
+- Branch: `main`
+- Baseline: clean worktree; `git fetch --prune` and `git pull --ff-only` completed successfully; local `main` matched `origin/main`.
+- Prompt source: `C:\Users\12031\Desktop\AGENT_ORCHESTRATOR_3_LEVELS_V2\03_LONG_6_STAGE_MAIN_V2.txt`
+- Prompt pack: `C:\Users\12031\Desktop\AGENT_PROMPTS_MAIN_PACK`
+- Required prompt files read: `AGENT_IMPROVE_MAIN.txt`, `AGENT_UIUX_MAIN.txt`, `AGENT_CHECK_MAIN.txt`, `AGENT_CI_FIX_MAIN.txt`
+- Previous direction: make a lighter pass on cross-page navigation consistency outside the CSTD project workflow.
+
+### Stage 1
+
+- Stage number: 1 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add a tested global navigation context layer for main site pages outside CSTD.
+- Design: `docs/superpowers/specs/2026-06-30-site-navigation-context-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-site-navigation-context.md`
+- Implemented:
+  - Added pure route normalization, nested-route matching, current-link state, and related-destination context helpers.
+  - Marked desktop and mobile header links with `aria-current="page"` and a restrained active state, including the count-aware collection link.
+  - Added a compact global context strip that identifies the current module and exposes two related next destinations without changing CSTD.
+  - Kept context actions at a 44 px minimum touch target after mobile verification exposed the initial 36 px height.
+- Verification recorded before commit:
+  - TDD red: focused tests failed 5 assertions before route helpers and the context component existed.
+  - TDD green: focused navigation tests passed 2 files / 7 tests.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 46 files / 193 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production checks in the in-app Browser at desktop and 390 x 844 confirmed nested-route active links, collection active state, expected related destinations, 44 px context actions, horizontal overflow `0`, no header/context overlap, and console warnings/errors `0`.
+- Risk: related destinations are intentionally curated metadata; future modules must add their own description and related links to participate in the context strip.
+- Next flagship: use Stage 2 to make mobile navigation route transitions deterministic when browser history or programmatic navigation changes the pathname.
+- Status: local verification complete; remote verification pending
+
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

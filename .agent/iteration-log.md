@@ -1,5 +1,33 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 4 Stage 1 / 6 - IMPROVE
+
+### Scope
+
+- Continued the previous cross-page navigation direction outside CSTD.
+- Added pure route matching and related-destination context helpers for exact and nested routes.
+- Added active states to desktop/mobile header links and the count-aware collection link.
+- Added a compact global context strip with two curated next destinations.
+
+### User-visible change
+
+- Visitors can see which RocoDex module they are currently browsing, including nested creature, guide, and team pages.
+- Each supported module now exposes two nearby next destinations without returning to the homepage.
+- Context actions retain a 44 px minimum touch target on mobile.
+
+### Verification evidence
+
+- TDD red failed before route helpers and context rendering existed; focused tests then passed 2 files / 7 tests.
+- `npm run lint` exited `0`.
+- `npm test` passed 46 files / 193 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local production desktop and 390 x 844 browser checks confirmed correct active links, expected context destinations, 44 px actions, overflow `0`, no header/context overlap, and console warnings/errors `0`.
+
+### Next direction
+
+- Stage 2 should make the mobile menu close reliably when the pathname changes through browser history or programmatic navigation.
+- Recommended flagship: extract and test route-transition menu state while preserving current link and accessibility behavior.
+
 ## 2026-06-30 - Long Homepage Cycle 3 Stage 2 / 6 - IMPROVE
 
 ### Scope
