@@ -106,6 +106,9 @@ import {
   cstdProjectMetricTileClassName,
   cstdProjectMetricValueClassName,
   cstdProjectProofTimelineGridClassName,
+  cstdRestoredEntryActionClassName,
+  cstdRestoredEntryNextClassName,
+  cstdRestoredEntryShellClassName,
   cstdProjectToolbarActionsClassName,
   cstdProjectToolbarClassName,
   cstdProjectWorkflowSummaryGridClassName,
@@ -147,6 +150,21 @@ const cstdProjectComparisonScanToneClassNames: Record<CstdProjectComparisonScanI
   evidence: "border-[#b8d7f5] bg-[#e3f2ff]/80 text-[#2563eb]",
   unscoped: "border-[#d8c8ad] bg-white/80 text-[#6f5b4a]",
 };
+
+const cstdRestoredEntryToneClassNames = {
+  directory: {
+    shell: "border-[#b8d7f5] bg-[#e3f2ff]/72 text-[#2563eb]",
+    detail: "text-[#315b7f]",
+    next: "border-[#b8d7f5]",
+    button: "border-[#2563eb] text-[#2563eb] hover:bg-[#f2f8ff] focus-visible:outline-[#2563eb]",
+  },
+  focus: {
+    shell: "border-[#9bd9bf] bg-[#dff8ed]/78 text-[#047857]",
+    detail: "text-[#355b4a]",
+    next: "border-[#9bd9bf]",
+    button: "border-[#1b4332] text-[#0f8f64] hover:bg-[#f7fffb] focus-visible:outline-[#0f8f64]",
+  },
+} as const;
 
 const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
 const homepageCapabilitySummary = getCstdHomepageCapabilitySummary(cstdHomepageCapabilities);
@@ -1050,29 +1068,15 @@ export function CstdLanding() {
                   </div>
                 ) : null}
                 {projectDirectoryRestoredReceipt ? (
-                  <div
-                    aria-label="筛选视图恢复状态"
-                    className="mt-2 max-w-full rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/72 px-3 py-2 text-xs font-bold leading-5 text-[#2563eb]"
-                  >
-                    <p className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1">
-                      <Check className="h-3.5 w-3.5 shrink-0" />
-                      <span className="font-black">{projectDirectoryRestoredReceipt.label}</span>
-                      <span className="min-w-0 break-words text-[#315b7f]">{projectDirectoryRestoredReceipt.detail}</span>
-                    </p>
-                    {projectDirectoryRestoredAction ? (
-                      <div className="mt-2 flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between" aria-label="恢复筛选下一步">
-                        <span className="min-w-0 break-words text-[#315b7f]">{projectDirectoryRestoredAction.detail}</span>
-                        <button
-                          type="button"
-                          onClick={handleRestoredDirectoryAction}
-                          className="inline-flex min-h-9 w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-3 text-xs font-black text-[#2563eb] transition hover:-translate-y-0.5 hover:bg-[#f2f8ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb] sm:w-auto"
-                        >
-                          <ArrowDownRight className="h-3.5 w-3.5" />
-                          {projectDirectoryRestoredAction.label}
-                        </button>
-                      </div>
-                    ) : null}
-                  </div>
+                  <RestoredEntryHandoff
+                    receipt={projectDirectoryRestoredReceipt}
+                    action={projectDirectoryRestoredAction}
+                    tone="directory"
+                    statusLabel="筛选视图恢复状态"
+                    nextLabel="恢复筛选下一步"
+                    actionIcon={ArrowDownRight}
+                    onClick={handleRestoredDirectoryAction}
+                  />
                 ) : null}
               </div>
               <div className={cstdProjectToolbarActionsClassName}>
@@ -2142,6 +2146,52 @@ function ProjectCard({
   );
 }
 
+function RestoredEntryHandoff({
+  receipt,
+  action,
+  tone,
+  statusLabel,
+  nextLabel,
+  actionIcon: ActionIcon,
+  onClick,
+}: {
+  receipt: CstdProjectRestoredReceipt;
+  action: { label: string; detail: string } | null;
+  tone: keyof typeof cstdRestoredEntryToneClassNames;
+  statusLabel: string;
+  nextLabel: string;
+  actionIcon: LucideIcon;
+  onClick: () => void;
+}) {
+  const toneClassNames = cstdRestoredEntryToneClassNames[tone];
+
+  return (
+    <div aria-label={statusLabel} aria-live="polite" className={`${cstdRestoredEntryShellClassName} ${toneClassNames.shell}`}>
+      <div className="flex min-w-0 items-start gap-2.5">
+        <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md bg-white/80" aria-hidden="true">
+          <Check className="h-3.5 w-3.5" />
+        </span>
+        <p className="min-w-0">
+          <span className="block font-black">{receipt.label}</span>
+          <span className={`mt-0.5 block min-w-0 break-words ${toneClassNames.detail}`}>{receipt.detail}</span>
+        </p>
+      </div>
+      {action ? (
+        <div className={`${cstdRestoredEntryNextClassName} ${toneClassNames.next}`} aria-label={nextLabel}>
+          <p className="min-w-0">
+            <span className="block text-[0.68rem] font-black uppercase text-[#6f5b4a]">建议下一步</span>
+            <span className={`mt-0.5 block min-w-0 break-words ${toneClassNames.detail}`}>{action.detail}</span>
+          </p>
+          <button type="button" onClick={onClick} className={`${cstdRestoredEntryActionClassName} ${toneClassNames.button}`}>
+            <ActionIcon className="h-3.5 w-3.5" />
+            {action.label}
+          </button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function ProjectFocus({
   project,
   briefCopyResult,
@@ -2198,52 +2248,38 @@ function ProjectFocus({
       exit={motionDisabled ? { opacity: 0 } : { opacity: 0, y: -10 }}
       transition={{ duration: 0.24 }}
     >
-      <div className="flex items-start justify-between gap-4 border-b border-[#ead6ad] bg-[#f6bf3f]/18 p-4 sm:p-6">
-        <div className="flex min-w-0 items-start gap-3">
+      <div className="relative border-b border-[#ead6ad] bg-[#f6bf3f]/18 p-4 sm:p-6">
+        <div className="flex min-w-0 items-start gap-3 pr-12">
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-[#0f8f64] shadow-sm">
             <Icon className="h-5 w-5" />
           </span>
           <div className="min-w-0">
             <p className="text-xs font-black uppercase text-[#d98528]">Project case study</p>
-            <h3 id={`project-focus-${project.id}`} className="mt-1 text-2xl font-black sm:text-3xl">
+            <h3 id={`project-focus-${project.id}`} className="mt-1 break-words text-2xl font-black sm:text-3xl">
               {project.title}
             </h3>
             <p className="mt-2 text-sm font-semibold text-[#6f5b4a]">{project.evidence.current}</p>
-            {restoredReceipt ? (
-              <div
-                aria-label="分享案例恢复状态"
-                className="mt-2 max-w-full rounded-lg border border-[#9bd9bf] bg-[#dff8ed]/78 px-3 py-2 text-xs font-bold leading-5 text-[#047857]"
-              >
-                <p className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1">
-                  <Check className="h-3.5 w-3.5 shrink-0" />
-                  <span className="font-black">{restoredReceipt.label}</span>
-                  <span className="min-w-0 break-words text-[#355b4a]">{restoredReceipt.detail}</span>
-                </p>
-                {restoredAction ? (
-                  <div className="mt-2 flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-between" aria-label="恢复案例下一步">
-                    <span className="min-w-0 break-words text-[#355b4a]">{restoredAction.detail}</span>
-                    <button
-                      type="button"
-                      onClick={onCopyBrief}
-                      className="inline-flex min-h-9 w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:-translate-y-0.5 hover:bg-[#f7fffb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
-                    >
-                      <Copy className="h-3.5 w-3.5" />
-                      {restoredAction.label}
-                    </button>
-                  </div>
-                ) : null}
-              </div>
-            ) : null}
           </div>
         </div>
         <button
           type="button"
           onClick={onClose}
           aria-label="关闭案例焦点"
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#ead6ad] bg-white text-[#2f241d] transition hover:border-[#d98528] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+          className="absolute right-4 top-4 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#ead6ad] bg-white text-[#2f241d] transition hover:border-[#d98528] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:right-6 sm:top-6"
         >
           <X className="h-5 w-5" />
         </button>
+        {restoredReceipt ? (
+          <RestoredEntryHandoff
+            receipt={restoredReceipt}
+            action={restoredAction}
+            tone="focus"
+            statusLabel="分享案例恢复状态"
+            nextLabel="恢复案例下一步"
+            actionIcon={Copy}
+            onClick={onCopyBrief}
+          />
+        ) : null}
       </div>
 
       <div className={cstdProjectFocusBodyClassName}>

@@ -51,6 +51,15 @@ export const cstdProjectToolbarClassName =
 
 export const cstdProjectToolbarActionsClassName = "grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:flex sm:flex-wrap sm:justify-end";
 
+export const cstdRestoredEntryShellClassName =
+  "mt-3 grid min-w-0 gap-3 rounded-lg border px-3 py-3 text-xs font-bold leading-5 sm:px-4";
+
+export const cstdRestoredEntryNextClassName =
+  "grid min-w-0 gap-2 border-t pt-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center";
+
+export const cstdRestoredEntryActionClassName =
+  "inline-flex min-h-11 w-full shrink-0 items-center justify-center gap-2 rounded-lg border bg-white px-3 text-xs font-black transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto";
+
 export const cstdProjectComparisonClassName =
   "mb-4 min-w-0 overflow-hidden rounded-xl border border-[#b7decf] bg-[#eefbf4]/82 shadow-[6px_6px_0_rgba(47,36,29,.05)]";
 

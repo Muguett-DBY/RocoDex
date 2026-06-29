@@ -1319,3 +1319,27 @@
 ### Next direction
 
 - Use the CHECK stage to audit URL-state edge cases, accessibility semantics, external-link safety, and regression gaps across the recent comparison workflow.
+
+## 2026-06-30 - Long Homepage Cycle 3 Stage 3 / 6 - UIUX
+
+### Scope
+
+- Unified restored directory and focused-case receipts in one responsive handoff component.
+- Added polite status semantics, a two-level scan hierarchy, and shared layout contracts.
+- Increased restored actions to 44 px and gave the focused-case handoff full mobile header width.
+
+### User-visible change
+
+- Restored links now separate the confirmed restored state from the recommended next action.
+- Mobile actions fill the available width; desktop actions remain compact.
+- The focused-case handoff no longer competes with the project icon and close control for a narrow text column.
+
+### Verification evidence
+
+- TDD red was observed before the component and layout exports existed; focused tests then passed 2 files / 28 tests and related tests passed 6 files / 58 tests.
+- `npm run lint` passed, `npm test` passed 44 files / 181 tests, and `npm run build` generated 735 static pages.
+- Local in-app Browser and Edge checks covered directory navigation, copy success/fallback feedback, 1366 x 900 and 390 x 844 layouts, 44 px actions, no horizontal overflow, and zero console warnings/errors.
+
+### Next direction
+
+- Use Stage 4 to strengthen the restored-entry workflow with a useful follow-through that preserves the existing public URL contract.

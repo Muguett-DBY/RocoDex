@@ -24,6 +24,9 @@ import {
   cstdProjectComparisonClassName,
   cstdProjectComparisonColumnsClassName,
   cstdProjectProofTimelineGridClassName,
+  cstdRestoredEntryActionClassName,
+  cstdRestoredEntryNextClassName,
+  cstdRestoredEntryShellClassName,
   cstdProjectToolbarActionsClassName,
   cstdProjectToolbarClassName,
   cstdProjectWorkflowSummaryGridClassName,
@@ -152,5 +155,15 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectHeadingClassName).toContain("text-2xl");
     expect(cstdProjectHeadingClassName).not.toContain("text-3xl");
     expect(cstdProjectHeadingClassName).toContain("sm:text-5xl");
+  });
+
+  test("keeps restored entry handoffs readable and touch-safe across breakpoints", () => {
+    expect(cstdRestoredEntryShellClassName).toContain("min-w-0");
+    expect(cstdRestoredEntryShellClassName).toContain("rounded-lg");
+    expect(cstdRestoredEntryNextClassName).toContain("grid");
+    expect(cstdRestoredEntryNextClassName).toContain("sm:grid-cols-[minmax(0,1fr)_auto]");
+    expect(cstdRestoredEntryActionClassName).toContain("min-h-11");
+    expect(cstdRestoredEntryActionClassName).toContain("w-full");
+    expect(cstdRestoredEntryActionClassName).toContain("sm:w-auto");
   });
 });

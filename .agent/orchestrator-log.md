@@ -95,6 +95,36 @@
 
 - Next stage: Stage 3 / 6 `UIUX`
 
+### Stage 3
+
+- Stage number: 3 / 6
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: turn the restored directory/focus action areas into a unified, more scannable responsive handoff pattern inside the existing Project index and Project case-study surfaces.
+- Start state:
+  - Stage 2 completed actionable restored-entry controls and both implementation/log commits passed CI and Vercel.
+  - The restored action rows work, but their visual hierarchy is still close to ordinary alert text and the action button is only `min-h-9`, which is less comfortable on mobile.
+  - The stage should improve responsive scanability, touch targets, and status semantics without adding a new homepage panel or changing URL behavior.
+- Design: `docs/superpowers/specs/2026-06-30-cstd-restored-entry-handoff-uiux-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-cstd-restored-entry-handoff-uiux.md`
+- Implemented:
+  - Added shared responsive restored-entry shell, next-step, and action class contracts.
+  - Replaced duplicated directory/focus receipt markup with one `RestoredEntryHandoff` component and preserved blue/green tone variants.
+  - Added polite live-region status semantics and a clearer restored-state / recommended-next-step hierarchy.
+  - Raised restored actions to a 44 px touch target, full width on mobile and compact on desktop.
+  - Moved the focus handoff below the title row so its mobile width increased from about 179 px to about 291 px without changing URL or copy behavior.
+- Verification recorded before commit:
+  - TDD red: source-contract and mobile-layout tests failed before the shared component and class exports existed.
+  - TDD green: focused tests passed 2 files / 28 tests; related CSTD suites passed 6 files / 58 tests.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 44 files / 181 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production in-app Browser checks confirmed both unique restored-entry regions, directory-to-focus navigation, copy fallback feedback, 44 px actions, horizontal overflow `0`, no dialog overlay, and console warnings/errors `0`.
+  - Local Edge at 1366 x 900 and 390 x 844 confirmed the directory transition, successful `案例摘要已复制` feedback, a 291 px mobile focus handoff, no horizontal overflow, and console warnings/errors `0`.
+  - The in-app screenshot compositor produced black capture artifacts; Edge screenshots rendered the DOM correctly and were used for authoritative visual review.
+- Status: local verification complete; remote closure pending
+
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

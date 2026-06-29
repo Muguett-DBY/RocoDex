@@ -75,8 +75,8 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain("setProjectFocusRestoredFromUrl(hasRestoredProjectViewState && viewState.projectId !== null);");
     expect(source).toContain("getCstdProjectDirectoryRestoredReceipt");
     expect(source).toContain("getCstdProjectFocusRestoredReceipt");
-    expect(source).toContain('aria-label="筛选视图恢复状态"');
-    expect(source).toContain('aria-label="分享案例恢复状态"');
+    expect(source).toContain('statusLabel="筛选视图恢复状态"');
+    expect(source).toContain('statusLabel="分享案例恢复状态"');
   });
 
   test("clears restored-link receipts after manual state changes", () => {
@@ -91,9 +91,18 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain("getCstdProjectFocusRestoredAction");
     expect(source).toContain("projectDirectoryRestoredAction");
     expect(source).toContain("selectedProjectRestoredAction");
-    expect(source).toContain('aria-label="恢复筛选下一步"');
-    expect(source).toContain('aria-label="恢复案例下一步"');
+    expect(source).toContain('nextLabel="恢复筛选下一步"');
+    expect(source).toContain('nextLabel="恢复案例下一步"');
     expect(source).toContain("onClick={handleRestoredDirectoryAction}");
     expect(source).toContain("restoredAction={selectedProjectRestoredAction}");
+  });
+
+  test("uses one accessible handoff pattern for restored entry points", () => {
+    expect(source).toContain("function RestoredEntryHandoff");
+    expect(source).toContain('aria-live="polite"');
+    expect(source).toContain('statusLabel="筛选视图恢复状态"');
+    expect(source).toContain('nextLabel="恢复筛选下一步"');
+    expect(source).toContain('statusLabel="分享案例恢复状态"');
+    expect(source).toContain('nextLabel="恢复案例下一步"');
   });
 });
