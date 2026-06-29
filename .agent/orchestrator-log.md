@@ -31,9 +31,18 @@
   - `npm test` passed 46 files / 193 tests.
   - `npm run build` exited `0` and generated 735 static pages.
   - Local production checks in the in-app Browser at desktop and 390 x 844 confirmed nested-route active links, collection active state, expected related destinations, 44 px context actions, horizontal overflow `0`, no header/context overlap, and console warnings/errors `0`.
+- Commit: `35e0095 feat: add main site navigation context`
+- Push: `origin/main` updated to `35e009562caa184c390e243fca94020c55ca3c0b`.
+- Remote check:
+  - GitHub Actions CI run `28407640308` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - HTTP smoke returned `200` for `https://rocodex.custard.top/creatures/001` and `https://rocodex.custard.top/collection`.
+  - Live desktop creature and 390 x 844 collection checks confirmed active navigation, expected context links, 44 px actions, horizontal overflow `0`, no header/context overlap, and console warnings/errors `0`.
 - Risk: related destinations are intentionally curated metadata; future modules must add their own description and related links to participate in the context strip.
 - Next flagship: use Stage 2 to make mobile navigation route transitions deterministic when browser history or programmatic navigation changes the pathname.
-- Status: local verification complete; remote verification pending
+- Status: closed
+
+- Next stage: Stage 2 / 6 `IMPROVE`
 
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 
