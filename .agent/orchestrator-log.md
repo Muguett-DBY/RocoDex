@@ -1629,3 +1629,15 @@
   - Clean Edge desktop and 390 x 844 mobile first-visit contexts confirmed `introSeen: null`, no intro controls, comparison top `96`, target-fit and next-action surfaces present, external action visible, horizontal overflow `0`, and no console warnings/errors.
   - Clean Edge plain `/cstd` first visit confirmed the intro still appears with `开启 CSTD` and `直接浏览项目`, horizontal overflow `0`, and no console warnings/errors.
   - Local screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-local-clean-desktop.png`, `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-local-clean-mobile.png`, and `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-local-plain-intro.png`.
+- Commit: `cbc1eac fix: skip cstd intro for restored view state`
+- Push: `origin/main` updated to `cbc1eac0679896469ae97b7c7c777350461457ba`.
+- Remote check:
+  - GitHub Actions CI run `28366577353` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Vercel production deployment `https://rocodex-bdevhiv15-muguett-dbys-projects.vercel.app` completed Ready.
+  - HTTP smoke returned `200` with CSTD content on `https://custard.top`, `https://rocodex.vercel.app/cstd`, and `https://rocodex.custard.top/cstd`.
+  - Live clean Edge desktop and 390 x 844 mobile checks at `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed `introSeen: null`, no intro controls, comparison top `96`, target-fit and next-action surfaces present, external action visible, horizontal overflow `0`, no framework overlay, and no console warnings/errors.
+  - Live screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-live-clean-desktop.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-live-clean-mobile.png`.
+- Risk: future view-state parameters must be added to `hasActiveCstdProjectViewState` when they become part of the public restored-state contract.
+- Next flagship: use the final IMPROVE stage to make restored comparison links more self-explanatory after the intro is skipped, without adding another homepage panel.
+- Status: closed

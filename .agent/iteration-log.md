@@ -1,5 +1,37 @@
 # RocoDex Iteration Log
 
+## 2026-06-29 - Long Homepage Cycle 2 Stage 5 / 6 - CHECK
+
+### Scope
+
+- Audited the recent CSTD comparison deep-link workflow for URL-state and first-visit behavior.
+- Fixed a real P1 issue where clean first-visit comparison or goal links restored state but could still be covered by the automatic intro overlay.
+- Added a validated active view-state helper so `category`, `q`, `goal`, `project`, and `compare` all participate in intro gating after invalid values are normalized away.
+
+### User-visible change
+
+- Shared CSTD project-state links now open directly into the restored decision surface without requiring the visitor to dismiss the intro first.
+- Plain `/cstd` first visits still show the intended intro entry, so the fix is scoped to restored/shared project-state URLs.
+
+### Verification evidence
+
+- TDD red failed on the missing active view-state helper and old `hasProjectFocus` intro gate, then focused tests passed 3 files / 19 tests.
+- Related URL-state, comparison, next-step, scan, workflow, motion, and mobile-layout tests passed 10 files / 60 tests.
+- `npm run ci:local` completed `npm ci` with 0 vulnerabilities.
+- `npm run lint` exited `0`.
+- `npm test` passed 44 files / 169 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- `npm audit --json` reported 0 vulnerabilities.
+- Local and live clean Edge desktop/mobile checks confirmed direct comparison links showed no intro controls, landed at `#project-comparison`, had target top `96`, horizontal overflow `0`, no framework overlay, and no console warnings/errors.
+- Local clean Edge plain `/cstd` confirmed the intro still appears with `开启 CSTD` and `直接浏览项目`.
+- Commit `cbc1eac` was pushed to `origin/main`; GitHub Actions run `28366577353` passed install, lint, test, and build.
+- Vercel deployment `https://rocodex-bdevhiv15-muguett-dbys-projects.vercel.app` reached Ready, and live HTTP/browser verification passed on the custom domain.
+
+### Next direction
+
+- Use Stage 6 to make restored comparison links more self-explanatory after the intro is skipped, without adding another homepage panel.
+- Keep future public URL parameters covered by `hasActiveCstdProjectViewState` when they should suppress the first-visit intro.
+
 ## 2026-06-28 — Long Homepage Round 5 Stage 6 / 6 — IMPROVE
 
 ### Scope
