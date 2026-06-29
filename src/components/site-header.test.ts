@@ -12,4 +12,13 @@ describe("site header mobile navigation", () => {
     expect(siteHeader).toContain("mobileMenuSummary.label");
     expect(siteHeader).toContain("mobileMenuSummary.description");
   });
+
+  it("keeps authenticated mobile menu controls on the same touch-target contract", () => {
+    const siteHeader = readFileSync(join(process.cwd(), "src", "components", "site-header.tsx"), "utf8");
+
+    expect(siteHeader).toContain("<AuthControls");
+    expect(siteHeader).toContain("onNavigate={closeMobileMenu}");
+    expect(siteHeader).toContain('rootClassName="grid gap-2"');
+    expect(siteHeader).toContain('controlClassName="h-11 justify-start px-3"');
+  });
 });
