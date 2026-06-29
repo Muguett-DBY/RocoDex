@@ -172,6 +172,7 @@ export function CstdLanding() {
   const [activeProjectFilter, setActiveProjectFilter] = useState<CstdProjectFilter>("all");
   const [projectSearchQuery, setProjectSearchQuery] = useState("");
   const [projectViewStateSynced, setProjectViewStateSynced] = useState(false);
+  const [projectViewStateRestoredFromUrl, setProjectViewStateRestoredFromUrl] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [selectedGuideId, setSelectedGuideId] = useState<CstdProjectGuideId | null>(null);
@@ -213,11 +214,13 @@ export function CstdLanding() {
   useCstdClientLayoutEffect(() => {
     const syncViewState = () => {
       const viewState = parseCstdProjectViewState(window.location.search);
+      const hasRestoredProjectViewState = hasActiveCstdProjectViewState(window.location.search);
       setActiveProjectFilter(viewState.filter);
       setProjectSearchQuery(viewState.query);
       setSelectedGuideId(viewState.guideId);
       setSelectedProjectId(viewState.projectId);
       setComparedProjectIds(viewState.compareProjectIds);
+      setProjectViewStateRestoredFromUrl(hasRestoredProjectViewState && viewState.compareProjectIds.length > 0);
       setProjectViewStateSynced(true);
     };
     syncViewState();
@@ -847,6 +850,7 @@ export function CstdLanding() {
               fit={projectComparisonFit}
               guideGoal={selectedGuide?.goal ?? null}
               nextStep={projectComparisonNextStep}
+              restoredFromUrl={projectViewStateRestoredFromUrl}
               scanSummary={projectComparisonScanSummary}
               onAlign={alignProjectComparisonToGoal}
               onClear={() => updateProjectComparison([])}
@@ -1709,6 +1713,7 @@ function ProjectComparison({
   fit,
   guideGoal,
   nextStep,
+  restoredFromUrl,
   scanSummary,
   onAlign,
   onClear,
@@ -1722,6 +1727,7 @@ function ProjectComparison({
   fit: CstdProjectComparisonFit;
   guideGoal: string | null;
   nextStep: CstdProjectComparisonNextStep;
+  restoredFromUrl: boolean;
   scanSummary: CstdProjectComparisonScanItem[];
   onAlign: (projectId: string) => void;
   onClear: () => void;
@@ -1733,6 +1739,7 @@ function ProjectComparison({
   const context = getCstdProjectComparisonContext({
     guideGoal,
     projectTitles: comparison.projects.map((project) => project.title),
+    restoredFromUrl,
   });
   const copyMessage = {
     copied: "对比摘要已复制",
@@ -1769,6 +1776,16 @@ function ProjectComparison({
             <span aria-hidden="true"> · </span>
             <span>{context.projectLabel}</span>
           </p>
+          {context.receipt ? (
+            <p
+              aria-label="分享视图恢复状态"
+              className="mt-2 inline-flex max-w-3xl flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-[#9bd9bf] bg-[#dff8ed]/70 px-3 py-2 text-xs font-bold leading-5 text-[#047857]"
+            >
+              <Check className="h-3.5 w-3.5 shrink-0" />
+              <span className="font-black">{context.receipt.label}</span>
+              <span className="min-w-0 break-words text-[#355b4a]">{context.receipt.detail}</span>
+            </p>
+          ) : null}
           <ul className="mt-3 grid min-w-0 grid-cols-1 gap-2 min-[520px]:grid-cols-3" aria-label="对比扫读摘要">
             {scanSummary.map((item) => (
               <li key={item.id} className={`min-w-0 border px-3 py-2 ${cstdProjectComparisonScanToneClassNames[item.tone]}`}>
