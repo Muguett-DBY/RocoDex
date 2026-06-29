@@ -1,5 +1,30 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 4 Stage 5 / 6 - CHECK
+
+### Scope
+
+- Audited the cross-page navigation work for auth-enabled mobile controls, keyboard semantics, route-transition behavior, dependency/audit state, and regression coverage.
+- Found and fixed a keyboard accessibility risk: closing the mobile menu with `Escape` from a focused menu link could unmount the focused element without returning focus to the menu button.
+
+### User-visible change
+
+- Pressing `Escape` from inside the expanded mobile menu now closes the menu and returns focus to the `打开主导航` button.
+
+### Verification evidence
+
+- TDD red reproduced the missing focus-return contract; focused tests then passed 2 files / 13 tests.
+- `npm run ci:local` stopped the local Next process, ran `npm ci`, and found 0 vulnerabilities; npm reported install-script approval warnings for `sharp` and `unrs-resolver`.
+- `git diff --check`, `npm audit --json`, and `npm run lint` passed.
+- Source hygiene found no source TODO/FIXME/debugger/conflict/console.log issues; the only match was an older docs line describing the scan itself.
+- `npm test` passed 47 files / 201 tests.
+- `npm run build` generated 735 static pages.
+- Local 390 x 844 production-browser verification on `/creatures/001` focused the mobile menu `/guides` link, pressed `Escape`, and confirmed the menu disappeared, `aria-expanded="false"`, focus returned to the `打开主导航` button, horizontal overflow `0`, and zero console warnings/errors.
+
+### Next direction
+
+- Stage 6 should add one final user-facing continuation polish to the non-CSTD navigation layer while preserving the accessibility contracts validated in Stage 5.
+
 ## 2026-06-30 - Long Homepage Cycle 4 Stage 4 / 6 - IMPROVE
 
 ### Scope

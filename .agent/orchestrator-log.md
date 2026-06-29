@@ -162,6 +162,37 @@
 
 - Next stage: Stage 5 / 6 `CHECK`
 
+### Stage 5
+
+- Stage number: 5 / 6
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN.txt`
+- Goal: audit the cross-page navigation work and fix real risks in auth-enabled mobile controls, keyboard semantics, route transitions, dependency/audit state, and regression coverage.
+- Start state:
+  - Stage 4 evidence commit passed GitHub Actions; Vercel deployment completed Ready, with commit status initially observed pending and then checked again during this stage.
+  - Worktree was clean on `main` matching `origin/main`.
+- Finding:
+  - P2 accessibility risk: `Escape` closed the mobile menu, but when focus was on a menu link, the focused element was unmounted and focus could fall back to the page instead of returning to the menu button.
+- Design: `docs/superpowers/specs/2026-06-30-mobile-navigation-focus-return-check-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-mobile-navigation-focus-return-check.md`
+- Implemented:
+  - Added a mobile menu button ref in `SiteHeader`.
+  - Prevented the default `Escape` dismissal path and restored focus to the menu button on the next animation frame after closing.
+  - Preserved the pure `Escape` helper, route-bound mobile menu state, active states, auth-enabled touch targets, and constrained menu scrolling.
+- Verification recorded before commit:
+  - TDD red: focused source contract failed before the mobile menu button ref, `preventDefault`, and focus restoration existed.
+  - TDD green: focused tests passed 2 files / 13 tests.
+  - `npm run ci:local` stopped the local Next process, ran `npm ci`, and found 0 vulnerabilities; npm reported install-script approval warnings for `sharp` and `unrs-resolver`.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - `npm audit --json` reported 0 vulnerabilities.
+  - Source hygiene scan found no source TODO/FIXME/debugger/conflict/console.log issues; the only match was a historical docs line describing the scan.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 47 files / 201 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production 390 x 844 in-app Browser verification on `/creatures/001` focused the mobile menu `/guides` link, pressed `Escape`, and confirmed the menu disappeared, `aria-expanded="false"`, focus returned to the `打开主导航` button, horizontal overflow `0`, and console warnings/errors `0`.
+- Risk: focus restoration uses `requestAnimationFrame` after state update; this matches the DOM replacement timing observed in the browser and avoids adding a global key listener.
+- Status: local verified, pending commit and remote verification
+
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

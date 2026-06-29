@@ -38,4 +38,13 @@ describe("site header mobile navigation", () => {
     expect(siteHeader).toContain("onKeyDown={handleMobileNavigationKeyDown}");
     expect(siteHeader).toContain("event.stopPropagation()");
   });
+
+  it("returns focus to the mobile menu button after Escape closes the menu", () => {
+    const siteHeader = readFileSync(join(process.cwd(), "src", "components", "site-header.tsx"), "utf8");
+
+    expect(siteHeader).toContain("mobileMenuButtonRef");
+    expect(siteHeader).toContain("event.preventDefault()");
+    expect(siteHeader).toContain("requestAnimationFrame");
+    expect(siteHeader).toContain("mobileMenuButtonRef.current?.focus()");
+  });
 });
