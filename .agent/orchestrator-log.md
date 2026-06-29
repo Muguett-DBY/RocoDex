@@ -1566,3 +1566,26 @@
 - Risk: the in-app Browser viewport override remains unreliable on the live custom domain; mobile acceptance used system Edge at an explicit 390 x 844 viewport as the controlled fallback.
 - Next flagship: turn the comparison decision signal into a clear, goal-aligned next action that opens the direct-match project without changing the comparison URL contract.
 - Status: closed
+
+## 2026-06-29 Long Homepage Cycle 2 - Stage 4 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Previous direction: turn the comparison decision signal into a clear, goal-aligned next action without changing the comparison URL contract.
+- Flagship goal: add direct-case, live-product, and missing-direct correction actions inside the comparison decision surface.
+- Additional visible increment: keep comparison-originated project removal and alignment on the comparison deep link.
+- Real issue targeted: a comparison could report that its direct project was missing without offering a way to repair the selection, and comparison-local removal changed the URL hash to `#projects` while the user remained in the comparison section.
+- Design: `docs/superpowers/specs/2026-06-29-cstd-comparison-next-step-design.md`
+- Plan: `docs/superpowers/plans/2026-06-29-cstd-comparison-next-step.md`
+- Start state: `main` matched `origin/main` at `ce0ccc5`; Stage 3 evidence CI run `28364534570` and Vercel deployment completed successfully; worktree was clean.
+- Verification recorded before commit:
+  - TDD red: focused next-step tests failed because the implementation module did not exist.
+  - TDD green: next-step helper passed 1 file / 5 tests; source integration red failed on two missing contracts, then passed with the helper at 2 files / 12 tests.
+  - Related comparison, fit, scan, URL-state, and mobile-layout tests passed 7 files / 43 tests.
+  - `git diff --check` exited `0` apart from line-ending notices; hygiene scans found no temporary markers or debug statements.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 44 files / 167 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production Browser desktop confirmed missing-direct alignment from `crm,alpha` to `design,crm`, preserved comparison hashes after alignment and removal, direct case focus at `project=design#project-focus`, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+  - Local 390 x 844 Edge Playwright confirmed the direct action band, 284 px full-width actions inside a 308 px band, live product link, alignment flow, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+- Status: in progress
