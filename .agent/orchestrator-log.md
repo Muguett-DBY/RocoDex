@@ -110,8 +110,21 @@
   - `npm test` passed 47 files / 198 tests.
   - `npm run build` exited `0` and generated 735 static pages.
   - Local production 390 x 844 in-app Browser verification on `/creatures/001` confirmed the current summary `精灵列表`, the description text, `aria-label="移动主导航"`, `aria-expanded="true"` after opening, the correct current link, 11 menu controls, 44 px minimum control height, `max-height: 764px`, internal vertical scrolling, horizontal overflow `0`, no viewport overflow, and console warnings/errors `0`.
+- Commits:
+  - `095ef57 feat: clarify mobile navigation context`
+  - `151975c fix: size mobile auth navigation controls`
+  - `121e3fc fix: constrain mobile navigation menu height`
+- Push: `origin/main` updated to `121e3fcaaba49457adb7bdbfef5f6f131eb4f016`.
+- Remote check:
+  - GitHub Actions CI run `28409478931` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Vercel production deployment `https://rocodex-1zpoyijjb-muguett-dbys-projects.vercel.app` completed Ready and kept aliases including `https://rocodex.custard.top`.
+  - Live 390 x 844 in-app Browser verification on `https://rocodex.custard.top/creatures/001` confirmed the current summary `精灵列表`, the description text, `aria-label="移动主导航"`, `aria-expanded="true"` after opening, the correct current link, 13 menu controls including auth links, 44 px minimum control height, `max-height: 764px`, internal vertical scrolling, menu bottom `828` inside the 844 px viewport, horizontal overflow `0`, and console warnings/errors `0`.
 - Risk: the summary intentionally mirrors curated navigation metadata; any future module that needs richer mobile wording should update the shared route metadata rather than hard-coding header copy.
-- Status: local verified, pending commit and remote verification
+- Next flagship: use Stage 4 to strengthen mobile navigation interaction resilience, especially keyboard dismissal, without adding persistent state.
+- Status: closed
+
+- Next stage: Stage 4 / 6 `IMPROVE`
 
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 

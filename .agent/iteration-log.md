@@ -23,6 +23,10 @@
 - `npm test` passed 47 files / 198 tests.
 - `npm run build` generated 735 static pages.
 - Local 390 x 844 production-browser verification on `/creatures/001` confirmed the `精灵列表` summary, description text, `aria-label="移动主导航"`, `aria-expanded="true"` after opening, correct active link, 11 menu controls, 44 px minimum control height, `max-height: 764px`, internal scrolling, overflow `0`, no viewport overflow, and zero console warnings/errors.
+- Commits `095ef57`, `151975c`, and `121e3fc` were pushed to `origin/main`.
+- GitHub Actions CI run `28409478931` completed successfully for `121e3fc`.
+- Vercel commit status completed successfully and production deployment `rocodex-1zpoyijjb-muguett-dbys-projects.vercel.app` was Ready.
+- Live 390 x 844 verification on `https://rocodex.custard.top/creatures/001` confirmed the same summary and route state with 13 controls including auth links, 44 px minimum control height, `max-height: 764px`, internal scrolling, menu bottom `828` inside the 844 px viewport, horizontal overflow `0`, and zero console warnings/errors.
 
 ### Next direction
 
