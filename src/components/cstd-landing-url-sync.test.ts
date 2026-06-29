@@ -59,4 +59,12 @@ describe("CSTD landing URL state sync", () => {
     expect(source).not.toContain("parseCstdProjectViewState(window.location.search).projectId !== null");
     expect(source).not.toContain("hasProjectFocus");
   });
+
+  test("surfaces restored comparison links in the comparison header", () => {
+    expect(source).toContain("projectViewStateRestoredFromUrl");
+    expect(source).toContain("const hasRestoredProjectViewState = hasActiveCstdProjectViewState(window.location.search);");
+    expect(source).toContain("setProjectViewStateRestoredFromUrl(hasRestoredProjectViewState && viewState.compareProjectIds.length > 0);");
+    expect(source).toContain("restoredFromUrl={projectViewStateRestoredFromUrl}");
+    expect(source).toContain('aria-label="分享视图恢复状态"');
+  });
 });

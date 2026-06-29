@@ -37,6 +37,32 @@
   - Commit status `Vercel` completed successfully with description `Deployment has completed`.
 - Status: closed
 
+## 2026-06-29 Long Homepage Cycle 2 - Stage 6 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Previous direction: make restored comparison links more self-explanatory after the intro is skipped, without adding another homepage panel.
+- Flagship goal: add a compact restored-link receipt inside the existing comparison header so shared goal/comparison links explain what was restored at the landing point.
+- Design: `docs/superpowers/specs/2026-06-29-cstd-restored-comparison-receipt-design.md`
+- Plan: `docs/superpowers/plans/2026-06-29-cstd-restored-comparison-receipt.md`
+- Start state: `main` matched `origin/main` at `b4ad1ee`; Stage 5 evidence CI run `28366763672` and Vercel deployment completed successfully; worktree was clean.
+- Implemented:
+  - Extended `getCstdProjectComparisonContext` with a tested restored-link receipt model.
+  - Tracked whether URL synchronization restored a comparison from a valid `compare` state.
+  - Rendered a compact `分享视图已恢复` receipt inside the existing comparison header, with mobile-safe wrapping and an accessible label.
+- Verification recorded before commit:
+  - TDD red: focused comparison-context and landing source-contract tests failed before `receipt`, `restoredFromUrl`, and component wiring existed.
+  - TDD green: focused tests passed 2 files / 13 tests.
+  - Related comparison, URL-state, next-step, scan, motion, and mobile-layout tests passed 9 files / 56 tests.
+  - `git diff --check` exited `0` with only Windows line-ending notices; diff hygiene scans found no debug statements, temporary markers, or obvious secret patterns.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 44 files / 172 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production server on port `3102` returned `200` for the restored comparison route after restart.
+  - Clean Edge desktop and 390 x 844 mobile direct comparison links confirmed no intro controls, comparison top `96`, visible restored-link receipt, target-fit and next-action surfaces present, horizontal overflow `0`, no framework overlay, and no console warnings/errors.
+  - Clean Edge plain `/cstd` confirmed the restored-link receipt is absent while the intro still appears, with horizontal overflow `0` and no console warnings/errors.
+  - Local screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-local-restored-desktop.png`, `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-local-restored-mobile.png`, and `C:/Users/12031/AppData/Local/Temp/rocodex-stage6-local-plain.png`.
+
 - Next stage: Stage 2 / 6 `IMPROVE`
 
 ### Stage 2
