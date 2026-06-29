@@ -202,7 +202,16 @@
   - `npm audit --json` reported 0 vulnerabilities.
   - Local production HTTP smoke with no auth secrets returned `503` and `{"error":"账号功能暂未启用"}` for `POST /api/register`.
   - `git diff --check` exited `0` with only Windows line-ending notices; debug/TODO scan found no new source markers, and secret scan found no real credentials.
-- Status: local verification complete; pending commit, push, CI, Vercel, and remote smoke.
+- Commit: `7f0ff03 fix: gate registration when auth is disabled`
+- Push: `origin/main` updated to `7f0ff0316715c87c34a205016cacc2ad5b594a18`.
+- Remote check:
+  - GitHub Actions CI run `28393299010` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Remote API smoke on `https://rocodex.custard.top/api/register` returned `400` and `{"error":"用户名和密码不能为空"}` for an empty JSON body, confirming the live route is deployed and rejects invalid registration without creating an account.
+- Risk: production has auth configured, so the disabled-auth `503` branch is covered by local production smoke and route tests rather than by the live domain.
+- Stage 6 handoff: use the final IMPROVE stage to add one high-value, user-facing continuation improvement without changing the auth boundary.
+- Status: closed
+- Next stage: Stage 6 / 6 `IMPROVE`
 
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 

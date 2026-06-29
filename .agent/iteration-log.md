@@ -1388,7 +1388,9 @@
 - TDD red reproduced the disabled-auth registration bug; focused route tests then passed 1 file / 2 tests and related auth/routing tests passed 4 files / 14 tests.
 - `npm run ci:local`, `npm run lint`, `npm test`, `npm run build`, and `npm audit --json` passed; full test count is 45 files / 185 tests, build generated 735 static pages, audit found 0 vulnerabilities.
 - Local production HTTP smoke with no auth secrets returned `503 {"error":"账号功能暂未启用"}` for `POST /api/register`.
+- Commit `7f0ff03` was pushed to `origin/main`; GitHub Actions run `28393299010` and Vercel commit status completed successfully.
+- Remote API smoke on `https://rocodex.custard.top/api/register` returned `400 {"error":"用户名和密码不能为空"}` for an empty JSON body, confirming the deployed route rejects invalid live registration input without creating an account.
 
 ### Next direction
 
-- After CI/deploy confirmation, use the final IMPROVE stage to add one high-value, user-facing continuation improvement without changing the auth boundary.
+- Use the final IMPROVE stage to add one high-value, user-facing continuation improvement without changing the auth boundary.
