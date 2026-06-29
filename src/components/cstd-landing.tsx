@@ -27,6 +27,7 @@ import {
 } from "@/lib/cstd-project-comparison";
 import { getCstdProjectComparisonContext } from "@/lib/cstd-project-comparison-context";
 import { getCstdProjectComparisonFit, type CstdProjectComparisonFit } from "@/lib/cstd-project-comparison-fit";
+import { getCstdProjectComparisonScanSummary, type CstdProjectComparisonScanItem } from "@/lib/cstd-project-comparison-scan";
 import {
   buildCstdProjectBrief,
   buildCstdProjectLinkDirectory,
@@ -122,6 +123,13 @@ const cstdProjectComparisonFitLabelClassNames: Record<CstdProjectComparisonFit["
   direct: "bg-[#dff8ed] text-[#047857]",
   reference: "bg-[#fff0c9] text-[#8a4b15]",
   unscoped: "bg-[#e3f2ff] text-[#2563eb]",
+};
+
+const cstdProjectComparisonScanToneClassNames: Record<CstdProjectComparisonScanItem["tone"], string> = {
+  direct: "border-[#9bd9bf] bg-[#dff8ed]/80 text-[#047857]",
+  reference: "border-[#f2d18d] bg-[#fff0c9]/80 text-[#8a4b15]",
+  evidence: "border-[#b8d7f5] bg-[#e3f2ff]/80 text-[#2563eb]",
+  unscoped: "border-[#d8c8ad] bg-white/80 text-[#6f5b4a]",
 };
 
 const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
@@ -261,6 +269,10 @@ export function CstdLanding() {
   const projectComparisonFit = useMemo(
     () => getCstdProjectComparisonFit(selectedGuide, projectComparison.projects),
     [projectComparison.projects, selectedGuide],
+  );
+  const projectComparisonScanSummary = useMemo(
+    () => getCstdProjectComparisonScanSummary(projectComparison, projectComparisonFit),
+    [projectComparison, projectComparisonFit],
   );
   const projectWorkflowSummary = useMemo(
     () =>
@@ -804,6 +816,7 @@ export function CstdLanding() {
               copyResult={comparisonBriefCopyResult}
               fit={projectComparisonFit}
               guideGoal={selectedGuide?.goal ?? null}
+              scanSummary={projectComparisonScanSummary}
               onClear={() => updateProjectComparison([])}
               onCopyBrief={copyProjectComparisonBrief}
               onRemove={toggleProjectComparison}
@@ -1661,6 +1674,7 @@ function ProjectComparison({
   copyResult,
   fit,
   guideGoal,
+  scanSummary,
   onClear,
   onCopyBrief,
   onRemove,
@@ -1669,6 +1683,7 @@ function ProjectComparison({
   copyResult: CstdProjectCopyResult | null;
   fit: CstdProjectComparisonFit;
   guideGoal: string | null;
+  scanSummary: CstdProjectComparisonScanItem[];
   onClear: () => void;
   onCopyBrief: () => void;
   onRemove: (projectId: string) => void;
@@ -1682,6 +1697,7 @@ function ProjectComparison({
     failed: "复制失败，请稍后重试",
     unsupported: "当前浏览器不支持复制",
   }[copyResult ?? "copied"];
+  const fitItemsByProjectId = useMemo(() => new Map(fit.items.map((item) => [item.projectId, item])), [fit.items]);
 
   return (
     <section id="project-comparison" className={`${cstdProjectComparisonClassName} scroll-mt-24`} aria-labelledby="project-comparison-heading">
@@ -1699,6 +1715,14 @@ function ProjectComparison({
             <span aria-hidden="true"> · </span>
             <span>{context.projectLabel}</span>
           </p>
+          <ul className="mt-3 grid min-w-0 grid-cols-1 gap-2 min-[520px]:grid-cols-3" aria-label="对比扫读摘要">
+            {scanSummary.map((item) => (
+              <li key={item.id} className={`min-w-0 border px-3 py-2 ${cstdProjectComparisonScanToneClassNames[item.tone]}`}>
+                <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em]">{item.label}</span>
+                <span className="mt-1 block min-w-0 break-words text-sm font-black leading-5">{item.value}</span>
+              </li>
+            ))}
+          </ul>
         </div>
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:items-end">
           <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
@@ -1729,19 +1753,30 @@ function ProjectComparison({
 
       <div className="p-4">
         <ul className={cstdProjectComparisonColumnsClassName} aria-label="已选对比项目">
-          {comparison.projects.map((project) => (
-            <li key={project.id} className="flex min-w-0 items-center justify-between gap-3 border-b border-[#b7decf] bg-white/68 px-3 py-2.5">
-              <span className="min-w-0 break-words text-sm font-black text-[#1b4332]">{project.title}</span>
-              <button
-                type="button"
-                onClick={() => onRemove(project.id)}
-                aria-label={`移出对比：${project.title}`}
-                className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#4c6b5d] transition hover:bg-[#dff8ed] hover:text-[#047857] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
-              >
-                <X className="h-4 w-4" />
-              </button>
-            </li>
-          ))}
+          {comparison.projects.map((project) => {
+            const fitItem = fitItemsByProjectId.get(project.id);
+
+            return (
+              <li key={project.id} className="flex min-w-0 items-center justify-between gap-3 border-b border-[#b7decf] bg-white/68 px-3 py-2.5">
+                <span className="min-w-0">
+                  {fitItem ? (
+                    <span className={`mb-1 inline-flex rounded-md px-2 py-1 text-[0.68rem] font-black ${cstdProjectComparisonFitLabelClassNames[fitItem.kind]}`}>
+                      {fitItem.label}
+                    </span>
+                  ) : null}
+                  <span className="block min-w-0 break-words text-sm font-black text-[#1b4332]">{project.title}</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => onRemove(project.id)}
+                  aria-label={`移出对比：${project.title}`}
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#4c6b5d] transition hover:bg-[#dff8ed] hover:text-[#047857] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </li>
+            );
+          })}
         </ul>
 
         <div className="mt-4 border-y border-[#b7decf] bg-[#fffaf0]/70" role="group" aria-label="目标匹配判断">
