@@ -213,6 +213,20 @@
 - Status: closed
 - Next stage: Stage 6 / 6 `IMPROVE`
 
+### Stage 6
+
+- Stage number: 6 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: make restored comparison deep links more self-explanatory and immediately actionable after the intro is skipped, without adding another homepage panel or changing auth behavior.
+- Start state: `main` matched `origin/main` at `2e3ea2d`; Stage 5 implementation CI passed and Vercel succeeded, Stage 5 evidence commit CI passed, and the evidence-only Vercel deployment `dpl_4Wu5HgChY4jhQZSAmgk7qxjvbL3i` remained externally stuck in `Building` with a 0ms build record.
+- Previous direction: add one high-value, user-facing continuation improvement without changing the auth boundary.
+- Flagship goal: turn a restored comparison receipt into a compact header-level handoff that explains the restored decision and exposes the existing next action immediately.
+- New visible increment: a shared comparison URL recipient can continue from the restored receipt itself rather than scrolling to the lower decision band.
+- Real issue targeted: restored comparison links skipped the intro correctly but the top receipt was passive, especially on mobile.
+- Design: `docs/superpowers/specs/2026-06-30-restored-comparison-continuation-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-restored-comparison-continuation.md`
+
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

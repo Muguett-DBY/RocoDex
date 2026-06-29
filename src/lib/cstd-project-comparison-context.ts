@@ -1,4 +1,11 @@
+import type { CstdProjectComparisonNextStep } from "./cstd-project-comparison-next-step";
+
 export type CstdProjectComparisonReceipt = {
+  label: string;
+  detail: string;
+};
+
+export type CstdProjectComparisonRestoredContinuation = {
   label: string;
   detail: string;
 };
@@ -33,5 +40,20 @@ export function getCstdProjectComparisonContext({
     goalLabel: `目标路径：${guideGoal?.trim() || "手动选择"}`,
     projectLabel: `对比项目：${titles.join(" / ") || "等待选择"}`,
     receipt,
+  };
+}
+
+export function getCstdProjectComparisonRestoredContinuation({
+  restoredFromUrl,
+  nextStep,
+}: {
+  restoredFromUrl: boolean;
+  nextStep: CstdProjectComparisonNextStep;
+}): CstdProjectComparisonRestoredContinuation | null {
+  if (!restoredFromUrl) return null;
+
+  return {
+    label: `继续：${nextStep.primaryLabel}`,
+    detail: nextStep.title,
   };
 }

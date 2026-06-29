@@ -25,7 +25,7 @@ import {
   toggleCstdProjectComparison,
   type CstdProjectComparison as CstdProjectComparisonData,
 } from "@/lib/cstd-project-comparison";
-import { getCstdProjectComparisonContext } from "@/lib/cstd-project-comparison-context";
+import { getCstdProjectComparisonContext, getCstdProjectComparisonRestoredContinuation } from "@/lib/cstd-project-comparison-context";
 import { getCstdProjectComparisonFit, type CstdProjectComparisonFit } from "@/lib/cstd-project-comparison-fit";
 import {
   alignCstdProjectComparisonIds,
@@ -1846,6 +1846,10 @@ function ProjectComparison({
     projectTitles: comparison.projects.map((project) => project.title),
     restoredFromUrl,
   });
+  const restoredContinuation = context.receipt ? getCstdProjectComparisonRestoredContinuation({
+    restoredFromUrl,
+    nextStep,
+  }) : null;
   const copyMessage = {
     copied: "对比摘要已复制",
     failed: "复制失败，请稍后重试",
@@ -1882,14 +1886,33 @@ function ProjectComparison({
             <span>{context.projectLabel}</span>
           </p>
           {context.receipt ? (
-            <p
+            <div
               aria-label="分享视图恢复状态"
-              className="mt-2 inline-flex max-w-3xl flex-wrap items-center gap-x-2 gap-y-1 rounded-lg border border-[#9bd9bf] bg-[#dff8ed]/70 px-3 py-2 text-xs font-bold leading-5 text-[#047857]"
+              aria-live="polite"
+              className="mt-2 max-w-3xl rounded-lg border border-[#9bd9bf] bg-[#dff8ed]/70 px-3 py-2 text-xs font-bold leading-5 text-[#047857]"
             >
-              <Check className="h-3.5 w-3.5 shrink-0" />
-              <span className="font-black">{context.receipt.label}</span>
-              <span className="min-w-0 break-words text-[#355b4a]">{context.receipt.detail}</span>
-            </p>
+              <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+                <Check className="h-3.5 w-3.5 shrink-0" />
+                <span className="font-black">{context.receipt.label}</span>
+                <span className="min-w-0 break-words text-[#355b4a]">{context.receipt.detail}</span>
+              </div>
+              {restoredContinuation ? (
+                <div className="mt-2 grid min-w-0 gap-2 rounded-md border border-[#9bd9bf]/70 bg-white/58 p-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" aria-label="分享对比恢复下一步">
+                  <p className="min-w-0">
+                    <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#047857]">建议下一步</span>
+                    <span className="mt-0.5 block min-w-0 break-words text-xs font-bold leading-5 text-[#355b4a]">{restoredContinuation.detail}</span>
+                  </p>
+                  <button
+                    type="button"
+                    onClick={handleNextStep}
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-3 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
+                  >
+                    <ArrowDownRight className="h-3.5 w-3.5" />
+                    {restoredContinuation.label}
+                  </button>
+                </div>
+              ) : null}
+            </div>
           ) : null}
           <ul className="mt-3 grid min-w-0 grid-cols-1 gap-2 min-[520px]:grid-cols-3" aria-label="对比扫读摘要">
             {scanSummary.map((item) => (
