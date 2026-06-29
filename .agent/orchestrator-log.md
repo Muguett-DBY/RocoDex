@@ -1499,3 +1499,38 @@
   - Live Browser mobile at 390 x 844 confirmed stacked full-width actions stayed within the viewport, explicit copy feedback, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
 - Next flagship: turn the copied comparison from a raw evidence handoff into a clearer decision aid by deriving goal-to-project fit signals from existing project evidence.
 - Status: closed
+
+## 2026-06-29 Long Homepage Cycle 2 - Stage 2 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Previous direction: derive goal-to-project fit signals from existing evidence so the comparison can support a decision instead of only transporting raw rows.
+- Flagship goal: add a transparent goal-fit decision layer inside the CSTD comparison matrix and copied comparison brief.
+- Design: `docs/superpowers/specs/2026-06-28-cstd-comparison-fit-design.md`
+- Plan: `docs/superpowers/plans/2026-06-28-cstd-comparison-fit.md`
+- Implemented:
+  - Added `getCstdProjectComparisonFit` with direct, reference, and unscoped fit states.
+  - Added fit lines to the copied comparison brief.
+  - Rendered a separator-based `目标判断` band inside the comparison surface.
+  - Fixed a verified direct `#project-comparison` hash restore issue after conditional comparison rendering.
+- Verification recorded before commit:
+  - TDD red: focused fit tests failed before the fit helper existed.
+  - TDD green: focused fit and comparison tests passed 3 files / 13 tests.
+  - Regression red: URL-sync source test failed before hash restore code existed.
+  - Regression green: URL-sync test passed 1 file / 4 tests.
+  - Related tests passed 6 files / 34 tests.
+  - `git diff --check` exited `0` apart from line-ending notices; hygiene scans found no temporary markers or secret patterns.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 42 files / 156 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production Browser desktop at `/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed the goal-fit band, `目标直达`, `横向参照`, direct hash restoration, copy feedback, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+  - Local production Browser mobile at 390 x 844 confirmed the same fit band and copy feedback, copy button within viewport, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+- Commit: `c88315b feat: add cstd comparison fit signals`
+- Push: `origin/main` updated to `c88315bb896f9d303fde4404f7cc99092d48b93d`.
+- Remote check:
+  - GitHub Actions CI run `28321478335` completed successfully; install, lint, test, and build all passed.
+  - Commit status `Vercel` completed successfully with description `Deployment has completed`.
+  - Live Browser desktop at `https://custard.top/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` confirmed hydrated goal/project context, fit band, `目标直达`, `横向参照`, copy feedback, horizontal overflow `0`, no framework overlay, and console warnings/errors `0`.
+  - Live 390 x 844 mobile verification used Edge Playwright fallback because the in-app Browser viewport override stayed at 1280 x 720 on the live tab; the fallback confirmed viewport `390 x 844`, section width `342`, copy button bounds within viewport, copy success feedback, horizontal overflow `0`, no intro/framework overlay, and console warnings/errors `0`.
+- Next flagship: use the UIUX stage to make the comparison decision surface easier to scan on small screens, especially the transition from selected project chips into the fit band and evidence rows.
+- Status: closed

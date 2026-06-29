@@ -1104,3 +1104,36 @@
 - Vercel commit status completed successfully with description `Deployment has completed`.
 - Live custom-domain Browser verification covered desktop and 390 px mobile comparison deep links, responsive actions, explicit restricted-clipboard feedback, no horizontal overflow, no framework error overlay, and console warnings/errors `0`.
 - Derive goal-to-project fit signals from existing evidence so the comparison can support a decision instead of only transporting raw rows.
+
+## 2026-06-29 - Long Homepage Cycle 2 Stage 2 / 6 - IMPROVE
+
+### Scope
+
+- Added a pure goal-fit helper for CSTD project comparisons.
+- Added direct/reference/unscoped fit signals to the comparison matrix and copied comparison brief.
+- Fixed direct `#project-comparison` deep links so the page restores the comparison anchor after conditional comparison content renders.
+
+### User-visible change
+
+- Direct comparison links now explain why the selected goal points to one project as `目标直达` and keeps the other as `横向参照`.
+- Copied comparison summaries now include the same decision signal instead of only raw evidence rows.
+
+### Verification evidence
+
+- TDD red failed before `getCstdProjectComparisonFit` existed; TDD green passed the focused fit and comparison suite at 3 files / 13 tests.
+- URL-sync regression failed before the comparison hash restore existed; it passed after adding the conditional scroll restoration.
+- Related comparison, URL-state, and mobile-layout tests passed 6 files / 34 tests.
+- `git diff --check` exited `0` apart from line-ending notices; source hygiene checks found no temporary markers or secret patterns.
+- `npm run lint` exited `0`.
+- `npm test` passed 42 files / 156 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local production Browser verification covered desktop and 390 px mobile comparison deep links, the fit band, copy feedback, no horizontal overflow, no framework error overlay, and console warnings/errors `0`.
+
+### Next direction
+
+- Commit `c88315b` was pushed to `origin/main`.
+- GitHub Actions CI run `28321478335` completed successfully.
+- Vercel commit status completed successfully with description `Deployment has completed`.
+- Live desktop Browser verification covered hydrated comparison fit, copy feedback, no horizontal overflow, no framework error overlay, and console warnings/errors `0`.
+- Live 390 px mobile verification used Edge Playwright fallback because the in-app Browser viewport override did not apply to the live tab; it confirmed viewport `390 x 844`, fit band visibility, copy success feedback, horizontal overflow `0`, and console warnings/errors `0`.
+- Use the UIUX stage to make the comparison decision surface easier to scan on small screens, especially the transition from selected project chips into the fit band and evidence rows.

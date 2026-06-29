@@ -38,5 +38,5 @@
 
 - [x] Run diff, hygiene, lint, full tests, and production build.
 - [x] Verify local desktop and 390px mobile behavior.
-- [ ] Commit, push, and verify Actions, Vercel, and the live custom domain.
-- [ ] Record Stage 2 evidence before starting Stage 3.
+- [x] Commit, push, and verify Actions, Vercel, and the live custom domain.
+- [x] Record Stage 2 evidence before starting Stage 3.
