@@ -90,7 +90,7 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
           <nav
             id="mobile-site-navigation"
             aria-label="移动主导航"
-            className="mt-3 grid gap-2 rounded-xl border border-slate-200 bg-white p-3 shadow-sm md:hidden dark:border-slate-700 dark:bg-slate-900"
+            className="mt-3 grid max-h-[calc(100dvh-5rem)] gap-2 overflow-y-auto overscroll-contain rounded-xl border border-slate-200 bg-white p-3 shadow-sm md:hidden dark:border-slate-700 dark:bg-slate-900"
           >
             {mobileMenuSummary ? (
               <div className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 dark:border-slate-700 dark:bg-slate-950/60">

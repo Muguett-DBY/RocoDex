@@ -21,4 +21,12 @@ describe("site header mobile navigation", () => {
     expect(siteHeader).toContain('rootClassName="grid gap-2"');
     expect(siteHeader).toContain('controlClassName="h-11 justify-start px-3"');
   });
+
+  it("keeps the expanded mobile menu constrained within the viewport", () => {
+    const siteHeader = readFileSync(join(process.cwd(), "src", "components", "site-header.tsx"), "utf8");
+
+    expect(siteHeader).toContain("max-h-[calc(100dvh-5rem)]");
+    expect(siteHeader).toContain("overflow-y-auto");
+    expect(siteHeader).toContain("overscroll-contain");
+  });
 });

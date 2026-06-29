@@ -8,6 +8,7 @@
 - Rendered the summary only inside the opened mobile menu, keeping the closed sticky header footprint unchanged.
 - Added an accessible mobile nav landmark label while preserving existing link order, active states, collection entry, and menu close behavior.
 - Fixed auth-enabled mobile menu controls so login/register inherit the same 44 px touch target and close-on-navigation behavior as the other menu entries.
+- Constrained the expanded mobile menu to the viewport with internal scrolling for auth-enabled production menus.
 
 ### User-visible change
 
@@ -16,12 +17,12 @@
 
 ### Verification evidence
 
-- TDD red failed before the summary helper and mobile menu summary UI existed; a follow-up red contract reproduced the live auth-enabled 36 px control issue; focused tests then passed 2 files / 9 tests.
+- TDD red failed before the summary helper and mobile menu summary UI existed; follow-up red contracts reproduced the live auth-enabled 36 px control issue and the viewport overflow issue; focused tests then passed 2 files / 10 tests.
 - `git diff --check` passed with only Windows line-ending notices.
 - `npm run lint` passed.
-- `npm test` passed 47 files / 197 tests.
+- `npm test` passed 47 files / 198 tests.
 - `npm run build` generated 735 static pages.
-- Local 390 x 844 production-browser verification on `/creatures/001` confirmed the `精灵列表` summary, description text, `aria-label="移动主导航"`, `aria-expanded="true"` after opening, correct active link, 11 menu controls, 44 px minimum control height, overflow `0`, no viewport overflow, and zero console warnings/errors.
+- Local 390 x 844 production-browser verification on `/creatures/001` confirmed the `精灵列表` summary, description text, `aria-label="移动主导航"`, `aria-expanded="true"` after opening, correct active link, 11 menu controls, 44 px minimum control height, `max-height: 764px`, internal scrolling, overflow `0`, no viewport overflow, and zero console warnings/errors.
 
 ### Next direction
 

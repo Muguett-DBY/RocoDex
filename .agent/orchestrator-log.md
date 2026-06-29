@@ -99,15 +99,17 @@
   - Added `aria-label="移动主导航"` to the mobile nav landmark.
   - Preserved existing active links, explicit close callbacks, collection entry, and 44 px mobile link targets.
   - Fixed a live-only auth-enabled mobile menu regression by letting mobile `AuthControls` inherit the same 44 px touch-target and close-on-navigation contract as primary links.
+  - Constrained the expanded mobile menu to the visible viewport with internal scrolling for auth-enabled production menus.
 - Verification recorded before commit:
   - TDD red: focused tests failed before `getMobileNavigationSummary` and the mobile menu summary UI existed.
   - Follow-up red: the auth mobile control source contract failed after live production showed login/register controls at 36 px when auth was enabled.
-  - TDD green: focused tests passed 2 files / 9 tests after the auth control fix.
+  - Follow-up red: the viewport constraint contract failed after live production showed the auth-enabled menu extending just past the 390 x 844 viewport.
+  - TDD green: focused tests passed 2 files / 10 tests after the auth control and viewport constraint fixes.
   - `git diff --check` exited `0` with only Windows line-ending notices.
   - `npm run lint` exited `0`.
-  - `npm test` passed 47 files / 197 tests.
+  - `npm test` passed 47 files / 198 tests.
   - `npm run build` exited `0` and generated 735 static pages.
-  - Local production 390 x 844 in-app Browser verification on `/creatures/001` confirmed the current summary `精灵列表`, the description text, `aria-label="移动主导航"`, `aria-expanded="true"` after opening, the correct current link, 11 menu controls, 44 px minimum control height, horizontal overflow `0`, no viewport overflow, and console warnings/errors `0`.
+  - Local production 390 x 844 in-app Browser verification on `/creatures/001` confirmed the current summary `精灵列表`, the description text, `aria-label="移动主导航"`, `aria-expanded="true"` after opening, the correct current link, 11 menu controls, 44 px minimum control height, `max-height: 764px`, internal vertical scrolling, horizontal overflow `0`, no viewport overflow, and console warnings/errors `0`.
 - Risk: the summary intentionally mirrors curated navigation metadata; any future module that needs richer mobile wording should update the shared route metadata rather than hard-coding header copy.
 - Status: local verified, pending commit and remote verification
 
