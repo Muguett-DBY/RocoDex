@@ -81,7 +81,19 @@
   - `npm run build` exited `0` and generated 735 static pages.
   - Local production server on port `3102` was verified with the in-app Browser: filtered directory action opened `project=crm#project-focus`, focus copy action showed copy feedback, horizontal overflow was `0`, no framework overlay appeared, and console warnings/errors were `0`.
   - Controlled Edge Playwright checks at 1366 x 900 and 390 x 844 confirmed both restored action regions, unique scoped buttons, directory-to-focus URL transition, focus copy feedback, horizontal overflow `0`, no framework overlay, console warnings/errors `0`, and page errors `0`.
-- Status: local verification complete; commit, push, CI, Vercel, live custom-domain verification pending.
+- Commit: `18e319a feat: add cstd restored entry actions`
+- Push: `origin/main` updated to `18e319a2a2c55df07514906c320ecef8deeb85c9`.
+- Remote check:
+  - GitHub Actions CI run `28388400215` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live `https://custard.top/cstd?category=operations&q=CRM#projects` returned `200` on desktop and 390 x 844 mobile, showed one `恢复筛选下一步` action, and opened `project=crm#project-focus`.
+  - Live `https://custard.top/cstd?project=design#project-focus` returned `200` on desktop and 390 x 844 mobile, showed one scoped `恢复案例下一步` action, and displayed copy feedback after `复制案例摘要`.
+  - Live browser checks found horizontal overflow `0`, no framework overlay, console warnings/errors `0`, and page errors `0`.
+- Risk: the directory handoff intentionally opens the first matching project for multi-match restored views; future work can make multi-result choice richer if the catalog grows.
+- Stage 3 handoff: use the UIUX stage to make the restored-entry action areas easier to scan on small screens and align their spacing with nearby toolbar/focus controls without adding a new panel.
+- Status: closed
+
+- Next stage: Stage 3 / 6 `UIUX`
 
 ## Run — 2026-06-28 — Long 6-stage homepage strengthening round 5
 

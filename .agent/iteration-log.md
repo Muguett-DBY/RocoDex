@@ -1,5 +1,38 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 3 Stage 2 / 6 - IMPROVE
+
+### Scope
+
+- Continued the Stage 1 restored-link direction by making restored directory and focused project entries actionable.
+- Added pure action helpers for restored directory and focus states.
+- Rendered a compact `恢复筛选下一步` handoff inside the Project index restored receipt.
+- Rendered a scoped `恢复案例下一步` copy action inside the Project case-study restored receipt.
+
+### User-visible change
+
+- Visitors opening `/cstd?category=operations&q=CRM#projects` can jump straight from the restored filter receipt into the matching CRM case study.
+- Visitors opening `/cstd?project=design#project-focus` can copy the restored case-study summary from the same restored-entry area.
+- The public URL-state contract and existing manual clearing behavior remain unchanged.
+
+### Verification evidence
+
+- TDD red failed before restored action helpers and component wiring existed; focused tests passed 2 files / 21 tests after implementation.
+- Related CSTD tests passed 6 files / 50 tests.
+- `npm run lint` exited `0`.
+- `npm test` passed 44 files / 179 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local in-app Browser plus controlled Edge desktop/mobile checks confirmed restored action regions, directory-to-focus transition, copy feedback, overflow `0`, no framework overlay, and console/page errors `0`.
+- Commit `18e319a` was pushed to `origin/main`.
+- GitHub Actions CI run `28388400215` completed successfully.
+- Vercel commit status completed successfully with description `Deployment has completed`.
+- Live `https://custard.top` desktop/mobile checks confirmed both restored actions, HTTP `200`, overflow `0`, no framework overlay, and console/page errors `0`.
+
+### Next direction
+
+- Stage 3 should use the UIUX prompt to make restored-entry action areas easier to scan on small screens and visually align them with nearby toolbar/focus controls.
+- Recommended flagship: refine the restored receipt/action presentation into a clearer responsive handoff pattern inside existing Project index and Project case-study surfaces.
+
 ## 2026-06-29 - Long Homepage Cycle 3 Stage 1 / 6 - IMPROVE
 
 ### Scope
