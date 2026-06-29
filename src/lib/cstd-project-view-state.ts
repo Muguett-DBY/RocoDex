@@ -31,6 +31,17 @@ export function parseCstdProjectViewState(search: string): CstdProjectViewState 
   };
 }
 
+export function hasActiveCstdProjectViewState(search: string): boolean {
+  const state = parseCstdProjectViewState(search);
+  return (
+    state.filter !== "all" ||
+    state.query.length > 0 ||
+    state.guideId !== null ||
+    state.projectId !== null ||
+    state.compareProjectIds.length > 0
+  );
+}
+
 export function buildCstdProjectViewHref(
   pathname: string,
   state: CstdProjectViewState,

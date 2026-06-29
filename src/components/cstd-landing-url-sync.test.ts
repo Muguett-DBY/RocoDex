@@ -52,4 +52,11 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain('updateProjectComparison(nextComparedProjectIds, "project-comparison")');
     expect(source).toContain('updateProjectComparison(nextIds, "project-comparison")');
   });
+
+  test("uses full restored project view state to suppress the automatic intro", () => {
+    expect(source).toContain("hasActiveCstdProjectViewState(window.location.search)");
+    expect(source).toContain("hasProjectViewState");
+    expect(source).not.toContain("parseCstdProjectViewState(window.location.search).projectId !== null");
+    expect(source).not.toContain("hasProjectFocus");
+  });
 });

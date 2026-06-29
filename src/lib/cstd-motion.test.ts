@@ -22,8 +22,8 @@ describe("CSTD motion preferences", () => {
     expect(shouldPlayCstdIntro({ reducedMotion: true, motionPreference: "enabled", introSeen: null })).toBe(false);
   });
 
-  test("skips the automatic intro for direct project focus links", () => {
-    expect(shouldPlayCstdIntro({ reducedMotion: false, motionPreference: "enabled", introSeen: null, hasProjectFocus: true })).toBe(false);
+  test("skips the automatic intro for restored project view state", () => {
+    expect(shouldPlayCstdIntro({ reducedMotion: false, motionPreference: "enabled", introSeen: null, hasProjectViewState: true })).toBe(false);
   });
 
   test("allows explicit replay even when automatic intro is skipped for reduced motion", () => {

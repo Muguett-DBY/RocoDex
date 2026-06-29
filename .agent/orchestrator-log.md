@@ -1599,3 +1599,33 @@
 - Risk: external project availability is outside this homepage's runtime control; the action uses the catalog's existing live URL.
 - Stage 5 handoff: audit the recent comparison workflow for URL-state edge cases, accessibility semantics, link safety, and regression gaps, then fix verified issues rather than adding another feature.
 - Status: closed
+
+## 2026-06-29 Long Homepage Cycle 2 - Stage 5 / 6
+
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Goal: audit recent comparison workflow URL-state edge cases, accessibility semantics, external-link safety, and regression coverage, then fix verified defects.
+- Start state: `main` matched `origin/main` at `bcdd8f5`; Stage 4 evidence CI run `28365498246` and Vercel deployment completed successfully; worktree was clean.
+- P1 finding: a clean first-visit comparison deep link such as `/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison` restored the comparison state but still displayed the automatic intro overlay because intro suppression only checked direct `project=` focus state.
+- Fix plan: add a validated active view-state detector, use it for the intro decision, and keep plain `/cstd` first visits eligible for the intro.
+- Design: `docs/superpowers/specs/2026-06-29-cstd-project-state-intro-gate-design.md`
+- Plan: `docs/superpowers/plans/2026-06-29-cstd-project-state-intro-gate.md`
+- Implemented:
+  - Added `hasActiveCstdProjectViewState` so valid `category`, `q`, `goal`, `project`, and `compare` state can be detected after invalid values are normalized away.
+  - Changed the CSTD intro decision from project-focus-specific gating to full restored project-view-state gating.
+  - Updated `CstdLanding` to suppress automatic intro playback for any active restored project view state while preserving explicit replay behavior.
+- Verification recorded before commit:
+  - TDD red: focused view-state, motion, and landing source-contract tests failed before the helper and component wiring existed.
+  - TDD green: focused tests passed 3 files / 19 tests.
+  - Related URL-state, comparison, next-step, scan, workflow, motion, and mobile-layout tests passed 10 files / 60 tests.
+  - `npm run ci:local` stopped stale local Next process `95980`, completed `npm ci`, and reported 0 vulnerabilities.
+  - `git diff --check` exited `0` with only Windows line-ending notices; diff hygiene scans found no debug statements, temporary markers, or obvious secret patterns.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 44 files / 169 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - `npm audit --json` reported 0 vulnerabilities.
+  - Local production server on port `3102` returned `200` for the comparison deep link.
+  - In-app Browser desktop check confirmed the direct comparison deep link landed on `#project-comparison`, showed the comparison section, had target top `96`, no intro controls, no framework overlay nodes, horizontal overflow `0`, and no console warnings/errors.
+  - Clean Edge desktop and 390 x 844 mobile first-visit contexts confirmed `introSeen: null`, no intro controls, comparison top `96`, target-fit and next-action surfaces present, external action visible, horizontal overflow `0`, and no console warnings/errors.
+  - Clean Edge plain `/cstd` first visit confirmed the intro still appears with `开启 CSTD` and `直接浏览项目`, horizontal overflow `0`, and no console warnings/errors.
+  - Local screenshots saved to `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-local-clean-desktop.png`, `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-local-clean-mobile.png`, and `C:/Users/12031/AppData/Local/Temp/rocodex-stage5-local-plain-intro.png`.

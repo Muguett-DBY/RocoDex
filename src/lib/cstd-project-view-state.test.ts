@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { buildCstdProjectViewHref, parseCstdProjectViewState } from "./cstd-project-view-state";
+import { buildCstdProjectViewHref, hasActiveCstdProjectViewState, parseCstdProjectViewState } from "./cstd-project-view-state";
 
 describe("CSTD project view state", () => {
   it("parses directory, goal, and focused project state from one URL", () => {
@@ -65,5 +65,14 @@ describe("CSTD project view state", () => {
         "project-comparison",
       ),
     ).toBe("/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison");
+  });
+
+  it("detects only valid active view state for automatic intro gating", () => {
+    expect(hasActiveCstdProjectViewState("")).toBe(false);
+    expect(hasActiveCstdProjectViewState("?category=nope&goal=nope&project=nope&compare=unknown")).toBe(false);
+    expect(hasActiveCstdProjectViewState("?goal=ai-creation&compare=design,crm")).toBe(true);
+    expect(hasActiveCstdProjectViewState("?q=AI")).toBe(true);
+    expect(hasActiveCstdProjectViewState("?category=operations")).toBe(true);
+    expect(hasActiveCstdProjectViewState("?project=design")).toBe(true);
   });
 });
