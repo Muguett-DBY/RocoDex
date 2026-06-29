@@ -32,4 +32,11 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain('document.getElementById("project-comparison")?.scrollIntoView({ block: "start" });');
     expect(source).toContain("[projectComparison.projects.length, projectViewStateSynced]");
   });
+
+  test("renders a scan-first comparison summary with fit-aware selected projects", () => {
+    expect(source).toContain("getCstdProjectComparisonScanSummary(projectComparison, projectComparisonFit)");
+    expect(source).toContain("scanSummary={projectComparisonScanSummary}");
+    expect(source).toContain('aria-label="对比扫读摘要"');
+    expect(source).toContain("fitItemsByProjectId");
+  });
 });
