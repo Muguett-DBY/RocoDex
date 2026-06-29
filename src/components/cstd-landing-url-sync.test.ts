@@ -68,6 +68,15 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain('aria-label="分享视图恢复状态"');
   });
 
+  test("makes restored comparison links actionable from the comparison header", () => {
+    expect(source).toContain("getCstdProjectComparisonRestoredContinuation");
+    expect(source).toContain("const restoredContinuation = context.receipt ? getCstdProjectComparisonRestoredContinuation({");
+    expect(source).toContain('aria-label="分享对比恢复下一步"');
+    expect(source).toContain("restoredContinuation.label");
+    expect(source).toContain("inline-flex min-h-11 w-full");
+    expect(source).toContain("onClick={handleNextStep}");
+  });
+
   test("surfaces restored directory and project-focus links in their existing surfaces", () => {
     expect(source).toContain("projectDirectoryRestoredFromUrl");
     expect(source).toContain("projectFocusRestoredFromUrl");
