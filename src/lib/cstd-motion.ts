@@ -4,7 +4,7 @@ export const CSTD_INTRO_SEEN_KEY = "cstd.introSeen";
 export type CstdMotionPreference = "enabled" | "disabled";
 
 type IntroDecision = {
-  hasProjectFocus?: boolean;
+  hasProjectViewState?: boolean;
   reducedMotion: boolean;
   motionPreference: string | null;
   introSeen?: string | null;
@@ -24,8 +24,8 @@ type PointerTiltInput = {
   rectHeight: number;
 };
 
-export function shouldPlayCstdIntro({ hasProjectFocus, reducedMotion, motionPreference, introSeen }: IntroDecision) {
-  if (hasProjectFocus) return false;
+export function shouldPlayCstdIntro({ hasProjectViewState, reducedMotion, motionPreference, introSeen }: IntroDecision) {
+  if (hasProjectViewState) return false;
   if (reducedMotion) return false;
   if (motionPreference === "disabled") return false;
   return introSeen !== "true";

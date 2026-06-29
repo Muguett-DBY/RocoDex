@@ -70,7 +70,7 @@ import {
   type CstdProjectFilter,
 } from "@/lib/cstd-project-filter";
 import { cstdProjectGuides, getCstdProjectGuide, type CstdProjectGuideId } from "@/lib/cstd-project-guide";
-import { buildCstdProjectViewHref, parseCstdProjectViewState, type CstdProjectViewHash } from "@/lib/cstd-project-view-state";
+import { buildCstdProjectViewHref, hasActiveCstdProjectViewState, parseCstdProjectViewState, type CstdProjectViewHash } from "@/lib/cstd-project-view-state";
 import {
   cstdHeaderNavClassName,
   cstdHeaderClassName,
@@ -197,9 +197,9 @@ export function CstdLanding() {
     const storedAudioPreference = window.localStorage.getItem(CSTD_AUDIO_PREFERENCE_KEY);
     const audioPreference: CstdAudioPreference = storedAudioPreference === "disabled" ? "disabled" : "enabled";
     const introSeen = window.localStorage.getItem(CSTD_INTRO_SEEN_KEY);
-    const hasProjectFocus = parseCstdProjectViewState(window.location.search).projectId !== null;
+    const hasProjectViewState = hasActiveCstdProjectViewState(window.location.search);
     const shouldShowIntro = shouldPlayCstdIntro({
-      hasProjectFocus,
+      hasProjectViewState,
       reducedMotion,
       motionPreference: preference,
       introSeen,
