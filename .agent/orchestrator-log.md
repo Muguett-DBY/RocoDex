@@ -44,6 +44,35 @@
 
 - Next stage: Stage 2 / 6 `IMPROVE`
 
+### Stage 2
+
+- Stage number: 2 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: make mobile navigation close deterministically across browser-history and programmatic pathname transitions.
+- Start state:
+  - Stage 1 added current-route states and a global route context strip.
+  - Menu-owned links close the mobile navigation, but pathname changes initiated elsewhere do not own that callback.
+  - The worktree is clean on `main`; Stage 1 feature and evidence commits passed GitHub Actions and Vercel.
+- Design: `docs/superpowers/specs/2026-06-30-mobile-navigation-route-state-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-mobile-navigation-route-state.md`
+- Implemented:
+  - Added a pure route-aware mobile navigation visibility helper using normalized pathnames.
+  - Replaced the header's standalone boolean menu state with a requested open state paired with the pathname where it was opened.
+  - Derived rendered menu visibility synchronously, so browser-history and programmatic pathname changes close stale menus without a state-setting effect.
+  - Preserved explicit close callbacks, toggle labels, `aria-expanded`, active links, and existing 44 px mobile navigation rows.
+- Verification recorded before commit:
+  - TDD red: the focused navigation suite failed on the missing route-aware visibility helper.
+  - TDD green: focused tests passed 2 files / 8 tests.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 46 files / 194 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production verification in the in-app Browser at 390 x 844 opened the menu on `/discover`, navigated back through browser history to `/creatures`, and confirmed the menu closed with `aria-expanded="false"`, the correct active link, horizontal overflow `0`, and console warnings/errors `0`.
+- Risk: visibility is tied to normalized pathname rather than query parameters; this is intentional because App Router `usePathname` does not treat in-page query filter changes as module navigation.
+- Next flagship: use the UIUX stage to improve the mobile header/menu hierarchy and make the current destination easier to scan without increasing header height.
+- Status: local verification complete; remote verification pending
+
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

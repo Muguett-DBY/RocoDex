@@ -1,5 +1,31 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 4 Stage 2 / 6 - IMPROVE
+
+### Scope
+
+- Bound the mobile menu's requested open state to the pathname where it was opened.
+- Added a pure normalized-path helper that derives whether the menu should still be visible.
+- Preserved existing explicit link-close behavior, accessibility state, active links, and touch targets.
+
+### User-visible change
+
+- The mobile navigation now closes when browser history, programmatic navigation, or another page control changes the pathname.
+- Query-only changes on the same page do not unexpectedly close the menu.
+
+### Verification evidence
+
+- TDD red failed before the route-aware visibility helper existed; focused tests then passed 2 files / 8 tests.
+- `npm run lint` exited `0`.
+- `npm test` passed 46 files / 194 tests.
+- `npm run build` exited `0` and generated 735 static pages.
+- Local 390 x 844 production-browser history navigation confirmed the menu closed, `aria-expanded` reset, the correct route became active, overflow stayed `0`, and console warnings/errors stayed `0`.
+
+### Next direction
+
+- Stage 3 should refine the mobile navigation's information hierarchy and current-location visibility without increasing the sticky header footprint.
+- Recommended flagship: turn the expanded menu into a clearer route index with stronger current-item semantics and restrained grouping.
+
 ## 2026-06-30 - Long Homepage Cycle 4 Stage 1 / 6 - IMPROVE
 
 ### Scope
