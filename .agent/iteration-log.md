@@ -20,6 +20,10 @@
 - `npm test` passed 47 files / 200 tests.
 - `npm run build` generated 735 static pages.
 - Local 390 x 844 production-browser verification on `/creatures/001` opened the menu, pressed `Escape` from the focused close toggle, and confirmed the menu disappeared, `aria-expanded="false"`, the toggle label returned to `打开主导航`, horizontal overflow `0`, and zero console warnings/errors.
+- Commit `44723a4` was pushed to `origin/main`.
+- GitHub Actions CI run `28409951124` completed successfully.
+- Vercel commit status completed successfully and production deployment `rocodex-958gkjp3r-muguett-dbys-projects.vercel.app` was Ready.
+- Live 390 x 844 verification on `https://rocodex.custard.top/creatures/001` opened the auth-enabled 13-control menu, pressed `Escape` from the focused close toggle, and confirmed the menu disappeared, `aria-expanded="false"`, the toggle label returned to `打开主导航`, horizontal overflow `0`, and zero console warnings/errors.
 
 ### Next direction
 
