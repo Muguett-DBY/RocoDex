@@ -46,10 +46,11 @@ export async function POST(request: Request) {
       user: { id: user.id, username: user.username },
     });
   } catch (error) {
-    console.error("Register error:", error);
     if (isStorageUnavailableError(error)) {
+      console.warn("Register storage unavailable:", error);
       return NextResponse.json({ error: "账号功能暂不可用" }, { status: 503 });
     }
+    console.error("Register error:", error);
     return NextResponse.json({ error: "注册失败，请稍后重试" }, { status: 500 });
   }
 }

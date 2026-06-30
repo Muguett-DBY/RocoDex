@@ -52,10 +52,11 @@ export async function POST(request: Request) {
       user: { id: user.id, username: user.username },
     });
   } catch (error) {
-    console.error("Live registration cleanup error:", error);
     if (isStorageUnavailableError(error)) {
+      console.warn("Live registration cleanup storage unavailable:", error);
       return NextResponse.json({ error: "账号功能暂不可用" }, { status: 503 });
     }
+    console.error("Live registration cleanup error:", error);
     return NextResponse.json({ error: "验收账号清理失败" }, { status: 500 });
   }
 }

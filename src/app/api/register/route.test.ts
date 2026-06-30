@@ -92,11 +92,15 @@ describe("register API route", () => {
 
   it("reports account storage as unavailable when user creation cannot reach Redis", async () => {
     process.env.AUTH_SECRET = "test-secret";
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.mocked(createUser).mockRejectedValue(new TypeError("fetch failed"));
 
     const response = await POST(registerRequest({ username: "tester", password: "secret123" }));
 
     await expect(response.json()).resolves.toEqual({ error: "账号功能暂不可用" });
     expect(response.status).toBe(503);
+    expect(errorSpy).not.toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledWith("Register storage unavailable:", expect.any(TypeError));
   });
 });
