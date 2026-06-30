@@ -5,4 +5,4 @@
 - [x] Add reusable goal-match layout classes.
 - [x] Apply the new action hierarchy and icon-only clear control.
 - [x] Run focused tests, lint, full tests, build, and visual browser checks.
-- [ ] Commit, push `main`, check GitHub Actions, and update logs.
+- [x] Commit, push `main`, check GitHub Actions, and update logs.
