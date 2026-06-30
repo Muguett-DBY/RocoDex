@@ -5,4 +5,4 @@
 - [x] Implement the pure continuation helper.
 - [x] Wire the selected goal panel to the project directory state and scroll target.
 - [x] Run focused tests, lint, full tests, build, and browser checks.
-- [ ] Commit, push `main`, check GitHub Actions, and update logs.
+- [x] Commit, push `main`, check GitHub Actions, and update logs.

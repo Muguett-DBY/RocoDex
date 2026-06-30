@@ -65,11 +65,17 @@
   - `npm test` passed 47 files / 205 tests.
   - `npm run build` generated 735 static pages.
   - Local Edge production checks at 1440 x 1000 and 390 x 844 confirmed the continuation action, preserved goal state, `creative` directory filter, cleared search, directory scroll offset near 96 px, horizontal overflow `0`, and zero console warnings/errors.
+- Commit: `e3f4e80 feat: connect goal matches to project directory`
+- Push: `origin/main` updated to `e3f4e801429816f0e0b40c0ee4c880113869ed9e`.
+- Remote check:
+  - GitHub Actions CI run `28419361689` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live Edge checks at 1440 x 1000 and 390 x 844 confirmed `category=creative&goal=portrait-shooting`, cleared search, preserved goal and category selected states, directory scroll offset near 96 px, horizontal overflow `0`, and zero console warnings/errors.
 - Risk: category continuation intentionally shows the full category, including the matched project itself, because the directory is a comparison surface rather than a strict related-project recommender.
 - Next flagship: Stage 3 should improve the selected-match action hierarchy and touch targets now that the panel contains five distinct next actions.
-- Status: implementation verified locally; remote verification pending
+- Status: closed
 
-- Next stage: Stage 3 / 6 `UIUX` after Stage 2 remote verification
+- Next stage: Stage 3 / 6 `UIUX`
 
 ## Run - 2026-06-30 - Long 6-stage homepage strengthening round 4
 

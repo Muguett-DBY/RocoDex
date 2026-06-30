@@ -1,5 +1,28 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 5 Stage 2 / 6 - IMPROVE
+
+### Scope
+
+- Added a goal-aware project-directory continuation derived from real category metadata and project counts.
+- Preserved the selected goal while applying its category filter, clearing stale search, and scrolling to the directory.
+
+### User-visible change
+
+- After choosing a goal, visitors can now continue into the relevant project category without manually finding the directory or recreating filters.
+
+### Verification evidence
+
+- TDD red reproduced the missing continuation helper; focused tests then passed 2 files / 20 tests.
+- `git diff --check`, `npm run lint`, `npm test`, and `npm run build` passed; full tests passed 47 files / 205 tests and build generated 735 static pages.
+- Local and live Edge checks at 1440 x 1000 and 390 x 844 confirmed goal preservation, category filtering, search clearing, directory scrolling, horizontal overflow `0`, and zero console warnings/errors.
+- Commit `e3f4e80` was pushed to `origin/main`.
+- GitHub Actions CI run `28419361689` and the Vercel deployment both completed successfully.
+
+### Next direction
+
+- Stage 3 should clarify the five-action match panel hierarchy and raise every action to a 44 px minimum touch target.
+
 ## 2026-06-30 - Long Homepage Cycle 5 Stage 1 / 6 - IMPROVE
 
 ### Scope
