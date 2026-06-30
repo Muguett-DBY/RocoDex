@@ -71,7 +71,13 @@ import {
   hasActiveCstdProjectControls,
   type CstdProjectFilter,
 } from "@/lib/cstd-project-filter";
-import { cstdProjectGuides, getCstdProjectGuide, getCstdProjectGuideSummary, type CstdProjectGuideId } from "@/lib/cstd-project-guide";
+import {
+  cstdProjectGuides,
+  getCstdProjectGuide,
+  getCstdProjectGuideDirectoryContinuation,
+  getCstdProjectGuideSummary,
+  type CstdProjectGuideId,
+} from "@/lib/cstd-project-guide";
 import {
   buildCstdProjectViewHref,
   getCstdProjectDirectoryRestoredAction,
@@ -540,6 +546,16 @@ export function CstdLanding() {
     updateProjectDirectoryControls("all", "");
   }
 
+  function browseProjectCategory(filter: CstdProjectFilter) {
+    updateProjectDirectoryControls(filter, "");
+    window.requestAnimationFrame(() => {
+      document.getElementById("project-directory")?.scrollIntoView({
+        behavior: motionDisabled ? "auto" : "smooth",
+        block: "start",
+      });
+    });
+  }
+
   function handleRestoredDirectoryAction() {
     if (!projectDirectoryRestoredAction) return;
     if (projectDirectoryRestoredAction.kind === "reset") {
@@ -933,6 +949,7 @@ export function CstdLanding() {
             guideSummary={projectGuideSummary}
             motionDisabled={motionDisabled}
             selectedGuideId={selectedGuideId}
+            onBrowseCategory={browseProjectCategory}
             onFocus={focusProject}
             onSelect={selectProjectGuide}
             onToggleComparison={toggleProjectComparison}
@@ -1656,6 +1673,7 @@ function ProjectGuide({
   guideSummary,
   motionDisabled,
   selectedGuideId,
+  onBrowseCategory,
   onFocus,
   onSelect,
   onToggleComparison,
@@ -1664,12 +1682,14 @@ function ProjectGuide({
   guideSummary: ReturnType<typeof getCstdProjectGuideSummary>;
   motionDisabled: boolean;
   selectedGuideId: CstdProjectGuideId | null;
+  onBrowseCategory: (filter: CstdProjectFilter) => void;
   onFocus: (projectId: string) => void;
   onSelect: (guideId: CstdProjectGuideId | null) => void;
   onToggleComparison: (projectId: string) => void;
 }) {
   const selectedGuide = getCstdProjectGuide(selectedGuideId);
   const selectedProject = selectedGuide ? cstdProjects.find((project) => project.id === selectedGuide.projectId) ?? null : null;
+  const directoryContinuation = getCstdProjectGuideDirectoryContinuation(selectedGuide, cstdProjects);
   const comparisonControl = selectedProject ? getCstdProjectComparisonControl(comparedProjectIds, selectedProject.id) : null;
 
   return (
@@ -1767,6 +1787,17 @@ function ProjectGuide({
                 >
                   打开项目 <ExternalLink className="h-4 w-4" />
                 </Link>
+                {directoryContinuation ? (
+                  <button
+                    type="button"
+                    onClick={() => onBrowseCategory(directoryContinuation.category)}
+                    aria-label={directoryContinuation.summary}
+                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#b8d7f5] bg-[#f2f8ff] px-3 text-sm font-black text-[#315b7f] transition hover:-translate-y-0.5 hover:border-[#2563eb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
+                  >
+                    <Search className="h-4 w-4" />
+                    浏览{directoryContinuation.categoryLabel} · {directoryContinuation.projectCount}
+                  </button>
+                ) : null}
                 <button
                   type="button"
                   onClick={() => onSelect(null)}

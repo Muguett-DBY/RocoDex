@@ -45,7 +45,31 @@
 - Next flagship: Stage 2 should turn the full live-project guide coverage into a clearer project-directory continuation, so visitors who pick a goal can move from match to evidence, comparison, or directory without rescanning.
 - Status: closed
 
-- Next stage: Stage 2 / 6 `IMPROVE`
+### Stage 2
+
+- Stage number: 2 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: connect a selected homepage goal to a filtered project directory without forcing visitors to rescan the whole portfolio.
+- Design: `docs/superpowers/specs/2026-06-30-cstd-goal-directory-continuation-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-cstd-goal-directory-continuation.md`
+- Implemented:
+  - Added `getCstdProjectGuideDirectoryContinuation` to derive the matched category, category label, current project count, project title, and continuation summary from source data.
+  - Added a goal-aware directory action to the selected match panel.
+  - Reused the existing project-view URL state so the action preserves `goal`, selects the matched `category`, clears stale `q`, and removes stale project focus.
+  - Added reduced-motion-aware scrolling to the existing `project-directory` target.
+- Verification recorded before commit:
+  - TDD red failed because the continuation helper did not exist.
+  - Focused tests passed 2 files / 20 tests.
+  - `npm run lint` passed.
+  - `npm test` passed 47 files / 205 tests.
+  - `npm run build` generated 735 static pages.
+  - Local Edge production checks at 1440 x 1000 and 390 x 844 confirmed the continuation action, preserved goal state, `creative` directory filter, cleared search, directory scroll offset near 96 px, horizontal overflow `0`, and zero console warnings/errors.
+- Risk: category continuation intentionally shows the full category, including the matched project itself, because the directory is a comparison surface rather than a strict related-project recommender.
+- Next flagship: Stage 3 should improve the selected-match action hierarchy and touch targets now that the panel contains five distinct next actions.
+- Status: implementation verified locally; remote verification pending
+
+- Next stage: Stage 3 / 6 `UIUX` after Stage 2 remote verification
 
 ## Run - 2026-06-30 - Long 6-stage homepage strengthening round 4
 

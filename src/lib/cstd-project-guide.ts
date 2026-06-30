@@ -1,4 +1,5 @@
 import type { CstdProject } from "./cstd-projects";
+import { cstdProjectFilters } from "./cstd-project-filter";
 
 type CstdProjectId = CstdProject["id"];
 
@@ -65,5 +66,28 @@ export function getCstdProjectGuideSummary(guides: readonly CstdProjectGuide[], 
     matchedLiveProjectCount: matchedLiveProjectIds.size,
     summary: `${guides.length} 条目标路径覆盖 ${matchedLiveProjectIds.size} / ${liveProjectIds.size} 个上线项目`,
     uncoveredLiveProjectTitles,
+  };
+}
+
+export function getCstdProjectGuideDirectoryContinuation(
+  guide: CstdProjectGuide | null,
+  projects: readonly CstdProject[],
+) {
+  if (!guide) return null;
+
+  const project = projects.find((item) => item.id === guide.projectId);
+  if (!project) return null;
+
+  const categoryLabel = cstdProjectFilters.find((filter) => filter.id === project.category)?.label;
+  if (!categoryLabel) return null;
+
+  const projectCount = projects.filter((item) => item.category === project.category).length;
+
+  return {
+    category: project.category,
+    categoryLabel,
+    projectCount,
+    projectTitle: project.title,
+    summary: projectCount > 1 ? `在 ${projectCount} 个${categoryLabel}项目中继续比较` : `在项目目录中查看${categoryLabel}`,
   };
 }
