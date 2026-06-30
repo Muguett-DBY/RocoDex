@@ -76,6 +76,7 @@ import {
   getCstdProjectGuide,
   getCstdProjectGuideCopyPresentation,
   getCstdProjectGuideDirectoryContinuation,
+  getCstdProjectGuideRestoredReceipt,
   getCstdProjectGuideSummary,
   type CstdProjectGuideId,
 } from "@/lib/cstd-project-guide";
@@ -87,6 +88,7 @@ import {
   getCstdProjectFocusRestoredAction,
   getCstdProjectFocusRestoredReceipt,
   hasActiveCstdProjectViewState,
+  isCstdProjectGuideShareRestored,
   parseCstdProjectViewState,
   type CstdProjectFocusRestoredAction,
   type CstdProjectRestoredReceipt,
@@ -226,6 +228,7 @@ export function CstdLanding() {
   const [projectSearchQuery, setProjectSearchQuery] = useState("");
   const [projectViewStateSynced, setProjectViewStateSynced] = useState(false);
   const [projectDirectoryRestoredFromUrl, setProjectDirectoryRestoredFromUrl] = useState(false);
+  const [projectGuideRestoredFromUrl, setProjectGuideRestoredFromUrl] = useState(false);
   const [projectFocusRestoredFromUrl, setProjectFocusRestoredFromUrl] = useState(false);
   const [projectViewStateRestoredFromUrl, setProjectViewStateRestoredFromUrl] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -280,6 +283,7 @@ export function CstdLanding() {
       setProjectGuideCopyResult(null);
       setProjectGuideShareUrl("");
       setProjectDirectoryRestoredFromUrl(hasRestoredProjectViewState && (viewState.filter !== "all" || viewState.query.length > 0));
+      setProjectGuideRestoredFromUrl(isCstdProjectGuideShareRestored(viewState));
       setProjectFocusRestoredFromUrl(hasRestoredProjectViewState && viewState.projectId !== null);
       setProjectViewStateRestoredFromUrl(hasRestoredProjectViewState && viewState.compareProjectIds.length > 0);
       setProjectViewStateSynced(true);
@@ -491,6 +495,7 @@ export function CstdLanding() {
 
   function clearRestoredProjectViewReceipts() {
     setProjectDirectoryRestoredFromUrl(false);
+    setProjectGuideRestoredFromUrl(false);
     setProjectFocusRestoredFromUrl(false);
     setProjectViewStateRestoredFromUrl(false);
   }
@@ -981,6 +986,7 @@ export function CstdLanding() {
             guideSummary={projectGuideSummary}
             motionDisabled={motionDisabled}
             projectGuideCopyResult={projectGuideCopyResult}
+            projectGuideRestoredFromUrl={projectGuideRestoredFromUrl}
             projectGuideShareUrl={projectGuideShareUrl}
             selectedGuideId={selectedGuideId}
             onBrowseCategory={browseProjectCategory}
@@ -1708,6 +1714,7 @@ function ProjectGuide({
   guideSummary,
   motionDisabled,
   projectGuideCopyResult,
+  projectGuideRestoredFromUrl,
   projectGuideShareUrl,
   selectedGuideId,
   onBrowseCategory,
@@ -1720,6 +1727,7 @@ function ProjectGuide({
   guideSummary: ReturnType<typeof getCstdProjectGuideSummary>;
   motionDisabled: boolean;
   projectGuideCopyResult: CstdProjectCopyResult | null;
+  projectGuideRestoredFromUrl: boolean;
   projectGuideShareUrl: string;
   selectedGuideId: CstdProjectGuideId | null;
   onBrowseCategory: (filter: CstdProjectFilter) => void;
@@ -1734,6 +1742,10 @@ function ProjectGuide({
   const comparisonControl = selectedProject ? getCstdProjectComparisonControl(comparedProjectIds, selectedProject.id) : null;
   const guideCopyPresentation = selectedGuide ? getCstdProjectGuideCopyPresentation(projectGuideCopyResult, selectedGuide.goal) : null;
   const guideCopyToneClassName = guideCopyPresentation?.tone === "warning" ? "text-[#8a4b15]" : "text-[#047857]";
+  const guideRestoredReceipt = getCstdProjectGuideRestoredReceipt(
+    projectGuideRestoredFromUrl ? selectedGuide : null,
+    selectedProject?.title ?? null,
+  );
 
   return (
     <div id="project-guide" className="mb-5 scroll-mt-24" aria-label={guideSummary.summary}>
@@ -1808,6 +1820,12 @@ function ProjectGuide({
                   {selectedProject.title}
                 </h4>
                 <p className="mt-2 text-sm font-semibold leading-6 text-[#416354]">{selectedGuide.reason}</p>
+                {guideRestoredReceipt ? (
+                  <div aria-label="分享目标恢复状态" aria-live="polite" className="mt-3 rounded-lg border border-[#9bd9bf]/70 bg-white/62 px-3 py-2">
+                    <p className="text-xs font-black text-[#047857]">{guideRestoredReceipt.label}</p>
+                    <p className="mt-1 text-xs font-semibold leading-5 text-[#355b4a]">{guideRestoredReceipt.detail}</p>
+                  </div>
+                ) : null}
                 {guideCopyPresentation ? (
                   <p role="status" className={`mt-2 text-xs font-black leading-5 ${guideCopyToneClassName}`}>
                     {guideCopyPresentation.message}

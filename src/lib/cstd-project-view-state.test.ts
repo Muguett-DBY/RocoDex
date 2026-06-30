@@ -8,6 +8,7 @@ import {
   getCstdProjectFocusRestoredAction,
   getCstdProjectFocusRestoredReceipt,
   hasActiveCstdProjectViewState,
+  isCstdProjectGuideShareRestored,
   parseCstdProjectViewState,
 } from "./cstd-project-view-state";
 
@@ -82,6 +83,13 @@ describe("CSTD project view state", () => {
     );
     expect(buildCstdProjectGuideShareHref("/cstd", "unknown")).toBeNull();
     expect(buildCstdProjectGuideShareHref("/cstd", null)).toBeNull();
+  });
+
+  it("identifies clean restored guide-share state without colliding with richer restored states", () => {
+    expect(isCstdProjectGuideShareRestored(parseCstdProjectViewState("?goal=portrait-shooting"))).toBe(true);
+    expect(isCstdProjectGuideShareRestored(parseCstdProjectViewState("?category=creative&goal=portrait-shooting"))).toBe(false);
+    expect(isCstdProjectGuideShareRestored(parseCstdProjectViewState("?goal=portrait-shooting&project=photography"))).toBe(false);
+    expect(isCstdProjectGuideShareRestored(parseCstdProjectViewState("?goal=portrait-shooting&compare=design,crm"))).toBe(false);
   });
 
   it("detects only valid active view state for automatic intro gating", () => {

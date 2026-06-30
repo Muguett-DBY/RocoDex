@@ -6,6 +6,7 @@ import {
   getCstdProjectGuideCopyMessage,
   getCstdProjectGuideCopyPresentation,
   getCstdProjectGuideDirectoryContinuation,
+  getCstdProjectGuideRestoredReceipt,
   getCstdProjectGuideSummary,
 } from "./cstd-project-guide";
 import { cstdProjects } from "./cstd-projects";
@@ -98,5 +99,14 @@ describe("CSTD project guide", () => {
       requiresManualCopy: true,
       tone: "warning",
     });
+  });
+
+  it("explains restored goal-share links without changing their URL contract", () => {
+    expect(getCstdProjectGuideRestoredReceipt(getCstdProjectGuide("portrait-shooting"), "奶黄包摄影")).toEqual({
+      detail: "预约南京写真或情侣约拍已从分享链接恢复，当前推荐奶黄包摄影。",
+      label: "目标路径已恢复",
+    });
+    expect(getCstdProjectGuideRestoredReceipt(null, "奶黄包摄影")).toBeNull();
+    expect(getCstdProjectGuideRestoredReceipt(getCstdProjectGuide("portrait-shooting"), "")).toBeNull();
   });
 });
