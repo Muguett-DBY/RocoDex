@@ -1,6 +1,7 @@
 import type { CstdProject } from "./cstd-projects";
 import { cstdProjectFilters } from "./cstd-project-filter";
 import type { CstdProjectCopyResult } from "./cstd-project-focus";
+import type { CstdProjectRestoredReceipt } from "./cstd-project-view-state";
 
 type CstdProjectId = CstdProject["id"];
 
@@ -120,5 +121,18 @@ export function getCstdProjectGuideCopyPresentation(
     message: result === "unsupported" ? "浏览器不支持自动复制，请手动复制下方目标路径" : "目标路径复制失败，请手动复制下方链接",
     requiresManualCopy: true,
     tone: "warning",
+  };
+}
+
+export function getCstdProjectGuideRestoredReceipt(
+  guide: CstdProjectGuide | null,
+  projectTitle: string | null,
+): CstdProjectRestoredReceipt | null {
+  const title = projectTitle?.trim();
+  if (!guide || !title) return null;
+
+  return {
+    detail: `${guide.goal}已从分享链接恢复，当前推荐${title}。`,
+    label: "目标路径已恢复",
   };
 }

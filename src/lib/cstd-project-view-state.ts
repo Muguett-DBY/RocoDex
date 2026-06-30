@@ -93,6 +93,16 @@ export function buildCstdProjectGuideShareHref(pathname: string, guideId: string
   );
 }
 
+export function isCstdProjectGuideShareRestored(state: CstdProjectViewState) {
+  return (
+    state.filter === "all" &&
+    state.query.trim().length === 0 &&
+    state.guideId !== null &&
+    state.projectId === null &&
+    state.compareProjectIds.length === 0
+  );
+}
+
 export function getCstdProjectDirectoryRestoredReceipt({
   filter,
   query,
