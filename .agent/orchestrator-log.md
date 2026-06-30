@@ -22,7 +22,30 @@
   - The live photography project is present in the directory but not represented in the first-scan goal guide.
 - Design: `docs/superpowers/specs/2026-06-30-cstd-goal-guide-live-coverage-design.md`
 - Plan: `docs/superpowers/plans/2026-06-30-cstd-goal-guide-live-coverage.md`
-- Status: in progress
+- Implemented:
+  - Added a `portrait-shooting` visitor goal for the live photography project.
+  - Added `getCstdProjectGuideSummary` to derive goal count, live-project coverage, and uncovered live-project titles from real project data.
+  - Replaced the hard-coded `4 条路径` guide count and workflow next-action copy with derived guide summary/count.
+  - Adjusted the desktop goal-guide grid to five columns so the five live-project paths scan as one row on wide screens.
+- Verification recorded before commit:
+  - TDD red failed on missing photography guide coverage, missing summary helper, and stale `4 条目标路径` workflow copy.
+  - Focused tests passed 2 files / 11 tests.
+  - `git diff --check` passed after removing one stage-log trailing space.
+  - `npm run lint` passed.
+  - `npm test` passed 47 files / 204 tests.
+  - `npm run build` generated 735 static pages.
+  - Local Edge production checks at 1440 x 1000 and 390 x 844 confirmed 5 guide cards, the coverage text `5 条目标路径覆盖 5 / 5 个上线项目`, the photography goal path, match heading `奶黄包摄影`, horizontal overflow `0`, and zero console warnings/errors.
+- Commit: `ffbb3da feat: cover live projects in cstd goal guide`
+- Push: `origin/main` updated to `ffbb3dab4d2ae2e2670bde3dcc41a11765412f8d`.
+- Remote check:
+  - GitHub Actions CI run `28418862325` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live Edge checks at 1440 x 1000 and 390 x 844 on `https://custard.top/#projects` confirmed the same guide coverage text, photography goal path, `奶黄包摄影` match, horizontal overflow `0`, and zero console warnings/errors.
+- Risk: the guide coverage helper intentionally counts live projects only; incubating projects stay out of goal-path coverage until promoted to `Live`.
+- Next flagship: Stage 2 should turn the full live-project guide coverage into a clearer project-directory continuation, so visitors who pick a goal can move from match to evidence, comparison, or directory without rescanning.
+- Status: closed
+
+- Next stage: Stage 2 / 6 `IMPROVE`
 
 ## Run - 2026-06-30 - Long 6-stage homepage strengthening round 4
 

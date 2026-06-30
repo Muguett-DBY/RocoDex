@@ -1,5 +1,32 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 5 Stage 1 / 6 - IMPROVE
+
+### Scope
+
+- Continued from the completed navigation-hardening loop by moving back to CSTD personal project homepage product direction.
+- Added a `portrait-shooting` goal-guide path for the live photography project.
+- Added guide coverage summary logic so the homepage now states `5 条目标路径覆盖 5 / 5 个上线项目`.
+- Replaced stale fixed `4 条路径` workflow copy with a derived goal count and adjusted the desktop goal grid to five columns.
+
+### User-visible change
+
+- Visitors can now choose `预约南京写真或情侣约拍` from the first-scan goal guide and land directly on the `奶黄包摄影` match.
+
+### Verification evidence
+
+- TDD red reproduced the missing photography goal path, missing coverage summary helper, and stale fixed path count.
+- Focused tests passed 2 files / 11 tests.
+- `git diff --check`, `npm run lint`, `npm test`, and `npm run build` passed; full tests passed 47 files / 204 tests and build generated 735 static pages.
+- Local and live Edge checks at 1440 x 1000 and 390 x 844 confirmed 5 goal cards, full live-project coverage text, photography match behavior, horizontal overflow `0`, and zero console warnings/errors.
+- Commit `ffbb3da` was pushed to `origin/main`.
+- GitHub Actions CI run `28418862325` completed successfully.
+- Vercel commit status completed successfully with description `Deployment has completed`.
+
+### Next direction
+
+- Stage 2 should turn the complete live-project goal guide into a stronger continuation path, especially after a visitor has selected a goal and needs to choose between evidence, comparison, directory, or opening the live project.
+
 ## 2026-06-30 - Long Homepage Cycle 4 Stage 6 / 6 - IMPROVE
 
 ### Scope
