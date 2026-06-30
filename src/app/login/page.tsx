@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAccountServiceStatus } from "@/hooks/use-account-service-status";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -13,10 +14,24 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const accountStatus = useAccountServiceStatus();
+  const isAccountBlocked = accountStatus?.state !== "ready";
+  const blockedAccountStatus = accountStatus && accountStatus.state !== "ready" ? accountStatus : null;
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError("");
+
+    if (!accountStatus) {
+      setError("正在确认账号服务状态，请稍后再试。");
+      return;
+    }
+
+    if (blockedAccountStatus) {
+      setError(blockedAccountStatus.message);
+      return;
+    }
+
     setLoading(true);
 
     const result = await signIn("credentials", {
@@ -44,6 +59,21 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {!accountStatus ? (
+            <div role="status" className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
+              <p className="font-semibold">正在检查账号服务</p>
+              <p className="mt-1 leading-5">确认注册与登录是否可用，请稍候。</p>
+            </div>
+          ) : blockedAccountStatus ? (
+            <div role="status" className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+              <p className="font-semibold">{blockedAccountStatus.title}</p>
+              <p className="mt-1 leading-5">{blockedAccountStatus.message}</p>
+              <Link href={blockedAccountStatus.actionHref} className="mt-2 inline-flex font-semibold text-amber-950 underline underline-offset-4">
+                {blockedAccountStatus.actionLabel}
+              </Link>
+            </div>
+          ) : null}
+
           {error ? (
             <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
               {error}
@@ -79,7 +109,7 @@ export default function LoginPage() {
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" className="w-full" disabled={loading || isAccountBlocked}>
             {loading ? "登录中..." : "登录"}
           </Button>
         </form>

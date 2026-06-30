@@ -1805,3 +1805,27 @@
 ### Next direction
 
 - Extend the same availability and recovery behavior to login so storage outages cannot be mistaken for invalid credentials.
+
+## 2026-07-01 - Long Homepage Risk Repair Stage 2 / 6 - IMPROVE
+
+### Scope
+
+- Added a shared bounded client account-status fetcher with a 6 second abort and unavailable fallback behavior.
+- Added a client hook for login and registration so both pages use the same availability state.
+- Added explicit checking feedback to login and registration, kept submit disabled until the account service is ready, and exposed the same local-collection recovery action on login.
+
+### User-visible change
+
+- Visitors no longer wait indefinitely for the account-status probe when production storage is stale.
+- Login no longer attempts credential auth while account storage is checking or unavailable, avoiding a misleading invalid-credentials experience.
+
+### Verification evidence
+
+- TDD red/green covered the shared client fetcher, login blocking/recovery behavior, and registration checking behavior; focused green tests passed 5 files / 13 tests.
+- `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed locally.
+- Final local counts: Vitest 58 files / 245 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages; npm audit found 0 vulnerabilities.
+- Local production Browser at 390 x 844 confirmed login and registration show checking states, switch to unavailable after the bounded wait, keep submit disabled, expose `/collection`, click through from login to `/collection`, have horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
+
+### Risk notes
+
+- Production account creation still requires a valid external Upstash/Vercel storage endpoint; the repository now presents a bounded and recoverable outage path while that dependency remains unavailable.

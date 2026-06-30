@@ -45,6 +45,33 @@
 - Next flagship: Stage 2 should turn the full live-project guide coverage into a clearer project-directory continuation, so visitors who pick a goal can move from match to evidence, comparison, or directory without rescanning.
 - Status: closed
 
+## 2026-07-01 Long Homepage Risk Repair Cycle - Stage 2 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Start state: `main` matched `origin/main` at `84cae8f`; Stage 1 implementation and evidence CI runs `28456491877` and `28456733018` passed; worktree was clean.
+- Flagship goal: bound the delayed account status probe, explain the checking state, and prevent login storage failures from appearing as invalid credentials.
+- Design: `docs/superpowers/specs/2026-07-01-account-status-client-design.md`
+- Plan: `docs/superpowers/plans/2026-07-01-account-status-client.md`
+- Implemented:
+  - Added a shared client account-status fetcher with a 6 second abort, `cache: "no-store"`, response-shape validation, and unavailable fallback behavior for timeout, fetch failure, invalid payload, and non-OK responses.
+  - Added `useAccountServiceStatus` so login and registration share the same bounded availability probe.
+  - Added explicit checking states to login and registration, kept submit disabled until the account service is ready, and extended the local-collection recovery action to login.
+  - Prevented login credential submission while account storage is still checking or blocked, so storage outages cannot be reported as invalid credentials.
+- Verification recorded before commit:
+  - TDD red reproduced the missing shared client helper, login recovery state, and registration checking state; focused green tests passed 5 files / 13 tests.
+  - `npm run lint` exited `0`.
+  - `npx tsc --noEmit` exited `0`.
+  - `npm test` passed 58 files / 245 tests.
+  - `npm run build` exited `0`, generated 734 static pages, and kept `/api/account-status`, `/login`, and `/register` dynamic.
+  - `npm run test:e2e` passed 3 tests with 1 environment-dependent registration test skipped.
+  - `npm audit --json` reported 0 vulnerabilities.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - Local production Browser at 390 x 844 on port `3104` confirmed login and registration show the checking state, switch to the unavailable state after the bounded client wait, keep submit disabled, expose `/collection`, click through from login to `/collection`, have horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
+  - Local screenshots: `C:/Users/12031/AppData/Local/Temp/rocodex-stage2-login-mobile-rerun.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage2-register-mobile-rerun.png`.
+- Risk: successful production registration still depends on corrected external Upstash/Vercel credentials; this stage bounds and explains the outage path but does not replace the missing storage endpoint.
+- Status: local verified; commit and remote checks pending
+
 ### Stage 2
 
 - Stage number: 2 / 6
