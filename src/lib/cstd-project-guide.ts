@@ -13,6 +13,11 @@ export type CstdProjectGuide = {
   reason: string;
   projectId: CstdProjectId;
 };
+export type CstdProjectGuideCopyPresentation = {
+  message: string;
+  requiresManualCopy: boolean;
+  tone: "success" | "warning";
+};
 
 export const cstdProjectGuides: readonly CstdProjectGuide[] = [
   {
@@ -94,8 +99,26 @@ export function getCstdProjectGuideDirectoryContinuation(
 }
 
 export function getCstdProjectGuideCopyMessage(result: CstdProjectCopyResult | null, goal: string) {
+  return getCstdProjectGuideCopyPresentation(result, goal)?.message ?? null;
+}
+
+export function getCstdProjectGuideCopyPresentation(
+  result: CstdProjectCopyResult | null,
+  goal: string,
+): CstdProjectGuideCopyPresentation | null {
   if (!result) return null;
-  if (result === "copied") return `${goal}的目标路径已复制`;
-  if (result === "unsupported") return "浏览器不支持自动复制，请手动复制下方目标路径";
-  return "目标路径复制失败，请手动复制下方链接";
+
+  if (result === "copied") {
+    return {
+      message: `${goal}的目标路径已复制`,
+      requiresManualCopy: false,
+      tone: "success",
+    };
+  }
+
+  return {
+    message: result === "unsupported" ? "浏览器不支持自动复制，请手动复制下方目标路径" : "目标路径复制失败，请手动复制下方链接",
+    requiresManualCopy: true,
+    tone: "warning",
+  };
 }

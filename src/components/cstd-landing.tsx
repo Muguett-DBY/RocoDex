@@ -74,7 +74,7 @@ import {
 import {
   cstdProjectGuides,
   getCstdProjectGuide,
-  getCstdProjectGuideCopyMessage,
+  getCstdProjectGuideCopyPresentation,
   getCstdProjectGuideDirectoryContinuation,
   getCstdProjectGuideSummary,
   type CstdProjectGuideId,
@@ -1732,7 +1732,8 @@ function ProjectGuide({
   const selectedProject = selectedGuide ? cstdProjects.find((project) => project.id === selectedGuide.projectId) ?? null : null;
   const directoryContinuation = getCstdProjectGuideDirectoryContinuation(selectedGuide, cstdProjects);
   const comparisonControl = selectedProject ? getCstdProjectComparisonControl(comparedProjectIds, selectedProject.id) : null;
-  const guideCopyMessage = selectedGuide ? getCstdProjectGuideCopyMessage(projectGuideCopyResult, selectedGuide.goal) : null;
+  const guideCopyPresentation = selectedGuide ? getCstdProjectGuideCopyPresentation(projectGuideCopyResult, selectedGuide.goal) : null;
+  const guideCopyToneClassName = guideCopyPresentation?.tone === "warning" ? "text-[#8a4b15]" : "text-[#047857]";
 
   return (
     <div id="project-guide" className="mb-5 scroll-mt-24" aria-label={guideSummary.summary}>
@@ -1807,12 +1808,12 @@ function ProjectGuide({
                   {selectedProject.title}
                 </h4>
                 <p className="mt-2 text-sm font-semibold leading-6 text-[#416354]">{selectedGuide.reason}</p>
-                {guideCopyMessage ? (
-                  <p role="status" className="mt-2 text-xs font-black leading-5 text-[#047857]">
-                    {guideCopyMessage}
+                {guideCopyPresentation ? (
+                  <p role="status" className={`mt-2 text-xs font-black leading-5 ${guideCopyToneClassName}`}>
+                    {guideCopyPresentation.message}
                   </p>
                 ) : null}
-                {projectGuideCopyResult && projectGuideCopyResult !== "copied" && projectGuideShareUrl ? (
+                {guideCopyPresentation?.requiresManualCopy && projectGuideShareUrl ? (
                   <input
                     aria-label="目标路径链接"
                     className="mt-2 h-11 w-full rounded-lg border border-[#b7decf] bg-white/82 px-3 text-xs font-semibold text-[#315b7f] outline-none focus:border-[#0f8f64] focus:ring-2 focus:ring-[#0f8f64]/20"

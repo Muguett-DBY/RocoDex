@@ -4,6 +4,7 @@ import {
   cstdProjectGuides,
   getCstdProjectGuide,
   getCstdProjectGuideCopyMessage,
+  getCstdProjectGuideCopyPresentation,
   getCstdProjectGuideDirectoryContinuation,
   getCstdProjectGuideSummary,
 } from "./cstd-project-guide";
@@ -79,5 +80,23 @@ describe("CSTD project guide", () => {
     expect(getCstdProjectGuideCopyMessage("failed", "预约南京写真或情侣约拍")).toBe(
       "目标路径复制失败，请手动复制下方链接",
     );
+  });
+
+  it("marks failed goal-share copy outcomes as manual-copy warnings", () => {
+    expect(getCstdProjectGuideCopyPresentation("copied", "预约南京写真或情侣约拍")).toEqual({
+      message: "预约南京写真或情侣约拍的目标路径已复制",
+      requiresManualCopy: false,
+      tone: "success",
+    });
+    expect(getCstdProjectGuideCopyPresentation("unsupported", "预约南京写真或情侣约拍")).toEqual({
+      message: "浏览器不支持自动复制，请手动复制下方目标路径",
+      requiresManualCopy: true,
+      tone: "warning",
+    });
+    expect(getCstdProjectGuideCopyPresentation("failed", "预约南京写真或情侣约拍")).toEqual({
+      message: "目标路径复制失败，请手动复制下方链接",
+      requiresManualCopy: true,
+      tone: "warning",
+    });
   });
 });
