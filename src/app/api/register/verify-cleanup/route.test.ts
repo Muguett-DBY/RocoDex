@@ -103,6 +103,8 @@ describe("live registration cleanup API route", () => {
   });
 
   it("reports account storage as unavailable when Redis cannot be reached", async () => {
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     vi.mocked(findUserByUsername).mockRejectedValue(new TypeError("fetch failed"));
 
     const response = await POST(
@@ -116,5 +118,7 @@ describe("live registration cleanup API route", () => {
     await expect(response.json()).resolves.toEqual({ error: "账号功能暂不可用" });
     expect(response.status).toBe(503);
     expect(deleteUserByUsername).not.toHaveBeenCalled();
+    expect(errorSpy).not.toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledWith("Live registration cleanup storage unavailable:", expect.any(TypeError));
   });
 });
