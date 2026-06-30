@@ -1,5 +1,6 @@
 import { createUser, findUserByUsername } from "@/lib/db";
 import { isAuthConfigured } from "@/lib/auth-availability";
+import { isStorageUnavailableError } from "@/lib/storage-errors";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
@@ -46,6 +47,9 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Register error:", error);
+    if (isStorageUnavailableError(error)) {
+      return NextResponse.json({ error: "账号功能暂不可用" }, { status: 503 });
+    }
     return NextResponse.json({ error: "注册失败，请稍后重试" }, { status: 500 });
   }
 }

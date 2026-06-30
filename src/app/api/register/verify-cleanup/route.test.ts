@@ -101,4 +101,20 @@ describe("live registration cleanup API route", () => {
     expect(response.status).toBe(200);
     expect(deleteUserByUsername).toHaveBeenCalledWith("qa-mqzw89a8-a1b2");
   });
+
+  it("reports account storage as unavailable when Redis cannot be reached", async () => {
+    vi.mocked(findUserByUsername).mockRejectedValue(new TypeError("fetch failed"));
+
+    const response = await POST(
+      cleanupRequest({
+        username: "qa-mqzw89a8-a1b2",
+        password: "secret123",
+        confirm: "delete-live-registration-user",
+      }),
+    );
+
+    await expect(response.json()).resolves.toEqual({ error: "账号功能暂不可用" });
+    expect(response.status).toBe(503);
+    expect(deleteUserByUsername).not.toHaveBeenCalled();
+  });
 });
