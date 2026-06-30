@@ -89,12 +89,13 @@ describe("CSTD project workflow action", () => {
       getCstdProjectWorkflowAction({
         compareCount: 0,
         compareLimit: 2,
+        guideCount: 5,
         hasGuide: false,
       }),
     ).toEqual({
       href: "#project-guide",
       label: "先选择访问目标",
-      detail: "从 4 条目标路径开始",
+      detail: "从 5 条目标路径开始",
     });
   });
 
@@ -103,6 +104,7 @@ describe("CSTD project workflow action", () => {
       getCstdProjectWorkflowAction({
         compareCount: 0,
         compareLimit: 2,
+        guideCount: 5,
         hasGuide: true,
       }),
     ).toEqual({
@@ -117,6 +119,7 @@ describe("CSTD project workflow action", () => {
       getCstdProjectWorkflowAction({
         compareCount: 1,
         compareLimit: 2,
+        guideCount: 5,
         hasGuide: true,
       }),
     ).toEqual({
@@ -131,6 +134,7 @@ describe("CSTD project workflow action", () => {
       getCstdProjectWorkflowAction({
         compareCount: 2,
         compareLimit: 2,
+        guideCount: 5,
         hasGuide: true,
       }),
     ).toEqual({

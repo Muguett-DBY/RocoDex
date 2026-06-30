@@ -71,7 +71,7 @@ import {
   hasActiveCstdProjectControls,
   type CstdProjectFilter,
 } from "@/lib/cstd-project-filter";
-import { cstdProjectGuides, getCstdProjectGuide, type CstdProjectGuideId } from "@/lib/cstd-project-guide";
+import { cstdProjectGuides, getCstdProjectGuide, getCstdProjectGuideSummary, type CstdProjectGuideId } from "@/lib/cstd-project-guide";
 import {
   buildCstdProjectViewHref,
   getCstdProjectDirectoryRestoredAction,
@@ -180,6 +180,7 @@ const homepageAcceptanceSummary = getCstdHomepageAcceptanceSummary(cstdHomepageA
 const projectEvidenceOverview = getCstdProjectEvidenceOverview(cstdProjects);
 const projectProofTimeline = getCstdProjectProofTimeline(cstdProjects);
 const projectCapabilityIndex = getCstdProjectCapabilityIndex(cstdProjects);
+const projectGuideSummary = getCstdProjectGuideSummary(cstdProjectGuides, cstdProjects);
 
 function getCstdClipboardWriter() {
   if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) return undefined;
@@ -363,6 +364,7 @@ export function CstdLanding() {
   const projectWorkflowAction = getCstdProjectWorkflowAction({
     compareCount: projectComparison.projects.length,
     compareLimit: CSTD_PROJECT_COMPARISON_LIMIT,
+    guideCount: projectGuideSummary.goalCount,
     hasGuide: Boolean(selectedGuide),
   });
   const selectedProject = useMemo(
@@ -928,6 +930,7 @@ export function CstdLanding() {
 
           <ProjectGuide
             comparedProjectIds={comparedProjectIds}
+            guideSummary={projectGuideSummary}
             motionDisabled={motionDisabled}
             selectedGuideId={selectedGuideId}
             onFocus={focusProject}
@@ -1650,6 +1653,7 @@ function ProjectWorkflowSummary({
 
 function ProjectGuide({
   comparedProjectIds,
+  guideSummary,
   motionDisabled,
   selectedGuideId,
   onFocus,
@@ -1657,6 +1661,7 @@ function ProjectGuide({
   onToggleComparison,
 }: {
   comparedProjectIds: readonly string[];
+  guideSummary: ReturnType<typeof getCstdProjectGuideSummary>;
   motionDisabled: boolean;
   selectedGuideId: CstdProjectGuideId | null;
   onFocus: (projectId: string) => void;
@@ -1668,15 +1673,15 @@ function ProjectGuide({
   const comparisonControl = selectedProject ? getCstdProjectComparisonControl(comparedProjectIds, selectedProject.id) : null;
 
   return (
-    <div id="project-guide" className="mb-5 scroll-mt-24">
+    <div id="project-guide" className="mb-5 scroll-mt-24" aria-label={guideSummary.summary}>
       <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#0f8f64]">Goal guide</p>
           <h3 className="mt-1 text-xl font-black text-[#2f241d] sm:text-2xl">按目标找项目</h3>
         </div>
-        <p className="text-xs font-semibold text-[#7b6656]">4 条路径</p>
+        <p className="text-xs font-semibold text-[#7b6656]">{guideSummary.summary}</p>
       </div>
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
         {cstdProjectGuides.map((guide) => {
           const project = cstdProjects.find((item) => item.id === guide.projectId);
           if (!project) return null;

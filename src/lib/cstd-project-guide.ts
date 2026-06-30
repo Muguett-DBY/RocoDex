@@ -1,8 +1,8 @@
-import type { cstdProjects } from "./cstd-projects";
+import type { CstdProject } from "./cstd-projects";
 
-type CstdProjectId = (typeof cstdProjects)[number]["id"];
+type CstdProjectId = CstdProject["id"];
 
-export const cstdProjectGuideIds = ["game-data", "company-research", "ai-creation", "park-operations"] as const;
+export const cstdProjectGuideIds = ["game-data", "portrait-shooting", "company-research", "ai-creation", "park-operations"] as const;
 export type CstdProjectGuideId = (typeof cstdProjectGuideIds)[number];
 
 export type CstdProjectGuide = {
@@ -18,6 +18,12 @@ export const cstdProjectGuides: readonly CstdProjectGuide[] = [
     goal: "查精灵资料与玩法工具",
     reason: "从搜索、对比、收藏到 PVP 阵容进入 RocoDex。",
     projectId: "rocodex",
+  },
+  {
+    id: "portrait-shooting",
+    goal: "预约南京写真或情侣约拍",
+    reason: "从风格、套餐和预约路径进入奶黄包摄影。",
+    projectId: "photography",
   },
   {
     id: "company-research",
@@ -42,4 +48,22 @@ export const cstdProjectGuides: readonly CstdProjectGuide[] = [
 export function getCstdProjectGuide(guideId: string | null) {
   if (!guideId) return null;
   return cstdProjectGuides.find((guide) => guide.id === guideId) ?? null;
+}
+
+export function getCstdProjectGuideSummary(guides: readonly CstdProjectGuide[], projects: readonly CstdProject[]) {
+  const liveProjectIds = new Set(projects.filter((project) => project.status === "Live").map((project) => project.id));
+  const matchedLiveProjectIds = new Set(guides.map((guide) => guide.projectId).filter((projectId) => liveProjectIds.has(projectId)));
+  const uncoveredLiveProjectTitles = projects
+    .filter((project) => project.status === "Live" && !matchedLiveProjectIds.has(project.id))
+    .map((project) => project.title);
+
+  return {
+    allLiveProjectsCovered: uncoveredLiveProjectTitles.length === 0,
+    goalCount: guides.length,
+    label: `${guides.length} 条路径`,
+    liveProjectCount: liveProjectIds.size,
+    matchedLiveProjectCount: matchedLiveProjectIds.size,
+    summary: `${guides.length} 条目标路径覆盖 ${matchedLiveProjectIds.size} / ${liveProjectIds.size} 个上线项目`,
+    uncoveredLiveProjectTitles,
+  };
 }
