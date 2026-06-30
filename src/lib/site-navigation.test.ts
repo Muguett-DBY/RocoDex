@@ -60,11 +60,11 @@ describe("site navigation metadata", () => {
   });
 
   it("marks matching header links as the current page for exact and nested routes", () => {
-    expect(getSiteNavigationLinkState({ href: "/guides", label: "攻略" }, "/guides/roco-quick-start")).toEqual({
+    expect(getSiteNavigationLinkState({ href: "/guides" }, "/guides/roco-quick-start")).toEqual({
       current: true,
       ariaCurrent: "page",
     });
-    expect(getSiteNavigationLinkState({ href: "/guides", label: "攻略" }, "/creatures/001")).toEqual({
+    expect(getSiteNavigationLinkState({ href: "/guides" }, "/creatures/001")).toEqual({
       current: false,
       ariaCurrent: undefined,
     });
