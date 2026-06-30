@@ -14,6 +14,7 @@ import {
   getCstdHomepageUpdateSummary,
 } from "@/lib/cstd-homepage-updates";
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
+import { shouldApplyCstdMascotMoodChange, type CstdMascotMood } from "@/lib/cstd-mascot-mood";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
 import { getCstdProjectCapabilityIndex } from "@/lib/cstd-project-capability-index";
@@ -134,7 +135,7 @@ import {
   cstdProjectWorkflowSummaryGridClassName,
 } from "@/lib/cstd-mobile-layout";
 
-type MascotMood = "curious" | "happy" | "working";
+type MascotMood = CstdMascotMood;
 type CstdIntroPhase = "idle" | "playing";
 type CstdAudioPreference = "enabled" | "disabled";
 
@@ -245,6 +246,7 @@ export function CstdLanding() {
   const [projectGuideShareUrl, setProjectGuideShareUrl] = useState("");
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
+  const mascotHappyUntilRef = useRef(0);
   const prefersReducedMotion = reducedMotion ?? true;
   const motionDisabled = prefersReducedMotion;
 
@@ -488,9 +490,18 @@ export function CstdLanding() {
   }
 
   function pokeMascot() {
+    mascotHappyUntilRef.current = Date.now() + 900;
     setMascotMood("happy");
     window.setTimeout(() => setMascotMood("working"), 900);
     window.setTimeout(() => setMascotMood("curious"), 2200);
+  }
+
+  function handleMascotMoodChange(nextMood: MascotMood) {
+    if (!shouldApplyCstdMascotMoodChange({ nextMood, now: Date.now(), happyUntil: mascotHappyUntilRef.current })) {
+      return;
+    }
+
+    setMascotMood(nextMood);
   }
 
   function clearRestoredProjectViewReceipts() {
@@ -952,7 +963,7 @@ export function CstdLanding() {
               mascotCopy={mascotCopy}
               mascotMood={mascotMood}
               motionDisabled={motionDisabled}
-              onMoodChange={setMascotMood}
+              onMoodChange={handleMascotMoodChange}
               onPoke={pokeMascot}
             />
           </motion.aside>
