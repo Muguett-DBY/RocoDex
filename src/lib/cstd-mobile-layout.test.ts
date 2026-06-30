@@ -18,6 +18,7 @@ import {
   cstdProjectGridClassName,
   cstdProjectGuideActionRailClassName,
   cstdProjectGuideClearActionClassName,
+  cstdProjectGuideHeaderActionsClassName,
   cstdProjectGuideMatchLayoutClassName,
   cstdProjectGuidePrimaryActionClassName,
   cstdProjectGuideSecondaryActionClassName,
@@ -165,6 +166,8 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectGuideSecondaryActionClassName).toContain("min-h-11");
     expect(cstdProjectGuideWideActionClassName).toContain("min-h-11");
     expect(cstdProjectGuideWideActionClassName).toContain("min-[420px]:col-span-2");
+    expect(cstdProjectGuideHeaderActionsClassName).toContain("absolute");
+    expect(cstdProjectGuideHeaderActionsClassName).toContain("flex");
     expect(cstdProjectGuideClearActionClassName).toContain("h-11");
     expect(cstdProjectGuideClearActionClassName).toContain("w-11");
   });

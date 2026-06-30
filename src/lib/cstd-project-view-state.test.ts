@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  buildCstdProjectGuideShareHref,
   buildCstdProjectViewHref,
   getCstdProjectDirectoryRestoredAction,
   getCstdProjectDirectoryRestoredReceipt,
@@ -73,6 +74,14 @@ describe("CSTD project view state", () => {
         "project-comparison",
       ),
     ).toBe("/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison");
+  });
+
+  it("builds a clean share link for one selected goal", () => {
+    expect(buildCstdProjectGuideShareHref("/cstd", "portrait-shooting")).toBe(
+      "/cstd?goal=portrait-shooting#projects",
+    );
+    expect(buildCstdProjectGuideShareHref("/cstd", "unknown")).toBeNull();
+    expect(buildCstdProjectGuideShareHref("/cstd", null)).toBeNull();
   });
 
   it("detects only valid active view state for automatic intro gating", () => {
