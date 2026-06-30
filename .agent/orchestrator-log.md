@@ -75,7 +75,30 @@
 - Next flagship: Stage 3 should improve the selected-match action hierarchy and touch targets now that the panel contains five distinct next actions.
 - Status: closed
 
-- Next stage: Stage 3 / 6 `UIUX`
+### Stage 3
+
+- Stage number: 3 / 6
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt`
+- Goal: rebalance the selected-goal panel after the fifth action was added, while making every command touch-safe.
+- Design: `docs/superpowers/specs/2026-06-30-cstd-goal-match-action-hierarchy-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-cstd-goal-match-action-hierarchy.md`
+- Implemented:
+  - Added reusable selected-goal layout classes to the existing mobile-layout module.
+  - Replaced the orphan-prone four-column rail with a primary full-width case action, paired comparison/live actions, and a full-width directory continuation from 420 px upward.
+  - Kept a simple full-width stack at 390 px.
+  - Raised all forward actions to a 44 px minimum and moved clear matching to a separate 44 by 44 icon control with accessible name and tooltip.
+- Verification recorded before commit:
+  - TDD red failed on the six missing layout contracts; focused tests then passed 2 files / 21 tests.
+  - `npm run lint` passed.
+  - `npm test` passed 47 files / 206 tests.
+  - The first build reproduced `EBUSY` on `.next/agent-server.stderr.log`; root-cause analysis traced it to the running server's redirected file handle inside the build directory. After stopping the server and moving runtime logs to the system temp directory, `npm run build` passed and generated 735 static pages.
+  - Local Edge screenshots and geometry checks at 1440 x 1000 and 390 x 844 confirmed 44 px actions, a 44 by 44 clear control, no clear/heading overlap, desktop 2-column hierarchy, mobile full-width stacking, horizontal overflow `0`, and zero console warnings/errors.
+- Risk: the 390 px layout intentionally remains single-column because two 149 px controls would make the Chinese labels less scannable.
+- Next flagship: Stage 4 should make a selected goal path directly shareable with clear copied/failed feedback.
+- Status: implementation verified locally; remote verification pending
+
+- Next stage: Stage 4 / 6 `IMPROVE` after Stage 3 remote verification
 
 ## Run - 2026-06-30 - Long 6-stage homepage strengthening round 4
 
