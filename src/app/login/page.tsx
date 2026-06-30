@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AccountStatusPanel } from "@/components/account-status-panel";
 import { useAccountServiceStatus } from "@/hooks/use-account-service-status";
 import Link from "next/link";
 import { signIn } from "next-auth/react";
@@ -17,6 +18,7 @@ export default function LoginPage() {
   const accountStatus = useAccountServiceStatus();
   const isAccountBlocked = accountStatus?.state !== "ready";
   const blockedAccountStatus = accountStatus && accountStatus.state !== "ready" ? accountStatus : null;
+  const submitHelpId = "account-status-submit-help";
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -51,28 +53,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-[calc(100vh-5rem)] items-center justify-center px-4">
-      <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-8 shadow-sm">
+    <div className="flex min-h-[calc(100vh-5rem)] items-center justify-center px-3 py-6 sm:px-4">
+      <div className="w-full max-w-md rounded-xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
         <div className="mb-8 text-center">
           <h1 className="text-2xl font-bold text-slate-950">登录</h1>
           <p className="mt-2 text-sm text-slate-500">登录你的洛克图鉴账号</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          {!accountStatus ? (
-            <div role="status" className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700">
-              <p className="font-semibold">正在检查账号服务</p>
-              <p className="mt-1 leading-5">确认注册与登录是否可用，请稍候。</p>
-            </div>
-          ) : blockedAccountStatus ? (
-            <div role="status" className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-              <p className="font-semibold">{blockedAccountStatus.title}</p>
-              <p className="mt-1 leading-5">{blockedAccountStatus.message}</p>
-              <Link href={blockedAccountStatus.actionHref} className="mt-2 inline-flex font-semibold text-amber-950 underline underline-offset-4">
-                {blockedAccountStatus.actionLabel}
-              </Link>
-            </div>
-          ) : null}
+          <AccountStatusPanel status={accountStatus} />
 
           {error ? (
             <div className="rounded-md bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -109,9 +98,19 @@ export default function LoginPage() {
             />
           </div>
 
-          <Button type="submit" className="w-full" disabled={loading || isAccountBlocked}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={loading || isAccountBlocked}
+            aria-describedby={isAccountBlocked ? submitHelpId : undefined}
+          >
             {loading ? "登录中..." : "登录"}
           </Button>
+          {isAccountBlocked ? (
+            <p id={submitHelpId} className="-mt-1 text-center text-xs leading-5 text-slate-500">
+              账号服务可用后即可登录。你也可以先用本地收藏继续浏览。
+            </p>
+          ) : null}
         </form>
 
         <p className="mt-6 text-center text-sm text-slate-500">

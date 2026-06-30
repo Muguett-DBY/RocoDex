@@ -15,8 +15,10 @@ describe("login account status preflight", () => {
   it("provides checking and local recovery states", () => {
     const loginPage = readFileSync(join(process.cwd(), "src", "app", "login", "page.tsx"), "utf8");
 
-    expect(loginPage).toContain("正在检查账号服务");
-    expect(loginPage).toContain("blockedAccountStatus.actionHref");
-    expect(loginPage).toContain("blockedAccountStatus.actionLabel");
+    expect(loginPage).toContain("AccountStatusPanel");
+    expect(loginPage).toContain("status={accountStatus}");
+    expect(loginPage).toContain("account-status-submit-help");
+    expect(loginPage).toContain("aria-describedby");
+    expect(loginPage).toContain("账号服务可用后即可登录");
   });
 });
