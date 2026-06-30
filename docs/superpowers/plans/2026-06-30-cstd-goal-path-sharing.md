@@ -5,4 +5,4 @@
 - [x] Implement the pure URL and feedback helpers.
 - [x] Add copy state, icon control, live feedback, and manual fallback to the match panel.
 - [x] Run focused tests, lint, full tests, build, and browser checks.
-- [ ] Commit, push `main`, check GitHub Actions, and update logs.
+- [x] Commit, push `main`, check GitHub Actions, and update logs.
