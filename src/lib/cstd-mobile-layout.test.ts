@@ -16,6 +16,12 @@ import {
   cstdProjectFocusBodyClassName,
   cstdProjectFocusChecklistGridClassName,
   cstdProjectGridClassName,
+  cstdProjectGuideActionRailClassName,
+  cstdProjectGuideClearActionClassName,
+  cstdProjectGuideMatchLayoutClassName,
+  cstdProjectGuidePrimaryActionClassName,
+  cstdProjectGuideSecondaryActionClassName,
+  cstdProjectGuideWideActionClassName,
   cstdProjectHeadingClassName,
   cstdProjectMetricGridClassName,
   cstdProjectMetricLabelClassName,
@@ -148,6 +154,19 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectWorkflowSummaryGridClassName).toContain("grid-cols-1");
     expect(cstdProjectWorkflowSummaryGridClassName).toContain("sm:grid-cols-2");
     expect(cstdProjectWorkflowSummaryGridClassName).toContain("xl:grid-cols-4");
+  });
+
+  test("gives the selected goal match a balanced touch-safe action hierarchy", () => {
+    expect(cstdProjectGuideMatchLayoutClassName).toContain("lg:grid-cols-[minmax(0,1fr)_18rem]");
+    expect(cstdProjectGuideActionRailClassName).toContain("min-[420px]:grid-cols-2");
+    expect(cstdProjectGuideActionRailClassName).toContain("lg:w-72");
+    expect(cstdProjectGuidePrimaryActionClassName).toContain("min-h-11");
+    expect(cstdProjectGuidePrimaryActionClassName).toContain("min-[420px]:col-span-2");
+    expect(cstdProjectGuideSecondaryActionClassName).toContain("min-h-11");
+    expect(cstdProjectGuideWideActionClassName).toContain("min-h-11");
+    expect(cstdProjectGuideWideActionClassName).toContain("min-[420px]:col-span-2");
+    expect(cstdProjectGuideClearActionClassName).toContain("h-11");
+    expect(cstdProjectGuideClearActionClassName).toContain("w-11");
   });
 
   test("keeps the project heading readable at narrow widths", () => {

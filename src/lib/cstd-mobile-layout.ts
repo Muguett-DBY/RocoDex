@@ -31,6 +31,24 @@ export const cstdProjectHeadingClassName = "mt-2 max-w-full break-words text-2xl
 
 export const cstdProjectWorkflowSummaryGridClassName = "grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4";
 
+export const cstdProjectGuideMatchLayoutClassName =
+  "grid gap-4 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-center";
+
+export const cstdProjectGuideActionRailClassName =
+  "grid min-w-0 grid-cols-1 gap-2 min-[420px]:grid-cols-2 lg:w-72";
+
+export const cstdProjectGuidePrimaryActionClassName =
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-black transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 min-[420px]:col-span-2";
+
+export const cstdProjectGuideSecondaryActionClassName =
+  "inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2";
+
+export const cstdProjectGuideWideActionClassName =
+  "inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 min-[420px]:col-span-2";
+
+export const cstdProjectGuideClearActionClassName =
+  "absolute right-0 top-0 inline-flex h-11 w-11 items-center justify-center rounded-lg border border-[#ead6ad] bg-white/75 text-[#6f5b4a] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]";
+
 export const cstdProjectMetricGridClassName = "mt-5 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-3 sm:gap-3";
 
 export const cstdProjectMetricTileClassName = "min-w-0 rounded-lg border border-[#ead6ad] bg-white/72 p-3 sm:rounded-xl sm:p-4 xl:px-2.5 xl:py-3";

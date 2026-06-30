@@ -108,6 +108,12 @@ import {
   cstdProjectFocusBodyClassName,
   cstdProjectFocusChecklistGridClassName,
   cstdProjectGridClassName,
+  cstdProjectGuideActionRailClassName,
+  cstdProjectGuideClearActionClassName,
+  cstdProjectGuideMatchLayoutClassName,
+  cstdProjectGuidePrimaryActionClassName,
+  cstdProjectGuideSecondaryActionClassName,
+  cstdProjectGuideWideActionClassName,
   cstdProjectHeadingClassName,
   cstdProjectMetricGridClassName,
   cstdProjectMetricLabelClassName,
@@ -1738,8 +1744,17 @@ function ProjectGuide({
             exit={motionDisabled ? { opacity: 0 } : { opacity: 0, y: -6 }}
             transition={{ duration: 0.18 }}
           >
-            <div className="grid gap-4 p-4 sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-              <div className="min-w-0">
+            <div className={cstdProjectGuideMatchLayoutClassName}>
+              <div className="relative min-w-0 pr-12">
+                <button
+                  type="button"
+                  onClick={() => onSelect(null)}
+                  aria-label="清除目标匹配"
+                  title="清除目标匹配"
+                  className={cstdProjectGuideClearActionClassName}
+                >
+                  <X className="h-4 w-4" />
+                </button>
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-[#047857]">推荐匹配</p>
                 <h4 id="project-match-heading" className="mt-1 text-xl font-black text-[#2f241d] sm:text-2xl">
                   {selectedProject.title}
@@ -1756,13 +1771,13 @@ function ProjectGuide({
                   </div>
                 </dl>
               </div>
-              <div className="grid min-w-0 gap-2 sm:grid-cols-4 lg:w-48 lg:grid-cols-1">
+              <div className={cstdProjectGuideActionRailClassName}>
                 <button
                   type="button"
                   onClick={() => onFocus(selectedProject.id)}
-                  className="inline-flex min-h-10 items-center justify-center rounded-lg border border-[#1b4332] bg-[#0f8f64] px-3 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                  className={`${cstdProjectGuidePrimaryActionClassName} border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59] focus-visible:outline-[#0f8f64]`}
                 >
-                  查看案例
+                  查看案例 <ArrowDownRight className="h-4 w-4" />
                 </button>
                 {comparisonControl ? (
                   <button
@@ -1771,7 +1786,7 @@ function ProjectGuide({
                     aria-label={`${comparisonControl.label}：${selectedProject.title}`}
                     aria-pressed={comparisonControl.selected}
                     disabled={comparisonControl.disabled}
-                    className={`inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border px-3 text-sm font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] disabled:cursor-not-allowed disabled:opacity-55 ${
+                    className={`${cstdProjectGuideSecondaryActionClassName} focus-visible:outline-[#0f8f64] disabled:cursor-not-allowed disabled:opacity-55 ${
                       comparisonControl.selected
                         ? "border-[#1b4332] bg-[#dff8ed] text-[#047857]"
                         : "border-[#1b4332] bg-white text-[#0f8f64] hover:-translate-y-0.5 hover:bg-[#eefbf4]"
@@ -1783,7 +1798,7 @@ function ProjectGuide({
                 ) : null}
                 <Link
                   href={selectedProject.href}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#b8d7f5] bg-white px-3 text-sm font-black text-[#2563eb] no-underline transition hover:-translate-y-0.5 hover:border-[#2563eb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
+                  className={`${cstdProjectGuideSecondaryActionClassName} border-[#b8d7f5] bg-white text-[#2563eb] no-underline hover:border-[#2563eb] focus-visible:outline-[#2563eb]`}
                 >
                   打开项目 <ExternalLink className="h-4 w-4" />
                 </Link>
@@ -1792,19 +1807,12 @@ function ProjectGuide({
                     type="button"
                     onClick={() => onBrowseCategory(directoryContinuation.category)}
                     aria-label={directoryContinuation.summary}
-                    className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#b8d7f5] bg-[#f2f8ff] px-3 text-sm font-black text-[#315b7f] transition hover:-translate-y-0.5 hover:border-[#2563eb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
+                    className={`${cstdProjectGuideWideActionClassName} border-[#b8d7f5] bg-[#f2f8ff] text-[#315b7f] hover:border-[#2563eb] focus-visible:outline-[#2563eb]`}
                   >
                     <Search className="h-4 w-4" />
                     浏览{directoryContinuation.categoryLabel} · {directoryContinuation.projectCount}
                   </button>
                 ) : null}
-                <button
-                  type="button"
-                  onClick={() => onSelect(null)}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#ead6ad] bg-white/75 px-3 text-sm font-black text-[#6f5b4a] transition hover:-translate-y-0.5 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
-                >
-                  <X className="h-4 w-4" /> 清除匹配
-                </button>
               </div>
             </div>
           </motion.section>
