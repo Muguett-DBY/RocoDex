@@ -1,5 +1,6 @@
 import { isAuthConfigured } from "@/lib/auth-availability";
 import { deleteUserByUsername, findUserByUsername } from "@/lib/db";
+import { isStorageUnavailableError } from "@/lib/storage-errors";
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
@@ -52,6 +53,9 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error("Live registration cleanup error:", error);
+    if (isStorageUnavailableError(error)) {
+      return NextResponse.json({ error: "账号功能暂不可用" }, { status: 503 });
+    }
     return NextResponse.json({ error: "验收账号清理失败" }, { status: 500 });
   }
 }
