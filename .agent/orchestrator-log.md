@@ -226,7 +226,15 @@
   - `npm run build` exited `0` and generated 735 static pages.
   - Local production desktop and 390 x 844 in-app Browser verification on `/creatures/001` confirmed the context strip home action `首页`, related actions `攻略` and `我的收藏`, all actions at 44 px height, horizontal overflow `0`, and console warnings/errors `0`.
 - Risk: the home action is deliberately suppressed on `/` to avoid duplicating the current destination; unknown routes still do not render the context strip.
-- Status: local verified, pending commit and remote verification
+- Commit: `93fc965 feat: add home action to site context`
+- Push: `origin/main` updated to `93fc965904abd9a8475ddfd4b443f3877a326b34`.
+- Remote check:
+  - GitHub Actions CI run `28418211220` completed successfully; install, lint, test, and build all passed.
+  - Vercel production deployment `https://rocodex-jvccbr4ex-muguett-dbys-projects.vercel.app` completed Ready and kept aliases including `https://rocodex.custard.top`.
+  - Live desktop and 390 x 844 in-app Browser verification on `https://rocodex.custard.top/creatures/001` confirmed the context strip home action `首页`, related actions `攻略` and `我的收藏`, all actions at 44 px height, horizontal overflow `0`, and console warnings/errors `0`.
+- Status: closed
+
+- Long 6-stage homepage strengthening round 4 status: complete
 
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 

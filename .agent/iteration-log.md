@@ -20,10 +20,14 @@
 - `npm test` passed 47 files / 203 tests.
 - `npm run build` generated 735 static pages.
 - Local desktop and 390 x 844 production-browser verification on `/creatures/001` confirmed the context strip home action `首页`, related actions `攻略` and `我的收藏`, 44 px action heights, horizontal overflow `0`, and zero console warnings/errors.
+- Commit `93fc965` was pushed to `origin/main`.
+- GitHub Actions CI run `28418211220` completed successfully.
+- Vercel production deployment `rocodex-jvccbr4ex-muguett-dbys-projects.vercel.app` was Ready.
+- Live desktop and 390 x 844 verification on `https://rocodex.custard.top/creatures/001` confirmed the context strip home action `首页`, related actions `攻略` and `我的收藏`, 44 px action heights, horizontal overflow `0`, and zero console warnings/errors.
 
 ### Next direction
 
-- The 6-stage cycle is complete after remote verification and final log closure.
+- The 6-stage cycle is complete. Next useful work is a separate product-direction pass rather than more navigation hardening in this same loop.
 
 ## 2026-06-30 - Long Homepage Cycle 4 Stage 5 / 6 - CHECK
 
