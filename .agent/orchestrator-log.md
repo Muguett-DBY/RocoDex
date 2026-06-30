@@ -94,11 +94,17 @@
   - `npm test` passed 47 files / 206 tests.
   - The first build reproduced `EBUSY` on `.next/agent-server.stderr.log`; root-cause analysis traced it to the running server's redirected file handle inside the build directory. After stopping the server and moving runtime logs to the system temp directory, `npm run build` passed and generated 735 static pages.
   - Local Edge screenshots and geometry checks at 1440 x 1000 and 390 x 844 confirmed 44 px actions, a 44 by 44 clear control, no clear/heading overlap, desktop 2-column hierarchy, mobile full-width stacking, horizontal overflow `0`, and zero console warnings/errors.
+- Commit: `4b18bfb feat: rebalance goal match actions`
+- Push: `origin/main` updated to `4b18bfba85e1dd89fc0b99efc98410c35c5c5aa7`.
+- Remote check:
+  - GitHub Actions CI run `28419743507` completed successfully; install, lint, test, and build all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live Edge geometry checks at 1440 x 1000 and 390 x 844 confirmed all four forward actions at 44 px, the clear control at 44 by 44, horizontal overflow `0`, and zero console warnings/errors.
 - Risk: the 390 px layout intentionally remains single-column because two 149 px controls would make the Chinese labels less scannable.
 - Next flagship: Stage 4 should make a selected goal path directly shareable with clear copied/failed feedback.
-- Status: implementation verified locally; remote verification pending
+- Status: closed
 
-- Next stage: Stage 4 / 6 `IMPROVE` after Stage 3 remote verification
+- Next stage: Stage 4 / 6 `IMPROVE`
 
 ## Run - 2026-06-30 - Long 6-stage homepage strengthening round 4
 

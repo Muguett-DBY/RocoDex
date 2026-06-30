@@ -1,5 +1,28 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 5 Stage 3 / 6 - UIUX
+
+### Scope
+
+- Rebuilt the selected-goal action rail around a stable primary, paired secondary, and full-width continuation hierarchy.
+- Raised every forward action to 44 px and separated clearing into an accessible 44 by 44 icon control.
+
+### User-visible change
+
+- Goal matches now scan cleanly on desktop and stack predictably on mobile without an orphaned fifth button or a competing text-heavy clear action.
+
+### Verification evidence
+
+- TDD red reproduced the missing layout contracts; focused tests then passed 2 files / 21 tests.
+- Lint passed; full tests passed 47 files / 206 tests; the production build generated 735 static pages after resolving a local `.next` log-handle lock.
+- Local screenshots and geometry checks confirmed the desktop 2-column hierarchy, mobile full-width stack, 44 px controls, no title overlap, horizontal overflow `0`, and zero console warnings/errors.
+- Commit `4b18bfb` was pushed to `origin/main`.
+- GitHub Actions CI run `28419743507`, Vercel deployment, and live desktop/mobile geometry checks all passed.
+
+### Next direction
+
+- Stage 4 should let visitors copy the exact selected goal path and receive explicit clipboard feedback.
+
 ## 2026-06-30 - Long Homepage Cycle 5 Stage 2 / 6 - IMPROVE
 
 ### Scope
