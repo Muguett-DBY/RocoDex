@@ -81,6 +81,42 @@
 - Stage 3 handoff: improve the visual hierarchy and reuse of the checking/unavailable account-status surfaces now that both auth pages share the same behavior.
 - Status: closed
 
+## 2026-07-01 Long Homepage Risk Repair Cycle - Stage 3 / 6
+
+- Type: UIUX
+- Prompt: `AGENT_UIUX_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Start state: `main` matched `origin/main` at `d295c29`; Stage 2 implementation and evidence CI runs `28458720084` and `28459021640` passed; worktree was clean.
+- UI/UX audit summary:
+  - P1: login and registration used duplicated plain alert markup for a production account-storage outage, making the recovery path look like secondary text rather than the safe next action.
+  - P1: disabled login/register buttons had no adjacent reason, so visitors had to infer why the primary action was unavailable.
+  - P2: mobile auth card padding and status-action touch target could be more deliberate for a first-viewport account recovery flow.
+- Flagship UI/UX goal: upgrade account-service status on login and registration into a reusable, responsive, accessible status panel with explicit disabled and recovery feedback.
+- Design: `docs/superpowers/specs/2026-07-01-auth-status-panel-uiux-design.md`
+- Plan: `docs/superpowers/plans/2026-07-01-auth-status-panel-uiux.md`
+- Implemented:
+  - Added `AccountStatusPanel` as the shared checking/unavailable account-status UI for login and registration.
+  - Replaced duplicated inline auth-page status alerts with the shared panel.
+  - Added spinner, warning, and arrow icons using the existing `lucide-react` dependency.
+  - Made the recovery action a 44 px touch-safe button-like link, full-width on narrow screens and compact on desktop.
+  - Added visible disabled-submit helper text and connected it with `aria-describedby`.
+  - Tightened auth card mobile spacing with `px-3 py-6` shell spacing and `p-5 sm:p-8` card padding.
+- Verification recorded before commit:
+  - TDD red failed on the missing `AccountStatusPanel` component and missing auth-page integration contracts.
+  - Focused green tests passed 3 files / 6 tests.
+  - `npm run lint` exited `0`.
+  - `npx tsc --noEmit` exited `0`.
+  - `npm test` passed 59 files / 247 tests.
+  - `npm run build` exited `0`, generated 734 static pages, and kept `/login`, `/register`, and `/api/account-status` dynamic.
+  - `npm run test:e2e` passed 3 tests with 1 environment-dependent registration test skipped.
+  - `npm audit --json` reported 0 vulnerabilities.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - Local production Browser on port `3105` confirmed mobile and desktop login/register checking states with `aria-live="polite"`, `aria-busy="true"`, and spinner; unavailable states with 44 px recovery actions; disabled submit with `aria-describedby="account-status-submit-help"`; recovery click-through to `/collection`; horizontal overflow `0`; no framework overlay; and zero console warnings/errors.
+  - Local mobile geometry: auth card width `366` at x `12`, action height `44`, action width `259`.
+  - Local desktop geometry: auth card width `448` centered at x `496`, action height `44`, action width `134`.
+  - Local screenshots: `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-local-mobile-login.png`, `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-local-mobile-register.png`, `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-local-desktop-login.png`, and `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-local-desktop-register.png`.
+- Risk: production account creation still depends on external storage credentials; this UIUX stage improves the outage and recovery experience but does not change storage availability.
+- Status: local verified; commit and remote checks pending
+
 ### Stage 2
 
 - Stage number: 2 / 6
