@@ -2376,3 +2376,26 @@
 - Risk: future view-state parameters must be added to `hasActiveCstdProjectViewState` when they become part of the public restored-state contract.
 - Next flagship: use the final IMPROVE stage to make restored comparison links more self-explanatory after the intro is skipped, without adding another homepage panel.
 - Status: closed
+
+## 2026-07-01 Long Homepage Risk Repair Cycle - Stage 1 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Start state: `main` matched `origin/main` at `849f6de`; worktree was clean after `git pull --ff-only`.
+- Previous direction: close the remaining account-storage risk while keeping the homepage and public tools usable.
+- Flagship goal: add a read-only account service status preflight so visitors see disabled/unavailable account states before submitting registration credentials.
+- External risk: production Redis endpoint still appears stale from prior verification; restoring successful production registration requires corrected Upstash/Vercel credentials outside the repository.
+- Design: `docs/superpowers/specs/2026-07-01-account-status-preflight-design.md`
+- Plan: `docs/superpowers/plans/2026-07-01-account-status-preflight.md`
+- Implemented:
+  - Added a pure three-state account availability model and read-only `/api/account-status` probe with no-store responses.
+  - Added registration preflight messaging, a local-collection recovery action, and blocked submit behavior while status is loading, disabled, or unavailable.
+  - Forced login/register layouts to evaluate auth configuration at runtime so build-time environment values cannot freeze the production auth surface.
+- Verification recorded before commit:
+  - TDD red/green covered the status model, route behavior, register integration, and runtime auth layouts; focused tests passed 6 files / 19 tests before the final loading-state regression was added.
+  - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed; the verified full counts were 56 Vitest files / 240 tests, 3 Playwright tests passed / 1 environment-dependent registration test skipped, 734 static pages, and 0 vulnerabilities.
+  - Local production API returned `200` with `state: "unavailable"` against an intentionally unreachable storage endpoint.
+  - Local in-app Browser at 390 x 844 confirmed the unavailable notice, disabled registration, local-collection continuation, horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
+- Risk: restoring successful production registration still requires valid Upstash/Vercel credentials outside repository control; the shipped path now prevents credential submission and preserves access to local tools while that dependency is unavailable.
+- Remote check: pending commit, push, CI, deployment, and live smoke.
+- Status: local verification complete; remote verification pending

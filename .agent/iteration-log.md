@@ -1781,3 +1781,25 @@
 - Live registration acceptance on the final deployment found production Redis DNS failure: Vercel runtime logs showed `getaddrinfo ENOTFOUND blessed-hamster-86513.upstash.io`, so valid registration returned 500 before any cleanup could run. Added storage-unavailable handling so register and cleanup APIs return explicit `503 {"error":"账号功能暂不可用"}` instead of generic 500 while the external Redis endpoint remains stale.
 - Follow-up verification after the storage-unavailable handling: focused route tests passed 2 files / 10 tests; `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run test:e2e`, `npm run build`, `npm audit --json`, and `git diff --check` passed locally; full counts were Vitest 52 files / 231 tests, Playwright 3 passed / 1 skipped, build 736 static pages, audit 0 vulnerabilities.
 - Final log-hygiene fix changed expected storage-unavailable paths from `console.error` to `console.warn` so Vercel error logs are not polluted by the known stale Redis endpoint. Verification repeated the same local gates: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run test:e2e`, `npm run build`, `npm audit --json`, and `git diff --check` passed.
+
+## 2026-07-01 - Long Homepage Risk Repair Stage 1 / 6 - IMPROVE
+
+### Scope
+
+- Added a read-only account-service status model and endpoint for ready, disabled, and storage-unavailable states.
+- Added registration preflight messaging and a local-collection recovery path before credentials can be submitted.
+- Made login and registration auth configuration runtime-dynamic instead of build-time static.
+
+### User-visible change
+
+- Visitors now see account storage outages before entering and submitting registration credentials.
+- Registration remains blocked while availability is being checked or unavailable, with a direct path to browser-local collection tools.
+
+### Verification evidence
+
+- Focused status, route, register, and runtime-layout tests passed; full local gates passed with 56 Vitest files / 240 tests, Playwright 3 passed / 1 environment-dependent test skipped, 734 static pages, and 0 audit vulnerabilities.
+- Local production Browser at 390 x 844 confirmed the outage notice, disabled submit, local-collection click-through, no horizontal overflow, no framework overlay, and zero console warnings/errors.
+
+### Next direction
+
+- Extend the same availability and recovery behavior to login so storage outages cannot be mistaken for invalid credentials.
