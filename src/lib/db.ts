@@ -57,3 +57,26 @@ export async function createUser(username: string, password: string): Promise<Us
 
   return user;
 }
+
+export async function deleteUserByUsername(username: string): Promise<boolean> {
+  if (useRedis && redis) {
+    return (await redis.del(userKey(username))) > 0;
+  }
+
+  const users = readLocalUsers();
+  const remainingUsers = users.filter((user) => user.username !== username);
+
+  if (remainingUsers.length === users.length) {
+    return false;
+  }
+
+  if (remainingUsers.length === 0) {
+    if (fs.existsSync(USERS_FILE)) {
+      fs.rmSync(USERS_FILE, { force: true });
+    }
+  } else {
+    writeLocalUsers(remainingUsers);
+  }
+
+  return true;
+}

@@ -17,5 +17,7 @@ describe("GitHub Actions CI workflow", () => {
     expect(workflow).toContain("npm run lint");
     expect(workflow).toContain("npm test");
     expect(workflow).toContain("npm run build");
+    expect(workflow).toContain("npx playwright install --with-deps chromium");
+    expect(workflow).toContain("npm run test:e2e");
   });
 });
