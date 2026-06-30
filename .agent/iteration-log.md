@@ -1,5 +1,32 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 5 Stage 4 / 6 - IMPROVE
+
+### Scope
+
+- Added clean selected-goal path sharing from the CSTD match panel.
+- Added clipboard success, unsupported-browser, and failure feedback for goal-path copying.
+- Added a manual read-only URL fallback and kept the existing case, comparison, live-link, and directory continuation actions unchanged.
+
+### User-visible change
+
+- Visitors who choose a goal can now copy a clean share URL like `/cstd?goal=portrait-shooting#projects` without carrying stale search, category, project focus, or comparison state.
+- The selected-goal heading now has two 44 px icon controls: copy target path and clear target match.
+
+### Verification evidence
+
+- TDD red reproduced the missing share-link and copy-message helpers; focused tests then passed 3 files / 32 tests.
+- `npm run lint` passed; full tests passed 47 files / 208 tests; `npm run build` generated 735 static pages.
+- Local Edge checks at 1365 x 900 and 390 x 844 confirmed clean copied URLs, unsupported-clipboard fallback input, 44 px copy/clear controls, no heading overlap, horizontal overflow `0`, and zero console warnings/errors.
+- Commit `4fad37c` was pushed to `origin/main`.
+- GitHub Actions CI run `28420278964` passed.
+- Vercel production deployment `rocodex-qntcdl8dp-muguett-dbys-projects.vercel.app` completed Ready and aliases include `https://custard.top`.
+- Live Edge checks on `https://custard.top/cstd` confirmed the same clean copied URL, fallback input, 44 px controls, horizontal overflow `0`, and zero console warnings/errors.
+
+### Next direction
+
+- Stage 5 should audit the goal-guide sharing path for URL-state edge cases, accessibility semantics, and regression gaps, then fix verified defects before adding more UI.
+
 ## 2026-06-30 - Long Homepage Cycle 5 Stage 3 / 6 - UIUX
 
 ### Scope

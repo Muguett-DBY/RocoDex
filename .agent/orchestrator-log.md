@@ -104,7 +104,38 @@
 - Next flagship: Stage 4 should make a selected goal path directly shareable with clear copied/failed feedback.
 - Status: closed
 
-- Next stage: Stage 4 / 6 `IMPROVE`
+### Stage 4
+
+- Stage number: 4 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: let visitors copy a clean selected-goal path directly from the CSTD match panel with explicit success and fallback feedback.
+- Design: `docs/superpowers/specs/2026-06-30-cstd-goal-path-sharing-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-cstd-goal-path-sharing.md`
+- Implemented:
+  - Added `buildCstdProjectGuideShareHref` so goal sharing serializes only a validated `goal` and `#projects`.
+  - Added `getCstdProjectGuideCopyMessage` for copied, unsupported, and failed clipboard outcomes.
+  - Added selected-goal copy state to the homepage and reused the existing clipboard adapter.
+  - Added a 44 by 44 copy icon beside the 44 by 44 clear icon in the selected-match heading.
+  - Added live-region feedback and a read-only manual URL fallback when automatic copying is unavailable.
+- Verification recorded before commit:
+  - TDD red failed because the share-link and copy-message helpers did not exist.
+  - Focused tests passed 3 files / 32 tests.
+  - `npm run lint` passed.
+  - `npm test` passed 47 files / 208 tests.
+  - `npm run build` generated 735 static pages after stopping the local production server to avoid stale build handles.
+  - Local Edge checks at 1365 x 900 and 390 x 844 confirmed clean copied URLs from a dirty source URL, unsupported-clipboard fallback input, 44 px copy/clear controls, no heading overlap, horizontal overflow `0`, and zero console warnings/errors.
+- Commit: `4fad37c feat: add cstd goal path sharing`
+- Push: `origin/main` updated to `4fad37c3b57c248d3a85d52c1295d952edfd2519`.
+- Remote check:
+  - GitHub Actions CI run `28420278964` completed successfully; install, lint, test, and build all passed.
+  - Vercel production deployment `https://rocodex-qntcdl8dp-muguett-dbys-projects.vercel.app` completed Ready and aliases include `https://custard.top`.
+  - Live Edge checks at 1365 x 900 and 390 x 844 on `https://custard.top/cstd?category=creative&q=CRM&goal=portrait-shooting&project=crm&compare=design,crm#project-focus` confirmed copied URL `https://custard.top/cstd?goal=portrait-shooting#projects`, unsupported-clipboard fallback input, 44 px controls, horizontal overflow `0`, and zero console warnings/errors.
+- Risk: the generated Vercel deployment URL is protected by Vercel login in this environment; production aliases were used for public live verification.
+- Next flagship: Stage 5 should audit the goal-guide sharing path for URL-state edge cases, accessibility semantics, and regression gaps, then fix verified defects before adding more UI.
+- Status: closed
+
+- Next stage: Stage 5 / 6 `CHECK`
 
 ## Run - 2026-06-30 - Long 6-stage homepage strengthening round 4
 
