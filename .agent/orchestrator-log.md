@@ -135,7 +135,39 @@
 - Next flagship: Stage 5 should audit the goal-guide sharing path for URL-state edge cases, accessibility semantics, and regression gaps, then fix verified defects before adding more UI.
 - Status: closed
 
-- Next stage: Stage 5 / 6 `CHECK`
+### Stage 5
+
+- Stage number: 5 / 6
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN.txt`
+- Goal: audit the goal-guide sharing path for URL-state edge cases, accessibility semantics, and regression gaps, then fix verified defects before adding more UI.
+- Finding:
+  - Unsupported and failed goal-path copy outcomes were visually treated with the same success-colored feedback as completed copies, and the manual-copy fallback requirement lived as component conditionals rather than a tested presentation contract.
+- Design: `docs/superpowers/specs/2026-06-30-cstd-goal-copy-warning-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-cstd-goal-copy-warning.md`
+- Implemented:
+  - Added `getCstdProjectGuideCopyPresentation` with message, `success` / `warning` tone, and `requiresManualCopy`.
+  - Kept `getCstdProjectGuideCopyMessage` as a compatibility wrapper around the presentation helper.
+  - Updated the selected-goal panel to use warning color for unsupported/failed copy outcomes.
+  - Derived fallback input visibility from `requiresManualCopy`.
+- Verification recorded before commit:
+  - TDD red failed because the copy-presentation helper did not exist.
+  - Focused guide tests passed 1 file / 7 tests; related CSTD guide/view/layout tests passed 3 files / 33 tests.
+  - `npm run lint` passed.
+  - `npm test` passed 47 files / 209 tests.
+  - `npm run build` generated 735 static pages after stopping the local production server.
+  - Local Edge checks confirmed success color `rgb(4, 120, 87)`, unsupported warning color `rgb(138, 75, 21)`, clean copied/fallback URL, horizontal overflow `0`, and zero console warnings/errors.
+- Commit: `6e85847 fix: mark goal copy fallback as warning`
+- Push: `origin/main` updated to `6e8584785a47591d8e426c8e7cc4bbeeffb14e0d`.
+- Remote check:
+  - GitHub Actions CI run `28420736743` completed successfully; install, lint, test, and build all passed.
+  - Vercel production deployment `https://rocodex-q2wy78dsy-muguett-dbys-projects.vercel.app` completed Ready.
+  - Live Edge checks on `https://custard.top/cstd?goal=portrait-shooting#projects` confirmed success color `rgb(4, 120, 87)`, unsupported warning color `rgb(138, 75, 21)`, clean copied/fallback URL, horizontal overflow `0`, and zero console warnings/errors.
+- Risk: color is not the only state channel; text and manual fallback remain the primary recovery cues.
+- Next flagship: Stage 6 should make opened goal-share links more self-explanatory for recipients, without adding another large panel or changing the share URL contract.
+- Status: closed
+
+- Next stage: Stage 6 / 6 `IMPROVE`
 
 ## Run - 2026-06-30 - Long 6-stage homepage strengthening round 4
 

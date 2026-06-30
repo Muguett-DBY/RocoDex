@@ -1,5 +1,32 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 5 Stage 5 / 6 - CHECK
+
+### Scope
+
+- Audited the selected-goal sharing path for URL-state, copy-feedback semantics, and fallback behavior.
+- Fixed a feedback semantics issue where unsupported or failed copy outcomes used the same success-colored treatment as completed copies.
+- Added a tested copy presentation contract with `success` / `warning` tone and manual-copy requirements.
+
+### User-visible change
+
+- Goal-path copy failures now read as warning/recovery states instead of success states.
+- Manual-copy fallback visibility is now derived from the same tested presentation contract as the message text.
+
+### Verification evidence
+
+- TDD red reproduced the missing copy-presentation helper; focused guide tests then passed 1 file / 7 tests and related tests passed 3 files / 33 tests.
+- `npm run lint` passed; full tests passed 47 files / 209 tests; `npm run build` generated 735 static pages.
+- Local Edge checks confirmed success feedback color `rgb(4, 120, 87)`, unsupported feedback color `rgb(138, 75, 21)`, clean copied/fallback URL, horizontal overflow `0`, and zero console warnings/errors.
+- Commit `6e85847` was pushed to `origin/main`.
+- GitHub Actions CI run `28420736743` passed.
+- Vercel production deployment `rocodex-q2wy78dsy-muguett-dbys-projects.vercel.app` completed Ready.
+- Live `https://custard.top/cstd` checks confirmed the same success/warning colors, manual fallback input, clean URL, horizontal overflow `0`, and zero console warnings/errors.
+
+### Next direction
+
+- Stage 6 should make opened goal-share links more self-explanatory for recipients, without adding another large panel or changing the share URL contract.
+
 ## 2026-06-30 - Long Homepage Cycle 5 Stage 4 / 6 - IMPROVE
 
 ### Scope
