@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 
-import { cstdProjectGuides, getCstdProjectGuide, getCstdProjectGuideSummary } from "./cstd-project-guide";
+import {
+  cstdProjectGuides,
+  getCstdProjectGuide,
+  getCstdProjectGuideDirectoryContinuation,
+  getCstdProjectGuideSummary,
+} from "./cstd-project-guide";
 import { cstdProjects } from "./cstd-projects";
 
 describe("CSTD project guide", () => {
@@ -43,5 +48,22 @@ describe("CSTD project guide", () => {
       summary: "5 条目标路径覆盖 5 / 5 个上线项目",
       uncoveredLiveProjectTitles: [],
     });
+  });
+
+  it("builds a directory continuation from the selected goal", () => {
+    expect(getCstdProjectGuideDirectoryContinuation(getCstdProjectGuide("portrait-shooting"), cstdProjects)).toEqual({
+      category: "creative",
+      categoryLabel: "创作影像",
+      projectCount: 2,
+      projectTitle: "奶黄包摄影",
+      summary: "在 2 个创作影像项目中继续比较",
+    });
+    expect(getCstdProjectGuideDirectoryContinuation(getCstdProjectGuide("game-data"), cstdProjects)).toMatchObject({
+      category: "data",
+      categoryLabel: "数据工具",
+      projectCount: 1,
+      summary: "在项目目录中查看数据工具",
+    });
+    expect(getCstdProjectGuideDirectoryContinuation(null, cstdProjects)).toBeNull();
   });
 });
