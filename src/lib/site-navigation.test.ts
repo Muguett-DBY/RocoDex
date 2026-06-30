@@ -4,6 +4,7 @@ import {
   getMobileNavigationToggleState,
   getMobileNavigationSummary,
   getSiteNavigationContext,
+  getSiteNavigationHomeAction,
   getSiteNavigationLinkState,
   isMobileNavigationOpenForPath,
   shouldDismissMobileNavigation,
@@ -78,5 +79,13 @@ describe("site navigation metadata", () => {
     const creatureContext = getSiteNavigationContext("/creatures/001");
     expect(creatureContext?.current.label).toBe("精灵列表");
     expect(creatureContext?.relatedItems.map((item) => item.href)).toEqual(["/guides", "/collection"]);
+  });
+
+  it("offers a home context action away from the homepage only", () => {
+    expect(getSiteNavigationHomeAction("/creatures/001")).toMatchObject({
+      href: "/",
+      label: "首页",
+    });
+    expect(getSiteNavigationHomeAction("/")).toBeNull();
   });
 });

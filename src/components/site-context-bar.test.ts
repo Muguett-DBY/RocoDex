@@ -19,4 +19,14 @@ describe("site context bar integration", () => {
     expect(contextBar).toContain("context.current.label");
     expect(contextBar).toContain("min-h-11");
   });
+
+  it("renders a homepage action from the context helper before related links", () => {
+    const contextBar = readFileSync(join(process.cwd(), "src", "components", "site-context-bar.tsx"), "utf8");
+
+    expect(contextBar).toContain("getSiteNavigationHomeAction");
+    expect(contextBar).toContain("homeAction");
+    expect(contextBar).toContain("homeAction.href");
+    expect(contextBar).toContain("homeAction.label");
+    expect(contextBar.indexOf("homeAction")).toBeLessThan(contextBar.indexOf("context.relatedItems.map"));
+  });
 });
