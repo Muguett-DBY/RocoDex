@@ -1776,3 +1776,5 @@
 ### Risk notes
 
 - Vercel production Redis variables are present but encrypted; `vercel env pull` returns only empty placeholders for those secrets. The live verifier therefore supports direct Redis verification when credentials are available and otherwise uses the deployed QA cleanup API to prove create-and-cleanup without exposing production secrets locally.
+- Live mobile browser QA on `https://rocodex.custard.top/cstd?goal=portrait-shooting#projects` found that touch/pointer ordering could overwrite the post-click `happy` mascot copy with the hover `working` copy. Added a guarded mascot mood transition so pointer-enter updates cannot hide click feedback during the 900 ms happy window.
+- Follow-up verification after the mobile interaction fix: `npx vitest run src/lib/cstd-mascot-mood.test.ts`, `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm run test:e2e`, `npm run build`, `npm audit --json`, and `git diff --check` passed locally; full counts were Vitest 52 files / 229 tests, Playwright 3 passed / 1 skipped, build 736 static pages, audit 0 vulnerabilities.
