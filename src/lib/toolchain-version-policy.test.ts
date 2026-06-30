@@ -19,17 +19,21 @@ describe("toolchain version policy", () => {
     };
 
     expect(packageJson.engines?.node).toBe(">=22 <27");
-    expect(packageJson.packageManager).toBe("npm@11.17.0");
+    expect(packageJson.packageManager).toBe("npm@11.18.0");
     expect(packageJson.dependencies.next).toBe("16.2.9");
     expect(packageJson.devDependencies["eslint-config-next"]).toBe("16.2.9");
-    expect(packageJson.devDependencies["@tailwindcss/postcss"]).toBe("4.3.1");
-    expect(packageJson.devDependencies.tailwindcss).toBe("4.3.1");
+    expect(packageJson.devDependencies["@tailwindcss/postcss"]).toBe("4.3.2");
+    expect(packageJson.devDependencies["@types/node"]).toBe("^22.20.0");
+    expect(packageJson.devDependencies.eslint).toBe("^9.39.4");
+    expect(packageJson.devDependencies.tailwindcss).toBe("4.3.2");
     expect(packageJson.devDependencies.vitest).toBe("4.1.9");
     expect(packageLock.packages["node_modules/next"]?.version).toBe("16.2.9");
     expect(packageLock.packages["node_modules/eslint-config-next"]?.version).toBe("16.2.9");
-    expect(packageLock.packages["node_modules/@tailwindcss/node"]?.version).toBe("4.3.1");
-    expect(packageLock.packages["node_modules/@tailwindcss/postcss"]?.version).toBe("4.3.1");
-    expect(packageLock.packages["node_modules/tailwindcss"]?.version).toBe("4.3.1");
+    expect(packageLock.packages["node_modules/@tailwindcss/node"]?.version).toBe("4.3.2");
+    expect(packageLock.packages["node_modules/@tailwindcss/postcss"]?.version).toBe("4.3.2");
+    expect(packageLock.packages["node_modules/@types/node"]?.version).toBe("22.20.0");
+    expect(packageLock.packages["node_modules/eslint"]?.version).toBe("9.39.4");
+    expect(packageLock.packages["node_modules/tailwindcss"]?.version).toBe("4.3.2");
     expect(packageLock.packages["node_modules/vitest"]?.version).toBe("4.1.9");
   });
 

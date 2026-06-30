@@ -1755,3 +1755,24 @@
 ### Next direction
 
 - The 6-stage cycle is complete. Next useful work is a lighter pass on cross-page navigation consistency outside the CSTD project workflow, unless a new product direction supersedes it.
+
+## 2026-06-30 - Residual Risk Closure
+
+### Scope
+
+- Closed the dependency, WebGL, E2E, and production-registration residual risks from the release pass.
+- Kept Tailwind on the current compatible patch, aligned Node typings with the supported Node 22 runtime, and preserved the Three.js 0.182 compatibility pin after a focused upgrade trial reproduced the upstream React Three Fiber Clock warning.
+- Added repository-owned Playwright coverage for core public routes, CSTD fallback interaction, responsive overflow checks, browser console health, and local register/login cleanup.
+- Added an opt-in live registration verifier plus a tightly scoped QA cleanup API. The cleanup API only accepts generated `qa-*` usernames, requires the same password used for registration, and deletes only that generated user.
+
+### Verification evidence
+
+- TDD red/green covered the toolchain policy, Three.js compatibility pin, WebGL constrained-context fallback, GitHub Actions E2E contract, Vitest/E2E collection boundary, DB user deletion, QA cleanup route, and live registration verifier cleanup paths.
+- `npm run ci:local` passed after stopping local Next and running `npm ci`; `npm install-scripts ls` reported no unreviewed install scripts.
+- `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run test:e2e`, `npm run build`, `npm audit --json`, and `git diff --check` passed locally.
+- Final local counts: Vitest 51 files / 227 tests passed; Playwright 3 passed / 1 skipped; Next build generated 736 static pages; npm audit found 0 vulnerabilities.
+- Test residue checks found no `data/users.json`; `test-results/` and the temporary Vercel env pull file were removed after verification.
+
+### Risk notes
+
+- Vercel production Redis variables are present but encrypted; `vercel env pull` returns only empty placeholders for those secrets. The live verifier therefore supports direct Redis verification when credentials are available and otherwise uses the deployed QA cleanup API to prove create-and-cleanup without exposing production secrets locally.
