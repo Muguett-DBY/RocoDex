@@ -5,4 +5,4 @@
 - [x] Implement the presentation helper while preserving existing copy-message compatibility.
 - [x] Wire the selected-goal panel to warning/success presentation states.
 - [x] Run focused tests, lint, full tests, build, and browser checks.
-- [ ] Commit, push `main`, check GitHub Actions, and update logs.
+- [x] Commit, push `main`, check GitHub Actions, and update logs.
