@@ -2397,5 +2397,12 @@
   - Local production API returned `200` with `state: "unavailable"` against an intentionally unreachable storage endpoint.
   - Local in-app Browser at 390 x 844 confirmed the unavailable notice, disabled registration, local-collection continuation, horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
 - Risk: restoring successful production registration still requires valid Upstash/Vercel credentials outside repository control; the shipped path now prevents credential submission and preserves access to local tools while that dependency is unavailable.
-- Remote check: pending commit, push, CI, deployment, and live smoke.
-- Status: local verification complete; remote verification pending
+- Commit: `558153d feat: surface account service availability`
+- Push: `origin/main` updated to `558153d199348ed0a7fd5b9468b925154b83dbc2`.
+- Remote check:
+  - GitHub Actions CI run `28456491877` completed successfully; install, Chromium setup, lint, test, build, and E2E all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live `https://rocodex.custard.top/api/account-status` returned `200`, `Cache-Control: no-store`, and `state: "unavailable"` for the stale production storage endpoint.
+  - Live in-app Browser at 390 x 844 confirmed registration remains disabled before and after the delayed probe, the unavailable notice appears, horizontal overflow is `0`, and console warnings/errors are `0`.
+- Stage 2 handoff: add explicit checking feedback and a bounded client wait, then extend the same storage-aware recovery state to login.
+- Status: closed

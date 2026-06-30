@@ -1799,6 +1799,8 @@
 
 - Focused status, route, register, and runtime-layout tests passed; full local gates passed with 56 Vitest files / 240 tests, Playwright 3 passed / 1 environment-dependent test skipped, 734 static pages, and 0 audit vulnerabilities.
 - Local production Browser at 390 x 844 confirmed the outage notice, disabled submit, local-collection click-through, no horizontal overflow, no framework overlay, and zero console warnings/errors.
+- Commit `558153d` was pushed to `origin/main`; GitHub Actions run `28456491877` and Vercel deployment completed successfully.
+- Live 390 x 844 Browser verification confirmed registration stays disabled during the delayed production probe and after the unavailable notice appears, with horizontal overflow `0` and zero console warnings/errors.
 
 ### Next direction
 
