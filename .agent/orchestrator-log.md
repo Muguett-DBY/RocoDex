@@ -167,7 +167,42 @@
 - Next flagship: Stage 6 should make opened goal-share links more self-explanatory for recipients, without adding another large panel or changing the share URL contract.
 - Status: closed
 
-- Next stage: Stage 6 / 6 `IMPROVE`
+### Stage 6
+
+- Stage number: 6 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: make opened goal-share links more self-explanatory for recipients without adding another large panel or changing the share URL contract.
+- Design: `docs/superpowers/specs/2026-06-30-cstd-goal-share-receipt-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-cstd-goal-share-receipt.md`
+- Implemented:
+  - Added `getCstdProjectGuideRestoredReceipt` for concise restored goal-share copy.
+  - Added `isCstdProjectGuideShareRestored` so only clean `goal` links trigger this receipt.
+  - Added separate restored-goal state in `CstdLanding`.
+  - Rendered a compact `目标路径已恢复` receipt inside the selected-match panel.
+  - Kept ordinary in-page goal selection and richer directory/project/comparison restored flows separate.
+- Verification recorded before commit:
+  - TDD red failed because the restored-goal receipt helper did not exist.
+  - Focused guide/view-state tests passed 2 files / 19 tests; related guide/view/layout tests passed 3 files / 35 tests.
+  - `npm run lint` passed.
+  - `npm test` passed 47 files / 211 tests.
+  - `npm run build` generated 735 static pages after stopping the local production server.
+  - Local Edge checks confirmed clean desktop/mobile goal-share links show `目标路径已恢复`, ordinary clicked selections do not, comparison restored states do not, horizontal overflow `0`, and zero console warnings/errors.
+- Commit: `3125a29 feat: explain restored goal share links`
+- Push: `origin/main` updated to `3125a298515329abf49c765379cea53ce14da00d`.
+- Remote check:
+  - GitHub Actions CI run `28421161470` completed successfully; install, lint, test, and build all passed.
+  - Vercel production deployment `https://rocodex-epmb7n9o3-muguett-dbys-projects.vercel.app` completed Ready.
+  - Live Edge checks on `https://custard.top/cstd?goal=portrait-shooting#projects` confirmed the restored-goal receipt on desktop and mobile, while ordinary clicked selections and comparison restored states suppressed it; horizontal overflow `0`, zero console warnings/errors.
+- Risk: the receipt intentionally only covers clean goal-share links; richer URLs continue to use their existing directory, case, or comparison handoffs.
+- Status: closed
+
+### Round 5 Final Status
+
+- Completed all 6 stages in sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`.
+- Latest production domain verification passed on `https://custard.top/cstd`.
+- Final residual risk: generated Vercel deployment URLs are protected by Vercel login in this environment, so public live verification used production aliases, primarily `https://custard.top`.
+- Status: complete
 
 ## Run - 2026-06-30 - Long 6-stage homepage strengthening round 4
 

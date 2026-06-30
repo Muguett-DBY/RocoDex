@@ -1,5 +1,32 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 5 Stage 6 / 6 - IMPROVE
+
+### Scope
+
+- Added a compact restored-goal receipt for clean selected-goal share links.
+- Tracked clean `goal` share restoration separately from directory, project-focus, and comparison restored states.
+- Preserved the goal-share URL contract: valid links still use only `goal` and `#projects`.
+
+### User-visible change
+
+- Opening a shared link such as `/cstd?goal=portrait-shooting#projects` now says `目标路径已恢复` inside the selected-match panel and names the restored goal plus recommended project.
+- Ordinary in-page goal selection and richer restored comparison links do not show this receipt.
+
+### Verification evidence
+
+- TDD red reproduced the missing restored-goal receipt helper; focused tests then passed 2 files / 19 tests and related tests passed 3 files / 35 tests.
+- `npm run lint` passed; full tests passed 47 files / 211 tests; `npm run build` generated 735 static pages.
+- Local Edge checks confirmed desktop/mobile clean goal links show the receipt, ordinary click and comparison-restored states do not, horizontal overflow `0`, and zero console warnings/errors.
+- Commit `3125a29` was pushed to `origin/main`.
+- GitHub Actions CI run `28421161470` passed.
+- Vercel production deployment `rocodex-epmb7n9o3-muguett-dbys-projects.vercel.app` completed Ready.
+- Live `https://custard.top/cstd?goal=portrait-shooting#projects` desktop/mobile checks confirmed the receipt, while ordinary click and comparison-restored states suppressed it; horizontal overflow `0`, zero console warnings/errors.
+
+### Next direction
+
+- This 6-stage cycle is complete. The next useful pass is a lighter cross-page CSTD content consistency check, unless a new product direction supersedes it.
+
 ## 2026-06-30 - Long Homepage Cycle 5 Stage 5 / 6 - CHECK
 
 ### Scope
