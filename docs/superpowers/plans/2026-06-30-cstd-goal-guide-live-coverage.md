@@ -9,4 +9,4 @@ Steps:
 - [x] Render the derived guide summary/count in the CSTD project section.
 - [x] Update workflow action copy to use the real guide count.
 - [x] Run focused tests, lint, full tests, build, and browser checks.
-- [ ] Commit, push `main`, check GitHub Actions, and update logs.
+- [x] Commit, push `main`, check GitHub Actions, and update logs.
