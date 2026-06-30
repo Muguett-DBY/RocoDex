@@ -69,10 +69,12 @@ export function getCstdProjectWorkflowSummary({
 export function getCstdProjectWorkflowAction({
   compareCount,
   compareLimit,
+  guideCount,
   hasGuide,
 }: {
   compareCount: number;
   compareLimit: number;
+  guideCount: number;
   hasGuide: boolean;
 }): CstdProjectWorkflowAction {
   const selectedComparisonCount = Math.min(Math.max(compareCount, 0), compareLimit);
@@ -82,7 +84,7 @@ export function getCstdProjectWorkflowAction({
     return {
       href: "#project-guide",
       label: "先选择访问目标",
-      detail: "从 4 条目标路径开始",
+      detail: `从 ${guideCount} 条目标路径开始`,
     };
   }
 

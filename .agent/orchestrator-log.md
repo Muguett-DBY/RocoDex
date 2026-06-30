@@ -1,5 +1,29 @@
 # RocoDex Agent Orchestrator Log
 
+## Run - 2026-06-30 - Long 6-stage homepage strengthening round 5
+
+- Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
+- Branch: `main`
+- Baseline: clean worktree; `git fetch --prune` and `git pull --ff-only` completed successfully; local `main` matched `origin/main`.
+- Prompt source: `C:\Users\12031\Desktop\AGENT_ORCHESTRATOR_3_LEVELS_V2\03_LONG_6_STAGE_MAIN_V2.txt`
+- Prompt pack: `C:\Users\12031\Desktop\AGENT_PROMPTS_MAIN_PACK`
+- Required prompt files read: `AGENT_IMPROVE_MAIN.txt`, `AGENT_UIUX_MAIN.txt`, `AGENT_CHECK_MAIN.txt`, `AGENT_CI_FIX_MAIN.txt`
+- Previous direction: start a separate product-direction pass rather than continuing navigation hardening.
+
+### Stage 1
+
+- Stage number: 1 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: make the CSTD personal project homepage goal guide cover every live project and derive visible path counts from real data.
+- Start state:
+  - Previous 6-stage cycle completed the non-CSTD navigation hardening loop.
+  - CSTD already has project directory, goal guide, evidence, comparison, URL-state receipts, and share flows.
+  - The live photography project is present in the directory but not represented in the first-scan goal guide.
+- Design: `docs/superpowers/specs/2026-06-30-cstd-goal-guide-live-coverage-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-cstd-goal-guide-live-coverage.md`
+- Status: in progress
+
 ## Run - 2026-06-30 - Long 6-stage homepage strengthening round 4
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`
