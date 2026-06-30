@@ -70,7 +70,16 @@
   - Local production Browser at 390 x 844 on port `3104` confirmed login and registration show the checking state, switch to the unavailable state after the bounded client wait, keep submit disabled, expose `/collection`, click through from login to `/collection`, have horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
   - Local screenshots: `C:/Users/12031/AppData/Local/Temp/rocodex-stage2-login-mobile-rerun.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage2-register-mobile-rerun.png`.
 - Risk: successful production registration still depends on corrected external Upstash/Vercel credentials; this stage bounds and explains the outage path but does not replace the missing storage endpoint.
-- Status: local verified; commit and remote checks pending
+- Commit: `41f2386 feat: bound account status checks`
+- Push: `origin/main` updated to `41f2386f9f40f1bf7a987083490cb8bee771d08f`.
+- Remote check:
+  - GitHub Actions CI run `28458720084` completed successfully; install, Chromium setup, lint, test, build, and E2E all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live in-app Browser at 390 x 844 confirmed login and registration show the checking state, switch to the unavailable state after the bounded client wait, keep submit disabled, expose `/collection`, have horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
+  - Live login recovery anchor `a[href="/collection"]` navigated to `https://rocodex.custard.top/collection` with zero console warnings/errors.
+  - Live screenshots: `C:/Users/12031/AppData/Local/Temp/rocodex-stage2-live-login-mobile.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage2-live-register-mobile.png`.
+- Stage 3 handoff: improve the visual hierarchy and reuse of the checking/unavailable account-status surfaces now that both auth pages share the same behavior.
+- Status: closed
 
 ### Stage 2
 

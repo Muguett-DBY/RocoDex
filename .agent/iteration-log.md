@@ -1825,7 +1825,14 @@
 - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed locally.
 - Final local counts: Vitest 58 files / 245 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages; npm audit found 0 vulnerabilities.
 - Local production Browser at 390 x 844 confirmed login and registration show checking states, switch to unavailable after the bounded wait, keep submit disabled, expose `/collection`, click through from login to `/collection`, have horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
+- Commit `41f2386` was pushed to `origin/main`; GitHub Actions run `28458720084` and Vercel commit status completed successfully.
+- Live 390 x 844 Browser verification confirmed login and registration show checking states, switch to unavailable after the bounded wait, keep submit disabled, expose `/collection`, have horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
+- Live login recovery anchor `a[href="/collection"]` navigated to `https://rocodex.custard.top/collection`.
 
 ### Risk notes
 
 - Production account creation still requires a valid external Upstash/Vercel storage endpoint; the repository now presents a bounded and recoverable outage path while that dependency remains unavailable.
+
+### Next direction
+
+- Improve the visual hierarchy and reuse of the checking/unavailable account-status surfaces now that both auth pages share the same behavior.
