@@ -76,6 +76,23 @@ export function buildCstdProjectViewHref(
   return `${pathname}${search ? `?${search}` : ""}#${hash}`;
 }
 
+export function buildCstdProjectGuideShareHref(pathname: string, guideId: string | null) {
+  const guide = getCstdProjectGuide(guideId);
+  if (!guide) return null;
+
+  return buildCstdProjectViewHref(
+    pathname,
+    {
+      filter: "all",
+      query: "",
+      guideId: guide.id,
+      projectId: null,
+      compareProjectIds: [],
+    },
+    "projects",
+  );
+}
+
 export function getCstdProjectDirectoryRestoredReceipt({
   filter,
   query,

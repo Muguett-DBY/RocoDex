@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
   cstdProjectGuides,
   getCstdProjectGuide,
+  getCstdProjectGuideCopyMessage,
   getCstdProjectGuideDirectoryContinuation,
   getCstdProjectGuideSummary,
 } from "./cstd-project-guide";
@@ -65,5 +66,18 @@ describe("CSTD project guide", () => {
       summary: "在项目目录中查看数据工具",
     });
     expect(getCstdProjectGuideDirectoryContinuation(null, cstdProjects)).toBeNull();
+  });
+
+  it("presents goal-share clipboard outcomes at the point of action", () => {
+    expect(getCstdProjectGuideCopyMessage(null, "预约南京写真或情侣约拍")).toBeNull();
+    expect(getCstdProjectGuideCopyMessage("copied", "预约南京写真或情侣约拍")).toBe(
+      "预约南京写真或情侣约拍的目标路径已复制",
+    );
+    expect(getCstdProjectGuideCopyMessage("unsupported", "预约南京写真或情侣约拍")).toBe(
+      "浏览器不支持自动复制，请手动复制下方目标路径",
+    );
+    expect(getCstdProjectGuideCopyMessage("failed", "预约南京写真或情侣约拍")).toBe(
+      "目标路径复制失败，请手动复制下方链接",
+    );
   });
 });

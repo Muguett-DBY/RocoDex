@@ -74,11 +74,13 @@ import {
 import {
   cstdProjectGuides,
   getCstdProjectGuide,
+  getCstdProjectGuideCopyMessage,
   getCstdProjectGuideDirectoryContinuation,
   getCstdProjectGuideSummary,
   type CstdProjectGuideId,
 } from "@/lib/cstd-project-guide";
 import {
+  buildCstdProjectGuideShareHref,
   buildCstdProjectViewHref,
   getCstdProjectDirectoryRestoredAction,
   getCstdProjectDirectoryRestoredReceipt,
@@ -110,6 +112,7 @@ import {
   cstdProjectGridClassName,
   cstdProjectGuideActionRailClassName,
   cstdProjectGuideClearActionClassName,
+  cstdProjectGuideHeaderActionsClassName,
   cstdProjectGuideMatchLayoutClassName,
   cstdProjectGuidePrimaryActionClassName,
   cstdProjectGuideSecondaryActionClassName,
@@ -235,6 +238,8 @@ export function CstdLanding() {
   const [comparisonBriefCopyResult, setComparisonBriefCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [projectLinkDirectoryCopyResult, setProjectLinkDirectoryCopyResult] = useState<CstdProjectCopyResult | null>(null);
   const [projectDirectoryCopyResult, setProjectDirectoryCopyResult] = useState<CstdProjectCopyResult | null>(null);
+  const [projectGuideCopyResult, setProjectGuideCopyResult] = useState<CstdProjectCopyResult | null>(null);
+  const [projectGuideShareUrl, setProjectGuideShareUrl] = useState("");
   const [bgmActive, setBgmActive] = useState(false);
   const [mascotMood, setMascotMood] = useState<MascotMood>("curious");
   const prefersReducedMotion = reducedMotion ?? true;
@@ -272,6 +277,8 @@ export function CstdLanding() {
       setSelectedGuideId(viewState.guideId);
       setSelectedProjectId(viewState.projectId);
       setComparedProjectIds(viewState.compareProjectIds);
+      setProjectGuideCopyResult(null);
+      setProjectGuideShareUrl("");
       setProjectDirectoryRestoredFromUrl(hasRestoredProjectViewState && (viewState.filter !== "all" || viewState.query.length > 0));
       setProjectFocusRestoredFromUrl(hasRestoredProjectViewState && viewState.projectId !== null);
       setProjectViewStateRestoredFromUrl(hasRestoredProjectViewState && viewState.compareProjectIds.length > 0);
@@ -524,6 +531,8 @@ export function CstdLanding() {
     setProjectCopyResult(null);
     setProjectBriefCopyResult(null);
     setProjectDirectoryCopyResult(null);
+    setProjectGuideCopyResult(null);
+    setProjectGuideShareUrl("");
     clearRestoredProjectViewReceipts();
   }
 
@@ -545,6 +554,8 @@ export function CstdLanding() {
     setProjectCopyResult(null);
     setProjectBriefCopyResult(null);
     setProjectDirectoryCopyResult(null);
+    setProjectGuideCopyResult(null);
+    setProjectGuideShareUrl("");
     clearRestoredProjectViewReceipts();
   }
 
@@ -636,7 +647,22 @@ export function CstdLanding() {
     setSelectedProjectId(null);
     setComparisonBriefCopyResult(null);
     setProjectDirectoryCopyResult(null);
+    setProjectGuideCopyResult(null);
+    setProjectGuideShareUrl("");
     clearRestoredProjectViewReceipts();
+  }
+
+  async function copyProjectGuideLink() {
+    const href = buildCstdProjectGuideShareHref(window.location.pathname, selectedGuideId);
+    if (!href) return;
+
+    const url = `${window.location.origin}${href}`;
+    setProjectGuideShareUrl(url);
+    const result = await copyCstdProjectLink(
+      getCstdClipboardWriter(),
+      url,
+    );
+    setProjectGuideCopyResult(result);
   }
 
   async function copyProjectFocusLink() {
@@ -954,8 +980,11 @@ export function CstdLanding() {
             comparedProjectIds={comparedProjectIds}
             guideSummary={projectGuideSummary}
             motionDisabled={motionDisabled}
+            projectGuideCopyResult={projectGuideCopyResult}
+            projectGuideShareUrl={projectGuideShareUrl}
             selectedGuideId={selectedGuideId}
             onBrowseCategory={browseProjectCategory}
+            onCopyGuide={copyProjectGuideLink}
             onFocus={focusProject}
             onSelect={selectProjectGuide}
             onToggleComparison={toggleProjectComparison}
@@ -1678,8 +1707,11 @@ function ProjectGuide({
   comparedProjectIds,
   guideSummary,
   motionDisabled,
+  projectGuideCopyResult,
+  projectGuideShareUrl,
   selectedGuideId,
   onBrowseCategory,
+  onCopyGuide,
   onFocus,
   onSelect,
   onToggleComparison,
@@ -1687,8 +1719,11 @@ function ProjectGuide({
   comparedProjectIds: readonly string[];
   guideSummary: ReturnType<typeof getCstdProjectGuideSummary>;
   motionDisabled: boolean;
+  projectGuideCopyResult: CstdProjectCopyResult | null;
+  projectGuideShareUrl: string;
   selectedGuideId: CstdProjectGuideId | null;
   onBrowseCategory: (filter: CstdProjectFilter) => void;
+  onCopyGuide: () => void;
   onFocus: (projectId: string) => void;
   onSelect: (guideId: CstdProjectGuideId | null) => void;
   onToggleComparison: (projectId: string) => void;
@@ -1697,6 +1732,7 @@ function ProjectGuide({
   const selectedProject = selectedGuide ? cstdProjects.find((project) => project.id === selectedGuide.projectId) ?? null : null;
   const directoryContinuation = getCstdProjectGuideDirectoryContinuation(selectedGuide, cstdProjects);
   const comparisonControl = selectedProject ? getCstdProjectComparisonControl(comparedProjectIds, selectedProject.id) : null;
+  const guideCopyMessage = selectedGuide ? getCstdProjectGuideCopyMessage(projectGuideCopyResult, selectedGuide.goal) : null;
 
   return (
     <div id="project-guide" className="mb-5 scroll-mt-24" aria-label={guideSummary.summary}>
@@ -1745,21 +1781,46 @@ function ProjectGuide({
             transition={{ duration: 0.18 }}
           >
             <div className={cstdProjectGuideMatchLayoutClassName}>
-              <div className="relative min-w-0 pr-12">
-                <button
-                  type="button"
-                  onClick={() => onSelect(null)}
-                  aria-label="清除目标匹配"
-                  title="清除目标匹配"
-                  className={cstdProjectGuideClearActionClassName}
-                >
-                  <X className="h-4 w-4" />
-                </button>
+              <div className="relative min-w-0 pr-24">
+                <div className={cstdProjectGuideHeaderActionsClassName}>
+                  <button
+                    type="button"
+                    onClick={onCopyGuide}
+                    aria-label="复制目标路径"
+                    title="复制目标路径"
+                    className={cstdProjectGuideClearActionClassName}
+                  >
+                    {projectGuideCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onSelect(null)}
+                    aria-label="清除目标匹配"
+                    title="清除目标匹配"
+                    className={cstdProjectGuideClearActionClassName}
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-[#047857]">推荐匹配</p>
                 <h4 id="project-match-heading" className="mt-1 text-xl font-black text-[#2f241d] sm:text-2xl">
                   {selectedProject.title}
                 </h4>
                 <p className="mt-2 text-sm font-semibold leading-6 text-[#416354]">{selectedGuide.reason}</p>
+                {guideCopyMessage ? (
+                  <p role="status" className="mt-2 text-xs font-black leading-5 text-[#047857]">
+                    {guideCopyMessage}
+                  </p>
+                ) : null}
+                {projectGuideCopyResult && projectGuideCopyResult !== "copied" && projectGuideShareUrl ? (
+                  <input
+                    aria-label="目标路径链接"
+                    className="mt-2 h-11 w-full rounded-lg border border-[#b7decf] bg-white/82 px-3 text-xs font-semibold text-[#315b7f] outline-none focus:border-[#0f8f64] focus:ring-2 focus:ring-[#0f8f64]/20"
+                    readOnly
+                    value={projectGuideShareUrl}
+                    onFocus={(event) => event.currentTarget.select()}
+                  />
+                ) : null}
                 <dl className="mt-3 grid gap-2 border-t border-[#b7decf] pt-3 sm:grid-cols-2">
                   <div className="min-w-0">
                     <dt className="text-xs font-black text-[#047857]">当前状态</dt>

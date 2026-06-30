@@ -1,5 +1,6 @@
 import type { CstdProject } from "./cstd-projects";
 import { cstdProjectFilters } from "./cstd-project-filter";
+import type { CstdProjectCopyResult } from "./cstd-project-focus";
 
 type CstdProjectId = CstdProject["id"];
 
@@ -90,4 +91,11 @@ export function getCstdProjectGuideDirectoryContinuation(
     projectTitle: project.title,
     summary: projectCount > 1 ? `在 ${projectCount} 个${categoryLabel}项目中继续比较` : `在项目目录中查看${categoryLabel}`,
   };
+}
+
+export function getCstdProjectGuideCopyMessage(result: CstdProjectCopyResult | null, goal: string) {
+  if (!result) return null;
+  if (result === "copied") return `${goal}的目标路径已复制`;
+  if (result === "unsupported") return "浏览器不支持自动复制，请手动复制下方目标路径";
+  return "目标路径复制失败，请手动复制下方链接";
 }

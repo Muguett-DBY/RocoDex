@@ -46,8 +46,10 @@ export const cstdProjectGuideSecondaryActionClassName =
 export const cstdProjectGuideWideActionClassName =
   "inline-flex min-h-11 min-w-0 items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 min-[420px]:col-span-2";
 
+export const cstdProjectGuideHeaderActionsClassName = "absolute right-0 top-0 flex gap-2";
+
 export const cstdProjectGuideClearActionClassName =
-  "absolute right-0 top-0 inline-flex h-11 w-11 items-center justify-center rounded-lg border border-[#ead6ad] bg-white/75 text-[#6f5b4a] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]";
+  "inline-flex h-11 w-11 items-center justify-center rounded-lg border border-[#ead6ad] bg-white/75 text-[#6f5b4a] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]";
 
 export const cstdProjectMetricGridClassName = "mt-5 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-3 sm:gap-3";
 
