@@ -1,13 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Compass } from "lucide-react";
+import { ArrowRight, Compass, Home } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { getSiteNavigationContext } from "@/lib/site-navigation";
+import { getSiteNavigationContext, getSiteNavigationHomeAction } from "@/lib/site-navigation";
 
 export function SiteContextBar() {
   const pathname = usePathname();
   const context = getSiteNavigationContext(pathname);
+  const homeAction = getSiteNavigationHomeAction(pathname);
 
   if (!context) {
     return null;
@@ -29,6 +30,15 @@ export function SiteContextBar() {
           </div>
         </div>
         <div className="flex min-w-0 flex-wrap items-center gap-2 sm:justify-end">
+          {homeAction ? (
+            <Link
+              href={homeAction.href}
+              className="inline-flex min-h-11 items-center gap-1.5 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:border-emerald-200 hover:text-slate-950 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:border-emerald-800 dark:hover:text-white"
+            >
+              <Home className="h-3.5 w-3.5" />
+              {homeAction.label}
+            </Link>
+          ) : null}
           {context.relatedItems.map((item) => (
             <Link
               key={item.href}

@@ -202,6 +202,32 @@
 
 - Next stage: Stage 6 / 6 `IMPROVE`
 
+### Stage 6
+
+- Stage number: 6 / 6
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt`
+- Goal: add one final user-facing continuation polish to the non-CSTD navigation layer while preserving the Stage 5 accessibility contracts.
+- Start state:
+  - Stage 5 completed the CHECK pass and verified Escape focus return locally and live.
+  - Worktree was clean on `main` matching `origin/main`; Stage 5 evidence commit passed GitHub Actions and Vercel.
+- Design: `docs/superpowers/specs/2026-06-30-site-context-home-action-design.md`
+- Plan: `docs/superpowers/plans/2026-06-30-site-context-home-action.md`
+- Implemented:
+  - Added `getSiteNavigationHomeAction`, returning the homepage action only when the current route is not already home.
+  - Added a compact `首页` action at the front of the existing context strip action row.
+  - Preserved the related-destination links, 44 px touch target contract, mobile menu keyboard/focus behavior, and CSTD isolation.
+- Verification recorded before commit:
+  - TDD red: focused tests failed before the home-action helper and context strip integration existed.
+  - TDD green: focused tests passed 2 files / 12 tests.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - `npm run lint` exited `0`.
+  - `npm test` passed 47 files / 203 tests.
+  - `npm run build` exited `0` and generated 735 static pages.
+  - Local production desktop and 390 x 844 in-app Browser verification on `/creatures/001` confirmed the context strip home action `首页`, related actions `攻略` and `我的收藏`, all actions at 44 px height, horizontal overflow `0`, and console warnings/errors `0`.
+- Risk: the home action is deliberately suppressed on `/` to avoid duplicating the current destination; unknown routes still do not render the context strip.
+- Status: local verified, pending commit and remote verification
+
 ## Run — 2026-06-29 — Long 6-stage homepage strengthening round 3
 
 - Sequence: `IMPROVE -> IMPROVE -> UIUX -> IMPROVE -> CHECK -> IMPROVE`

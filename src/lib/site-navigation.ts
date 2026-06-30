@@ -197,6 +197,16 @@ export function getSiteNavigationContext(pathname: string | null | undefined): S
   return { current, relatedItems };
 }
 
+export function getSiteNavigationHomeAction(pathname: string | null | undefined): SiteNavigationItem | null {
+  const current = getActiveSiteNavigationItem(pathname);
+
+  if (!current || current.href === siteHomeNavigationItem.href) {
+    return null;
+  }
+
+  return siteHomeNavigationItem;
+}
+
 function pathMatchesNavigationItem(pathname: string, href: string) {
   if (href === "/") {
     return pathname === "/";

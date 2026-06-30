@@ -1,5 +1,30 @@
 # RocoDex Iteration Log
 
+## 2026-06-30 - Long Homepage Cycle 4 Stage 6 / 6 - IMPROVE
+
+### Scope
+
+- Added a pure context-strip home action helper.
+- Added a `首页` action before related destinations in the non-CSTD context strip.
+- Kept related links, 44 px action targets, mobile Escape/focus behavior, and CSTD isolation unchanged.
+
+### User-visible change
+
+- From nested or module pages, visitors now get an explicit `首页` continuation in the context strip instead of relying only on the brand mark.
+
+### Verification evidence
+
+- TDD red failed before the home action helper and context strip rendering existed; focused tests then passed 2 files / 12 tests.
+- `git diff --check` passed with only Windows line-ending notices.
+- `npm run lint` passed.
+- `npm test` passed 47 files / 203 tests.
+- `npm run build` generated 735 static pages.
+- Local desktop and 390 x 844 production-browser verification on `/creatures/001` confirmed the context strip home action `首页`, related actions `攻略` and `我的收藏`, 44 px action heights, horizontal overflow `0`, and zero console warnings/errors.
+
+### Next direction
+
+- The 6-stage cycle is complete after remote verification and final log closure.
+
 ## 2026-06-30 - Long Homepage Cycle 4 Stage 5 / 6 - CHECK
 
 ### Scope
