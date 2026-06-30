@@ -134,10 +134,10 @@ describe("CSTD project focus", () => {
   test("summarizes checklist completeness for the focus panel header", () => {
     expect(
       getCstdProjectEvidenceChecklistSummary([
-        { label: "角色", value: "产品", complete: true },
-        { label: "问题", value: "资料分散", complete: true },
-        { label: "交付", value: "上线", complete: true },
-        { label: "现状", value: "维护中", complete: true },
+        { complete: true },
+        { complete: true },
+        { complete: true },
+        { complete: true },
       ]),
     ).toBe("4 / 4 项证据完整");
   });

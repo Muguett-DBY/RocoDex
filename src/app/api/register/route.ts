@@ -8,10 +8,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "账号功能暂未启用" }, { status: 503 });
   }
 
+  let payload: unknown;
   try {
-    const { username, password } = await request.json();
+    payload = await request.json();
+  } catch {
+    return NextResponse.json({ error: "用户名和密码不能为空" }, { status: 400 });
+  }
 
-    if (!username || !password) {
+  try {
+    const { username, password } = payload as { username?: unknown; password?: unknown };
+
+    if (typeof username !== "string" || typeof password !== "string" || !username || !password) {
       return NextResponse.json({ error: "用户名和密码不能为空" }, { status: 400 });
     }
 

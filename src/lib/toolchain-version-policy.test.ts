@@ -32,4 +32,15 @@ describe("toolchain version policy", () => {
     expect(packageLock.packages["node_modules/tailwindcss"]?.version).toBe("4.3.1");
     expect(packageLock.packages["node_modules/vitest"]?.version).toBe("4.1.9");
   });
+
+  test("pins approved install scripts for native tooling used by Next and ESLint", () => {
+    const packageJson = readJson("package.json") as {
+      allowScripts?: Record<string, boolean>;
+    };
+
+    expect(packageJson.allowScripts).toMatchObject({
+      "sharp@0.34.5": true,
+      "unrs-resolver@1.12.2": true,
+    });
+  });
 });

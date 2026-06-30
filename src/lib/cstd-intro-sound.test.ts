@@ -53,8 +53,8 @@ function installFakeAudio({ rejectPlay = false, throwConstructor = false }: Fake
   }
 
   const localStorage = {
-    getItem: vi.fn(() => null),
-    setItem: vi.fn(),
+    getItem: vi.fn<(key: string) => string | null>(() => null),
+    setItem: vi.fn<(key: string, value: string) => void>(),
   };
 
   vi.stubGlobal("window", { Audio: FakeAudio, localStorage });

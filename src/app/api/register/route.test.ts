@@ -18,6 +18,14 @@ function registerRequest(body: Record<string, unknown>) {
   });
 }
 
+function rawRegisterRequest(body: string) {
+  return new Request("http://localhost/api/register", {
+    method: "POST",
+    body,
+    headers: { "content-type": "application/json" },
+  });
+}
+
 describe("register API route", () => {
   beforeEach(() => {
     delete process.env.AUTH_SECRET;
@@ -58,5 +66,27 @@ describe("register API route", () => {
     expect(response.status).toBe(200);
     expect(findUserByUsername).toHaveBeenCalledWith("tester");
     expect(createUser).toHaveBeenCalledWith("tester", expect.any(String));
+  });
+
+  it("rejects malformed JSON as a client input error before touching storage", async () => {
+    process.env.AUTH_SECRET = "test-secret";
+
+    const response = await POST(rawRegisterRequest("{not-json"));
+
+    await expect(response.json()).resolves.toEqual({ error: "用户名和密码不能为空" });
+    expect(response.status).toBe(400);
+    expect(findUserByUsername).not.toHaveBeenCalled();
+    expect(createUser).not.toHaveBeenCalled();
+  });
+
+  it("rejects non-string credentials as a client input error before touching storage", async () => {
+    process.env.AUTH_SECRET = "test-secret";
+
+    const response = await POST(registerRequest({ username: "tester", password: 123456 }));
+
+    await expect(response.json()).resolves.toEqual({ error: "用户名和密码不能为空" });
+    expect(response.status).toBe(400);
+    expect(findUserByUsername).not.toHaveBeenCalled();
+    expect(createUser).not.toHaveBeenCalled();
   });
 });
