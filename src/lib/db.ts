@@ -1,12 +1,12 @@
 import { Redis } from "@upstash/redis";
+import { getAccountStorageConfig } from "@/lib/account-storage-config";
+import { AccountStorageConfigurationError } from "@/lib/storage-errors";
 import fs from "node:fs";
 import path from "node:path";
 
-const redisUrl = process.env.UPSTASH_REDIS_REST_URL || process.env.UPSTASH_REDIS_URL;
-const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.UPSTASH_REDIS_TOKEN;
-const useRedis = !!(redisUrl && redisToken);
-
-const redis = useRedis ? new Redis({ url: redisUrl!, token: redisToken! }) : null;
+const storageConfig = getAccountStorageConfig();
+const redis =
+  storageConfig.kind === "redis" ? new Redis({ url: storageConfig.url, token: storageConfig.token }) : null;
 
 // Local fallback storage
 const DATA_DIR = path.join(process.cwd(), "data");
@@ -38,7 +38,9 @@ function userKey(username: string) {
 }
 
 export async function findUserByUsername(username: string): Promise<User | undefined> {
-  if (useRedis && redis) {
+  assertStorageConfigured();
+
+  if (redis) {
     return (await redis.get(userKey(username))) as User | undefined;
   }
   return readLocalUsers().find((u) => u.username === username);
@@ -47,7 +49,9 @@ export async function findUserByUsername(username: string): Promise<User | undef
 export async function createUser(username: string, password: string): Promise<User> {
   const user: User = { id: crypto.randomUUID(), username, password, createdAt: new Date().toISOString() };
 
-  if (useRedis && redis) {
+  assertStorageConfigured();
+
+  if (redis) {
     await redis.set(userKey(username), user);
   } else {
     const users = readLocalUsers();
@@ -59,7 +63,9 @@ export async function createUser(username: string, password: string): Promise<Us
 }
 
 export async function deleteUserByUsername(username: string): Promise<boolean> {
-  if (useRedis && redis) {
+  assertStorageConfigured();
+
+  if (redis) {
     return (await redis.del(userKey(username))) > 0;
   }
 
@@ -79,4 +85,10 @@ export async function deleteUserByUsername(username: string): Promise<boolean> {
   }
 
   return true;
+}
+
+function assertStorageConfigured(): void {
+  if (storageConfig.kind === "invalid") {
+    throw new AccountStorageConfigurationError(storageConfig.reason);
+  }
 }

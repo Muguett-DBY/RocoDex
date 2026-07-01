@@ -1954,3 +1954,23 @@
 ### Final status
 
 - Six-stage long homepage risk repair cycle completed.
+
+## 2026-07-01 - Account Storage Configuration Follow-up
+
+### Scope
+
+- Investigated the remaining production account-storage dependency after the six-stage repair cycle.
+- Confirmed Vercel Production has `AUTH_SECRET`, `UPSTASH_REDIS_URL`, and `UPSTASH_REDIS_TOKEN` configured as sensitive variables, while Preview and Development have no account-storage variables.
+- Added explicit account-storage configuration validation so Vercel runtimes cannot silently fall back to local file storage when Redis credentials are missing, partial, or supplied as a non-REST `rediss://` socket URL.
+
+### Verification evidence
+
+- TDD red reproduced the missing storage-config module; focused green passed 2 files / 9 tests.
+- Account API/register/auth focused tests passed 6 files / 25 tests.
+- Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
+- Final local counts: Vitest 62 files / 259 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages; npm audit found 0 vulnerabilities.
+- Local Vercel-like production server with `VERCEL=1` and missing Redis credentials returned `200`, `Cache-Control: no-store`, and `state: "unavailable"` from `/api/account-status`.
+
+### Risk notes
+
+- This fixes the repository-controlled configuration safety risk. Restoring successful production account registration/login still requires valid external Upstash REST credentials in Vercel Production.
