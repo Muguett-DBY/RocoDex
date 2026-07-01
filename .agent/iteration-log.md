@@ -1896,3 +1896,26 @@
 ### Next direction
 
 - Audit the account-status and auth outage path for direct API/authorization bypasses, hydration/performance regressions, and stale recovery links.
+
+## 2026-07-01 - Long Homepage Risk Repair Stage 5 / 6 - CHECK
+
+### Scope
+
+- Audited account-status, registration, and credentials login outage handling.
+- Found that direct credentials authorization could still let known storage failures escape if a request bypassed the client preflight.
+- Added a focused Auth.js credentials-provider regression test and narrowed the fix to the storage lookup boundary.
+
+### Fix
+
+- Known Redis/network storage outages during credentials login now warn and return `null` for a controlled failed sign-in.
+- Unknown lookup errors still re-throw, so unrelated auth bugs are not hidden.
+
+### Verification evidence
+
+- TDD red reproduced the direct-login storage outage risk; focused green tests passed 3 files / 10 tests.
+- `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed locally.
+- Final local counts: Vitest 61 files / 251 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages; npm audit found 0 vulnerabilities.
+
+### Risk notes
+
+- Successful production account creation/login still requires valid external Upstash/Vercel credentials; this stage prevents known storage outages from becoming unhandled auth exceptions.

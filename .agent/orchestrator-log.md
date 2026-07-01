@@ -165,6 +165,34 @@
 - Stage 5 handoff: audit the account-status and auth outage path for direct API/authorization bypasses, hydration/performance regressions, and stale recovery links.
 - Status: closed
 
+## 2026-07-01 Long Homepage Risk Repair Cycle - Stage 5 / 6
+
+- Type: CHECK
+- Prompt: `AGENT_CHECK_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Start state: `main` matched `origin/main` at `b21c670`; Stage 4 implementation and evidence CI runs `28494753472` and `28494887843` passed; worktree was clean.
+- Audit focus: account-status and auth outage paths, direct authorization bypasses, recovery-link freshness, CI/build/test parity, and storage error handling.
+- Finding P1: credentials `authorize` calls `findUserByUsername` directly. Direct or stale-client login attempts can bypass the client account-status preflight, and known Redis/network failures may still surface as unhandled auth server errors.
+- Fix plan: catch known storage-unavailable errors inside the credentials provider, warn without polluting error logs, return `null` for a controlled failed sign-in, and re-throw unknown errors.
+- Design: `docs/superpowers/specs/2026-07-01-auth-storage-outage-check-design.md`
+- Plan: `docs/superpowers/plans/2026-07-01-auth-storage-outage-check.md`
+- Implemented:
+  - Added an Auth.js credentials-provider regression test that captures the `authorize` callback through module mocks.
+  - Reproduced the direct-login storage outage risk: known storage errors rejected instead of resolving to a controlled failed sign-in.
+  - Wrapped only the `findUserByUsername` lookup in `authorize`; known storage-unavailable errors now warn and return `null`, while unknown lookup errors still re-throw.
+- Verification recorded before commit:
+  - TDD red: `npx vitest run src/lib/auth.test.ts` failed because `TypeError("fetch failed")` rejected from `authorize`.
+  - Focused green tests passed `src/lib/auth.test.ts`, `src/app/api/register/route.test.ts`, and `src/app/api/account-status/route.test.ts`: 3 files / 10 tests.
+  - `npm run lint` exited `0`.
+  - `npx tsc --noEmit` initially caught a test type-narrowing issue, which was fixed; rerun exited `0`.
+  - `npm test` passed 61 files / 251 tests.
+  - `npm run build` exited `0`, generated 734 static pages, and kept auth routes dynamic.
+  - `npm run test:e2e` passed 3 tests with 1 environment-dependent registration test skipped.
+  - `npm audit --json` reported 0 vulnerabilities.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - Source hygiene scan found no new source TODO/FIXME/console.log/debugger or secret-pattern matches; matches were limited to the plan template and historical log text.
+- Risk: direct login attempts during the external storage outage now fail safely, but successful account creation/login still requires corrected external Upstash/Vercel credentials.
+- Status: local verified; commit and remote checks pending
+
 ### Stage 2
 
 - Stage number: 2 / 6
