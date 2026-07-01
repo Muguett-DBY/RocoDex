@@ -1856,7 +1856,13 @@
 - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed locally.
 - Final local counts: Vitest 59 files / 247 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages; npm audit found 0 vulnerabilities.
 - Local production Browser covered desktop and 390 x 844 login/register checking and unavailable states, 44 px recovery actions, disabled helper linkage, `/collection` click-through, horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
+- Commit `7131d1f` was pushed to `origin/main`; GitHub Actions run `28459987432` and Vercel commit status completed successfully.
+- Live production Browser covered desktop and 390 x 844 login/register checking and unavailable states, 44 px recovery actions, disabled helper linkage, `/collection` click-through, horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
 
 ### Risk notes
 
 - Storage recovery still requires valid external Upstash/Vercel credentials; the UI now presents that outage with clearer feedback and a usable local continuation.
+
+### Next direction
+
+- Add a homepage/public navigation continuation that makes the account outage path more discoverable before users reach login or registration.

@@ -115,7 +115,17 @@
   - Local desktop geometry: auth card width `448` centered at x `496`, action height `44`, action width `134`.
   - Local screenshots: `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-local-mobile-login.png`, `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-local-mobile-register.png`, `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-local-desktop-login.png`, and `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-local-desktop-register.png`.
 - Risk: production account creation still depends on external storage credentials; this UIUX stage improves the outage and recovery experience but does not change storage availability.
-- Status: local verified; commit and remote checks pending
+- Commit: `7131d1f feat: upgrade auth status experience`
+- Push: `origin/main` updated to `7131d1fd109040c1c1d61cf5cf492649985f2d55`.
+- Remote check:
+  - GitHub Actions CI run `28459987432` completed successfully; install, Chromium setup, lint, test, build, and E2E all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live production Browser at 390 x 844 and 1440 x 900 confirmed login/register checking states with `aria-live="polite"`, `aria-busy="true"`, and spinner; unavailable states with 44 px recovery actions; disabled submit with `aria-describedby="account-status-submit-help"`; recovery click-through to `/collection`; horizontal overflow `0`; no framework overlay; and zero console warnings/errors.
+  - Live mobile geometry: auth card width `366` at x `12`, action height `44`, action width `259`.
+  - Live desktop geometry: auth card width `448` centered at x `496`, action height `44`, action width `134`.
+  - Live screenshots: `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-live-mobile-login.png`, `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-live-mobile-register.png`, `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-live-desktop-login.png`, and `C:/Users/12031/AppData/Local/Temp/rocodex-stage3-live-desktop-register.png`.
+- Stage 4 handoff: add a homepage/public navigation continuation that makes the account outage path more discoverable before users reach login or registration.
+- Status: closed
 
 ### Stage 2
 
