@@ -44,4 +44,19 @@ describe("account storage configuration", () => {
       token: "token",
     });
   });
+
+  it("prefers Vercel Marketplace KV REST credentials over stale legacy variables", () => {
+    expect(
+      getAccountStorageConfig({
+        KV_REST_API_URL: "https://marketplace.upstash.io",
+        KV_REST_API_TOKEN: "marketplace-token",
+        UPSTASH_REDIS_URL: "rediss://default:stale@example.upstash.io:6379",
+        UPSTASH_REDIS_TOKEN: "stale-token",
+      }),
+    ).toEqual({
+      kind: "redis",
+      url: "https://marketplace.upstash.io",
+      token: "marketplace-token",
+    });
+  });
 });
