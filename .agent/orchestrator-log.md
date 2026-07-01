@@ -200,6 +200,34 @@
 - Stage 6 handoff: add a final low-risk user-facing improvement around account recovery confidence, then run the final production acceptance loop.
 - Status: closed
 
+## 2026-07-01 Long Homepage Risk Repair Cycle - Stage 6 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Start state: `main` matched `origin/main` at `06bf984`; Stage 5 implementation and evidence CI runs `28496842845` and `28496965763` passed; worktree was clean.
+- Previous direction: add a final low-risk user-facing improvement around account recovery confidence, then run the final production acceptance loop.
+- Flagship goal: make the shared account outage panel provide a complete no-account continuation path for both returning users and first-time visitors.
+- Design: `docs/superpowers/specs/2026-07-01-account-recovery-actions-design.md`
+- Plan: `docs/superpowers/plans/2026-07-01-account-recovery-actions.md`
+- Implemented:
+  - Added a secondary `/creatures` recovery action to the shared `AccountStatusPanel` for account-disabled and storage-unavailable states.
+  - Kept the primary local-collection action intact and changed the action layout to mobile-first stacked buttons that become inline on larger screens.
+  - Extended panel tests so both recovery links and the responsive action layout are covered.
+- Verification recorded before commit:
+  - TDD red failed because the shared outage panel did not yet expose the `/creatures` continuation.
+  - Focused green test passed `src/components/account-status-panel.test.tsx` with 1 file / 2 tests.
+  - `npm run lint` exited `0`.
+  - `npx tsc --noEmit` exited `0`.
+  - `npm test` passed 61 files / 251 tests.
+  - `npm run build` exited `0` and generated 734 static pages.
+  - `npm run test:e2e` passed 3 tests with 1 environment-dependent registration test skipped.
+  - `npm audit --json` reported 0 vulnerabilities.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - Local production Browser at 390 x 844 confirmed login outage UI shows both `/collection` and `/creatures`, keeps login disabled, gives both actions 44 px touch height, has horizontal overflow `0`, navigates to `/creatures`, and reports zero console/page errors.
+  - Local production Browser at 390 x 844 confirmed homepage outage UI shows both `/collection` and `/creatures`, keeps the panel within a 390 px viewport, gives both actions 44 px touch height, has horizontal overflow `0`, navigates to `/creatures`, and reports zero console/page errors.
+- Risk: successful production account creation and login still require valid external Upstash/Vercel storage credentials; this stage reduces dead ends while that dependency remains unavailable.
+- Status: local verification complete; awaiting commit, push, CI, Vercel, and live browser verification.
+
 ### Stage 2
 
 - Stage number: 2 / 6

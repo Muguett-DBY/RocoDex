@@ -1925,3 +1925,30 @@
 ### Next direction
 
 - Add a final low-risk user-facing improvement around account recovery confidence, then run the final production acceptance loop.
+
+## 2026-07-01 - Long Homepage Risk Repair Stage 6 / 6 - IMPROVE
+
+### Scope
+
+- Added a second no-account recovery path to the shared account outage panel.
+- Kept `/collection` as the primary local-collection continuation and added `/creatures` for visitors who want to keep browsing the public index.
+- Changed the outage action area to stack on mobile and sit inline on wider screens, preserving 44 px touch targets.
+
+### User-visible change
+
+- Login, registration, and homepage outage panels now offer both “先用本地收藏” and “继续查精灵” so visitors are not funneled into only one recovery path while account storage is unavailable.
+
+### Verification evidence
+
+- TDD red reproduced the missing `/creatures` recovery action; focused green passed 1 file / 2 tests.
+- `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed locally.
+- Final local counts: Vitest 61 files / 251 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages; npm audit found 0 vulnerabilities.
+- Local production Browser at 390 x 844 confirmed login and homepage outage UI show both `/collection` and `/creatures`, keep the account path controlled, give both actions 44 px touch height, have horizontal overflow `0`, navigate to `/creatures`, and report zero console/page errors.
+
+### Risk notes
+
+- Successful production account creation/login still requires valid external Upstash/Vercel credentials; this stage improves recovery choices while that dependency remains unavailable.
+
+### Next direction
+
+- Complete commit, push, CI, Vercel, and live browser acceptance for the final stage, then close the six-stage risk repair cycle.

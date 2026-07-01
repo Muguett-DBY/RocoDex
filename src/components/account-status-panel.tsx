@@ -47,13 +47,21 @@ export function AccountStatusPanel({ status, className }: AccountStatusPanelProp
         <div className="min-w-0 flex-1">
           <p className="font-semibold">{status.title}</p>
           <p className="mt-1 leading-5 text-amber-900">{status.message}</p>
-          <Link
-            href={status.actionHref}
-            className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-amber-300 bg-white px-3 text-sm font-semibold text-amber-950 shadow-sm transition hover:bg-amber-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600 sm:w-auto"
-          >
-            {status.actionLabel}
-            <ArrowRight aria-hidden="true" className="h-4 w-4" />
-          </Link>
+          <div className="mt-3 grid gap-2 sm:flex">
+            <Link
+              href={status.actionHref}
+              className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-amber-300 bg-white px-3 text-sm font-semibold text-amber-950 shadow-sm transition hover:bg-amber-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600 sm:w-auto"
+            >
+              {status.actionLabel}
+              <ArrowRight aria-hidden="true" className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/creatures"
+              className="inline-flex min-h-11 w-full items-center justify-center rounded-md border border-amber-200 px-3 text-sm font-semibold text-amber-900 transition hover:bg-amber-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-600 sm:w-auto"
+            >
+              继续查精灵
+            </Link>
+          </div>
         </div>
       </div>
     </div>
