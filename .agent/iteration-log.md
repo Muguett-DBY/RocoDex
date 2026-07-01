@@ -1977,3 +1977,28 @@
 ### Risk notes
 
 - This fixes the repository-controlled configuration safety risk. Restoring successful production account registration/login still requires valid external Upstash REST credentials in Vercel Production.
+
+## 2026-07-01 - Account Storage Marketplace Recovery
+
+### Scope
+
+- Accepted Upstash Marketplace setup after account-owner terms confirmation and provisioned `rocodex-accounts` as a Vercel-managed Upstash Redis resource.
+- Connected the resource to the `rocodex` project for Production on the free plan, `syd1` primary region, with auto-upgrade disabled.
+- Confirmed Vercel injected Marketplace REST variables: `KV_REST_API_URL`, `KV_REST_API_TOKEN`, `KV_REST_API_READ_ONLY_TOKEN`, `KV_URL`, and `REDIS_URL`.
+- Found stale manual `UPSTASH_REDIS_URL` / `UPSTASH_REDIS_TOKEN` variables still present, so account storage needed to prefer Marketplace KV REST credentials.
+
+### Fix
+
+- Updated account-storage config resolution to choose complete credential pairs in this order: Marketplace `KV_REST_API_*`, then `UPSTASH_REDIS_REST_*`, then legacy `UPSTASH_REDIS_*`.
+- Added a regression test proving Marketplace KV REST credentials override stale legacy socket credentials.
+
+### Verification evidence
+
+- TDD red reproduced the stale-legacy-variable precedence failure in `src/lib/account-storage-config.test.ts`.
+- Focused green passed account-storage config, DB, and account-status tests: 3 files / 14 tests.
+- Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, and `npm run test:e2e`.
+- Final local counts: Vitest 62 files / 260 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages.
+
+### Next verification
+
+- Commit and push this repository fix, then wait for GitHub Actions and Vercel deployment before validating production account registration/login against the new Upstash resource.

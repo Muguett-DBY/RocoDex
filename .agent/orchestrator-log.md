@@ -2632,3 +2632,19 @@
   - Live in-app Browser at 390 x 844 confirmed registration remains disabled before and after the delayed probe, the unavailable notice appears, horizontal overflow is `0`, and console warnings/errors are `0`.
 - Stage 2 handoff: add explicit checking feedback and a bounded client wait, then extend the same storage-aware recovery state to login.
 - Status: closed
+
+## 2026-07-01 Account Storage Marketplace Recovery
+
+- Type: FIX
+- Prompt: continuation after user completed Vercel/Upstash account authorization.
+- Start state: `main` matched `origin/main`; existing production account status remained `state: "unavailable"`.
+- External action completed: provisioned Vercel Marketplace Upstash Redis resource `rocodex-accounts` for project `rocodex`, Production environment only, free plan, `syd1` primary region, auto-upgrade disabled.
+- Finding: Marketplace injected `KV_REST_API_URL` / `KV_REST_API_TOKEN`, while stale manual `UPSTASH_REDIS_URL` / `UPSTASH_REDIS_TOKEN` variables still existed; current code preferred the stale legacy pair.
+- Fix: account-storage configuration now prefers complete Marketplace `KV_REST_API_*` credentials before Upstash REST and legacy variables.
+- Verification before commit:
+  - TDD red reproduced stale legacy precedence over Marketplace REST credentials.
+  - Focused green passed 3 files / 14 tests.
+  - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, and `npm run test:e2e` passed.
+  - Local counts: Vitest 62 files / 260 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages.
+- Remote check pending: commit/push, GitHub Actions, Vercel deployment, and live production registration/login verification.
+- Status: in progress
