@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ComponentType } from "react";
 import { ArrowRight, BookOpen, Database, GitCompare, ScrollText, Search, Shield, ShieldAlert, Sparkles, Swords } from "lucide-react";
+import { HomeAccountContinuity } from "@/components/home-account-continuity";
 import { HomeSearch } from "@/components/home-search";
 import { PageShell } from "@/components/page-shell";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +30,7 @@ export default function Home() {
               <div className="mt-8 max-w-2xl">
                 <HomeSearch />
               </div>
+              <HomeAccountContinuity />
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-700 hover:text-emerald-800" href="/creatures">
                   查看精灵列表 <ArrowRight className="h-4 w-4" />

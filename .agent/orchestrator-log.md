@@ -127,6 +127,36 @@
 - Stage 4 handoff: add a homepage/public navigation continuation that makes the account outage path more discoverable before users reach login or registration.
 - Status: closed
 
+## 2026-07-01 Long Homepage Risk Repair Cycle - Stage 4 / 6
+
+- Type: IMPROVE
+- Prompt: `AGENT_IMPROVE_MAIN.txt` via `03_LONG_6_STAGE_MAIN_V2.txt`
+- Start state: `main` matched `origin/main` at `92d03cb`; Stage 3 implementation and evidence CI runs `28459987432` and `28494370448` passed; worktree was clean.
+- Previous direction: make the account outage path discoverable before visitors reach login or registration.
+- Flagship goal: add a homepage account-continuity notice that appears only when account service is blocked and points visitors to the local collection recovery path.
+- Product rationale: production storage remains externally unavailable, so the homepage should prevent account actions from feeling like a dead end while staying quiet in healthy environments.
+- Design: `docs/superpowers/specs/2026-07-01-home-account-continuity-design.md`
+- Plan: `docs/superpowers/plans/2026-07-01-home-account-continuity.md`
+- Implemented:
+  - Added `HomeAccountContinuity`, a quiet homepage client component that reuses the bounded account-status hook.
+  - Suppressed the homepage notice while account status is loading or ready so the hero stays calm in healthy environments.
+  - Rendered the shared `AccountStatusPanel` below homepage search only for disabled/unavailable account states.
+  - Mounted the panel in the first-viewport hero content column so the local-collection recovery path is discoverable before login/register.
+- Verification recorded before commit:
+  - TDD red failed on missing `HomeAccountContinuity` and missing homepage integration.
+  - Focused green tests passed 1 file / 2 tests.
+  - `npm run lint` exited `0`.
+  - `npx tsc --noEmit` exited `0`.
+  - `npm test` passed 60 files / 249 tests.
+  - `npm run build` exited `0`, generated 734 static pages, and kept auth routes dynamic.
+  - `npm run test:e2e` passed 3 tests with 1 environment-dependent registration test skipped.
+  - `npm audit --json` reported 0 vulnerabilities.
+  - `git diff --check` exited `0` with only Windows line-ending notices.
+  - Local production Browser on port `3106` confirmed the homepage initially shows no account panel, then shows the unavailable account panel after the bounded status wait; `/collection` recovery click-through works; mobile panel width `343` at x `16`; mobile action height `44`; desktop panel width `647`; desktop action height `44`; horizontal overflow `0`; no framework overlay; and zero console warnings/errors.
+  - Local screenshots: `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-local-home-mobile.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-local-home-desktop.png`.
+- Risk: the homepage recovery notice correctly reflects the current external storage outage, but successful account creation still requires valid Upstash/Vercel credentials outside the repository.
+- Status: local verified; commit and remote checks pending
+
 ### Stage 2
 
 - Stage number: 2 / 6

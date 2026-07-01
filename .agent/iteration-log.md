@@ -1866,3 +1866,27 @@
 ### Next direction
 
 - Add a homepage/public navigation continuation that makes the account outage path more discoverable before users reach login or registration.
+
+## 2026-07-01 - Long Homepage Risk Repair Stage 4 / 6 - IMPROVE
+
+### Scope
+
+- Added `HomeAccountContinuity` to surface account-service outages on the homepage before visitors open login/register.
+- Reused the bounded account-status hook and shared `AccountStatusPanel`.
+- Kept the homepage quiet while account status is loading or ready, avoiding a permanent account banner in healthy environments.
+
+### User-visible change
+
+- When account storage is unavailable, homepage visitors now see the same local-collection recovery path directly below search.
+- The first account-related dead end is avoided: users can continue with local tools from the first screen.
+
+### Verification evidence
+
+- TDD red/green covered the homepage continuity component and homepage integration; focused tests passed 1 file / 2 tests.
+- `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed locally.
+- Final local counts: Vitest 60 files / 249 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages; npm audit found 0 vulnerabilities.
+- Local production Browser covered desktop and 390 x 844 homepage outage visibility, `/collection` click-through, 44 px recovery action, horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
+
+### Risk notes
+
+- Production account creation still depends on corrected external Upstash/Vercel credentials; the homepage now exposes the recoverable local path while that dependency remains unavailable.
