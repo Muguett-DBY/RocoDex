@@ -29,4 +29,4 @@
 
 - [x] Run full local gates: lint, typecheck, test, build, E2E, audit, diff check.
 - [x] Browser-check login and homepage outage panels locally or on production after deploy.
-- [ ] Update logs, commit, push `main`, check CI/Vercel, and record final evidence.
+- [x] Update logs, commit, push `main`, check CI/Vercel, and record final evidence.

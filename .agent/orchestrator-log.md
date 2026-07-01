@@ -225,8 +225,16 @@
   - `git diff --check` exited `0` with only Windows line-ending notices.
   - Local production Browser at 390 x 844 confirmed login outage UI shows both `/collection` and `/creatures`, keeps login disabled, gives both actions 44 px touch height, has horizontal overflow `0`, navigates to `/creatures`, and reports zero console/page errors.
   - Local production Browser at 390 x 844 confirmed homepage outage UI shows both `/collection` and `/creatures`, keeps the panel within a 390 px viewport, gives both actions 44 px touch height, has horizontal overflow `0`, navigates to `/creatures`, and reports zero console/page errors.
+- Commit: `318264e feat: expand account recovery actions`
+- Push: `origin/main` updated to `318264e41dbd264d5a1084774662fa9e8715f89b`.
+- Remote check:
+  - GitHub Actions CI run `28497469178` completed successfully; lint, test, build, and end-to-end tests all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live `https://rocodex.custard.top/api/account-status` returned `200`, `Cache-Control: no-store`, and `state: "unavailable"`.
+  - Live 390 x 844 Browser checks on `/login` and `/` confirmed both `/collection` and `/creatures` recovery actions, 44 px action heights, login submit disabled during outage, horizontal overflow `0`, `/creatures` navigation, and zero console/page errors.
 - Risk: successful production account creation and login still require valid external Upstash/Vercel storage credentials; this stage reduces dead ends while that dependency remains unavailable.
-- Status: local verification complete; awaiting commit, push, CI, Vercel, and live browser verification.
+- Final status: six-stage long homepage risk repair cycle completed.
+- Status: closed
 
 ### Stage 2
 

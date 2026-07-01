@@ -1944,11 +1944,13 @@
 - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed locally.
 - Final local counts: Vitest 61 files / 251 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages; npm audit found 0 vulnerabilities.
 - Local production Browser at 390 x 844 confirmed login and homepage outage UI show both `/collection` and `/creatures`, keep the account path controlled, give both actions 44 px touch height, have horizontal overflow `0`, navigate to `/creatures`, and report zero console/page errors.
+- Commit `318264e` was pushed to `origin/main`; GitHub Actions run `28497469178` and Vercel commit status completed successfully.
+- Live production Browser at 390 x 844 confirmed login and homepage outage UI show both `/collection` and `/creatures`, keep login disabled during outage, give both actions 44 px touch height, have horizontal overflow `0`, navigate to `/creatures`, and report zero console/page errors.
 
 ### Risk notes
 
 - Successful production account creation/login still requires valid external Upstash/Vercel credentials; this stage improves recovery choices while that dependency remains unavailable.
 
-### Next direction
+### Final status
 
-- Complete commit, push, CI, Vercel, and live browser acceptance for the final stage, then close the six-stage risk repair cycle.
+- Six-stage long homepage risk repair cycle completed.
