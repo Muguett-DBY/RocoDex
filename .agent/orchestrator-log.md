@@ -2646,5 +2646,14 @@
   - Focused green passed 3 files / 14 tests.
   - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, and `npm run test:e2e` passed.
   - Local counts: Vitest 62 files / 260 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages.
-- Remote check pending: commit/push, GitHub Actions, Vercel deployment, and live production registration/login verification.
-- Status: in progress
+- Commit: `506d1ba fix: prefer marketplace redis credentials`
+- Push: `origin/main` updated to `506d1ba478970d34346d6046149cfcf0513822cd`.
+- Remote check:
+  - GitHub Actions CI run `28513175924` completed successfully.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live `https://rocodex.custard.top/api/account-status` returned `200`, `Cache-Control: no-store`, and `state: "ready"`.
+  - Live API registration verification created and cleaned `qa-mr1z6oc4-5761` with `cleanupMode: "api"`.
+  - Live mobile-width browser login verification created `qa-mr1zdd7j-f2f7`, logged in through `/login`, confirmed `/api/auth/session.user.name`, found horizontal overflow `0`, and reported console/page errors `0`.
+  - Redis production cleanup audit scanned `user:qa*` and returned `[]`.
+- Risk: old manual `UPSTASH_REDIS_URL` / `UPSTASH_REDIS_TOKEN` variables still exist in Production, but repository code now prefers Marketplace `KV_REST_API_*`. They can be removed later in Vercel settings to reduce configuration noise.
+- Status: closed

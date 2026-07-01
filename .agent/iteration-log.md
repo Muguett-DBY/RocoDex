@@ -1998,7 +1998,12 @@
 - Focused green passed account-storage config, DB, and account-status tests: 3 files / 14 tests.
 - Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, and `npm run test:e2e`.
 - Final local counts: Vitest 62 files / 260 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages.
+- Commit `506d1ba` was pushed to `origin/main`; GitHub Actions run `28513175924` completed successfully; Vercel commit status completed with `Deployment has completed`.
+- Live production `/api/account-status` returned `200`, `Cache-Control: no-store`, and `state: "ready"` at `https://rocodex.custard.top`.
+- Live production registration verification created and cleaned `qa-mr1z6oc4-5761` through the API cleanup path.
+- Live production browser login verification created `qa-mr1zdd7j-f2f7`, logged in through `/login`, confirmed `/api/auth/session.user.name` matched the generated user, reported horizontal overflow `0`, reported browser warnings/errors `0`, and cleaned the account.
+- Final Redis scan for `user:qa*` returned `[]`.
 
-### Next verification
+### Final status
 
-- Commit and push this repository fix, then wait for GitHub Actions and Vercel deployment before validating production account registration/login against the new Upstash resource.
+- Production account registration and login are restored through the Vercel-managed Upstash Redis resource.
