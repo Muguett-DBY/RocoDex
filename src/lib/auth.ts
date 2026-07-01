@@ -1,4 +1,5 @@
 import { findUserByUsername } from "@/lib/db";
+import { isStorageUnavailableError } from "@/lib/storage-errors";
 import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
@@ -15,7 +16,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           return null;
         }
 
-        const user = await findUserByUsername(credentials.username as string);
+        let user;
+        try {
+          user = await findUserByUsername(credentials.username as string);
+        } catch (error) {
+          if (isStorageUnavailableError(error)) {
+            console.warn("Login storage unavailable:", error);
+            return null;
+          }
+
+          throw error;
+        }
 
         if (!user) return null;
 
