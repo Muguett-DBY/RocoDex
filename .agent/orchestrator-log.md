@@ -191,7 +191,14 @@
   - `git diff --check` exited `0` with only Windows line-ending notices.
   - Source hygiene scan found no new source TODO/FIXME/console.log/debugger or secret-pattern matches; matches were limited to the plan template and historical log text.
 - Risk: direct login attempts during the external storage outage now fail safely, but successful account creation/login still requires corrected external Upstash/Vercel credentials.
-- Status: local verified; commit and remote checks pending
+- Commit: `34d1040 fix: handle login storage outages`
+- Push: `origin/main` updated to `34d1040e373c121ad32835fd9e83236c7bd8535b`.
+- Remote check:
+  - GitHub Actions CI run `28496842845` completed successfully; install, Chromium setup, lint, test, build, and E2E all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live production Browser at 390 x 844 confirmed the login outage UI remains controlled after deploy: unavailable notice, disabled submit, `aria-describedby="account-status-submit-help"`, 44 px recovery action, horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
+- Stage 6 handoff: add a final low-risk user-facing improvement around account recovery confidence, then run the final production acceptance loop.
+- Status: closed
 
 ### Stage 2
 

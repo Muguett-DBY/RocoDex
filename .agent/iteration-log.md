@@ -1915,7 +1915,13 @@
 - TDD red reproduced the direct-login storage outage risk; focused green tests passed 3 files / 10 tests.
 - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed locally.
 - Final local counts: Vitest 61 files / 251 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages; npm audit found 0 vulnerabilities.
+- Commit `34d1040` was pushed to `origin/main`; GitHub Actions run `28496842845` and Vercel commit status completed successfully.
+- Live production Browser confirmed the login outage UI remains controlled after deploy: unavailable notice, disabled submit, linked helper, 44 px recovery action, horizontal overflow `0`, no framework overlay, and zero console warnings/errors.
 
 ### Risk notes
 
 - Successful production account creation/login still requires valid external Upstash/Vercel credentials; this stage prevents known storage outages from becoming unhandled auth exceptions.
+
+### Next direction
+
+- Add a final low-risk user-facing improvement around account recovery confidence, then run the final production acceptance loop.
