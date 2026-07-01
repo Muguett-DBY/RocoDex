@@ -155,7 +155,15 @@
   - Local production Browser on port `3106` confirmed the homepage initially shows no account panel, then shows the unavailable account panel after the bounded status wait; `/collection` recovery click-through works; mobile panel width `343` at x `16`; mobile action height `44`; desktop panel width `647`; desktop action height `44`; horizontal overflow `0`; no framework overlay; and zero console warnings/errors.
   - Local screenshots: `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-local-home-mobile.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-local-home-desktop.png`.
 - Risk: the homepage recovery notice correctly reflects the current external storage outage, but successful account creation still requires valid Upstash/Vercel credentials outside the repository.
-- Status: local verified; commit and remote checks pending
+- Commit: `566591b feat: surface account recovery on home`
+- Push: `origin/main` updated to `566591bd8ac0d16e594a6c0d971438af922a044c`.
+- Remote check:
+  - GitHub Actions CI run `28494753472` completed successfully; install, Chromium setup, lint, test, build, and E2E all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live production Browser confirmed the homepage initially shows no account panel, then shows the unavailable account panel after the bounded status wait; `/collection` recovery click-through works; mobile panel width `343` at x `16`; mobile action height `44`; desktop panel width `647`; desktop action height `44`; horizontal overflow `0`; no framework overlay; and zero console warnings/errors.
+  - Live screenshots: `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-live-home-mobile.png` and `C:/Users/12031/AppData/Local/Temp/rocodex-stage4-live-home-desktop.png`.
+- Stage 5 handoff: audit the account-status and auth outage path for direct API/authorization bypasses, hydration/performance regressions, and stale recovery links.
+- Status: closed
 
 ### Stage 2
 
