@@ -1961,6 +1961,7 @@
 
 - Investigated the remaining production account-storage dependency after the six-stage repair cycle.
 - Confirmed Vercel Production has `AUTH_SECRET`, `UPSTASH_REDIS_URL`, and `UPSTASH_REDIS_TOKEN` configured as sensitive variables, while Preview and Development have no account-storage variables.
+- Confirmed no Marketplace integration resources are currently connected to the project; Upstash Redis is discoverable but not installed for this team/project.
 - Added explicit account-storage configuration validation so Vercel runtimes cannot silently fall back to local file storage when Redis credentials are missing, partial, or supplied as a non-REST `rediss://` socket URL.
 
 ### Verification evidence
@@ -1970,6 +1971,8 @@
 - Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
 - Final local counts: Vitest 62 files / 259 tests passed; Playwright 3 passed / 1 environment-dependent registration test skipped; Next build generated 734 static pages; npm audit found 0 vulnerabilities.
 - Local Vercel-like production server with `VERCEL=1` and missing Redis credentials returned `200`, `Cache-Control: no-store`, and `state: "unavailable"` from `/api/account-status`.
+- Commit `e22bdb2` was pushed to `origin/main`; GitHub Actions run `28499457641` and Vercel commit status completed successfully.
+- Live production Browser at 390 x 844 confirmed login and homepage outage UI still show both `/collection` and `/creatures`, keep login disabled during outage, give both actions 44 px touch height, have horizontal overflow `0`, navigate to `/creatures`, and report zero console/page errors.
 
 ### Risk notes
 

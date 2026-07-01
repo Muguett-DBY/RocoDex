@@ -244,6 +244,7 @@
   - Vercel Production lists `AUTH_SECRET`, `UPSTASH_REDIS_URL`, and `UPSTASH_REDIS_TOKEN` as sensitive variables for `muguett-dbys-projects/rocodex`.
   - Vercel Preview and Development list no account-storage variables.
   - `vercel env pull --environment=production` did not expose decryptable values in this local CLI session, so secret values were not printed or persisted.
+  - `vercel integration list` and `vercel integration installations` found no connected Marketplace resources; `upstash/upstash-kv` is discoverable but not installed.
 - Implemented:
   - Added `getAccountStorageConfig` to classify local fallback, valid HTTPS REST Redis credentials, and invalid Redis configuration.
   - Changed `db.ts` so Vercel runtimes with missing Redis credentials, partial credentials, or non-HTTPS Redis URLs throw `AccountStorageConfigurationError` instead of using local file storage or entering Upstash fetch.
@@ -260,8 +261,15 @@
   - `npm audit --json` reported 0 vulnerabilities.
   - `git diff --check` exited `0` with only Windows line-ending notices.
   - Local production server with `VERCEL=1`, `VERCEL_ENV=production`, `AUTH_SECRET` set, and no Redis credentials returned `200`, `Cache-Control: no-store`, and `state: "unavailable"` from `/api/account-status`.
+- Commit: `e22bdb2 fix: validate account storage configuration`
+- Push: `origin/main` updated to `e22bdb2391f28df9b1adca6ac039260befc2ce32`.
+- Remote check:
+  - GitHub Actions CI run `28499457641` completed successfully; lint, test, build, and end-to-end tests all passed.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live `https://rocodex.custard.top/api/account-status` returned `200`, `Cache-Control: no-store`, and `state: "unavailable"`.
+  - Live 390 x 844 Browser checks on `/login` and `/` confirmed both `/collection` and `/creatures` recovery actions, 44 px action heights, login submit disabled during outage, horizontal overflow `0`, `/creatures` navigation, and zero console/page errors.
 - Risk: restoring successful production account creation/login still requires valid external Upstash REST credentials in Vercel Production; repository code now prevents unsafe fallback and reports the dependency as unavailable.
-- Status: local verification complete; awaiting commit, push, CI, Vercel, and live verification.
+- Status: closed
 
 ### Stage 2
 
