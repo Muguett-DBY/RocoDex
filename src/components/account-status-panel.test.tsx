@@ -20,8 +20,11 @@ describe("AccountStatusPanel", () => {
 
     expect(markup).toContain('role="status"');
     expect(markup).toContain('href="/collection"');
+    expect(markup).toContain('href="/creatures"');
     expect(markup).toContain("账号功能暂不可用");
     expect(markup).toContain("先用本地收藏");
+    expect(markup).toContain("继续查精灵");
     expect(markup).toContain("min-h-11");
+    expect(markup).toContain("grid gap-2 sm:flex");
   });
 });
