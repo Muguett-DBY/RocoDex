@@ -11,6 +11,8 @@ describe("local user storage", () => {
     delete process.env.UPSTASH_REDIS_REST_URL;
     delete process.env.UPSTASH_REDIS_TOKEN;
     delete process.env.UPSTASH_REDIS_URL;
+    delete process.env.VERCEL;
+    delete process.env.VERCEL_ENV;
     tempDir = await mkdtemp(path.join(os.tmpdir(), "rocodex-db-test-"));
     vi.resetModules();
     vi.spyOn(process, "cwd").mockReturnValue(tempDir);
@@ -37,5 +39,29 @@ describe("local user storage", () => {
     const { deleteUserByUsername } = await import("./db");
 
     await expect(deleteUserByUsername("missing")).resolves.toBe(false);
+  });
+
+  test("rejects Redis socket URLs instead of falling back to local storage", async () => {
+    process.env.UPSTASH_REDIS_URL = "rediss://default:secret@example.upstash.io:6379";
+    process.env.UPSTASH_REDIS_TOKEN = "token";
+
+    const { findUserByUsername } = await import("./db");
+
+    await expect(findUserByUsername("existing")).rejects.toMatchObject({
+      name: "AccountStorageConfigurationError",
+      reason: "unsupported-redis-url",
+    });
+  });
+
+  test("rejects missing Redis credentials in Vercel runtimes instead of using local storage", async () => {
+    process.env.VERCEL = "1";
+    process.env.VERCEL_ENV = "production";
+
+    const { createUser } = await import("./db");
+
+    await expect(createUser("existing", "hashed-password")).rejects.toMatchObject({
+      name: "AccountStorageConfigurationError",
+      reason: "missing-redis-credentials",
+    });
   });
 });

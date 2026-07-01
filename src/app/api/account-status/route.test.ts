@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { findUserByUsername } from "@/lib/db";
 import { ACCOUNT_STATUS_HEALTHCHECK_USERNAME } from "@/lib/account-service-status";
+import { AccountStorageConfigurationError } from "@/lib/storage-errors";
 import { GET } from "./route";
 
 vi.mock("@/lib/db", () => ({
@@ -62,5 +63,25 @@ describe("account status API route", () => {
     expect(response.status).toBe(200);
     expect(errorSpy).not.toHaveBeenCalled();
     expect(warnSpy).toHaveBeenCalledWith("Account status storage unavailable:", expect.any(TypeError));
+  });
+
+  it("reports invalid storage configuration as a warning-level service state", async () => {
+    process.env.AUTH_SECRET = "test-secret";
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.mocked(findUserByUsername).mockRejectedValue(new AccountStorageConfigurationError("unsupported-redis-url"));
+
+    const response = await GET();
+
+    await expect(response.json()).resolves.toMatchObject({
+      state: "unavailable",
+      title: "账号功能暂不可用",
+    });
+    expect(response.status).toBe(200);
+    expect(errorSpy).not.toHaveBeenCalled();
+    expect(warnSpy).toHaveBeenCalledWith(
+      "Account status storage unavailable:",
+      expect.any(AccountStorageConfigurationError),
+    );
   });
 });
