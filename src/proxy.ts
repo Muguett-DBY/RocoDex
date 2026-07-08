@@ -26,6 +26,13 @@ export function proxy(request: NextRequest) {
     return NextResponse.rewrite(new URL(cstdRouteDecision.path, request.url));
   }
 
+  if (cstdRouteDecision.kind === "redirect") {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.hostname = cstdRouteDecision.host;
+    redirectUrl.protocol = "https:";
+    return NextResponse.redirect(redirectUrl, 308);
+  }
+
   if (cstdRouteDecision.kind === "not-found") {
     return new NextResponse(CSTD_NOT_FOUND_HTML, {
       status: 404,
