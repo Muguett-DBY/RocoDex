@@ -5,7 +5,7 @@ describe("CSTD host routing", () => {
   test("detects only the apex CSTD domain", () => {
     expect(isCstdHost("custard.top")).toBe(true);
     expect(isCstdHost("custard.top:443")).toBe(true);
-    expect(isCstdHost("www.custard.top")).toBe(false);
+    expect(isCstdHost("www.custard.top")).toBe(true);
     expect(isCstdHost("rocodex.custard.top")).toBe(false);
   });
 
@@ -38,7 +38,11 @@ describe("CSTD host routing", () => {
     expect(getCstdRouteDecision("rocodex.custard.top", "/creatures")).toEqual({ kind: "next" });
   });
 
-  test("does not support www as a CSTD entry point", () => {
-    expect(getCstdRouteDecision("www.custard.top", "/")).toEqual({ kind: "not-found" });
+  test("redirects the www CSTD host to the apex domain before route handling", () => {
+    expect(getCstdRouteDecision("www.custard.top", "/")).toEqual({ kind: "redirect", host: "custard.top" });
+    expect(getCstdRouteDecision("www.custard.top:443", "/cstd")).toEqual({
+      kind: "redirect",
+      host: "custard.top",
+    });
   });
 });

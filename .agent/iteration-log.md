@@ -2007,3 +2007,32 @@
 ### Final status
 
 - Production account registration and login are restored through the Vercel-managed Upstash Redis resource.
+
+## 2026-07-09 - CSTD Main Site WWW Entry Recovery
+
+### Scope
+
+- Started the continuous improvement goal for the personal main site, treating `custard.top` / CSTD as the target surface rather than the RocoDex subdomain.
+- Confirmed `main` matched `origin/main`, pulled latest state, and audited CSTD routing, Vercel domain state, project links, sitemap, CI workflow, TODO/debug markers, and recent iteration direction.
+- Found a real main-site reachability gap: the code explicitly treated `www.custard.top` as unsupported, while Vercel reported the `www` domain was not attached/configured for the project.
+- Added `www.custard.top` to the Vercel `rocodex` project so it is ready once DNS points to Vercel.
+
+### Fix
+
+- Changed CSTD host routing so `www.custard.top` is recognized as part of the CSTD surface and returns a canonical apex redirect decision.
+- Updated `src/proxy.ts` to issue a 308 redirect from `www.custard.top` to `https://custard.top`, preserving the path and query string before normal route handling.
+
+### Verification evidence
+
+- Live baseline: `https://custard.top/` returned `200` with the CSTD title; `https://www.custard.top/` failed before app routing with a TLS/DNS configuration error.
+- Vercel domain action: `vercel domains add www.custard.top rocodex --non-interactive` returned `domain_added`.
+- Vercel verification: `vercel domains verify www.custard.top` returned `invalid_configuration`; recommended Cloudflare DNS record is `CNAME www 0ccdf8b2f445bccf.vercel-dns-017.com.` with proxy disabled.
+- TDD red reproduced the old behavior: `src/lib/cstd-routing.test.ts` failed because `www.custard.top` was not a CSTD host and returned `not-found`.
+- Focused green passed: `npx vitest run src/lib/cstd-routing.test.ts src/lib/auth-provider-routing.test.ts` passed 2 files / 10 tests.
+- Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
+- Local counts: Vitest 62 files / 260 tests passed; Next build generated 734 static pages; Playwright 3 passed / 1 environment-dependent registration test skipped; npm audit found 0 vulnerabilities.
+- Local production `next start` on port 3107 returned 308 for `Host: www.custard.top` on `/`, `/cstd?project=crm`, and `/creatures`, preserving path/query; `Host: custard.top` on `/` returned `200` with the CSTD title.
+
+### Risk notes
+
+- Live `www.custard.top` cannot complete TLS until Cloudflare DNS is updated. Code and Vercel project attachment are ready; the remaining blocker is DNS outside the repository.

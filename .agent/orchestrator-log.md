@@ -2657,3 +2657,25 @@
   - Redis production cleanup audit scanned `user:qa*` and returned `[]`.
 - Risk: old manual `UPSTASH_REDIS_URL` / `UPSTASH_REDIS_TOKEN` variables still exist in Production, but repository code now prefers Marketplace `KV_REST_API_*`. They can be removed later in Vercel settings to reduce configuration noise.
 - Status: closed
+
+## 2026-07-09 CSTD Main Site WWW Entry Recovery
+
+- Type: FIX
+- Prompt: continuous autonomous improvement goal focused on personal main site `custard.top`, not the RocoDex graph/site surface.
+- Start state: `main` matched `origin/main`; `git pull --ff-only origin main` was already up to date; worktree was clean.
+- First audit covered README/product positioning, CSTD proxy routing, GitHub Actions workflow, project links, sitemap, TODO/debug markers, recent logs, Vercel domains, and live HTTP status.
+- Finding: `www.custard.top` was a common personal-site entry point but the repository explicitly treated it as unsupported, and live access failed before app routing due to DNS/TLS configuration.
+- External Vercel action: `www.custard.top` was added to project `rocodex` successfully.
+- Remaining external DNS requirement: Vercel verification reports `invalid_configuration`; Cloudflare should add `CNAME www 0ccdf8b2f445bccf.vercel-dns-017.com.` with proxy disabled, then rerun `vercel domains verify www.custard.top`.
+- Fix:
+  - `src/lib/cstd-routing.ts` now classifies `www.custard.top` as CSTD-owned and returns a canonical redirect decision to `custard.top`.
+  - `src/proxy.ts` now returns a 308 redirect for that decision while preserving path and query.
+  - `src/lib/cstd-routing.test.ts` now covers the new canonical behavior.
+- Verification before commit:
+  - TDD red: focused CSTD routing test failed on old `www` behavior.
+  - Focused green: 2 files / 10 tests passed.
+  - Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, `git diff --check`.
+  - Counts: Vitest 62 files / 260 tests passed; build generated 734 static pages; Playwright 3 passed / 1 skipped; npm audit 0 vulnerabilities.
+  - Local production host-header verification on port 3107 returned 308 for `Host: www.custard.top` and preserved `/`, `/cstd?project=crm`, and `/creatures`; `Host: custard.top` returned `200` with CSTD title.
+- Remote check pending: commit, push, GitHub Actions, Vercel deployment, live apex smoke, and `www` DNS verification evidence.
+- Status: in progress

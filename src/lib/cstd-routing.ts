@@ -1,23 +1,25 @@
-const CSTD_HOST = "custard.top";
-const UNSUPPORTED_CSTD_HOSTS = new Set(["www.custard.top"]);
+export const CSTD_HOST = "custard.top";
+const CSTD_REDIRECT_HOSTS = new Set(["www.custard.top"]);
+const CSTD_HOSTS = new Set([CSTD_HOST, ...CSTD_REDIRECT_HOSTS]);
 const CSTD_ENTRY_PATHS = new Set(["/", "/index.html"]);
 const CSTD_EXPLICIT_ENTRY_PATHS = new Set(["/cstd"]);
 const CSTD_ALLOWED_PATHS = new Set(["/cstd-mascot.svg", "/cstd-og.svg", "/favicon.ico", "/sitemap.xml"]);
 
 export type CstdRouteDecision =
   | { kind: "rewrite"; path: "/cstd" }
+  | { kind: "redirect"; host: typeof CSTD_HOST }
   | { kind: "next" }
   | { kind: "not-found" };
 
 export function isCstdHost(host: string) {
-  return normalizeHost(host) === CSTD_HOST;
+  return CSTD_HOSTS.has(normalizeHost(host));
 }
 
 export function getCstdRouteDecision(host: string, path: string): CstdRouteDecision {
   const normalizedHost = normalizeHost(host);
 
-  if (UNSUPPORTED_CSTD_HOSTS.has(normalizedHost)) return { kind: "not-found" };
-  if (normalizedHost !== CSTD_HOST) return { kind: "next" };
+  if (CSTD_REDIRECT_HOSTS.has(normalizedHost)) return { kind: "redirect", host: CSTD_HOST };
+  if (!CSTD_HOSTS.has(normalizedHost)) return { kind: "next" };
   if (CSTD_ENTRY_PATHS.has(path)) return { kind: "rewrite", path: "/cstd" };
   if (CSTD_EXPLICIT_ENTRY_PATHS.has(path)) return { kind: "next" };
   if (isAllowedCstdPath(path)) return { kind: "next" };
