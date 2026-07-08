@@ -2032,6 +2032,9 @@
 - Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
 - Local counts: Vitest 62 files / 260 tests passed; Next build generated 734 static pages; Playwright 3 passed / 1 environment-dependent registration test skipped; npm audit found 0 vulnerabilities.
 - Local production `next start` on port 3107 returned 308 for `Host: www.custard.top` on `/`, `/cstd?project=crm`, and `/creatures`, preserving path/query; `Host: custard.top` on `/` returned `200` with the CSTD title.
+- Commit `55abc41` was pushed to `origin/main`; GitHub Actions run `28975133900` completed successfully; Vercel commit status completed with `Deployment has completed`.
+- Live post-deploy smoke returned `200` for `https://custard.top/`, `https://custard.top/?project=crm#project-focus`, `https://custard.top/cstd?project=design#project-focus`, and `https://custard.top/sitemap.xml`.
+- Live browser verification covered `https://custard.top/` at 1440 x 900 and `https://custard.top/?project=crm#project-focus` at 390 x 844; both had horizontal overflow `0`, console/page errors `0`, and failed requests `0`.
 
 ### Risk notes
 

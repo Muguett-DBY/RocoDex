@@ -2677,5 +2677,13 @@
   - Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, `git diff --check`.
   - Counts: Vitest 62 files / 260 tests passed; build generated 734 static pages; Playwright 3 passed / 1 skipped; npm audit 0 vulnerabilities.
   - Local production host-header verification on port 3107 returned 308 for `Host: www.custard.top` and preserved `/`, `/cstd?project=crm`, and `/creatures`; `Host: custard.top` returned `200` with CSTD title.
-- Remote check pending: commit, push, GitHub Actions, Vercel deployment, live apex smoke, and `www` DNS verification evidence.
-- Status: in progress
+- Commit: `55abc41 fix: canonicalize cstd www host`
+- Push: `origin/main` updated to `55abc41e0d10fa4be83e0c64b535d83b0aa75a3a`.
+- Remote check:
+  - GitHub Actions CI run `28975133900` completed successfully.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live HTTP smoke returned `200` for `https://custard.top/`, `https://custard.top/?project=crm#project-focus`, `https://custard.top/cstd?project=design#project-focus`, and `https://custard.top/sitemap.xml`.
+  - Live browser verification covered `https://custard.top/` at 1440 x 900 and `https://custard.top/?project=crm#project-focus` at 390 x 844; both had horizontal overflow `0`, console/page errors `0`, and failed requests `0`.
+  - `https://www.custard.top/` still fails before app routing with TLS/DNS configuration error.
+  - `vercel domains verify www.custard.top --non-interactive` still returns `invalid_configuration`, with required Cloudflare `CNAME www 0ccdf8b2f445bccf.vercel-dns-017.com.` and proxy disabled.
+- Status: closed with external DNS follow-up
