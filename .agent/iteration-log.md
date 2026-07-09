@@ -2039,3 +2039,23 @@
 ### Risk notes
 
 - Live `www.custard.top` cannot complete TLS until Cloudflare DNS is updated. Code and Vercel project attachment are ready; the remaining blocker is DNS outside the repository.
+
+## 2026-07-09 - CSTD Main Site External Link Safety
+
+### Scope
+
+- Continued the personal main site improvement loop on the CSTD landing experience.
+- Found that primary project buttons such as `打开 RocoDex` and project-card live links navigated away from `custard.top` in the current tab and did not share one explicit external-link policy.
+
+### Fix
+
+- Added `getCstdLinkTargetProps` to classify CSTD-local links versus external project links.
+- Updated the shared `HeroButton` so external project links open in a separate tab with `rel="noreferrer"`, while in-page links such as `#projects` and canonical `custard.top` links stay in the current tab.
+
+### Verification evidence
+
+- TDD red reproduced the missing helper through `src/lib/cstd-link-target.test.ts`.
+- Focused green passed: `npx vitest run src/lib/cstd-link-target.test.ts src/lib/cstd-routing.test.ts src/lib/cstd-project-card.test.ts` passed 3 files / 11 tests.
+- Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
+- Local counts: Vitest 63 files / 262 tests passed; Next build generated 734 static pages; Playwright 3 passed / 1 environment-dependent registration test skipped; npm audit found 0 vulnerabilities.
+- Local production browser verification on port 3108 confirmed `打开 RocoDex` renders `target="_blank"` and `rel="noreferrer"`, `看项目` keeps no `target`/`rel`, horizontal overflow is `0`, and browser console/page errors are `0`.

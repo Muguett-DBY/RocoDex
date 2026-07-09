@@ -2687,3 +2687,22 @@
   - `https://www.custard.top/` still fails before app routing with TLS/DNS configuration error.
   - `vercel domains verify www.custard.top --non-interactive` still returns `invalid_configuration`, with required Cloudflare `CNAME www 0ccdf8b2f445bccf.vercel-dns-017.com.` and proxy disabled.
 - Status: closed with external DNS follow-up
+
+## 2026-07-09 CSTD Main Site External Link Safety
+
+- Type: FIX
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` matched `origin/main` at `e1bb4d8`; worktree only had the new red test during continuation.
+- Finding: CSTD project action links used the shared `HeroButton` but external live-project URLs opened in the same tab with no explicit external-link policy, which made the personal main site easy to lose while browsing the portfolio.
+- Fix:
+  - Added `src/lib/cstd-link-target.ts` and tests.
+  - Updated `src/components/cstd-landing.tsx` so `HeroButton` applies `target="_blank"` / `rel="noreferrer"` to external project links only.
+  - Kept CSTD-local links and in-page anchors in the current tab.
+- Verification before commit:
+  - TDD red: `src/lib/cstd-link-target.test.ts` failed because the helper module did not exist.
+  - Focused green: 3 files / 11 tests passed.
+  - Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, `git diff --check`.
+  - Counts: Vitest 63 files / 262 tests passed; build generated 734 static pages; Playwright 3 passed / 1 skipped; npm audit 0 vulnerabilities.
+  - Local production browser verification on port 3108 confirmed `打开 RocoDex` has `target="_blank"` and `rel="noreferrer"`, `看项目` has no external target policy, overflow `0`, and browser errors `0`.
+- Remote check pending: commit, push, GitHub Actions, Vercel deployment, and live browser link-attribute smoke.
+- Status: in progress
