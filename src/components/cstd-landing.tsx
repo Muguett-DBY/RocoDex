@@ -14,6 +14,7 @@ import {
   getCstdHomepageUpdateSummary,
 } from "@/lib/cstd-homepage-updates";
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
+import { getCstdLinkTargetProps } from "@/lib/cstd-link-target";
 import { shouldApplyCstdMascotMoodChange, type CstdMascotMood } from "@/lib/cstd-mascot-mood";
 import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "@/lib/cstd-navigation";
 import { getCstdProjectCardPreview, getCstdProjectFocusButtonLabel } from "@/lib/cstd-project-card";
@@ -1610,9 +1611,12 @@ function NavLink({
 }
 
 function HeroButton({ href, children, primary = false }: { href: string; children: ReactNode; primary?: boolean }) {
+  const targetProps = getCstdLinkTargetProps(href);
+
   return (
     <Link
       href={href}
+      {...targetProps}
       className={`inline-flex min-h-11 w-full items-center justify-center rounded-lg border px-5 text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 sm:w-auto ${
         primary ? "border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59]" : "border-[#b8d7f5] bg-[#e3f2ff] text-[#2563eb] hover:border-[#2563eb]"
       }`}
