@@ -2704,5 +2704,10 @@
   - Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, `git diff --check`.
   - Counts: Vitest 63 files / 262 tests passed; build generated 734 static pages; Playwright 3 passed / 1 skipped; npm audit 0 vulnerabilities.
   - Local production browser verification on port 3108 confirmed `打开 RocoDex` has `target="_blank"` and `rel="noreferrer"`, `看项目` has no external target policy, overflow `0`, and browser errors `0`.
-- Remote check pending: commit, push, GitHub Actions, Vercel deployment, and live browser link-attribute smoke.
-- Status: in progress
+- Commit: `5f9c09d fix: open cstd project links safely`
+- Push: `origin/main` updated to `5f9c09d5304b7d7d394bd2db3da56f2f70ffccf7`.
+- Remote check:
+  - GitHub Actions CI run `29000741402` completed successfully.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Live browser verification on `https://custard.top/` at 390 x 844 confirmed `打开 RocoDex` has `target="_blank"` and `rel="noreferrer"`, `看项目` has no external target policy, horizontal overflow `0`, console/page errors `0`, and failed requests `0`.
+- Status: closed
