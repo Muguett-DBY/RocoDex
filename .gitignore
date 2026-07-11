@@ -79,6 +79,8 @@ sync_config.py
 *.txt
 !requirements.txt
 !LICENSE.txt
+!src/app/robots.txt/
+!src/app/robots.txt/*.ts
 
 # codex output & reports
 /output/
