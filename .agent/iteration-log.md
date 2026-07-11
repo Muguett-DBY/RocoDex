@@ -2061,3 +2061,39 @@
 - Local production browser verification on port 3108 confirmed `打开 RocoDex` renders `target="_blank"` and `rel="noreferrer"`, `看项目` keeps no `target`/`rel`, horizontal overflow is `0`, and browser console/page errors are `0`.
 - Commit `5f9c09d` was pushed to `origin/main`; GitHub Actions run `29000741402` completed successfully; Vercel commit status completed with `Deployment has completed`.
 - Live browser verification on `https://custard.top/` at 390 x 844 confirmed `打开 RocoDex` renders `target="_blank"` and `rel="noreferrer"`, `看项目` keeps no `target`/`rel`, horizontal overflow is `0`, console/page errors are `0`, and failed requests are `0`.
+
+## 2026-07-11 - CSTD Host-Aware Robots Policy and E2E Readiness
+
+### Scope
+
+- Continued the personal main-site improvement loop by closing the unfinished public crawler entry for `custard.top` without changing the RocoDex product surface.
+- Found that the repository had a host-aware sitemap route but no tracked `/robots.txt` route, and the CSTD host allowlist did not admit that public entry.
+- During remote closure, found a separate CI-only navigation race: Playwright waited for the full `load` event while noncritical optimized images could remain pending on constrained mobile Chromium.
+
+### Fix
+
+- Added a host-aware `/robots.txt` route that selects the `custard.top` or `rocodex.custard.top` sitemap, allows search crawling, publishes the content-use signal, and denies configured AI-training crawlers.
+- Allowed `/robots.txt` through CSTD routing and added `.gitignore` exceptions so the `.txt` route directory is tracked despite the repository-wide `*.txt` rule.
+- Changed Playwright server readiness to `/api/auth/session` and changed route navigation waits to `domcontentloaded`.
+- Added a regression test that holds a noncritical optimized-image response and proves route navigation completes before that image is released.
+
+### Verification evidence
+
+- TDD red/green covered host-aware robots output, route headers/body, CSTD routing, Playwright readiness, and delayed-image navigation behavior.
+- Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
+- Local counts: Vitest 66 files / 268 tests passed; Next build generated 734 static pages and included dynamic `/robots.txt`; Playwright passed 4 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local production host-header checks returned `200` and the correct per-host Sitemap for both `custard.top` and `rocodex.custard.top`.
+- Commits `0ad1ced` and `7b84bfd` were pushed to `origin/main`.
+- GitHub Actions run `29154293049` exposed the original mobile navigation race on its first attempt; the same-SHA rerun passed. Final regression-fix run `29154691982` completed successfully, including lint, tests, build, and E2E.
+- Vercel status for `7b84bfd` completed successfully with `Deployment has completed`.
+- Live `https://custard.top/robots.txt` returned `200`, `text/plain`, the CSTD Sitemap, the content-use signal, and the GPTBot denial; it did not contain the RocoDex Sitemap.
+- Live `https://rocodex.custard.top/robots.txt` returned `200`, `text/plain`, the RocoDex Sitemap, the same content-use signal, and the GPTBot denial; it did not contain the CSTD Sitemap.
+- Live browser checks at 1280 x 720 and 390 x 844 confirmed the CSTD title, the Design and CRM project content/links, horizontal overflow `0`, and zero console errors.
+
+### Risk notes
+
+- No repository-controlled risk remains for this item. Edge providers may prepend managed crawler policy, so future crawler-policy changes should continue to validate the final live response rather than only the origin route.
+
+### Final status
+
+- Host-aware crawler entry and the CI navigation race are closed in production.

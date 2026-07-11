@@ -2711,3 +2711,29 @@
   - Vercel commit status completed successfully with description `Deployment has completed`.
   - Live browser verification on `https://custard.top/` at 390 x 844 confirmed `打开 RocoDex` has `target="_blank"` and `rel="noreferrer"`, `看项目` has no external target policy, horizontal overflow `0`, console/page errors `0`, and failed requests `0`.
 - Status: closed
+
+## 2026-07-11 CSTD Host-Aware Robots Policy and E2E Readiness
+
+- Type: FIX
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: the host-aware robots implementation was locally present but had not completed final E2E, remote CI, Vercel, and live-host closure.
+- Findings:
+  - CSTD routing needed to admit `/robots.txt`, and the blanket `*.txt` ignore rule hid the route directory.
+  - The first remote run exposed a mobile Chromium race because route navigation waited for `load` while an optimized image could remain pending.
+- Fix:
+  - Added and tested host-aware robots policy/route output for `custard.top` and `rocodex.custard.top`.
+  - Added the CSTD route allowlist entry and explicit `.gitignore` exceptions.
+  - Moved Playwright readiness to `/api/auth/session`, changed route navigation to `domcontentloaded`, and added a delayed-image regression test.
+- Verification before final remote closure:
+  - TDD red/green proved the delayed-image regression.
+  - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed.
+  - Counts: Vitest 66 files / 268 tests passed; build generated 734 static pages; Playwright 4 passed / 2 skipped; npm audit 0 vulnerabilities.
+- Commits: `0ad1ced fix: publish robots policy and stabilize e2e readiness`; `7b84bfd test: stabilize e2e navigation waits`.
+- Push: `origin/main` updated to `7b84bfd3558a31bda805775f16a6d9e7decdc190`.
+- Remote check:
+  - GitHub Actions run `29154691982` completed successfully after the navigation-race regression fix.
+  - Vercel commit status completed successfully with description `Deployment has completed`.
+  - Both live robots endpoints returned `200`, `text/plain`, their correct host-specific Sitemap, the content-use signal, and GPTBot denial, with no cross-host Sitemap leakage.
+  - Live CSTD browser checks at desktop and 390 x 844 confirmed title/content, Design and CRM links, horizontal overflow `0`, and console errors `0`.
+- Risk: no repository-controlled risk remains for this item; validate final edge-served robots content again whenever crawler policy changes.
+- Status: closed
