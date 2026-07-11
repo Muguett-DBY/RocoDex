@@ -3,7 +3,7 @@ const CSTD_REDIRECT_HOSTS = new Set(["www.custard.top"]);
 const CSTD_HOSTS = new Set([CSTD_HOST, ...CSTD_REDIRECT_HOSTS]);
 const CSTD_ENTRY_PATHS = new Set(["/", "/index.html"]);
 const CSTD_EXPLICIT_ENTRY_PATHS = new Set(["/cstd"]);
-const CSTD_ALLOWED_PATHS = new Set(["/cstd-mascot.svg", "/cstd-og.svg", "/favicon.ico", "/sitemap.xml"]);
+const CSTD_ALLOWED_PATHS = new Set(["/cstd-mascot.svg", "/cstd-og.svg", "/favicon.ico", "/robots.txt", "/sitemap.xml"]);
 
 export type CstdRouteDecision =
   | { kind: "rewrite"; path: "/cstd" }

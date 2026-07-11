@@ -32,7 +32,7 @@ export default defineConfig({
   ],
   webServer: {
     command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
-    url: baseURL,
+    url: `${baseURL}/api/auth/session`,
     reuseExistingServer: false,
     timeout: 180_000,
     env: {
