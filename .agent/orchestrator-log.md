@@ -2756,3 +2756,30 @@
 - Repository impact: no product-code change was needed; the existing canonical redirect implementation was already correct.
 - Local environment note: the machine's proxy DNS fake-IP cache can lag behind authoritative DNS, but independent public and edge checks confirm production health.
 - Status: closed
+
+## 2026-07-12 CSTD Top Navigation Context Preservation
+
+- Type: FIX
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` matched `origin/main`; the shared project action button already applied the external-link policy, while top and mobile navigation did not.
+- Finding: selecting RocoDex, Photography, Alpha, Design, or CRM from the CSTD navigation replaced the personal main site in the current tab, creating inconsistent behavior with the project actions below.
+- Fix:
+  - Wired the shared `NavLink` to `getCstdLinkTargetProps`.
+  - Kept `Projects` as a same-tab `#projects` anchor.
+  - Applied `_blank` / `noreferrer` to all external desktop and mobile project navigation links.
+  - Added a source-contract regression test for the shared navigation wiring.
+- Verification before commit:
+  - TDD red/green covered the missing `NavLink` integration; focused tests passed 3 files / 5 tests.
+  - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed.
+  - Counts: Vitest 67 files / 269 tests passed; build generated 734 static pages; Playwright 4 passed / 2 skipped; npm audit 0 vulnerabilities.
+  - Local production desktop/mobile browser checks confirmed exact target attributes, local `#projects` behavior, menu close semantics, overflow `0`, and console warnings/errors `0`.
+- Commit: `80d65dc fix: keep cstd project navigation context`
+- Push: `origin/main` updated to `80d65dce6d69a628d563cb40e488301a46564129`.
+- Remote check:
+  - GitHub Actions run `29159909691` completed successfully, including install, lint, tests, build, and E2E.
+  - Vercel production deployment `dpl_9ow5ijwjkXypX9HBuwaLK1DtSaBY` completed `Ready` with the `custard.top` and `www.custard.top` aliases.
+  - Live desktop navigation exposed `Projects` without target attributes and all five external project links with `_blank` / `noreferrer`; overflow was `0` and console warnings/errors were `0`.
+  - Live mobile navigation at 390 x 844 exposed the same target policy; selecting `Projects` updated `#projects`, removed the menu, set `aria-expanded="false"`, kept overflow `0`, and produced zero console warnings/errors.
+- Risk: no repository-controlled or deployment risk remains for this item.
+- Next direction: audit the CSTD first-visit and keyboard navigation experience for a verified, user-facing friction point before selecting the next implementation.
+- Status: closed

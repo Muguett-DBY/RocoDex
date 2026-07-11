@@ -2129,3 +2129,36 @@
 ### Final status
 
 - The common `www.custard.top` entry is now publicly configured, TLS-covered, and canonically redirected to `custard.top`.
+
+## 2026-07-12 - CSTD Top Navigation Context Preservation
+
+### Scope
+
+- Continued the personal main-site improvement loop on the `custard.top` header and mobile project navigation.
+- Found that project action buttons already preserved the main-site context for external destinations, but the top navigation still replaced `custard.top` in the current tab.
+- Kept `Projects` as an in-page anchor while applying the existing CSTD external-link policy consistently to the remaining project destinations.
+
+### Fix
+
+- Updated the shared `NavLink` in `src/components/cstd-landing.tsx` to use `getCstdLinkTargetProps`.
+- External links for RocoDex, Photography, Alpha, Design, and CRM now render `target="_blank"` with `rel="noreferrer"` on desktop and mobile.
+- Added `src/components/cstd-landing-navigation.test.ts` to guard the shared navigation wiring.
+
+### Verification evidence
+
+- TDD red reproduced the missing navigation target policy; focused green passed 3 files / 5 tests.
+- Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
+- Local counts: Vitest 67 files / 269 tests passed; Next build generated 734 static pages; Playwright passed 4 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local production browser checks at 1280 px and 390 x 844 confirmed the exact desktop/mobile target policy, in-page `#projects` navigation, menu close state, horizontal overflow `0`, and zero console warnings/errors.
+- Commit `80d65dc` was pushed to `origin/main`; GitHub Actions run `29159909691` completed successfully, including lint, tests, build, and E2E.
+- Vercel production deployment `dpl_9ow5ijwjkXypX9HBuwaLK1DtSaBY` reached `Ready` and included the `custard.top` and `www.custard.top` aliases.
+- Live desktop verification confirmed the exact six-link target policy and horizontal overflow `0`.
+- Live mobile verification at 390 x 844 confirmed external links use `_blank` / `noreferrer`, `Projects` remains local, selecting it updates the hash to `#projects`, closes the menu, leaves `aria-expanded="false"`, keeps horizontal overflow `0`, and reports zero console warnings/errors.
+
+### Risk notes
+
+- No repository-controlled or deployment risk remains for this item.
+
+### Final status
+
+- CSTD header navigation now preserves the personal main-site context consistently across desktop and mobile in production.
