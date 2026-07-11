@@ -2737,3 +2737,22 @@
   - Live CSTD browser checks at desktop and 390 x 844 confirmed title/content, Design and CRM links, horizontal overflow `0`, and console errors `0`.
 - Risk: no repository-controlled risk remains for this item; validate final edge-served robots content again whenever crawler policy changes.
 - Status: closed
+
+## 2026-07-11 CSTD WWW DNS and TLS Recovery
+
+- Type: FIX
+- Prompt: next iteration of the active autonomous `custard.top` improvement goal.
+- Finding: the application and Vercel project had the `www` canonical redirect ready, but Cloudflare had no `www` record and Vercel had no certificate for the hostname, so public HTTPS failed before app routing.
+- External fix:
+  - Added unproxied Cloudflare CNAME `www.custard.top -> 0ccdf8b2f445bccf.vercel-dns-017.com` with automatic TTL.
+  - Verified the domain in Vercel and issued an auto-renewing `www.custard.top` certificate.
+- Verification:
+  - Cloudflare API preflight found no conflicting `www` records; record creation succeeded.
+  - Public DoH resolved the exact CNAME and Vercel edge addresses.
+  - Vercel returned `configured_correctly` with no issues or conflicts.
+  - Strict edge TLS returned 308 and preserved both root and `/cstd?project=crm` destinations.
+  - Cloudflare Browser Rendering loaded the public deep link, followed the redirect, returned 200, rendered the CSTD title, and found CRM content.
+  - Focused local routing verification passed 3 files / 13 tests.
+- Repository impact: no product-code change was needed; the existing canonical redirect implementation was already correct.
+- Local environment note: the machine's proxy DNS fake-IP cache can lag behind authoritative DNS, but independent public and edge checks confirm production health.
+- Status: closed

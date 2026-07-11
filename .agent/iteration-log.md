@@ -2097,3 +2097,35 @@
 ### Final status
 
 - Host-aware crawler entry and the CI navigation race are closed in production.
+
+## 2026-07-11 - CSTD WWW DNS and TLS Recovery
+
+### Scope
+
+- Reopened the unresolved `www.custard.top` reachability risk from the earlier canonical-host code change.
+- Confirmed the repository and Vercel project already knew how to redirect `www` to the apex domain, but Cloudflare had no `www` DNS record and Vercel had no certificate covering that hostname.
+
+### Fix
+
+- Created an unproxied Cloudflare CNAME from `www.custard.top` to Vercel's project-specific target `0ccdf8b2f445bccf.vercel-dns-017.com` with automatic TTL.
+- Re-ran Vercel domain verification and explicitly issued an auto-renewing certificate for `www.custard.top`.
+- Kept the existing application-level 308 canonical redirect, which preserves path and query parameters.
+
+### Verification evidence
+
+- Baseline Cloudflare API lookup returned an active `custard.top` zone and zero records for `www.custard.top`; Vercel reported `invalid_configuration`, and HTTPS failed before application routing.
+- Cloudflare DNS creation returned success with type `CNAME`, `proxied: false`, and the exact Vercel target.
+- Public Cloudflare DoH returned the new CNAME and Vercel edge addresses.
+- `vercel domains verify www.custard.top --non-interactive` returned `configured_correctly`, with no issues or conflicts.
+- `vercel certs issue www.custard.top` succeeded, and `vercel certs ls` showed an auto-renewing certificate covering the hostname.
+- Strict TLS checks against the Vercel edge returned `308` from `/` to `https://custard.top/` and from `/cstd?project=crm` to `https://custard.top/cstd?project=crm`.
+- Cloudflare Browser Rendering independently loaded the public `www` deep link, followed the redirect, returned `200`, rendered the CSTD title, and found the CRM project content.
+- Focused repository verification passed 3 files / 13 tests covering CSTD host routing, auth-provider routing, and host-aware robots behavior.
+
+### Risk notes
+
+- The development machine's local proxy DNS still maps public addresses to a short-lived `198.18.x.x` fake IP, so its ordinary curl/Chromium path can lag behind public DNS changes. Public DoH, strict edge TLS, Vercel verification, and independent edge-browser evidence all confirm the production hostname is healthy.
+
+### Final status
+
+- The common `www.custard.top` entry is now publicly configured, TLS-covered, and canonically redirected to `custard.top`.
