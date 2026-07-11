@@ -29,7 +29,7 @@ async function expectNoHorizontalOverflow(page: Page) {
 async function gotoRocodexPage(page: Page, url: string) {
   const [sessionResponse, pageResponse] = await Promise.all([
     page.waitForResponse((response) => response.url().endsWith("/api/auth/session")),
-    page.goto(url),
+    page.goto(url, { waitUntil: "domcontentloaded" }),
   ]);
 
   expect(sessionResponse.ok()).toBe(true);
@@ -82,6 +82,36 @@ test("core routes render responsively and the CSTD fallback remains interactive"
   await expectNoHorizontalOverflow(page);
 
   expect(browserIssues).toEqual([]);
+});
+
+test("RocoDex navigation finishes while a noncritical optimized image is delayed", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "One browser profile is sufficient for navigation wait semantics.");
+
+  let releaseImages!: () => void;
+  let markImageRequested!: () => void;
+  const imagesReleased = new Promise<void>((resolve) => {
+    releaseImages = resolve;
+  });
+  const imageRequested = new Promise<void>((resolve) => {
+    markImageRequested = resolve;
+  });
+
+  await page.route("**/_next/image?*", async (route) => {
+    markImageRequested();
+    await imagesReleased;
+    await route.abort();
+  });
+
+  const navigation = gotoRocodexPage(page, "/creatures/001");
+  await imageRequested;
+  const completedBeforeImage = await Promise.race([
+    navigation.then(() => true),
+    new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 5_000)),
+  ]);
+
+  releaseImages();
+  await navigation;
+  expect(completedBeforeImage).toBe(true);
 });
 
 test("a unique local user can register and sign in without leaving test data", async ({ page, isMobile }) => {
