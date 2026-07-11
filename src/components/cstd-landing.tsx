@@ -1599,9 +1599,12 @@ function NavLink({
   mobile: boolean;
   onNavigate?: () => void;
 }) {
+  const targetProps = getCstdLinkTargetProps(href);
+
   return (
     <Link
       href={href}
+      {...targetProps}
       onClick={onNavigate}
       className={`${cstdNavLinkClassName} ${mobile ? "w-full justify-start px-4" : "justify-center"}`}
     >
