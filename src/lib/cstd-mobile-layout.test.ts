@@ -67,7 +67,7 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdPageShellClassName).toContain("max-w-[342px]");
     expect(cstdPageShellClassName).toContain("sm:w-[min(1160px,calc(100%_-_32px))]");
     expect(cstdHeroSectionClassName).toContain("min-h-0");
-    expect(cstdHeroSectionClassName).toContain("lg:min-h-[calc(100vh-88px)]");
+    expect(cstdHeroSectionClassName).toContain("lg:min-h-[calc(100vh-176px)]");
     expect(cstdHeroSectionClassName).toContain("lg:grid-cols-[minmax(0,1fr)_420px]");
     expect(cstdHeroSectionClassName).not.toContain("order-first");
   });
