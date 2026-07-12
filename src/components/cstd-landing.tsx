@@ -1314,14 +1314,65 @@ function CstdIntro({
   phase: CstdIntroPhase;
 }) {
   const introPlaying = phase === "playing";
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const skipButtonRef = useRef<HTMLButtonElement>(null);
+  const startButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+
+    const previouslyFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousBodyOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    if (!dialog.open) dialog.showModal();
+
+    return () => {
+      document.body.style.overflow = previousBodyOverflow;
+      if (dialog.open) dialog.close();
+      if (previouslyFocusedElement && previouslyFocusedElement !== document.body && previouslyFocusedElement.isConnected) {
+        previouslyFocusedElement.focus();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      (introPlaying ? skipButtonRef : startButtonRef).current?.focus();
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [introPlaying]);
 
   return (
-    <motion.div
-      className="fixed inset-0 z-50 grid place-items-center overflow-hidden bg-[#fff4cf] text-[#2f241d]"
+    <motion.dialog
+      ref={dialogRef}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cstd-intro-title"
+      onCancel={(event) => {
+        event.preventDefault();
+        onSkip();
+      }}
+      onKeyDown={(event) => {
+        if (event.key !== "Tab") return;
+
+        const firstControl = skipButtonRef.current;
+        const lastControl = introPlaying ? firstControl : startButtonRef.current;
+        if (!firstControl || !lastControl) return;
+
+        const focusLeavesStart = event.shiftKey && document.activeElement === firstControl;
+        const focusLeavesEnd = !event.shiftKey && document.activeElement === lastControl;
+        if (!focusLeavesStart && !focusLeavesEnd) return;
+
+        event.preventDefault();
+        (event.shiftKey ? lastControl : firstControl).focus();
+      }}
+      className="fixed inset-0 z-50 m-0 grid h-full max-h-none w-full max-w-none place-items-center overflow-hidden border-0 bg-[#fff4cf] p-0 text-[#2f241d] backdrop:bg-transparent"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 1.018, filter: "blur(12px)" }}
       transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
     >
+      <h2 id="cstd-intro-title" className="sr-only">CSTD 开场动画</h2>
       <motion.div
         aria-hidden="true"
         className="absolute inset-0"
@@ -1341,9 +1392,10 @@ function CstdIntro({
       {introPlaying ? <IntroSoundWaves /> : null}
       {introPlaying ? <CinematicSugarBurst delay={2.28} /> : null}
       <button
+        ref={skipButtonRef}
         type="button"
         onClick={onSkip}
-        className="absolute right-4 top-4 z-30 rounded-full border border-[#ead6ad] bg-white/82 px-4 py-2 text-sm font-black text-[#7b6656] shadow-sm backdrop-blur transition hover:border-[#d98528] hover:text-[#2f241d] sm:right-5 sm:top-5"
+        className="absolute right-4 top-4 z-30 rounded-full border border-[#ead6ad] bg-white/82 px-4 py-2 text-sm font-black text-[#7b6656] shadow-sm backdrop-blur transition hover:border-[#d98528] hover:text-[#2f241d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:right-5 sm:top-5"
       >
         直接浏览项目
       </button>
@@ -1444,11 +1496,12 @@ function CstdIntro({
               transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
             />
             <p className="relative mt-4 text-sm font-black uppercase tracking-[0.2em] text-[#d98528]">tap to wake the custard</p>
-            <h2 className="mt-2 text-4xl font-black tracking-tight text-[#2f241d] sm:text-6xl">CSTD</h2>
+            <h2 aria-hidden="true" className="mt-2 text-4xl font-black tracking-tight text-[#2f241d] sm:text-6xl">CSTD</h2>
             <button
+              ref={startButtonRef}
               type="button"
               onClick={onStart}
-              className="group relative mt-6 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-xl border-2 border-[#2f241d] bg-[#0f8f64] px-7 text-base font-black text-white shadow-[7px_7px_0_rgba(47,36,29,.14)] transition hover:-translate-y-0.5 hover:bg-[#0d7d59]"
+              className="group relative mt-6 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-xl border-2 border-[#2f241d] bg-[#0f8f64] px-7 text-base font-black text-white shadow-[7px_7px_0_rgba(47,36,29,.14)] transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
             >
               <span className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/24 transition group-hover:left-full" />
               开启 CSTD
@@ -1456,7 +1509,7 @@ function CstdIntro({
           </motion.div>
         )}
       </div>
-    </motion.div>
+    </motion.dialog>
   );
 }
 

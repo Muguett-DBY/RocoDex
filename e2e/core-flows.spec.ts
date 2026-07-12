@@ -84,6 +84,48 @@ test("core routes render responsively and the CSTD fallback remains interactive"
   expect(browserIssues).toEqual([]);
 });
 
+test("CSTD intro behaves as a keyboard-contained modal", async ({ page }) => {
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  expect(response?.ok()).toBe(true);
+
+  const dialog = page.getByRole("dialog", { name: "CSTD 开场动画" });
+  const skip = dialog.getByRole("button", { name: "直接浏览项目" });
+  const start = dialog.getByRole("button", { name: "开启 CSTD" });
+
+  await expect(dialog).toBeVisible();
+  await expect(start).toBeFocused();
+  await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("hidden");
+
+  await page.keyboard.press("Tab");
+  await expect(skip).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(start).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(skip).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(start).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("");
+
+  const replay = page.getByRole("button", { name: "播放开场" });
+  await replay.click();
+  await expect(dialog).toBeVisible();
+  await expect(skip).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(skip).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(skip).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(replay).toBeFocused();
+  await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("");
+  expect(browserIssues).toEqual([]);
+});
+
 test("RocoDex navigation finishes while a noncritical optimized image is delayed", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "One browser profile is sufficient for navigation wait semantics.");
 

@@ -14,13 +14,14 @@ Use the browser's native modal `dialog` behavior while preserving the current CS
 - Open it with `showModal()` so the page behind it becomes inert and keyboard focus stays inside the intro.
 - Give the dialog a stable accessible name and explicit modal semantics.
 - Focus `开启 CSTD` during the idle phase and `直接浏览项目` during playback.
+- Wrap focus at both dialog boundaries, including when playback leaves only one tabbable control; Chromium otherwise moves focus to `body` when Tab crosses either edge.
 - Treat Escape as the same explicit skip action as `直接浏览项目`.
 - Lock page scrolling while the dialog is mounted and restore the previous body style on cleanup.
-- Close the native dialog during cleanup so browsers can restore focus to the control that replayed the intro.
+- Record and restore the previously focused element during cleanup so replay focus return does not depend on React unmount timing.
 
 ## Alternatives Considered
 
-- Keep the existing `div` and implement a custom focus trap. Rejected because native dialog behavior covers focus containment, background inertness, and focus restoration with less code and fewer keyboard edge cases.
+- Keep the existing `div` and implement a full custom focus trap. Rejected because native dialog behavior still provides background inertness and modal semantics; a narrow boundary handler is only needed to wrap Chromium focus at the first and last controls.
 - Remove the automatic intro. Rejected because the intro is an intentional first-viewport brand experience and can be made accessible without removing it.
 
 ## Interaction Flow
@@ -41,6 +42,8 @@ Use the browser's native modal `dialog` behavior while preserving the current CS
 
 - Guard `showModal()` with the dialog's `open` state so React effect re-entry cannot open it twice.
 - Restore the exact previous body overflow value during cleanup.
+- Restore the prior focus only when that element is still connected and is not `body`.
+- Intercept Tab only when focus would cross the first or last control, wrapping to the opposite boundary; during playback both boundaries resolve to `直接浏览项目`.
 - Prevent the native cancel event from closing independently of React state; route it through the existing skip handler.
 
 ## Acceptance
