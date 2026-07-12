@@ -2783,3 +2783,32 @@
 - Risk: no repository-controlled or deployment risk remains for this item.
 - Next direction: audit the CSTD first-visit and keyboard navigation experience for a verified, user-facing friction point before selecting the next implementation.
 - Status: closed
+
+## 2026-07-12 CSTD Intro Keyboard Modal Accessibility
+
+- Type: FIX
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` matched `origin/main`; the full-screen intro visually covered CSTD but was a generic animated container rather than a keyboard-contained modal.
+- Finding: Chromium moved focus to `body` when Tab crossed either intro boundary, and the experience lacked one explicit contract for Escape, scroll lock, phase focus, and replay focus restoration.
+- Fix:
+  - Converted the intro to a native `dialog` opened with `showModal()` and added accessible modal naming.
+  - Added body scroll locking/restoration and previous-focus restoration.
+  - Focused the start action while idle and the skip action while playing.
+  - Added first/last-control Tab wrapping and visible keyboard focus styles.
+  - Added a desktop/mobile Playwright regression for initial and replay behavior.
+- Verification before commit:
+  - Focused Playwright regression passed 2 tests.
+  - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed.
+  - Counts: Vitest 67 files / 269 tests; build 734 static pages; Playwright 6 passed / 2 skipped; npm audit 0 vulnerabilities.
+  - Fresh local production desktop/mobile browser checks proved focus containment, Escape, scroll cleanup, focus restoration, overflow `0`, and zero browser warnings/errors.
+- Commit: `9140588 fix: make cstd intro keyboard modal`
+- Push: `origin/main` updated to `9140588056cb91dc05111b62700262d2e9a2e8b2`.
+- Remote check:
+  - GitHub Actions run `29179619174` completed successfully.
+  - Vercel deployment `dpl_Gb8L4mKm7a8epKxUHDPHTfhRvoWv` completed `Ready` with the apex, `www`, and project aliases.
+  - Both apex and `/cstd` returned `200`; the apex request matched the CSTD route.
+  - Live desktop/mobile checks confirmed the exact idle focus loop, playback focus containment, Escape close, replay focus restoration, scroll cleanup, overflow `0`, no error overlay, and zero console warnings/errors.
+  - Desktop/mobile screenshots were visually clean with no clipping or overlap.
+- Risk: no repository-controlled or deployment risk remains for this item; automatic intro suppression after first completion remains intentional and replay stays available.
+- Next direction: audit the CSTD project discovery and evidence flow for the next verified user-facing friction point.
+- Status: closed

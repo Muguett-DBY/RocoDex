@@ -2162,3 +2162,38 @@
 ### Final status
 
 - CSTD header navigation now preserves the personal main-site context consistently across desktop and mobile in production.
+
+## 2026-07-12 - CSTD Intro Keyboard Modal Accessibility
+
+### Scope
+
+- Continued the personal main-site improvement loop on the first-visit CSTD intro at `custard.top`.
+- Found that the full-screen intro visually blocked the page but did not expose native modal behavior, so keyboard focus could cross its boundaries and Escape/focus restoration were not enforced as one interaction contract.
+
+### Fix
+
+- Replaced the intro wrapper with a native `dialog` opened through `showModal()`, with an accessible name and explicit modal semantics.
+- Locked body scrolling while the intro is mounted, restored the previous overflow state on exit, and returned focus to the control that launched a replay.
+- Focused `开启 CSTD` in the idle phase and `直接浏览项目` during playback.
+- Added explicit first/last-control Tab wrapping because Chromium otherwise moves focus to `body` when crossing a dialog boundary.
+- Added visible keyboard focus styles and an end-to-end regression covering the initial intro and replay flow.
+
+### Verification evidence
+
+- Focused Playwright regression passed on desktop and mobile: 2 tests passed.
+- Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
+- Local counts: Vitest passed 67 files / 269 tests; Next generated 734 static pages; Playwright passed 6 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Fresh local production checks at 1440 x 1100 and 390 x 844 confirmed the exact focus loop, body scroll lock, Escape close, replay focus restoration, horizontal overflow `0`, and no browser warnings/errors.
+- Commit `9140588` was pushed to `origin/main`; GitHub Actions run `29179619174` completed successfully, including lint, tests, build, and E2E.
+- Vercel production deployment `dpl_Gb8L4mKm7a8epKxUHDPHTfhRvoWv` reached `Ready` and attached `custard.top`, `www.custard.top`, and the project aliases.
+- Live HTTP checks returned `200` for both `https://custard.top/` and `/cstd`, with the apex request matched to `/cstd`.
+- Live desktop and 390 x 844 mobile browser checks confirmed the focus sequence `开启 CSTD -> 直接浏览项目 -> 开启 CSTD -> 直接浏览项目 -> 开启 CSTD`, playback focus containment on `直接浏览项目`, Escape close, replay focus restoration, body overflow cleanup, horizontal overflow `0`, no Next.js error overlay, and zero console warnings/errors.
+- Desktop and mobile screenshots were visually inspected; the intro, controls, and keyboard outline were fully visible without clipping or overlap.
+
+### Risk notes
+
+- No repository-controlled or deployment risk remains for this item. The existing `cstd.introSeen` preference intentionally suppresses automatic replay after the first completed or skipped intro; the explicit `播放开场` control remains available.
+
+### Final status
+
+- The CSTD first-visit intro now behaves as a keyboard-contained modal across desktop and mobile in production.
