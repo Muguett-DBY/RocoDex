@@ -1,5 +1,5 @@
 export const cstdNavigationItems = [
-  { href: "#projects", label: "Projects" },
+  { href: "#project-directory", label: "Projects" },
   { href: "https://rocodex.custard.top", label: "RocoDex" },
   { href: "https://shoot.custard.top", label: "Photography" },
   { href: "https://alpha.custard.top", label: "Alpha" },

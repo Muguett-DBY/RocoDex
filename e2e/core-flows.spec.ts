@@ -26,6 +26,29 @@ async function expectNoHorizontalOverflow(page: Page) {
     .toBe(true);
 }
 
+async function expectElementBefore(page: Page, firstSelector: string, secondSelector: string) {
+  await expect
+    .poll(() =>
+      page.evaluate(
+        ({ firstSelector, secondSelector }) => {
+          const first = document.querySelector(firstSelector);
+          const second = document.querySelector(secondSelector);
+          if (!first || !second) return false;
+          return Boolean(first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING);
+        },
+        { firstSelector, secondSelector },
+      ),
+    )
+    .toBe(true);
+}
+
+async function dismissCstdIntro(page: Page) {
+  const dialog = page.getByRole("dialog", { name: "CSTD 开场动画" });
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+}
+
 async function gotoRocodexPage(page: Page, url: string) {
   const [sessionResponse, pageResponse] = await Promise.all([
     page.waitForResponse((response) => response.url().endsWith("/api/auth/session")),
@@ -123,6 +146,54 @@ test("CSTD intro behaves as a keyboard-contained modal", async ({ page }) => {
   await expect(dialog).toHaveCount(0);
   await expect(replay).toBeFocused();
   await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("");
+  expect(browserIssues).toEqual([]);
+});
+
+test("CSTD project discovery lands on live project work", async ({ page }) => {
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  expect(response?.ok()).toBe(true);
+  await dismissCstdIntro(page);
+
+  const projectLink = page.getByRole("link", { name: "看项目", exact: true });
+  const firstProjectCard = page.locator("article").filter({
+    has: page.getByRole("heading", { name: "洛克图鉴 / RocoDex" }),
+  });
+
+  await expect(projectLink).toHaveAttribute("href", "#project-directory");
+  await expect(page.getByText("Latest updates", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Capability checklist", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Acceptance status", { exact: true })).toHaveCount(0);
+  await expect
+    .poll(() => page.locator("#projects").evaluate((element) => element.getBoundingClientRect().top < window.innerHeight))
+    .toBe(true);
+
+  await projectLink.click();
+  await expect(page).toHaveURL(/#project-directory$/);
+  await expect(page.locator("#project-directory")).toBeInViewport();
+  await expect(firstProjectCard).toBeInViewport({ ratio: 0.01 });
+  await expectElementBefore(page, "#project-directory", "#project-guide");
+  await expectElementBefore(page, "article", "#project-guide");
+  await expectNoHorizontalOverflow(page);
+  expect(browserIssues).toEqual([]);
+});
+
+test("CSTD project discovery preserves restored decision context", async ({ page }) => {
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto("/cstd?goal=portrait-shooting#projects", { waitUntil: "domcontentloaded" });
+  expect(response?.ok()).toBe(true);
+  await expect(page.getByRole("dialog", { name: "CSTD 开场动画" })).toHaveCount(0);
+
+  await expect(page.getByText("目标路径已恢复", { exact: true })).toBeVisible();
+  await expectElementBefore(page, "#project-guide", "#project-directory");
+
+  await page
+    .getByRole("region", { name: "奶黄包摄影" })
+    .getByRole("button", { name: "加入对比：奶黄包摄影" })
+    .click();
+  await expectElementBefore(page, "#project-guide", "#project-directory");
+  await expectElementBefore(page, "#project-comparison", "#project-directory");
+  await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });
 

@@ -5,14 +5,6 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowDownRight, Bot, Building2, Camera, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, GitCompareArrows, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
-import {
-  cstdHomepageAcceptance,
-  cstdHomepageCapabilities,
-  cstdHomepageUpdates,
-  getCstdHomepageAcceptanceSummary,
-  getCstdHomepageCapabilitySummary,
-  getCstdHomepageUpdateSummary,
-} from "@/lib/cstd-homepage-updates";
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { getCstdLinkTargetProps } from "@/lib/cstd-link-target";
 import { shouldApplyCstdMascotMoodChange, type CstdMascotMood } from "@/lib/cstd-mascot-mood";
@@ -193,9 +185,6 @@ const cstdRestoredEntryFeedbackClassNames: Record<CstdProjectBriefCopyPresentati
   warning: "text-[#8a4b15]",
 };
 
-const homepageUpdateSummary = getCstdHomepageUpdateSummary(cstdHomepageUpdates);
-const homepageCapabilitySummary = getCstdHomepageCapabilitySummary(cstdHomepageCapabilities);
-const homepageAcceptanceSummary = getCstdHomepageAcceptanceSummary(cstdHomepageAcceptance);
 const projectEvidenceOverview = getCstdProjectEvidenceOverview(cstdProjects);
 const projectProofTimeline = getCstdProjectProofTimeline(cstdProjects);
 const projectCapabilityIndex = getCstdProjectCapabilityIndex(cstdProjects);
@@ -233,6 +222,7 @@ export function CstdLanding() {
   const [projectGuideRestoredFromUrl, setProjectGuideRestoredFromUrl] = useState(false);
   const [projectFocusRestoredFromUrl, setProjectFocusRestoredFromUrl] = useState(false);
   const [projectViewStateRestoredFromUrl, setProjectViewStateRestoredFromUrl] = useState(false);
+  const [projectDecisionContextFirst, setProjectDecisionContextFirst] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [selectedGuideId, setSelectedGuideId] = useState<CstdProjectGuideId | null>(null);
@@ -289,6 +279,7 @@ export function CstdLanding() {
       setProjectGuideRestoredFromUrl(isCstdProjectGuideShareRestored(viewState));
       setProjectFocusRestoredFromUrl(hasRestoredProjectViewState && viewState.projectId !== null);
       setProjectViewStateRestoredFromUrl(hasRestoredProjectViewState && viewState.compareProjectIds.length > 0);
+      setProjectDecisionContextFirst(viewState.guideId !== null || viewState.compareProjectIds.length > 0);
       setProjectViewStateSynced(true);
     };
     syncViewState();
@@ -766,6 +757,48 @@ export function CstdLanding() {
     setComparisonBriefCopyResult(result);
   }
 
+  const hasProjectDecisionContext = projectDecisionContextFirst;
+  const projectDecisionContent = (
+    <>
+      {projectViewStateSynced ? (
+        <ProjectWorkflowSummary action={projectWorkflowAction} items={projectWorkflowSummary} />
+      ) : null}
+
+      <ProjectGuide
+        comparedProjectIds={comparedProjectIds}
+        guideSummary={projectGuideSummary}
+        motionDisabled={motionDisabled}
+        projectGuideCopyResult={projectGuideCopyResult}
+        projectGuideRestoredFromUrl={projectGuideRestoredFromUrl}
+        projectGuideShareUrl={projectGuideShareUrl}
+        selectedGuideId={selectedGuideId}
+        onBrowseCategory={browseProjectCategory}
+        onCopyGuide={copyProjectGuideLink}
+        onFocus={focusProject}
+        onSelect={selectProjectGuide}
+        onToggleComparison={toggleProjectComparison}
+      />
+
+      {projectComparison.projects.length > 0 ? (
+        <ProjectComparison
+          comparison={projectComparison}
+          copyResult={comparisonBriefCopyResult}
+          fit={projectComparisonFit}
+          guideGoal={selectedGuide?.goal ?? null}
+          nextStep={projectComparisonNextStep}
+          restoredFromUrl={projectViewStateRestoredFromUrl}
+          scanSummary={projectComparisonScanSummary}
+          onAlign={alignProjectComparisonToGoal}
+          onClear={() => updateProjectComparison([])}
+          onCopyBrief={copyProjectComparisonBrief}
+          onFocus={focusProject}
+          onRemove={removeProjectFromComparison}
+          onSelectGoal={focusProjectGuide}
+        />
+      ) : null}
+    </>
+  );
+
   return (
     <main className="relative isolate min-h-screen overflow-hidden bg-[#fff6df] text-[#2f241d]">
       <AnimatePresence>{introVisible ? <CstdIntro phase={introPhase} onSkip={skipIntro} onStart={beginIntroPlayback} /> : null}</AnimatePresence>
@@ -872,7 +905,7 @@ export function CstdLanding() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.42, duration: 0.5 }}
             >
-              <HeroButton href="#projects" primary>
+              <HeroButton href="#project-directory" primary>
                 看项目
               </HeroButton>
               <HeroButton href="https://rocodex.custard.top">打开 RocoDex</HeroButton>
@@ -880,65 +913,41 @@ export function CstdLanding() {
             </motion.div>
 
             <motion.div
-              className="mt-5 grid max-w-2xl grid-cols-2 gap-2 sm:mt-6 sm:grid-cols-3 sm:gap-3"
+              className="mt-4 grid max-w-2xl grid-cols-2 gap-2 sm:mt-6 sm:grid-cols-4 sm:gap-3 lg:grid-cols-3 [@media(max-height:800px)]:mt-3"
               initial={motionDisabled ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
             >
               {noteItems.map(([value, label]) => (
-                <div key={value} className="min-w-0 rounded-lg border border-dashed border-[#cdb58c] bg-white/65 p-3 shadow-[3px_3px_0_rgba(47,36,29,.05)]">
+                <div key={value} className="min-w-0 rounded-lg border border-dashed border-[#cdb58c] bg-white/65 p-3 shadow-[3px_3px_0_rgba(47,36,29,.05)] [@media(max-height:800px)]:p-2">
                   <strong className="block break-all text-lg font-black sm:text-2xl">{value}</strong>
                   <span className="mt-1 block text-[0.68rem] font-medium text-[#7b6656] sm:text-xs">{label}</span>
                 </div>
               ))}
+              <button
+                type="button"
+                onClick={pokeMascot}
+                onPointerEnter={() => handleMascotMoodChange("working")}
+                onPointerLeave={() => handleMascotMoodChange("curious")}
+                aria-label="点击奶黄包互动"
+                title="点一点奶黄包"
+                className="group relative grid min-h-[74px] min-w-0 place-items-center overflow-hidden rounded-lg border border-dashed border-[#cdb58c] bg-white/65 p-1 shadow-[3px_3px_0_rgba(47,36,29,.05)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] lg:hidden"
+              >
+                <motion.img
+                  src="/cstd-mascot.svg"
+                  alt=""
+                  className="h-16 w-16 object-contain drop-shadow-[4px_5px_0_rgba(47,36,29,.08)]"
+                  animate={motionDisabled ? undefined : { y: [0, -3, 0], rotate: [-2, 2, -2] }}
+                  transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
+                />
+                <span className="sr-only">{mascotCopy}</span>
+              </button>
             </motion.div>
 
-            <motion.div
-              className="mt-4 max-w-2xl rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[5px_5px_0_rgba(47,36,29,.05)] sm:mt-5 sm:p-4"
-              initial={motionDisabled ? false : { opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.58, duration: 0.5 }}
-              aria-label={homepageUpdateSummary}
-            >
-              <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">Latest updates</p>
-                <p className="text-xs font-bold text-[#7b6656]">{homepageUpdateSummary}</p>
-              </div>
-              <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-                {cstdHomepageUpdates.map((update) => (
-                  <div key={update.label} className="min-w-0 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/84 p-2.5">
-                    <p className="text-sm font-black text-[#2f241d]">{update.label}</p>
-                    <p className="mt-1 text-xs font-semibold leading-5 text-[#6f5b4a]">{update.detail}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-3 rounded-lg border border-[#d6eadf] bg-[#eefbf4]/82 p-3" aria-label={homepageCapabilitySummary}>
-                <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#047857]">Capability checklist</p>
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {cstdHomepageCapabilities.map((capability) => (
-                    <span key={capability.label} className="inline-flex min-h-8 items-center gap-1.5 rounded-md bg-white/82 px-2.5 text-xs font-black text-[#1b4332]" title={capability.detail}>
-                      <Check className="h-3.5 w-3.5 text-[#0f8f64]" />
-                      {capability.label}
-                    </span>
-                  ))}
-                </div>
-              </div>
-              <div className="mt-3 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/78 p-3" aria-label={homepageAcceptanceSummary}>
-                <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#2563eb]">Acceptance status</p>
-                <div className="mt-2 grid gap-2 sm:grid-cols-2">
-                  {cstdHomepageAcceptance.map((item) => (
-                    <div key={item.label} className="min-w-0 rounded-md bg-white/78 px-2.5 py-2">
-                      <p className="text-xs font-black text-[#1d4ed8]">{item.label}</p>
-                      <p className="mt-1 text-[0.68rem] font-semibold leading-4 text-[#315b7f]">{item.detail}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
 
           <motion.aside
-            className={cstdMascotAsideClassName}
+            className={`${cstdMascotAsideClassName} hidden lg:block`}
             initial={motionDisabled ? false : { opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ delay: 0.18, duration: 0.65 }}
@@ -989,141 +998,8 @@ export function CstdLanding() {
             />
           </div>
 
-          {projectViewStateSynced ? (
-            <ProjectWorkflowSummary action={projectWorkflowAction} items={projectWorkflowSummary} />
-          ) : null}
+          {hasProjectDecisionContext ? projectDecisionContent : null}
 
-          <ProjectGuide
-            comparedProjectIds={comparedProjectIds}
-            guideSummary={projectGuideSummary}
-            motionDisabled={motionDisabled}
-            projectGuideCopyResult={projectGuideCopyResult}
-            projectGuideRestoredFromUrl={projectGuideRestoredFromUrl}
-            projectGuideShareUrl={projectGuideShareUrl}
-            selectedGuideId={selectedGuideId}
-            onBrowseCategory={browseProjectCategory}
-            onCopyGuide={copyProjectGuideLink}
-            onFocus={focusProject}
-            onSelect={selectProjectGuide}
-            onToggleComparison={toggleProjectComparison}
-          />
-
-          {projectComparison.projects.length > 0 ? (
-            <ProjectComparison
-              comparison={projectComparison}
-              copyResult={comparisonBriefCopyResult}
-              fit={projectComparisonFit}
-              guideGoal={selectedGuide?.goal ?? null}
-              nextStep={projectComparisonNextStep}
-              restoredFromUrl={projectViewStateRestoredFromUrl}
-              scanSummary={projectComparisonScanSummary}
-              onAlign={alignProjectComparisonToGoal}
-              onClear={() => updateProjectComparison([])}
-              onCopyBrief={copyProjectComparisonBrief}
-              onFocus={focusProject}
-              onRemove={removeProjectFromComparison}
-              onSelectGoal={focusProjectGuide}
-            />
-          ) : null}
-
-          <ProjectCapabilityIndex onFocus={focusProject} />
-
-          <div id="project-evidence" className="mb-5 scroll-mt-24 rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/84 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-              <div className="min-w-0">
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d98528]">Evidence overview</p>
-                <p className="mt-2 text-lg font-black leading-7 text-[#2f241d]">{projectEvidenceOverview.summary}</p>
-              </div>
-              <div className="grid gap-2 sm:grid-cols-3 lg:w-[28rem]">
-                {projectEvidenceOverview.stats.map((stat) => (
-                  <div key={stat.label} className="rounded-lg border border-[#ead6ad] bg-white/78 p-3">
-                    <strong className="block text-2xl font-black text-[#0f8f64]">{stat.value}</strong>
-                    <span className="mt-1 block text-xs font-black text-[#7b6656]">{stat.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className={cstdProjectEvidenceShareGridClassName} aria-label="项目分享中心">
-              <div className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-[#ead6ad] bg-white/72 p-3">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">Portfolio brief</p>
-                  <p className="mt-2 text-sm font-semibold leading-6 text-[#6f5b4a]">把已上线项目、当前状态、交付证据和链接复制成一段组合摘要。</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={copyPortfolioBrief}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
-                >
-                  {portfolioCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                  复制项目组合摘要
-                </button>
-                {portfolioCopyResult ? (
-                  <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
-                    {{
-                      copied: "项目组合摘要已复制",
-                      unsupported: "浏览器不支持自动复制，请手动复制摘要",
-                      failed: "组合摘要复制失败，请手动复制",
-                    }[portfolioCopyResult]}
-                  </p>
-                ) : null}
-              </div>
-              <div className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/74 p-3">
-                <div>
-                  <p className="text-xs font-black uppercase tracking-[0.16em] text-[#2563eb]">Deep links</p>
-                  <p className="mt-2 text-sm font-semibold leading-6 text-[#315b7f]">需要发给别人看时，可以直接复制每个项目的案例深链。</p>
-                </div>
-                <button
-                  type="button"
-                  onClick={copyProjectLinkDirectory}
-                  className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-4 text-sm font-black text-[#2563eb] transition hover:-translate-y-0.5 hover:bg-[#f2f8ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
-                >
-                  {projectLinkDirectoryCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                  复制项目深链目录
-                </button>
-                {projectLinkDirectoryCopyResult ? (
-                  <p role="status" className="text-xs font-semibold leading-5 text-[#315b7f]">
-                    {{
-                      copied: "项目深链目录已复制",
-                      unsupported: "浏览器不支持自动复制，请手动复制项目深链目录",
-                      failed: "项目深链目录复制失败，请手动复制",
-                    }[projectLinkDirectoryCopyResult]}
-                  </p>
-                ) : null}
-              </div>
-            </div>
-            {portfolioCopyResult && portfolioCopyResult !== "copied" ? (
-              <textarea
-                aria-label="项目组合摘要文本"
-                readOnly
-                value={buildCstdProjectPortfolioBrief(cstdProjects)}
-                className="mt-3 min-h-44 w-full resize-y rounded-lg border border-[#ead6ad] bg-[#fffaf0] p-3 text-xs font-semibold leading-5 text-[#4f3d31] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
-              />
-            ) : null}
-            {projectLinkDirectoryCopyResult && projectLinkDirectoryCopyResult !== "copied" ? (
-              <textarea
-                aria-label="项目深链目录文本"
-                readOnly
-                value={typeof window === "undefined" ? "" : buildCstdProjectLinkDirectory(cstdProjects, window.location.origin, window.location.pathname)}
-                className="mt-3 min-h-36 w-full resize-y rounded-lg border border-[#b8d7f5] bg-[#f2f8ff] p-3 text-xs font-semibold leading-5 text-[#315b7f] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
-              />
-            ) : null}
-            <div className="mt-4 rounded-lg border border-[#d6eadf] bg-[#eefbf4]/78 p-3" aria-label={projectProofTimeline.summary}>
-              <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-[#047857]">Proof timeline</p>
-                <p className="text-xs font-bold text-[#4c6b5d]">{projectProofTimeline.summary}</p>
-              </div>
-              <ol className={cstdProjectProofTimelineGridClassName}>
-                {projectProofTimeline.items.map((item, index) => (
-                  <li key={item.projectId} className="min-w-0 rounded-lg border border-[#b7decf] bg-white/82 p-3">
-                    <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-[#0f8f64] px-2 text-xs font-black text-white">{index + 1}</span>
-                    <p className="mt-2 text-sm font-black leading-5 text-[#1b4332]">{item.title}</p>
-                    <p className="mt-1 text-xs font-black leading-5 text-[#047857]">{item.signal}</p>
-                    <p className="mt-2 line-clamp-3 text-xs font-semibold leading-5 text-[#4c6b5d]">{item.proof}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
 
           <div id="project-directory" className="mb-5 scroll-mt-24 rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[6px_6px_0_rgba(47,36,29,.05)] backdrop-blur-sm sm:p-4">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
@@ -1293,6 +1169,17 @@ export function CstdLanding() {
                 </button>
               </div>
             )}
+          </div>
+
+          <div className="mt-5">
+            {hasProjectDecisionContext ? null : projectDecisionContent}
+            <ProjectSupportingEvidence
+              portfolioCopyResult={portfolioCopyResult}
+              projectLinkDirectoryCopyResult={projectLinkDirectoryCopyResult}
+              onCopyPortfolio={copyPortfolioBrief}
+              onCopyProjectLinks={copyProjectLinkDirectory}
+              onFocusProject={focusProject}
+            />
           </div>
         </section>
 
@@ -1674,7 +1561,7 @@ function HeroButton({ href, children, primary = false }: { href: string; childre
       href={href}
       {...targetProps}
       className={`inline-flex min-h-11 w-full items-center justify-center rounded-lg border px-5 text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 sm:w-auto ${
-        primary ? "border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59]" : "border-[#b8d7f5] bg-[#e3f2ff] text-[#2563eb] hover:border-[#2563eb]"
+        primary ? "col-span-2 border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59]" : "border-[#b8d7f5] bg-[#e3f2ff] text-[#2563eb] hover:border-[#2563eb]"
       }`}
     >
       {children}
@@ -1734,6 +1621,123 @@ function MotionControls({
         {audioEnabled ? (bgmActive ? "奶油音乐轻轻播放中" : "奶油音乐待播放") : "声音已关闭"}
       </span>
     </div>
+  );
+}
+
+function ProjectSupportingEvidence({
+  portfolioCopyResult,
+  projectLinkDirectoryCopyResult,
+  onCopyPortfolio,
+  onCopyProjectLinks,
+  onFocusProject,
+}: {
+  portfolioCopyResult: CstdProjectCopyResult | null;
+  projectLinkDirectoryCopyResult: CstdProjectCopyResult | null;
+  onCopyPortfolio: () => void;
+  onCopyProjectLinks: () => void;
+  onFocusProject: (projectId: string) => void;
+}) {
+  return (
+    <>
+      <ProjectCapabilityIndex onFocus={onFocusProject} />
+
+      <div id="project-evidence" className="mb-5 scroll-mt-24 rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/84 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="min-w-0">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d98528]">Evidence overview</p>
+            <p className="mt-2 text-lg font-black leading-7 text-[#2f241d]">{projectEvidenceOverview.summary}</p>
+          </div>
+          <div className="grid gap-2 sm:grid-cols-3 lg:w-[28rem]">
+            {projectEvidenceOverview.stats.map((stat) => (
+              <div key={stat.label} className="rounded-lg border border-[#ead6ad] bg-white/78 p-3">
+                <strong className="block text-2xl font-black text-[#0f8f64]">{stat.value}</strong>
+                <span className="mt-1 block text-xs font-black text-[#7b6656]">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={cstdProjectEvidenceShareGridClassName} aria-label="项目分享中心">
+          <div className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-[#ead6ad] bg-white/72 p-3">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">Portfolio brief</p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-[#6f5b4a]">把已上线项目、当前状态、交付证据和链接复制成一段组合摘要。</p>
+            </div>
+            <button
+              type="button"
+              onClick={onCopyPortfolio}
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+            >
+              {portfolioCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              复制项目组合摘要
+            </button>
+            {portfolioCopyResult ? (
+              <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
+                {{
+                  copied: "项目组合摘要已复制",
+                  unsupported: "浏览器不支持自动复制，请手动复制摘要",
+                  failed: "组合摘要复制失败，请手动复制",
+                }[portfolioCopyResult]}
+              </p>
+            ) : null}
+          </div>
+          <div className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/74 p-3">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#2563eb]">Deep links</p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-[#315b7f]">需要发给别人看时，可以直接复制每个项目的案例深链。</p>
+            </div>
+            <button
+              type="button"
+              onClick={onCopyProjectLinks}
+              className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-4 text-sm font-black text-[#2563eb] transition hover:-translate-y-0.5 hover:bg-[#f2f8ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
+            >
+              {projectLinkDirectoryCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+              复制项目深链目录
+            </button>
+            {projectLinkDirectoryCopyResult ? (
+              <p role="status" className="text-xs font-semibold leading-5 text-[#315b7f]">
+                {{
+                  copied: "项目深链目录已复制",
+                  unsupported: "浏览器不支持自动复制，请手动复制项目深链目录",
+                  failed: "项目深链目录复制失败，请手动复制",
+                }[projectLinkDirectoryCopyResult]}
+              </p>
+            ) : null}
+          </div>
+        </div>
+        {portfolioCopyResult && portfolioCopyResult !== "copied" ? (
+          <textarea
+            aria-label="项目组合摘要文本"
+            readOnly
+            value={buildCstdProjectPortfolioBrief(cstdProjects)}
+            className="mt-3 min-h-44 w-full resize-y rounded-lg border border-[#ead6ad] bg-[#fffaf0] p-3 text-xs font-semibold leading-5 text-[#4f3d31] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+          />
+        ) : null}
+        {projectLinkDirectoryCopyResult && projectLinkDirectoryCopyResult !== "copied" ? (
+          <textarea
+            aria-label="项目深链目录文本"
+            readOnly
+            value={typeof window === "undefined" ? "" : buildCstdProjectLinkDirectory(cstdProjects, window.location.origin, window.location.pathname)}
+            className="mt-3 min-h-36 w-full resize-y rounded-lg border border-[#b8d7f5] bg-[#f2f8ff] p-3 text-xs font-semibold leading-5 text-[#315b7f] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
+          />
+        ) : null}
+        <div className="mt-4 rounded-lg border border-[#d6eadf] bg-[#eefbf4]/78 p-3" aria-label={projectProofTimeline.summary}>
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#047857]">Proof timeline</p>
+            <p className="text-xs font-bold text-[#4c6b5d]">{projectProofTimeline.summary}</p>
+          </div>
+          <ol className={cstdProjectProofTimelineGridClassName}>
+            {projectProofTimeline.items.map((item, index) => (
+              <li key={item.projectId} className="min-w-0 rounded-lg border border-[#b7decf] bg-white/82 p-3">
+                <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-[#0f8f64] px-2 text-xs font-black text-white">{index + 1}</span>
+                <p className="mt-2 text-sm font-black leading-5 text-[#1b4332]">{item.title}</p>
+                <p className="mt-1 text-xs font-black leading-5 text-[#047857]">{item.signal}</p>
+                <p className="mt-2 line-clamp-3 text-xs font-semibold leading-5 text-[#4c6b5d]">{item.proof}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </>
   );
 }
 

@@ -4,7 +4,7 @@ export const cstdPageShellClassName =
   "mx-auto w-[calc(100%_-_48px)] max-w-[342px] sm:w-[min(1160px,calc(100%_-_32px))] sm:max-w-none";
 
 export const cstdHeaderClassName =
-  "sticky top-0 z-30 -mx-3 border-b border-[#ead6ad]/80 bg-[#fff6df]/92 px-3 py-3 backdrop-blur-md sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-7 sm:backdrop-blur-none";
+  "sticky top-0 z-30 -mx-3 border-b border-[#ead6ad]/80 bg-[#fff6df]/92 px-3 py-3 backdrop-blur-md sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-7 sm:backdrop-blur-none [@media(max-height:800px)]:py-3";
 
 export const cstdHeaderNavClassName = "hidden items-center gap-2 sm:flex sm:flex-wrap sm:justify-end";
 
@@ -15,10 +15,10 @@ export const cstdNavLinkClassName =
   "inline-flex min-h-10 min-w-0 items-center rounded-lg border border-[#ead6ad] bg-white/75 px-3 text-sm font-black text-[#2f241d] no-underline shadow-[3px_3px_0_rgba(47,36,29,.06)] transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]";
 
 export const cstdHeroSectionClassName =
-  "grid min-h-0 items-start gap-7 pb-10 pt-2 lg:min-h-[calc(100vh-88px)] lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center lg:gap-14 lg:pb-16 lg:pt-3";
+  "grid min-h-0 items-start gap-7 pb-6 pt-2 lg:min-h-[calc(100vh-176px)] lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center lg:gap-14 lg:pb-16 lg:pt-3 [@media(max-height:800px)]:pb-4 [@media(max-height:800px)]:pt-1";
 
 export const cstdHeroActionsClassName =
-  "mt-6 grid w-full grid-cols-1 gap-3 sm:mt-8 sm:w-auto sm:max-w-none sm:flex sm:flex-wrap";
+  "mt-4 grid w-full grid-cols-2 gap-3 sm:mt-8 sm:w-auto sm:max-w-none sm:flex sm:flex-wrap [@media(max-height:800px)]:mt-4";
 
 export const cstdMascotAsideClassName = "relative min-h-0 lg:min-h-[560px]";
 
