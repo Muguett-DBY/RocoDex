@@ -2197,3 +2197,41 @@
 ### Final status
 
 - The CSTD first-visit intro now behaves as a keyboard-contained modal across desktop and mobile in production.
+
+## 2026-07-13 - CSTD Project-First Discovery
+
+### Scope
+
+- Continued the personal main-site improvement loop on the `custard.top` project discovery flow.
+- Found that maintainer-oriented update, capability, and acceptance panels occupied the first viewport while the live project directory appeared later than the decision helpers.
+- Preserved restored goal and comparison links as decision-first entry points while making the default visit project-first.
+
+### Fix
+
+- Pointed the hero and shared `Projects` navigation to `#project-directory`.
+- Removed the homepage-only maintainer status panels and their unused data module.
+- Reordered the default project flow to show the directory and live project cards before goal guidance and supporting evidence.
+- Kept restored goal/comparison context before the directory and added stable state so the order no longer jumps after the first comparison action.
+- Tightened short-screen spacing and added an accessible compact mascot interaction for mobile and tablet layouts.
+- Added desktop/mobile Playwright regressions for the default project jump and restored decision-context behavior.
+
+### Verification evidence
+
+- TDD red reproduced the restored-context jump after adding the recommended photography project; the regression passed on desktop and mobile after the state-lifecycle fix.
+- Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
+- Local counts: Vitest passed 66 files / 266 tests; Next generated 734 static pages; Playwright passed 10 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local production verification confirmed the restored goal and comparison sections stay before the directory after interaction, with horizontal overflow `0`, no Next.js error overlay, and zero console warnings/errors. The final full-page screenshot was inspected for clipping, overlap, and blank rendering.
+- Design commit `2927d21` and implementation commit `cfb0981` were pushed to `origin/main`.
+- GitHub Actions run `29210137095` completed successfully, including lint, tests, build, and E2E.
+- Vercel production deployment `dpl_8mT1JA71Dcj6T383ESLqcKJkaxVg` reached `Ready` with `custard.top`, `www.custard.top`, and the project aliases.
+- Live HTTP checks returned `200` for the apex, `/cstd`, and the restored goal deep link.
+- Live desktop and 390 x 844 mobile checks confirmed the Projects section is hinted in the first viewport, `看项目` lands on the directory with the first card visible, default ordering is directory-first, horizontal overflow is `0`, and no error overlay appears.
+- Live restored-goal verification confirmed that adding `奶黄包摄影` keeps both `#project-guide` and `#project-comparison` before `#project-directory`, with zero console warnings/errors.
+
+### Risk notes
+
+- No repository-controlled or deployment risk remains for this item. The requested independent review agent did not return a review before timeout; staged-diff review, React/UX checklist review, automated gates, local production checks, and live production checks were completed directly.
+
+### Final status
+
+- CSTD now leads default visitors to real project work while preserving stable, decision-first deep links in production.

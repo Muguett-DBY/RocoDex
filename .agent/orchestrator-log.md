@@ -2812,3 +2812,34 @@
 - Risk: no repository-controlled or deployment risk remains for this item; automatic intro suppression after first completion remains intentional and replay stays available.
 - Next direction: audit the CSTD project discovery and evidence flow for the next verified user-facing friction point.
 - Status: closed
+
+## 2026-07-13 CSTD Project-First Discovery
+
+- Type: IMPROVE
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` contained the verified intro-modal release; the default project area still led with workflow guidance and maintainer-facing status panels before live project cards.
+- Finding: default visitors had to pass internal update, capability, acceptance, goal, comparison, and evidence content before reaching the actual portfolio work; restored goal links also risked jumping to directory-first order after the first interaction.
+- Fix:
+  - Retargeted hero and shared Projects navigation to `#project-directory`.
+  - Removed the maintainer-only homepage status module and panels.
+  - Made the default flow directory and live-card first, with guidance and evidence following.
+  - Preserved restored goal/comparison context before the directory through a stable URL-entry ordering state.
+  - Compressed short-screen hero spacing and exposed the mascot interaction on mobile/tablet.
+  - Added default and restored-context desktop/mobile E2E regressions.
+- Verification before commit:
+  - TDD red/green proved the post-interaction restored-context ordering bug and its fix.
+  - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed.
+  - Counts: Vitest 66 files / 266 tests; build 734 static pages; Playwright 10 passed / 2 skipped; npm audit 0 vulnerabilities.
+  - Local production desktop and mobile checks confirmed directory visibility, stable restored ordering, overflow `0`, no error overlay, and zero console warnings/errors; the final full-page screenshot was visually inspected.
+- Commits: `2927d21 docs: design cstd project-first discovery`; `cfb0981 fix: prioritize cstd project discovery`.
+- Push: `origin/main` updated to `cfb0981047a9f511ea9c2aeb8cbb5694c88163ea`.
+- Remote check:
+  - GitHub Actions run `29210137095` completed successfully.
+  - Vercel deployment `dpl_8mT1JA71Dcj6T383ESLqcKJkaxVg` completed `Ready` for production aliases.
+  - Apex, `/cstd`, and restored-goal HTTP checks returned `200`.
+  - Live desktop and 390 x 844 mobile checks confirmed first-viewport project discovery, CTA arrival on the directory and first card, overflow `0`, and no error overlay.
+  - Live restored-goal interaction kept guide and comparison before the directory after adding photography, with zero console warnings/errors.
+- Review note: the independent reviewer agent did not return before timeout; direct staged-diff review, the React/UX checklist, automated verification, local production verification, and live verification found no blocking issue.
+- Risk: no repository-controlled or deployment risk remains for this item.
+- Next direction: audit mobile performance and below-the-fold project decision density, especially whether the desktop-only interactive stage still incurs unnecessary mobile cost.
+- Status: closed
