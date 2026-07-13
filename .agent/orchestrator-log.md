@@ -2922,7 +2922,7 @@
   - Converted project metrics to named `ul` / `li` groups and added shared layout-contract unit tests plus desktop/mobile geometry coverage.
 - Verification before commit:
   - Focused unit and E2E regressions passed.
-  - `npm run typecheck`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check` passed.
+  - `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check` passed.
   - Counts: Vitest 66 files / 267 tests; build 734 static pages; Playwright 10 passed / 2 skipped; npm audit 0 vulnerabilities.
   - Local 280, 320, 390, and desktop checks confirmed the intended responsive geometry, no metric-label failures, overflow `0`, and zero console warnings/errors.
 - Commits: `e7b82b4 docs: design cstd mobile metric density`; `0b943ef fix: compact cstd mobile project metrics`.

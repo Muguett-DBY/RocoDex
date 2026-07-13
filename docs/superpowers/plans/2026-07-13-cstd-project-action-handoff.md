@@ -117,7 +117,7 @@ Run:
 
 ```powershell
 npx vitest run src/lib/cstd-navigation.test.ts
-npm run typecheck
+npx tsc --noEmit
 npm run lint
 ```
 
@@ -314,7 +314,7 @@ Run:
 
 ```powershell
 npm run test:e2e -- --grep "CSTD project discovery lands on live project work"
-npm run typecheck
+npx tsc --noEmit
 npm run lint
 ```
 
@@ -349,7 +349,7 @@ Expected: one commit containing only the two listed files.
 Run each command and require exit code `0`:
 
 ```powershell
-npm run typecheck
+npx tsc --noEmit
 npm run lint
 npm test
 npm audit --audit-level=moderate

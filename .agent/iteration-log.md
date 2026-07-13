@@ -2331,7 +2331,7 @@
 ### Verification evidence
 
 - Focused unit and Playwright regressions passed after the responsive contracts were implemented.
-- Full local gates passed: `npm run typecheck`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check`.
+- Full local gates passed: `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check`.
 - Local counts: Vitest passed 66 files / 267 tests; Next generated 734 static pages; Playwright passed 10 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
 - Local production checks at 280, 320, 390, and 1280 CSS pixels confirmed the intended one-column, two-plus-one, and three-column states with no text or page overflow and zero console warnings/errors.
 - At 320 pixels, the first card dropped from the measured live baseline of about 930 pixels to 853 pixels; its metric area dropped from about 224 pixels to 147 pixels while all labels stayed on one line.
