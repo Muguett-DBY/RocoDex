@@ -2427,3 +2427,42 @@
 ### Final status
 
 - Mobile project cards now keep decisions and actions visible first, reduce repeated collapsed scroll cost by 832 pixels at 390 pixels wide, and preserve full project evidence through a native keyboard-accessible disclosure in production.
+
+## 2026-07-13 - CSTD Comparison Completion Handoff
+
+### Scope
+
+- Continued the personal main-site improvement loop by measuring what happens after a visitor selects two projects for comparison on `custard.top`.
+- At 390 x 844, the first selection correctly stayed on the card but left the incomplete comparison 4,522.8 pixels below the viewport. After the second selection, the ready result still remained 3,662.8 pixels below the viewport and required another 4,411 pixels of manual scrolling.
+- The existing recommended next action began about 1,076 pixels into the manually reached result and was also outside the first result viewport.
+
+### Fix
+
+- Added a normalized pure helper that detects only the transition from an incomplete comparison to the two-project limit.
+- Kept the first selection in place with its existing pressed state and focus, then changed only the completion edge to serialize `#project-comparison` and reuse the existing post-render result alignment.
+- Added an interaction-only ref so direct completion focuses the programmatically focusable `项目对比` heading, while restored links and browser history navigation align without stealing focus.
+- Moved the unchanged `对比下一步` panel before selected-project, goal-fit, and matrix details. No comparison data, callbacks, selected-project controls, URL parameters, copied brief, or limit changed.
+- Strengthened unit, source-contract, and desktop/mobile E2E coverage for completion detection, first-selection stability, URL/hash, result position, heading focus, next-step order, responsive visibility, restored state, and overflow.
+
+### Verification evidence
+
+- TDD red produced one missing-helper unit failure and two browser failures that received `#projects` instead of `#project-comparison`; focused green passed 8 unit tests and both desktop/mobile completion tests.
+- The first full unit run exposed one stale source-string assertion for the old optional-chain scroll implementation. Its replacement asserts section lookup, scroll, pending-interaction guard, and heading focus; the focused source-contract file then passed 15 tests.
+- Full local gates passed: `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check`.
+- Local counts: Vitest passed 66 files / 269 tests; Next generated 734 static pages; Playwright passed 12 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local production verification at 320 x 800, 390 x 844, and 1280 x 720 measured first-selection scroll deltas of `0`. Completion automatically traversed 4,580, 4,411, and 1,663 pixels respectively and aligned the result at about 96 pixels with the heading focused.
+- The next-action panel measured 573.3-763.3 pixels at 320, 572.7-762.7 pixels at 390, and 328.7-434.7 pixels on desktop, fully inside every explicit production viewport and before the selected-project list.
+- Browser back restored `?compare=rocodex#projects` with `1 / 2`, the first project selected, and photography unselected. Forward restored `2 / 2` at `#project-comparison` without treating history navigation as a new focus handoff.
+- Design, plan, viewport correction, implementation, and source-contract commits `7a34e07`, `8cf3c17`, `ebb58f7`, `f6446e3`, and `0b1ee15` were pushed to `origin/main`.
+- GitHub Actions run `29247894511` completed successfully in 2m31s, including lint, tests, build, and the expanded E2E suite.
+- Vercel production deployment `dpl_FEqbGZW9oUSpNrUzuNNFVajGDnbB` reached `READY` with `custard.top`, `www.custard.top`, and the project aliases; the apex and cache-busted apex/www `/cstd` URLs returned `200`.
+- Fresh production verification reproduced every local geometry and history result exactly. A restored two-project URL aligned at 96.5 pixels, retained the restored-view receipt, did not focus the heading, and kept overflow and browser issues at `0`.
+- First-selection, completion, desktop, and restored-state screenshots were visually inspected without clipping, overlap, blank content, or breakpoint drift.
+
+### Risk notes
+
+- No repository-controlled or deployment risk remains for this item. The shorter automated mobile profile (about 393 x 727) shows the next-action panel heading in the arrival viewport but requires a small continuation scroll for its button; the explicit 320 x 800 and 390 x 844 production contracts keep the complete panel and action visible.
+
+### Final status
+
+- Completing a project comparison now turns selection into a direct, keyboard-coherent decision handoff and removes more than 4,400 pixels of manual result discovery on the measured mobile path.
