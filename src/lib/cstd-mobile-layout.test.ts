@@ -10,6 +10,11 @@ import {
   cstdMobileNavClassName,
   cstdNavLinkClassName,
   cstdPageShellClassName,
+  cstdProjectDetailsBodyClassName,
+  cstdProjectDetailsDesktopClassName,
+  cstdProjectDetailsDisclosureClassName,
+  cstdProjectDetailsMetaClassName,
+  cstdProjectDetailsSummaryClassName,
   cstdProjectEvidenceClassName,
   cstdProjectEvidenceShareGridClassName,
   cstdProjectCardActionRailClassName,
@@ -120,6 +125,18 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectEvidenceClassName).toContain("grid");
     expect(cstdProjectEvidenceClassName).toContain("text-sm");
     expect(cstdProjectEvidenceClassName).not.toContain("grid-cols-3");
+  });
+
+  test("progressively discloses supporting project details only on mobile", () => {
+    expect(cstdProjectDetailsDisclosureClassName).toContain("sm:hidden");
+    expect(cstdProjectDetailsDisclosureClassName).toContain("group");
+    expect(cstdProjectDetailsSummaryClassName).toContain("min-h-11");
+    expect(cstdProjectDetailsSummaryClassName).toContain("list-none");
+    expect(cstdProjectDetailsSummaryClassName).toContain("focus-visible:outline");
+    expect(cstdProjectDetailsMetaClassName).toContain("whitespace-nowrap");
+    expect(cstdProjectDetailsBodyClassName).toContain("border-t");
+    expect(cstdProjectDetailsDesktopClassName).toContain("hidden");
+    expect(cstdProjectDetailsDesktopClassName).toContain("sm:block");
   });
 
   test("gives live project cards a compact touch-safe action hierarchy", () => {

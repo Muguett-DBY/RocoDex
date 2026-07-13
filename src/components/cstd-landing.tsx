@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, 
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowDownRight, Bot, Building2, Camera, Check, ChevronLeft, ChevronRight, Copy, ExternalLink, GitCompareArrows, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
+import { ArrowDownRight, Bot, Building2, Camera, Check, ChevronDown, ChevronLeft, ChevronRight, Copy, ExternalLink, GitCompareArrows, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
 import { playCstdIntroSound, setCstdAudioVolume, startCstdBgm, stopCstdBgm } from "@/lib/cstd-intro-sound";
 import { getCstdLinkTargetProps } from "@/lib/cstd-link-target";
 import { shouldApplyCstdMascotMoodChange, type CstdMascotMood } from "@/lib/cstd-mascot-mood";
@@ -98,6 +98,11 @@ import {
   cstdMobileNavClassName,
   cstdNavLinkClassName,
   cstdPageShellClassName,
+  cstdProjectDetailsBodyClassName,
+  cstdProjectDetailsDesktopClassName,
+  cstdProjectDetailsDisclosureClassName,
+  cstdProjectDetailsMetaClassName,
+  cstdProjectDetailsSummaryClassName,
   cstdProjectEvidenceClassName,
   cstdProjectEvidenceShareGridClassName,
   cstdProjectCardActionRailClassName,
@@ -2415,25 +2420,58 @@ function ProjectCard({
           ) : null}
         </div>
 
-        <dl className={cstdProjectEvidenceClassName}>
-          {evidencePreview.map((item) => (
-            <ProjectEvidence key={item.label} label={item.label} value={item.value} />
-          ))}
-        </dl>
+        <details aria-label={`${project.title} 项目详情`} className={cstdProjectDetailsDisclosureClassName}>
+          <summary className={cstdProjectDetailsSummaryClassName}>
+            <span className="min-w-0 whitespace-nowrap">项目详情</span>
+            <span className={cstdProjectDetailsMetaClassName}>
+              证据 {evidencePreview.length} · 技术 {project.tags.length}
+            </span>
+            <ChevronDown aria-hidden="true" className="h-4 w-4 shrink-0 transition-transform group-open:rotate-180" />
+          </summary>
+          <div className={cstdProjectDetailsBodyClassName}>
+            <ProjectCardSupportingDetails project={project} evidencePreview={evidencePreview} motionDisabled={motionDisabled} compact />
+          </div>
+        </details>
 
-        <div className="mt-5 flex flex-wrap gap-2">
-          {project.tags.map((tag) => (
-            <motion.span
-              key={tag}
-              className="rounded-md bg-[#fff0c9] px-2.5 py-1 text-xs font-black text-[#8a4b15]"
-              whileHover={motionDisabled ? undefined : { y: -2, rotate: -1 }}
-            >
-              {tag}
-            </motion.span>
-          ))}
+        <div data-cstd-project-details="desktop" className={cstdProjectDetailsDesktopClassName}>
+          <ProjectCardSupportingDetails project={project} evidencePreview={evidencePreview} motionDisabled={motionDisabled} />
         </div>
       </div>
     </motion.article>
+  );
+}
+
+function ProjectCardSupportingDetails({
+  project,
+  evidencePreview,
+  motionDisabled,
+  compact = false,
+}: {
+  project: (typeof cstdProjects)[number];
+  evidencePreview: ReturnType<typeof getCstdProjectCardPreview>;
+  motionDisabled: boolean;
+  compact?: boolean;
+}) {
+  return (
+    <>
+      <dl className={compact ? "grid gap-2 text-sm" : cstdProjectEvidenceClassName}>
+        {evidencePreview.map((item) => (
+          <ProjectEvidence key={item.label} label={item.label} value={item.value} />
+        ))}
+      </dl>
+
+      <div className={compact ? "mt-3 flex flex-wrap gap-2" : "mt-5 flex flex-wrap gap-2"}>
+        {project.tags.map((tag) => (
+          <motion.span
+            key={tag}
+            className="rounded-md bg-[#fff0c9] px-2.5 py-1 text-xs font-black text-[#8a4b15]"
+            whileHover={motionDisabled ? undefined : { y: -2, rotate: -1 }}
+          >
+            {tag}
+          </motion.span>
+        ))}
+      </div>
+    </>
   );
 }
 

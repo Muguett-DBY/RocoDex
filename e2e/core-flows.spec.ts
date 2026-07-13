@@ -184,12 +184,15 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
   await expect(firstProjectActions.nth(2)).toHaveText("加入对比");
 
   const projectMetrics = firstProjectCard.getByRole("list", { name: "洛克图鉴 / RocoDex 项目指标" });
-  const projectEvidence = firstProjectCard.locator("dl");
+  const mobileProjectDetails = page.locator('#project-grid details[aria-label$=" 项目详情"]');
+  const firstMobileDetails = firstProjectCard.locator('details[aria-label="洛克图鉴 / RocoDex 项目详情"]');
+  const desktopProjectDetails = firstProjectCard.locator('[data-cstd-project-details="desktop"]');
+  const supportingContent = isMobile ? firstMobileDetails : desktopProjectDetails.locator("dl");
   const metricTiles = projectMetrics.getByRole("listitem");
   await expect(metricTiles).toHaveCount(3);
-  const [metricGridBox, evidenceBox, actionBoxes, metricBoxes] = await Promise.all([
+  const [metricGridBox, supportingBox, actionBoxes, metricBoxes] = await Promise.all([
     projectMetrics.boundingBox(),
-    projectEvidence.boundingBox(),
+    supportingContent.boundingBox(),
     firstProjectActions.evaluateAll((actions) =>
       actions.map((action) => {
         const box = action.getBoundingClientRect();
@@ -205,28 +208,62 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
   ]);
 
   expect(metricGridBox).not.toBeNull();
-  expect(evidenceBox).not.toBeNull();
+  expect(supportingBox).not.toBeNull();
   expect(actionBoxes.length).toBeGreaterThanOrEqual(3);
   const actionTop = Math.min(...actionBoxes.map((box) => box.top));
   const actionBottom = Math.max(...actionBoxes.map((box) => box.bottom));
   expect(actionTop).toBeGreaterThanOrEqual(metricGridBox!.y + metricGridBox!.height - 2);
-  expect(evidenceBox!.y).toBeGreaterThanOrEqual(actionBottom - 2);
+  expect(supportingBox!.y).toBeGreaterThanOrEqual(actionBottom - 2);
   expect(actionBottom).toBeLessThanOrEqual(page.viewportSize()!.height);
 
   if (isMobile) {
-    const [caseStudyBox, comparisonBox] = await Promise.all([
+    const mobileDetailsGroup = firstProjectCard.getByRole("group", {
+      name: "洛克图鉴 / RocoDex 项目详情",
+    });
+    const mobileSummary = firstMobileDetails.locator("summary");
+    const secondProjectCard = page.locator("#project-grid article").nth(1);
+    const [caseStudyBox, comparisonBox, firstCardBox, secondCardBox, summaryBox, summaryOverflow] = await Promise.all([
       firstProjectActions.nth(1).boundingBox(),
       firstProjectActions.nth(2).boundingBox(),
+      firstProjectCard.boundingBox(),
+      secondProjectCard.boundingBox(),
+      mobileSummary.boundingBox(),
+      mobileSummary.evaluate((summary) => summary.scrollWidth - summary.clientWidth),
     ]);
 
     expect(caseStudyBox).not.toBeNull();
     expect(comparisonBox).not.toBeNull();
+    expect(firstCardBox).not.toBeNull();
+    expect(secondCardBox).not.toBeNull();
+    expect(summaryBox).not.toBeNull();
     expect(Math.abs(caseStudyBox!.y - comparisonBox!.y)).toBeLessThanOrEqual(1);
     expect(caseStudyBox!.height).toBeGreaterThanOrEqual(44);
     expect(comparisonBox!.height).toBeGreaterThanOrEqual(44);
     expect(Math.abs(metricBoxes[0].y - metricBoxes[1].y)).toBeLessThanOrEqual(1);
     expect(metricBoxes[2].y).toBeGreaterThan(metricBoxes[0].y);
     expect(metricBoxes[2].width).toBeGreaterThanOrEqual(metricBoxes[0].width * 1.9);
+    await expect(mobileProjectDetails).toHaveCount(6);
+    await expect(mobileDetailsGroup).toHaveCount(1);
+    await expect(firstMobileDetails).toBeVisible();
+    await expect(firstMobileDetails).not.toHaveAttribute("open", "");
+    await expect(desktopProjectDetails).not.toBeVisible();
+    await expect(mobileSummary).toContainText("项目详情");
+    await expect(mobileSummary).toContainText("证据 2 · 技术 4");
+    expect(summaryBox!.height).toBeGreaterThanOrEqual(44);
+    expect(summaryOverflow).toBeLessThanOrEqual(0);
+    expect(firstCardBox!.height).toBeLessThanOrEqual(700);
+    expect(secondCardBox!.y - (firstCardBox!.y + firstCardBox!.height)).toBeLessThanOrEqual(24);
+
+    await mobileSummary.focus();
+    await mobileSummary.press("Enter");
+    await expect(firstMobileDetails).toHaveAttribute("open", "");
+    await expect(firstMobileDetails.getByText("负责", { exact: true })).toBeVisible();
+    await expect(firstMobileDetails.getByText("Next.js 16", { exact: true })).toBeVisible();
+    await expect(mobileSummary).toBeFocused();
+    await mobileSummary.press("Space");
+    await expect(firstMobileDetails).not.toHaveAttribute("open", "");
+    await expect(firstMobileDetails.getByText("负责", { exact: true })).not.toBeVisible();
+    await expect(mobileSummary).toBeFocused();
 
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: "auto" }));
     const navigationToggle = page.locator('button[aria-controls="cstd-mobile-navigation"]');
@@ -239,6 +276,10 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
     await expect(page).toHaveURL(/#project-grid$/);
     await expect(page.locator("#project-grid")).toBeInViewport();
   } else {
+    await expect(mobileProjectDetails).toHaveCount(6);
+    await expect(firstMobileDetails).not.toBeVisible();
+    await expect(desktopProjectDetails).toBeVisible();
+    await expect(desktopProjectDetails.locator("dl")).toBeVisible();
     expect(Math.abs(metricBoxes[0].y - metricBoxes[1].y)).toBeLessThanOrEqual(2);
     expect(Math.abs(metricBoxes[0].y - metricBoxes[2].y)).toBeLessThanOrEqual(2);
     expect(Math.abs(metricBoxes[0].width - metricBoxes[1].width)).toBeLessThanOrEqual(1);
