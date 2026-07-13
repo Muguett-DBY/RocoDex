@@ -70,7 +70,7 @@ For both desktop and mobile profiles:
 6. Assert the URL now ends in `#project-comparison` with both IDs.
 7. Poll until the result top is between 80 and 112 pixels.
 8. Assert `项目对比` is focused, `已选择 2 / 2 个项目` is visible, and `对比下一步` is before `已选对比项目`.
-9. On mobile, require the complete next-action panel to fit in the viewport.
+9. On the automated mobile profile (about 393 x 727), require the next-action panel to begin inside the viewport; reserve complete panel/action containment for the explicit 320 x 800 and 390 x 844 production-browser contracts below.
 10. Require the matrix to exist, horizontal overflow `0`, and zero browser warnings/errors.
 
 Extend the restored-comparison coverage or add a direct restored URL assertion proving the heading is not auto-focused on initial load.
