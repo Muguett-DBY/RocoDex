@@ -12,6 +12,9 @@ import {
   cstdPageShellClassName,
   cstdProjectEvidenceClassName,
   cstdProjectEvidenceShareGridClassName,
+  cstdProjectCardActionRailClassName,
+  cstdProjectCardPrimaryActionClassName,
+  cstdProjectCardSecondaryActionClassName,
   cstdProjectFocusActionRailClassName,
   cstdProjectFocusBodyClassName,
   cstdProjectFocusChecklistGridClassName,
@@ -114,6 +117,16 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectEvidenceClassName).toContain("grid");
     expect(cstdProjectEvidenceClassName).toContain("text-sm");
     expect(cstdProjectEvidenceClassName).not.toContain("grid-cols-3");
+  });
+
+  test("gives live project cards a compact touch-safe action hierarchy", () => {
+    expect(cstdProjectCardActionRailClassName).toContain("grid-cols-2");
+    expect(cstdProjectCardActionRailClassName).toContain("sm:flex");
+    expect(cstdProjectCardPrimaryActionClassName).toContain("col-span-2");
+    expect(cstdProjectCardPrimaryActionClassName).toContain("min-h-11");
+    expect(cstdProjectCardSecondaryActionClassName).toContain("min-w-0");
+    expect(cstdProjectCardSecondaryActionClassName).toContain("min-h-11");
+    expect(cstdProjectCardSecondaryActionClassName).not.toContain("col-span-2");
   });
 
   test("keeps the focused case study scan-first on mobile and action-stable on desktop", () => {

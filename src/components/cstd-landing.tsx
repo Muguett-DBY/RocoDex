@@ -100,6 +100,9 @@ import {
   cstdPageShellClassName,
   cstdProjectEvidenceClassName,
   cstdProjectEvidenceShareGridClassName,
+  cstdProjectCardActionRailClassName,
+  cstdProjectCardPrimaryActionClassName,
+  cstdProjectCardSecondaryActionClassName,
   cstdProjectComparisonClassName,
   cstdProjectComparisonColumnsClassName,
   cstdProjectFocusActionRailClassName,
@@ -1572,16 +1575,28 @@ function NavLink({
   );
 }
 
-function HeroButton({ href, children, primary = false }: { href: string; children: ReactNode; primary?: boolean }) {
+function HeroButton({
+  href,
+  children,
+  primary = false,
+  wideOnMobile = false,
+}: {
+  href: string;
+  children: ReactNode;
+  primary?: boolean;
+  wideOnMobile?: boolean;
+}) {
   const targetProps = getCstdLinkTargetProps(href);
 
   return (
     <Link
       href={href}
       {...targetProps}
-      className={`inline-flex min-h-11 w-full items-center justify-center rounded-lg border px-5 text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 sm:w-auto ${
-        primary ? "col-span-2 border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59]" : "border-[#b8d7f5] bg-[#e3f2ff] text-[#2563eb] hover:border-[#2563eb]"
-      }`}
+      className={`inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto sm:px-5 ${
+        primary
+          ? "col-span-2 border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59] focus-visible:outline-[#0f8f64]"
+          : "border-[#b8d7f5] bg-[#e3f2ff] text-[#2563eb] hover:border-[#2563eb] focus-visible:outline-[#2563eb]"
+      } ${wideOnMobile ? "col-span-2" : ""}`}
     >
       {children}
     </Link>
@@ -2289,6 +2304,7 @@ function ProjectCard({
   onToggleComparison: (projectId: string) => void;
 }) {
   const Icon = projectIcons[project.icon];
+  const isLive = project.status === "Live";
   const evidencePreview = getCstdProjectCardPreview(project);
   const comparisonControl = getCstdProjectComparisonControl(comparedProjectIds, project.id);
   const toneClasses = {
@@ -2347,36 +2363,52 @@ function ProjectCard({
           ))}
         </dl>
 
-        <div className="mt-5 flex flex-col gap-3 sm:mt-6 sm:flex-row sm:flex-wrap">
+        <div className={cstdProjectCardActionRailClassName}>
+          {isLive ? (
+            <HeroButton href={project.href} primary>
+              <ExternalLink aria-hidden="true" className="h-4 w-4 shrink-0" />
+              {project.action}
+            </HeroButton>
+          ) : null}
           <button
             type="button"
             onClick={() => onFocus(project.id)}
             aria-label={getCstdProjectFocusButtonLabel(project)}
-            className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-5 text-sm font-black text-white shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
+            className={`${isLive ? cstdProjectCardSecondaryActionClassName : cstdProjectCardPrimaryActionClassName} ${
+              isLive ? "border-[#1b4332] bg-white text-[#0f8f64] hover:bg-[#eefbf4]" : "border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59]"
+            }`}
           >
+            <ArrowDownRight aria-hidden="true" className="h-4 w-4 shrink-0" />
             查看案例
           </button>
-          {project.status === "Live" ? (
+          {isLive ? (
             <button
               type="button"
               onClick={() => onToggleComparison(project.id)}
               aria-label={`${comparisonControl.label}：${project.title}`}
               aria-pressed={comparisonControl.selected}
               disabled={comparisonControl.disabled}
-              className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border px-5 text-sm font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] disabled:cursor-not-allowed disabled:opacity-55 sm:w-auto ${
+              className={`${cstdProjectCardSecondaryActionClassName} disabled:cursor-not-allowed disabled:opacity-55 ${
                 comparisonControl.selected
                   ? "border-[#1b4332] bg-[#dff8ed] text-[#047857]"
-                  : "border-[#1b4332] bg-white text-[#0f8f64] hover:-translate-y-0.5 hover:bg-[#eefbf4]"
+                  : "border-[#1b4332] bg-white text-[#0f8f64] hover:bg-[#eefbf4]"
               }`}
             >
               {comparisonControl.selected ? <Check className="h-4 w-4" /> : <GitCompareArrows className="h-4 w-4" />}
               {comparisonControl.label}
             </button>
           ) : null}
-          <HeroButton href={project.href}>
-            {project.action}
-          </HeroButton>
-          {"softHref" in project && project.softHref ? <HeroButton href={project.softHref}>{project.softAction}</HeroButton> : null}
+          {"softHref" in project && project.softHref ? (
+            <HeroButton href={project.softHref} wideOnMobile>
+              <ExternalLink aria-hidden="true" className="h-4 w-4 shrink-0" />
+              {project.softAction}
+            </HeroButton>
+          ) : null}
+          {!isLive ? (
+            <HeroButton href={project.href} wideOnMobile>
+              {project.action}
+            </HeroButton>
+          ) : null}
         </div>
 
         <div className="mt-5 flex flex-wrap gap-2">
