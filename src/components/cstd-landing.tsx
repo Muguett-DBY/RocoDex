@@ -14,6 +14,7 @@ import { getCstdProjectCapabilityIndex } from "@/lib/cstd-project-capability-ind
 import {
   CSTD_PROJECT_COMPARISON_LIMIT,
   buildCstdProjectComparisonBrief,
+  didCompleteCstdProjectComparison,
   getCstdProjectComparison,
   getCstdProjectComparisonControl,
   toggleCstdProjectComparison,
@@ -220,6 +221,7 @@ export function CstdLanding() {
   const desktopCustardStageEnabled = useDesktopCustardStage();
   const initialized = useRef(false);
   const projectFocusRef = useRef<HTMLElement>(null);
+  const comparisonCompletionHandoffPendingRef = useRef(false);
   const [introVisible, setIntroVisible] = useState(false);
   const [introPhase, setIntroPhase] = useState<CstdIntroPhase>("idle");
   const [motionPreference, setMotionPreference] = useState<CstdMotionPreference>("enabled");
@@ -430,7 +432,14 @@ export function CstdLanding() {
     if (!projectViewStateSynced || projectComparison.projects.length === 0) return;
     if (window.location.hash !== "#project-comparison") return;
     const frame = window.requestAnimationFrame(() => {
-      document.getElementById("project-comparison")?.scrollIntoView({ block: "start" });
+      const comparisonSection = document.getElementById("project-comparison");
+      if (!comparisonSection) return;
+
+      comparisonSection.scrollIntoView({ block: "start" });
+      if (!comparisonCompletionHandoffPendingRef.current) return;
+
+      document.getElementById("project-comparison-heading")?.focus({ preventScroll: true });
+      comparisonCompletionHandoffPendingRef.current = false;
     });
     return () => window.cancelAnimationFrame(frame);
   }, [projectComparison.projects.length, projectViewStateSynced]);
@@ -602,7 +611,14 @@ export function CstdLanding() {
   }
 
   function toggleProjectComparison(projectId: string) {
-    updateProjectComparison(toggleCstdProjectComparison(comparedProjectIds, projectId));
+    const nextComparedProjectIds = toggleCstdProjectComparison(comparedProjectIds, projectId);
+    const shouldHandoff = didCompleteCstdProjectComparison(comparedProjectIds, nextComparedProjectIds);
+    comparisonCompletionHandoffPendingRef.current = shouldHandoff;
+    if (shouldHandoff) {
+      updateProjectComparison(nextComparedProjectIds, "project-comparison");
+      return;
+    }
+    updateProjectComparison(nextComparedProjectIds);
   }
 
   function updateProjectComparison(
@@ -2122,7 +2138,11 @@ function ProjectComparison({
       <div className="flex flex-col gap-3 border-b border-[#b7decf] p-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#047857]">Decision view</p>
-          <h3 id="project-comparison-heading" className="mt-1 text-lg font-black text-[#1b4332]">
+          <h3
+            id="project-comparison-heading"
+            tabIndex={-1}
+            className="mt-1 rounded-sm text-lg font-black text-[#1b4332] focus:outline focus:outline-2 focus:outline-offset-4 focus:outline-[#0f8f64]"
+          >
             项目对比
           </h3>
           <p className="mt-1 text-xs font-bold text-[#4c6b5d]" aria-live="polite">
@@ -2199,6 +2219,35 @@ function ProjectComparison({
       </div>
 
       <div className="p-4">
+        <div className="mt-4 border-y border-[#9bd9bf] bg-[#eefbf4]/78 px-3 py-4 sm:px-4" role="group" aria-label="对比下一步">
+          <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+            <div className="min-w-0">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#047857]">{nextStep.eyebrow}</p>
+              <p className="mt-1 break-words text-base font-black text-[#1b4332]">{nextStep.title}</p>
+              <p className="mt-1 max-w-3xl break-words text-sm font-semibold leading-6 text-[#355b4a]">{nextStep.detail}</p>
+            </div>
+            <div className="grid w-full shrink-0 gap-2 sm:grid-cols-2 lg:w-auto">
+              <button
+                type="button"
+                onClick={handleNextStep}
+                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] lg:w-auto"
+              >
+                <ArrowDownRight className="h-4 w-4" />
+                {nextStep.primaryLabel}
+              </button>
+              {nextStep.kind === "focus" ? (
+                <Link
+                  href={nextStep.project.href}
+                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-4 text-sm font-black text-[#2563eb] no-underline transition hover:-translate-y-0.5 hover:bg-[#e3f2ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb] lg:w-auto"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  {nextStep.secondaryLabel}
+                </Link>
+              ) : null}
+            </div>
+          </div>
+        </div>
+
         <ul className={cstdProjectComparisonColumnsClassName} aria-label="已选对比项目">
           {comparison.projects.map((project) => {
             const fitItem = fitItemsByProjectId.get(project.id);
@@ -2243,35 +2292,6 @@ function ProjectComparison({
               </li>
             ))}
           </ul>
-        </div>
-
-        <div className="mt-4 border-y border-[#9bd9bf] bg-[#eefbf4]/78 px-3 py-4 sm:px-4" role="group" aria-label="对比下一步">
-          <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#047857]">{nextStep.eyebrow}</p>
-              <p className="mt-1 break-words text-base font-black text-[#1b4332]">{nextStep.title}</p>
-              <p className="mt-1 max-w-3xl break-words text-sm font-semibold leading-6 text-[#355b4a]">{nextStep.detail}</p>
-            </div>
-            <div className="grid w-full shrink-0 gap-2 sm:grid-cols-2 lg:w-auto">
-              <button
-                type="button"
-                onClick={handleNextStep}
-                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] lg:w-auto"
-              >
-                <ArrowDownRight className="h-4 w-4" />
-                {nextStep.primaryLabel}
-              </button>
-              {nextStep.kind === "focus" ? (
-                <Link
-                  href={nextStep.project.href}
-                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-4 text-sm font-black text-[#2563eb] no-underline transition hover:-translate-y-0.5 hover:bg-[#e3f2ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb] lg:w-auto"
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  {nextStep.secondaryLabel}
-                </Link>
-              ) : null}
-            </div>
-          </div>
         </div>
 
         {comparison.ready ? (

@@ -292,6 +292,82 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
   expect(browserIssues).toEqual([]);
 });
 
+test("CSTD comparison completion hands off to the decision result", async ({ page, isMobile }) => {
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  expect(response?.ok()).toBe(true);
+  await dismissCstdIntro(page);
+
+  const firstCard = page.locator("#project-grid article").filter({
+    has: page.getByRole("heading", { name: "洛克图鉴 / RocoDex" }),
+  });
+  const secondCard = page.locator("#project-grid article").filter({
+    has: page.getByRole("heading", { name: "奶黄包摄影" }),
+  });
+  const firstComparisonButton = firstCard.getByRole("button", {
+    name: "加入对比：洛克图鉴 / RocoDex",
+  });
+  const secondComparisonButton = secondCard.getByRole("button", {
+    name: "加入对比：奶黄包摄影",
+  });
+
+  await page.locator("#project-grid").evaluate((element) => {
+    element.scrollIntoView({ block: "start", behavior: "auto" });
+  });
+  const firstSelectionScrollY = await page.evaluate(() => window.scrollY);
+  await firstComparisonButton.click();
+  await expect(page).toHaveURL(/\/cstd\?compare=rocodex#projects$/);
+  const firstSelectedButton = firstCard.getByRole("button", {
+    name: "移出对比：洛克图鉴 / RocoDex",
+  });
+  await expect(firstSelectedButton).toBeFocused();
+  await expect
+    .poll(() => page.evaluate((before) => Math.abs(window.scrollY - before), firstSelectionScrollY))
+    .toBeLessThanOrEqual(2);
+
+  await secondComparisonButton.scrollIntoViewIfNeeded();
+  await secondComparisonButton.click();
+  await expect(page).toHaveURL(/\/cstd\?compare=rocodex%2Cphotography#project-comparison$/);
+
+  const comparison = page.locator("#project-comparison");
+  const comparisonHeading = page.getByRole("heading", { name: "项目对比" });
+  const nextStep = comparison.getByRole("group", { name: "对比下一步" });
+  await expect
+    .poll(() => comparison.evaluate((element) => {
+      const top = element.getBoundingClientRect().top;
+      return top >= 80 && top <= 112;
+    }))
+    .toBe(true);
+  await expect(comparisonHeading).toBeFocused();
+  await expect(comparison.getByText("已选择 2 / 2 个项目", { exact: true })).toBeVisible();
+  await expectElementBefore(
+    page,
+    '#project-comparison [aria-label="对比下一步"]',
+    '#project-comparison [aria-label="已选对比项目"]',
+  );
+  await expect(comparison.locator("dl")).toHaveCount(1);
+
+  if (isMobile) {
+    const nextStepBox = await nextStep.boundingBox();
+    expect(nextStepBox).not.toBeNull();
+    expect(nextStepBox!.y).toBeLessThan(page.viewportSize()!.height);
+  }
+
+  await expectNoHorizontalOverflow(page);
+
+  const restoredResponse = await page.reload({ waitUntil: "domcontentloaded" });
+  expect(restoredResponse?.ok()).toBe(true);
+  await expect
+    .poll(() => comparison.evaluate((element) => {
+      const top = element.getBoundingClientRect().top;
+      return top >= 80 && top <= 112;
+    }))
+    .toBe(true);
+  await expect(comparisonHeading).not.toBeFocused();
+  await expectNoHorizontalOverflow(page);
+  expect(browserIssues).toEqual([]);
+});
+
 test("CSTD project discovery preserves restored decision context", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd?goal=portrait-shooting#projects", { waitUntil: "domcontentloaded" });
