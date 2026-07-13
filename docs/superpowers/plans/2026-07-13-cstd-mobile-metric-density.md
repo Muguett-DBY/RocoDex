@@ -48,6 +48,8 @@ Update `src/lib/cstd-mobile-layout.ts`:
 - add `min-[320px]:grid-cols-2`;
 - retain `sm:grid-cols-3`;
 - add last-item span/reset classes to the metric tile.
+- align the project action rail with the same 320-pixel activation boundary so
+  narrower screens use full-width actions.
 
 Update `ProjectCard` in `src/components/cstd-landing.tsx`:
 

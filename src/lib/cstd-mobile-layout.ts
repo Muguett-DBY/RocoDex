@@ -51,9 +51,11 @@ export const cstdProjectGuideHeaderActionsClassName = "absolute right-0 top-0 fl
 export const cstdProjectGuideClearActionClassName =
   "inline-flex h-11 w-11 items-center justify-center rounded-lg border border-[#ead6ad] bg-white/75 text-[#6f5b4a] transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]";
 
-export const cstdProjectMetricGridClassName = "mt-5 grid grid-cols-1 gap-2 sm:mt-6 sm:grid-cols-3 sm:gap-3";
+export const cstdProjectMetricGridClassName =
+  "mt-5 grid list-none grid-cols-1 gap-2 p-0 min-[320px]:grid-cols-2 sm:mt-6 sm:grid-cols-3 sm:gap-3";
 
-export const cstdProjectMetricTileClassName = "min-w-0 rounded-lg border border-[#ead6ad] bg-white/72 p-3 sm:rounded-xl sm:p-4 xl:px-2.5 xl:py-3";
+export const cstdProjectMetricTileClassName =
+  "min-w-0 rounded-lg border border-[#ead6ad] bg-white/72 p-3 min-[320px]:last:col-span-2 sm:last:col-span-1 sm:rounded-xl sm:p-4 xl:px-2.5 xl:py-3";
 
 export const cstdProjectMetricValueClassName = "block min-w-0 break-words text-lg font-black leading-tight sm:text-xl xl:text-lg";
 
@@ -62,10 +64,11 @@ export const cstdProjectMetricLabelClassName = "mt-1 block min-w-0 break-words t
 export const cstdProjectEvidenceClassName =
   "mt-4 grid gap-2 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/72 p-3 text-sm sm:mt-5";
 
-export const cstdProjectCardActionRailClassName = "mt-5 grid min-w-0 grid-cols-2 gap-3 sm:mt-6 sm:flex sm:flex-wrap";
+export const cstdProjectCardActionRailClassName =
+  "mt-5 grid min-w-0 grid-cols-1 gap-3 min-[320px]:grid-cols-2 sm:mt-6 sm:flex sm:flex-wrap";
 
 export const cstdProjectCardPrimaryActionClassName =
-  "col-span-2 inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto sm:px-5";
+  "inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] min-[320px]:col-span-2 sm:w-auto sm:px-5";
 
 export const cstdProjectCardSecondaryActionClassName =
   "inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto sm:px-5";

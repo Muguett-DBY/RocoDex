@@ -105,8 +105,11 @@ describe("CSTD mobile layout rules", () => {
 
   test("keeps project metric text inside its tile at narrow card widths", () => {
     expect(cstdProjectMetricGridClassName).toContain("grid-cols-1");
+    expect(cstdProjectMetricGridClassName).toContain("min-[320px]:grid-cols-2");
     expect(cstdProjectMetricGridClassName).toContain("sm:grid-cols-3");
     expect(cstdProjectMetricTileClassName).toContain("min-w-0");
+    expect(cstdProjectMetricTileClassName).toContain("min-[320px]:last:col-span-2");
+    expect(cstdProjectMetricTileClassName).toContain("sm:last:col-span-1");
     expect(cstdProjectMetricValueClassName).toContain("min-w-0");
     expect(cstdProjectMetricValueClassName).toContain("break-words");
     expect(cstdProjectMetricLabelClassName).toContain("min-w-0");
@@ -120,9 +123,10 @@ describe("CSTD mobile layout rules", () => {
   });
 
   test("gives live project cards a compact touch-safe action hierarchy", () => {
-    expect(cstdProjectCardActionRailClassName).toContain("grid-cols-2");
+    expect(cstdProjectCardActionRailClassName).toContain("grid-cols-1");
+    expect(cstdProjectCardActionRailClassName).toContain("min-[320px]:grid-cols-2");
     expect(cstdProjectCardActionRailClassName).toContain("sm:flex");
-    expect(cstdProjectCardPrimaryActionClassName).toContain("col-span-2");
+    expect(cstdProjectCardPrimaryActionClassName).toContain("min-[320px]:col-span-2");
     expect(cstdProjectCardPrimaryActionClassName).toContain("min-h-11");
     expect(cstdProjectCardSecondaryActionClassName).toContain("min-w-0");
     expect(cstdProjectCardSecondaryActionClassName).toContain("min-h-11");
