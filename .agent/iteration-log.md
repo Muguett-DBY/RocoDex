@@ -2235,3 +2235,41 @@
 ### Final status
 
 - CSTD now leads default visitors to real project work while preserving stable, decision-first deep links in production.
+
+## 2026-07-13 - CSTD Mobile Stage Loading
+
+### Scope
+
+- Continued the personal main-site improvement loop by measuring the real mobile JavaScript cost of the desktop-only CSTD mascot stage.
+- Found that Tailwind hid the stage below the `lg` breakpoint, but React still mounted its dynamic component and downloaded the Three.js / React Three Fiber chunk on a fresh 390 x 844 visit.
+- Kept the full interactive stage for desktop visitors while removing its network, parsing, WebGL, and mount cost from the mobile path.
+
+### Fix
+
+- Added a client-side `matchMedia("(min-width: 1024px)")` gate that starts disabled for hydration stability and follows breakpoint changes.
+- Mounted `CstdCustardStage` only while the desktop media query matches; mobile and tablet layouts continue to expose the compact mascot control.
+- Strengthened the responsive E2E contract to wait for network idle and assert one raw mascot control on mobile versus two mounted controls on desktop.
+- Added design and implementation plans documenting the measured problem, breakpoint contract, TDD sequence, and release checks.
+
+### Verification evidence
+
+- TDD red first proved the hidden desktop stage still mounted on mobile after dynamic loading; focused green passed on both desktop and mobile after the media-query gate.
+- Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
+- Local counts: Vitest passed 66 files / 266 tests; Next generated 734 static pages; Playwright passed 10 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local production mobile verification found one mascot control, no `canvas`, no stage chunk, horizontal overflow `0`, and script totals of 242,870 transferred / 804,131 decoded bytes. Desktop resize loaded the 884,176-byte decoded stage chunk, mounted the canvas, and preserved overflow `0`.
+- Design commit `ccf6bfa` and implementation commit `9622741` were pushed to `origin/main`.
+- GitHub Actions run `29230393408` completed successfully, including lint, tests, build, and E2E.
+- Vercel production deployment `dpl_51y3bTDihUt3512c8ZsxfQSd4omo` reached `Ready` with `custard.top`, `www.custard.top`, and the project aliases; apex and `/cstd` returned `200`.
+- Fresh live mobile verification at 390 x 844 found one visible mascot control, no `canvas`, no script over 500 KB decoded, script totals of 250,777 transferred / 804,570 decoded bytes, horizontal overflow `0`, no error overlay, and zero console warnings/errors.
+- Compared with the measured pre-fix live baseline, the mobile path removed 241,196 transferred bytes (49.0%) and 883,935 decoded bytes (52.3%).
+- Live desktop verification at 1280 x 720 loaded `07klvbk3r7wpr.js` at 241,230 transferred / 884,176 decoded bytes, mounted the canvas, retained one visible stage interaction, and kept horizontal overflow `0` with zero console warnings/errors.
+- Desktop and mobile production screenshots were inspected after dismissing the intro; the full stage and compact mascot rendered without clipping, overlap, blank content, or breakpoint layout shift.
+
+### Risk notes
+
+- No repository-controlled or deployment risk remains for this item. The independent reviewer could not run because the external reviewer account reached its usage limit; direct staged-diff review, TDD, full local gates, CI, resource timing, and visual production checks found no blocking issue.
+- Chrome DevTools trace tooling was unavailable in this environment, so transfer and decoded-byte evidence came from the browser Resource Timing API and production chunk inspection rather than a DevTools performance trace.
+
+### Final status
+
+- Mobile visitors no longer pay for the desktop-only 3D stage, while desktop behavior remains available and verified in production.

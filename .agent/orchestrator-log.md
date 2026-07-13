@@ -2843,3 +2843,34 @@
 - Risk: no repository-controlled or deployment risk remains for this item.
 - Next direction: audit mobile performance and below-the-fold project decision density, especially whether the desktop-only interactive stage still incurs unnecessary mobile cost.
 - Status: closed
+
+## 2026-07-13 CSTD Mobile Stage Loading
+
+- Type: PERFORMANCE
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` contained the verified project-first release; the full mascot stage was visually hidden below Tailwind `lg` but its dynamic Three.js bundle still loaded and mounted on mobile.
+- Finding:
+  - Fresh 390 x 844 production navigation created a hidden WebGL canvas and downloaded `07klvbk3r7wpr.js` at 241,230 transferred / 884,176 decoded bytes.
+  - Total mobile scripts measured 491,973 transferred / 1,688,505 decoded bytes before the fix.
+- Fix:
+  - Added a hydration-stable `matchMedia("(min-width: 1024px)")` hook with a breakpoint-change listener.
+  - Conditioned the `CstdCustardStage` mount on that query while preserving the compact mobile mascot.
+  - Added a network-idle E2E assertion for one raw mobile mascot control versus two mounted desktop controls.
+- Verification before commit:
+  - TDD red/green proved the hidden mount and its removal.
+  - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed.
+  - Counts: Vitest 66 files / 266 tests; build 734 static pages; Playwright 10 passed / 2 skipped; npm audit 0 vulnerabilities.
+  - Local production checks proved mobile omitted the stage chunk and canvas while desktop loaded both; screenshots were visually clean.
+- Commits: `ccf6bfa docs: design cstd mobile stage loading`; `9622741 perf: skip cstd desktop stage on mobile`.
+- Push: `origin/main` updated to `9622741211fee927b6826e7d1d1abd9726dea055`.
+- Remote check:
+  - GitHub Actions run `29230393408` completed successfully across lint, tests, build, and E2E.
+  - Vercel deployment `dpl_51y3bTDihUt3512c8ZsxfQSd4omo` completed `Ready` for production aliases; apex and `/cstd` returned `200`.
+  - Fresh live mobile measured 250,777 transferred / 804,570 decoded script bytes, one mascot control, no canvas, no script over 500 KB, overflow `0`, no error overlay, and zero console warnings/errors.
+  - The live mobile reduction versus baseline was 241,196 transferred bytes (49.0%) and 883,935 decoded bytes (52.3%).
+  - Live desktop loaded the expected 884,176-byte decoded stage chunk, mounted the canvas, preserved the interaction, and remained visually clean with overflow `0` and zero console warnings/errors.
+- Review note: the requested independent review was unavailable because the reviewer account reached its external usage limit; direct review and every local, CI, and production gate passed.
+- Evidence limitation: Chrome DevTools trace tooling was unavailable, so browser Resource Timing and chunk inspection supplied the network evidence.
+- Risk: no repository-controlled or deployment risk remains for this item.
+- Next direction: audit project-card decision density and first-action clarity on mobile now that the largest avoidable mobile bundle is removed.
+- Status: closed
