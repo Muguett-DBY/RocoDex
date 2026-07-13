@@ -62,6 +62,13 @@ export function toggleCstdProjectComparison(selectedIds: readonly string[], proj
   return normalizeCstdProjectComparisonIds([...normalizedIds, projectId]);
 }
 
+export function didCompleteCstdProjectComparison(previousIds: readonly string[], nextIds: readonly string[]) {
+  const previousSelection = normalizeCstdProjectComparisonIds(previousIds);
+  const nextSelection = normalizeCstdProjectComparisonIds(nextIds);
+
+  return previousSelection.length < CSTD_PROJECT_COMPARISON_LIMIT && nextSelection.length === CSTD_PROJECT_COMPARISON_LIMIT;
+}
+
 export function getCstdProjectComparison(projects: readonly CstdProject[], selectedIds: readonly string[]): CstdProjectComparison {
   const liveProjects = normalizeCstdProjectComparisonIds(selectedIds)
     .map((projectId) => projects.find((project) => project.id === projectId && project.status === "Live"))

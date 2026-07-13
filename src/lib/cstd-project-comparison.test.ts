@@ -5,6 +5,7 @@ import { cstdProjects } from "./cstd-projects";
 import {
   CSTD_PROJECT_COMPARISON_LIMIT,
   buildCstdProjectComparisonBrief,
+  didCompleteCstdProjectComparison,
   getCstdProjectComparison,
   getCstdProjectComparisonControl,
   normalizeCstdProjectComparisonIds,
@@ -12,6 +13,13 @@ import {
 } from "./cstd-project-comparison";
 
 describe("CSTD project comparison", () => {
+  test("detects only the transition that completes a comparison", () => {
+    expect(didCompleteCstdProjectComparison([], ["rocodex"])).toBe(false);
+    expect(didCompleteCstdProjectComparison(["rocodex"], ["rocodex", "photography"])).toBe(true);
+    expect(didCompleteCstdProjectComparison(["rocodex", "photography"], ["rocodex"])).toBe(false);
+    expect(didCompleteCstdProjectComparison(["rocodex", "photography"], ["rocodex", "photography"])).toBe(false);
+  });
+
   test("adds, removes, and limits comparison selections", () => {
     expect(toggleCstdProjectComparison([], "design")).toEqual(["design"]);
     expect(toggleCstdProjectComparison(["design"], "crm")).toEqual(["design", "crm"]);
