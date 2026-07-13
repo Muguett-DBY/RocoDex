@@ -79,7 +79,7 @@ async function removeLocalTestUser(username: string) {
   await writeFile(usersFile, `${JSON.stringify(remainingUsers, null, 2)}\n`, "utf8");
 }
 
-test("core routes render responsively and the CSTD fallback remains interactive", async ({ page }) => {
+test("core routes render responsively and the CSTD fallback remains interactive", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
 
   await gotoRocodexPage(page, "/");
@@ -97,6 +97,8 @@ test("core routes render responsively and the CSTD fallback remains interactive"
 
   const cstdResponse = await page.goto("/cstd?goal=portrait-shooting#projects");
   expect(cstdResponse?.ok()).toBe(true);
+  await page.waitForLoadState("networkidle");
+  await expect(page.locator('button[aria-label="点击奶黄包互动"]')).toHaveCount(isMobile ? 1 : 2);
   const mascot = page.getByRole("button", { name: "点击奶黄包互动" });
   await expect(mascot).toBeVisible();
   await expect(page.locator("canvas")).toHaveCount(0);

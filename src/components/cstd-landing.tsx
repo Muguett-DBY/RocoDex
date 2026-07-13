@@ -209,6 +209,7 @@ const CstdCustardStage = dynamic(
 
 export function CstdLanding() {
   const reducedMotion = usePrefersReducedMotion();
+  const desktopCustardStageEnabled = useDesktopCustardStage();
   const initialized = useRef(false);
   const projectFocusRef = useRef<HTMLElement>(null);
   const [introVisible, setIntroVisible] = useState(false);
@@ -968,14 +969,16 @@ export function CstdLanding() {
               fresh build
             </motion.div>
 
-            <CstdCustardStage
-              audioEnabled={audioPreference !== "disabled"}
-              mascotCopy={mascotCopy}
-              mascotMood={mascotMood}
-              motionDisabled={motionDisabled}
-              onMoodChange={handleMascotMoodChange}
-              onPoke={pokeMascot}
-            />
+            {desktopCustardStageEnabled ? (
+              <CstdCustardStage
+                audioEnabled={audioPreference !== "disabled"}
+                mascotCopy={mascotCopy}
+                mascotMood={mascotMood}
+                motionDisabled={motionDisabled}
+                onMoodChange={handleMascotMoodChange}
+                onPoke={pokeMascot}
+              />
+            ) : null}
           </motion.aside>
         </section>
 
@@ -1496,6 +1499,22 @@ function usePrefersReducedMotion() {
   }, []);
 
   return prefersReducedMotion;
+}
+
+function useDesktopCustardStage() {
+  const [enabled, setEnabled] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    const updateEnabled = () => setEnabled(mediaQuery.matches);
+
+    updateEnabled();
+    mediaQuery.addEventListener("change", updateEnabled);
+
+    return () => mediaQuery.removeEventListener("change", updateEnabled);
+  }, []);
+
+  return enabled;
 }
 
 function FloatingBits({ motionDisabled }: { motionDisabled: boolean }) {
