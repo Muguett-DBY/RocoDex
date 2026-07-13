@@ -180,6 +180,16 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
   await expect(firstProjectActions.nth(1)).toHaveText("查看案例");
   await expect(firstProjectActions.nth(2)).toHaveText("加入对比");
 
+  const projectMetrics = firstProjectCard.getByRole("list", { name: "洛克图鉴 / RocoDex 项目指标" });
+  const metricTiles = projectMetrics.getByRole("listitem");
+  await expect(metricTiles).toHaveCount(3);
+  const metricBoxes = await metricTiles.evaluateAll((tiles) =>
+    tiles.map((tile) => {
+      const box = tile.getBoundingClientRect();
+      return { width: box.width, height: box.height, x: box.x, y: box.y };
+    }),
+  );
+
   if (isMobile) {
     const [caseStudyBox, comparisonBox] = await Promise.all([
       firstProjectActions.nth(1).boundingBox(),
@@ -191,6 +201,14 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
     expect(Math.abs(caseStudyBox!.y - comparisonBox!.y)).toBeLessThanOrEqual(1);
     expect(caseStudyBox!.height).toBeGreaterThanOrEqual(44);
     expect(comparisonBox!.height).toBeGreaterThanOrEqual(44);
+    expect(Math.abs(metricBoxes[0].y - metricBoxes[1].y)).toBeLessThanOrEqual(1);
+    expect(metricBoxes[2].y).toBeGreaterThan(metricBoxes[0].y);
+    expect(metricBoxes[2].width).toBeGreaterThanOrEqual(metricBoxes[0].width * 1.9);
+  } else {
+    expect(Math.abs(metricBoxes[0].y - metricBoxes[1].y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(metricBoxes[0].y - metricBoxes[2].y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(metricBoxes[0].width - metricBoxes[1].width)).toBeLessThanOrEqual(1);
+    expect(Math.abs(metricBoxes[0].width - metricBoxes[2].width)).toBeLessThanOrEqual(1);
   }
 
   await expectElementBefore(page, "#project-directory", "#project-guide");

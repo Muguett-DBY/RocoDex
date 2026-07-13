@@ -33,6 +33,9 @@ desktop/tablet layout from `sm` upward.
 - `>= 640px`: three equal columns; the last metric returns to one column.
 - Metric values and labels retain `min-w-0` and `break-words` protection.
 - Existing spacing, borders, color, and type hierarchy remain unchanged.
+- The project action rail follows the same safety boundary: one column below
+  320 pixels and two columns from 320 pixels, preventing Chinese action labels
+  from splitting inside 92-pixel controls.
 
 ## Semantic Contract
 

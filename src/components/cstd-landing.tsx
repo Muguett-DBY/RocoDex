@@ -909,7 +909,7 @@ export function CstdLanding() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.42, duration: 0.5 }}
             >
-              <HeroButton href="#project-directory" primary>
+              <HeroButton href="#project-directory" primary wideOnMobile>
                 看项目
               </HeroButton>
               <HeroButton href="https://rocodex.custard.top">打开 RocoDex</HeroButton>
@@ -1579,11 +1579,13 @@ function HeroButton({
   href,
   children,
   primary = false,
+  wideFrom320 = false,
   wideOnMobile = false,
 }: {
   href: string;
   children: ReactNode;
   primary?: boolean;
+  wideFrom320?: boolean;
   wideOnMobile?: boolean;
 }) {
   const targetProps = getCstdLinkTargetProps(href);
@@ -1594,9 +1596,9 @@ function HeroButton({
       {...targetProps}
       className={`inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto sm:px-5 ${
         primary
-          ? "col-span-2 border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59] focus-visible:outline-[#0f8f64]"
+          ? "border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59] focus-visible:outline-[#0f8f64]"
           : "border-[#b8d7f5] bg-[#e3f2ff] text-[#2563eb] hover:border-[#2563eb] focus-visible:outline-[#2563eb]"
-      } ${wideOnMobile ? "col-span-2" : ""}`}
+      } ${wideOnMobile ? "col-span-2" : ""} ${wideFrom320 ? "min-[320px]:col-span-2" : ""}`}
     >
       {children}
     </Link>
@@ -2348,14 +2350,14 @@ function ProjectCard({
           </div>
         </div>
 
-        <div className={cstdProjectMetricGridClassName}>
+        <ul aria-label={`${project.title} 项目指标`} className={cstdProjectMetricGridClassName}>
           {project.metrics.map(([value, label]) => (
-            <div key={value} className={cstdProjectMetricTileClassName}>
+            <li key={value} className={cstdProjectMetricTileClassName}>
               <strong className={cstdProjectMetricValueClassName}>{value}</strong>
               <span className={cstdProjectMetricLabelClassName}>{label}</span>
-            </div>
+            </li>
           ))}
-        </div>
+        </ul>
 
         <dl className={cstdProjectEvidenceClassName}>
           {evidencePreview.map((item) => (
@@ -2365,7 +2367,7 @@ function ProjectCard({
 
         <div className={cstdProjectCardActionRailClassName}>
           {isLive ? (
-            <HeroButton href={project.href} primary>
+            <HeroButton href={project.href} primary wideFrom320>
               <ExternalLink aria-hidden="true" className="h-4 w-4 shrink-0" />
               {project.action}
             </HeroButton>
@@ -2399,13 +2401,13 @@ function ProjectCard({
             </button>
           ) : null}
           {"softHref" in project && project.softHref ? (
-            <HeroButton href={project.softHref} wideOnMobile>
+            <HeroButton href={project.softHref} wideFrom320>
               <ExternalLink aria-hidden="true" className="h-4 w-4 shrink-0" />
               {project.softAction}
             </HeroButton>
           ) : null}
           {!isLive ? (
-            <HeroButton href={project.href} wideOnMobile>
+            <HeroButton href={project.href} wideFrom320>
               {project.action}
             </HeroButton>
           ) : null}
