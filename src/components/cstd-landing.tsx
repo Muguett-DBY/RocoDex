@@ -909,7 +909,7 @@ export function CstdLanding() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.42, duration: 0.5 }}
             >
-              <HeroButton href="#project-directory" primary wideOnMobile>
+              <HeroButton href="#project-grid" primary wideOnMobile>
                 看项目
               </HeroButton>
               <HeroButton href="https://rocodex.custard.top">打开 RocoDex</HeroButton>
@@ -1149,7 +1149,7 @@ export function CstdLanding() {
             ) : null}
           </AnimatePresence>
 
-          <div className={cstdProjectGridClassName}>
+          <div id="project-grid" className={`${cstdProjectGridClassName} scroll-mt-24`}>
             {visibleProjects.length > 0 ? (
               visibleProjects.map((project, index) => (
                 <ProjectCard
