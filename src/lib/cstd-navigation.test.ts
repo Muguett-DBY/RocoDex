@@ -4,7 +4,7 @@ import { cstdNavigationItems, getCstdMobileNavigationToggleState } from "./cstd-
 describe("CSTD project navigation", () => {
   test("keeps the project destinations in a stable discovery order", () => {
     expect(cstdNavigationItems).toEqual([
-      { href: "#project-directory", label: "Projects" },
+      { href: "#project-grid", label: "Projects" },
       { href: "https://rocodex.custard.top", label: "RocoDex" },
       { href: "https://shoot.custard.top", label: "Photography" },
       { href: "https://alpha.custard.top", label: "Alpha" },
