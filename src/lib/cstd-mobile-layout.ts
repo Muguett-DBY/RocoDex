@@ -62,6 +62,14 @@ export const cstdProjectMetricLabelClassName = "mt-1 block min-w-0 break-words t
 export const cstdProjectEvidenceClassName =
   "mt-4 grid gap-2 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/72 p-3 text-sm sm:mt-5";
 
+export const cstdProjectCardActionRailClassName = "mt-5 grid min-w-0 grid-cols-2 gap-3 sm:mt-6 sm:flex sm:flex-wrap";
+
+export const cstdProjectCardPrimaryActionClassName =
+  "col-span-2 inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto sm:px-5";
+
+export const cstdProjectCardSecondaryActionClassName =
+  "inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto sm:px-5";
+
 export const cstdProjectEvidenceShareGridClassName = "mt-4 grid items-stretch gap-3 lg:grid-cols-2";
 
 export const cstdProjectProofTimelineGridClassName = "mt-3 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-5";

@@ -151,7 +151,7 @@ test("CSTD intro behaves as a keyboard-contained modal", async ({ page }) => {
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD project discovery lands on live project work", async ({ page }) => {
+test("CSTD project discovery lands on live project work", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   expect(response?.ok()).toBe(true);
@@ -174,6 +174,25 @@ test("CSTD project discovery lands on live project work", async ({ page }) => {
   await expect(page).toHaveURL(/#project-directory$/);
   await expect(page.locator("#project-directory")).toBeInViewport();
   await expect(firstProjectCard).toBeInViewport({ ratio: 0.01 });
+  const firstProjectActions = firstProjectCard.locator("a, button");
+  await expect(firstProjectActions.nth(0)).toHaveText("打开图鉴");
+  await expect(firstProjectActions.nth(0)).toHaveAttribute("href", "https://rocodex.custard.top");
+  await expect(firstProjectActions.nth(1)).toHaveText("查看案例");
+  await expect(firstProjectActions.nth(2)).toHaveText("加入对比");
+
+  if (isMobile) {
+    const [caseStudyBox, comparisonBox] = await Promise.all([
+      firstProjectActions.nth(1).boundingBox(),
+      firstProjectActions.nth(2).boundingBox(),
+    ]);
+
+    expect(caseStudyBox).not.toBeNull();
+    expect(comparisonBox).not.toBeNull();
+    expect(Math.abs(caseStudyBox!.y - comparisonBox!.y)).toBeLessThanOrEqual(1);
+    expect(caseStudyBox!.height).toBeGreaterThanOrEqual(44);
+    expect(comparisonBox!.height).toBeGreaterThanOrEqual(44);
+  }
+
   await expectElementBefore(page, "#project-directory", "#project-guide");
   await expectElementBefore(page, "article", "#project-guide");
   await expectNoHorizontalOverflow(page);
