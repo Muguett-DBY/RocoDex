@@ -162,7 +162,10 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
     has: page.getByRole("heading", { name: "洛克图鉴 / RocoDex" }),
   });
 
-  await expect(projectLink).toHaveAttribute("href", "#project-directory");
+  await expect(projectLink).toHaveAttribute("href", "#project-grid");
+  if (!isMobile) {
+    await expect(page.getByRole("link", { name: "Projects", exact: true })).toHaveAttribute("href", "#project-grid");
+  }
   await expect(page.getByText("Latest updates", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Capability checklist", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Acceptance status", { exact: true })).toHaveCount(0);
@@ -171,9 +174,9 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
     .toBe(true);
 
   await projectLink.click();
-  await expect(page).toHaveURL(/#project-directory$/);
-  await expect(page.locator("#project-directory")).toBeInViewport();
-  await expect(firstProjectCard).toBeInViewport({ ratio: 0.01 });
+  await expect(page).toHaveURL(/#project-grid$/);
+  await expect(page.locator("#project-grid")).toBeInViewport();
+  await expect(firstProjectCard).toBeInViewport({ ratio: 0.7 });
   const firstProjectActions = firstProjectCard.locator("a, button");
   await expect(firstProjectActions.nth(0)).toHaveText("打开图鉴");
   await expect(firstProjectActions.nth(0)).toHaveAttribute("href", "https://rocodex.custard.top");
@@ -181,14 +184,34 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
   await expect(firstProjectActions.nth(2)).toHaveText("加入对比");
 
   const projectMetrics = firstProjectCard.getByRole("list", { name: "洛克图鉴 / RocoDex 项目指标" });
+  const projectEvidence = firstProjectCard.locator("dl");
   const metricTiles = projectMetrics.getByRole("listitem");
   await expect(metricTiles).toHaveCount(3);
-  const metricBoxes = await metricTiles.evaluateAll((tiles) =>
-    tiles.map((tile) => {
-      const box = tile.getBoundingClientRect();
-      return { width: box.width, height: box.height, x: box.x, y: box.y };
-    }),
-  );
+  const [metricGridBox, evidenceBox, actionBoxes, metricBoxes] = await Promise.all([
+    projectMetrics.boundingBox(),
+    projectEvidence.boundingBox(),
+    firstProjectActions.evaluateAll((actions) =>
+      actions.map((action) => {
+        const box = action.getBoundingClientRect();
+        return { top: box.top, bottom: box.bottom };
+      }),
+    ),
+    metricTiles.evaluateAll((tiles) =>
+      tiles.map((tile) => {
+        const box = tile.getBoundingClientRect();
+        return { width: box.width, height: box.height, x: box.x, y: box.y };
+      }),
+    ),
+  ]);
+
+  expect(metricGridBox).not.toBeNull();
+  expect(evidenceBox).not.toBeNull();
+  expect(actionBoxes.length).toBeGreaterThanOrEqual(3);
+  const actionTop = Math.min(...actionBoxes.map((box) => box.top));
+  const actionBottom = Math.max(...actionBoxes.map((box) => box.bottom));
+  expect(actionTop).toBeGreaterThanOrEqual(metricGridBox!.y + metricGridBox!.height - 2);
+  expect(evidenceBox!.y).toBeGreaterThanOrEqual(actionBottom - 2);
+  expect(actionBottom).toBeLessThanOrEqual(page.viewportSize()!.height);
 
   if (isMobile) {
     const [caseStudyBox, comparisonBox] = await Promise.all([
@@ -204,15 +227,26 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
     expect(Math.abs(metricBoxes[0].y - metricBoxes[1].y)).toBeLessThanOrEqual(1);
     expect(metricBoxes[2].y).toBeGreaterThan(metricBoxes[0].y);
     expect(metricBoxes[2].width).toBeGreaterThanOrEqual(metricBoxes[0].width * 1.9);
+
+    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "auto" }));
+    const navigationToggle = page.locator('button[aria-controls="cstd-mobile-navigation"]');
+    await navigationToggle.click();
+    const projectsNavigationLink = page.getByRole("link", { name: "Projects", exact: true });
+    await expect(projectsNavigationLink).toHaveAttribute("href", "#project-grid");
+    await projectsNavigationLink.click();
+    await expect(navigationToggle).toHaveAttribute("aria-expanded", "false");
+    await expect(page.locator("#cstd-mobile-navigation")).toHaveCount(0);
+    await expect(page).toHaveURL(/#project-grid$/);
+    await expect(page.locator("#project-grid")).toBeInViewport();
   } else {
-    expect(Math.abs(metricBoxes[0].y - metricBoxes[1].y)).toBeLessThanOrEqual(1);
-    expect(Math.abs(metricBoxes[0].y - metricBoxes[2].y)).toBeLessThanOrEqual(1);
+    expect(Math.abs(metricBoxes[0].y - metricBoxes[1].y)).toBeLessThanOrEqual(2);
+    expect(Math.abs(metricBoxes[0].y - metricBoxes[2].y)).toBeLessThanOrEqual(2);
     expect(Math.abs(metricBoxes[0].width - metricBoxes[1].width)).toBeLessThanOrEqual(1);
     expect(Math.abs(metricBoxes[0].width - metricBoxes[2].width)).toBeLessThanOrEqual(1);
   }
 
   await expectElementBefore(page, "#project-directory", "#project-guide");
-  await expectElementBefore(page, "article", "#project-guide");
+  await expectElementBefore(page, "#project-grid", "#project-guide");
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });

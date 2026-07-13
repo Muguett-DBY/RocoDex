@@ -1567,7 +1567,15 @@ function NavLink({
     <Link
       href={href}
       {...targetProps}
-      onClick={onNavigate}
+      onClick={() => {
+        const samePageTargetId = href.startsWith("#") && window.location.hash === href ? href.slice(1) : null;
+        onNavigate?.();
+        if (!samePageTargetId) return;
+
+        window.requestAnimationFrame(() => {
+          document.getElementById(samePageTargetId)?.scrollIntoView({ block: "start" });
+        });
+      }}
       className={`${cstdNavLinkClassName} ${mobile ? "w-full justify-start px-4" : "justify-center"}`}
     >
       {children}
@@ -2359,12 +2367,6 @@ function ProjectCard({
           ))}
         </ul>
 
-        <dl className={cstdProjectEvidenceClassName}>
-          {evidencePreview.map((item) => (
-            <ProjectEvidence key={item.label} label={item.label} value={item.value} />
-          ))}
-        </dl>
-
         <div className={cstdProjectCardActionRailClassName}>
           {isLive ? (
             <HeroButton href={project.href} primary wideFrom320>
@@ -2412,6 +2414,12 @@ function ProjectCard({
             </HeroButton>
           ) : null}
         </div>
+
+        <dl className={cstdProjectEvidenceClassName}>
+          {evidencePreview.map((item) => (
+            <ProjectEvidence key={item.label} label={item.label} value={item.value} />
+          ))}
+        </dl>
 
         <div className="mt-5 flex flex-wrap gap-2">
           {project.tags.map((tag) => (
