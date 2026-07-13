@@ -10,7 +10,7 @@ export type CstdProjectViewState = {
   projectId: string | null;
   compareProjectIds: string[];
 };
-export type CstdProjectViewHash = "projects" | "project-focus" | "project-comparison";
+export type CstdProjectViewHash = "projects" | "project-guide" | "project-focus" | "project-comparison";
 export type CstdProjectRestoredReceipt = {
   label: string;
   detail: string;

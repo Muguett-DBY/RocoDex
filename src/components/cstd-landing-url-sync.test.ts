@@ -31,9 +31,20 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain('window.location.hash !== "#project-comparison"');
     expect(source).toContain('const comparisonSection = document.getElementById("project-comparison");');
     expect(source).toContain('comparisonSection.scrollIntoView({ block: "start" });');
-    expect(source).toContain("if (!comparisonCompletionHandoffPendingRef.current) return;");
+    expect(source).toContain("if (!comparisonResultFocusPendingRef.current) return;");
     expect(source).toContain('document.getElementById("project-comparison-heading")?.focus({ preventScroll: true });');
-    expect(source).toContain("[projectComparison.projects.length, projectViewStateSynced]");
+    expect(source).toContain("[projectComparison.projects.length, projectViewStateSynced, selectedGuideId]");
+  });
+
+  test("round trips comparison goals through named focus targets", () => {
+    expect(source).toContain("const [comparisonGoalHandoffPending, setComparisonGoalHandoffPending] = useState(false);");
+    expect(source).toContain('window.location.hash !== "#project-guide"');
+    expect(source).toContain('document.getElementById("project-guide-heading")?.focus({ preventScroll: true });');
+    expect(source).toContain('"project-guide",');
+    expect(source).toContain('window.location.hash === "#project-guide"');
+    expect(source).toContain('shouldReturnToComparison ? "project-comparison" : "projects"');
+    expect(source).toContain("const handlePopState = () => {");
+    expect(source).toContain("setComparisonGoalHandoffPending(false);");
   });
 
   test("renders a scan-first comparison summary with fit-aware selected projects", () => {

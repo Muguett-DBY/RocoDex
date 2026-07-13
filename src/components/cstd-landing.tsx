@@ -221,7 +221,7 @@ export function CstdLanding() {
   const desktopCustardStageEnabled = useDesktopCustardStage();
   const initialized = useRef(false);
   const projectFocusRef = useRef<HTMLElement>(null);
-  const comparisonCompletionHandoffPendingRef = useRef(false);
+  const comparisonResultFocusPendingRef = useRef(false);
   const [introVisible, setIntroVisible] = useState(false);
   const [introPhase, setIntroPhase] = useState<CstdIntroPhase>("idle");
   const [motionPreference, setMotionPreference] = useState<CstdMotionPreference>("enabled");
@@ -229,6 +229,7 @@ export function CstdLanding() {
   const [activeProjectFilter, setActiveProjectFilter] = useState<CstdProjectFilter>("all");
   const [projectSearchQuery, setProjectSearchQuery] = useState("");
   const [projectViewStateSynced, setProjectViewStateSynced] = useState(false);
+  const [comparisonGoalHandoffPending, setComparisonGoalHandoffPending] = useState(false);
   const [projectDirectoryRestoredFromUrl, setProjectDirectoryRestoredFromUrl] = useState(false);
   const [projectGuideRestoredFromUrl, setProjectGuideRestoredFromUrl] = useState(false);
   const [projectFocusRestoredFromUrl, setProjectFocusRestoredFromUrl] = useState(false);
@@ -294,9 +295,14 @@ export function CstdLanding() {
       setProjectViewStateSynced(true);
     };
     syncViewState();
-    window.addEventListener("popstate", syncViewState);
+    const handlePopState = () => {
+      comparisonResultFocusPendingRef.current = false;
+      setComparisonGoalHandoffPending(false);
+      syncViewState();
+    };
+    window.addEventListener("popstate", handlePopState);
     return () => {
-      window.removeEventListener("popstate", syncViewState);
+      window.removeEventListener("popstate", handlePopState);
     };
   }, []);
 
@@ -429,6 +435,23 @@ export function CstdLanding() {
   const mobileNavigationToggle = getCstdMobileNavigationToggleState(mobileNavOpen);
 
   useEffect(() => {
+    if (!projectViewStateSynced || window.location.hash !== "#project-guide") return;
+    const frame = window.requestAnimationFrame(() => {
+      const guideSection = document.getElementById("project-guide");
+      if (!guideSection) return;
+
+      guideSection.scrollIntoView({
+        behavior: comparisonGoalHandoffPending && !motionDisabled ? "smooth" : "auto",
+        block: "start",
+      });
+      if (!comparisonGoalHandoffPending) return;
+
+      document.getElementById("project-guide-heading")?.focus({ preventScroll: true });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [comparisonGoalHandoffPending, motionDisabled, projectViewStateSynced, selectedGuideId]);
+
+  useEffect(() => {
     if (!projectViewStateSynced || projectComparison.projects.length === 0) return;
     if (window.location.hash !== "#project-comparison") return;
     const frame = window.requestAnimationFrame(() => {
@@ -436,13 +459,13 @@ export function CstdLanding() {
       if (!comparisonSection) return;
 
       comparisonSection.scrollIntoView({ block: "start" });
-      if (!comparisonCompletionHandoffPendingRef.current) return;
+      if (!comparisonResultFocusPendingRef.current) return;
 
       document.getElementById("project-comparison-heading")?.focus({ preventScroll: true });
-      comparisonCompletionHandoffPendingRef.current = false;
+      comparisonResultFocusPendingRef.current = false;
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [projectComparison.projects.length, projectViewStateSynced]);
+  }, [projectComparison.projects.length, projectViewStateSynced, selectedGuideId]);
 
   function replayIntro() {
     const replayPreference: CstdMotionPreference = "enabled";
@@ -613,7 +636,7 @@ export function CstdLanding() {
   function toggleProjectComparison(projectId: string) {
     const nextComparedProjectIds = toggleCstdProjectComparison(comparedProjectIds, projectId);
     const shouldHandoff = didCompleteCstdProjectComparison(comparedProjectIds, nextComparedProjectIds);
-    comparisonCompletionHandoffPendingRef.current = shouldHandoff;
+    comparisonResultFocusPendingRef.current = shouldHandoff;
     if (shouldHandoff) {
       updateProjectComparison(nextComparedProjectIds, "project-comparison");
       return;
@@ -661,20 +684,43 @@ export function CstdLanding() {
   }
 
   function focusProjectGuide() {
-    document.getElementById("project-guide")?.scrollIntoView({ behavior: motionDisabled ? "auto" : "smooth", block: "start" });
-  }
-
-  function selectProjectGuide(guideId: CstdProjectGuideId | null) {
+    setComparisonGoalHandoffPending(true);
     window.history.pushState(
       null,
       "",
-      buildCstdProjectViewHref(window.location.pathname, {
-        filter: activeProjectFilter,
-        query: projectSearchQuery,
-        guideId,
-        projectId: null,
-        compareProjectIds: comparedProjectIds,
-      }),
+      buildCstdProjectViewHref(
+        window.location.pathname,
+        {
+          filter: activeProjectFilter,
+          query: projectSearchQuery,
+          guideId: selectedGuideId,
+          projectId: selectedProjectId,
+          compareProjectIds: comparedProjectIds,
+        },
+        "project-guide",
+      ),
+    );
+  }
+
+  function selectProjectGuide(guideId: CstdProjectGuideId | null) {
+    const shouldReturnToComparison =
+      guideId !== null && window.location.hash === "#project-guide" && comparedProjectIds.length > 0;
+    comparisonResultFocusPendingRef.current = shouldReturnToComparison;
+    setComparisonGoalHandoffPending(false);
+    window.history.pushState(
+      null,
+      "",
+      buildCstdProjectViewHref(
+        window.location.pathname,
+        {
+          filter: activeProjectFilter,
+          query: projectSearchQuery,
+          guideId,
+          projectId: null,
+          compareProjectIds: comparedProjectIds,
+        },
+        shouldReturnToComparison ? "project-comparison" : "projects",
+      ),
     );
     setSelectedGuideId(guideId);
     setSelectedProjectId(null);
@@ -1892,7 +1938,13 @@ function ProjectGuide({
       <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#0f8f64]">Goal guide</p>
-          <h3 className="mt-1 text-xl font-black text-[#2f241d] sm:text-2xl">按目标找项目</h3>
+          <h3
+            id="project-guide-heading"
+            tabIndex={-1}
+            className="mt-1 rounded-sm text-xl font-black text-[#2f241d] focus:outline focus:outline-2 focus:outline-offset-4 focus:outline-[#0f8f64] sm:text-2xl"
+          >
+            按目标找项目
+          </h3>
         </div>
         <p className="text-xs font-semibold text-[#7b6656]">{guideSummary.summary}</p>
       </div>

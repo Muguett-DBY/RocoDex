@@ -368,6 +368,94 @@ test("CSTD comparison completion hands off to the decision result", async ({ pag
   expect(browserIssues).toEqual([]);
 });
 
+test("CSTD goal selection returns to the preserved comparison decision", async ({ page }) => {
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto("/cstd?compare=rocodex%2Cphotography#project-comparison", {
+    waitUntil: "domcontentloaded",
+  });
+  expect(response?.ok()).toBe(true);
+
+  const comparison = page.locator("#project-comparison");
+  const comparisonHeading = page.getByRole("heading", { name: "项目对比" });
+  const comparisonNextStep = comparison.getByRole("group", { name: "对比下一步" });
+  const guide = page.locator("#project-guide");
+  const guideHeading = page.getByRole("heading", { name: "按目标找项目" });
+  const firstGoal = page.getByRole("button", {
+    name: "查精灵资料与玩法工具，匹配洛克图鉴 / RocoDex",
+  });
+
+  await expect
+    .poll(() => comparison.evaluate((element) => {
+      const top = element.getBoundingClientRect().top;
+      return top >= 80 && top <= 112;
+    }))
+    .toBe(true);
+  await comparisonNextStep
+    .getByRole("button", { name: "选择目标路径", exact: true })
+    .click();
+
+  await expect(page).toHaveURL(/\/cstd\?compare=rocodex%2Cphotography#project-guide$/);
+  await expect
+    .poll(() => guide.evaluate((element) => {
+      const top = element.getBoundingClientRect().top;
+      return top >= 80 && top <= 112;
+    }))
+    .toBe(true);
+  await expect(guideHeading).toBeFocused();
+  await expect(comparison.getByText("已选择 2 / 2 个项目", { exact: true })).toBeVisible();
+
+  await page.keyboard.press("Tab");
+  await expect(firstGoal).toBeFocused();
+  await firstGoal.click();
+
+  await expect(page).toHaveURL(/\/cstd\?goal=game-data&compare=rocodex%2Cphotography#project-comparison$/);
+  await expect
+    .poll(() => comparison.evaluate((element) => {
+      const top = element.getBoundingClientRect().top;
+      return top >= 80 && top <= 112;
+    }))
+    .toBe(true);
+  await expect(comparisonHeading).toBeFocused();
+  await expect(comparison.getByText("已选择 2 / 2 个项目", { exact: true })).toBeVisible();
+  await expect(comparisonNextStep.getByText("优先查看洛克图鉴 / RocoDex", { exact: true })).toBeVisible();
+  await expect(comparison.getByRole("group", { name: "目标匹配判断" })).toContainText("目标直达");
+  await expect(comparison.getByRole("list", { name: "已选对比项目" }).getByRole("listitem")).toHaveCount(2);
+
+  await page.goBack();
+  await expect(page).toHaveURL(/\/cstd\?compare=rocodex%2Cphotography#project-guide$/);
+  await expect
+    .poll(() => guide.evaluate((element) => {
+      const top = element.getBoundingClientRect().top;
+      return top >= 80 && top <= 112;
+    }))
+    .toBe(true);
+  await expect(firstGoal).toHaveAttribute("aria-pressed", "false");
+  await expect(comparison.getByText("已选择 2 / 2 个项目", { exact: true })).toBeVisible();
+
+  await page.goForward();
+  await expect(page).toHaveURL(/\/cstd\?goal=game-data&compare=rocodex%2Cphotography#project-comparison$/);
+  await expect
+    .poll(() => comparison.evaluate((element) => {
+      const top = element.getBoundingClientRect().top;
+      return top >= 80 && top <= 112;
+    }))
+    .toBe(true);
+  await expect(firstGoal).toHaveAttribute("aria-pressed", "true");
+  await expect(comparisonNextStep.getByText("优先查看洛克图鉴 / RocoDex", { exact: true })).toBeVisible();
+
+  const restoredResponse = await page.reload({ waitUntil: "domcontentloaded" });
+  expect(restoredResponse?.ok()).toBe(true);
+  await expect
+    .poll(() => comparison.evaluate((element) => {
+      const top = element.getBoundingClientRect().top;
+      return top >= 80 && top <= 112;
+    }))
+    .toBe(true);
+  await expect(comparisonHeading).not.toBeFocused();
+  await expectNoHorizontalOverflow(page);
+  expect(browserIssues).toEqual([]);
+});
+
 test("CSTD project discovery preserves restored decision context", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd?goal=portrait-shooting#projects", { waitUntil: "domcontentloaded" });
