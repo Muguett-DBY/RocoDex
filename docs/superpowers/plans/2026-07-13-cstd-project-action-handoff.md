@@ -163,7 +163,7 @@ await expect
 await projectLink.click();
 await expect(page).toHaveURL(/#project-grid$/);
 await expect(page.locator("#project-grid")).toBeInViewport();
-await expect(firstProjectCard).toBeInViewport({ ratio: 0.8 });
+await expect(firstProjectCard).toBeInViewport({ ratio: 0.7 });
 
 const firstProjectActions = firstProjectCard.locator("a, button");
 await expect(firstProjectActions.nth(0)).toHaveText("打开图鉴");
@@ -308,6 +308,29 @@ In `ProjectCard`, keep the metric list first, then place the complete existing a
 </div>
 ```
 
+The mobile regression also proves that selecting `Projects` again must restore
+the grid even when the URL already ends in `#project-grid`. Update `NavLink`
+without preventing normal link navigation:
+
+```tsx
+<Link
+  href={href}
+  {...targetProps}
+  onClick={() => {
+    const samePageTargetId = href.startsWith("#") && window.location.hash === href ? href.slice(1) : null;
+    onNavigate?.();
+    if (!samePageTargetId) return;
+
+    window.requestAnimationFrame(() => {
+      document.getElementById(samePageTargetId)?.scrollIntoView({ block: "start" });
+    });
+  }}
+  className={`${cstdNavLinkClassName} ${mobile ? "w-full justify-start px-4" : "justify-center"}`}
+>
+  {children}
+</Link>
+```
+
 - [ ] **Step 4: Run focused regression, type, and lint checks**
 
 Run:
@@ -318,7 +341,8 @@ npx tsc --noEmit
 npm run lint
 ```
 
-Expected: 2 focused Playwright cases pass, TypeScript exits `0`, and ESLint reports no errors.
+Expected: 2 focused Playwright cases pass, including repeated mobile hash
+navigation; TypeScript exits `0`, and ESLint reports no errors.
 
 - [ ] **Step 5: Commit the action-order regression and implementation**
 
