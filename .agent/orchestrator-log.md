@@ -2970,3 +2970,32 @@
 - Risk: no repository-controlled or deployment risk remains. The 280-pixel rail intentionally continues below the viewport after its fully visible primary action so all four controls retain full-width, readable touch targets.
 - Next direction: audit post-action evidence and tag density on mobile, testing whether progressive disclosure can shorten repeated card content without hiding decision-critical context.
 - Status: closed
+
+## 2026-07-13 CSTD Mobile Project Details
+
+- Type: UIUX
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` contained the verified project-action handoff; repeated evidence and technology blocks still consumed 1,312 pixels after the mobile action rails, about 29% of the measured project-card height.
+- Finding:
+  - The 390 x 844 production baseline measured a 9,863-pixel page and 4,616-pixel project grid.
+  - A static compact prototype saved about 232 grid pixels, while a native collapsed disclosure saved about 832 pixels and retained all supporting content on demand.
+- Fix:
+  - Added project-named native `details` / `summary` disclosures below mobile actions with 44-pixel summaries, evidence/tag counts, and rotating chevrons.
+  - Reused one supporting-content renderer for mobile and desktop, keeping the existing static desktop presentation and every project action, URL, fact, tag, comparison state, and persistence behavior.
+  - Added shared layout contracts plus unit and E2E coverage for responsive visibility, ordering, semantics, geometry, keyboard operation, and focus retention.
+- Verification before release:
+  - TDD red/green reproduced the missing contracts and behavior, then passed 18 focused layout tests and both browser profiles.
+  - `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check` passed.
+  - Counts: Vitest 66 files / 268 tests; build 734 static pages; Playwright 10 passed / 2 skipped; npm audit 0 vulnerabilities.
+  - Local production checks at 280, 320, 390, and 1280 pixels confirmed 44-pixel summaries, zero text/page overflow, correct action-before-detail ordering, native Enter/Space behavior, retained focus, static desktop evidence, no overlay, and zero console warnings/errors.
+- Commits: `068d94e docs: design cstd mobile project details`; `d9d497d docs: plan cstd mobile project details`; `c33085d docs: align cstd details e2e viewport`; `0002bec feat: disclose cstd mobile project details`.
+- Push: `origin/main` updated to `0002becde37d2160e32ab71e89cff6e26273e758`.
+- Remote check:
+  - GitHub Actions run `29244894840` completed successfully in 2m16s across lint, tests, build, and E2E.
+  - Vercel deployment `dpl_Bdrn5chjTum1ogCnvyBBx8QakiJj` completed `READY` for production and included `custard.top`, `www.custard.top`, and project aliases.
+  - Apex, `/cstd`, `www`, and the cache-busted implementation URL returned `200`.
+  - Live geometry matched local results exactly: at 390 pixels the page measured 9,031 pixels, the grid measured 3,784 pixels, the first card measured 664 pixels, and 67.5 pixels of the next card remained visible; the measured baseline reduction was 832 pixels.
+  - Live keyboard, responsive, overflow, overlay, console, desktop fallback, and restored operations checks all passed. `#project-directory` remained at 96.1 pixels with `产业园区招商 CRM` first, and screenshots were visually clean after a transient Chromium capture artifact was eliminated by repaint and recapture.
+- Risk: no repository-controlled or deployment risk remains. The 280-pixel layout intentionally prioritizes the primary action over fitting the complete card into one 800-pixel viewport.
+- Next direction: audit the mobile comparison-selection feedback and the cost of reaching the comparison result after `加入对比`, now that individual cards no longer dominate the scroll path.
+- Status: closed

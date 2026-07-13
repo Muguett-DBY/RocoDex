@@ -2389,3 +2389,41 @@
 ### Final status
 
 - CSTD navigation now hands visitors directly to project choices and exposes the first working-product action within the arrival viewport across production breakpoints.
+
+## 2026-07-13 - CSTD Mobile Project Details
+
+### Scope
+
+- Continued the personal main-site improvement loop by measuring repeated evidence and technology content after each project card's action rail on `custard.top`.
+- The 390 x 844 production baseline measured a 9,863-pixel page, a 4,616-pixel project grid, 4,536 pixels of card height, and 1,312 pixels of repeated post-action evidence/tags, about 29% of the card total.
+- Compared a static compact treatment, which saved about 232 grid pixels, with a native mobile disclosure, which saved about 832 grid pixels while preserving every evidence field and technology tag on demand.
+
+### Fix
+
+- Added one native, project-named `details` / `summary` disclosure after each mobile action rail, collapsed by default and reporting its evidence/tag counts before expansion.
+- Kept the complete evidence and technology content rendered inside the disclosure and kept the existing static desktop presentation unchanged from the `sm` breakpoint upward.
+- Factored the shared supporting-content renderer so mobile and desktop use the same source data without duplicating project facts.
+- Preserved all project actions, URLs, comparison behavior, URL state, and persistence semantics; the disclosure requires no React state or new dependency.
+- Added shared mobile disclosure layout contracts, unit coverage, and desktop/mobile E2E assertions for semantics, ordering, geometry, responsive visibility, keyboard behavior, and focus retention.
+
+### Verification evidence
+
+- TDD red first produced one missing-layout-contract unit failure and two missing-disclosure browser failures; focused green passed 18 layout tests and both desktop/mobile project-flow tests after implementation.
+- Full local gates passed: `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check`.
+- Local counts: Vitest passed 66 files / 268 tests; Next generated 734 static pages; Playwright passed 10 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local production checks at 280, 320, 390, and 1280 pixels found grid tops near 96 pixels, horizontal overflow `0`, no error overlay, and zero console warnings/errors. At 280 the primary product action remained visible and all six summaries were 44 pixels with zero text overflow; at 320 the 692-pixel first card fit completely; at 390 the first card measured 664 pixels and exposed 67.5 pixels of the next card.
+- Keyboard verification proved Enter opens and Space closes the native disclosure, focus remains on the summary, evidence and `Next.js 16` become visible, and the chevron reaches `rotate: 180deg`. Desktop kept the prior 691-pixel first-card geometry, static evidence, and visible first-row action rails.
+- Design, plan, correction, and implementation commits `068d94e`, `d9d497d`, `c33085d`, and `0002bec` were pushed to `origin/main`.
+- GitHub Actions run `29244894840` completed successfully in 2m16s, including lint, tests, build, and E2E.
+- Vercel production deployment `dpl_Bdrn5chjTum1ogCnvyBBx8QakiJj` reached `READY` with `custard.top`, `www.custard.top`, and the project aliases; the apex, `/cstd`, `www` route, and cache-busted implementation URL returned `200`.
+- Fresh production checks reproduced the local geometry exactly: the 390-pixel project grid measured 3,784 pixels and the page measured 9,031 pixels, saving 832 pixels from each measured baseline while retaining all content behind the disclosure.
+- The restored operations link retained `#project-directory` at 96.1 pixels and surfaced `产业园区招商 CRM` first. Collapsed, expanded, desktop, and restored-state screenshots were inspected without clipping, overlap, blank content, or breakpoint drift.
+
+### Risk notes
+
+- No repository-controlled or deployment risk remains for this item. At 280 pixels the complete action rail and disclosure intentionally continue below the viewport while the primary product action remains visible and every control retains a readable full-width target.
+- The first expanded screenshot in each environment briefly showed a Chromium screenshot-compositor artifact; a delayed repaint produced clean local and production captures, while DOM state, CSS rotation, console checks, and repeat screenshots remained correct.
+
+### Final status
+
+- Mobile project cards now keep decisions and actions visible first, reduce repeated collapsed scroll cost by 832 pixels at 390 pixels wide, and preserve full project evidence through a native keyboard-accessible disclosure in production.
