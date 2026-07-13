@@ -82,7 +82,7 @@ Inside `CSTD project discovery lands on live project work`:
 - On mobile, require six visible, collapsed, uniquely named groups.
 - Require a 44-pixel first summary, one-line text with no internal overflow, and the compact count text.
 - Press Enter to open the first group, verify its evidence and technology tags become visible, then press Space to close it while focus remains on the summary.
-- Require the first 390-pixel card to fit fully in the viewport and the next card to be visibly hinted.
+- In the configured Pixel 5 profile, require the first card to stay at or below 700 CSS pixels and the transformed bounding-box gap between cards to stay at or below 24 pixels. Reserve the 390 x 844 full-card and next-card-hint contract for the explicit production-build viewport audit.
 - On desktop, require mobile disclosures to be hidden and the existing static evidence wrapper to remain visible.
 
 Use stable selectors:
