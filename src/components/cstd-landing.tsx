@@ -2271,14 +2271,14 @@ function ProjectComparison({
       </div>
 
       <div className="p-4">
-        <div className="mt-4 border-y border-[#9bd9bf] bg-[#eefbf4]/78 px-3 py-4 sm:px-4" role="group" aria-label="对比下一步">
+        <div className="mt-4 border-y border-[#9bd9bf] bg-[#eefbf4]/78 px-3 py-3 min-[390px]:py-4 sm:px-4" role="group" aria-label="对比下一步">
           <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="min-w-0">
               <p className="text-xs font-black uppercase tracking-[0.14em] text-[#047857]">{nextStep.eyebrow}</p>
               <p className="mt-1 break-words text-base font-black text-[#1b4332]">{nextStep.title}</p>
               <p className="mt-1 max-w-3xl break-words text-sm font-semibold leading-6 text-[#355b4a]">{nextStep.detail}</p>
             </div>
-            <div className="grid w-full shrink-0 gap-2 sm:grid-cols-2 lg:w-auto">
+            <div className="grid w-full shrink-0 grid-cols-1 gap-2 min-[320px]:grid-cols-2 lg:w-auto">
               <button
                 type="button"
                 onClick={handleNextStep}

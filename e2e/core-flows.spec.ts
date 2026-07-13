@@ -368,7 +368,7 @@ test("CSTD comparison completion hands off to the decision result", async ({ pag
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD goal selection returns to the preserved comparison decision", async ({ page }) => {
+test("CSTD goal selection returns to the preserved comparison decision", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd?compare=rocodex%2Cphotography#project-comparison", {
     waitUntil: "domcontentloaded",
@@ -420,6 +420,14 @@ test("CSTD goal selection returns to the preserved comparison decision", async (
   await expect(comparisonNextStep.getByText("优先查看洛克图鉴 / RocoDex", { exact: true })).toBeVisible();
   await expect(comparison.getByRole("group", { name: "目标匹配判断" })).toContainText("目标直达");
   await expect(comparison.getByRole("list", { name: "已选对比项目" }).getByRole("listitem")).toHaveCount(2);
+
+  if (isMobile) {
+    const primaryActionBox = await comparisonNextStep.getByRole("button", { name: "查看目标直达案例" }).boundingBox();
+    const externalActionBox = await comparisonNextStep.getByRole("link", { name: "打开图鉴" }).boundingBox();
+    expect(primaryActionBox).not.toBeNull();
+    expect(externalActionBox).not.toBeNull();
+    expect(Math.abs(primaryActionBox!.y - externalActionBox!.y)).toBeLessThanOrEqual(2);
+  }
 
   await page.goBack();
   await expect(page).toHaveURL(/\/cstd\?compare=rocodex%2Cphotography#project-guide$/);
