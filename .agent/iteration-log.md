@@ -2311,3 +2311,44 @@
 ### Final status
 
 - CSTD live project cards now lead visitors into real working products while retaining compact case-study, comparison, and deep-link paths in production.
+
+## 2026-07-13 - CSTD Mobile Metric Density
+
+### Scope
+
+- Continued the personal main-site improvement loop by measuring project-card metric density on narrow `custard.top` viewports.
+- Found that the three metric tiles stacked into about 224 pixels at 320 CSS pixels wide, delaying the primary working-product action even after the previous action-hierarchy improvement.
+- Preserved a readable single-column fallback for very narrow 280-pixel layouts instead of forcing long labels into undersized columns.
+
+### Fix
+
+- Changed project metrics to one column below 320 pixels, a two-column plus full-width final tile from 320 through 639 pixels, and the existing three-column row from 640 pixels upward.
+- Converted the metric wrapper and tiles to a named semantic list so assistive technology receives the metrics as one project-scoped group.
+- Aligned the action rail with the same 320-pixel safety boundary: controls stack at 280 pixels, then restore the compact two-column action hierarchy at 320 pixels and above.
+- Added shared responsive layout contracts and unit coverage for every breakpoint and final-tile span.
+- Added desktop/mobile end-to-end assertions for metric semantics, row geometry, width, and responsive action behavior.
+
+### Verification evidence
+
+- Focused unit and Playwright regressions passed after the responsive contracts were implemented.
+- Full local gates passed: `npm run typecheck`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check`.
+- Local counts: Vitest passed 66 files / 267 tests; Next generated 734 static pages; Playwright passed 10 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local production checks at 280, 320, 390, and 1280 CSS pixels confirmed the intended one-column, two-plus-one, and three-column states with no text or page overflow and zero console warnings/errors.
+- At 320 pixels, the first card dropped from the measured live baseline of about 930 pixels to 853 pixels; its metric area dropped from about 224 pixels to 147 pixels while all labels stayed on one line.
+- Design commit `e7b82b4` and implementation commit `0b943ef` were pushed to `origin/main`.
+- GitHub Actions run `29236595404` completed successfully, including lint, tests, build, and E2E.
+- Vercel production deployment `dpl_75pJ3iwc99myEZwhrGhcfQ1QSesV` reached `Ready` with `custard.top`, `www.custard.top`, and the project aliases; both the apex and `/cstd` returned `200`.
+- Fresh live 280-pixel verification found three 196 x 69 metric rows and full-width action rows with no split labels or horizontal overflow.
+- Fresh live 320-pixel verification measured a 236 x 146 metric list with two 114 x 69 tiles followed by one 236 x 69 tile; all six project cards had zero metric text failures and the first card measured 852 pixels tall.
+- Fresh live 390-pixel verification measured two 149 x 69 tiles followed by one 306 x 69 tile, with no dialog residue, text failure, or horizontal overflow.
+- Fresh live desktop verification measured three equal 98 x 70 tiles on one row, with a maximum animation-time vertical delta of 1.15 pixels, no horizontal overflow, and zero console warnings/errors.
+- Mobile and desktop production screenshots were visually inspected after dismissing the intro and showed no clipping, overlap, or breakpoint drift.
+
+### Risk notes
+
+- No repository-controlled or deployment risk remains for this item. The 280-pixel fallback intentionally uses a taller card to preserve complete labels and 44-pixel action targets.
+- A first full E2E run exposed that separately sampled animated bounding boxes could drift by about one pixel; the regression now captures all metric geometry atomically, matching the actual same-row layout without weakening the responsive contract.
+
+### Final status
+
+- CSTD project cards now expose live work sooner on standard mobile widths while retaining readable, stable behavior at 280 pixels and the original compact desktop row in production.

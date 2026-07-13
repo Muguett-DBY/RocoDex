@@ -2906,3 +2906,35 @@
 - Risk: no repository-controlled or deployment risk remains for this item.
 - Next direction: audit whether the three stacked mobile metric tiles can be compressed without reintroducing long-label overflow or reducing touch/readability quality.
 - Status: closed
+
+## 2026-07-13 CSTD Mobile Metric Density
+
+- Type: UIUX
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` contained the verified project-action release; the first 320-pixel card still stacked three metric tiles into about 224 pixels before its primary action.
+- Finding:
+  - A 320-pixel live baseline put all three metrics in separate rows and measured the first card at about 930 pixels.
+  - A two-column prototype saved about 77 pixels at 320 pixels, but forcing the same layout at 280 pixels split `Portrait` and `Nanjing`, so the narrowest viewport needed a separate fallback.
+- Fix:
+  - Added a one-column metric/action fallback below 320 pixels.
+  - Added a two-column metric grid from 320 through 639 pixels with the final metric spanning the row.
+  - Preserved the three-column metric row from 640 pixels upward.
+  - Converted project metrics to named `ul` / `li` groups and added shared layout-contract unit tests plus desktop/mobile geometry coverage.
+- Verification before commit:
+  - Focused unit and E2E regressions passed.
+  - `npm run typecheck`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check` passed.
+  - Counts: Vitest 66 files / 267 tests; build 734 static pages; Playwright 10 passed / 2 skipped; npm audit 0 vulnerabilities.
+  - Local 280, 320, 390, and desktop checks confirmed the intended responsive geometry, no metric-label failures, overflow `0`, and zero console warnings/errors.
+- Commits: `e7b82b4 docs: design cstd mobile metric density`; `0b943ef fix: compact cstd mobile project metrics`.
+- Push: `origin/main` updated to `0b943efa253853c630343af7eb85f0976de2faaa`.
+- Remote check:
+  - GitHub Actions run `29236595404` completed successfully across lint, tests, build, and E2E.
+  - Vercel deployment `dpl_75pJ3iwc99myEZwhrGhcfQ1QSesV` completed `Ready` for production aliases; apex and `/cstd` returned `200`.
+  - Live 280 pixels preserved readable single-column metrics and actions without split labels.
+  - Live 320 and 390 pixels rendered two equal metrics plus a full-width third metric, reducing the first 320-pixel card to 852 pixels with zero failures across all six project metric groups.
+  - Live desktop rendered three equal-width metrics on one row; every checked viewport kept overflow `0`, no dialog residue, and zero console warnings/errors.
+  - Production screenshots at 320, 390, and 1280 pixels were visually clean after the intro was dismissed.
+- Test note: one initial E2E run revealed one-pixel Framer Motion drift between sequential geometry samples; atomic sampling removed the measurement race while retaining the same layout assertions.
+- Risk: no repository-controlled or deployment risk remains; the 280-pixel fallback is intentionally taller to retain full labels and touch targets.
+- Next direction: audit whether project cards still expose more repeated descriptive content than visitors need before choosing a project, using measured mobile scroll cost and semantic duplication as evidence.
+- Status: closed
