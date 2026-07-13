@@ -64,6 +64,18 @@ export const cstdProjectMetricLabelClassName = "mt-1 block min-w-0 break-words t
 export const cstdProjectEvidenceClassName =
   "mt-4 grid gap-2 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/72 p-3 text-sm sm:mt-5";
 
+export const cstdProjectDetailsDisclosureClassName =
+  "group mt-4 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/72 text-sm sm:hidden";
+
+export const cstdProjectDetailsSummaryClassName =
+  "flex min-h-11 min-w-0 cursor-pointer list-none items-center gap-2 px-3 font-black text-[#0f8f64] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] [&::-webkit-details-marker]:hidden";
+
+export const cstdProjectDetailsMetaClassName = "ml-auto shrink-0 whitespace-nowrap text-xs font-bold text-[#7b6656]";
+
+export const cstdProjectDetailsBodyClassName = "border-t border-[#ead6ad] p-3";
+
+export const cstdProjectDetailsDesktopClassName = "hidden sm:block";
+
 export const cstdProjectCardActionRailClassName =
   "mt-5 grid min-w-0 grid-cols-1 gap-3 min-[320px]:grid-cols-2 sm:mt-6 sm:flex sm:flex-wrap";
 
