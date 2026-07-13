@@ -10,6 +10,7 @@ import {
   hasActiveCstdProjectViewState,
   isCstdProjectGuideShareRestored,
   parseCstdProjectViewState,
+  type CstdProjectViewHash,
 } from "./cstd-project-view-state";
 
 describe("CSTD project view state", () => {
@@ -75,6 +76,24 @@ describe("CSTD project view state", () => {
         "project-comparison",
       ),
     ).toBe("/cstd?goal=ai-creation&compare=design%2Ccrm#project-comparison");
+  });
+
+  it("serializes the goal guide anchor without dropping comparison context", () => {
+    const guideHash: CstdProjectViewHash = "project-guide";
+
+    expect(
+      buildCstdProjectViewHref(
+        "/cstd",
+        {
+          filter: "all",
+          query: "",
+          guideId: null,
+          projectId: null,
+          compareProjectIds: ["rocodex", "photography"],
+        },
+        guideHash,
+      ),
+    ).toBe("/cstd?compare=rocodex%2Cphotography#project-guide");
   });
 
   it("builds a clean share link for one selected goal", () => {
