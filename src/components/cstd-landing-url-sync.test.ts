@@ -29,7 +29,10 @@ describe("CSTD landing URL state sync", () => {
 
   test("restores the comparison hash after conditional comparison content renders", () => {
     expect(source).toContain('window.location.hash !== "#project-comparison"');
-    expect(source).toContain('document.getElementById("project-comparison")?.scrollIntoView({ block: "start" });');
+    expect(source).toContain('const comparisonSection = document.getElementById("project-comparison");');
+    expect(source).toContain('comparisonSection.scrollIntoView({ block: "start" });');
+    expect(source).toContain("if (!comparisonCompletionHandoffPendingRef.current) return;");
+    expect(source).toContain('document.getElementById("project-comparison-heading")?.focus({ preventScroll: true });');
     expect(source).toContain("[projectComparison.projects.length, projectViewStateSynced]");
   });
 
