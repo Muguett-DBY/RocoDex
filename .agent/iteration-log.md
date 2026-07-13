@@ -2352,3 +2352,40 @@
 ### Final status
 
 - CSTD project cards now expose live work sooner on standard mobile widths while retaining readable, stable behavior at 280 pixels and the original compact desktop row in production.
+
+## 2026-07-13 - CSTD Project Action Handoff
+
+### Scope
+
+- Continued the personal main-site improvement loop by measuring the handoff from the project-directory controls into the first working project on `custard.top`.
+- Found that `看项目` landed on the 392-pixel directory panel rather than the project grid; at 390 x 844 the first card began about 412 pixels below the target and its primary product action sat about 574 pixels into the card, outside the arrival viewport.
+- Preserved the complete project evidence and action set while reducing the distance from navigation intent to a usable product choice.
+
+### Fix
+
+- Added a dedicated `#project-grid` target with the established 96-pixel scroll margin and retargeted the hero plus shared desktop/mobile `Projects` navigation to it.
+- Moved each unchanged project action rail directly after the metric group and before the evidence preview, so working-product, case-study, comparison, and deep-link controls appear before supporting detail.
+- Restored same-hash navigation explicitly: selecting `Projects` again now scrolls back to the grid even when the URL already ends in `#project-grid`.
+- Expanded the desktop/mobile E2E contract to cover navigation targets, repeated mobile navigation, card visibility, metric/action/evidence ordering, viewport containment, and overflow.
+- Corrected the release plan and prior log evidence to use the repository's real type check, `npx tsc --noEmit`, and hardened the browser-audit procedure against intro-overlay and resize/hash false results.
+
+### Verification evidence
+
+- TDD red first failed in both browser profiles because evidence preceded the action rail; a later focused run also reproduced the same-hash mobile restore failure. The final focused regression passed 2 tests.
+- Full local gates passed: `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check`.
+- Local counts: Vitest passed 66 files / 267 tests; Next generated 734 static pages; Playwright passed 10 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local production checks at 280, 320, 390, and 1280 CSS pixels measured `#project-grid` and the first card at 96 pixels, order correctness at every size, horizontal overflow `0`, no error overlay, and zero console warnings/errors. The primary action was fully visible at 280; the complete first-row action rails were visible at 320, 390, and 1280.
+- Design, implementation, and audit commits `b76c57e`, `1521bdd`, `69c7a23`, `5dde6b6`, `840fed0`, `8cd95df`, and `d558733` were pushed to `origin/main`.
+- GitHub Actions run `29241778764` completed successfully in 2m13s, including lint, tests, build, and E2E.
+- Vercel production deployment `dpl_GYrWE1qiNxNbFUAso94meYJL46vK` reached `READY` with `custard.top`, `www.custard.top`, and the project aliases; both the apex and `/cstd` returned `200`.
+- Fresh live checks reproduced the 96-pixel target position and local containment results at all four viewports, with overflow `0`, no error overlay, and zero console warnings/errors.
+- The restored operations link retained `#project-directory` at 96 pixels and surfaced `产业园区招商 CRM` first. All local and production screenshots were visually inspected without clipping, overlap, or breakpoint drift.
+
+### Risk notes
+
+- No repository-controlled or deployment risk remains for this item. At 280 pixels the full four-control action rail intentionally extends below the viewport, while its primary working-product action remains fully visible and every control retains a readable full-width touch target.
+- Supporting evidence remains visible directly after the action rail; this change reorders rather than hides project context.
+
+### Final status
+
+- CSTD navigation now hands visitors directly to project choices and exposes the first working-product action within the arrival viewport across production breakpoints.

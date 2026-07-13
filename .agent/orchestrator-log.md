@@ -2938,3 +2938,35 @@
 - Risk: no repository-controlled or deployment risk remains; the 280-pixel fallback is intentionally taller to retain full labels and touch targets.
 - Next direction: audit whether project cards still expose more repeated descriptive content than visitors need before choosing a project, using measured mobile scroll cost and semantic duplication as evidence.
 - Status: closed
+
+## 2026-07-13 CSTD Project Action Handoff
+
+- Type: UIUX
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` contained the verified mobile-metric release; hero and shared `Projects` navigation still targeted the directory controls rather than the card grid, and every card placed evidence before actions.
+- Finding:
+  - The directory target was about 392 pixels tall and the first project card began about 412 pixels below the mobile arrival point.
+  - At 390 x 844, the first working-product action sat about 574 pixels into the card and below the viewport after `看项目`.
+  - Re-selecting the mobile `Projects` link did not restore the grid when the URL already had the same hash.
+- Fix:
+  - Added and targeted `#project-grid` with a 96-pixel scroll margin from hero, desktop, and mobile navigation.
+  - Moved action rails after metrics and before evidence without removing any action or supporting detail.
+  - Added explicit same-hash restoration after mobile navigation closes.
+  - Added desktop/mobile regression coverage for target URLs, repeated navigation, card area visibility, metric/action/evidence order, action containment, and overflow.
+  - Corrected type-check evidence to `npx tsc --noEmit` and updated the browser audit to dismiss the intro and re-align the target after each viewport resize.
+- Verification before release:
+  - TDD red/green proved both the content-order failure and repeated same-hash navigation bug; the focused browser regression passed 2 tests after implementation.
+  - `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check` passed.
+  - Counts: Vitest 66 files / 267 tests; build 734 static pages; Playwright 10 passed / 2 skipped; npm audit 0 vulnerabilities.
+  - Local production checks at 280, 320, 390, and 1280 pixels measured the grid/card top at 96 pixels, correct content order, overflow `0`, no error overlay, and zero console warnings/errors. The primary action fit at 280; complete first-row rails fit at 320, 390, and 1280.
+- Commits: `b76c57e docs: design cstd project action handoff`; `1521bdd docs: plan cstd project action handoff`; `69c7a23 docs: correct cstd typecheck evidence`; `5dde6b6 fix: hand off cstd navigation to project grid`; `840fed0 docs: update cstd handoff execution plan`; `8cd95df fix: surface cstd project actions earlier`; `d558733 docs: harden cstd handoff browser audit`.
+- Push: `origin/main` updated to `d558733471b59028d71f5aa8faf7c8c98f7577b6`.
+- Remote check:
+  - GitHub Actions run `29241778764` completed successfully in 2m13s across lint, tests, build, and E2E.
+  - Vercel deployment `dpl_GYrWE1qiNxNbFUAso94meYJL46vK` completed `READY` for production and included `custard.top`, `www.custard.top`, and project aliases.
+  - Apex and `/cstd` returned `200` for the implementation SHA.
+  - Live 280, 320, 390, and 1280 checks reproduced the 96-pixel target position, expected action containment, correct content order, overflow `0`, no error overlay, and zero console warnings/errors.
+  - The restored operations link preserved `#project-directory` at 96 pixels and surfaced `产业园区招商 CRM` first; all production screenshots were visually clean.
+- Risk: no repository-controlled or deployment risk remains. The 280-pixel rail intentionally continues below the viewport after its fully visible primary action so all four controls retain full-width, readable touch targets.
+- Next direction: audit post-action evidence and tag density on mobile, testing whether progressive disclosure can shorten repeated card content without hiding decision-critical context.
+- Status: closed
