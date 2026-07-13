@@ -2874,3 +2874,35 @@
 - Risk: no repository-controlled or deployment risk remains for this item.
 - Next direction: audit project-card decision density and first-action clarity on mobile now that the largest avoidable mobile bundle is removed.
 - Status: closed
+
+## 2026-07-13 CSTD Live Project Action Priority
+
+- Type: UIUX
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` contained the verified mobile-stage release; production project cards still presented case study as the green primary action and put the real product launch third.
+- Finding:
+  - At 390 x 844, the first live card's action order was case study, comparison, product launch, and deep link.
+  - The four vertical action rows consumed about 212 pixels and made the working product look secondary.
+- Fix:
+  - Made working-product links first and primary for all `Live` cards.
+  - Placed case-study and comparison controls together as touch-safe secondary actions on mobile.
+  - Kept optional deep links wide on mobile and preserved external-link safety.
+  - Kept `Next` cards case-study first so incubation is not presented as a live launch.
+  - Added responsive class contracts plus desktop/mobile E2E order and geometry coverage.
+- Verification before commit:
+  - TDD red/green reproduced the old action order and then passed in both browser profiles.
+  - `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check` passed.
+  - Counts: Vitest 66 files / 267 tests; build 734 static pages; Playwright 10 passed / 2 skipped; npm audit 0 vulnerabilities.
+  - Local production mobile reduced the first card from about 959 to 903 pixels, aligned the 45-pixel case/comparison controls on one row, preserved `_blank` / `noreferrer`, and reported overflow `0`, no overlay, and zero console warnings/errors.
+  - Local desktop retained clear first-action priority, stable card geometry, overflow `0`, and zero console warnings/errors.
+- Commits: `fef4862 docs: design cstd project action hierarchy`; `512d86a fix: prioritize live cstd project actions`.
+- Push: `origin/main` updated to `512d86a82454f5c6574bb8e1996de0f40321ec06`.
+- Remote check:
+  - GitHub Actions run `29234209526` completed successfully across lint, tests, build, and E2E.
+  - Vercel deployment `dpl_AeigikDbMWq4gynqce2j2KyMXkuu` completed `Ready` for production aliases.
+  - Apex and `/cstd` returned `200`.
+  - Live mobile proved all five `Live` cards start with their real product action while the incubating card starts with case study; first-card height was 903 pixels, secondary controls shared a row, external-link attributes remained correct, overflow was `0`, no canvas loaded, and console warnings/errors were `0`.
+  - Live desktop preserved the same semantic order, mounted the expected desktop canvas, remained visually clean, and reported overflow `0`, no overlay, and zero console warnings/errors.
+- Risk: no repository-controlled or deployment risk remains for this item.
+- Next direction: audit whether the three stacked mobile metric tiles can be compressed without reintroducing long-label overflow or reducing touch/readability quality.
+- Status: closed

@@ -2273,3 +2273,41 @@
 ### Final status
 
 - Mobile visitors no longer pay for the desktop-only 3D stage, while desktop behavior remains available and verified in production.
+
+## 2026-07-13 - CSTD Live Project Action Priority
+
+### Scope
+
+- Continued the personal main-site improvement loop by auditing the action hierarchy inside the project cards on `custard.top`.
+- Found that every live card visually prioritized `查看案例`, placed comparison second, and deferred the actual working-product link to the third action.
+- Measured the first 390 x 844 production card at about 959 CSS pixels tall, including four stacked 44-pixel action rows.
+
+### Fix
+
+- Made each `Live` project's working-product link the first DOM, keyboard, and visual action and applied the established green primary treatment.
+- Kept case-study and comparison controls as secondary actions and placed them in one two-column row on narrow cards.
+- Kept optional project-specific deep links full-width on mobile and added familiar external-link icons.
+- Preserved the incubating card contract: `查看案例` remains first and primary, so it does not imply that an unfinished project is live.
+- Added responsive action-rail constants, touch-target unit coverage, and desktop/mobile E2E assertions for semantic order and mobile row alignment.
+
+### Verification evidence
+
+- TDD red failed on desktop and mobile because the first card action was still `查看案例`; the same focused Playwright test passed in both profiles after the implementation.
+- Full local gates passed: `npm run lint`, `npx tsc --noEmit`, `npm test`, `npm run build`, `npm run test:e2e`, `npm audit --json`, and `git diff --check`.
+- Local counts: Vitest passed 66 files / 267 tests; Next generated 734 static pages; Playwright passed 10 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local production mobile verification measured the first card at 903 pixels, 56 pixels shorter than the live baseline. The direct link measured 306 x 46, case study and comparison each measured 147 x 45 on the same row, overflow was `0`, and no error overlay or console issue appeared.
+- Local desktop verification kept the direct action first, preserved 45-pixel controls, showed no clipping or overlap, and retained overflow `0` with no browser warnings/errors.
+- Design commit `fef4862` and implementation commit `512d86a` were pushed to `origin/main`.
+- GitHub Actions run `29234209526` completed successfully, including lint, tests, build, and E2E.
+- Vercel production deployment `dpl_AeigikDbMWq4gynqce2j2KyMXkuu` reached `Ready` with `custard.top`, `www.custard.top`, and the project aliases; apex and `/cstd` returned `200`.
+- Fresh live mobile verification confirmed all five `Live` cards begin with their working-product action, the `Next` card begins with `查看案例`, the first card remains 903 pixels tall, external links use `_blank` / `noreferrer`, overflow is `0`, the mobile-only path has no canvas, and there are zero console warnings/errors.
+- Live desktop verification confirmed the same semantic order, expected 45-pixel controls, the desktop canvas, overflow `0`, no error overlay, and zero console warnings/errors.
+- Local and production mobile/desktop screenshots were visually inspected and matched without text clipping, overlap, or breakpoint drift.
+
+### Risk notes
+
+- No repository-controlled or deployment risk remains for this item.
+
+### Final status
+
+- CSTD live project cards now lead visitors into real working products while retaining compact case-study, comparison, and deep-link paths in production.
