@@ -2626,3 +2626,39 @@
 ### Final status
 
 - The live personal site now presents CSTD as an independent product studio, shows real shipped work in the first viewport, preserves the established mascot identity, and keeps all existing project discovery, comparison, case-study, URL, history, and focus behavior intact.
+
+## 2026-07-30 - CSTD Editorial Project Workbench
+
+### Scope
+
+- Continued the `custard.top` personal-main-site loop with a desktop-first audit of the project directory, project gallery, goal guide, capability index, comparison handoff, and delivery evidence.
+- The shipped-product hero was visually strong, but the long project area still used six equal cards followed by several similarly weighted pale tools.
+- The result was complete but visually flat: the most important live work had no hierarchy, filtering felt like a form, and the lower evidence sequence lacked a clear closing moment.
+
+### Fix
+
+- Added a tested gallery-layout rule that promotes the first visible live project, keeps later work in a compact editorial rhythm, and reserves a full-width studio queue for incubating work.
+- Rebuilt the desktop gallery on a twelve-column system: an 8/4 opening pair, a three-project second row, and a separate full-width incubation strip.
+- Enlarged real production media, added project numbering, removed hover rotation, and kept filter results adaptive so a single match becomes a full-width feature.
+- Recast the project directory as a high-contrast product console with a stronger search field, state summary, filters, and copy controls.
+- Reworked the goal guide as a dark route board, the capability index as a blue capability band, and the evidence overview as a full-bleed dark delivery ledger.
+- Increased primary project actions to a stable 48-pixel minimum target and preserved every existing URL, focus, comparison, history, share, and external-link behavior.
+
+### Verification evidence
+
+- The TDD red run failed because the gallery-layout helper did not exist; the focused green run passed 21 tests after implementation.
+- Full local gates passed: `npx tsc --noEmit`, `npm run lint`, 68 Vitest files / 279 tests, `npm audit --audit-level=moderate`, a 734-page production build, 16 Playwright tests with 2 environment-dependent skips, and `git diff --check`.
+- The first full E2E run found two genuine regressions: the 360-pixel featured image pushed actions 73.6 pixels below a 720-pixel viewport, and card `content-visibility` defeated the browser's scroll anchor after selecting the first comparison item.
+- Reduced featured desktop media to 256 pixels, removed the unnecessary visibility containment, and raised project actions from 44 to 48 pixels. Focused desktop/mobile E2E then passed 4/4 and the full suite passed.
+- Production-mode browser checks confirmed a `CRM` search renders one 1,280-pixel full-width feature, two selected projects restore the comparison URL and two-item decision list, and all tested states report overflow `0` with no console/page/network errors.
+- Final 1,440 x 1,000 and 1,280 x 720 visual checks showed the intended 8/4 and three-column rhythm, readable production media, coherent controls, and 162.7 pixels of measured action headroom at the compact desktop viewport.
+- A 3.2-second scripted full-page scroll recorded 513 frames, 6.4-millisecond p95 frame spacing, no long tasks during the scroll, and CLS `0`.
+- Final screenshots and the side-by-side comparison are stored under `output/playwright/cstd-workbench-2026-07-30/`.
+
+### Risk notes
+
+- Remote CI, deployment, production browser, and runtime-log checks are pending the verified implementation push.
+
+### Final status
+
+- Local implementation and acceptance are complete; release closure remains pending.

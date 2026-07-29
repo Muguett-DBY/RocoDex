@@ -3163,3 +3163,23 @@
 - Risk: the failed initial CI run remains visible, but the exact boundary was fixed and the final commit has successful local, CI, deploy, browser, and runtime evidence.
 - Next direction: harmonize the project-directory, guide, comparison, and evidence sections with the new editorial system while reducing long-page visual density without weakening their decision workflows.
 - Status: closed
+
+## 2026-07-30 CSTD Editorial Project Workbench
+
+- Type: visual design, desktop UX, performance, reliability
+- Prompt: continue comprehensively beautifying `custard.top`, make the UI/UX immediately striking and fluid, verify it, and push when clean; no mobile optimization requested.
+- Start state: the new hero and live-product rail were strong, but the lower project journey still used an equal-card grid and a sequence of similarly styled light tools.
+- Fix:
+  - Added a tested feature / standard / incubator layout rule and a twelve-column editorial gallery.
+  - Promoted the first visible live project, kept a balanced 8/4 opening row, grouped the next three products, and separated incubation into a full-width studio queue.
+  - Rebuilt the directory as a dark project console, the goal guide as a route board, the capability index as a blue band, and evidence as a full-bleed dark delivery ledger.
+  - Preserved search, filtering, focus, comparison, history, case, share, and external-link semantics.
+- Local verification:
+  - TDD red/green covered the missing gallery-layout rule; focused green passed 21 tests.
+  - `npx tsc --noEmit`, `npm run lint`, 68 Vitest files / 279 tests, `npm audit --audit-level=moderate`, a 734-page build, 16 Playwright passes / 2 skips, and `git diff --check` passed.
+  - The initial full E2E run exposed desktop action visibility and scroll-anchor regressions; reducing the feature image, removing visibility containment, and using 48-pixel actions closed both.
+  - Production-mode 1,280 and 1,440 browser checks reported overflow `0`, no browser/network errors, adaptive single-result width, working comparison state, and 162.7 pixels of compact-desktop action headroom.
+  - A scripted 3.2-second full-page scroll recorded 6.4-millisecond p95 frame spacing, no scroll-time long tasks, and CLS `0`.
+- Release: implementation push, GitHub Actions, Vercel readiness, production browser checks, and runtime logs pending.
+- Next direction: close this release loop, then audit the remaining light comparison view against the new editorial hierarchy without reducing its scanability.
+- Status: release pending
