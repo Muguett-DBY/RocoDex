@@ -3189,3 +3189,29 @@
 - Risk: the pre-existing broad Node engine warning remains informational; this release has no repository-controlled UI, audit, CI, deployment, runtime-log, or measured desktop-viewport risk.
 - Next direction: audit the remaining light comparison view against the new editorial hierarchy without reducing its scanability.
 - Status: closed
+
+## 2026-07-30 CSTD Decision Room
+
+- Type: visual design, desktop UX, accessibility, performance, reliability
+- Prompt: continue making `custard.top` immediately more striking and fluid, verify it completely, and push when clean; no mobile optimization requested.
+- Start state: the project gallery and supporting tools had a strong editorial hierarchy, but comparison and case focus remained pale, visually flat, and disconnected from the production previews.
+- Fix:
+  - Rebuilt comparison as a dark decision room with real candidate media, a sequenced next action, goal-fit judgment, and an evidence matrix.
+  - Rebuilt project focus as a split production-image case handoff with a dark sticky control rail.
+  - Preserved URL, focus, history, close, comparison, and external-link behavior.
+  - Retained the `项目对比` accessible name and exact two-candidate list semantics.
+  - Eager-loaded all RocoDex above-the-fold image instances to eliminate a shared-cache LCP warning.
+- Local verification:
+  - Regression-led E2E caught and closed three genuine issues: heading-name drift, nested-list inflation, and an intermittent LCP loading warning.
+  - `npx tsc --noEmit`, `npm run lint`, 68 Vitest files / 279 tests, `npm audit --audit-level=moderate`, a 734-page build, 16 Playwright passes / 2 skips, and `git diff --check` passed.
+  - Production-mode checks at 1,280 x 720 and 1,440 x 1,000 showed overflow `0`, clean browser output, visible primary actions, exact two-item comparison semantics, and correct focus/history restoration.
+  - Scripted scrolling recorded 6.4-millisecond p95 frame spacing, no long tasks, and CLS `0.00022`.
+- Release:
+  - Commit `f095109` was pushed to `origin/main`.
+  - GitHub Actions run `30471787557` passed in 2m41s.
+  - Vercel deployment `dpl_8o1EdvxRB6FtmSL3AW5AAmEBrJoH` reached `READY`.
+  - Live `custard.top` reproduced the new decision and focus states with overflow `0`, visible actions, preserved history, and no browser issues.
+  - Vercel returned no error/fatal runtime entries or build errors.
+- Risk: the pre-existing broad Node engine warning remains informational; six unrelated stale guide-slug requests returned 404, while `/cstd` had no runtime error or HTTP 500 evidence.
+- Next direction: audit restored-share states and the non-target comparison path inside the new decision-room hierarchy, keeping the same scanability and history guarantees.
+- Status: closed

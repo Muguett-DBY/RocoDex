@@ -2669,3 +2669,41 @@
 ### Final status
 
 - The editorial project workbench is live on `custard.top`, with the full local and remote release loop closed.
+
+## 2026-07-30 - CSTD Decision Room
+
+### Scope
+
+- Continued the desktop-first `custard.top` visual loop at the comparison decision and project-case handoff.
+- The comparison was functionally complete but still read as one pale form, while the case focus hid real product output behind a conventional detail panel.
+
+### Fix
+
+- Rebuilt comparison as a high-contrast decision room with a dark scan header, explicit decision sequence, real candidate product windows, a blue goal-fit band, and a structured evidence table.
+- Rebuilt case focus around a real production screenshot, a visible comparison handoff, and a persistent dark action rail.
+- Preserved the `项目对比` accessible heading, two-item list semantics, URL state, focus, history, close behavior, and external-link policy.
+- Marked every above-the-fold RocoDex production-image instance for eager loading so shared-cache runs no longer emit intermittent Next.js LCP warnings.
+
+### Verification evidence
+
+- The initial full E2E run caught the changed accessible heading name; the next run caught nested-list inflation from two candidates to eight list items.
+- A shared-cache rerun then exposed an intermittent LCP warning from another RocoDex image instance. All three issues were fixed before release.
+- Final local gates passed: `npx tsc --noEmit`, `npm run lint`, 68 Vitest files / 279 tests, `npm audit --audit-level=moderate`, a 734-page production build, 16 Playwright tests with 2 environment-dependent skips, and `git diff --check`.
+- Local 1,440 x 1,000 and 1,280 x 720 checks reported overflow `0`, two semantic candidates, visible decision and handoff actions, clean focus/history behavior, and no browser issues.
+- A stable 3.2-second full-page scroll recorded 6.4-millisecond p95 frame spacing, no long tasks, and CLS `0.00022`.
+- Before/after and final screenshots are stored under `output/playwright/cstd-decision-room-2026-07-30/`.
+- Implementation commit `f095109` was pushed directly to `origin/main`.
+- GitHub Actions run `30471787557` completed successfully in 2m41s across install, lint, 279 tests, build, and E2E.
+- Vercel deployment `dpl_8o1EdvxRB6FtmSL3AW5AAmEBrJoH` reached `READY` for exact commit `f0951098330d83e17d3dca0fc769c9b7bc2399eb`.
+- Fresh apex checks reproduced the decision room and case focus at 1,440 x 1,000 with action visibility, history restoration around 96 pixels, overflow `0`, and no browser issues.
+- Vercel reported no error/fatal runtime entries and no build errors.
+
+### Risk notes
+
+- Vercel retains the repository's pre-existing broad Node-engine-range warning; it did not affect the successful build.
+- Six observed 404 entries were direct requests to stale `/guides/creature-*` slugs, not `/cstd` routes; no HTTP 500 or release-related runtime error was observed.
+- No repository-controlled UI, dependency-audit, final-CI, deployment, or measured desktop-viewport risk remains for this item.
+
+### Final status
+
+- The comparison-to-case decision path is live as a visually distinct product-workbench experience without weakening its established interaction or accessibility contracts.
