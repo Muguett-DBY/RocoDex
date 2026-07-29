@@ -208,6 +208,13 @@ function getCstdClipboardWriter() {
   return (text: string) => navigator.clipboard.writeText(text);
 }
 
+function isCstdManagedFocusTarget(element: Element | null): element is HTMLElement {
+  if (!(element instanceof HTMLElement)) return false;
+  return element.id === "project-guide-heading"
+    || element.id === "project-comparison-heading"
+    || element.id.startsWith("project-focus-");
+}
+
 const CstdCustardStage = dynamic(
   () => import("@/components/cstd-custard-stage").then((module) => module.CstdCustardStage),
   {
@@ -301,6 +308,9 @@ export function CstdLanding() {
     };
     syncViewState();
     const handlePopState = () => {
+      if (isCstdManagedFocusTarget(document.activeElement)) {
+        document.activeElement.blur();
+      }
       projectFocusHeadingPendingRef.current = false;
       comparisonResultFocusPendingRef.current = false;
       setComparisonGoalHandoffPending(false);
@@ -479,7 +489,7 @@ export function CstdLanding() {
       comparisonResultFocusPendingRef.current = false;
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [projectComparison.projects.length, projectViewStateSynced, selectedGuideId]);
+  }, [projectComparison.projects.length, projectViewStateSynced, selectedGuideId, selectedProjectId]);
 
   function replayIntro() {
     const replayPreference: CstdMotionPreference = "enabled";
@@ -580,16 +590,22 @@ export function CstdLanding() {
   }
 
   function closeProjectFocus() {
+    const shouldReturnToComparison = selectedProjectComparisonHandoff !== null;
+    comparisonResultFocusPendingRef.current = shouldReturnToComparison;
     window.history.pushState(
       null,
       "",
-      buildCstdProjectViewHref(window.location.pathname, {
-        filter: activeProjectFilter,
-        query: projectSearchQuery,
-        guideId: selectedGuideId,
-        projectId: null,
-        compareProjectIds: comparedProjectIds,
-      }),
+      buildCstdProjectViewHref(
+        window.location.pathname,
+        {
+          filter: activeProjectFilter,
+          query: projectSearchQuery,
+          guideId: selectedGuideId,
+          projectId: null,
+          compareProjectIds: comparedProjectIds,
+        },
+        shouldReturnToComparison ? "project-comparison" : "projects",
+      ),
     );
     setSelectedProjectId(null);
     setProjectCopyResult(null);
