@@ -174,10 +174,10 @@ const cstdProjectComparisonFitLabelClassNames: Record<CstdProjectComparisonFit["
 };
 
 const cstdProjectComparisonScanToneClassNames: Record<CstdProjectComparisonScanItem["tone"], string> = {
-  direct: "border-[#9bd9bf] bg-[#dff8ed]/80 text-[#047857]",
-  reference: "border-[#f2d18d] bg-[#fff0c9]/80 text-[#8a4b15]",
-  evidence: "border-[#b8d7f5] bg-[#e3f2ff]/80 text-[#2563eb]",
-  unscoped: "border-[#d8c8ad] bg-white/80 text-[#6f5b4a]",
+  direct: "border-[#49d3a3]/55 bg-[#123b31] text-[#a8f0d4]",
+  reference: "border-[#f6bf3f]/60 bg-[#3b2e12] text-[#ffe39a]",
+  evidence: "border-[#6fa9ff]/55 bg-[#162945] text-[#b8d7f5]",
+  unscoped: "border-white/20 bg-white/5 text-[#d8d0c5]",
 };
 
 const cstdRestoredEntryToneClassNames = {
@@ -1735,7 +1735,8 @@ function ProjectPreviewRail({
                     src={project.preview.src}
                     alt={project.preview.alt}
                     fill
-                    priority={project.id === "rocodex"}
+                    loading={project.id === "rocodex" ? "eager" : "lazy"}
+                    fetchPriority={project.id === "rocodex" ? "high" : "auto"}
                     sizes="(max-width: 639px) 82vw, (max-width: 1023px) 44vw, 244px"
                     className="object-cover transition duration-500 group-hover:scale-[1.025]"
                     style={{ objectPosition: project.preview.position }}
@@ -2279,45 +2280,93 @@ function ProjectComparison({
 
   return (
     <section id="project-comparison" className={`${cstdProjectComparisonClassName} scroll-mt-24`} aria-labelledby="project-comparison-heading">
-      <div className="flex flex-col gap-3 border-b border-[#b7decf] p-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0">
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#047857]">Decision view</p>
+      <div className="border-b-2 border-[#2f241d] bg-[#181511] p-4 text-white sm:p-6">
+        <div className="flex min-w-0 flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+          <div className="min-w-0 lg:max-w-4xl">
+            <div className="flex min-w-0 flex-wrap items-center gap-3">
+              <span className="inline-flex min-h-8 items-center gap-2 rounded-md border border-[#f6bf3f]/55 bg-[#f6bf3f]/12 px-3 text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#ffe39a]">
+                <GitCompareArrows className="h-3.5 w-3.5" />
+                Decision room
+              </span>
+              <span className="text-xs font-black text-[#9e9489]" aria-live="polite">
+                {comparison.summary}
+              </span>
+            </div>
           <h3
             id="project-comparison-heading"
+            aria-label="项目对比"
             tabIndex={-1}
-            className="mt-1 rounded-sm text-lg font-black text-[#1b4332] focus:outline focus:outline-2 focus:outline-offset-4 focus:outline-[#0f8f64]"
+              className="mt-4 max-w-3xl rounded-sm text-2xl font-black leading-tight text-white focus:outline focus:outline-2 focus:outline-offset-4 focus:outline-[#f6bf3f] sm:text-4xl"
           >
-            项目对比
+              把两个项目放进同一个决策现场
           </h3>
-          <p className="mt-1 text-xs font-bold text-[#4c6b5d]" aria-live="polite">
-            {comparison.summary}
+            <p className="mt-3 max-w-3xl break-words text-sm font-semibold leading-6 text-[#c9c1b7]">
+              <span className="font-black text-[#f6bf3f]">{context.goalLabel}</span>
+              <span aria-hidden="true"> / </span>
+              <span>{context.projectLabel}</span>
           </p>
-          <p className="mt-2 max-w-3xl break-words text-xs font-semibold leading-5 text-[#4c6b5d]">
-            <span className="font-black text-[#047857]">{context.goalLabel}</span>
-            <span aria-hidden="true"> · </span>
-            <span>{context.projectLabel}</span>
-          </p>
+          </div>
+
+          <div className="flex w-full shrink-0 flex-col gap-2 lg:w-auto lg:items-end">
+            <div className="grid w-full grid-cols-2 gap-2 lg:w-auto">
+              <button
+                type="button"
+                onClick={onCopyBrief}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-[#f6bf3f] bg-[#f6bf3f] px-4 text-xs font-black text-[#181511] transition hover:-translate-y-0.5 hover:bg-[#ffd366] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f]"
+              >
+                {copyResult === "copied" ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                复制摘要
+              </button>
+              <button
+                type="button"
+                onClick={onClear}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/25 bg-white/5 px-4 text-xs font-black text-white transition hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f]"
+              >
+                <X className="h-3.5 w-3.5" />
+                清空对比
+              </button>
+            </div>
+            {copyResult ? (
+              <p className="text-xs font-bold text-[#a8f0d4]" aria-live="polite">
+                {copyMessage}
+              </p>
+            ) : null}
+          </div>
+        </div>
+
+        <ul className="mt-5 grid min-w-0 grid-cols-1 gap-2 min-[520px]:grid-cols-3" aria-label="对比扫读摘要">
+          {scanSummary.map((item, index) => (
+            <li key={item.id} className={`min-w-0 border px-3 py-3 ${cstdProjectComparisonScanToneClassNames[item.tone]}`}>
+              <span className="flex items-center justify-between gap-3 text-[0.68rem] font-black uppercase tracking-[0.12em]">
+                {item.label}
+                <span className="text-[0.62rem] opacity-65">0{index + 1}</span>
+              </span>
+              <span className="mt-2 block min-w-0 break-words text-base font-black leading-5">{item.value}</span>
+            </li>
+          ))}
+        </ul>
+
           {context.receipt ? (
             <div
               aria-label="分享视图恢复状态"
               aria-live="polite"
-              className="mt-2 max-w-3xl rounded-lg border border-[#9bd9bf] bg-[#dff8ed]/70 px-3 py-2 text-xs font-bold leading-5 text-[#047857]"
+              className="mt-4 border-t border-white/15 pt-4 text-xs font-bold leading-5 text-[#a8f0d4]"
             >
               <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
                 <Check className="h-3.5 w-3.5 shrink-0" />
                 <span className="font-black">{context.receipt.label}</span>
-                <span className="min-w-0 break-words text-[#355b4a]">{context.receipt.detail}</span>
+                <span className="min-w-0 break-words text-[#c9c1b7]">{context.receipt.detail}</span>
               </div>
               {restoredContinuation ? (
-                <div className="mt-2 grid min-w-0 gap-2 rounded-md border border-[#9bd9bf]/70 bg-white/58 p-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" aria-label="分享对比恢复下一步">
+                <div className="mt-3 grid min-w-0 gap-3 border-t border-white/15 pt-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center" aria-label="分享对比恢复下一步">
                   <p className="min-w-0">
-                    <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#047857]">建议下一步</span>
-                    <span className="mt-0.5 block min-w-0 break-words text-xs font-bold leading-5 text-[#355b4a]">{restoredContinuation.detail}</span>
+                    <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f6bf3f]">建议下一步</span>
+                    <span className="mt-0.5 block min-w-0 break-words text-xs font-bold leading-5 text-[#c9c1b7]">{restoredContinuation.detail}</span>
                   </p>
                   <button
                     type="button"
                     onClick={handleNextStep}
-                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-3 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
+                    className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-[#f6bf3f] bg-[#f6bf3f] px-3 text-xs font-black text-[#181511] transition hover:-translate-y-0.5 hover:bg-[#ffd366] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f] sm:w-auto"
                   >
                     <ArrowDownRight className="h-3.5 w-3.5" />
                     {restoredContinuation.label}
@@ -2326,55 +2375,24 @@ function ProjectComparison({
               ) : null}
             </div>
           ) : null}
-          <ul className="mt-3 grid min-w-0 grid-cols-1 gap-2 min-[520px]:grid-cols-3" aria-label="对比扫读摘要">
-            {scanSummary.map((item) => (
-              <li key={item.id} className={`min-w-0 border px-3 py-2 ${cstdProjectComparisonScanToneClassNames[item.tone]}`}>
-                <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em]">{item.label}</span>
-                <span className="mt-1 block min-w-0 break-words text-sm font-black leading-5">{item.value}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="flex w-full flex-col gap-2 sm:w-auto sm:items-end">
-          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
-            <button
-              type="button"
-              onClick={onCopyBrief}
-              className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#0f8f64] bg-[#047857] px-3 text-xs font-black text-white transition hover:bg-[#036747] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
-            >
-              {copyResult === "copied" ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-              复制摘要
-            </button>
-            <button
-              type="button"
-              onClick={onClear}
-              className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:bg-[#f7fffb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
-            >
-              <X className="h-3.5 w-3.5" />
-              清空对比
-            </button>
-          </div>
-          {copyResult ? (
-            <p className="text-xs font-bold text-[#4c6b5d]" aria-live="polite">
-              {copyMessage}
-            </p>
-          ) : null}
-        </div>
       </div>
 
-      <div className="p-4">
-        <div className="mt-4 border-y border-[#9bd9bf] bg-[#eefbf4]/78 px-3 py-3 min-[390px]:py-4 sm:px-4" role="group" aria-label="对比下一步">
-          <div className="flex min-w-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="bg-[#f4f3ed] p-4 sm:p-6">
+        <div className="border-2 border-[#2f241d] bg-[#f6bf3f] px-4 py-4 sm:px-5" role="group" aria-label="对比下一步">
+          <div className="grid min-w-0 gap-4 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-center">
+            <span className="hidden text-4xl font-black leading-none text-[#2f241d]/25 lg:block" aria-hidden="true">
+              01
+            </span>
             <div className="min-w-0">
-              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#047857]">{nextStep.eyebrow}</p>
-              <p className="mt-1 break-words text-base font-black text-[#1b4332]">{nextStep.title}</p>
-              <p className="mt-1 max-w-3xl break-words text-sm font-semibold leading-6 text-[#355b4a]">{nextStep.detail}</p>
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#6b4412]">{nextStep.eyebrow}</p>
+              <p className="mt-1 break-words text-lg font-black text-[#181511]">{nextStep.title}</p>
+              <p className="mt-1 max-w-3xl break-words text-sm font-semibold leading-6 text-[#4f3d31]">{nextStep.detail}</p>
             </div>
             <div className="grid w-full shrink-0 grid-cols-1 gap-2 min-[320px]:grid-cols-2 lg:w-auto">
               <button
                 type="button"
                 onClick={handleNextStep}
-                className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] lg:w-auto"
+                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-[#181511] bg-[#181511] px-5 text-sm font-black text-white transition hover:-translate-y-0.5 hover:bg-[#2f2a24] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#181511] lg:w-auto"
               >
                 <ArrowDownRight className="h-4 w-4" />
                 {nextStep.primaryLabel}
@@ -2382,7 +2400,7 @@ function ProjectComparison({
               {nextStep.kind === "focus" ? (
                 <Link
                   href={nextStep.project.href}
-                  className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-[#2563eb] bg-white px-4 text-sm font-black text-[#2563eb] no-underline transition hover:-translate-y-0.5 hover:bg-[#e3f2ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb] lg:w-auto"
+                  className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-[#181511] bg-white px-5 text-sm font-black text-[#181511] no-underline transition hover:-translate-y-0.5 hover:bg-[#fffaf0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#181511] lg:w-auto"
                 >
                   <ExternalLink className="h-4 w-4" />
                   {nextStep.secondaryLabel}
@@ -2392,62 +2410,111 @@ function ProjectComparison({
           </div>
         </div>
 
-        <ul className={cstdProjectComparisonColumnsClassName} aria-label="已选对比项目">
-          {comparison.projects.map((project) => {
+        <ul className={`${cstdProjectComparisonColumnsClassName} mt-5 gap-4`} aria-label="已选对比项目">
+          {comparison.projects.map((project, projectIndex) => {
             const fitItem = fitItemsByProjectId.get(project.id);
+            const ProjectIcon = projectIcons[project.icon];
 
             return (
-              <li key={project.id} className="flex min-w-0 items-center justify-between gap-3 border-b border-[#b7decf] bg-white/68 px-3 py-2.5">
-                <span className="min-w-0">
-                  {fitItem ? (
-                    <span className={`mb-1 inline-flex rounded-md px-2 py-1 text-[0.68rem] font-black ${cstdProjectComparisonFitLabelClassNames[fitItem.kind]}`}>
-                      {fitItem.label}
-                    </span>
-                  ) : null}
-                  <span className="block min-w-0 break-words text-sm font-black text-[#1b4332]">{project.title}</span>
-                </span>
+              <li key={project.id} className="group relative min-w-0 overflow-hidden border-2 border-[#2f241d] bg-white">
                 <button
                   type="button"
                   onClick={() => onRemove(project.id)}
                   aria-label={`移出对比：${project.title}`}
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#4c6b5d] transition hover:bg-[#dff8ed] hover:text-[#047857] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+                  className="absolute right-3 top-3 z-20 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[#2f241d] bg-white text-[#2f241d] transition hover:-translate-y-0.5 hover:bg-[#f6bf3f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
                 >
                   <X className="h-4 w-4" />
                 </button>
+                {project.preview ? (
+                  <div className="relative hidden h-36 overflow-hidden border-b-2 border-[#2f241d] bg-[#e9e7df] sm:block">
+                    <Image
+                      src={project.preview.src}
+                      alt={project.preview.alt}
+                      fill
+                      loading={projectIndex === 0 ? "eager" : "lazy"}
+                      fetchPriority={projectIndex === 0 ? "high" : "auto"}
+                      sizes="(max-width: 1279px) 50vw, 620px"
+                      className="object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
+                      style={{ objectPosition: project.preview.position }}
+                    />
+                    <span className="absolute bottom-3 left-3 rounded-md border border-[#2f241d] bg-[#f6bf3f] px-2.5 py-1 text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#2f241d]">
+                      Candidate 0{projectIndex + 1}
+                    </span>
+                  </div>
+                ) : null}
+                <div className="p-4 sm:p-5">
+                  <div className="flex min-w-0 items-start gap-3 pr-10">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-md bg-[#dff8ed] text-[#047857]">
+                      <ProjectIcon className="h-5 w-5" />
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#7b6656]">{project.kicker}</span>
+                      <span className="mt-1 block min-w-0 break-words text-xl font-black text-[#181511]">{project.title}</span>
+                    </span>
+                  </div>
+                  <div className="mt-4 flex min-w-0 flex-wrap items-center gap-2 border-t border-[#d8d0c5] pt-3">
+                    {fitItem ? (
+                      <span className={`inline-flex rounded-md px-2 py-1 text-[0.68rem] font-black ${cstdProjectComparisonFitLabelClassNames[fitItem.kind]}`}>
+                        {fitItem.label}
+                      </span>
+                    ) : null}
+                    <span className="text-xs font-bold text-[#6f5b4a]">{project.evidence.current}</span>
+                  </div>
+                  <div className="mt-4 grid grid-cols-3 border-y border-[#d8d0c5]" role="group" aria-label={`${project.title} 对比指标`}>
+                    {project.metrics.map(([value, label]) => (
+                      <div key={value} className="flex min-w-0 flex-col border-r border-[#d8d0c5] px-2 py-3 last:border-r-0">
+                        <span className="order-2 mt-1 min-w-0 break-words text-[0.68rem] font-bold text-[#7b6656]">{label}</span>
+                        <strong className="order-1 min-w-0 break-words text-sm font-black text-[#181511]">{value}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </li>
             );
           })}
         </ul>
 
-        <div className="mt-4 border-y border-[#b7decf] bg-[#fffaf0]/70" role="group" aria-label="目标匹配判断">
-          <div className="border-b border-[#b7decf] px-3 py-3">
-            <p className="text-xs font-black uppercase tracking-[0.14em] text-[#d98528]">Goal fit</p>
-            <p className="mt-1 text-sm font-black text-[#1b4332]">目标判断</p>
-            <p className="mt-1 break-words text-sm font-semibold leading-6 text-[#4c6b5d]">{fit.summary}</p>
+        <div className="mt-5 border-y-2 border-[#2f241d] bg-[#e3f2ff]" role="group" aria-label="目标匹配判断">
+          <div className="grid min-w-0 lg:grid-cols-[16rem_minmax(0,1fr)]">
+            <div className="border-b-2 border-[#2f241d] bg-[#2563eb] px-4 py-4 text-white lg:border-b-0 lg:border-r-2">
+              <p className="text-xs font-black uppercase tracking-[0.14em] text-[#cfe3ff]">Goal fit / 02</p>
+              <p className="mt-2 text-lg font-black">目标判断</p>
+              <p className="mt-2 break-words text-sm font-semibold leading-6 text-[#e3f2ff]">{fit.summary}</p>
+            </div>
+            <ul className={`${cstdProjectComparisonColumnsClassName} gap-0`} aria-label="目标匹配项目">
+              {fit.items.map((item) => (
+                <li key={item.projectId} className="min-w-0 border-b border-[#b8d7f5] px-4 py-4 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
+                  <div className="flex min-w-0 flex-wrap items-center gap-2">
+                    <span className={`rounded-md px-2 py-1 text-[0.68rem] font-black ${cstdProjectComparisonFitLabelClassNames[item.kind]}`}>{item.label}</span>
+                    <span className="min-w-0 break-words text-sm font-black text-[#181511]">{item.title}</span>
+                  </div>
+                  <p className="mt-2 break-words text-sm font-semibold leading-6 text-[#315b7f]">{item.detail}</p>
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul className={`${cstdProjectComparisonColumnsClassName} gap-0`} aria-label="目标匹配项目">
-            {fit.items.map((item) => (
-              <li key={item.projectId} className="min-w-0 border-b border-[#b7decf] px-3 py-3 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0">
-                <div className="flex min-w-0 flex-wrap items-center gap-2">
-                  <span className={`rounded-md px-2 py-1 text-[0.68rem] font-black ${cstdProjectComparisonFitLabelClassNames[item.kind]}`}>{item.label}</span>
-                  <span className="min-w-0 break-words text-sm font-black text-[#1b4332]">{item.title}</span>
-                </div>
-                <p className="mt-2 break-words text-sm font-semibold leading-6 text-[#355b4a]">{item.detail}</p>
-              </li>
-            ))}
-          </ul>
         </div>
 
         {comparison.ready ? (
-          <dl className="mt-4 border-t border-[#b7decf]">
+          <dl className="mt-5 border-t-2 border-[#2f241d] bg-white">
+            <div className="grid min-w-0 border-b-2 border-[#2f241d] bg-[#181511] text-white sm:grid-cols-[8rem_minmax(0,1fr)]">
+              <div className="px-4 py-3 text-xs font-black uppercase tracking-[0.14em] text-[#f6bf3f]">Evidence / 03</div>
+              <div className={`${cstdProjectComparisonColumnsClassName} gap-0`}>
+                {comparison.projects.map((project) => (
+                  <div key={project.id} className="min-w-0 border-t border-white/15 px-4 py-3 text-sm font-black first:border-t-0 sm:border-l sm:border-t-0">
+                    {project.title}
+                  </div>
+                ))}
+              </div>
+            </div>
             {comparison.rows.map((row) => (
-              <div key={row.label} className="grid min-w-0 gap-2 border-b border-[#b7decf] py-3 sm:grid-cols-[7rem_minmax(0,1fr)] sm:gap-3">
-                <dt className="text-xs font-black text-[#047857]">{row.label}</dt>
-                <dd className={cstdProjectComparisonColumnsClassName}>
+              <div key={row.label} className="grid min-w-0 border-b border-[#d8d0c5] last:border-b-0 sm:grid-cols-[8rem_minmax(0,1fr)]">
+                <dt className="bg-[#fffaf0] px-4 py-4 text-xs font-black text-[#8a4b15]">{row.label}</dt>
+                <dd className={`${cstdProjectComparisonColumnsClassName} gap-0`}>
                   {row.values.map((value, index) => {
                     const project = comparison.projects[index];
                     return (
-                      <div key={project.id} className="min-w-0 break-words text-sm font-semibold leading-6 text-[#355b4a]">
+                      <div key={project.id} className="min-w-0 border-t border-[#d8d0c5] px-4 py-4 text-sm font-semibold leading-6 text-[#4f3d31] first:border-t-0 sm:border-l sm:border-t-0">
                         <span className="mb-1 block text-[0.68rem] font-black text-[#047857] sm:sr-only">{project.title}</span>
                         {value}
                       </div>
@@ -2458,7 +2525,7 @@ function ProjectComparison({
             ))}
           </dl>
         ) : (
-          <p className="mt-4 text-sm font-bold text-[#4c6b5d]" role="status">
+          <p className="mt-5 border-2 border-dashed border-[#7b6656] bg-white px-4 py-6 text-center text-sm font-bold text-[#4f3d31]" role="status">
             再选择 1 个已上线项目即可对比
           </p>
         )}
@@ -2547,6 +2614,7 @@ function ProjectCard({
             src={project.preview.src}
             alt={project.preview.alt}
             fill
+            loading={project.id === "rocodex" ? "eager" : "lazy"}
             sizes={isFeature ? "(max-width: 1279px) 50vw, 90vw" : "(max-width: 1279px) 50vw, 31vw"}
             className="object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
             style={{ objectPosition: project.preview.position }}
@@ -2829,91 +2897,131 @@ function ProjectFocus({
       ref={focusRef}
       id="project-focus"
       aria-labelledby={`project-focus-${project.id}`}
-      className="scroll-mt-24 mb-6 overflow-hidden rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/96 shadow-[10px_10px_0_rgba(47,36,29,.1)]"
+      className="scroll-mt-24 mb-6 overflow-hidden rounded-lg border-2 border-[#2f241d] bg-[#f4f3ed] shadow-[10px_10px_0_rgba(47,36,29,.12)]"
       initial={motionDisabled ? false : { opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       exit={motionDisabled ? { opacity: 0 } : { opacity: 0, y: -10 }}
       transition={{ duration: 0.24 }}
     >
-      <div className="relative border-b border-[#ead6ad] bg-[#f6bf3f]/18 p-4 sm:p-6">
-        <div className="flex min-w-0 items-start gap-3 pr-12">
-          <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-white text-[#0f8f64] shadow-sm">
-            <Icon className="h-5 w-5" />
-          </span>
-          <div className="min-w-0">
-            <p className="text-xs font-black uppercase text-[#d98528]">Project case study</p>
+      <div className="relative grid min-w-0 border-b-2 border-[#2f241d] bg-[#181511] text-white lg:grid-cols-[minmax(0,1.15fr)_minmax(24rem,.85fr)]">
+        <div className="flex min-h-[280px] min-w-0 flex-col justify-between p-5 sm:p-7 lg:min-h-[320px]">
+          <div className="min-w-0 pr-12">
+            <div className="flex min-w-0 flex-wrap items-center gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-md border border-white/15 bg-white/8 text-[#a8f0d4]">
+                <Icon className="h-5 w-5" />
+              </span>
+              <span className="inline-flex min-h-8 items-center rounded-md border border-[#f6bf3f]/55 bg-[#f6bf3f]/12 px-3 text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#ffe39a]">
+                Project case / {project.kicker}
+              </span>
+            </div>
             <h3
               id={`project-focus-${project.id}`}
               tabIndex={-1}
-              className="mt-1 rounded-sm break-words text-2xl font-black focus:outline focus:outline-2 focus:outline-offset-4 focus:outline-[#0f8f64] sm:text-3xl"
+              className="mt-5 max-w-3xl rounded-sm break-words text-3xl font-black leading-tight focus:outline focus:outline-2 focus:outline-offset-4 focus:outline-[#f6bf3f] sm:text-5xl"
             >
               {project.title}
             </h3>
-            <p className="mt-2 text-sm font-semibold text-[#6f5b4a]">{project.evidence.current}</p>
+            <p className="mt-3 max-w-2xl text-sm font-semibold leading-6 text-[#c9c1b7]">{project.evidence.current}</p>
           </div>
+          {comparisonHandoff ? (
+            <div
+              aria-label="目标案例交接状态"
+              aria-live="polite"
+              className="mt-6 grid min-w-0 gap-4 border-t border-white/15 pt-5 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end"
+            >
+              <p className="min-w-0">
+                <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#a8f0d4]">
+                  {comparisonHandoff.eyebrow}
+                </span>
+                <span className="mt-1 block text-base font-black text-white">{comparisonHandoff.label}</span>
+                <span className="mt-1 block min-w-0 break-words text-xs font-semibold leading-5 text-[#c9c1b7]">
+                  {comparisonHandoff.detail}
+                </span>
+              </p>
+              <Link
+                href={comparisonHandoff.href}
+                {...getCstdLinkTargetProps(comparisonHandoff.href)}
+                className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-md border border-[#f6bf3f] bg-[#f6bf3f] px-5 text-sm font-black text-[#181511] no-underline transition hover:-translate-y-0.5 hover:bg-[#ffd366] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f] sm:w-auto"
+              >
+                <ExternalLink aria-hidden="true" className="h-4 w-4 shrink-0" />
+                {comparisonHandoff.actionLabel}
+              </Link>
+            </div>
+          ) : visibleRestoredReceipt ? (
+            <RestoredEntryHandoff
+              receipt={visibleRestoredReceipt}
+              action={restoredAction}
+              tone="focus"
+              statusLabel="分享案例恢复状态"
+              nextLabel="恢复案例下一步"
+              actionIcon={Copy}
+              onClick={onCopyBrief}
+              copyPresentation={briefCopyPresentation}
+              fallbackText={projectBriefText}
+              secondaryAction={{
+                href: project.href,
+                label: project.action,
+              }}
+            />
+          ) : (
+            <div className="mt-6 flex min-w-0 flex-wrap gap-2 border-t border-white/15 pt-5">
+              {project.metrics.map(([value, label]) => (
+                <span key={value} className="inline-flex min-h-9 items-center gap-2 border border-white/15 bg-white/5 px-3 text-xs font-black text-white">
+                  <strong className="text-[#f6bf3f]">{value}</strong>
+                  <span className="text-[#c9c1b7]">{label}</span>
+                </span>
+              ))}
+            </div>
+          )}
         </div>
+
+        {project.preview ? (
+          <div className="group relative min-h-[220px] overflow-hidden border-t-2 border-[#2f241d] bg-[#e9e7df] lg:min-h-[320px] lg:border-l-2 lg:border-t-0">
+            <Image
+              src={project.preview.src}
+              alt={project.preview.alt}
+              fill
+              loading="eager"
+              fetchPriority="high"
+              sizes="(max-width: 1023px) 100vw, 42vw"
+              className="object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
+              style={{ objectPosition: project.preview.position }}
+            />
+            <span className="absolute bottom-4 left-4 rounded-md border border-[#2f241d] bg-[#f6bf3f] px-3 py-1.5 text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#2f241d] shadow-[4px_4px_0_rgba(24,21,17,.2)]">
+              Live product
+            </span>
+          </div>
+        ) : (
+          <div className="grid min-h-[220px] place-items-center border-t-2 border-[#2f241d] bg-[#2563eb] lg:min-h-[320px] lg:border-l-2 lg:border-t-0">
+            <Icon className="h-20 w-20 text-white/80" />
+          </div>
+        )}
+
         <button
           type="button"
           onClick={onClose}
           aria-label="关闭案例焦点"
-          className="absolute right-4 top-4 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-[#ead6ad] bg-white text-[#2f241d] transition hover:border-[#d98528] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:right-6 sm:top-6"
+          className="absolute right-4 top-4 z-20 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-[#2f241d] bg-white text-[#2f241d] transition hover:-translate-y-0.5 hover:bg-[#f6bf3f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f] sm:right-6 sm:top-6"
         >
           <X className="h-5 w-5" />
         </button>
-        {comparisonHandoff ? (
-          <div
-            aria-label="目标案例交接状态"
-            aria-live="polite"
-            className="mt-4 grid min-w-0 gap-3 border-t border-[#e3c778] pt-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end"
-          >
-            <p className="min-w-0">
-              <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#047857]">
-                {comparisonHandoff.eyebrow}
-              </span>
-              <span className="mt-1 block text-sm font-black text-[#2f241d]">{comparisonHandoff.label}</span>
-              <span className="mt-1 block min-w-0 break-words text-xs font-semibold leading-5 text-[#6f5b4a]">
-                {comparisonHandoff.detail}
-              </span>
-            </p>
-            <HeroButton href={comparisonHandoff.href} primary>
-              <ExternalLink aria-hidden="true" className="h-4 w-4 shrink-0" />
-              {comparisonHandoff.actionLabel}
-            </HeroButton>
-          </div>
-        ) : visibleRestoredReceipt ? (
-          <RestoredEntryHandoff
-            receipt={visibleRestoredReceipt}
-            action={restoredAction}
-            tone="focus"
-            statusLabel="分享案例恢复状态"
-            nextLabel="恢复案例下一步"
-            actionIcon={Copy}
-            onClick={onCopyBrief}
-            copyPresentation={briefCopyPresentation}
-            fallbackText={projectBriefText}
-            secondaryAction={{
-              href: project.href,
-              label: project.action,
-            }}
-          />
-        ) : null}
       </div>
 
       <div className={cstdProjectFocusBodyClassName}>
-        <div className="grid gap-5">
-          <dl className="grid gap-4">
+        <div className="grid min-w-0 gap-6 p-5 sm:p-7">
+          <dl className="grid gap-4 border-y-2 border-[#2f241d] bg-white px-4 py-4">
             <ProjectEvidence label="负责" value={project.evidence.role} />
             <ProjectEvidence label="解决问题" value={project.evidence.problem} />
             <ProjectEvidence label="已交付" value={project.evidence.outcome} />
           </dl>
-          <div className="rounded-xl border border-[#ead6ad] bg-white/72 p-4">
+          <div className="border-t-2 border-[#2f241d] pt-5">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">证据清单</p>
-              <p className="text-xs font-black text-[#0f8f64]">{evidenceChecklistSummary}</p>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">Evidence register</p>
+              <p className="text-xs font-black text-[#047857]">{evidenceChecklistSummary}</p>
             </div>
             <ul className={cstdProjectFocusChecklistGridClassName}>
               {evidenceChecklist.map((item) => (
-                <li key={item.label} className="flex min-w-0 items-start gap-2 rounded-lg bg-[#fffaf0] p-3">
+                <li key={item.label} className="flex min-w-0 items-start gap-3 border-t border-[#d8d0c5] py-4">
                   <span className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full ${item.complete ? "bg-[#dff8ed] text-[#047857]" : "bg-[#ffe7ec] text-[#be4563]"}`}>
                     <Check className="h-3.5 w-3.5" />
                   </span>
@@ -2927,38 +3035,45 @@ function ProjectFocus({
           </div>
         </div>
         <div className={cstdProjectFocusActionRailClassName}>
-          <p className="text-sm font-black text-[#2f241d]">继续查看</p>
+          <div className="border-b border-white/15 pb-4">
+            <p className="text-[0.68rem] font-black uppercase tracking-[0.14em] text-[#f6bf3f]">Case controls</p>
+            <p className="mt-1 text-lg font-black text-white">继续查看</p>
+          </div>
           <div className="grid gap-2">
             <ProjectFocusNavigationButton direction="previous" project={navigation.previous} onNavigate={onNavigate} />
             <ProjectFocusNavigationButton direction="next" project={navigation.next} onNavigate={onNavigate} />
           </div>
-          <HeroButton href={project.href}>
+          <Link
+            href={project.href}
+            {...getCstdLinkTargetProps(project.href)}
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-[#f6bf3f] bg-[#f6bf3f] px-4 text-sm font-black text-[#181511] no-underline transition hover:-translate-y-0.5 hover:bg-[#ffd366] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f]"
+          >
             <ExternalLink className="mr-2 h-4 w-4" />
             {project.action}
-          </HeroButton>
+          </Link>
           <button
             type="button"
             onClick={onCopy}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff] px-4 text-sm font-black text-[#2563eb] transition hover:border-[#2563eb] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-[#6fa9ff]/65 bg-[#162945] px-4 text-sm font-black text-[#b8d7f5] transition hover:-translate-y-0.5 hover:border-[#6fa9ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#6fa9ff]"
           >
             {copyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             复制案例链接
           </button>
           {copyResult ? (
-            <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
+            <p role="status" className="text-xs font-semibold leading-5 text-[#a8f0d4]">
               {copyMessage}
             </p>
           ) : null}
           <button
             type="button"
             onClick={onCopyBrief}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-[#ead6ad] bg-white px-4 text-sm font-black text-[#2f241d] transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-[#fff7df] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-white/25 bg-white/5 px-4 text-sm font-black text-white transition hover:-translate-y-0.5 hover:border-white/50 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
           >
             {briefCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             复制案例摘要
           </button>
           {!visibleRestoredReceipt && briefCopyResult ? (
-            <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
+            <p role="status" className="text-xs font-semibold leading-5 text-[#c9c1b7]">
               {briefCopyMessage}
             </p>
           ) : null}
@@ -2968,7 +3083,7 @@ function ProjectFocus({
               readOnly
               value={projectBriefText}
               onFocus={(event) => event.currentTarget.select()}
-              className="min-h-36 resize-y rounded-lg border border-[#ead6ad] bg-[#fffaf0] p-3 text-xs font-semibold leading-5 text-[#4f3d31] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+              className="min-h-36 resize-y rounded-md border border-white/25 bg-white/8 p-3 text-xs font-semibold leading-5 text-white outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             />
           ) : null}
         </div>
@@ -2988,7 +3103,7 @@ function ProjectFocusNavigationButton({
 }) {
   if (!project) {
     return (
-      <div className="flex min-h-12 items-center gap-2 rounded-lg border border-dashed border-[#ead6ad] bg-[#fffaf0]/70 px-3 text-xs font-black text-[#9a8776]">
+      <div className="flex min-h-12 items-center gap-2 rounded-md border border-dashed border-white/20 bg-white/5 px-3 text-xs font-black text-[#9e9489]">
         {direction === "previous" ? <ChevronLeft className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
         <span>{direction === "previous" ? "已经是第一个项目" : "已经是最后一个项目"}</span>
       </div>
@@ -3000,16 +3115,16 @@ function ProjectFocusNavigationButton({
       type="button"
       aria-label={`${direction === "previous" ? "查看上一个项目" : "查看下一个项目"}：${project.title}`}
       onClick={() => onNavigate(project.id)}
-      className="group flex min-h-12 items-center gap-2 rounded-lg border border-[#ead6ad] bg-white px-3 text-left transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-[#fff7df] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+      className="group flex min-h-12 items-center gap-2 rounded-md border border-white/20 bg-white/5 px-3 text-left transition hover:-translate-y-0.5 hover:border-[#f6bf3f]/60 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f]"
     >
-      {direction === "previous" ? <ChevronLeft className="h-4 w-4 shrink-0 text-[#d98528]" /> : null}
+      {direction === "previous" ? <ChevronLeft className="h-4 w-4 shrink-0 text-[#f6bf3f]" /> : null}
       <span className="min-w-0 flex-1">
-        <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#9a5a18]">
+        <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#f6bf3f]">
           {direction === "previous" ? "上一个项目" : "下一个项目"}
         </span>
-        <span className="mt-0.5 block truncate text-sm font-black text-[#2f241d]">{project.title}</span>
+        <span className="mt-0.5 block truncate text-sm font-black text-white">{project.title}</span>
       </span>
-      {direction === "next" ? <ChevronRight className="h-4 w-4 shrink-0 text-[#d98528]" /> : null}
+      {direction === "next" ? <ChevronRight className="h-4 w-4 shrink-0 text-[#f6bf3f]" /> : null}
     </button>
   );
 }
