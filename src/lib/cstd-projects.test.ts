@@ -1,3 +1,5 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, test } from "vitest";
 import { cstdProjects } from "./cstd-projects";
 
@@ -11,6 +13,16 @@ describe("CSTD project evidence", () => {
       expect(project.evidence.problem.length).toBeGreaterThan(8);
       expect(project.evidence.outcome.length).toBeGreaterThan(8);
       expect(project.evidence.current.length).toBeGreaterThan(4);
+    }
+  });
+
+  test("gives every live project a first-party visual preview", () => {
+    const liveProjects = cstdProjects.filter((project) => project.status === "Live");
+
+    for (const project of liveProjects) {
+      expect(project.preview?.src).toMatch(/^\/cstd-projects\/[a-z-]+\.png$/);
+      expect(project.preview?.alt.length).toBeGreaterThan(8);
+      expect(existsSync(path.join(process.cwd(), "public", project.preview!.src.slice(1)))).toBe(true);
     }
   });
 

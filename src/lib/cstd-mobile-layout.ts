@@ -1,10 +1,10 @@
 import { cstdProjects } from "./cstd-projects";
 
 export const cstdPageShellClassName =
-  "mx-auto w-[calc(100%_-_48px)] max-w-[342px] sm:w-[min(1160px,calc(100%_-_32px))] sm:max-w-none";
+  "mx-auto w-[calc(100%_-_48px)] max-w-[342px] sm:w-[min(1280px,calc(100%_-_40px))] sm:max-w-none";
 
 export const cstdHeaderClassName =
-  "sticky top-0 z-30 -mx-3 border-b border-[#ead6ad]/80 bg-[#fff6df]/92 px-3 py-3 backdrop-blur-md sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-7 sm:backdrop-blur-none [@media(max-height:800px)]:py-3";
+  "sticky top-0 z-30 -mx-3 border-b border-[#c9c5b8] bg-[#f4f3ed]/96 px-3 py-3 backdrop-blur-md sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:py-6 sm:backdrop-blur-none [@media(max-height:800px)]:py-3";
 
 export const cstdHeaderNavClassName = "hidden items-center gap-2 sm:flex sm:flex-wrap sm:justify-end";
 
@@ -15,7 +15,7 @@ export const cstdNavLinkClassName =
   "inline-flex min-h-10 min-w-0 items-center rounded-lg border border-[#ead6ad] bg-white/75 px-3 text-sm font-black text-[#2f241d] no-underline shadow-[3px_3px_0_rgba(47,36,29,.06)] transition hover:-translate-y-0.5 hover:border-[#d98528] hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]";
 
 export const cstdHeroSectionClassName =
-  "grid min-h-0 items-start gap-7 pb-6 pt-2 lg:min-h-[calc(100vh-176px)] lg:grid-cols-[minmax(0,1fr)_420px] lg:items-center lg:gap-14 lg:pb-16 lg:pt-3 [@media(max-height:800px)]:pb-4 [@media(max-height:800px)]:pt-1";
+  "relative left-1/2 grid w-dvw -translate-x-1/2 overflow-hidden border-y-2 border-[#2f241d] bg-[#181511] px-[max(24px,calc((100dvw-1280px)/2))] pb-5 pt-7 text-white lg:min-h-[calc(100vh-104px)] lg:grid-cols-[minmax(0,1fr)_500px] lg:items-center lg:gap-10 lg:pb-7 lg:pt-7 [@media(max-height:800px)]:pb-5 [@media(max-height:800px)]:pt-5";
 
 export const cstdHeroActionsClassName =
   "mt-4 grid w-full grid-cols-2 gap-3 sm:mt-8 sm:w-auto sm:max-w-none sm:flex sm:flex-wrap [@media(max-height:800px)]:mt-4";
@@ -23,7 +23,7 @@ export const cstdHeroActionsClassName =
 export const cstdMascotAsideClassName = "relative min-h-0 lg:min-h-[560px]";
 
 export const cstdMascotShellClassName =
-  "group relative left-1/2 top-0 grid w-[min(100%,240px)] -translate-x-1/2 place-items-center overflow-hidden rounded-[24px] border-2 border-[#ead6ad] bg-white/55 p-3 shadow-[10px_10px_0_rgba(97,61,22,.08)] backdrop-blur-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0f8f64] sm:w-[min(100%,300px)] sm:rounded-[28px] sm:p-4 lg:absolute lg:top-20 lg:w-[min(100%,420px)] lg:rounded-[36px] lg:p-5 lg:shadow-[18px_18px_0_rgba(97,61,22,.08)]";
+  "group relative left-1/2 top-0 grid w-[min(100%,240px)] -translate-x-1/2 place-items-center overflow-visible bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6bf3f] sm:w-[min(100%,300px)] lg:absolute lg:top-14 lg:w-[min(100%,460px)]";
 
 export const cstdProjectGridClassName = "grid gap-4 md:grid-cols-2 xl:grid-cols-3";
 

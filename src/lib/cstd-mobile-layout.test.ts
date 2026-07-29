@@ -73,10 +73,10 @@ describe("CSTD mobile layout rules", () => {
   test("keeps mobile hero content natural-flow while preserving desktop split hero", () => {
     expect(cstdPageShellClassName).toContain("calc(100%_-_48px)");
     expect(cstdPageShellClassName).toContain("max-w-[342px]");
-    expect(cstdPageShellClassName).toContain("sm:w-[min(1160px,calc(100%_-_32px))]");
-    expect(cstdHeroSectionClassName).toContain("min-h-0");
-    expect(cstdHeroSectionClassName).toContain("lg:min-h-[calc(100vh-176px)]");
-    expect(cstdHeroSectionClassName).toContain("lg:grid-cols-[minmax(0,1fr)_420px]");
+    expect(cstdPageShellClassName).toContain("sm:w-[min(1280px,calc(100%_-_40px))]");
+    expect(cstdHeroSectionClassName).toContain("w-dvw");
+    expect(cstdHeroSectionClassName).toContain("lg:min-h-[calc(100vh-104px)]");
+    expect(cstdHeroSectionClassName).toContain("lg:grid-cols-[minmax(0,1fr)_500px]");
     expect(cstdHeroSectionClassName).not.toContain("order-first");
   });
 
@@ -101,6 +101,8 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdMascotShellClassName).toContain("relative");
     expect(cstdMascotShellClassName).toContain("w-[min(100%,240px)]");
     expect(cstdMascotShellClassName).toContain("lg:absolute");
+    expect(cstdMascotShellClassName).toContain("overflow-visible");
+    expect(cstdMascotShellClassName).not.toContain("border-2");
   });
 
   test("renders all project cards with equal grid weight", () => {

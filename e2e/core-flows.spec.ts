@@ -157,7 +157,7 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
   expect(response?.ok()).toBe(true);
   await dismissCstdIntro(page);
 
-  const projectLink = page.getByRole("link", { name: "看项目", exact: true });
+  const projectLink = page.getByRole("link", { name: "浏览全部项目", exact: true });
   const firstProjectCard = page.locator("article").filter({
     has: page.getByRole("heading", { name: "洛克图鉴 / RocoDex" }),
   });
@@ -169,8 +169,15 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
   await expect(page.getByText("Latest updates", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Capability checklist", { exact: true })).toHaveCount(0);
   await expect(page.getByText("Acceptance status", { exact: true })).toHaveCount(0);
+  const projectPreviewRail = page.locator('[aria-label="已上线项目预览"]');
+  await expect(projectPreviewRail.getByRole("link")).toHaveCount(5);
   await expect
-    .poll(() => page.locator("#projects").evaluate((element) => element.getBoundingClientRect().top < window.innerHeight))
+    .poll(() =>
+      projectPreviewRail.evaluate((element) => {
+        const box = element.getBoundingClientRect();
+        return box.top < window.innerHeight && box.bottom > 0;
+      }),
+    )
     .toBe(true);
 
   await projectLink.click();
