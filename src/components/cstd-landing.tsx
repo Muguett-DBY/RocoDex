@@ -2493,7 +2493,7 @@ function ProjectCard({
         transition={{ duration: 0.8, ease: "easeOut" }}
       />
       {project.preview ? (
-        <div className="relative hidden h-44 overflow-hidden border-b-2 border-[#2f241d] bg-[#f4f3ed] sm:block">
+        <div className="relative hidden h-40 overflow-hidden border-b-2 border-[#2f241d] bg-[#f4f3ed] sm:block">
           <Image
             src={project.preview.src}
             alt={project.preview.alt}
