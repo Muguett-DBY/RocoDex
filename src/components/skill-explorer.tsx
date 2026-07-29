@@ -45,10 +45,16 @@ export function SkillExplorer() {
           <CardTitle>技能筛选</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3 md:grid-cols-[2fr_1fr_1fr]">
-          <label className="relative">
+          <label className="relative" htmlFor="skill-query-input">
             <span className="sr-only">关键词</span>
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-            <Input value={query} onChange={(event) => setQuery(event.target.value)} className="pl-10" placeholder="技能名、精灵名、描述" />
+            <Input
+              id="skill-query-input"
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              className="pl-10"
+              placeholder="技能名、精灵名、描述"
+            />
           </label>
           <Select value={attribute} onChange={(event) => setAttribute(event.target.value as CreatureAttribute | "all")}>
             {attributes.map((item) => (

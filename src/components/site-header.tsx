@@ -76,6 +76,8 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
 
   return (
     <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-[#f7f6f1]/95 backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/95">
+      {/* Escape is handled from bubbled menu events; this container is not itself interactive. */}
+      {/* eslint-disable-next-line jsx-a11y-x/no-static-element-interactions */}
       <div className="mx-auto max-w-7xl px-4 py-3 lg:px-8" onKeyDown={handleMobileNavigationKeyDown}>
         <div className="flex items-center justify-between gap-3">
           <BrandLink />

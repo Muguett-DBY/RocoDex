@@ -87,7 +87,6 @@ export default function RegisterPage() {
               required
               minLength={2}
               maxLength={20}
-              autoFocus
             />
           </div>
 
