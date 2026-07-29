@@ -411,11 +411,9 @@ export function generateAnalysis(typeCode: string): RktiResult {
   const creatureId = creatureMap[typeCode] ?? "001";
 
   const personality: string[] = [];
-  let battleAnalysis = "";
-  let teamRole = "";
-  let trainAdvice = "";
 
   // 战斗节奏
+  let battleAnalysis: string;
   if (bs[0]) {
     personality.push("你是一位崇尚速攻的训练师。在你的理解中，战斗就像一道闪电——快、准、狠。你倾向于用低能耗的技能持续施压，在对手还没来得及布阵时就已经奠定了胜局。你喜欢爆发增益流、火狗速攻等快节奏阵容，享受那种一个回合定乾坤的爽快感。");
     battleAnalysis = "推荐阵容：爆发增益流（翠顶夫人+独角兽+化蝶）、火狗速攻队（音速犬+恶魔狼+独角兽）。核心战术是第一回合抢速开增益，第二回合核心输出进场收割。注意防范高坦度承伤位和带净化的队伍，一旦速攻节奏被断，容错率会急剧下降。";
@@ -425,6 +423,7 @@ export function generateAnalysis(typeCode: string): RktiResult {
   }
 
   // 输出方式
+  let teamRole: string;
   if (bs[1]) {
     personality.push("你钟情于拳拳到肉的物理对战。武系、地系、虫系的铁血硬汉最对你胃口。你认为最强的精灵就应该站在最前面，用物理攻击把对手一拳一拳砸回去。你对技能的判断标准很简单——威力高不高？能打几段连击？需不需要先手？");
     teamRole = "物攻核心位。推荐培养：武系（画间沉铁兽）、地系（罗隐、石冠王蜥）、龙系（寂灭骨龙）。性格优先选择固执（+物攻）或开朗（+速度）。天分优先速度、物攻、生命。配招以高威力物攻技能为主，搭配破甲或强化技。";
@@ -447,6 +446,7 @@ export function generateAnalysis(typeCode: string): RktiResult {
   }
 
   // 培育追求
+  let trainAdvice: string;
   if (bs[3]) {
     personality.push("你对精灵的要求极高。性格必须正确、天分必须完美、配招必须最优。你不会满足于一只还能用的精灵——你要的是极品。你会花大量时间刷初始、研究攻略、对照数据，只为打造出最强的那一只。");
     trainAdvice = "建议优先培养性格为固执/开朗（物攻向）或保守/胆小（魔攻向）的精灵。天分优先速度和主攻属性，次选生命和双防。技能搭配要保证至少一个本系大招 + 一个强化/破甲技 + 一个应对技。多看高分段录像学习配招思路。";

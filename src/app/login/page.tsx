@@ -80,7 +80,6 @@ export default function LoginPage() {
               onChange={(event) => setUsername(event.target.value)}
               placeholder="输入用户名"
               required
-              autoFocus
             />
           </div>
 

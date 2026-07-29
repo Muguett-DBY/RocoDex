@@ -83,10 +83,11 @@ export function CreatureExplorer() {
           搜索与筛选
         </div>
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
-          <label className="relative md:col-span-2">
+          <label className="relative md:col-span-2" htmlFor="creature-query-input">
             <span className="sr-only">关键词</span>
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
             <Input
+              id="creature-query-input"
               value={filters.query ?? ""}
               onChange={(event) => updateFilter("query", event.target.value)}
               className="pl-10"

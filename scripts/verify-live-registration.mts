@@ -130,6 +130,7 @@ export async function verifyLiveRegistration({
         throw new AggregateError(
           [originalError, cleanupError],
           "Live registration verification failed and cleanup also failed",
+          { cause: cleanupError },
         );
       }
       throw cleanupError;
