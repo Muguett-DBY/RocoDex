@@ -3067,3 +3067,36 @@
 - Risk: no repository-controlled, dependency-audit, CI, deployment, runtime-log, or measured viewport risk remains for this item.
 - Next direction: audit the `查看目标直达案例` handoff from the returned decision, including whether it preserves comparison provenance while bringing the matched project action into view.
 - Status: closed
+
+## 2026-07-29 CSTD Comparison Case Handoff
+
+- Type: UIUX, accessibility, reliability
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` contained the verified comparison-goal round trip, but `查看目标直达案例` opened a long case panel without naming the preserved decision context or exposing the real project action in the mobile arrival viewport.
+- Finding:
+  - At 390 x 844 the case aligned near 82 pixels, but the live action began around 1,088 pixels and was 244 pixels below the viewport.
+  - The URL correctly retained `goal=game-data`, `project=rocodex`, and `compare=rocodex,photography`.
+  - Focus remained on the offscreen comparison trigger after the direct handoff.
+- Fix:
+  - Added a tested comparison-handoff model that requires the opened case to match the current goal and preserved comparison.
+  - Added an unframed header band naming the goal, horizontal reference, and direct live-project action.
+  - Added one-shot case-heading focus for direct interaction and cleared that intent on `popstate`.
+  - Preserved focus neutrality for forward navigation and reload, plus all existing evidence, action, copy, navigation, URL, and selection behavior.
+  - Added unit, source-contract, and desktop/mobile browser regression coverage.
+- Verification before release:
+  - TDD red/green failed first for the missing helper and source contract, then passed 19 focused tests.
+  - `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check` passed.
+  - Counts: Vitest 67 files / 274 tests; build 734 static pages; Playwright 16 passed / 2 skipped; npm audit 0 vulnerabilities.
+  - Local 320, 390, and 1280 checks aligned the case near 78 pixels, focused the heading only after the direct click, kept the live action fully visible at about 391, 337, and 241 pixels, and reported zero overflow or browser issues.
+- Commit: `a5be005 feat: carry cstd comparison context into case studies`.
+- Push: `origin/main` updated to `a5be005fa4e3eaff543c0c1acf62814dcd8f331e`.
+- Remote check:
+  - GitHub Actions run `30453941937` completed successfully in 2m42s across lint, 274 tests, build, and E2E.
+  - Vercel deployment `dpl_2pxLPe5neaiPodbTwnxsUca9EMu2` completed `READY` for production aliases.
+  - Apex, `/cstd`, and `www` returned `200`.
+  - Live 320, 390, and 1280 checks matched local geometry, focus, URL, back/forward, reload, action visibility, and zero-overflow results exactly.
+  - Production screenshots were visually clean; Vercel runtime-error and HTTP 500 queries returned no entries.
+- Test note: the first full E2E attempt encountered the temporary local Next visual-audit process; stopping that owned process and rerunning completed the full passing suite.
+- Risk: no repository-controlled, dependency-audit, CI, deployment, runtime-log, or measured viewport risk remains for this item.
+- Next direction: audit `关闭案例焦点` after a comparison-originated case, including whether it returns to the preserved comparison decision with correct position and focus instead of leaving the visitor in the project directory.
+- Status: closed

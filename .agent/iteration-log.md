@@ -2506,3 +2506,41 @@
 ### Final status
 
 - A completed comparison can now enter goal selection and return to an updated, focused decision without losing selected projects, URL provenance, history behavior, or a mobile viewport.
+
+## 2026-07-29 - CSTD Comparison Case Handoff
+
+### Scope
+
+- Continued the personal main-site improvement loop by following `查看目标直达案例` from the goal-aligned comparison decision on `custard.top`.
+- The production baseline preserved `goal=game-data` and both compared projects, but a 390 x 844 arrival left the live project action at about 1,088 pixels, 244 pixels below the viewport.
+- The direct click also left keyboard focus on the offscreen comparison button instead of identifying the newly opened case study.
+
+### Fix
+
+- Added a pure comparison-handoff model that is created only when the selected case matches the current goal and is present in the preserved comparison.
+- Added a compact `Decision handoff` band to the case-study header with the goal, horizontal reference, and real live-project action.
+- Added interaction-only heading focus for direct case navigation while keeping browser history and restored links focus-neutral.
+- Kept the complete evidence checklist, existing action rail, project navigation, copy controls, project URLs, goal, comparison selection, and URL serialization unchanged.
+- Added unit, source-contract, and desktop/mobile E2E coverage for provenance, action visibility, focus, URL state, back/forward, reload, overflow, and browser issues.
+
+### Verification evidence
+
+- TDD red first failed on the absent handoff helper and source contract; the focused green run passed 19 tests.
+- Full local gates passed: `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check`.
+- Local counts: Vitest passed 67 files / 274 tests; Next generated 734 static pages; Playwright passed 16 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local visual checks at 320 x 800, 390 x 844, and 1280 x 900 aligned the case at about 78 pixels and placed the live action at about 391, 337, and 241 pixels respectively, fully inside every viewport.
+- The heading received direct-interaction focus, while back, forward, and reload stayed focus-neutral. Every viewport reported horizontal overflow `0` and no console warnings/errors.
+- Implementation commit `a5be005` was pushed to `origin/main`.
+- GitHub Actions run `30453941937` completed successfully in 2m42s across install, lint, 274 tests, build, and E2E.
+- Vercel production deployment `dpl_2pxLPe5neaiPodbTwnxsUca9EMu2` reached `READY` for `custard.top`, `www.custard.top`, and project aliases; apex, `/cstd`, and `www` returned `200`.
+- Fresh production checks reproduced the local positions, focus, URL, history, reload, action visibility, and zero-overflow results at all three viewports.
+- Production screenshots were visually inspected without clipping, overlap, blank content, or breakpoint drift. Vercel runtime-error and HTTP 500 queries returned no entries.
+
+### Risk notes
+
+- No repository-controlled, dependency-audit, CI, deployment, runtime-log, or measured viewport risk remains for this item.
+- One full E2E attempt was blocked by the temporary local Next process used for visual inspection; stopping that owned process and rerunning produced the complete passing result.
+
+### Final status
+
+- A goal-aligned comparison now hands visitors to an actionable case study with visible provenance, immediate live-project access, keyboard-coherent focus, and durable history behavior in production.
