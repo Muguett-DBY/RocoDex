@@ -3032,3 +3032,38 @@
 - Risk: no repository-controlled or deployment risk remains. The approximately 393 x 727 automated profile exposes the next-action panel in the arrival viewport but needs a small continuation scroll to reveal the complete action; explicit 800/844-pixel mobile contracts show it in full.
 - Next direction: audit the `选择目标路径` continuation from a completed comparison, including whether it preserves both selected projects and returns the visitor to an updated fit decision without context loss.
 - Status: closed
+
+## 2026-07-29 CSTD Comparison Goal Round Trip
+
+- Type: UIUX, reliability, security
+- Prompt: continuation of the active autonomous `custard.top` improvement goal.
+- Start state: `main` contained the verified comparison-completion handoff, but the next `选择目标路径` step did not own a URL state or focus destination and returned goal choices to the project grid instead of the updated comparison.
+- Finding:
+  - The restored two-project result aligned at about 96.5 pixels.
+  - Opening the goal guide left `#project-comparison` in the URL, focus on the offscreen trigger, and keyboard traversal beyond the goal controls.
+  - Selecting `查精灵资料与玩法工具` preserved `2 / 2` but returned to `#projects`; the updated result sat about 1,391.5 pixels below the viewport and required roughly 1,295 pixels of manual return scrolling.
+  - A first 320-pixel result kept its secondary action below the arrival viewport; the two actions were 52 pixels apart vertically.
+- Fix:
+  - Added durable `#project-guide` serialization with comparison context and one-shot guide/result heading focus.
+  - Returned goal choices to `#project-comparison`, cleared transient focus intent on popstate, and preserved browser back/forward plus reload semantics.
+  - Restored a two-column result action row from 320 pixels upward while retaining the 280-pixel stacked fallback.
+  - Patched the new Next.js/Auth.js/PostCSS/Sharp advisories and migrated from the vulnerable legacy Next lint bundle to ESLint 10 flat rules with Next, TypeScript, Hooks, and accessibility coverage.
+  - Fixed all code and accessibility findings exposed by the stronger lint gate.
+- Verification before release:
+  - TDD red/green covered the hash type, source contract, desktop/mobile round trip, focus, URL/history restoration, and the 52-pixel-to-zero action-row transition.
+  - `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, `git diff --check`, and npm `11.18.0` clean-install compatibility passed.
+  - Counts: Vitest 66 files / 271 tests; build 734 static pages; Playwright 14 passed / 2 skipped; npm audit 0 vulnerabilities.
+  - Local production checks at 320, 390, and 1280 pixels aligned every named step at about 96 pixels, preserved 2 selected items, focused only direct interactions, restored history correctly, and reported overflow/dialog/browser issues of `0`.
+  - At 320 pixels the complete next-step group ended at 796.97 pixels inside the 800-pixel viewport, with both actions on one row.
+- Commits: `bfae771 docs: design cstd comparison goal round trip`; `747eacf docs: plan cstd comparison goal round trip`; `03d35ec feat: complete cstd comparison goal round trip`; `ab0d142 fix: fit cstd goal actions on narrow screens`; `853890b chore: harden release toolchain dependencies`.
+- Push: `origin/main` updated to `853890bc1e3f95872e01e1174f3bc8994232d98e`.
+- Remote check:
+  - GitHub Actions run `30451887816` completed successfully in 2m22s across install, lint, 271 tests, 734-page build, and 16 Playwright cases.
+  - Vercel deployment `dpl_2jQ8D8n9n7Re4YE9PkDWNV5BGzTb` completed `READY` for production aliases.
+  - Apex, `/cstd`, `www`, and a cache-busted release URL returned `200`; the direct deployment URL remained correctly protected by project authentication.
+  - Live 320, 390, and 1280 measurements matched local results exactly, including positions, focus, selected count, target decision, action geometry, history, refresh, and zero overflow/dialog/browser issues.
+  - Vercel error-level and HTTP 500 log queries returned no entries.
+  - Production screenshots were visually clean.
+- Risk: no repository-controlled, dependency-audit, CI, deployment, runtime-log, or measured viewport risk remains for this item.
+- Next direction: audit the `查看目标直达案例` handoff from the returned decision, including whether it preserves comparison provenance while bringing the matched project action into view.
+- Status: closed

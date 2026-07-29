@@ -2466,3 +2466,43 @@
 ### Final status
 
 - Completing a project comparison now turns selection into a direct, keyboard-coherent decision handoff and removes more than 4,400 pixels of manual result discovery on the measured mobile path.
+
+## 2026-07-29 - CSTD Comparison Goal Round Trip
+
+### Scope
+
+- Continued the personal main-site improvement loop by tracing the `选择目标路径` continuation from a completed two-project comparison on `custard.top`.
+- The restored comparison itself aligned at about 96.5 pixels, but opening the goal guide left the URL at `#project-comparison`, kept focus on the offscreen trigger, and let Tab skip the goal buttons.
+- Choosing `查精灵资料与玩法工具` preserved both projects but changed the URL to `#projects`; the updated comparison landed about 1,391.5 pixels below the viewport and required roughly 1,295 pixels of manual return scrolling.
+
+### Fix
+
+- Added `#project-guide` to the normalized CSTD view-state contract so the guide step is durable, shareable, and history-aware without dropping `compare=rocodex,photography`.
+- Added one-shot interaction focus for the guide and result headings while keeping restored links, reloads, and browser history from stealing focus.
+- Returned a goal choice directly to `#project-comparison`, preserved both selected projects, and retained browser back/forward semantics between the guide and the updated fit decision.
+- Kept 280-pixel actions stacked, but moved 320 pixels and wider to a two-column action row and tightened the narrow panel padding so the complete result action fits inside a 320 x 800 arrival viewport.
+- Patched newly published dependency advisories during release: upgraded Next.js to `16.2.12`, Auth.js to `5.0.0-beta.32`, PostCSS to `8.5.24`, and Sharp to `0.35.3`.
+- Replaced the vulnerable legacy `eslint-config-next` dependency chain with an ESLint 10 flat configuration that retains Next Core Web Vitals, TypeScript, React Hooks, and JSX accessibility coverage; fixed the concrete accessibility and code-quality findings exposed by the new rules.
+
+### Verification evidence
+
+- TDD red first rejected the missing `project-guide` hash type, then source-contract tests failed for the absent one-shot round-trip state, and both desktop/mobile browser tests received `#project-comparison` instead of `#project-guide`.
+- The narrow-layout red check measured a 52-pixel action-row delta at mobile size; the final focused browser regression passed both profiles with a zero-pixel delta.
+- Full local gates passed: `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, `git diff --check`, and an npm `11.18.0` clean-install dry run.
+- Local counts: Vitest passed 66 files / 271 tests; Next generated 734 static pages; Playwright passed 14 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local production verification at 320 x 800, 390 x 844, and 1280 x 900 aligned the comparison, guide, and returned result at 96.0-96.5 pixels. Guide and result headings received interaction focus, Tab reached the first goal, back/forward restored pressed state, and reload intentionally left focus neutral.
+- At 320 pixels the two result actions shared one row, the next-step panel ended at 796.97 pixels, and the complete action remained inside the 800-pixel viewport. Every viewport had overflow `0`, no dialog residue, and zero console warnings/errors.
+- Design, plan, implementation, narrow-layout, and security commits `bfae771`, `747eacf`, `03d35ec`, `ab0d142`, and `853890b` were pushed to `origin/main`.
+- GitHub Actions run `30451887816` completed successfully in 2m22s, including dependency installation, lint, tests, build, and E2E.
+- Vercel production deployment `dpl_2jQ8D8n9n7Re4YE9PkDWNV5BGzTb` reached `READY` with `custard.top`, `www.custard.top`, and project aliases. Apex, `/cstd`, `www`, and the cache-busted release URL returned `200`.
+- Fresh production browser verification reproduced every local position, focus, history, selected-project, action-row, overflow, and restored-state result exactly. Production console issues, Vercel error logs, and Vercel HTTP 500 logs were all `0`.
+- Mobile guide/result and desktop result screenshots were visually inspected without clipping, overlap, blank content, or breakpoint drift.
+
+### Risk notes
+
+- No repository-controlled, dependency-audit, CI, deployment, runtime-log, or measured viewport risk remains for this item.
+- The direct Vercel deployment URL is protected by project authentication; public production verification was completed through the canonical `custard.top` aliases.
+
+### Final status
+
+- A completed comparison can now enter goal selection and return to an updated, focused decision without losing selected projects, URL provenance, history behavior, or a mobile viewport.
