@@ -1,7 +1,6 @@
-import type { CstdProjectCategory } from "./cstd-project-filter";
-
 export type CstdProjectIconKey = "sparkles" | "camera" | "trending-up" | "bot" | "building" | "rotate";
 export type CstdProjectTone = "mint" | "rose" | "teal" | "violet" | "amber" | "sky";
+export type CstdProjectCategory = "data" | "creative" | "research" | "operations" | "incubating";
 
 export type CstdProject = {
   id: string;

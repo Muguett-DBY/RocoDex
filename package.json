@@ -17,7 +17,6 @@
     "ci:local": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& './scripts/stop-local-next.ps1'; npm ci\""
   },
   "dependencies": {
-    "@react-three/fiber": "^9.6.1",
     "@upstash/redis": "^1.38.0",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
@@ -27,8 +26,7 @@
     "next-auth": "5.0.0-beta.32",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "tailwind-merge": "^3.5.0",
-    "three": "0.182.0"
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -39,14 +37,13 @@
     "@types/node": "^22.20.0",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
-    "@types/three": "0.182.0",
     "eslint": "10.8.0",
     "eslint-plugin-jsx-a11y-x": "0.2.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.8.0",
     "tailwindcss": "4.3.2",
-    "typescript-eslint": "8.65.0",
     "typescript": "^6.0.3",
+    "typescript-eslint": "8.65.0",
     "vitest": "4.1.9"
   },
   "overrides": {

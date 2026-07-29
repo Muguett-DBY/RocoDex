@@ -2707,3 +2707,34 @@
 ### Final status
 
 - The comparison-to-case decision path is live as a visually distinct product-workbench experience without weakening its established interaction or accessibility contracts.
+
+## 2026-07-30 - CSTD Pure Visual Portfolio
+
+### Scope
+
+- Reframed `custard.top` from an interactive project workbench into a visual personal portfolio.
+- Removed project search, filters, goal selection, comparison, case focus, sharing state, intro modal, background audio, and WebGL mascot controls.
+
+### Fix
+
+- Replaced the previous 3,582-line landing component with a 577-line exhibition built around one generated studio hero and five shipped products.
+- Added five full-width product chapters using real production screenshots, distinct art direction, direct project links, a sticky exhibition index, restrained reveal/parallax motion, and a small studio interaction.
+- Added a tested showcase-data boundary that admits only live projects with real previews and navigable URLs.
+- Removed 8,217 lines of obsolete interaction code and tests, three unused audio files, the Three.js stage, and 20 no-longer-required packages.
+- Allowed the new hero asset on the CSTD apex route and removed the retired audio path allowance.
+
+### Verification evidence
+
+- `npx tsc --noEmit`, `npm run lint`, 43 Vitest files / 141 tests, `npm audit --audit-level=moderate`, a 734-page production build, 10 Playwright passes / 2 expected skips, and `git diff --check` passed.
+- Production-mode checks at 1,440 x 1,000, 1,280 x 720, and 390 x 844 loaded all five real project images with zero horizontal overflow and no console or page errors.
+- A 3.2-second full-page scroll recorded 508 frames, 6.4-millisecond p95 frame spacing, 18.7-millisecond maximum spacing, no long tasks, and CLS `0`.
+- Host-aware local production checks returned `200` for the apex CSTD page and the 1.67 MB generated hero, while the retired audio URL returned `404`.
+- Visual evidence is stored under `output/playwright/cstd-showcase-2026-07-30/`.
+
+### Risk notes
+
+- No repository-controlled UI, dependency, route, accessibility, overflow, build, or measured scroll-performance risk remains before release.
+
+### Final status
+
+- The personal homepage is now a focused visual exhibition: five shipped products, five distinct presentation bands, direct navigation, and no portfolio-management workflow.

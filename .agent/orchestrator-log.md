@@ -3215,3 +3215,26 @@
 - Risk: the pre-existing broad Node engine warning remains informational; six unrelated stale guide-slug requests returned 404, while `/cstd` had no runtime error or HTTP 500 evidence.
 - Next direction: audit restored-share states and the non-target comparison path inside the new decision-room hierarchy, keeping the same scanability and history guarantees.
 - Status: closed
+
+## 2026-07-30 CSTD Pure Visual Portfolio
+
+- Type: visual redesign, UX simplification, performance, maintainability
+- Prompt: thoroughly rebuild `custard.top` as a beautiful, fluid, visually expressive personal showcase without project search, comparison, or other portfolio-tool workflows; use generated imagery when useful.
+- Start state: the homepage had accumulated a strong visual system but required visitors to navigate search, filters, goals, comparisons, case focus, share state, intro, audio, and a WebGL mascot.
+- Fix:
+  - Generated and integrated a cinematic CSTD studio hero with dark copy space and a tactile custard workstation.
+  - Replaced the 3,582-line workbench with a 577-line visual exhibition and five full-width shipped-product chapters.
+  - Kept interaction to scroll progress, exhibition navigation, media motion, direct external links, and one lightweight studio note.
+  - Deleted the retired tool, intro, audio, and 3D implementation; removed 20 packages and 8,217 lines of obsolete code/tests.
+  - Added focused showcase-data, source-contract, route, media, external-link, and browser coverage.
+- Local verification:
+  - `npx tsc --noEmit`, `npm run lint`, 43 Vitest files / 141 tests, `npm audit --audit-level=moderate`, a 734-page production build, 10 Playwright passes / 2 expected skips, and `git diff --check` passed.
+  - Production-mode desktop and narrow checks showed five loaded products, overflow `0`, no browser issues, and clean full-page visual composition.
+  - A 3.2-second full-page scroll recorded 508 frames, 6.4-millisecond p95 frame spacing, no long tasks, and CLS `0`.
+  - Host-aware checks returned `200` for the apex page and generated hero, and `404` for removed audio.
+- Asset generation:
+  - Built-in image generation created a full-bleed cinematic 3D studio scene with a custard-yellow workstation, dark left-side copy space, mint/cobalt/coral accents, and no text or logos.
+  - Workspace asset: `public/cstd-studio-hero.png`.
+- Risk: no repository-controlled local risk remains before release.
+- Next direction: observe the live visual and performance result before adding any new homepage interaction.
+- Status: release pending
