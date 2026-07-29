@@ -464,6 +464,60 @@ test("CSTD goal selection returns to the preserved comparison decision", async (
   expect(browserIssues).toEqual([]);
 });
 
+test("CSTD comparison decision opens an actionable case with preserved provenance", async ({ page }) => {
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto(
+    "/cstd?goal=game-data&compare=rocodex%2Cphotography#project-comparison",
+    { waitUntil: "domcontentloaded" },
+  );
+  expect(response?.ok()).toBe(true);
+
+  const comparison = page.locator("#project-comparison");
+  const comparisonHeading = page.getByRole("heading", { name: "项目对比" });
+  const comparisonNextStep = comparison.getByRole("group", { name: "对比下一步" });
+  const caseStudy = page.locator("#project-focus");
+  const caseHeading = page.locator("#project-focus-rocodex");
+  const handoff = caseStudy.getByLabel("目标案例交接状态");
+  const projectAction = handoff.getByRole("link", { name: "打开图鉴" });
+
+  await comparisonNextStep.getByRole("button", { name: "查看目标直达案例" }).click();
+
+  await expect(page).toHaveURL(
+    /\/cstd\?goal=game-data&project=rocodex&compare=rocodex%2Cphotography#project-focus$/,
+  );
+  await expect(caseHeading).toBeFocused();
+  await expect(handoff).toContainText("目标路径“查精灵资料与玩法工具”");
+  await expect(handoff).toContainText("保留与奶黄包摄影的横向对比");
+  await expect
+    .poll(() =>
+      projectAction.evaluate((element) => {
+        const box = element.getBoundingClientRect();
+        return box.top >= 0 && box.bottom <= window.innerHeight;
+      }),
+    )
+    .toBe(true);
+
+  await page.goBack();
+  await expect(page).toHaveURL(
+    /\/cstd\?goal=game-data&compare=rocodex%2Cphotography#project-comparison$/,
+  );
+  await expect(comparisonHeading).not.toBeFocused();
+
+  await page.goForward();
+  await expect(page).toHaveURL(
+    /\/cstd\?goal=game-data&project=rocodex&compare=rocodex%2Cphotography#project-focus$/,
+  );
+  await expect(handoff).toBeVisible();
+  await expect(caseHeading).not.toBeFocused();
+
+  const restoredResponse = await page.reload({ waitUntil: "domcontentloaded" });
+  expect(restoredResponse?.ok()).toBe(true);
+  await expect(handoff).toBeVisible();
+  await expect(caseHeading).not.toBeFocused();
+  await expectNoHorizontalOverflow(page);
+  expect(browserIssues).toEqual([]);
+});
+
 test("CSTD project discovery preserves restored decision context", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd?goal=portrait-shooting#projects", { waitUntil: "domcontentloaded" });

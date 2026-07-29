@@ -62,6 +62,15 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain("onAlign={alignProjectComparisonToGoal}");
   });
 
+  test("hands an active comparison decision to a named, actionable case study", () => {
+    expect(source).toContain("getCstdProjectComparisonHandoff(");
+    expect(source).toContain("projectFocusHeadingPendingRef.current = true;");
+    expect(source).toContain('document.getElementById(`project-focus-${selectedProjectId}`)?.focus({ preventScroll: true });');
+    expect(source).toContain('tabIndex={-1}');
+    expect(source).toContain('aria-label="目标案例交接状态"');
+    expect(source).toContain("comparisonHandoff={selectedProjectComparisonHandoff}");
+  });
+
   test("keeps comparison-originated selection changes on the comparison hash", () => {
     expect(source).toContain('updateProjectComparison(nextComparedProjectIds, "project-comparison")');
     expect(source).toContain('updateProjectComparison(nextIds, "project-comparison")');
@@ -136,6 +145,6 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain("secondaryAction={{");
     expect(source).toContain("href: project.href");
     expect(source).toContain('aria-label={`${statusLabel}手动复制文本`}');
-    expect(source).toContain("!restoredReceipt && briefCopyResult");
+    expect(source).toContain("!visibleRestoredReceipt && briefCopyResult");
   });
 });

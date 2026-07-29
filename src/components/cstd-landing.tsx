@@ -23,6 +23,10 @@ import {
 import { getCstdProjectComparisonContext, getCstdProjectComparisonRestoredContinuation } from "@/lib/cstd-project-comparison-context";
 import { getCstdProjectComparisonFit, type CstdProjectComparisonFit } from "@/lib/cstd-project-comparison-fit";
 import {
+  getCstdProjectComparisonHandoff,
+  type CstdProjectComparisonHandoff,
+} from "@/lib/cstd-project-comparison-handoff";
+import {
   alignCstdProjectComparisonIds,
   getCstdProjectComparisonNextStep,
   type CstdProjectComparisonNextStep,
@@ -221,6 +225,7 @@ export function CstdLanding() {
   const desktopCustardStageEnabled = useDesktopCustardStage();
   const initialized = useRef(false);
   const projectFocusRef = useRef<HTMLElement>(null);
+  const projectFocusHeadingPendingRef = useRef(false);
   const comparisonResultFocusPendingRef = useRef(false);
   const [introVisible, setIntroVisible] = useState(false);
   const [introPhase, setIntroPhase] = useState<CstdIntroPhase>("idle");
@@ -296,6 +301,7 @@ export function CstdLanding() {
     };
     syncViewState();
     const handlePopState = () => {
+      projectFocusHeadingPendingRef.current = false;
       comparisonResultFocusPendingRef.current = false;
       setComparisonGoalHandoffPending(false);
       syncViewState();
@@ -310,6 +316,10 @@ export function CstdLanding() {
     if (!selectedProjectId || window.location.hash !== "#project-focus") return;
     const frame = window.requestAnimationFrame(() => {
       projectFocusRef.current?.scrollIntoView({ behavior: motionDisabled ? "auto" : "smooth", block: "start" });
+      if (!projectFocusHeadingPendingRef.current) return;
+
+      document.getElementById(`project-focus-${selectedProjectId}`)?.focus({ preventScroll: true });
+      projectFocusHeadingPendingRef.current = false;
     });
     return () => window.cancelAnimationFrame(frame);
   }, [motionDisabled, selectedProjectId]);
@@ -404,6 +414,10 @@ export function CstdLanding() {
   const selectedProject = useMemo(
     () => cstdProjects.find((project) => project.id === selectedProjectId) ?? null,
     [selectedProjectId],
+  );
+  const selectedProjectComparisonHandoff = useMemo(
+    () => getCstdProjectComparisonHandoff(selectedGuide, selectedProject, projectComparison.projects),
+    [projectComparison.projects, selectedGuide, selectedProject],
   );
   const selectedProjectRestoredReceipt = useMemo(
     () => (projectFocusRestoredFromUrl && selectedProject ? getCstdProjectFocusRestoredReceipt(selectedProject.title) : null),
@@ -545,6 +559,7 @@ export function CstdLanding() {
   }
 
   function focusProject(projectId: string) {
+    projectFocusHeadingPendingRef.current = true;
     const href = buildCstdProjectViewHref(
       window.location.pathname,
       {
@@ -1206,6 +1221,7 @@ export function CstdLanding() {
                 focusRef={projectFocusRef}
                 motionDisabled={motionDisabled}
                 navigation={selectedProjectNavigation}
+                comparisonHandoff={selectedProjectComparisonHandoff}
                 restoredAction={selectedProjectRestoredAction}
                 restoredReceipt={selectedProjectRestoredReceipt}
                 onClose={closeProjectFocus}
@@ -2635,6 +2651,7 @@ function ProjectFocus({
   focusRef,
   motionDisabled,
   navigation,
+  comparisonHandoff,
   restoredAction,
   restoredReceipt,
   onClose,
@@ -2651,6 +2668,7 @@ function ProjectFocus({
     previous: (typeof cstdProjects)[number] | null;
     next: (typeof cstdProjects)[number] | null;
   };
+  comparisonHandoff: CstdProjectComparisonHandoff | null;
   restoredAction: CstdProjectFocusRestoredAction | null;
   restoredReceipt: CstdProjectRestoredReceipt | null;
   onClose: () => void;
@@ -2673,6 +2691,7 @@ function ProjectFocus({
   const projectBriefText = briefCopyPresentation?.requiresManualCopy ? buildCstdProjectBrief(project) : "";
   const evidenceChecklist = getCstdProjectEvidenceChecklist(project);
   const evidenceChecklistSummary = getCstdProjectEvidenceChecklistSummary(evidenceChecklist);
+  const visibleRestoredReceipt = comparisonHandoff ? null : restoredReceipt;
 
   return (
     <motion.section
@@ -2692,7 +2711,11 @@ function ProjectFocus({
           </span>
           <div className="min-w-0">
             <p className="text-xs font-black uppercase text-[#d98528]">Project case study</p>
-            <h3 id={`project-focus-${project.id}`} className="mt-1 break-words text-2xl font-black sm:text-3xl">
+            <h3
+              id={`project-focus-${project.id}`}
+              tabIndex={-1}
+              className="mt-1 rounded-sm break-words text-2xl font-black focus:outline focus:outline-2 focus:outline-offset-4 focus:outline-[#0f8f64] sm:text-3xl"
+            >
               {project.title}
             </h3>
             <p className="mt-2 text-sm font-semibold text-[#6f5b4a]">{project.evidence.current}</p>
@@ -2706,9 +2729,29 @@ function ProjectFocus({
         >
           <X className="h-5 w-5" />
         </button>
-        {restoredReceipt ? (
+        {comparisonHandoff ? (
+          <div
+            aria-label="目标案例交接状态"
+            aria-live="polite"
+            className="mt-4 grid min-w-0 gap-3 border-t border-[#e3c778] pt-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end"
+          >
+            <p className="min-w-0">
+              <span className="block text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#047857]">
+                {comparisonHandoff.eyebrow}
+              </span>
+              <span className="mt-1 block text-sm font-black text-[#2f241d]">{comparisonHandoff.label}</span>
+              <span className="mt-1 block min-w-0 break-words text-xs font-semibold leading-5 text-[#6f5b4a]">
+                {comparisonHandoff.detail}
+              </span>
+            </p>
+            <HeroButton href={comparisonHandoff.href} primary>
+              <ExternalLink aria-hidden="true" className="h-4 w-4 shrink-0" />
+              {comparisonHandoff.actionLabel}
+            </HeroButton>
+          </div>
+        ) : visibleRestoredReceipt ? (
           <RestoredEntryHandoff
-            receipt={restoredReceipt}
+            receipt={visibleRestoredReceipt}
             action={restoredAction}
             tone="focus"
             statusLabel="分享案例恢复状态"
@@ -2783,12 +2826,12 @@ function ProjectFocus({
             {briefCopyResult === "copied" ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
             复制案例摘要
           </button>
-          {!restoredReceipt && briefCopyResult ? (
+          {!visibleRestoredReceipt && briefCopyResult ? (
             <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
               {briefCopyMessage}
             </p>
           ) : null}
-          {!restoredReceipt && briefCopyPresentation?.requiresManualCopy && projectBriefText.length > 0 ? (
+          {!visibleRestoredReceipt && briefCopyPresentation?.requiresManualCopy && projectBriefText.length > 0 ? (
             <textarea
               aria-label="案例摘要文本"
               readOnly
