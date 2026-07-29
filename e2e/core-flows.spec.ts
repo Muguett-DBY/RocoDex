@@ -514,6 +514,31 @@ test("CSTD comparison decision opens an actionable case with preserved provenanc
   expect(restoredResponse?.ok()).toBe(true);
   await expect(handoff).toBeVisible();
   await expect(caseHeading).not.toBeFocused();
+
+  await caseStudy.getByRole("button", { name: "关闭案例焦点" }).click();
+  await expect(page).toHaveURL(
+    /\/cstd\?goal=game-data&compare=rocodex%2Cphotography#project-comparison$/,
+  );
+  await expect
+    .poll(() => comparison.evaluate((element) => {
+      const top = element.getBoundingClientRect().top;
+      return top >= 80 && top <= 112;
+    }))
+    .toBe(true);
+  await expect(comparisonHeading).toBeFocused();
+
+  await page.goBack();
+  await expect(page).toHaveURL(
+    /\/cstd\?goal=game-data&project=rocodex&compare=rocodex%2Cphotography#project-focus$/,
+  );
+  await expect(handoff).toBeVisible();
+  await expect(caseHeading).not.toBeFocused();
+
+  await page.goForward();
+  await expect(page).toHaveURL(
+    /\/cstd\?goal=game-data&compare=rocodex%2Cphotography#project-comparison$/,
+  );
+  await expect(comparisonHeading).not.toBeFocused();
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });

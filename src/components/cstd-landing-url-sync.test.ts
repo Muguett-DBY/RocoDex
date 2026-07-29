@@ -33,7 +33,7 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain('comparisonSection.scrollIntoView({ block: "start" });');
     expect(source).toContain("if (!comparisonResultFocusPendingRef.current) return;");
     expect(source).toContain('document.getElementById("project-comparison-heading")?.focus({ preventScroll: true });');
-    expect(source).toContain("[projectComparison.projects.length, projectViewStateSynced, selectedGuideId]");
+    expect(source).toContain("[projectComparison.projects.length, projectViewStateSynced, selectedGuideId, selectedProjectId]");
   });
 
   test("round trips comparison goals through named focus targets", () => {
@@ -45,6 +45,8 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain('shouldReturnToComparison ? "project-comparison" : "projects"');
     expect(source).toContain("const handlePopState = () => {");
     expect(source).toContain("setComparisonGoalHandoffPending(false);");
+    expect(source).toContain("isCstdManagedFocusTarget(document.activeElement)");
+    expect(source).toContain("document.activeElement.blur();");
   });
 
   test("renders a scan-first comparison summary with fit-aware selected projects", () => {
@@ -69,6 +71,13 @@ describe("CSTD landing URL state sync", () => {
     expect(source).toContain('tabIndex={-1}');
     expect(source).toContain('aria-label="目标案例交接状态"');
     expect(source).toContain("comparisonHandoff={selectedProjectComparisonHandoff}");
+  });
+
+  test("returns a comparison-originated case to its named decision result", () => {
+    expect(source).toContain("const shouldReturnToComparison = selectedProjectComparisonHandoff !== null;");
+    expect(source).toContain("comparisonResultFocusPendingRef.current = shouldReturnToComparison;");
+    expect(source).toContain('shouldReturnToComparison ? "project-comparison" : "projects",');
+    expect(source).toContain("[projectComparison.projects.length, projectViewStateSynced, selectedGuideId, selectedProjectId]");
   });
 
   test("keeps comparison-originated selection changes on the comparison hash", () => {
