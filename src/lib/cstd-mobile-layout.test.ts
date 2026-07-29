@@ -105,8 +105,8 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdMascotShellClassName).not.toContain("border-2");
   });
 
-  test("renders all project cards with equal grid weight", () => {
-    expect(cstdProjectGridClassName).toBe("grid gap-4 md:grid-cols-2 xl:grid-cols-3");
+  test("provides a twelve-column desktop gallery without hard-coding item spans", () => {
+    expect(cstdProjectGridClassName).toBe("grid gap-4 md:grid-cols-2 xl:grid-cols-12 xl:gap-5");
     expect(cstdProjectGridClassName).not.toContain("col-span");
   });
 
@@ -146,9 +146,9 @@ describe("CSTD mobile layout rules", () => {
     expect(cstdProjectCardActionRailClassName).toContain("min-[320px]:grid-cols-2");
     expect(cstdProjectCardActionRailClassName).toContain("sm:flex");
     expect(cstdProjectCardPrimaryActionClassName).toContain("min-[320px]:col-span-2");
-    expect(cstdProjectCardPrimaryActionClassName).toContain("min-h-11");
+    expect(cstdProjectCardPrimaryActionClassName).toContain("min-h-12");
     expect(cstdProjectCardSecondaryActionClassName).toContain("min-w-0");
-    expect(cstdProjectCardSecondaryActionClassName).toContain("min-h-11");
+    expect(cstdProjectCardSecondaryActionClassName).toContain("min-h-12");
     expect(cstdProjectCardSecondaryActionClassName).not.toContain("col-span-2");
   });
 

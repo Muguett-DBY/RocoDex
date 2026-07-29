@@ -25,7 +25,7 @@ export const cstdMascotAsideClassName = "relative min-h-0 lg:min-h-[560px]";
 export const cstdMascotShellClassName =
   "group relative left-1/2 top-0 grid w-[min(100%,240px)] -translate-x-1/2 place-items-center overflow-visible bg-transparent p-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f6bf3f] sm:w-[min(100%,300px)] lg:absolute lg:top-14 lg:w-[min(100%,460px)]";
 
-export const cstdProjectGridClassName = "grid gap-4 md:grid-cols-2 xl:grid-cols-3";
+export const cstdProjectGridClassName = "grid gap-4 md:grid-cols-2 xl:grid-cols-12 xl:gap-5";
 
 export const cstdProjectHeadingClassName = "mt-2 max-w-full break-words text-2xl font-black tracking-tight sm:text-5xl";
 
@@ -80,17 +80,17 @@ export const cstdProjectCardActionRailClassName =
   "mt-5 grid min-w-0 grid-cols-1 gap-3 min-[320px]:grid-cols-2 sm:mt-6 sm:flex sm:flex-wrap";
 
 export const cstdProjectCardPrimaryActionClassName =
-  "inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] min-[320px]:col-span-2 sm:w-auto sm:px-5";
+  "inline-flex min-h-12 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] min-[320px]:col-span-2 sm:w-auto sm:px-5";
 
 export const cstdProjectCardSecondaryActionClassName =
-  "inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto sm:px-5";
+  "inline-flex min-h-12 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto sm:px-5";
 
 export const cstdProjectEvidenceShareGridClassName = "mt-4 grid items-stretch gap-3 lg:grid-cols-2";
 
 export const cstdProjectProofTimelineGridClassName = "mt-3 grid grid-cols-1 gap-2 md:grid-cols-2 xl:grid-cols-5";
 
 export const cstdProjectToolbarClassName =
-  "mt-3 grid min-w-0 gap-3 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/78 p-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center";
+  "mt-4 grid min-w-0 gap-3 border-b border-white/15 pb-4 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-end";
 
 export const cstdProjectToolbarActionsClassName = "grid grid-cols-1 gap-2 min-[420px]:grid-cols-2 sm:flex sm:flex-wrap sm:justify-end";
 

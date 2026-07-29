@@ -80,6 +80,7 @@ import {
   getCstdProjectGuideSummary,
   type CstdProjectGuideId,
 } from "@/lib/cstd-project-guide";
+import { getCstdProjectLayout } from "@/lib/cstd-project-layout";
 import {
   buildCstdProjectGuideShareHref,
   buildCstdProjectViewHref,
@@ -1085,46 +1086,56 @@ export function CstdLanding() {
         </section>
 
         <section id="projects" className="pb-16 pt-10 sm:pb-24 sm:pt-16">
-          <div className="mb-5 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+          <div className="mb-7 grid gap-6 border-b-2 border-[#2f241d] pb-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
             <div>
               <p className="font-black uppercase tracking-[0.18em] text-[#d05f23]">Selected work · 2026</p>
               <h2 className={cstdProjectHeadingClassName}>已经做出来的东西</h2>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-[#6f5b4a] sm:text-base">
-                从真实界面开始浏览，再按目标筛选、对比或进入完整案例。
+                五个真实上线产品，不是概念稿。先看生产界面，再按目标筛选、横向对比或进入完整案例。
               </p>
             </div>
-            <MotionControls
-              audioPreference={audioPreference}
-              bgmActive={bgmActive}
-              motionPreference={motionPreference}
-              onAudioToggle={toggleAudio}
-              onReplay={replayIntro}
-              onToggle={toggleMotion}
-            />
+            <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-stretch">
+              <div className="flex min-w-32 items-center justify-between gap-4 rounded-lg border-2 border-[#2f241d] bg-[#f6bf3f] px-4 py-3 text-[#181511] shadow-[5px_5px_0_#2f241d]">
+                <span className="text-4xl font-black leading-none">{String(heroPreviewProjects.length).padStart(2, "0")}</span>
+                <span className="text-right text-[0.65rem] font-black uppercase leading-4 tracking-[0.14em]">
+                  Live
+                  <br />
+                  products
+                </span>
+              </div>
+              <MotionControls
+                audioPreference={audioPreference}
+                bgmActive={bgmActive}
+                motionPreference={motionPreference}
+                onAudioToggle={toggleAudio}
+                onReplay={replayIntro}
+                onToggle={toggleMotion}
+              />
+            </div>
           </div>
 
           {hasProjectDecisionContext ? projectDecisionContent : null}
 
 
-          <div id="project-directory" className="mb-5 scroll-mt-24 rounded-xl border border-[#ead6ad] bg-white/68 p-3 shadow-[6px_6px_0_rgba(47,36,29,.05)] backdrop-blur-sm sm:p-4">
+          <div id="project-directory" className="mb-7 scroll-mt-24 overflow-hidden rounded-xl border-2 border-[#2f241d] bg-[#1e1b16] p-4 text-white shadow-[8px_8px_0_#d8cdb9] sm:p-5">
             <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d98528]">Project index</p>
-              <p className="text-xs font-bold text-[#7b6656]" aria-live="polite">
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-[#f6bf3f]">Project console</p>
+              <p className="text-xs font-bold text-[#c9c1b5]" aria-live="polite">
                 {projectFilterSummary}
               </p>
             </div>
             <div className={cstdProjectToolbarClassName}>
               <div className="min-w-0">
-                <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#9a5a18]">当前视图</p>
-                <p className="mt-1 break-words text-sm font-black text-[#2f241d]" aria-live="polite">
+                <p className="text-[0.68rem] font-black uppercase tracking-[0.16em] text-[#8be0be]">当前视图</p>
+                <p className="mt-1 break-words text-base font-black text-white" aria-live="polite">
                   {projectControlSummary}
                 </p>
                 {projectControlBadges.length > 0 ? (
                   <div className="mt-2 flex flex-wrap gap-1.5" aria-label="当前项目目录条件">
                     {projectControlBadges.map((badge) => (
-                      <span key={`${badge.label}-${badge.value}`} className="inline-flex max-w-full items-center gap-1 rounded-md border border-[#ead6ad] bg-white/82 px-2 py-1 text-[0.68rem] font-black text-[#7b6656]">
-                        <span className="shrink-0 text-[#9a5a18]">{badge.label}</span>
-                        <span className="min-w-0 truncate text-[#2f241d]">{badge.value}</span>
+                      <span key={`${badge.label}-${badge.value}`} className="inline-flex max-w-full items-center gap-1 rounded-md border border-white/15 bg-white/8 px-2 py-1 text-[0.68rem] font-black text-[#d8d1c6]">
+                        <span className="shrink-0 text-[#f6bf3f]">{badge.label}</span>
+                        <span className="min-w-0 truncate text-white">{badge.value}</span>
                       </span>
                     ))}
                   </div>
@@ -1145,7 +1156,7 @@ export function CstdLanding() {
                 <button
                   type="button"
                   onClick={copyProjectDirectoryView}
-                  className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-[#0f8f64] px-3 text-xs font-black text-white transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
+                  className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#f6bf3f] bg-[#f6bf3f] px-3 text-xs font-black text-[#181511] transition hover:-translate-y-0.5 hover:bg-[#ffd66d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f] sm:w-auto"
                 >
                   <Copy className="h-3.5 w-3.5" />
                   复制当前视图
@@ -1155,7 +1166,7 @@ export function CstdLanding() {
                     type="button"
                     onClick={resetProjectControls}
                     aria-label="重置项目搜索和筛选"
-                    className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-[#1b4332] bg-white px-3 text-xs font-black text-[#0f8f64] transition hover:-translate-y-0.5 hover:bg-[#eefbf4] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:w-auto"
+                    className="inline-flex min-h-9 w-full items-center justify-center gap-2 rounded-lg border border-white/30 bg-transparent px-3 text-xs font-black text-white transition hover:-translate-y-0.5 hover:border-white hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f] sm:w-auto"
                   >
                     <RotateCcw className="h-3.5 w-3.5" />
                     重置
@@ -1164,7 +1175,7 @@ export function CstdLanding() {
               </div>
             </div>
             {projectDirectoryCopyResult ? (
-              <p className="mt-2 text-xs font-bold text-[#0f8f64]" aria-live="polite">
+              <p className="mt-2 text-xs font-bold text-[#8be0be]" aria-live="polite">
                 {
                   {
                     copied: "当前项目视图链接已复制",
@@ -1186,27 +1197,27 @@ export function CstdLanding() {
                 className="mt-2 min-h-20 w-full resize-y rounded-lg border border-[#b8d7f5] bg-[#f2f8ff] p-3 text-xs font-semibold leading-5 text-[#315b7f] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
               />
             ) : null}
-            <label className="mt-3 flex min-h-11 items-center gap-2 rounded-lg border border-[#ead6ad] bg-white/82 px-3 text-sm shadow-inner focus-within:border-[#0f8f64] focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#0f8f64]">
-              <Search className="h-4 w-4 shrink-0 text-[#0f8f64]" />
+            <label className="mt-4 flex min-h-12 items-center gap-3 rounded-lg border border-white/20 bg-white/8 px-4 text-sm transition focus-within:border-[#8be0be] focus-within:bg-white/12 focus-within:outline focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#8be0be]">
+              <Search className="h-4 w-4 shrink-0 text-[#8be0be]" />
               <span className="sr-only">搜索项目</span>
               <input
                 value={projectSearchQuery}
                 onChange={(event) => updateProjectDirectoryControls(activeProjectFilter, event.target.value)}
                 placeholder="搜索项目、标签或问题，例如 CRM、南京、估值"
-                className="min-w-0 flex-1 bg-transparent font-semibold text-[#2f241d] outline-none placeholder:text-[#9a8776]"
+                className="min-w-0 flex-1 bg-transparent font-semibold text-white outline-none placeholder:text-[#aaa397]"
               />
               {projectSearchQuery ? (
                 <button
                   type="button"
                   onClick={() => updateProjectDirectoryControls(activeProjectFilter, "")}
                   aria-label="清空项目搜索"
-                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#7b6656] transition hover:bg-[#fff0c9] hover:text-[#2f241d]"
+                  className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-[#c9c1b5] transition hover:bg-white/10 hover:text-white"
                 >
                   <X className="h-4 w-4" />
                 </button>
               ) : null}
             </label>
-            <div className="mt-3 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
+            <div className="mt-4 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
               {cstdProjectFilters.map((filter) => {
                 const selected = activeProjectFilter === filter.id;
                 return (
@@ -1217,8 +1228,8 @@ export function CstdLanding() {
                     aria-pressed={selected}
                     className={`inline-flex min-h-10 items-center justify-center rounded-lg border px-3 text-xs font-black transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] ${
                       selected
-                        ? "border-[#1b4332] bg-[#0f8f64] text-white shadow-[4px_4px_0_rgba(47,36,29,.1)]"
-                        : "border-[#ead6ad] bg-white/76 text-[#2f241d] hover:-translate-y-0.5 hover:border-[#d98528]"
+                        ? "border-[#f6bf3f] bg-[#f6bf3f] text-[#181511] shadow-[3px_3px_0_rgba(246,191,63,.22)]"
+                        : "border-white/20 bg-white/5 text-[#e9e3da] hover:-translate-y-0.5 hover:border-[#8be0be] hover:bg-white/10"
                     }`}
                   >
                     {filter.label}
@@ -1671,7 +1682,7 @@ function HeroButton({
     <Link
       href={href}
       {...targetProps}
-      className={`inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto sm:px-5 ${toneClassName} ${wideOnMobile ? "col-span-2" : ""} ${wideFrom320 ? "min-[320px]:col-span-2" : ""}`}
+      className={`inline-flex min-h-12 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto sm:px-5 ${toneClassName} ${wideOnMobile ? "col-span-2" : ""} ${wideFrom320 ? "min-[320px]:col-span-2" : ""}`}
     >
       {children}
     </Link>
@@ -1764,12 +1775,12 @@ function MotionControls({
   const audioLabel = !audioEnabled ? "关" : bgmActive ? "开" : "待播";
 
   return (
-    <div className="grid w-full grid-cols-2 gap-2 rounded-xl border border-[#ead6ad] bg-white/65 p-2 shadow-[5px_5px_0_rgba(47,36,29,.06)] sm:w-auto sm:grid-cols-[auto_auto_auto]">
+    <div className="grid w-full grid-cols-2 gap-2 rounded-lg border-2 border-[#2f241d] bg-[#25211b] p-2 shadow-[5px_5px_0_#d8cdb9] sm:w-auto sm:grid-cols-[auto_auto_auto]">
       <button
         type="button"
         onClick={onToggle}
         aria-pressed={introEnabled}
-        className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-[#fff0c9] px-2 text-xs font-black text-[#8a4b15] transition hover:bg-[#ffe08a] sm:px-3"
+        className="inline-flex min-h-9 items-center justify-center gap-2 rounded-md bg-[#f6bf3f] px-2 text-xs font-black text-[#181511] transition hover:bg-[#ffd66d] sm:px-3"
       >
         {introEnabled ? <Pause className="h-3.5 w-3.5" /> : <Play className="h-3.5 w-3.5" />}
         {getCstdIntroControlLabel(motionPreference)}
@@ -1778,7 +1789,7 @@ function MotionControls({
         type="button"
         onClick={onAudioToggle}
         aria-pressed={audioEnabled}
-        className="inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-[#e3f2ff] px-2 text-xs font-black text-[#2563eb] transition hover:bg-[#d5eaff] sm:px-3"
+        className="inline-flex min-h-9 items-center justify-center gap-2 rounded-md bg-[#cce7ff] px-2 text-xs font-black text-[#174d7a] transition hover:bg-[#e3f2ff] sm:px-3"
       >
         {audioEnabled ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
         声音：{audioLabel}
@@ -1787,12 +1798,12 @@ function MotionControls({
         type="button"
         onClick={onReplay}
         disabled={!introEnabled}
-        className="col-span-2 inline-flex min-h-9 items-center justify-center gap-2 rounded-lg bg-[#dff8ed] px-2 text-xs font-black text-[#047857] transition hover:bg-[#c8f3df] disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-1 sm:px-3"
+        className="col-span-2 inline-flex min-h-9 items-center justify-center gap-2 rounded-md bg-[#8be0be] px-2 text-xs font-black text-[#153f31] transition hover:bg-[#a8ecd1] disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-1 sm:px-3"
       >
         <RotateCcw className="h-3.5 w-3.5" />
         播放开场
       </button>
-      <span className="col-span-2 inline-flex min-h-7 items-center justify-center rounded-lg bg-white/70 px-2 text-[0.68rem] font-black text-[#7b6656] sm:col-span-3">
+      <span className="col-span-2 inline-flex min-h-7 items-center justify-center rounded-md border border-white/10 bg-white/5 px-2 text-[0.68rem] font-black text-[#c9c1b5] sm:col-span-3">
         {audioEnabled ? (bgmActive ? "奶油音乐轻轻播放中" : "奶油音乐待播放") : "声音已关闭"}
       </span>
     </div>
@@ -1816,26 +1827,31 @@ function ProjectSupportingEvidence({
     <>
       <ProjectCapabilityIndex onFocus={onFocusProject} />
 
-      <div id="project-evidence" className="mb-5 scroll-mt-24 rounded-xl border-2 border-[#2f241d] bg-[#fffaf0]/84 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5">
+      <div
+        id="project-evidence"
+        className="relative left-1/2 mt-10 w-dvw -translate-x-1/2 scroll-mt-24 border-y-2 border-[#2f241d] bg-[#181511] px-[max(24px,calc((100dvw-1280px)/2))] py-10 text-white sm:py-14"
+      >
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="min-w-0">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d98528]">Evidence overview</p>
-            <p className="mt-2 text-lg font-black leading-7 text-[#2f241d]">{projectEvidenceOverview.summary}</p>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#f6bf3f]">Evidence overview</p>
+            <p className="mt-2 max-w-2xl text-xl font-black leading-8 text-white sm:text-3xl">{projectEvidenceOverview.summary}</p>
           </div>
-          <div className="grid gap-2 sm:grid-cols-3 lg:w-[28rem]">
-            {projectEvidenceOverview.stats.map((stat) => (
-              <div key={stat.label} className="rounded-lg border border-[#ead6ad] bg-white/78 p-3">
-                <strong className="block text-2xl font-black text-[#0f8f64]">{stat.value}</strong>
-                <span className="mt-1 block text-xs font-black text-[#7b6656]">{stat.label}</span>
+          <div className="grid gap-2 sm:grid-cols-3 lg:w-[30rem]">
+            {projectEvidenceOverview.stats.map((stat, index) => (
+              <div key={stat.label} className="border-l-2 border-[#f6bf3f] bg-white/5 px-4 py-3">
+                <strong className={`block text-3xl font-black ${index === 1 ? "text-[#8be0be]" : index === 2 ? "text-[#9bc8ff]" : "text-[#f6bf3f]"}`}>
+                  {stat.value}
+                </strong>
+                <span className="mt-1 block text-xs font-black text-[#c9c1b5]">{stat.label}</span>
               </div>
             ))}
           </div>
         </div>
         <div className={cstdProjectEvidenceShareGridClassName} aria-label="项目分享中心">
-          <div className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-[#ead6ad] bg-white/72 p-3">
+          <div className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-white/15 bg-white/5 p-4">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#d98528]">Portfolio brief</p>
-              <p className="mt-2 text-sm font-semibold leading-6 text-[#6f5b4a]">把已上线项目、当前状态、交付证据和链接复制成一段组合摘要。</p>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#f6bf3f]">Portfolio brief</p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-[#d8d1c6]">把已上线项目、当前状态、交付证据和链接复制成一段组合摘要。</p>
             </div>
             <button
               type="button"
@@ -1846,7 +1862,7 @@ function ProjectSupportingEvidence({
               复制项目组合摘要
             </button>
             {portfolioCopyResult ? (
-              <p role="status" className="text-xs font-semibold leading-5 text-[#6f5b4a]">
+              <p role="status" className="text-xs font-semibold leading-5 text-[#d8d1c6]">
                 {{
                   copied: "项目组合摘要已复制",
                   unsupported: "浏览器不支持自动复制，请手动复制摘要",
@@ -1855,10 +1871,10 @@ function ProjectSupportingEvidence({
               </p>
             ) : null}
           </div>
-          <div className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-[#b8d7f5] bg-[#e3f2ff]/74 p-3">
+          <div className="flex min-w-0 flex-col justify-between gap-3 rounded-lg border border-[#7eb7f2]/45 bg-[#17314a] p-4">
             <div>
-              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#2563eb]">Deep links</p>
-              <p className="mt-2 text-sm font-semibold leading-6 text-[#315b7f]">需要发给别人看时，可以直接复制每个项目的案例深链。</p>
+              <p className="text-xs font-black uppercase tracking-[0.16em] text-[#9bc8ff]">Deep links</p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-[#d5eaff]">需要发给别人看时，可以直接复制每个项目的案例深链。</p>
             </div>
             <button
               type="button"
@@ -1869,7 +1885,7 @@ function ProjectSupportingEvidence({
               复制项目深链目录
             </button>
             {projectLinkDirectoryCopyResult ? (
-              <p role="status" className="text-xs font-semibold leading-5 text-[#315b7f]">
+              <p role="status" className="text-xs font-semibold leading-5 text-[#d5eaff]">
                 {{
                   copied: "项目深链目录已复制",
                   unsupported: "浏览器不支持自动复制，请手动复制项目深链目录",
@@ -1895,18 +1911,18 @@ function ProjectSupportingEvidence({
             className="mt-3 min-h-36 w-full resize-y rounded-lg border border-[#b8d7f5] bg-[#f2f8ff] p-3 text-xs font-semibold leading-5 text-[#315b7f] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#2563eb]"
           />
         ) : null}
-        <div className="mt-4 rounded-lg border border-[#d6eadf] bg-[#eefbf4]/78 p-3" aria-label={projectProofTimeline.summary}>
+        <div className="mt-5 border-t border-white/15 pt-5" aria-label={projectProofTimeline.summary}>
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#047857]">Proof timeline</p>
-            <p className="text-xs font-bold text-[#4c6b5d]">{projectProofTimeline.summary}</p>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-[#8be0be]">Proof timeline</p>
+            <p className="text-xs font-bold text-[#c8d7cd]">{projectProofTimeline.summary}</p>
           </div>
           <ol className={cstdProjectProofTimelineGridClassName}>
             {projectProofTimeline.items.map((item, index) => (
-              <li key={item.projectId} className="min-w-0 rounded-lg border border-[#b7decf] bg-white/82 p-3">
-                <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-md bg-[#0f8f64] px-2 text-xs font-black text-white">{index + 1}</span>
-                <p className="mt-2 text-sm font-black leading-5 text-[#1b4332]">{item.title}</p>
-                <p className="mt-1 text-xs font-black leading-5 text-[#047857]">{item.signal}</p>
-                <p className="mt-2 line-clamp-3 text-xs font-semibold leading-5 text-[#4c6b5d]">{item.proof}</p>
+              <li key={item.projectId} className="min-w-0 border-l border-white/15 px-3 py-2 first:border-[#8be0be]">
+                <span className="inline-flex h-7 min-w-7 items-center justify-center rounded-md bg-[#8be0be] px-2 text-xs font-black text-[#153f31]">{index + 1}</span>
+                <p className="mt-3 text-sm font-black leading-5 text-white">{item.title}</p>
+                <p className="mt-1 text-xs font-black leading-5 text-[#8be0be]">{item.signal}</p>
+                <p className="mt-2 line-clamp-3 text-xs font-semibold leading-5 text-[#c8d7cd]">{item.proof}</p>
               </li>
             ))}
           </ol>
@@ -1998,39 +2014,51 @@ function ProjectGuide({
   );
 
   return (
-    <div id="project-guide" className="mb-5 scroll-mt-24" aria-label={guideSummary.summary}>
+    <div
+      id="project-guide"
+      className="mb-7 scroll-mt-24 overflow-hidden rounded-xl border-2 border-[#2f241d] bg-[#18352a] p-4 shadow-[8px_8px_0_#c8d7cd] sm:p-5"
+      aria-label={guideSummary.summary}
+    >
       <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#0f8f64]">Goal guide</p>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-[#8be0be]">Goal guide</p>
           <h3
             id="project-guide-heading"
             tabIndex={-1}
-            className="mt-1 rounded-sm text-xl font-black text-[#2f241d] focus:outline focus:outline-2 focus:outline-offset-4 focus:outline-[#0f8f64] sm:text-2xl"
+            className="mt-1 rounded-sm text-xl font-black text-white focus:outline focus:outline-2 focus:outline-offset-4 focus:outline-[#f6bf3f] sm:text-2xl"
           >
             按目标找项目
           </h3>
         </div>
-        <p className="text-xs font-semibold text-[#7b6656]">{guideSummary.summary}</p>
+        <p className="text-xs font-semibold text-[#c8d7cd]">{guideSummary.summary}</p>
       </div>
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
-        {cstdProjectGuides.map((guide) => {
+        {cstdProjectGuides.map((guide, guideIndex) => {
           const project = cstdProjects.find((item) => item.id === guide.projectId);
           if (!project) return null;
+          const selected = selectedGuideId === guide.id;
 
           return (
             <button
               key={guide.id}
               type="button"
               onClick={() => onSelect(guide.id)}
-              aria-pressed={selectedGuideId === guide.id}
-              className={`group min-w-0 rounded-lg border p-4 text-left shadow-[5px_5px_0_rgba(47,36,29,.05)] transition hover:-translate-y-0.5 hover:border-[#0f8f64] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] ${
-                selectedGuideId === guide.id ? "border-[#0f8f64] bg-[#dff8ed]" : "border-[#ead6ad] bg-white/72 hover:bg-[#fffaf0]"
+              aria-pressed={selected}
+              className={`group min-w-0 rounded-lg border p-4 text-left transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f] ${
+                selected
+                  ? "border-[#f6bf3f] bg-[#f6bf3f] shadow-[5px_5px_0_rgba(0,0,0,.22)]"
+                  : "border-white/15 bg-white/5 hover:border-[#8be0be] hover:bg-white/10"
               }`}
               aria-label={`${guide.goal}，匹配${project.title}`}
             >
-              <span className="block min-w-0 text-sm font-black text-[#2f241d]">{guide.goal}</span>
-              <span className="mt-2 block min-w-0 text-xs font-semibold leading-5 text-[#6f5b4a]">{guide.reason}</span>
-              <span className="mt-3 inline-flex min-h-7 items-center rounded-md bg-[#dff8ed] px-2 text-xs font-black text-[#047857]">
+              <span className={`block text-[0.65rem] font-black uppercase tracking-[0.16em] ${selected ? "text-[#73561c]" : "text-[#8be0be]"}`}>
+                Route 0{guideIndex + 1}
+              </span>
+              <span className={`mt-2 block min-w-0 text-sm font-black ${selected ? "text-[#181511]" : "text-white"}`}>{guide.goal}</span>
+              <span className={`mt-2 block min-w-0 text-xs font-semibold leading-5 ${selected ? "text-[#5b461b]" : "text-[#c8d7cd]"}`}>
+                {guide.reason}
+              </span>
+              <span className={`mt-3 inline-flex min-h-7 items-center rounded-md px-2 text-xs font-black ${selected ? "bg-[#181511] text-[#f6bf3f]" : "bg-[#8be0be] text-[#153f31]"}`}>
                 {project.title}
               </span>
             </button>
@@ -2160,7 +2188,7 @@ function ProjectGuide({
 
 function ProjectCapabilityIndex({ onFocus }: { onFocus: (projectId: string) => void }) {
   return (
-    <div className="mb-5 rounded-xl border-2 border-[#2f241d] bg-white/76 p-4 shadow-[7px_7px_0_rgba(47,36,29,.08)] sm:p-5" aria-label={projectCapabilityIndex.summary}>
+    <div className="mb-5 rounded-xl border-2 border-[#2f241d] bg-[#dcecff] p-4 shadow-[7px_7px_0_#b8cee8] sm:p-5" aria-label={projectCapabilityIndex.summary}>
       <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-[#d98528]">Capability index</p>
@@ -2170,7 +2198,7 @@ function ProjectCapabilityIndex({ onFocus }: { onFocus: (projectId: string) => v
       </div>
       <div className="mt-4 grid gap-3 lg:grid-cols-3">
         {projectCapabilityIndex.lanes.map((lane) => (
-          <div key={lane.id} className="min-w-0 rounded-lg border border-[#ead6ad] bg-[#fffaf0]/78 p-3">
+          <div key={lane.id} className="min-w-0 border-l-2 border-[#2563eb] px-3 py-1">
             <p className="text-sm font-black text-[#2f241d]">{lane.label}</p>
             <p className="mt-2 text-xs font-semibold leading-5 text-[#6f5b4a]">{lane.description}</p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -2458,6 +2486,24 @@ function ProjectCard({
   const isLive = project.status === "Live";
   const evidencePreview = getCstdProjectCardPreview(project);
   const comparisonControl = getCstdProjectComparisonControl(comparedProjectIds, project.id);
+  const layout = getCstdProjectLayout({
+    index,
+    hasPreview: Boolean(project.preview),
+    status: project.status,
+  });
+  const isFeature = layout === "feature";
+  const isIncubator = layout === "incubator";
+  const articleLayoutClassName = {
+    feature: "md:col-span-2 xl:col-span-8 only:xl:col-span-12",
+    standard: "xl:col-span-4",
+    incubator: "md:col-span-2 xl:col-span-12",
+  }[layout];
+  const mediaLayoutClassName = isFeature
+    ? "h-40 sm:h-56 xl:h-64"
+    : "h-40 sm:h-52 xl:h-48";
+  const contentLayoutClassName = isIncubator
+    ? "relative p-4 pt-5 sm:p-6 xl:grid xl:grid-cols-[minmax(0,1fr)_minmax(420px,.78fr)] xl:items-start xl:gap-x-12 xl:p-8"
+    : `relative p-4 pt-5 sm:p-6 ${isFeature ? "xl:p-8" : "xl:p-6"}`;
   const toneClasses = {
     mint: "bg-[#dff8ed] text-[#047857]",
     rose: "bg-[#ffe7ec] text-[#be4563]",
@@ -2477,12 +2523,15 @@ function ProjectCard({
 
   return (
     <motion.article
-      className="group relative overflow-hidden rounded-lg border-2 border-[#2f241d] bg-white shadow-[7px_7px_0_rgba(47,36,29,.1)] sm:shadow-[9px_9px_0_rgba(47,36,29,.12)]"
+      data-project-layout={layout}
+      className={`group relative min-w-0 overflow-hidden rounded-lg border-2 border-[#2f241d] bg-white shadow-[7px_7px_0_rgba(47,36,29,.1)] transition-shadow sm:shadow-[9px_9px_0_rgba(47,36,29,.12)] xl:h-full ${articleLayoutClassName} ${
+        isIncubator ? "xl:bg-[#edf5ff]" : ""
+      }`}
       initial={motionDisabled ? false : { opacity: 0, y: 34 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ delay: index * 0.08, duration: 0.58, ease: [0.2, 0.8, 0.2, 1] }}
-      whileHover={motionDisabled ? undefined : { y: -6, rotate: index === 1 ? 0.4 : -0.3 }}
+      whileHover={motionDisabled ? undefined : { y: -6 }}
     >
       <div className={`absolute inset-x-0 top-0 z-20 h-2 ${toneBandClasses}`} />
       <motion.div
@@ -2493,13 +2542,13 @@ function ProjectCard({
         transition={{ duration: 0.8, ease: "easeOut" }}
       />
       {project.preview ? (
-        <div className="relative hidden h-40 overflow-hidden border-b-2 border-[#2f241d] bg-[#f4f3ed] sm:block">
+        <div className={`relative hidden overflow-hidden border-b-2 border-[#2f241d] bg-[#f4f3ed] sm:block ${mediaLayoutClassName}`}>
           <Image
             src={project.preview.src}
             alt={project.preview.alt}
             fill
-            sizes="(max-width: 1279px) 50vw, 33vw"
-            className="object-cover transition duration-500 group-hover:scale-[1.02]"
+            sizes={isFeature ? "(max-width: 1279px) 50vw, 90vw" : "(max-width: 1279px) 50vw, 31vw"}
+            className="object-cover transition duration-700 ease-out group-hover:scale-[1.025]"
             style={{ objectPosition: project.preview.position }}
           />
           <span className="absolute bottom-3 left-3 rounded-md border border-[#2f241d] bg-[#f6bf3f] px-2.5 py-1 text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#2f241d] shadow-[3px_3px_0_rgba(47,36,29,.18)]">
@@ -2507,22 +2556,30 @@ function ProjectCard({
           </span>
         </div>
       ) : null}
-      <div className="relative p-4 pt-5 sm:p-6 xl:p-7">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
+      <div className={contentLayoutClassName}>
+        <div className={`flex flex-col gap-4 sm:flex-row sm:items-start ${isIncubator ? "xl:col-start-1 xl:row-span-3 xl:row-start-1" : ""}`}>
           <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-lg ${toneClasses} shadow-inner`}>
             <Icon className="h-5 w-5" />
           </span>
           <div className="min-w-0">
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-md bg-[#dff8ed] px-2 py-1 text-xs font-black text-[#047857]">{project.status}</span>
               <span className="rounded-md bg-white/80 px-2 py-1 text-xs font-black text-[#7b6656]">{project.kicker}</span>
+              <span className="ml-auto hidden text-[0.66rem] font-black uppercase tracking-[0.18em] text-[#9a8776] xl:inline">
+                {isIncubator ? "Studio queue" : `Project 0${index + 1}`}
+              </span>
             </div>
-            <h3 className="mt-3 text-xl font-black tracking-tight sm:text-2xl xl:text-3xl">{project.title}</h3>
+            <h3 className={`mt-3 font-black tracking-tight ${isFeature ? "text-2xl sm:text-3xl xl:text-4xl" : "text-xl sm:text-2xl"}`}>
+              {project.title}
+            </h3>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-[#6f5b4a] sm:mt-4 sm:text-base">{project.description}</p>
           </div>
         </div>
 
-        <ul aria-label={`${project.title} 项目指标`} className={cstdProjectMetricGridClassName}>
+        <ul
+          aria-label={`${project.title} 项目指标`}
+          className={`${cstdProjectMetricGridClassName} ${isIncubator ? "xl:col-start-2 xl:row-start-1 xl:mt-0" : ""}`}
+        >
           {project.metrics.map(([value, label]) => (
             <li key={value} className={cstdProjectMetricTileClassName}>
               <strong className={cstdProjectMetricValueClassName}>{value}</strong>
@@ -2531,7 +2588,7 @@ function ProjectCard({
           ))}
         </ul>
 
-        <div className={cstdProjectCardActionRailClassName}>
+        <div className={`${cstdProjectCardActionRailClassName} ${isIncubator ? "xl:col-start-2 xl:row-start-2" : ""}`}>
           {isLive ? (
             <HeroButton href={project.href} primary wideFrom320>
               <ExternalLink aria-hidden="true" className="h-4 w-4 shrink-0" />
@@ -2592,7 +2649,10 @@ function ProjectCard({
           </div>
         </details>
 
-        <div data-cstd-project-details="desktop" className={cstdProjectDetailsDesktopClassName}>
+        <div
+          data-cstd-project-details="desktop"
+          className={`${cstdProjectDetailsDesktopClassName} ${isIncubator ? "xl:col-start-2 xl:row-start-3" : ""}`}
+        >
           <ProjectCardSupportingDetails project={project} evidencePreview={evidencePreview} motionDisabled={motionDisabled} />
         </div>
       </div>
