@@ -154,9 +154,12 @@ describe("CSTD mobile layout rules", () => {
 
   test("keeps the focused case study scan-first on mobile and action-stable on desktop", () => {
     expect(cstdProjectFocusBodyClassName).toContain("grid");
-    expect(cstdProjectFocusBodyClassName).toContain("lg:grid-cols-[minmax(0,1fr)_20rem]");
+    expect(cstdProjectFocusBodyClassName).toContain("gap-0");
+    expect(cstdProjectFocusBodyClassName).toContain("lg:grid-cols-[minmax(0,1fr)_22rem]");
     expect(cstdProjectFocusChecklistGridClassName).toContain("grid-cols-1");
     expect(cstdProjectFocusChecklistGridClassName).toContain("md:grid-cols-2");
+    expect(cstdProjectFocusActionRailClassName).toContain("bg-[#181511]");
+    expect(cstdProjectFocusActionRailClassName).toContain("lg:border-l-2");
     expect(cstdProjectFocusActionRailClassName).toContain("lg:sticky");
     expect(cstdProjectFocusActionRailClassName).toContain("lg:top-24");
   });
@@ -182,6 +185,9 @@ describe("CSTD mobile layout rules", () => {
   test("keeps project comparison readable without horizontal scrolling", () => {
     expect(cstdProjectComparisonClassName).toContain("min-w-0");
     expect(cstdProjectComparisonClassName).toContain("overflow-hidden");
+    expect(cstdProjectComparisonClassName).toContain("border-2");
+    expect(cstdProjectComparisonClassName).toContain("border-[#2f241d]");
+    expect(cstdProjectComparisonClassName).toContain("bg-[#181511]");
     expect(cstdProjectComparisonColumnsClassName).toContain("grid-cols-1");
     expect(cstdProjectComparisonColumnsClassName).toContain("sm:grid-cols-2");
   });

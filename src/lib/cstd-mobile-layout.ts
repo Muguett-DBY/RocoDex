@@ -106,15 +106,15 @@ export const cstdRestoredEntryActionClassName =
 export const cstdRestoredEntryActionsClassName = "grid w-full grid-cols-1 gap-2 sm:w-auto sm:grid-cols-2";
 
 export const cstdProjectComparisonClassName =
-  "mb-4 min-w-0 overflow-hidden rounded-xl border border-[#b7decf] bg-[#eefbf4]/82 shadow-[6px_6px_0_rgba(47,36,29,.05)]";
+  "mb-5 min-w-0 overflow-hidden rounded-lg border-2 border-[#2f241d] bg-[#181511] shadow-[10px_10px_0_rgba(47,36,29,.12)]";
 
 export const cstdProjectComparisonColumnsClassName = "grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2";
 
-export const cstdProjectFocusBodyClassName = "grid gap-5 p-4 sm:p-6 lg:grid-cols-[minmax(0,1fr)_20rem]";
+export const cstdProjectFocusBodyClassName = "grid gap-0 lg:grid-cols-[minmax(0,1fr)_22rem]";
 
 export const cstdProjectFocusChecklistGridClassName = "mt-3 grid grid-cols-1 gap-2 md:grid-cols-2";
 
 export const cstdProjectFocusActionRailClassName =
-  "flex flex-col gap-3 rounded-xl border border-[#ead6ad] bg-white/75 p-4 lg:sticky lg:top-24 lg:self-start";
+  "flex flex-col gap-3 border-t-2 border-[#2f241d] bg-[#181511] p-5 text-white lg:sticky lg:top-24 lg:self-start lg:border-l-2 lg:border-t-0";
 
 export const cstdProjectCards = cstdProjects.map(({ title, kicker }) => ({ title, kicker }));
