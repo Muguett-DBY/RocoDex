@@ -2654,11 +2654,18 @@
 - Final 1,440 x 1,000 and 1,280 x 720 visual checks showed the intended 8/4 and three-column rhythm, readable production media, coherent controls, and 162.7 pixels of measured action headroom at the compact desktop viewport.
 - A 3.2-second scripted full-page scroll recorded 513 frames, 6.4-millisecond p95 frame spacing, no long tasks during the scroll, and CLS `0`.
 - Final screenshots and the side-by-side comparison are stored under `output/playwright/cstd-workbench-2026-07-30/`.
+- Implementation commit `8937f45` was pushed directly to `origin/main`.
+- GitHub Actions run `30468328413` completed successfully in 2m52s across install, lint, 279 tests, build, and E2E.
+- Vercel production deployment `dpl_9ApvubxoS1tXifbnBZS9eZGFPrAk` reached `READY` for exact commit `8937f45061ad73f758501f662f41a22169f881ae`.
+- Apex, `/cstd`, and `www` returned `200`; `www` redirected to the apex.
+- Fresh production browser checks at 1,440 x 1,000 and 1,280 x 720 matched local gallery geometry, adaptive single-result width, two-item comparison state, URL serialization, 162.7-pixel action headroom, overflow `0`, and no browser issues.
+- Vercel runtime-error, error/fatal, and HTTP 500 queries returned no entries for the released deployment.
 
 ### Risk notes
 
-- Remote CI, deployment, production browser, and runtime-log checks are pending the verified implementation push.
+- Vercel reports the repository's pre-existing broad Node engine range warning; it did not affect this 52-second successful build and is outside this UI release.
+- No repository-controlled UI, dependency-audit, final-CI, deployment, runtime-log, or measured desktop-viewport risk remains for this item.
 
 ### Final status
 
-- Local implementation and acceptance are complete; release closure remains pending.
+- The editorial project workbench is live on `custard.top`, with the full local and remote release loop closed.

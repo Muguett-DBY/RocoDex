@@ -3180,6 +3180,12 @@
   - The initial full E2E run exposed desktop action visibility and scroll-anchor regressions; reducing the feature image, removing visibility containment, and using 48-pixel actions closed both.
   - Production-mode 1,280 and 1,440 browser checks reported overflow `0`, no browser/network errors, adaptive single-result width, working comparison state, and 162.7 pixels of compact-desktop action headroom.
   - A scripted 3.2-second full-page scroll recorded 6.4-millisecond p95 frame spacing, no scroll-time long tasks, and CLS `0`.
-- Release: implementation push, GitHub Actions, Vercel readiness, production browser checks, and runtime logs pending.
-- Next direction: close this release loop, then audit the remaining light comparison view against the new editorial hierarchy without reducing its scanability.
-- Status: release pending
+- Release:
+  - Commit `8937f45` was pushed to `origin/main`.
+  - GitHub Actions run `30468328413` passed in 2m52s.
+  - Vercel deployment `dpl_9ApvubxoS1tXifbnBZS9eZGFPrAk` reached `READY` for the exact implementation commit.
+  - Apex, `/cstd`, and `www` returned `200`; production 1,280 and 1,440 checks matched local geometry, search, comparison, URL, action headroom, and zero-overflow results.
+  - Vercel runtime-error, error/fatal, and HTTP 500 queries returned no entries.
+- Risk: the pre-existing broad Node engine warning remains informational; this release has no repository-controlled UI, audit, CI, deployment, runtime-log, or measured desktop-viewport risk.
+- Next direction: audit the remaining light comparison view against the new editorial hierarchy without reducing its scanability.
+- Status: closed
