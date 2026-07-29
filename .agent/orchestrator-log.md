@@ -3232,9 +3232,16 @@
   - Production-mode desktop and narrow checks showed five loaded products, overflow `0`, no browser issues, and clean full-page visual composition.
   - A 3.2-second full-page scroll recorded 508 frames, 6.4-millisecond p95 frame spacing, no long tasks, and CLS `0`.
   - Host-aware checks returned `200` for the apex page and generated hero, and `404` for removed audio.
+- Release:
+  - Commit `f9f5450` was pushed to `origin/main`.
+  - GitHub Actions run `30477336831` passed in 5m07s.
+  - Vercel deployment `dpl_2Ldt3z51NZUgEHEYerWNPsDF7R4x` reached `READY` for the exact implementation commit.
+  - Apex, `/cstd`, the generated hero, and the RocoDex preview returned `200`; `www` returned `308` to the apex.
+  - Live browser checks showed five projects, zero old tools, safe external links, overflow `0`, CLS `0`, 6.4-millisecond p95 scroll spacing, and no browser issues.
+  - Vercel runtime errors, error/fatal logs, and HTTP 500 queries returned no entries.
 - Asset generation:
   - Built-in image generation created a full-bleed cinematic 3D studio scene with a custard-yellow workstation, dark left-side copy space, mint/cobalt/coral accents, and no text or logos.
   - Workspace asset: `public/cstd-studio-hero.png`.
-- Risk: no repository-controlled local risk remains before release.
+- Risk: no repository-controlled local, CI, deployment, runtime-log, or measured browser risk remains.
 - Next direction: observe the live visual and performance result before adding any new homepage interaction.
-- Status: release pending
+- Status: closed

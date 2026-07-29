@@ -2730,11 +2730,17 @@
 - A 3.2-second full-page scroll recorded 508 frames, 6.4-millisecond p95 frame spacing, 18.7-millisecond maximum spacing, no long tasks, and CLS `0`.
 - Host-aware local production checks returned `200` for the apex CSTD page and the 1.67 MB generated hero, while the retired audio URL returned `404`.
 - Visual evidence is stored under `output/playwright/cstd-showcase-2026-07-30/`.
+- Implementation commit `f9f5450` was pushed directly to `origin/main`.
+- GitHub Actions run `30477336831` completed successfully in 5m07s across clean install, lint, 141 tests, build, and E2E.
+- Vercel production deployment `dpl_2Ldt3z51NZUgEHEYerWNPsDF7R4x` reached `READY` for exact commit `f9f54501e0910195b99b218be9fcd33390d2c1a5`.
+- Fresh production checks returned `200` for the apex, `/cstd`, the generated hero, and the RocoDex preview; `www` returned `308` to the apex.
+- Live browser checks reproduced five projects, zero legacy tools, safe external links, overflow `0`, CLS `0`, 6.4-millisecond p95 scroll spacing, and no console or page errors.
+- Vercel returned no runtime-error clusters, error/fatal logs, or HTTP 500 entries for the released deployment.
 
 ### Risk notes
 
-- No repository-controlled UI, dependency, route, accessibility, overflow, build, or measured scroll-performance risk remains before release.
+- No repository-controlled UI, dependency, route, accessibility, overflow, CI, deployment, runtime, or measured scroll-performance risk remains.
 
 ### Final status
 
-- The personal homepage is now a focused visual exhibition: five shipped products, five distinct presentation bands, direct navigation, and no portfolio-management workflow.
+- The focused visual portfolio is live on `custard.top`: five shipped products, five distinct presentation bands, direct navigation, and no portfolio-management workflow.
