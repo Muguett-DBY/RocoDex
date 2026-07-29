@@ -26,29 +26,6 @@ async function expectNoHorizontalOverflow(page: Page) {
     .toBe(true);
 }
 
-async function expectElementBefore(page: Page, firstSelector: string, secondSelector: string) {
-  await expect
-    .poll(() =>
-      page.evaluate(
-        ({ firstSelector, secondSelector }) => {
-          const first = document.querySelector(firstSelector);
-          const second = document.querySelector(secondSelector);
-          if (!first || !second) return false;
-          return Boolean(first.compareDocumentPosition(second) & Node.DOCUMENT_POSITION_FOLLOWING);
-        },
-        { firstSelector, secondSelector },
-      ),
-    )
-    .toBe(true);
-}
-
-async function dismissCstdIntro(page: Page) {
-  const dialog = page.getByRole("dialog", { name: "CSTD 开场动画" });
-  await expect(dialog).toBeVisible();
-  await page.keyboard.press("Escape");
-  await expect(dialog).toHaveCount(0);
-}
-
 async function gotoRocodexPage(page: Page, url: string) {
   const [sessionResponse, pageResponse] = await Promise.all([
     page.waitForResponse((response) => response.url().endsWith("/api/auth/session")),
@@ -79,7 +56,7 @@ async function removeLocalTestUser(username: string) {
   await writeFile(usersFile, `${JSON.stringify(remainingUsers, null, 2)}\n`, "utf8");
 }
 
-test("core routes render responsively and the CSTD fallback remains interactive", async ({ page, isMobile }) => {
+test("core routes render responsively", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
 
   await gotoRocodexPage(page, "/");
@@ -95,476 +72,107 @@ test("core routes render responsively and the CSTD fallback remains interactive"
   await expect(page.getByRole("heading", { level: 1, name: "迪莫" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 
-  const cstdResponse = await page.goto("/cstd?goal=portrait-shooting#projects");
+  const cstdResponse = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   expect(cstdResponse?.ok()).toBe(true);
-  await page.waitForLoadState("networkidle");
-  await expect(page.locator('button[aria-label="点击奶黄包互动"]')).toHaveCount(isMobile ? 1 : 2);
-  const mascot = page.getByRole("button", { name: "点击奶黄包互动" });
-  await expect(mascot).toBeVisible();
-  await expect(page.locator("canvas")).toHaveCount(0);
-  await mascot.click();
-  await expect(mascot).toContainText("奶黄包收到了你的点击，正在加糖。");
+  await expect(page.getByRole("heading", { level: 1, name: "CSTD" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD intro behaves as a keyboard-contained modal", async ({ page }) => {
+test("CSTD presents five shipped products without portfolio tools", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
-  const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  const response = await page.goto("/cstd", { waitUntil: "networkidle" });
   expect(response?.ok()).toBe(true);
 
-  const dialog = page.getByRole("dialog", { name: "CSTD 开场动画" });
-  const skip = dialog.getByRole("button", { name: "直接浏览项目" });
-  const start = dialog.getByRole("button", { name: "开启 CSTD" });
+  await expect(page.getByRole("heading", { level: 1, name: "CSTD" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "看五个作品" })).toHaveAttribute("href", "#work");
+  await expect(page.locator('[data-cstd-project]')).toHaveCount(5);
 
-  await expect(dialog).toBeVisible();
-  await expect(start).toBeFocused();
-  await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("hidden");
-
-  await page.keyboard.press("Tab");
-  await expect(skip).toBeFocused();
-  await page.keyboard.press("Shift+Tab");
-  await expect(start).toBeFocused();
-  await page.keyboard.press("Shift+Tab");
-  await expect(skip).toBeFocused();
-  await page.keyboard.press("Tab");
-  await expect(start).toBeFocused();
-
-  await page.keyboard.press("Escape");
-  await expect(dialog).toHaveCount(0);
-  await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("");
-
-  const replay = page.getByRole("button", { name: "播放开场" });
-  await replay.click();
-  await expect(dialog).toBeVisible();
-  await expect(skip).toBeFocused();
-  await page.keyboard.press("Tab");
-  await expect(skip).toBeFocused();
-  await page.keyboard.press("Shift+Tab");
-  await expect(skip).toBeFocused();
-
-  await page.keyboard.press("Escape");
-  await expect(dialog).toHaveCount(0);
-  await expect(replay).toBeFocused();
-  await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe("");
-  expect(browserIssues).toEqual([]);
-});
-
-test("CSTD project discovery lands on live project work", async ({ page, isMobile }) => {
-  const browserIssues = captureBrowserIssues(page);
-  const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
-  expect(response?.ok()).toBe(true);
-  await dismissCstdIntro(page);
-
-  const projectLink = page.getByRole("link", { name: "浏览全部项目", exact: true });
-  const firstProjectCard = page.locator("article").filter({
-    has: page.getByRole("heading", { name: "洛克图鉴 / RocoDex" }),
-  });
-
-  await expect(projectLink).toHaveAttribute("href", "#project-grid");
-  if (!isMobile) {
-    await expect(page.getByRole("link", { name: "Projects", exact: true })).toHaveAttribute("href", "#project-grid");
+  for (const title of [
+    "洛克图鉴 / RocoDex",
+    "奶黄包摄影",
+    "CSTD Alpha",
+    "私人 AI 创作工作台",
+    "产业园区招商 CRM",
+  ]) {
+    await expect(page.getByRole("heading", { level: 3, name: title })).toHaveCount(1);
   }
-  await expect(page.getByText("Latest updates", { exact: true })).toHaveCount(0);
-  await expect(page.getByText("Capability checklist", { exact: true })).toHaveCount(0);
-  await expect(page.getByText("Acceptance status", { exact: true })).toHaveCount(0);
-  const projectPreviewRail = page.locator('[aria-label="已上线项目预览"]');
-  await expect(projectPreviewRail.getByRole("link")).toHaveCount(5);
+
+  await expect(page.getByRole("searchbox")).toHaveCount(0);
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByText("项目对比", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("按目标找项目", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("加入对比", { exact: false })).toHaveCount(0);
+
   await expect
     .poll(() =>
-      projectPreviewRail.evaluate((element) => {
-        const box = element.getBoundingClientRect();
-        return box.top < window.innerHeight && box.bottom > 0;
+      page.locator('img[src*="cstd-studio-hero"]').evaluate((image) => {
+        const element = image as HTMLImageElement;
+        return element.complete && element.naturalWidth > 0;
       }),
     )
     .toBe(true);
-
-  await projectLink.click();
-  await expect(page).toHaveURL(/#project-grid$/);
-  await expect(page.locator("#project-grid")).toBeInViewport();
-  await expect(firstProjectCard).toBeInViewport({ ratio: 0.7 });
-  const firstProjectActions = firstProjectCard.locator("a, button");
-  await expect(firstProjectActions.nth(0)).toHaveText("打开图鉴");
-  await expect(firstProjectActions.nth(0)).toHaveAttribute("href", "https://rocodex.custard.top");
-  await expect(firstProjectActions.nth(1)).toHaveText("查看案例");
-  await expect(firstProjectActions.nth(2)).toHaveText("加入对比");
-
-  const projectMetrics = firstProjectCard.getByRole("list", { name: "洛克图鉴 / RocoDex 项目指标" });
-  const mobileProjectDetails = page.locator('#project-grid details[aria-label$=" 项目详情"]');
-  const firstMobileDetails = firstProjectCard.locator('details[aria-label="洛克图鉴 / RocoDex 项目详情"]');
-  const desktopProjectDetails = firstProjectCard.locator('[data-cstd-project-details="desktop"]');
-  const supportingContent = isMobile ? firstMobileDetails : desktopProjectDetails.locator("dl");
-  const metricTiles = projectMetrics.getByRole("listitem");
-  await expect(metricTiles).toHaveCount(3);
-  const [metricGridBox, supportingBox, actionBoxes, metricBoxes] = await Promise.all([
-    projectMetrics.boundingBox(),
-    supportingContent.boundingBox(),
-    firstProjectActions.evaluateAll((actions) =>
-      actions.map((action) => {
-        const box = action.getBoundingClientRect();
-        return { top: box.top, bottom: box.bottom };
-      }),
-    ),
-    metricTiles.evaluateAll((tiles) =>
-      tiles.map((tile) => {
-        const box = tile.getBoundingClientRect();
-        return { width: box.width, height: box.height, x: box.x, y: box.y };
-      }),
-    ),
-  ]);
-
-  expect(metricGridBox).not.toBeNull();
-  expect(supportingBox).not.toBeNull();
-  expect(actionBoxes.length).toBeGreaterThanOrEqual(3);
-  const actionTop = Math.min(...actionBoxes.map((box) => box.top));
-  const actionBottom = Math.max(...actionBoxes.map((box) => box.bottom));
-  expect(actionTop).toBeGreaterThanOrEqual(metricGridBox!.y + metricGridBox!.height - 2);
-  expect(supportingBox!.y).toBeGreaterThanOrEqual(actionBottom - 2);
-  expect(page.viewportSize()!.height - actionBottom).toBeGreaterThanOrEqual(10);
-
-  if (isMobile) {
-    const mobileDetailsGroup = firstProjectCard.getByRole("group", {
-      name: "洛克图鉴 / RocoDex 项目详情",
-    });
-    const mobileSummary = firstMobileDetails.locator("summary");
-    const secondProjectCard = page.locator("#project-grid article").nth(1);
-    const [caseStudyBox, comparisonBox, firstCardBox, secondCardBox, summaryBox, summaryOverflow] = await Promise.all([
-      firstProjectActions.nth(1).boundingBox(),
-      firstProjectActions.nth(2).boundingBox(),
-      firstProjectCard.boundingBox(),
-      secondProjectCard.boundingBox(),
-      mobileSummary.boundingBox(),
-      mobileSummary.evaluate((summary) => summary.scrollWidth - summary.clientWidth),
-    ]);
-
-    expect(caseStudyBox).not.toBeNull();
-    expect(comparisonBox).not.toBeNull();
-    expect(firstCardBox).not.toBeNull();
-    expect(secondCardBox).not.toBeNull();
-    expect(summaryBox).not.toBeNull();
-    expect(Math.abs(caseStudyBox!.y - comparisonBox!.y)).toBeLessThanOrEqual(1);
-    expect(caseStudyBox!.height).toBeGreaterThanOrEqual(44);
-    expect(comparisonBox!.height).toBeGreaterThanOrEqual(44);
-    expect(Math.abs(metricBoxes[0].y - metricBoxes[1].y)).toBeLessThanOrEqual(1);
-    expect(metricBoxes[2].y).toBeGreaterThan(metricBoxes[0].y);
-    expect(metricBoxes[2].width).toBeGreaterThanOrEqual(metricBoxes[0].width * 1.9);
-    await expect(mobileProjectDetails).toHaveCount(6);
-    await expect(mobileDetailsGroup).toHaveCount(1);
-    await expect(firstMobileDetails).toBeVisible();
-    await expect(firstMobileDetails).not.toHaveAttribute("open", "");
-    await expect(desktopProjectDetails).not.toBeVisible();
-    await expect(mobileSummary).toContainText("项目详情");
-    await expect(mobileSummary).toContainText("证据 2 · 技术 4");
-    expect(summaryBox!.height).toBeGreaterThanOrEqual(44);
-    expect(summaryOverflow).toBeLessThanOrEqual(0);
-    expect(firstCardBox!.height).toBeLessThanOrEqual(700);
-    expect(secondCardBox!.y - (firstCardBox!.y + firstCardBox!.height)).toBeLessThanOrEqual(24);
-
-    await mobileSummary.focus();
-    await mobileSummary.press("Enter");
-    await expect(firstMobileDetails).toHaveAttribute("open", "");
-    await expect(firstMobileDetails.getByText("负责", { exact: true })).toBeVisible();
-    await expect(firstMobileDetails.getByText("Next.js 16", { exact: true })).toBeVisible();
-    await expect(mobileSummary).toBeFocused();
-    await mobileSummary.press("Space");
-    await expect(firstMobileDetails).not.toHaveAttribute("open", "");
-    await expect(firstMobileDetails.getByText("负责", { exact: true })).not.toBeVisible();
-    await expect(mobileSummary).toBeFocused();
-
-    await page.evaluate(() => window.scrollTo({ top: 0, behavior: "auto" }));
-    const navigationToggle = page.locator('button[aria-controls="cstd-mobile-navigation"]');
-    await navigationToggle.click();
-    const projectsNavigationLink = page.getByRole("link", { name: "Projects", exact: true });
-    await expect(projectsNavigationLink).toHaveAttribute("href", "#project-grid");
-    await projectsNavigationLink.click();
-    await expect(navigationToggle).toHaveAttribute("aria-expanded", "false");
-    await expect(page.locator("#cstd-mobile-navigation")).toHaveCount(0);
-    await expect(page).toHaveURL(/#project-grid$/);
-    await expect(page.locator("#project-grid")).toBeInViewport();
-  } else {
-    await expect(mobileProjectDetails).toHaveCount(6);
-    await expect(firstMobileDetails).not.toBeVisible();
-    await expect(desktopProjectDetails).toBeVisible();
-    await expect(desktopProjectDetails.locator("dl")).toBeVisible();
-    expect(Math.abs(metricBoxes[0].y - metricBoxes[1].y)).toBeLessThanOrEqual(2);
-    expect(Math.abs(metricBoxes[0].y - metricBoxes[2].y)).toBeLessThanOrEqual(2);
-    expect(Math.abs(metricBoxes[0].width - metricBoxes[1].width)).toBeLessThanOrEqual(1);
-    expect(Math.abs(metricBoxes[0].width - metricBoxes[2].width)).toBeLessThanOrEqual(1);
-  }
-
-  await expectElementBefore(page, "#project-directory", "#project-guide");
-  await expectElementBefore(page, "#project-grid", "#project-guide");
-  await expectNoHorizontalOverflow(page);
-  expect(browserIssues).toEqual([]);
-});
-
-test("CSTD comparison completion hands off to the decision result", async ({ page, isMobile }) => {
-  const browserIssues = captureBrowserIssues(page);
-  const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
-  expect(response?.ok()).toBe(true);
-  await dismissCstdIntro(page);
-
-  const firstCard = page.locator("#project-grid article").filter({
-    has: page.getByRole("heading", { name: "洛克图鉴 / RocoDex" }),
-  });
-  const secondCard = page.locator("#project-grid article").filter({
-    has: page.getByRole("heading", { name: "奶黄包摄影" }),
-  });
-  const firstComparisonButton = firstCard.getByRole("button", {
-    name: "加入对比：洛克图鉴 / RocoDex",
-  });
-  const secondComparisonButton = secondCard.getByRole("button", {
-    name: "加入对比：奶黄包摄影",
-  });
-
-  await page.locator("#project-grid").evaluate((element) => {
-    element.scrollIntoView({ block: "start", behavior: "auto" });
-  });
-  const firstSelectionScrollY = await page.evaluate(() => window.scrollY);
-  await firstComparisonButton.click();
-  await expect(page).toHaveURL(/\/cstd\?compare=rocodex#projects$/);
-  const firstSelectedButton = firstCard.getByRole("button", {
-    name: "移出对比：洛克图鉴 / RocoDex",
-  });
-  await expect(firstSelectedButton).toBeFocused();
-  await expect
-    .poll(() => page.evaluate((before) => Math.abs(window.scrollY - before), firstSelectionScrollY))
-    .toBeLessThanOrEqual(2);
-
-  await secondComparisonButton.scrollIntoViewIfNeeded();
-  await secondComparisonButton.click();
-  await expect(page).toHaveURL(/\/cstd\?compare=rocodex%2Cphotography#project-comparison$/);
-
-  const comparison = page.locator("#project-comparison");
-  const comparisonHeading = page.getByRole("heading", { name: "项目对比" });
-  const nextStep = comparison.getByRole("group", { name: "对比下一步" });
-  await expect
-    .poll(() => comparison.evaluate((element) => {
-      const top = element.getBoundingClientRect().top;
-      return top >= 80 && top <= 112;
-    }))
-    .toBe(true);
-  await expect(comparisonHeading).toBeFocused();
-  await expect(comparison.getByText("已选择 2 / 2 个项目", { exact: true })).toBeVisible();
-  await expectElementBefore(
-    page,
-    '#project-comparison [aria-label="对比下一步"]',
-    '#project-comparison [aria-label="已选对比项目"]',
-  );
-  await expect(comparison.locator("dl")).toHaveCount(1);
-
-  if (isMobile) {
-    const nextStepBox = await nextStep.boundingBox();
-    expect(nextStepBox).not.toBeNull();
-    expect(nextStepBox!.y).toBeLessThan(page.viewportSize()!.height);
+  for (const id of ["rocodex", "photography", "alpha", "design", "crm"]) {
+    const project = page.locator(`[data-cstd-project="${id}"]`);
+    await project.scrollIntoViewIfNeeded();
+    await expect
+      .poll(() =>
+        project.locator("img").evaluate((image) => {
+          const element = image as HTMLImageElement;
+          return element.complete && element.naturalWidth > 0;
+        }),
+      )
+      .toBe(true);
   }
 
   await expectNoHorizontalOverflow(page);
-
-  const restoredResponse = await page.reload({ waitUntil: "domcontentloaded" });
-  expect(restoredResponse?.ok()).toBe(true);
-  await expect
-    .poll(() => comparison.evaluate((element) => {
-      const top = element.getBoundingClientRect().top;
-      return top >= 80 && top <= 112;
-    }))
-    .toBe(true);
-  await expect(comparisonHeading).not.toBeFocused();
-  await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD goal selection returns to the preserved comparison decision", async ({ page, isMobile }) => {
+test("CSTD project index navigates the exhibition and keeps direct links safe", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
-  const response = await page.goto("/cstd?compare=rocodex%2Cphotography#project-comparison", {
-    waitUntil: "domcontentloaded",
-  });
+  const response = await page.goto("/cstd", { waitUntil: "networkidle" });
   expect(response?.ok()).toBe(true);
 
-  const comparison = page.locator("#project-comparison");
-  const comparisonHeading = page.getByRole("heading", { name: "项目对比" });
-  const comparisonNextStep = comparison.getByRole("group", { name: "对比下一步" });
-  const guide = page.locator("#project-guide");
-  const guideHeading = page.getByRole("heading", { name: "按目标找项目" });
-  const firstGoal = page.getByRole("button", {
-    name: "查精灵资料与玩法工具，匹配洛克图鉴 / RocoDex",
-  });
-
+  const index = page.getByRole("navigation", { name: "作品索引" });
+  await expect(index.getByRole("link")).toHaveCount(5);
+  await index.getByRole("link", { name: /02.*奶黄包摄影/ }).click();
+  await expect(page).toHaveURL(/#project-photography$/);
+  await expect(page.locator("#project-photography")).toBeInViewport({ ratio: 0.35 });
   await expect
-    .poll(() => comparison.evaluate((element) => {
-      const top = element.getBoundingClientRect().top;
-      return top >= 80 && top <= 112;
-    }))
-    .toBe(true);
-  await comparisonNextStep
-    .getByRole("button", { name: "选择目标路径", exact: true })
-    .click();
+    .poll(() => index.getByRole("link", { name: /02.*奶黄包摄影/ }).getAttribute("aria-current"))
+    .toBe("true");
 
-  await expect(page).toHaveURL(/\/cstd\?compare=rocodex%2Cphotography#project-guide$/);
-  await expect
-    .poll(() => guide.evaluate((element) => {
-      const top = element.getBoundingClientRect().top;
-      return top >= 80 && top <= 112;
-    }))
-    .toBe(true);
-  await expect(guideHeading).toBeFocused();
-  await expect(comparison.getByText("已选择 2 / 2 个项目", { exact: true })).toBeVisible();
+  const expectedLinks = [
+    ["rocodex", "打开图鉴", "https://rocodex.custard.top"],
+    ["photography", "查看摄影站", "https://shoot.custard.top"],
+    ["alpha", "打开 Alpha", "https://alpha.custard.top"],
+    ["design", "打开工作台", "https://design.custard.top"],
+    ["crm", "打开 CRM", "https://cfzzs.custard.top"],
+  ] as const;
 
-  await page.keyboard.press("Tab");
-  await expect(firstGoal).toBeFocused();
-  await firstGoal.click();
-
-  await expect(page).toHaveURL(/\/cstd\?goal=game-data&compare=rocodex%2Cphotography#project-comparison$/);
-  await expect
-    .poll(() => comparison.evaluate((element) => {
-      const top = element.getBoundingClientRect().top;
-      return top >= 80 && top <= 112;
-    }))
-    .toBe(true);
-  await expect(comparisonHeading).toBeFocused();
-  await expect(comparison.getByText("已选择 2 / 2 个项目", { exact: true })).toBeVisible();
-  await expect(comparisonNextStep.getByText("优先查看洛克图鉴 / RocoDex", { exact: true })).toBeVisible();
-  await expect(comparison.getByRole("group", { name: "目标匹配判断" })).toContainText("目标直达");
-  await expect(comparison.getByRole("list", { name: "已选对比项目" }).getByRole("listitem")).toHaveCount(2);
-
-  if (isMobile) {
-    const primaryActionBox = await comparisonNextStep.getByRole("button", { name: "查看目标直达案例" }).boundingBox();
-    const externalActionBox = await comparisonNextStep.getByRole("link", { name: "打开图鉴" }).boundingBox();
-    expect(primaryActionBox).not.toBeNull();
-    expect(externalActionBox).not.toBeNull();
-    expect(Math.abs(primaryActionBox!.y - externalActionBox!.y)).toBeLessThanOrEqual(2);
+  for (const [id, label, href] of expectedLinks) {
+    const link = page.locator(`[data-cstd-project="${id}"]`).getByRole("link", { name: label });
+    await expect(link).toHaveAttribute("href", href);
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noreferrer");
   }
 
-  await page.goBack();
-  await expect(page).toHaveURL(/\/cstd\?compare=rocodex%2Cphotography#project-guide$/);
-  await expect
-    .poll(() => guide.evaluate((element) => {
-      const top = element.getBoundingClientRect().top;
-      return top >= 80 && top <= 112;
-    }))
-    .toBe(true);
-  await expect(firstGoal).toHaveAttribute("aria-pressed", "false");
-  await expect(comparison.getByText("已选择 2 / 2 个项目", { exact: true })).toBeVisible();
-
-  await page.goForward();
-  await expect(page).toHaveURL(/\/cstd\?goal=game-data&compare=rocodex%2Cphotography#project-comparison$/);
-  await expect
-    .poll(() => comparison.evaluate((element) => {
-      const top = element.getBoundingClientRect().top;
-      return top >= 80 && top <= 112;
-    }))
-    .toBe(true);
-  await expect(firstGoal).toHaveAttribute("aria-pressed", "true");
-  await expect(comparisonNextStep.getByText("优先查看洛克图鉴 / RocoDex", { exact: true })).toBeVisible();
-
-  const restoredResponse = await page.reload({ waitUntil: "domcontentloaded" });
-  expect(restoredResponse?.ok()).toBe(true);
-  await expect
-    .poll(() => comparison.evaluate((element) => {
-      const top = element.getBoundingClientRect().top;
-      return top >= 80 && top <= 112;
-    }))
-    .toBe(true);
-  await expect(comparisonHeading).not.toBeFocused();
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD comparison decision opens an actionable case with preserved provenance", async ({ page }) => {
+test("CSTD studio interaction changes the note without turning into a workflow", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
-  const response = await page.goto(
-    "/cstd?goal=game-data&compare=rocodex%2Cphotography#project-comparison",
-    { waitUntil: "domcontentloaded" },
-  );
+  const response = await page.goto("/cstd#studio", { waitUntil: "networkidle" });
   expect(response?.ok()).toBe(true);
 
-  const comparison = page.locator("#project-comparison");
-  const comparisonHeading = page.getByRole("heading", { name: "项目对比" });
-  const comparisonNextStep = comparison.getByRole("group", { name: "对比下一步" });
-  const caseStudy = page.locator("#project-focus");
-  const caseHeading = page.locator("#project-focus-rocodex");
-  const handoff = caseStudy.getByLabel("目标案例交接状态");
-  const projectAction = handoff.getByRole("link", { name: "打开图鉴" });
-
-  await comparisonNextStep.getByRole("button", { name: "查看目标直达案例" }).click();
-
-  await expect(page).toHaveURL(
-    /\/cstd\?goal=game-data&project=rocodex&compare=rocodex%2Cphotography#project-focus$/,
-  );
-  await expect(caseHeading).toBeFocused();
-  await expect(handoff).toContainText("目标路径“查精灵资料与玩法工具”");
-  await expect(handoff).toContainText("保留与奶黄包摄影的横向对比");
-  await expect
-    .poll(() =>
-      projectAction.evaluate((element) => {
-        const box = element.getBoundingClientRect();
-        return box.top >= 0 && box.bottom <= window.innerHeight;
-      }),
-    )
-    .toBe(true);
-
-  await page.goBack();
-  await expect(page).toHaveURL(
-    /\/cstd\?goal=game-data&compare=rocodex%2Cphotography#project-comparison$/,
-  );
-  await expect(comparisonHeading).not.toBeFocused();
-
-  await page.goForward();
-  await expect(page).toHaveURL(
-    /\/cstd\?goal=game-data&project=rocodex&compare=rocodex%2Cphotography#project-focus$/,
-  );
-  await expect(handoff).toBeVisible();
-  await expect(caseHeading).not.toBeFocused();
-
-  const restoredResponse = await page.reload({ waitUntil: "domcontentloaded" });
-  expect(restoredResponse?.ok()).toBe(true);
-  await expect(handoff).toBeVisible();
-  await expect(caseHeading).not.toBeFocused();
-
-  await caseStudy.getByRole("button", { name: "关闭案例焦点" }).click();
-  await expect(page).toHaveURL(
-    /\/cstd\?goal=game-data&compare=rocodex%2Cphotography#project-comparison$/,
-  );
-  await expect
-    .poll(() => comparison.evaluate((element) => {
-      const top = element.getBoundingClientRect().top;
-      return top >= 80 && top <= 112;
-    }))
-    .toBe(true);
-  await expect(comparisonHeading).toBeFocused();
-
-  await page.goBack();
-  await expect(page).toHaveURL(
-    /\/cstd\?goal=game-data&project=rocodex&compare=rocodex%2Cphotography#project-focus$/,
-  );
-  await expect(handoff).toBeVisible();
-  await expect(caseHeading).not.toBeFocused();
-
-  await page.goForward();
-  await expect(page).toHaveURL(
-    /\/cstd\?goal=game-data&compare=rocodex%2Cphotography#project-comparison$/,
-  );
-  await expect(comparisonHeading).not.toBeFocused();
-  await expectNoHorizontalOverflow(page);
-  expect(browserIssues).toEqual([]);
-});
-
-test("CSTD project discovery preserves restored decision context", async ({ page }) => {
-  const browserIssues = captureBrowserIssues(page);
-  const response = await page.goto("/cstd?goal=portrait-shooting#projects", { waitUntil: "domcontentloaded" });
-  expect(response?.ok()).toBe(true);
-  await expect(page.getByRole("dialog", { name: "CSTD 开场动画" })).toHaveCount(0);
-
-  await expect(page.getByText("目标路径已恢复", { exact: true })).toBeVisible();
-  await expectElementBefore(page, "#project-guide", "#project-directory");
-
-  await page
-    .getByRole("region", { name: "奶黄包摄影" })
-    .getByRole("button", { name: "加入对比：奶黄包摄影" })
-    .click();
-  await expectElementBefore(page, "#project-guide", "#project-directory");
-  await expectElementBefore(page, "#project-comparison", "#project-directory");
+  const originalUrl = page.url();
+  await expect(page.getByText("先把问题看明白，再把界面做漂亮。", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "再碰一下奶黄包" }).click();
+  await expect(page.getByText("真实上线，比停在概念图里更有意思。", { exact: true })).toBeVisible();
+  expect(page.url()).toBe(originalUrl);
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });
