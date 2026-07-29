@@ -2544,3 +2544,42 @@
 ### Final status
 
 - A goal-aligned comparison now hands visitors to an actionable case study with visible provenance, immediate live-project access, keyboard-coherent focus, and durable history behavior in production.
+
+## 2026-07-29 - CSTD Case Return To Decision
+
+### Scope
+
+- Continued the personal main-site improvement loop by closing the comparison-originated case study on `custard.top`.
+- At 390 x 844, closing the case changed the URL to `#projects`, kept the page near scroll position 5,453, and placed the first project card at about 78 pixels.
+- The preserved comparison decision moved about 2,432 pixels above the viewport and keyboard focus fell back to `body`.
+
+### Fix
+
+- Made case closing source-aware: a goal-matched case with preserved comparison provenance now serializes `#project-comparison` instead of `#projects`.
+- Reused the existing result-alignment effect and direct-interaction focus intent so closing lands on the named `项目对比` heading.
+- Added `selectedProjectId` to the comparison restoration effect dependencies so removing the conditionally rendered case can trigger the return.
+- Cleared only programmatically managed CSTD heading focus on `popstate`, preventing offscreen focus from surviving back/forward navigation while leaving ordinary controls untouched.
+- Kept ordinary non-comparison case closing on the project directory path.
+- Extended source-contract and desktop/mobile E2E coverage through close, back, forward, position, focus, URL, provenance, overflow, and browser issues.
+
+### Verification evidence
+
+- The source-contract red run failed on the absent source-aware close rule.
+- The first focused E2E green attempt found the comparison heading remained focused while history restored the case; the managed-focus cleanup fixed that offscreen focus and the second focused run passed both browser profiles.
+- Full local gates passed: `npx tsc --noEmit`, `npm run lint`, `npm test`, `npm audit --audit-level=moderate`, `npm run build`, `npm run test:e2e`, and `git diff --check`.
+- Local counts: Vitest passed 67 files / 275 tests; Next generated 734 static pages; Playwright passed 16 tests with 2 environment-dependent skips; npm audit found 0 vulnerabilities.
+- Local checks at 320 x 800, 390 x 844, and 1280 x 900 aligned the returned comparison at 96.0-96.5 pixels and focused its heading.
+- Browser back restored the case around 96 pixels with its handoff and neutral focus; forward restored the comparison around 96 pixels with neutral focus. Every viewport reported overflow `0` and no console warnings/errors.
+- Implementation commit `477db60` was pushed to `origin/main`.
+- GitHub Actions run `30455467721` completed successfully in 2m52s across install, lint, 275 tests, build, and E2E.
+- Vercel production deployment `dpl_K7zEmKjC3372h7EVUNnUopawnr32` reached `READY` for production aliases; apex, `/cstd`, and `www` returned `200`.
+- Fresh production checks reproduced every local URL, position, direct focus, history-neutral focus, provenance, and zero-overflow result.
+- Production screenshots were visually inspected without clipping, overlap, blank content, or breakpoint drift. Vercel runtime-error and HTTP 500 queries returned no entries.
+
+### Risk notes
+
+- No repository-controlled, dependency-audit, CI, deployment, runtime-log, or measured viewport risk remains for this item.
+
+### Final status
+
+- Closing a comparison-originated case now returns to the preserved decision instead of stranding visitors in the project directory, with coherent direct and history focus behavior in production.
