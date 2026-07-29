@@ -2,16 +2,16 @@ import type { Metadata } from "next";
 import { CstdLanding } from "@/components/cstd-landing";
 
 export const metadata: Metadata = {
-  title: "CSTD | 奶黄包的奇思妙想实验田",
-  description: "CSTD 是 custard 的个人项目集，记录技术、设计、文化、投资研究与游戏相关的混合实验。",
+  title: "CSTD | 独立产品工作室",
+  description: "CSTD 是 custard 的独立产品工作室，展示游戏数据、影像服务、投资研究、AI 创作与业务系统等已上线项目。",
   alternates: {
     canonical: "https://custard.top/",
   },
   openGraph: {
     type: "website",
     siteName: "CSTD",
-    title: "CSTD | 奶黄包的奇思妙想实验田",
-    description: "从奶黄包出发，孵化技术、设计、文化、投资研究与游戏的个人项目实验田。",
+    title: "CSTD | 独立产品工作室",
+    description: "把灵感做成真正能用的产品。浏览 CSTD 已上线的游戏数据、影像、研究、AI 与业务系统。",
     url: "https://custard.top/",
     images: [
       {
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "CSTD | 奶黄包的奇思妙想实验田",
-    description: "从奶黄包出发，孵化技术、设计、文化、投资研究与游戏的个人项目实验田。",
+    title: "CSTD | 独立产品工作室",
+    description: "把灵感做成真正能用的产品。浏览 CSTD 已上线的游戏数据、影像、研究、AI 与业务系统。",
     images: ["https://custard.top/cstd-og.svg"],
   },
 };

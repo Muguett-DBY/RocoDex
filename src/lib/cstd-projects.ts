@@ -16,6 +16,11 @@ export type CstdProject = {
   tone: CstdProjectTone;
   category: CstdProjectCategory;
   description: string;
+  preview?: {
+    src: string;
+    alt: string;
+    position?: string;
+  };
   metrics: readonly (readonly [value: string, label: string])[];
   tags: readonly string[];
   evidence: {
@@ -41,6 +46,11 @@ export const cstdProjects: readonly CstdProject[] = [
     category: "data",
     description:
       "面向《洛克王国世界》的中文精灵资料库，支持搜索筛选、精灵对比、PVP 阵容探索、技能浏览和洛克性格测试。",
+    preview: {
+      src: "/cstd-projects/rocodex.png",
+      alt: "RocoDex 中文精灵资料库首页界面",
+      position: "center top",
+    },
     metrics: [
       ["347", "只精灵"],
       ["402", "个形态"],
@@ -66,6 +76,11 @@ export const cstdProjects: readonly CstdProject[] = [
     category: "creative",
     description:
       "南京女生写真与情侣约拍。柔雾胶片感、自然陪拍、江南感写真和情侣纪念，用清晰的套餐、作品展示和预约入口承载更温柔的拍摄体验。",
+    preview: {
+      src: "/cstd-projects/photography.png",
+      alt: "奶黄包摄影南京写真预约站首页界面",
+      position: "center top",
+    },
     metrics: [
       ["Portrait", "人像"],
       ["Nanjing", "城市"],
@@ -91,6 +106,11 @@ export const cstdProjects: readonly CstdProject[] = [
     category: "research",
     description:
       "中文公司深度评分报告工具。先确认上市主体，再结合公开行情、财务数据和 DeepSeek 生成模板化研究报告、评分、估值区间与图表驾驶舱。",
+    preview: {
+      src: "/cstd-projects/alpha.png",
+      alt: "CSTD Alpha 私人公司深度研究工具入口界面",
+      position: "center center",
+    },
     metrics: [
       ["AI", "深度报告"],
       ["20", "项评分"],
@@ -116,6 +136,11 @@ export const cstdProjects: readonly CstdProject[] = [
     category: "creative",
     description:
       "个人中文 AI 创作工作台，整合流式对话、图片生成、视频生成和素材库管理，用单密码私有访问承载长期创作资料。",
+    preview: {
+      src: "/cstd-projects/design.png",
+      alt: "私人 AI 创作工作台访问入口界面",
+      position: "center center",
+    },
     metrics: [
       ["Chat", "智能对话"],
       ["Image", "图片生成"],
@@ -141,6 +166,11 @@ export const cstdProjects: readonly CstdProject[] = [
     category: "operations",
     description:
       "面向产业园区招商的线索管理系统，覆盖仪表盘、线索流转、联系人、空间资源、导入导出、RBAC 权限和管理后台。",
+    preview: {
+      src: "/cstd-projects/crm.png",
+      alt: "产业园区招商 CRM 登录入口界面",
+      position: "center center",
+    },
     metrics: [
       ["RBAC", "权限"],
       ["D1", "业务数据"],

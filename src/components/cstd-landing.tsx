@@ -2,6 +2,7 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type RefObject } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowDownRight, Bot, Building2, Camera, Check, ChevronDown, ChevronLeft, ChevronRight, Copy, ExternalLink, GitCompareArrows, Menu, Pause, Play, RotateCcw, Search, Sparkles, TrendingUp, Volume2, VolumeX, X, type LucideIcon } from "lucide-react";
@@ -160,9 +161,9 @@ const projectIcons: Record<CstdProjectIconKey, LucideIcon> = {
 };
 
 const noteItems = [
-  ["05", "个在线项目"],
+  ["05", "个产品在线"],
   ["347", "只精灵资料"],
-  ["Mix", "技术 / 设计 / 研究"],
+  ["01", "个人独立工作室"],
 ] as const;
 
 const cstdProjectComparisonFitLabelClassNames: Record<CstdProjectComparisonFit["items"][number]["kind"], string> = {
@@ -202,6 +203,7 @@ const projectEvidenceOverview = getCstdProjectEvidenceOverview(cstdProjects);
 const projectProofTimeline = getCstdProjectProofTimeline(cstdProjects);
 const projectCapabilityIndex = getCstdProjectCapabilityIndex(cstdProjects);
 const projectGuideSummary = getCstdProjectGuideSummary(cstdProjectGuides, cstdProjects);
+const heroPreviewProjects = cstdProjects.filter((project) => project.status === "Live" && project.preview);
 
 function getCstdClipboardWriter() {
   if (typeof navigator === "undefined" || !navigator.clipboard?.writeText) return undefined;
@@ -902,19 +904,8 @@ export function CstdLanding() {
   );
 
   return (
-    <main className="relative isolate min-h-screen overflow-hidden bg-[#fff6df] text-[#2f241d]">
+    <main className="relative isolate min-h-screen overflow-hidden bg-[#f4f3ed] text-[#2f241d]">
       <AnimatePresence>{introVisible ? <CstdIntro phase={introPhase} onSkip={skipIntro} onStart={beginIntroPlayback} /> : null}</AnimatePresence>
-
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-0 -z-20"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(47,36,29,.04) 1px, transparent 1px), linear-gradient(180deg, rgba(47,36,29,.04) 1px, transparent 1px), radial-gradient(circle at 75% 15%, rgba(255,231,236,.8), transparent 28%), radial-gradient(circle at 12% 72%, rgba(223,248,237,.9), transparent 30%), linear-gradient(135deg, #fffaf0 0%, #fff2c7 48%, #f9fff4 100%)",
-          backgroundSize: "32px 32px, 32px 32px, auto, auto, auto",
-        }}
-      />
-      <FloatingBits motionDisabled={motionDisabled} />
 
       <div className={cstdPageShellClassName}>
         <header className={cstdHeaderClassName}>
@@ -966,16 +957,43 @@ export function CstdLanding() {
         </header>
 
         <section className={cstdHeroSectionClassName}>
+          <div aria-hidden="true" className="absolute inset-y-0 right-0 hidden w-[42%] bg-[#202820] lg:block" />
+          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-1.5 bg-[#f6bf3f]" />
+
           <motion.div
             initial={motionDisabled ? false : { opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.75, ease: [0.2, 0.8, 0.2, 1] }}
-            className="relative z-10"
+            className="relative z-10 self-center"
           >
-            <p className="font-black uppercase tracking-[0.22em] text-[#d98528]">Custard studio</p>
-            <div className="mt-4 overflow-hidden">
+            <div className="flex items-center justify-between gap-4">
+              <p className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-[0.2em] text-[#f6bf3f] sm:text-sm">
+                <span className="h-2 w-2 rounded-full bg-[#4ee0a5] shadow-[0_0_0_5px_rgba(78,224,165,.12)]" />
+                Independent product studio
+              </p>
+              <button
+                type="button"
+                onClick={pokeMascot}
+                onPointerEnter={() => handleMascotMoodChange("working")}
+                onPointerLeave={() => handleMascotMoodChange("curious")}
+                aria-label="点击奶黄包互动"
+                title="点一点奶黄包"
+                className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-lg border border-white/30 bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f] lg:hidden"
+              >
+                <motion.img
+                  src="/cstd-mascot.svg"
+                  alt=""
+                  className="h-12 w-12 object-contain"
+                  animate={motionDisabled ? undefined : { y: [0, -2, 0], rotate: [-2, 2, -2] }}
+                  transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
+                />
+                <span className="sr-only">{mascotCopy}</span>
+              </button>
+            </div>
+
+            <div className="mt-3 overflow-hidden sm:mt-4">
               <motion.h1
-                className="text-[clamp(3.45rem,20vw,5.4rem)] font-black leading-[0.8] tracking-[0.03em] text-[#2f241d] drop-shadow-[7px_7px_0_rgba(246,191,63,.34)] sm:text-[clamp(4.6rem,17vw,10rem)] sm:leading-[0.78] sm:drop-shadow-[9px_9px_0_rgba(246,191,63,.38)]"
+                className="text-[clamp(4rem,21vw,5.6rem)] font-black leading-[0.78] tracking-[0.03em] text-[#f6bf3f] sm:text-[clamp(5rem,12vw,9rem)] sm:leading-[0.76]"
                 initial={motionDisabled ? false : { y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ delay: 0.08, duration: 0.75, ease: [0.2, 0.8, 0.2, 1] }}
@@ -984,21 +1002,21 @@ export function CstdLanding() {
               </motion.h1>
             </div>
             <motion.p
-              className="mt-4 max-w-full break-all text-[clamp(1.45rem,7.4vw,2.25rem)] font-black leading-tight sm:mt-5 sm:max-w-3xl sm:text-[clamp(1.45rem,5.4vw,3.45rem)]"
+              className="mt-4 max-w-3xl text-[clamp(1.65rem,8vw,2.4rem)] font-black leading-[1.08] text-white sm:mt-5 sm:text-[clamp(2rem,4vw,3.4rem)]"
               initial={motionDisabled ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.22, duration: 0.55 }}
             >
-              <span className="block">奶黄包的奇思</span>
-              <span className="block">妙想实验田</span>
+              <span className="block">把灵感，做成</span>
+              <span className="block text-[#aaf0d5]">真正能用的产品。</span>
             </motion.p>
             <motion.p
-              className="mt-4 max-w-full break-all text-sm leading-7 text-[#6f5b4a] sm:mt-5 sm:max-w-2xl sm:text-lg sm:leading-8"
+              className="mt-4 max-w-2xl text-sm font-medium leading-6 text-[#d8d3c8] sm:mt-5 sm:text-base sm:leading-7"
               initial={motionDisabled ? false : { opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.32, duration: 0.55 }}
             >
-              从一只软乎乎的奶黄包出发，孵化技术、设计、投资研究、文化与游戏的混合实验。这里收纳正在生长的产品、视觉练习和小型工具，每个项目都带一点甜糯的手作痕迹。
+              独立完成产品设计、全栈开发与持续运营。这里收纳游戏数据、影像服务、投资研究、AI 创作与业务系统，每一个都已经可以打开使用。
             </motion.p>
 
             <motion.div
@@ -1007,45 +1025,26 @@ export function CstdLanding() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.42, duration: 0.5 }}
             >
-              <HeroButton href="#project-grid" primary wideOnMobile>
-                看项目
+              <HeroButton href="#project-grid" primary hero wideOnMobile>
+                浏览全部项目
               </HeroButton>
-              <HeroButton href="https://rocodex.custard.top">打开 RocoDex</HeroButton>
-              <HeroButton href="https://alpha.custard.top">打开 Alpha</HeroButton>
+              <HeroButton href="https://rocodex.custard.top" hero>RocoDex</HeroButton>
+              <HeroButton href="https://shoot.custard.top" hero>摄影作品</HeroButton>
             </motion.div>
 
             <motion.div
-              className="mt-4 grid max-w-2xl grid-cols-2 gap-2 sm:mt-6 sm:grid-cols-4 sm:gap-3 lg:grid-cols-3 [@media(max-height:800px)]:mt-3"
+              className="mt-5 grid max-w-2xl grid-cols-3 divide-x divide-white/20 border-y border-white/20 py-3 sm:mt-6"
               initial={motionDisabled ? false : { opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5, duration: 0.5 }}
             >
               {noteItems.map(([value, label]) => (
-                <div key={value} className="min-w-0 rounded-lg border border-dashed border-[#cdb58c] bg-white/65 p-3 shadow-[3px_3px_0_rgba(47,36,29,.05)] [@media(max-height:800px)]:p-2">
-                  <strong className="block break-all text-lg font-black sm:text-2xl">{value}</strong>
-                  <span className="mt-1 block text-[0.68rem] font-medium text-[#7b6656] sm:text-xs">{label}</span>
+                <div key={`${value}-${label}`} className="min-w-0 px-2 first:pl-0 sm:px-4">
+                  <strong className="block break-words text-lg font-black text-white sm:text-2xl">{value}</strong>
+                  <span className="mt-1 block break-words text-[0.62rem] font-bold leading-4 text-[#aaa397] sm:text-xs">{label}</span>
                 </div>
               ))}
-              <button
-                type="button"
-                onClick={pokeMascot}
-                onPointerEnter={() => handleMascotMoodChange("working")}
-                onPointerLeave={() => handleMascotMoodChange("curious")}
-                aria-label="点击奶黄包互动"
-                title="点一点奶黄包"
-                className="group relative grid min-h-[74px] min-w-0 place-items-center overflow-hidden rounded-lg border border-dashed border-[#cdb58c] bg-white/65 p-1 shadow-[3px_3px_0_rgba(47,36,29,.05)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] lg:hidden"
-              >
-                <motion.img
-                  src="/cstd-mascot.svg"
-                  alt=""
-                  className="h-16 w-16 object-contain drop-shadow-[4px_5px_0_rgba(47,36,29,.08)]"
-                  animate={motionDisabled ? undefined : { y: [0, -3, 0], rotate: [-2, 2, -2] }}
-                  transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
-                />
-                <span className="sr-only">{mascotCopy}</span>
-              </button>
             </motion.div>
-
           </motion.div>
 
           <motion.aside
@@ -1056,18 +1055,18 @@ export function CstdLanding() {
             aria-label="奶黄包互动角色"
           >
             <motion.div
-              className="absolute right-0 top-0 hidden rounded-xl border-2 border-[#2f241d] bg-[#ffe7ec] px-4 py-2 text-sm font-black text-[#be4563] shadow-[6px_6px_0_rgba(47,36,29,.12)] md:block"
+              className="absolute right-0 top-8 hidden rounded-lg border border-white/25 bg-[#f46d8b] px-4 py-2 text-sm font-black text-white shadow-[6px_6px_0_rgba(0,0,0,.22)] md:block"
               animate={motionDisabled ? undefined : { rotate: [5, 2, 5], y: [0, -8, 0] }}
               transition={{ repeat: Infinity, duration: 4.2, ease: "easeInOut" }}
             >
-              soft launch
+              05 products live
             </motion.div>
             <motion.div
-              className="absolute left-3 top-10 hidden rounded-xl border-2 border-[#2f241d] bg-[#dff8ed] px-4 py-2 text-sm font-black text-[#047857] shadow-[6px_6px_0_rgba(47,36,29,.12)] sm:block"
+              className="absolute left-0 top-20 hidden rounded-lg border border-white/25 bg-[#aaf0d5] px-4 py-2 text-sm font-black text-[#173d31] shadow-[6px_6px_0_rgba(0,0,0,.22)] sm:block"
               animate={motionDisabled ? undefined : { rotate: [-5, -1, -5], y: [0, 8, 0] }}
               transition={{ repeat: Infinity, duration: 3.8, ease: "easeInOut" }}
             >
-              fresh build
+              designed + shipped
             </motion.div>
 
             {desktopCustardStageEnabled ? (
@@ -1081,15 +1080,17 @@ export function CstdLanding() {
               />
             ) : null}
           </motion.aside>
+
+          <ProjectPreviewRail projects={heroPreviewProjects} motionDisabled={motionDisabled} />
         </section>
 
-        <section id="projects" className="pb-16 pt-2 sm:pb-24">
+        <section id="projects" className="pb-16 pt-10 sm:pb-24 sm:pt-16">
           <div className="mb-5 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
-              <p className="font-black uppercase tracking-[0.18em] text-[#d98528]">Projects</p>
-              <h2 className={cstdProjectHeadingClassName}>正在发酵的项目</h2>
+              <p className="font-black uppercase tracking-[0.18em] text-[#d05f23]">Selected work · 2026</p>
+              <h2 className={cstdProjectHeadingClassName}>已经做出来的东西</h2>
               <p className="mt-3 max-w-2xl text-sm leading-7 text-[#6f5b4a] sm:text-base">
-                工具、影像与研究类项目分开放置，方便从主站快速进入。
+                从真实界面开始浏览，再按目标筛选、对比或进入完整案例。
               </p>
             </div>
             <MotionControls
@@ -1359,35 +1360,22 @@ function CstdIntro({
         event.preventDefault();
         (event.shiftKey ? lastControl : firstControl).focus();
       }}
-      className="fixed inset-0 z-50 m-0 grid h-full max-h-none w-full max-w-none place-items-center overflow-hidden border-0 bg-[#fff4cf] p-0 text-[#2f241d] backdrop:bg-transparent"
+      className="fixed inset-0 z-50 m-0 grid h-full max-h-none w-full max-w-none place-items-center overflow-hidden border-0 bg-[#181511] p-0 text-white backdrop:bg-transparent"
       initial={{ opacity: 1 }}
       exit={{ opacity: 0, scale: 1.018, filter: "blur(12px)" }}
       transition={{ duration: 0.7, ease: [0.2, 0.8, 0.2, 1] }}
     >
       <h2 id="cstd-intro-title" className="sr-only">CSTD 开场动画</h2>
-      <motion.div
-        aria-hidden="true"
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 42%, rgba(255,216,121,.72), transparent 20%), radial-gradient(circle at 30% 28%, rgba(255,255,255,.86), transparent 22%), radial-gradient(circle at 22% 72%, rgba(223,248,237,.86), transparent 28%), radial-gradient(circle at 78% 22%, rgba(255,231,236,.84), transparent 25%), linear-gradient(90deg, rgba(47,36,29,.045) 1px, transparent 1px), linear-gradient(180deg, rgba(47,36,29,.045) 1px, transparent 1px)",
-          backgroundSize: "auto, auto, auto, auto, 34px 34px, 34px 34px",
-        }}
-      />
-      <motion.div
-        aria-hidden="true"
-        className="absolute inset-x-[-20%] top-[6%] h-28 rotate-[-5deg] rounded-full border-y border-white/70 bg-white/24 blur-xl"
-        animate={introPlaying ? { x: ["-7%", "9%", "-4%"], opacity: [0.18, 0.72, 0.2] } : { opacity: 0.26 }}
-        transition={{ duration: 4.8, ease: "easeInOut" }}
-      />
-      <CinematicSteam active={introPlaying} />
+      <div aria-hidden="true" className="absolute inset-y-0 right-0 w-[38%] bg-[#202820]" />
+      <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-2 bg-[#f6bf3f]" />
+      {introPlaying ? <CinematicSteam active /> : null}
       {introPlaying ? <IntroSoundWaves /> : null}
       {introPlaying ? <CinematicSugarBurst delay={2.28} /> : null}
       <button
         ref={skipButtonRef}
         type="button"
         onClick={onSkip}
-        className="absolute right-4 top-4 z-30 rounded-full border border-[#ead6ad] bg-white/82 px-4 py-2 text-sm font-black text-[#7b6656] shadow-sm backdrop-blur transition hover:border-[#d98528] hover:text-[#2f241d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64] sm:right-5 sm:top-5"
+        className="absolute right-4 top-4 z-30 rounded-lg border border-white/30 bg-white/10 px-4 py-2 text-sm font-black text-white backdrop-blur transition hover:border-[#f6bf3f] hover:bg-white/15 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f] sm:right-5 sm:top-5"
       >
         直接浏览项目
       </button>
@@ -1474,26 +1462,21 @@ function CstdIntro({
           </motion.div>
         ) : (
           <motion.div key="idle" className="grid place-items-center text-center" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.48 }}>
-            <motion.div
-              aria-hidden="true"
-              className="absolute left-1/2 top-1/2 h-[360px] w-[360px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#f6bf3f]/35 bg-white/24 shadow-[0_0_70px_rgba(246,191,63,.24)]"
-              animate={{ scale: [0.96, 1.04, 0.96], opacity: [0.62, 0.9, 0.62] }}
-              transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut" }}
-            />
             <motion.img
               src="/cstd-mascot.svg"
               alt=""
-              className="relative w-64 drop-shadow-[14px_16px_0_rgba(47,36,29,.12)] sm:w-80"
+              className="relative w-64 drop-shadow-[14px_16px_0_rgba(0,0,0,.28)] sm:w-80"
               animate={{ y: [0, -10, 0], rotate: [-2, 2, -2] }}
               transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut" }}
             />
-            <p className="relative mt-4 text-sm font-black uppercase tracking-[0.2em] text-[#d98528]">tap to wake the custard</p>
-            <h2 aria-hidden="true" className="mt-2 text-4xl font-black tracking-tight text-[#2f241d] sm:text-6xl">CSTD</h2>
+            <p className="relative mt-4 text-sm font-black uppercase tracking-[0.2em] text-[#aaf0d5]">independent product studio</p>
+            <h2 aria-hidden="true" className="mt-2 text-5xl font-black tracking-[0.03em] text-[#f6bf3f] sm:text-7xl">CSTD</h2>
+            <p className="mt-2 text-sm font-bold text-[#d8d3c8]">五个产品在线，等你打开。</p>
             <button
               ref={startButtonRef}
               type="button"
               onClick={onStart}
-              className="group relative mt-6 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-xl border-2 border-[#2f241d] bg-[#0f8f64] px-7 text-base font-black text-white shadow-[7px_7px_0_rgba(47,36,29,.14)] transition hover:-translate-y-0.5 hover:bg-[#0d7d59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0f8f64]"
+              className="group relative mt-6 inline-flex min-h-12 items-center justify-center overflow-hidden rounded-lg border-2 border-[#f6bf3f] bg-[#f6bf3f] px-7 text-base font-black text-[#181511] shadow-[7px_7px_0_rgba(246,191,63,.18)] transition hover:-translate-y-0.5 hover:bg-[#ffd469] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f6bf3f]"
             >
               <span className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/24 transition group-hover:left-full" />
               开启 CSTD
@@ -1619,28 +1602,6 @@ function useDesktopCustardStage() {
   return enabled;
 }
 
-function FloatingBits({ motionDisabled }: { motionDisabled: boolean }) {
-  const bits = [
-    "left-[7%] top-[22%] h-4 w-4 rotate-12 bg-[#ffe7ec]",
-    "right-[16%] top-[34%] h-5 w-5 -rotate-6 bg-[#dff8ed]",
-    "left-[18%] bottom-[18%] h-3 w-3 rotate-45 bg-[#e3f2ff]",
-    "right-[8%] bottom-[24%] h-4 w-4 rotate-12 bg-[#fff0c9]",
-  ];
-
-  return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      {bits.map((classes, index) => (
-        <motion.span
-          key={classes}
-          className={`absolute rounded-sm border border-[#2f241d]/40 shadow-[4px_4px_0_rgba(47,36,29,.06)] ${classes}`}
-          animate={motionDisabled ? undefined : { y: [0, index % 2 ? 14 : -14, 0], rotate: [0, index % 2 ? 10 : -10, 0] }}
-          transition={{ repeat: Infinity, duration: 5 + index, ease: "easeInOut" }}
-        />
-      ))}
-    </div>
-  );
-}
-
 function CstdNavigationLinks({ mobile = false, onNavigate }: { mobile?: boolean; onNavigate?: () => void }) {
   return cstdNavigationItems.map((item) => (
     <NavLink key={item.href} href={item.href} mobile={mobile} onNavigate={onNavigate}>
@@ -1685,30 +1646,101 @@ function NavLink({
 function HeroButton({
   href,
   children,
+  hero = false,
   primary = false,
   wideFrom320 = false,
   wideOnMobile = false,
 }: {
   href: string;
   children: ReactNode;
+  hero?: boolean;
   primary?: boolean;
   wideFrom320?: boolean;
   wideOnMobile?: boolean;
 }) {
   const targetProps = getCstdLinkTargetProps(href);
+  const toneClassName = hero
+    ? primary
+      ? "border-[#f6bf3f] bg-[#f6bf3f] text-[#181511] shadow-[5px_5px_0_rgba(246,191,63,.2)] hover:bg-[#ffd469] focus-visible:outline-[#f6bf3f]"
+      : "border-white/35 bg-white/10 text-white shadow-none hover:border-white/70 hover:bg-white/16 focus-visible:outline-white"
+    : primary
+      ? "border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59] focus-visible:outline-[#0f8f64]"
+      : "border-[#b8d7f5] bg-[#e3f2ff] text-[#2563eb] hover:border-[#2563eb] focus-visible:outline-[#2563eb]";
 
   return (
     <Link
       href={href}
       {...targetProps}
-      className={`inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto sm:px-5 ${
-        primary
-          ? "border-[#1b4332] bg-[#0f8f64] text-white hover:bg-[#0d7d59] focus-visible:outline-[#0f8f64]"
-          : "border-[#b8d7f5] bg-[#e3f2ff] text-[#2563eb] hover:border-[#2563eb] focus-visible:outline-[#2563eb]"
-      } ${wideOnMobile ? "col-span-2" : ""} ${wideFrom320 ? "min-[320px]:col-span-2" : ""}`}
+      className={`inline-flex min-h-11 min-w-0 w-full items-center justify-center gap-2 rounded-lg border px-3 text-center text-sm font-black no-underline shadow-[4px_4px_0_rgba(47,36,29,.08)] transition hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 sm:w-auto sm:px-5 ${toneClassName} ${wideOnMobile ? "col-span-2" : ""} ${wideFrom320 ? "min-[320px]:col-span-2" : ""}`}
     >
       {children}
     </Link>
+  );
+}
+
+function ProjectPreviewRail({
+  projects,
+  motionDisabled,
+}: {
+  projects: readonly (typeof cstdProjects)[number][];
+  motionDisabled: boolean;
+}) {
+  return (
+    <motion.div
+      className="relative z-10 mt-3 min-w-0 lg:col-span-2 lg:mt-0"
+      initial={motionDisabled ? false : { opacity: 0, y: 18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.58, duration: 0.55 }}
+    >
+      <div className="mb-2 flex items-center justify-between gap-4">
+        <p className="text-[0.64rem] font-black uppercase tracking-[0.18em] text-[#aaa397] sm:text-xs">
+          Live product windows
+        </p>
+        <span className="hidden text-xs font-bold text-[#aaa397] sm:block">真实生产界面 · 点击打开</span>
+      </div>
+      <div
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-5 lg:overflow-visible lg:pb-0"
+        aria-label="已上线项目预览"
+      >
+        {projects.map((project) => {
+          if (!project.preview) return null;
+          const targetProps = getCstdLinkTargetProps(project.href);
+
+          return (
+            <motion.div
+              key={project.id}
+              className="min-w-[82%] snap-start sm:min-w-[44%] lg:min-w-0"
+              whileHover={motionDisabled ? undefined : { y: -5 }}
+              transition={{ duration: 0.2 }}
+            >
+              <Link
+                href={project.href}
+                {...targetProps}
+                aria-label={`打开 ${project.title} 生产站点`}
+                className="group block overflow-hidden rounded-lg border border-white/25 bg-[#f4f3ed] text-[#181511] no-underline shadow-[6px_6px_0_rgba(0,0,0,.2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f6bf3f]"
+              >
+                <span className="relative block h-36 overflow-hidden border-b border-[#2f241d]/20 bg-white sm:h-40 lg:h-28">
+                  <Image
+                    src={project.preview.src}
+                    alt={project.preview.alt}
+                    fill
+                    priority={project.id === "rocodex"}
+                    sizes="(max-width: 639px) 82vw, (max-width: 1023px) 44vw, 244px"
+                    className="object-cover transition duration-500 group-hover:scale-[1.025]"
+                    style={{ objectPosition: project.preview.position }}
+                  />
+                </span>
+                <span className="flex min-h-11 items-center gap-2 px-3 py-2">
+                  <span className="h-2 w-2 shrink-0 rounded-full bg-[#0f8f64]" />
+                  <span className="min-w-0 flex-1 truncate text-xs font-black">{project.title}</span>
+                  <ExternalLink aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-[#6f5b4a]" />
+                </span>
+              </Link>
+            </motion.div>
+          );
+        })}
+      </div>
+    </motion.div>
   );
 }
 
@@ -2427,24 +2459,32 @@ function ProjectCard({
   const evidencePreview = getCstdProjectCardPreview(project);
   const comparisonControl = getCstdProjectComparisonControl(comparedProjectIds, project.id);
   const toneClasses = {
-    mint: "from-[#dff8ed]/90 text-[#047857]",
-    rose: "from-[#ffe7ec]/90 text-[#be4563]",
-    teal: "from-[#d9f6f2]/90 text-[#0f766e]",
-    violet: "from-[#ede9fe]/90 text-[#6d28d9]",
-    amber: "from-[#fff0c9]/90 text-[#b45309]",
-    sky: "from-[#e3f2ff]/90 text-[#2563eb]",
+    mint: "bg-[#dff8ed] text-[#047857]",
+    rose: "bg-[#ffe7ec] text-[#be4563]",
+    teal: "bg-[#d9f6f2] text-[#0f766e]",
+    violet: "bg-[#ede9fe] text-[#6d28d9]",
+    amber: "bg-[#fff0c9] text-[#b45309]",
+    sky: "bg-[#e3f2ff] text-[#2563eb]",
+  }[project.tone];
+  const toneBandClasses = {
+    mint: "bg-[#20b486]",
+    rose: "bg-[#f46d8b]",
+    teal: "bg-[#25b6a4]",
+    violet: "bg-[#8b6de9]",
+    amber: "bg-[#e49a2f]",
+    sky: "bg-[#5c9df5]",
   }[project.tone];
 
   return (
     <motion.article
-      className="group relative overflow-hidden rounded-xl border-2 border-[#ead6ad] bg-white/78 shadow-[0_18px_42px_rgba(97,61,22,.1)] backdrop-blur-sm sm:shadow-[0_22px_55px_rgba(97,61,22,.12)]"
+      className="group relative overflow-hidden rounded-lg border-2 border-[#2f241d] bg-white shadow-[7px_7px_0_rgba(47,36,29,.1)] sm:shadow-[9px_9px_0_rgba(47,36,29,.12)]"
       initial={motionDisabled ? false : { opacity: 0, y: 34 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-80px" }}
       transition={{ delay: index * 0.08, duration: 0.58, ease: [0.2, 0.8, 0.2, 1] }}
       whileHover={motionDisabled ? undefined : { y: -6, rotate: index === 1 ? 0.4 : -0.3 }}
     >
-      <div className="absolute inset-x-0 top-0 h-2 bg-[repeating-linear-gradient(90deg,#f6bf3f_0_24px,#dff8ed_24px_48px,#ffe7ec_48px_72px,#e3f2ff_72px_96px)]" />
+      <div className={`absolute inset-x-0 top-0 z-20 h-2 ${toneBandClasses}`} />
       <motion.div
         aria-hidden="true"
         className="absolute inset-y-0 -left-1/3 w-1/3 skew-x-[-18deg] bg-white/40"
@@ -2452,9 +2492,24 @@ function ProjectCard({
         whileHover={motionDisabled ? undefined : { x: "520%" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
       />
-      <div className="relative p-4 sm:p-6 xl:p-7">
+      {project.preview ? (
+        <div className="relative hidden h-44 overflow-hidden border-b-2 border-[#2f241d] bg-[#f4f3ed] sm:block">
+          <Image
+            src={project.preview.src}
+            alt={project.preview.alt}
+            fill
+            sizes="(max-width: 1279px) 50vw, 33vw"
+            className="object-cover transition duration-500 group-hover:scale-[1.02]"
+            style={{ objectPosition: project.preview.position }}
+          />
+          <span className="absolute bottom-3 left-3 rounded-md border border-[#2f241d] bg-[#f6bf3f] px-2.5 py-1 text-[0.68rem] font-black uppercase tracking-[0.12em] text-[#2f241d] shadow-[3px_3px_0_rgba(47,36,29,.18)]">
+            Production
+          </span>
+        </div>
+      ) : null}
+      <div className="relative p-4 pt-5 sm:p-6 xl:p-7">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-          <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-gradient-to-br ${toneClasses} to-white shadow-inner`}>
+          <span className={`grid h-12 w-12 shrink-0 place-items-center rounded-lg ${toneClasses} shadow-inner`}>
             <Icon className="h-5 w-5" />
           </span>
           <div className="min-w-0">
