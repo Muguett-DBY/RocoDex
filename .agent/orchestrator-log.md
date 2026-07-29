@@ -3133,3 +3133,33 @@
 - Risk: no repository-controlled, dependency-audit, CI, deployment, runtime-log, or measured viewport risk remains for this item.
 - Next direction: audit navigation from the goal-matched case into another compared case, including whether closing the reference case still returns to the preserved comparison decision instead of losing its origin.
 - Status: closed
+
+## 2026-07-30 CSTD Live Product Showcase
+
+- Type: visual design, responsive UX, performance, reliability
+- Prompt: continue comprehensively beautifying the personal main site, make the frontend visibly striking, verify mobile, and push when clean.
+- Start state: the verified comparison and case workflows were functionally strong, but real project output was absent from the first viewport and desktop hero space was underused.
+- Fix:
+  - Added five inspected first-party production screenshots and allowed their dedicated apex asset path.
+  - Rebuilt the hero and intro around a dark full-width studio stage, bright custard/mint accents, compact copy, and the existing interactive mascot.
+  - Added a mobile snap rail and desktop five-window overview with direct, safe external links.
+  - Added desktop project-card previews, flatter color treatments, updated metadata, and a clearer shipped-work section hierarchy.
+  - Preserved mobile action visibility by hiding card media below `sm` while showing it in the first-viewport rail.
+- Verification before release:
+  - TDD red/green covered preview metadata, real asset presence, apex routing, mobile layout contracts, and five browser-visible production links.
+  - `npx tsc --noEmit`, `npm run lint`, 67 Vitest files / 276 tests, `npm audit --audit-level=moderate`, a 734-page build, 16 Playwright passes / 2 skips, and `git diff --check` passed.
+  - Local 320, 390, and 1440 checks showed zero overflow, working image loading, exact mobile rail scrolling, no browser issues, and visibly clean before/after comparisons.
+- CI correction:
+  - Initial run `30464141054` found Linux fonts pushed desktop actions to 723 pixels in a 720-pixel viewport and induced a 7-pixel focus scroll.
+  - Reduced desktop preview media by 16 pixels and raised the browser contract to require 10 pixels of headroom.
+  - Final run `30465027509` passed in 2m27s.
+- Commits: `f39f252 feat: transform cstd into a live product showcase`; `feaa808 fix: reserve desktop space for cstd project actions`.
+- Deployment: Vercel `dpl_BgrURAwM9fkyf28JtwHw6CnJPXSL` reached `READY` for `feaa808`.
+- Production:
+  - Apex, `/cstd`, `www`, and the new RocoDex preview asset returned `200`.
+  - Browser checks at 320, 390, 1280 x 720, and 1440 reported overflow `0`, no browser issues, five project links, and action headroom of 93, 165, 50, and 330 pixels.
+  - Mobile end-of-rail lazy loading, first-visit intro focus, desktop card images, and direct-link policies all passed.
+  - Vercel error/fatal and HTTP 500 log searches returned no entries.
+- Risk: the failed initial CI run remains visible, but the exact boundary was fixed and the final commit has successful local, CI, deploy, browser, and runtime evidence.
+- Next direction: harmonize the project-directory, guide, comparison, and evidence sections with the new editorial system while reducing long-page visual density without weakening their decision workflows.
+- Status: closed

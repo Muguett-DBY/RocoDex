@@ -2583,3 +2583,46 @@
 ### Final status
 
 - Closing a comparison-originated case now returns to the preserved decision instead of stranding visitors in the project directory, with coherent direct and history focus behavior in production.
+
+## 2026-07-30 - CSTD Live Product Showcase
+
+### Scope
+
+- Continued the personal main-site loop with a visual audit of the first visit, hero, project discovery path, and project cards on `custard.top`.
+- The production baseline had a coherent custard identity, but the mobile first viewport was dominated by copy and controls while the desktop hero used most of its right half for the mascot alone.
+- Visitors had to scroll into long text cards before seeing what the five shipped products actually looked like.
+
+### Fix
+
+- Captured and visually inspected first-party production screenshots for RocoDex, the photography site, CSTD Alpha, the private AI workspace, and the招商 CRM.
+- Rebuilt the hero as a dark, full-width product-studio stage with sharper positioning, compact actions, an integrated 3D custard, and a mobile mascot control.
+- Added a responsive five-item `Live product windows` rail. Mobile uses touch-safe horizontal snap scrolling with a visible next-card cue; desktop shows all five production surfaces at once.
+- Added production previews to desktop project cards while preserving the compact, action-first mobile card.
+- Reworked the first-visit intro, typography, color balance, metadata, project-section framing, and card treatment to match the new product-studio direction.
+- Added apex-host routing for `/cstd-projects/`, preview metadata and file-existence coverage, and browser coverage for all five live links.
+
+### Verification evidence
+
+- TDD red first rejected missing preview metadata and blocked the new apex asset path; the focused green run passed 28 tests.
+- Full local gates passed: `npx tsc --noEmit`, `npm run lint`, 67 Vitest files / 276 tests, `npm audit --audit-level=moderate`, a 734-page production build, 16 Playwright tests with 2 environment-dependent skips, and `git diff --check`.
+- Local production checks at 320 x 800, 390 x 844, and 1440 x 1000 reported horizontal overflow `0`, five preview links, loaded visible images, working mobile end-of-rail lazy loading, and no console warnings/errors.
+- The first GitHub Actions run `30464141054` exposed a Linux-font boundary: the desktop action bottom reached 723 pixels in a 720-pixel viewport and focus caused a 7-pixel browser scroll.
+- Reduced the desktop preview height by 16 pixels and strengthened the regression to require at least 10 pixels of action headroom instead of merely allowing an exact viewport fit.
+- The corrected local full E2E rerun passed, and GitHub Actions run `30465027509` completed successfully in 2m27s across install, lint, 276 tests, build, and E2E.
+- Commits `f39f252` and `feaa808` were pushed to `origin/main`.
+- Vercel production deployment `dpl_BgrURAwM9fkyf28JtwHw6CnJPXSL` reached `READY` for final commit `feaa808`.
+- Apex, `/cstd`, `www`, and `/cstd-projects/rocodex.png` returned `200`; `www` redirected to the apex and the existing apex route boundary continued to return `404` for RocoDex-only paths.
+- Fresh production checks at 320 x 800, 390 x 844, 1280 x 720, and 1440 x 1000 reported overflow `0`, five live links, no browser issues, and action headroom of 93, 165, 50, and 330 pixels respectively.
+- The mobile rail reached its exact 1,108-pixel maximum scroll and loaded the fifth preview at 319 x 199 pixels. The live intro remained visible, focused `开启 CSTD`, and produced no overflow or browser issues.
+- Production desktop, mobile, intro, project-card, and before/after screenshots were visually inspected without clipping, overlap, blank media, or breakpoint drift.
+- Vercel error/fatal and HTTP 500 log scans returned no entries.
+
+### Risk notes
+
+- The first implementation CI run is intentionally retained as evidence of the cross-platform typography boundary; the final run and deployment are green.
+- Mobile project-card screenshots remain intentionally hidden and lazy to preserve the action-first 320/390 layout; the live product rail supplies the first-viewport visual proof.
+- No repository-controlled, dependency-audit, final-CI, deployment, runtime-log, or measured viewport risk remains for this item.
+
+### Final status
+
+- The live personal site now presents CSTD as an independent product studio, shows real shipped work in the first viewport, preserves the established mascot identity, and keeps all existing project discovery, comparison, case-study, URL, history, and focus behavior intact.
