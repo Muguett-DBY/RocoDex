@@ -221,7 +221,7 @@ test("CSTD project discovery lands on live project work", async ({ page, isMobil
   const actionBottom = Math.max(...actionBoxes.map((box) => box.bottom));
   expect(actionTop).toBeGreaterThanOrEqual(metricGridBox!.y + metricGridBox!.height - 2);
   expect(supportingBox!.y).toBeGreaterThanOrEqual(actionBottom - 2);
-  expect(actionBottom).toBeLessThanOrEqual(page.viewportSize()!.height);
+  expect(page.viewportSize()!.height - actionBottom).toBeGreaterThanOrEqual(10);
 
   if (isMobile) {
     const mobileDetailsGroup = firstProjectCard.getByRole("group", {
