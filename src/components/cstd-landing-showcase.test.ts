@@ -3,21 +3,26 @@ import { describe, expect, test } from "vitest";
 
 const source = readFileSync(new URL("./cstd-landing.tsx", import.meta.url), "utf8");
 
-describe("CSTD visual showcase", () => {
-  test("renders the generated studio hero and the curated shipped-work exhibition", () => {
-    expect(source).toContain('src="/cstd-studio-hero.png"');
-    expect(source).toContain("getCstdShowcaseProjects(cstdProjects)");
-    expect(source).toContain('aria-label="作品索引"');
-    expect(source).toContain("data-cstd-project={project.id}");
+describe("CSTD creative systems landing", () => {
+  test("uses the generated visual system for a technical narrative", () => {
+    expect(source).toContain('src="/cstd-systems-hero-v1.png"');
+    expect(source).toContain('src="/cstd-systems-map-v1.png"');
+    expect(source).toContain('src="/cstd-research-archive-v1.png"');
+    expect(source).toContain("data-cstd-system={system.id}");
+    expect(source).toContain("data-cstd-proof={proof.projectId}");
     expect(source).toContain("useReducedMotion()");
+    expect(source).toContain("useScroll(");
   });
 
-  test("keeps direct project links behind the shared external-link policy", () => {
+  test("keeps the few live product links behind the shared external-link policy", () => {
     expect(source).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
     expect(source).toContain("{...targetProps}");
   });
 
-  test("does not restore the removed portfolio-tool workflows", () => {
+  test("does not restore the exhibition or portfolio-tool workflows", () => {
+    expect(source).not.toContain("ProjectShowcase");
+    expect(source).not.toContain("ShowcaseIndex");
+    expect(source).not.toContain("五个正在");
     expect(source).not.toContain("project-directory");
     expect(source).not.toContain("project-comparison");
     expect(source).not.toContain("project-guide");

@@ -6,7 +6,9 @@ const CSTD_EXPLICIT_ENTRY_PATHS = new Set(["/cstd"]);
 const CSTD_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",
   "/cstd-og.svg",
-  "/cstd-studio-hero.png",
+  "/cstd-systems-hero-v1.png",
+  "/cstd-systems-map-v1.png",
+  "/cstd-research-archive-v1.png",
   "/favicon.ico",
   "/robots.txt",
   "/sitemap.xml",
