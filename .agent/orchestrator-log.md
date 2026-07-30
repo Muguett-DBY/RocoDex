@@ -3245,3 +3245,22 @@
 - Risk: no repository-controlled local, CI, deployment, runtime-log, or measured browser risk remains.
 - Next direction: observe the live visual and performance result before adding any new homepage interaction.
 - Status: closed
+
+## 2026-07-30 CSTD Creative Systems Lab
+
+- Type: visual narrative redesign, generated visual assets, UX simplification, animation, maintainability
+- Prompt: make the custard / 奶黄包 personal homepage gentler and more sophisticated, use AI-generated materials, choose the Creative Systems Lab direction, and foreground real technical depth over detailed project walkthroughs.
+- Fix:
+  - Generated and integrated three project-owned visual assets: warm systems studio hero, tactile system map, and research archive.
+  - Replaced the five-screen exhibition with five separately labeled system capabilities, three selected running-product proofs, two small live-object links, and a grounded 2022 to 2026 technical path.
+  - Encoded the delivery-versus-research distinction in `cstd-systems.ts`, preserving evidence boundaries instead of presenting course work as production delivery.
+  - Added progressive scroll motion, depth-parallax media, entry choreography, hover physics, and reduced-motion fallbacks without restoring search, comparison, indexes, or click-through toys.
+  - Removed the retired showcase module and updated host route tests, source contracts, metadata, and browser coverage.
+- Local verification:
+  - `npm run lint`, 43 Vitest files / 142 tests, 734-page `npm run build`, `git diff --check`, and `npm audit --omit=dev --audit-level=high` passed with 0 reported vulnerabilities.
+  - Playwright: 10 passes / 2 expected skips in desktop and mobile Chromium.
+  - Production-mode views at 1,440 x 1,000 and 390 x 844 showed intact composition, zero horizontal overflow, loaded generated media, safe external links, and no console errors or warnings.
+  - An image-preload warning was caught in visual QA, corrected by moving the hero to explicit eager loading, then rechecked to 0 warnings.
+- Risk: no repository-controlled local, build, route, dependency, overflow, or browser-console risk remains. The headed browser throttled a synthetic `requestAnimationFrame` sample, so no invalid scroll FPS claim is made.
+- Next direction: release the Creative Systems Lab narrative, then observe live delivery and browser telemetry before adding another interaction layer.
+- Status: local acceptance complete; release pending

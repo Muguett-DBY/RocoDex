@@ -80,20 +80,25 @@ test("core routes render responsively", async ({ page }) => {
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD presents five shipped products without portfolio tools", async ({ page }) => {
+test("CSTD presents a calm technical narrative with selective proof", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "networkidle" });
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1, name: "CSTD" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "看五个作品" })).toHaveAttribute("href", "#work");
-  await expect(page.locator('[data-cstd-project]')).toHaveCount(5);
+  await expect(page.getByRole("link", { name: "看系统" })).toHaveAttribute("href", "#systems");
+  await expect(page.locator('[data-cstd-system]')).toHaveCount(5);
+  await expect(page.locator('[data-cstd-proof]')).toHaveCount(3);
+  await expect(page.locator('[data-cstd-live-object]')).toHaveCount(2);
 
   for (const title of [
+    "可用的产品表面",
+    "边缘与业务系统",
+    "AI 创作与研究工具",
+    "研究与可解释模型",
+    "数据流与计算研究",
     "洛克图鉴 / RocoDex",
-    "奶黄包摄影",
     "CSTD Alpha",
-    "私人 AI 创作工作台",
     "产业园区招商 CRM",
   ]) {
     await expect(page.getByRole("heading", { level: 3, name: title })).toHaveCount(1);
@@ -105,56 +110,55 @@ test("CSTD presents five shipped products without portfolio tools", async ({ pag
   await expect(page.getByText("按目标找项目", { exact: true })).toHaveCount(0);
   await expect(page.getByText("加入对比", { exact: false })).toHaveCount(0);
 
-  await expect
-    .poll(() =>
-      page.locator('img[src*="cstd-studio-hero"]').evaluate((image) => {
-        const element = image as HTMLImageElement;
-        return element.complete && element.naturalWidth > 0;
-      }),
-    )
-    .toBe(true);
-  for (const id of ["rocodex", "photography", "alpha", "design", "crm"]) {
-    const project = page.locator(`[data-cstd-project="${id}"]`);
-    await project.scrollIntoViewIfNeeded();
+  for (const asset of ["cstd-systems-hero-v1", "cstd-systems-map-v1", "cstd-research-archive-v1"]) {
+    const image = page.locator(`img[src*="${asset}"]`);
+    await image.scrollIntoViewIfNeeded();
     await expect
       .poll(() =>
-        project.locator("img").evaluate((image) => {
-          const element = image as HTMLImageElement;
-          return element.complete && element.naturalWidth > 0;
+        image.evaluate((element) => {
+          const imageElement = element as HTMLImageElement;
+          return imageElement.complete && imageElement.naturalWidth > 0;
         }),
       )
       .toBe(true);
+  }
+
+  for (const id of ["product-surfaces", "edge-operations", "ai-creation", "research-models", "data-systems"]) {
+    const system = page.locator(`[data-cstd-system="${id}"]`);
+    await system.scrollIntoViewIfNeeded();
+    await expect(system).toBeVisible();
   }
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD project index navigates the exhibition and keeps direct links safe", async ({ page }) => {
+test("CSTD navigation moves through the narrative and keeps proof links safe", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "networkidle" });
   expect(response?.ok()).toBe(true);
 
-  const index = page.getByRole("navigation", { name: "作品索引" });
-  await expect(index.getByRole("link")).toHaveCount(5);
-  await index.getByRole("link", { name: /02.*奶黄包摄影/ }).click();
-  await expect(page).toHaveURL(/#project-photography$/);
-  await expect(page.locator("#project-photography")).toBeInViewport({ ratio: 0.35 });
-  await expect
-    .poll(() => index.getByRole("link", { name: /02.*奶黄包摄影/ }).getAttribute("aria-current"))
-    .toBe("true");
+  const navigation = page.getByRole("navigation", { name: "主导航" });
+  await expect(navigation.getByRole("link")).toHaveCount(3);
+  await navigation.getByRole("link", { name: "系统" }).click();
+  await expect(page).toHaveURL(/#systems$/);
+  await expect(page.locator("#systems")).toBeInViewport({ ratio: 0.2 });
 
   const expectedLinks = [
     ["rocodex", "打开图鉴", "https://rocodex.custard.top"],
-    ["photography", "查看摄影站", "https://shoot.custard.top"],
     ["alpha", "打开 Alpha", "https://alpha.custard.top"],
-    ["design", "打开工作台", "https://design.custard.top"],
     ["crm", "打开 CRM", "https://cfzzs.custard.top"],
   ] as const;
 
   for (const [id, label, href] of expectedLinks) {
-    const link = page.locator(`[data-cstd-project="${id}"]`).getByRole("link", { name: label });
+    const link = page.locator(`[data-cstd-proof="${id}"]`).getByRole("link", { name: label });
     await expect(link).toHaveAttribute("href", href);
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noreferrer");
+  }
+
+  for (const id of ["photography", "design"]) {
+    const link = page.locator(`[data-cstd-live-object="${id}"]`).getByRole("link");
     await expect(link).toHaveAttribute("target", "_blank");
     await expect(link).toHaveAttribute("rel", "noreferrer");
   }
@@ -163,16 +167,14 @@ test("CSTD project index navigates the exhibition and keeps direct links safe", 
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD studio interaction changes the note without turning into a workflow", async ({ page }) => {
+test("CSTD does not revive gallery index or playful click-through interactions", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
-  const response = await page.goto("/cstd#studio", { waitUntil: "networkidle" });
+  const response = await page.goto("/cstd#path", { waitUntil: "networkidle" });
   expect(response?.ok()).toBe(true);
 
-  const originalUrl = page.url();
-  await expect(page.getByText("先把问题看明白，再把界面做漂亮。", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "再碰一下奶黄包" }).click();
-  await expect(page.getByText("真实上线，比停在概念图里更有意思。", { exact: true })).toBeVisible();
-  expect(page.url()).toBe(originalUrl);
+  await expect(page.getByRole("navigation", { name: "作品索引" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "再碰一下奶黄包" })).toHaveCount(0);
+  await expect(page.locator('[data-cstd-project]')).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });

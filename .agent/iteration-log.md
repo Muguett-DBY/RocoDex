@@ -2744,3 +2744,34 @@
 ### Final status
 
 - The focused visual portfolio is live on `custard.top`: five shipped products, five distinct presentation bands, direct navigation, and no portfolio-management workflow.
+
+## 2026-07-30 - CSTD Creative Systems Lab
+
+### Scope
+
+- Reframed `custard.top` from a five-chapter project exhibition into a calmer personal technical narrative for custard / 奶黄包.
+
+### Fix
+
+- Added three built-in generated bitmap assets for the hero, five-layer systems material, and research archive.
+- Replaced the exhibition index and per-project chapters with five grounded systems, three selected live-product proofs, two quieter live-object links, and a 2022 to 2026 study path.
+- Kept product delivery and study/research claims explicitly separate in the data model and page copy.
+- Added scroll-progress, depth-parallax, viewport reveal, reduced-motion behavior, and restrained physical hover motion without restoring portfolio workflows.
+- Removed the retired showcase selector and tightened apex route allowance to the new generated assets.
+
+### Verification evidence
+
+- `npm run lint`, 43 Vitest files / 142 tests, a 734-page production build, and `git diff --check` passed.
+- Playwright completed 10 passes with 2 expected skips across desktop and narrow Chromium profiles.
+- `npm audit --omit=dev --audit-level=high` reported 0 vulnerabilities.
+- Production-mode visual checks at 1,440 x 1,000 and 390 x 844 confirmed the hero, systems map, proof composition, research path, safe links, and no horizontal overflow.
+- Local production browser output was 0 errors and 0 warnings after replacing the unnecessary image preload with eager loading.
+
+### Risk notes
+
+- No repository-controlled local UI, accessibility, route, dependency, build, or browser-console risk remains before release.
+- Background-frame sampling was intentionally discarded because the headed desktop session throttled `requestAnimationFrame`; no synthetic scroll-rate claim is recorded.
+
+### Final status
+
+- Local acceptance complete; release verification is pending push, CI, and production checks.
