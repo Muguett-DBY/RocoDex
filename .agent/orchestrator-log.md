@@ -3263,4 +3263,10 @@
   - An image-preload warning was caught in visual QA, corrected by moving the hero to explicit eager loading, then rechecked to 0 warnings.
 - Risk: no repository-controlled local, build, route, dependency, overflow, or browser-console risk remains. The headed browser throttled a synthetic `requestAnimationFrame` sample, so no invalid scroll FPS claim is made.
 - Next direction: release the Creative Systems Lab narrative, then observe live delivery and browser telemetry before adding another interaction layer.
-- Status: local acceptance complete; release pending
+- Release:
+  - Commit `0addd0d7209fb86abbd2cee372d0627d2a872720` was pushed to `origin/main`.
+  - GitHub Actions run `30528317319` passed install, lint, test, build, and end-to-end stages.
+  - Vercel deployment `dpl_2jjrepK8DtmnzrRDrnHkHAWPugA1` reached `READY` and is aliased to `custard.top`.
+  - Live desktop verification reproduced the new hero, five systems, three proofs, two quiet links, loaded generated media, zero overflow, and 0 console errors or warnings.
+  - The apex and three generated assets returned `200`; retired `/cstd-studio-hero.png` returned the intended `404`; Vercel error and HTTP 500 log queries returned no entries.
+- Status: closed

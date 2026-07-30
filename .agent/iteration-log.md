@@ -2772,6 +2772,15 @@
 - No repository-controlled local UI, accessibility, route, dependency, build, or browser-console risk remains before release.
 - Background-frame sampling was intentionally discarded because the headed desktop session throttled `requestAnimationFrame`; no synthetic scroll-rate claim is recorded.
 
+### Release evidence
+
+- Implementation commit `0addd0d7209fb86abbd2cee372d0627d2a872720` was pushed directly to `origin/main`.
+- GitHub Actions run `30528317319` completed successfully across install, lint, test, build, and end-to-end tests.
+- Vercel production deployment `dpl_2jjrepK8DtmnzrRDrnHkHAWPugA1` reached `READY` for the exact implementation commit and is aliased to `custard.top`.
+- Fresh live browser verification found 5 systems, 3 selected proofs, 2 quiet live-object links, the generated hero loaded, no legacy comparison copy, no horizontal overflow, and 0 console errors or warnings.
+- Live asset checks returned `200` for the apex and all three generated assets, while the retired `/cstd-studio-hero.png` route returned the expected `404`.
+- Vercel error-level and HTTP 500 log queries returned no entries after release validation.
+
 ### Final status
 
-- Local acceptance complete; release verification is pending push, CI, and production checks.
+- Released and verified on `https://custard.top/`.
