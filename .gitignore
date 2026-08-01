@@ -65,6 +65,7 @@ next-env.d.ts
 
 # codex account switching tools (moved to E:\DEV\codex-tools)
 *.ps1
+!scripts/start-local-production.ps1
 switch_*.py
 check_*.py
 compare_*.py

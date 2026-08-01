@@ -1,4 +1,4 @@
-import config from "../../vitest.config";
+import config from "../../vitest.config.mts";
 import { describe, expect, test } from "vitest";
 
 describe("Vitest configuration", () => {

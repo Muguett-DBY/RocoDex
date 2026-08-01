@@ -5,7 +5,7 @@ import Image from "next/image";
 import { ArrowDown, ArrowUpRight, Crosshair, Sparkles } from "lucide-react";
 import { clsx } from "clsx";
 import {
-  motion,
+  LazyMotion,
   useMotionValue,
   useMotionValueEvent,
   useScroll,
@@ -14,6 +14,7 @@ import {
   useVelocity,
   type MotionValue,
 } from "framer-motion";
+import * as m from "framer-motion/m";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from "react";
 import { getCstdLinkTargetProps } from "../domain/link-target";
 import { cstdProjects } from "../content/projects";
@@ -32,6 +33,9 @@ const PersonalImmersiveScene = dynamic(
   () => import("./immersive-scene").then((module) => module.PersonalImmersiveScene),
   { ssr: false },
 );
+
+const loadPersonalMotionFeatures = () =>
+  import("./motion-features").then((module) => module.default);
 
 type ChapterId = "hero" | "systems" | "proof" | "path";
 
@@ -149,13 +153,29 @@ function useWideViewport() {
   return isWide;
 }
 
+function useDeferredEnhancements() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if ("requestIdleCallback" in window) {
+      const idleId = window.requestIdleCallback(() => setReady(true), { timeout: 900 });
+      return () => window.cancelIdleCallback(idleId);
+    }
+
+    const timeoutId = setTimeout(() => setReady(true), 120);
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  return ready;
+}
+
 function SignalStrip({ reducedMotion }: { reducedMotion: boolean }) {
   const content = [...heroSignals, ...heroSignals];
 
   return (
     <div data-cstd-signal-strip className="relative z-20 h-[8svh] min-h-16 overflow-hidden border-y border-black bg-[#f4b72f] text-[#11130f]">
       {[0, 1].map((track) => (
-        <motion.div
+        <m.div
           key={track}
           data-cstd-signal-track={track}
           className={`flex h-1/2 w-max items-center border-black ${track === 0 ? "border-b" : "bg-[#2d6fae] text-white"}`}
@@ -168,7 +188,7 @@ function SignalStrip({ reducedMotion }: { reducedMotion: boolean }) {
               <span aria-hidden="true" className="ml-6 text-base">/</span>
             </span>
           ))}
-        </motion.div>
+        </m.div>
       ))}
     </div>
   );
@@ -202,7 +222,7 @@ function SystemsChapter({
               </h2>
             </div>
 
-            <motion.div
+            <m.div
               key={activeSystem.id}
               data-cstd-system-visual={activeSystem.id}
               initial={{ opacity: 0, y: 20 }}
@@ -215,14 +235,14 @@ function SystemsChapter({
               <p className="mt-6 text-xs font-bold leading-6 text-[#f4b72f]">
                 {activeSystem.stack.join("  /  ")}
               </p>
-            </motion.div>
+            </m.div>
           </div>
 
           <div className="border-t border-white/25">
             {cstdSystems.map((system, index) => {
               const isActive = system.id === activeSystem.id;
               return (
-                <motion.button
+                <m.button
                   type="button"
                   key={system.id}
                   data-cstd-system={system.id}
@@ -238,7 +258,7 @@ function SystemsChapter({
                     {system.title}
                   </span>
                   <span aria-hidden="true" className={`h-px transition-all duration-500 ${isActive ? "w-16 bg-[#f4b72f]" : "w-5 bg-white/35"}`} />
-                </motion.button>
+                </m.button>
               );
             })}
           </div>
@@ -277,14 +297,14 @@ function ProofChapter({ proof, index }: { proof: CstdProof; index: number }) {
         </a>
       </div>
 
-      <motion.figure
+      <m.figure
         data-cstd-project-plane={proof.projectId}
         className="relative mt-14 aspect-[16/11] min-h-0 overflow-hidden border border-black/20 bg-black lg:mt-0"
         initial={{ clipPath: "polygon(7% 0%, 100% 0%, 93% 100%, 0% 100%)" }}
         whileHover={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
         transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
       >
-        <motion.div className="absolute inset-[-2%]" whileHover={{ scale: 1.055, rotate: index % 2 === 0 ? -0.7 : 0.7 }} transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}>
+        <m.div className="absolute inset-[-2%]" whileHover={{ scale: 1.055, rotate: index % 2 === 0 ? -0.7 : 0.7 }} transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}>
           <Image
             src={project.preview.src}
             alt={project.preview.alt}
@@ -293,12 +313,12 @@ function ProofChapter({ proof, index }: { proof: CstdProof; index: number }) {
             className="object-cover"
             style={{ objectPosition: project.preview.position }}
           />
-        </motion.div>
+        </m.div>
         <div aria-hidden="true" className="absolute inset-0 border-[10px] border-[#efe8dc]/10" />
         <figcaption className="absolute bottom-0 left-0 bg-[#11130f] px-4 py-3 text-[10px] font-black text-white">
           LIVE / {project.kicker.toUpperCase()}
         </figcaption>
-      </motion.figure>
+      </m.figure>
     </article>
   );
 }
@@ -422,7 +442,7 @@ function ResearchPathPanel({
         <span className="absolute bottom-0 top-0 left-[8%] w-px bg-white/[0.07]" />
       </div>
 
-      <motion.div
+      <m.div
         className="relative z-20 min-w-0 max-w-2xl"
         style={motionStyle ? { x: copyShift } : undefined}
       >
@@ -439,9 +459,9 @@ function ResearchPathPanel({
           <span aria-hidden="true" className="h-px flex-1 bg-white/18" />
           <span>{String(index + 1).padStart(2, "0")} / {String(cstdLearningPath.length).padStart(2, "0")}</span>
         </div>
-      </motion.div>
+      </m.div>
 
-      <motion.figure
+      <m.figure
         className={clsx(
           "relative z-10 min-h-0 overflow-hidden border bg-black shadow-[0_30px_90px_rgba(0,0,0,0.42)]",
           accent.border,
@@ -451,7 +471,7 @@ function ResearchPathPanel({
         whileHover={reducedMotion ? undefined : { scale: 1.018 }}
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
       >
-        <motion.div
+        <m.div
           className="absolute inset-[-4%]"
           style={motionStyle ? { scale: mediaScale } : undefined}
         >
@@ -463,14 +483,14 @@ function ResearchPathPanel({
             sizes="(min-width: 1024px) 42vw, 100vw"
             className="object-cover saturate-[0.78] transition duration-700 group-hover:saturate-100"
           />
-        </motion.div>
+        </m.div>
         <div aria-hidden="true" className="absolute inset-0 border-[12px] border-black/10" />
         <div aria-hidden="true" className="absolute left-5 top-5 h-8 w-8 border-l border-t border-white/70" />
         <div aria-hidden="true" className="absolute bottom-5 right-5 h-8 w-8 border-b border-r border-white/70" />
         <figcaption className={clsx("absolute bottom-0 right-0 px-4 py-3 text-[10px] font-black text-black", accent.background)}>
           CSTD ARCHIVE / {entry.year}
         </figcaption>
-      </motion.figure>
+      </m.figure>
 
       {horizontalPath ? (
         <div aria-hidden="true" className="relative z-20 hidden h-[62svh] flex-col items-end justify-between border-l border-white/18 pl-6 lg:flex">
@@ -567,11 +587,11 @@ function ResearchPath({ reducedMotion, isWide }: { reducedMotion: boolean; isWid
             </div>
           </div>
           <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-white/12">
-            <motion.div data-cstd-path-progress className="h-px origin-left bg-[#f4b72f]" style={{ scaleX: scrollYProgress }} />
+            <m.div data-cstd-path-progress className="h-px origin-left bg-[#f4b72f]" style={{ scaleX: scrollYProgress }} />
           </div>
         </header>
 
-        <motion.ol
+        <m.ol
           style={horizontalPath ? { x: pathX } : undefined}
           className={horizontalPath ? "flex h-svh w-[400vw] flex-row will-change-transform" : "flex w-full flex-col"}
         >
@@ -589,7 +609,7 @@ function ResearchPath({ reducedMotion, isWide }: { reducedMotion: boolean; isWid
               />
             );
           })}
-        </motion.ol>
+        </m.ol>
       </div>
     </section>
   );
@@ -628,6 +648,7 @@ export function PersonalHomepage() {
     getMotionModeServerSnapshot,
   );
   const reducedMotion = motionMode === "calm";
+  const enhancementsReady = useDeferredEnhancements();
   const isWide = useWideViewport();
   const progressRef = useRef(0);
   const pointerRef = useRef({ x: 0, y: 0 });
@@ -692,15 +713,17 @@ export function PersonalHomepage() {
   }
 
   return (
-    <main
-      data-cstd-kinetic-world
-      onPointerMove={handlePointerMove}
-      onPointerLeave={handlePointerLeave}
-      onPointerDown={() => {
-        if (!reducedMotion) impulseRef.current = 1;
-      }}
-      className="relative isolate overflow-clip bg-[#090a08] font-sans text-[#f4efe4]"
-    >
+    <LazyMotion features={loadPersonalMotionFeatures} strict>
+      <main
+        data-cstd-kinetic-world
+        data-cstd-enhancements-ready={enhancementsReady ? "true" : "false"}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
+        onPointerDown={() => {
+          if (!reducedMotion) impulseRef.current = 1;
+        }}
+        className="relative isolate overflow-clip bg-[#090a08] font-sans text-[#f4efe4]"
+      >
       <a href="#systems" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:px-4 focus:py-3 focus:text-black">
         跳到主要内容
       </a>
@@ -715,17 +738,17 @@ export function PersonalHomepage() {
           className="object-cover opacity-70"
         />
         <div className="absolute inset-0 bg-black/26" />
-        <PersonalImmersiveScene {...sceneProps} />
+        {enhancementsReady ? <PersonalImmersiveScene {...sceneProps} /> : null}
       </div>
 
-      <motion.div
+      <m.div
         aria-hidden="true"
         data-cstd-page-progress
         className="fixed inset-x-0 top-0 z-[70] h-1 origin-left bg-[#f4b72f]"
         style={{ scaleX: pageProgress }}
       />
 
-      <motion.div
+      <m.div
         aria-hidden="true"
         data-cstd-pointer-field
         className={clsx(
@@ -735,9 +758,9 @@ export function PersonalHomepage() {
         style={{ x: smoothCursorX, y: smoothCursorY }}
       >
         <Crosshair className="h-4 w-4" strokeWidth={1.6} />
-      </motion.div>
+      </m.div>
 
-      <motion.header
+      <m.header
         data-cstd-header-theme={activeChapter}
         className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/18 bg-[#090a08]/72 px-5 text-white backdrop-blur-md md:px-10 lg:px-12"
         initial={{ y: -80 }}
@@ -774,7 +797,7 @@ export function PersonalHomepage() {
             </span>
           </button>
         </div>
-      </motion.header>
+      </m.header>
 
       <ChapterRail activeChapter={activeChapter} />
 
@@ -786,15 +809,15 @@ export function PersonalHomepage() {
         className="relative z-10 flex h-[92svh] min-h-[680px] items-end overflow-hidden px-5 pb-12 pt-24 md:px-10 md:pb-16 lg:px-16"
       >
         <div className="mx-auto flex w-full max-w-[1540px] flex-col justify-end">
-          <motion.p
+          <m.p
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.15 }}
             className="mb-5 text-xs font-black text-[#f4b72f]"
           >
             奶黄包的个人技术工作室 / CREATIVE SYSTEMS LAB
-          </motion.p>
-          <motion.h1
+          </m.p>
+          <m.h1
             id="cstd-hero-title"
             data-cstd-hero-depth
             initial={{ opacity: 0, y: 60 }}
@@ -803,7 +826,7 @@ export function PersonalHomepage() {
             className="text-[7rem] font-black leading-[0.72] tracking-[0] text-white mix-blend-difference md:text-[11rem] xl:text-[16rem] 2xl:text-[20rem]"
           >
             CSTD
-          </motion.h1>
+          </m.h1>
 
           <div className="mt-8 grid items-end gap-8 border-t border-white/35 pt-6 md:grid-cols-[1fr_auto]">
             <div className="max-w-2xl">
@@ -842,6 +865,7 @@ export function PersonalHomepage() {
           </div>
         </div>
       </footer>
-    </main>
+      </main>
+    </LazyMotion>
   );
 }

@@ -446,6 +446,18 @@ function FloatingArchives({
   );
 }
 
+function ProgressiveArchiveLayer(
+  props: Pick<PersonalImmersiveSceneProps, "progressRef" | "pointerRef" | "reducedMotion"> & {
+    quality: SceneQuality;
+  },
+) {
+  return (
+    <Suspense fallback={null}>
+      <FloatingArchives {...props} />
+    </Suspense>
+  );
+}
+
 function CameraRig({ progressRef, pointerRef, impulseRef, reducedMotion }: PersonalImmersiveSceneProps) {
   useFrame(({ camera, clock }, delta) => {
     const progress = progressRef.current;
@@ -515,7 +527,7 @@ function World(
         quality={props.quality}
       />
       <ArchiveSpine {...props} />
-      <FloatingArchives
+      <ProgressiveArchiveLayer
         progressRef={props.progressRef}
         pointerRef={props.pointerRef}
         reducedMotion={props.reducedMotion}

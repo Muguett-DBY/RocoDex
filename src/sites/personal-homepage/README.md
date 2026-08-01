@@ -4,7 +4,7 @@
 
 ## 目录
 
-- `components/`：个人主站页面与 Three.js 沉浸场景。
+- `components/`：个人主站页面、延迟加载的 Motion 特性与 Three.js 沉浸场景。
 - `content/`：作品、系统能力和学习路径等可编辑内容。
 - `domain/`：与框架无关的小型展示规则。
 - `infrastructure/`：apex Host 路由和个人 sitemap。
@@ -13,6 +13,8 @@
 - `server.ts`：proxy、robots 与 sitemap 可用的服务端入口。
 
 外部代码不要直接导入内部子目录。新增个人主站功能时优先在本模块内完成；只有两个站点都需要且语义一致的无产品逻辑代码，才进入 `src/sites/shared`。
+
+Three.js、React Three Fiber 与 Postprocessing 只能存在于 `components/immersive-scene.tsx`。页面先渲染静态主视觉，再在浏览器空闲阶段挂载 WebGL；不要把这些包静态导入页面或共享布局。Motion DOM 特性由 `components/motion-features.ts` 单独异步加载。
 
 ## 静态资源
 
@@ -32,4 +34,6 @@
 npm run test:architecture
 npm run test:personal
 npm run test:e2e:personal
+npm run build
+npm run verify:personal-bundle
 ```
