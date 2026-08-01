@@ -22,6 +22,7 @@ describe("CSTD creative systems landing", () => {
     expect(source).toContain("data-cstd-atlas-node={system.id}");
     expect(source).toContain("aria-pressed={activeSystemId === system.id}");
     expect(source).toContain("onPointerMove={handlePointerMove}");
+    expect(source).toContain('<AnimatePresence mode="popLayout" initial={false}>');
   });
 
   test("keeps the few live product links behind the shared external-link policy", () => {
