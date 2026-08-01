@@ -34,6 +34,13 @@ describe("site architecture boundaries", () => {
     expect(readSource("app/(rocodex)/layout.tsx")).toContain("AuthProvider");
   });
 
+  it("provides RocoDex auth context to the global not-found fallback", () => {
+    const notFoundSource = readSource("app/not-found.tsx");
+
+    expect(notFoundSource).toContain("AuthProvider");
+    expect(notFoundSource).toContain("isAuthConfigured");
+  });
+
   it("owns personal homepage code inside one site module", () => {
     const expectedFiles = [
       "sites/personal-homepage/index.ts",

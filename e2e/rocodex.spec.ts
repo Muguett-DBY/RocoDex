@@ -55,6 +55,17 @@ test("core RocoDex routes render responsively", async ({ page }) => {
   expect(browserIssues).toEqual([]);
 });
 
+test("RocoDex not-found fallback renders inside the configured auth context", async ({ page }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  const response = await page.goto("/route-that-does-not-exist", { waitUntil: "networkidle" });
+
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { level: 1, name: "页面未找到" })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  expect(pageErrors).toEqual([]);
+});
+
 test("RocoDex navigation finishes while a noncritical optimized image is delayed", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "One browser profile is sufficient for navigation wait semantics.");
 

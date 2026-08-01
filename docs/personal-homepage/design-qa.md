@@ -60,12 +60,12 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 
 ## Automated Acceptance
 
-- Unit and source contracts: 151/151 passed across 45 files.
-- Dual-site architecture boundary: 7/7 contracts passed.
+- Unit and source contracts: 153/153 passed across 45 files.
+- Dual-site architecture boundary: 8/8 contracts passed.
 - Targeted desktop browser regression: 3/3 passed for horizontal scroll, calm mode, and WebGL context loss.
-- Full desktop and mobile browser suite: 15 passed, 7 intentional capability skips.
+- Full desktop and mobile browser suite: 17 passed, 7 intentional capability skips.
 - CI-equivalent CSTD suite with operating-system reduced motion: 7 passed, 1 intentional hardware-interaction skip.
-- Full CI-equivalent desktop and mobile suite: 14 passed, 8 intentional capability skips in 1.3 minutes.
+- Full CI-equivalent desktop and mobile suite: 16 passed, 8 intentional capability skips.
 - Browser interaction checks include Canvas frame changes, real wheel-driven track transforms, 2026 visibility, footer reachability, chapter state, project links, keyboard focus, no utility workflows, calm mode, and context-loss fallback.
 - Production build: 734 static pages generated successfully; dependency audit reports zero vulnerabilities.
 
