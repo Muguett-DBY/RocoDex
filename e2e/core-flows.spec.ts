@@ -26,6 +26,31 @@ async function expectNoHorizontalOverflow(page: Page) {
     .toBe(true);
 }
 
+async function expectCstdHeadingRevealed(page: Page, headingId: string) {
+  await expect
+    .poll(() =>
+      page.evaluate((id) => {
+        const heading = document.getElementById(id);
+        const visualLine = heading?.querySelector<HTMLElement>(
+          'span[aria-hidden="true"] > span > span',
+        );
+        if (!heading || !visualLine) return false;
+
+        const transform = getComputedStyle(visualLine).transform;
+        if (transform === "none") return true;
+
+        const matrix = new DOMMatrixReadOnly(transform);
+        return (
+          Math.abs(matrix.m41) < 1 &&
+          Math.abs(matrix.m42) < 1 &&
+          Math.abs(matrix.m12) < 0.01 &&
+          Math.abs(matrix.m21) < 0.01
+        );
+      }, headingId),
+    )
+    .toBe(true);
+}
+
 async function gotoRocodexPage(page: Page, url: string) {
   const [sessionResponse, pageResponse] = await Promise.all([
     page.waitForResponse((response) => response.url().endsWith("/api/auth/session")),
@@ -167,6 +192,50 @@ test("CSTD navigation moves through the narrative and keeps proof links safe", a
   expect(browserIssues).toEqual([]);
 });
 
+test("CSTD composes its chapters as one kinetic studio", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "Desktop covers the full chapter rail and sticky research composition.");
+
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto("/cstd", { waitUntil: "networkidle" });
+  expect(response?.ok()).toBe(true);
+
+  const header = page.locator("[data-cstd-header-theme]");
+  await expect(header).toHaveAttribute("data-cstd-header-theme", "hero");
+
+  const signalStrip = page.locator("[data-cstd-signal-strip]");
+  await expect(signalStrip).toBeVisible();
+  const signalTracks = page.locator("[data-cstd-signal-track]");
+  await expect(signalTracks).toHaveCount(2);
+  const initialSignalTransform = await signalTracks.first().evaluate((element) =>
+    getComputedStyle(element).transform,
+  );
+  await expect
+    .poll(() => signalTracks.first().evaluate((element) => getComputedStyle(element).transform))
+    .not.toBe(initialSignalTransform);
+
+  for (const chapter of ["systems", "proof", "path"] as const) {
+    await page.locator(`#${chapter}`).evaluate((element) =>
+      element.scrollIntoView({ block: "center" }),
+    );
+    await expect
+      .poll(() => header.getAttribute("data-cstd-header-theme"))
+      .toBe(chapter);
+    await page.locator(`#${chapter}-heading`).evaluate((element) =>
+      element.scrollIntoView({ block: "center" }),
+    );
+    await expectCstdHeadingRevealed(page, `${chapter}-heading`);
+  }
+
+  const finalResearchStep = page.locator('[data-cstd-learning-step="2026"]');
+  await finalResearchStep.evaluate((element) => element.scrollIntoView({ block: "center" }));
+  await expect
+    .poll(() => page.locator("[data-cstd-research-state]").getAttribute("data-cstd-research-state"))
+    .toBe("2026");
+
+  await expectNoHorizontalOverflow(page);
+  expect(browserIssues).toEqual([]);
+});
+
 test("CSTD systems atlas responds to deliberate exploration", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "The atlas uses the compact system list on smaller screens.");
 
@@ -242,6 +311,15 @@ test("CSTD keeps pointer depth still when reduced motion is requested", async ({
   await expect
     .poll(() => heroDepth.evaluate((element) => getComputedStyle(element).transform))
     .toBe(initialHeroTransform);
+
+  const signalTrack = page.locator("[data-cstd-signal-track]").first();
+  const initialSignalTransform = await signalTrack.evaluate((element) =>
+    getComputedStyle(element).transform,
+  );
+  await page.waitForTimeout(450);
+  await expect
+    .poll(() => signalTrack.evaluate((element) => getComputedStyle(element).transform))
+    .toBe(initialSignalTransform);
 
   const proof = page.locator('[data-cstd-proof="rocodex"]');
   await proof.scrollIntoViewIfNeeded();
