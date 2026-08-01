@@ -193,15 +193,9 @@ test("CSTD composes its chapters as one kinetic studio", async ({ page, isMobile
   const initialSignalTransform = await signalTracks.first().evaluate((element) =>
     getComputedStyle(element).transform,
   );
-  const reducedMotion = await page.evaluate(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
-  const signalTransform = expect.poll(() =>
-    signalTracks.first().evaluate((element) => getComputedStyle(element).transform),
-  );
-  if (reducedMotion) {
-    await signalTransform.toBe(initialSignalTransform);
-  } else {
-    await signalTransform.not.toBe(initialSignalTransform);
-  }
+  await expect
+    .poll(() => signalTracks.first().evaluate((element) => getComputedStyle(element).transform))
+    .not.toBe(initialSignalTransform);
 
   for (const chapter of ["systems", "proof", "path"] as const) {
     await page.locator(`#${chapter}`).evaluate((element) =>
@@ -216,12 +210,29 @@ test("CSTD composes its chapters as one kinetic studio", async ({ page, isMobile
     await expect(page.locator(`#${chapter}-heading`)).toBeInViewport();
   }
 
-  await page.locator("#path").evaluate((element) => {
+  const researchPath = page.locator("#path");
+  await expect(researchPath).toHaveAttribute("data-cstd-path-mode", "horizontal");
+  await researchPath.evaluate((element) => {
+    window.scrollTo({ top: element.offsetTop, behavior: "instant" });
+  });
+  const pathTrack = researchPath.locator("ol");
+  const initialPathTransform = await pathTrack.evaluate((element) => getComputedStyle(element).transform);
+  await page.mouse.wheel(0, 720);
+  await expect
+    .poll(() => pathTrack.evaluate((element) => getComputedStyle(element).transform))
+    .not.toBe(initialPathTransform);
+
+  await researchPath.evaluate((element) => {
     window.scrollTo({ top: element.offsetTop + element.offsetHeight - window.innerHeight, behavior: "auto" });
   });
   await expect
     .poll(() => page.locator("[data-cstd-research-state]").getAttribute("data-cstd-research-state"))
     .toBe("2026");
+  await expect(page.locator('[data-cstd-learning-step="2026"]')).toBeInViewport({ ratio: 0.65 });
+
+  const footer = page.locator("#cstd-footer");
+  await footer.scrollIntoViewIfNeeded();
+  await expect(footer).toBeInViewport({ ratio: 0.4 });
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
@@ -287,14 +298,54 @@ test("CSTD WebGL field, cursor, and project planes respond to deliberate input",
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD keeps the cinematic field still when reduced motion is requested", async ({ page, isMobile }) => {
-  test.skip(Boolean(isMobile), "One browser profile is sufficient for reduced-motion semantics.");
+test("CSTD preserves its visual field when the WebGL context is lost", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "One browser profile is sufficient for context-loss recovery.");
+
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto("/cstd", { waitUntil: "networkidle" });
+  expect(response?.ok()).toBe(true);
+
+  const webgl = page.locator("[data-cstd-webgl]");
+  const canvasShell = page.locator("[data-cstd-webgl-canvas]");
+  const canvas = canvasShell.locator("canvas");
+  await expect(webgl).toHaveAttribute("data-cstd-render-ready", "true");
+  await canvas.evaluate((element) => {
+    element.dispatchEvent(new Event("webglcontextlost", { cancelable: true }));
+  });
+  await expect(webgl).toHaveAttribute("data-cstd-render-ready", "fallback");
+  await expect(webgl).toHaveAttribute("data-cstd-render-fallback", "true");
+  await expect(canvasShell).toHaveCount(0);
+
+  await expectNoHorizontalOverflow(page);
+  expect(browserIssues).toEqual([]);
+});
+
+test("CSTD defaults to full motion and keeps an explicit calm mode scrollable", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "One browser profile is sufficient for motion-mode semantics.");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "networkidle" });
   expect(response?.ok()).toBe(true);
 
+  const motionToggle = page.locator("[data-cstd-motion-toggle]");
+  const webgl = page.locator("[data-cstd-webgl]");
+  await expect(webgl).toHaveAttribute("data-cstd-render-ready", "true");
+  const fullQuality = await webgl.getAttribute("data-cstd-render-quality");
+  await expect(motionToggle).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("[data-cstd-pointer-field]")).toBeVisible();
+  await expect(page.locator('[data-cstd-chapter="path"]')).toHaveAttribute("data-cstd-path-mode", "horizontal");
+
+  await motionToggle.click();
+  await expect(motionToggle).toHaveAttribute("aria-pressed", "false");
+  await expect(webgl).toHaveAttribute("data-cstd-render-quality", "lite");
+  await expect(webgl).toHaveAttribute("data-cstd-render-ready", "true");
+  await motionToggle.click();
+  await expect(motionToggle).toHaveAttribute("aria-pressed", "true");
+  await expect(webgl).toHaveAttribute("data-cstd-render-quality", fullQuality!);
+  await motionToggle.click();
+  await expect(motionToggle).toHaveAttribute("aria-pressed", "false");
+  await expect(webgl).toHaveAttribute("data-cstd-render-quality", "lite");
   await expect(page.locator("[data-cstd-pointer-field]")).toBeHidden();
 
   const signalTrack = page.locator("[data-cstd-signal-track]").first();
@@ -313,6 +364,19 @@ test("CSTD keeps the cinematic field still when reduced motion is requested", as
   await page.waitForTimeout(450);
   const secondFrame = await canvas.screenshot();
   expect(secondFrame.equals(firstFrame)).toBe(true);
+
+  const researchPath = page.locator('[data-cstd-chapter="path"]');
+  await expect(researchPath).toHaveAttribute("data-cstd-path-mode", "vertical");
+  await researchPath.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const target = window.scrollY + rect.top + element.scrollHeight - window.innerHeight * 1.05;
+    window.scrollTo({ top: target, behavior: "instant" });
+  });
+  await expect(page.locator('[data-cstd-learning-step="2026"]')).toBeInViewport({ ratio: 0.35 });
+
+  const footer = page.locator("footer");
+  await footer.scrollIntoViewIfNeeded();
+  await expect(footer).toBeInViewport({ ratio: 0.4 });
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);

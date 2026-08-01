@@ -535,34 +535,45 @@ function World(
 }
 
 export function CstdImmersiveScene(props: CstdImmersiveSceneProps) {
-  const [quality, setQuality] = useState<SceneQuality>("lite");
+  const [detectedQuality, setDetectedQuality] = useState<SceneQuality>("lite");
   const [readyQuality, setReadyQuality] = useState<SceneQuality | null>(null);
+  const [contextLost, setContextLost] = useState(false);
+  const quality: SceneQuality = props.reducedMotion ? "lite" : detectedQuality;
   const markSceneReady = useCallback((renderedQuality: SceneQuality) => setReadyQuality(renderedQuality), []);
+  const renderReady = contextLost ? "fallback" : readyQuality === quality ? "true" : "false";
 
   return (
     <div
       data-cstd-webgl
       data-cstd-render-quality={quality}
-      data-cstd-render-ready={readyQuality === quality ? "true" : "false"}
+      data-cstd-render-ready={renderReady}
+      data-cstd-render-fallback={contextLost ? "true" : "false"}
       className="absolute inset-0"
     >
-      <Canvas
-        data-cstd-webgl-canvas
-        camera={{ position: [0, 0, 7.2], fov: 42, near: 0.1, far: 40 }}
-        dpr={quality === "lite" ? 1 : [1, 1.5]}
-        frameloop={props.reducedMotion ? "demand" : "always"}
-        gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
-        onCreated={({ gl }) => {
-          gl.outputColorSpace = THREE.SRGBColorSpace;
-          gl.toneMapping = THREE.ACESFilmicToneMapping;
-          gl.toneMappingExposure = 1.06;
-          setQuality(props.reducedMotion ? "lite" : getSceneQuality(gl));
-        }}
-      >
-        <Suspense fallback={null}>
-          <World {...props} quality={quality} onReady={markSceneReady} />
-        </Suspense>
-      </Canvas>
+      {contextLost ? null : (
+        <Canvas
+          data-cstd-webgl-canvas
+          camera={{ position: [0, 0, 7.2], fov: 42, near: 0.1, far: 40 }}
+          dpr={quality === "lite" ? 1 : [1, 1.5]}
+          frameloop={props.reducedMotion ? "demand" : "always"}
+          gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+          onCreated={({ gl }) => {
+            gl.outputColorSpace = THREE.SRGBColorSpace;
+            gl.toneMapping = THREE.ACESFilmicToneMapping;
+            gl.toneMappingExposure = 1.06;
+            gl.domElement.addEventListener("webglcontextlost", (event) => {
+              event.preventDefault();
+              setReadyQuality(null);
+              setContextLost(true);
+            }, { once: true });
+            setDetectedQuality(getSceneQuality(gl));
+          }}
+        >
+          <Suspense fallback={null}>
+            <World {...props} quality={quality} onReady={markSceneReady} />
+          </Suspense>
+        </Canvas>
+      )}
     </div>
   );
 }

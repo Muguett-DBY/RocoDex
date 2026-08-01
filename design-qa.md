@@ -9,6 +9,10 @@
 - Systems chapter after correction: `output/playwright/cstd-wow-systems-pass2.png`
 - Selected work chapter: `output/playwright/cstd-wow-proof-pass1.png`
 - Horizontal research path: `output/playwright/cstd-wow-path-pass1.png`
+- Rebuilt path at 2048 x 900: `output/playwright/cstd-path-2048-start-v2.png`
+- Rebuilt path transition at 2048 x 900: `output/playwright/cstd-path-2048-transition.png`
+- Rebuilt path at 1440 x 1024: `output/playwright/cstd-path-1440-start.png`
+- Path-to-footer handoff at 1440 x 1024: `output/playwright/cstd-path-1440-last.png`
 - Mobile fallback and layout: `output/playwright/cstd-wow-mobile-pass1.png`
 - Desktop viewport: 1440 x 1024 CSS pixels at device scale factor 1
 - Mobile viewport: 393 x 852 CSS pixels at device scale factor 1
@@ -22,7 +26,7 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 - Hero: full-bleed, unframed WebGL world with the CSTD brand as the first viewport signal and the next signal strip visible at the fold.
 - Systems: five capability axes operate as one deliberate focus surface. Hover and keyboard focus update evidence without search, filtering, or comparison utilities.
 - Work: three live systems use full-height editorial chapters and real product screenshots rather than repeated cards.
-- Research: four learning years move through one horizontal camera-like sequence on desktop and fall back to a vertical sequence on smaller viewports or reduced motion.
+- Research: four learning years move through one horizontal camera-like sequence on desktop and fall back to a complete vertical sequence on smaller viewports or the explicit calm mode.
 - Palette: graphite, warm ivory, custard amber, cobalt, and small brass highlights. No purple theme, decorative orbs, gradient background, or neon cyberpunk treatment.
 - Typography: heavy display hierarchy with zero letter spacing, stable responsive sizes, and no viewport-width font scaling.
 
@@ -34,8 +38,9 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 - Pointer movement and press changed the canvas pixel output; the cursor field moved from its initial transform to the inspected pointer coordinates.
 - Scroll progress changes background textures, particles, archive panels, project planes, camera position, and the active header chapter.
 - Project planes animate their clipping geometry and image transform on hover.
-- Reduced-motion mode hides the pointer field, freezes the signal lanes, and produces identical consecutive canvas frames.
+- The site defaults to full motion even when the operating system reports reduced motion. A persisted header control explicitly switches to calm mode, where the pointer field is hidden, signal lanes freeze, consecutive canvas frames are identical, and every research chapter remains scrollable.
 - The scene starts with a lightweight first frame, promotes to full post-processing on hardware GPUs, and retains a lower-cost composition on software rasterizers.
+- A lost WebGL context removes the invalid canvas and preserves the generated static material field without emitting an application error.
 - Desktop and 393px states have zero horizontal overflow.
 
 ## Iteration History
@@ -47,14 +52,19 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 5. P1: continuous full-quality WebGL saturated GitHub's software rasterizer and caused unrelated DOM assertions to time out. Fixed with renderer-aware quality, reduced-motion CI contexts, and a scene-ready signal after texture decode.
 6. P2: reduced-motion demand frames could still advance lerped object transforms while textures settled. Fixed by assigning deterministic transforms directly and proving identical canvas output across five consecutive runs.
 7. P2: mixed unitless and percentage clip-path coordinates produced invalid intermediate keyframes during hover. Fixed with consistent percentage coordinates and verified across three consecutive hardware-interaction runs.
+8. P1: reduced-motion CSS disabled the horizontal transform while leaving the desktop sticky, viewport-height, overflow-hidden shell active. Fixed by making horizontal and vertical path modes structurally exclusive and proving the 2026 chapter and footer remain reachable.
+9. P1: conflicting `relative` and `absolute` utilities made the research header consume 210px in the horizontal stage, pushing content below the viewport. Fixed with exclusive positioning classes and visual checks at 2048 x 900 and 1440 x 1024.
+10. P2: repeated development refreshes could lose the WebGL context while the post-processing composer was remounting. Fixed with context-loss detection and an immediate static-material fallback.
+11. Product decision: operating-system reduced-motion preference no longer silently changes the first visit. Full motion is the default and an explicit, persisted calm-mode control owns the choice.
 
 ## Automated Acceptance
 
-- CSTD source and routing contracts: 13/13 passed.
-- CSTD desktop browser regression: 7/7 passed.
-- Full desktop and mobile browser suite: 14 passed, 6 intentional capability skips.
-- CI-equivalent CSTD suite: 9 passed, 5 intentional hardware-interaction skips in 54.5 seconds.
-- Browser interaction checks include Canvas frame changes, chapter state, project links, keyboard focus, no utility workflows, and reduced motion.
+- Unit and source contracts: 145/145 passed across 43 files.
+- Targeted desktop browser regression: 3/3 passed for horizontal scroll, calm mode, and WebGL context loss.
+- Full desktop and mobile browser suite: 15 passed, 7 intentional capability skips.
+- CI-equivalent CSTD suite with operating-system reduced motion: 7 passed, 1 intentional hardware-interaction skip.
+- Browser interaction checks include Canvas frame changes, real wheel-driven track transforms, 2026 visibility, footer reachability, chapter state, project links, keyboard focus, no utility workflows, calm mode, and context-loss fallback.
+- Production build: 734 static pages generated successfully; dependency audit reports zero vulnerabilities.
 
 ## Findings
 

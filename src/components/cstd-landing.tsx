@@ -2,7 +2,8 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { ArrowDown, ArrowUpRight, Crosshair } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Crosshair, Sparkles } from "lucide-react";
+import { clsx } from "clsx";
 import {
   motion,
   useMotionValue,
@@ -10,6 +11,8 @@ import {
   useScroll,
   useSpring,
   useTransform,
+  useVelocity,
+  type MotionValue,
 } from "framer-motion";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from "react";
 import { getCstdLinkTargetProps } from "@/lib/cstd-link-target";
@@ -72,6 +75,33 @@ const learningAssets: Record<CstdLearningEntry["year"], { src: string; alt: stri
   },
 };
 
+const researchAccents = [
+  {
+    text: "text-[#f4b72f]",
+    background: "bg-[#f4b72f]",
+    border: "border-[#f4b72f]",
+    code: "AMBER / ORIGIN",
+  },
+  {
+    text: "text-[#75b8ee]",
+    background: "bg-[#75b8ee]",
+    border: "border-[#75b8ee]",
+    code: "COBALT / SIGNAL",
+  },
+  {
+    text: "text-[#ee7862]",
+    background: "bg-[#ee7862]",
+    border: "border-[#ee7862]",
+    code: "CORAL / STRUCTURE",
+  },
+  {
+    text: "text-[#b7d9c2]",
+    background: "bg-[#b7d9c2]",
+    border: "border-[#b7d9c2]",
+    code: "MINT / CONTINUUM",
+  },
+] as const;
+
 const proofProjects = getCstdProjectsById(
   cstdProjects,
   cstdProofs.map((proof) => proof.projectId),
@@ -79,20 +109,30 @@ const proofProjects = getCstdProjectsById(
 
 const liveProjects = getCstdProjectsById(cstdProjects, cstdLiveObjectIds);
 
-const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
+const motionModeStorageKey = "cstd-motion-mode";
+const motionModeChangeEvent = "cstd-motion-mode-change";
+type MotionMode = "full" | "calm";
+let volatileMotionMode: MotionMode = "full";
 
-function subscribeReducedMotion(onStoreChange: () => void) {
-  const media = window.matchMedia(reducedMotionQuery);
-  media.addEventListener("change", onStoreChange);
-  return () => media.removeEventListener("change", onStoreChange);
+function subscribeMotionMode(onStoreChange: () => void) {
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(motionModeChangeEvent, onStoreChange);
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(motionModeChangeEvent, onStoreChange);
+  };
 }
 
-function getReducedMotionSnapshot() {
-  return window.matchMedia(reducedMotionQuery).matches;
+function getMotionModeSnapshot(): MotionMode {
+  try {
+    return window.localStorage.getItem(motionModeStorageKey) === "calm" ? "calm" : "full";
+  } catch {
+    return volatileMotionMode;
+  }
 }
 
-function getReducedMotionServerSnapshot() {
-  return false;
+function getMotionModeServerSnapshot(): MotionMode {
+  return "full";
 }
 
 function useWideViewport() {
@@ -306,17 +346,192 @@ function SelectedWork() {
   );
 }
 
+function ResearchPathPanel({
+  entry,
+  index,
+  active,
+  horizontalPath,
+  reducedMotion,
+  scrollProgress,
+  velocityTilt,
+}: {
+  entry: CstdLearningEntry;
+  index: number;
+  active: boolean;
+  horizontalPath: boolean;
+  reducedMotion: boolean;
+  scrollProgress: MotionValue<number>;
+  velocityTilt: MotionValue<number>;
+}) {
+  const asset = learningAssets[entry.year];
+  const accent = researchAccents[index];
+  const lastIndex = cstdLearningPath.length - 1;
+  const center = index / lastIndex;
+  const reach = 0.22;
+  const inputRange = index === 0
+    ? [0, reach]
+    : index === lastIndex
+      ? [1 - reach, 1]
+      : [center - reach, center, center + reach];
+  const mediaShift = useTransform(
+    scrollProgress,
+    inputRange,
+    index === 0 ? [0, -72] : index === lastIndex ? [72, 0] : [72, 0, -72],
+  );
+  const copyShift = useTransform(
+    scrollProgress,
+    inputRange,
+    index === 0 ? [0, -34] : index === lastIndex ? [34, 0] : [34, 0, -34],
+  );
+  const mediaScale = useTransform(
+    scrollProgress,
+    inputRange,
+    index === 0 ? [1, 0.92] : index === lastIndex ? [0.92, 1] : [0.92, 1, 0.92],
+  );
+  const mediaOpacity = useTransform(
+    scrollProgress,
+    inputRange,
+    index === 0 ? [1, 0.42] : index === lastIndex ? [0.42, 1] : [0.42, 1, 0.42],
+  );
+  const motionStyle = horizontalPath && !reducedMotion;
+
+  return (
+    <li
+      data-cstd-learning-step={entry.year}
+      data-cstd-learning-active={active ? "true" : "false"}
+      className={clsx(
+        "group relative grid w-full flex-none items-center overflow-hidden border-white/20 px-5 md:px-10 lg:px-16",
+        horizontalPath
+          ? "h-svh w-screen grid-cols-[0.72fr_1.08fr_0.2fr] gap-12 border-r pb-14 pt-40"
+          : "min-h-svh gap-12 border-b py-28 md:grid-cols-[0.82fr_1.18fr] lg:gap-20 lg:py-32",
+      )}
+    >
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <Image
+          src={asset.src}
+          alt=""
+          fill
+          sizes="100vw"
+          className="scale-125 object-cover opacity-[0.09] saturate-50 transition duration-1000 group-hover:scale-[1.29] group-hover:opacity-[0.14] group-hover:saturate-100"
+        />
+        <div className="absolute inset-0 bg-[#090a08]/78" />
+        <span className="absolute -bottom-12 right-2 text-[13rem] font-black leading-none text-white/[0.035] md:text-[20rem] lg:-right-5 lg:text-[27rem]">
+          {entry.year.slice(2)}
+        </span>
+        <span className="absolute inset-x-0 top-[42%] h-px bg-white/10" />
+        <span className="absolute bottom-0 top-0 left-[8%] w-px bg-white/[0.07]" />
+      </div>
+
+      <motion.div
+        className="relative z-20 min-w-0 max-w-2xl"
+        style={motionStyle ? { x: copyShift } : undefined}
+      >
+        <div className="flex items-center gap-4 text-[10px] font-black text-white/48 md:text-xs">
+          <span className={accent.text}>0{index + 1}</span>
+          <span aria-hidden="true" className={clsx("h-px w-12", accent.background)} />
+          <span>{entry.focus}</span>
+        </div>
+        <p className={clsx("mt-8 text-8xl font-black leading-none md:text-9xl", accent.text)}>{entry.year}</p>
+        <h3 className="mt-6 text-balance text-4xl font-black leading-[0.96] tracking-[0] md:text-5xl xl:text-6xl">{entry.title}</h3>
+        <p className="mt-7 max-w-lg text-balance text-base leading-8 text-white/66">{entry.note}</p>
+        <div className="mt-10 flex items-center gap-4 text-[10px] font-black text-white/38">
+          <span>{accent.code}</span>
+          <span aria-hidden="true" className="h-px flex-1 bg-white/18" />
+          <span>{String(index + 1).padStart(2, "0")} / {String(cstdLearningPath.length).padStart(2, "0")}</span>
+        </div>
+      </motion.div>
+
+      <motion.figure
+        className={clsx(
+          "relative z-10 min-h-0 overflow-hidden border bg-black shadow-[0_30px_90px_rgba(0,0,0,0.42)]",
+          accent.border,
+          horizontalPath ? "aspect-[5/4] max-h-[62svh]" : "aspect-[4/5] max-h-[70svh]",
+        )}
+        style={motionStyle ? { y: mediaShift, opacity: mediaOpacity, rotate: velocityTilt } : undefined}
+        whileHover={reducedMotion ? undefined : { scale: 1.018 }}
+        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <motion.div
+          className="absolute inset-[-4%]"
+          style={motionStyle ? { scale: mediaScale } : undefined}
+        >
+          <Image
+            src={asset.src}
+            alt={asset.alt}
+            fill
+            loading="eager"
+            sizes="(min-width: 1024px) 42vw, 100vw"
+            className="object-cover saturate-[0.78] transition duration-700 group-hover:saturate-100"
+          />
+        </motion.div>
+        <div aria-hidden="true" className="absolute inset-0 border-[12px] border-black/10" />
+        <div aria-hidden="true" className="absolute left-5 top-5 h-8 w-8 border-l border-t border-white/70" />
+        <div aria-hidden="true" className="absolute bottom-5 right-5 h-8 w-8 border-b border-r border-white/70" />
+        <figcaption className={clsx("absolute bottom-0 right-0 px-4 py-3 text-[10px] font-black text-black", accent.background)}>
+          CSTD ARCHIVE / {entry.year}
+        </figcaption>
+      </motion.figure>
+
+      {horizontalPath ? (
+        <div aria-hidden="true" className="relative z-20 hidden h-[62svh] flex-col items-end justify-between border-l border-white/18 pl-6 lg:flex">
+          <span className="text-[10px] font-black text-white/38">FRAME {String(index + 1).padStart(2, "0")}</span>
+          <span className={clsx("text-6xl font-black", accent.text)}>0{index + 1}</span>
+          <span className="text-[10px] font-black text-white/38">CSTD / {entry.year}</span>
+        </div>
+      ) : null}
+
+      {index === lastIndex ? (
+        <a
+          href="#cstd-footer"
+          aria-label="继续到页脚"
+          className="absolute bottom-8 right-6 z-30 flex h-12 w-12 items-center justify-center border border-white/45 text-white transition-colors hover:border-[#f4b72f] hover:bg-[#f4b72f] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f] md:right-10 lg:right-16"
+        >
+          <ArrowDown aria-hidden="true" className="h-5 w-5" />
+        </a>
+      ) : null}
+    </li>
+  );
+}
+
 function ResearchPath({ reducedMotion, isWide }: { reducedMotion: boolean; isWide: boolean }) {
   const pathRef = useRef<HTMLElement>(null);
   const [activeYear, setActiveYear] = useState<CstdLearningEntry["year"]>(cstdLearningPath[0].year);
   const { scrollYProgress } = useScroll({ target: pathRef, offset: ["start start", "end end"] });
   const pathX = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+  const pathVelocity = useVelocity(scrollYProgress);
+  const smoothPathVelocity = useSpring(pathVelocity, { stiffness: 90, damping: 24, mass: 0.45 });
+  const velocityTilt = useTransform(smoothPathVelocity, [-0.65, 0.65], [-2.2, 2.2]);
+  const horizontalPath = isWide && !reducedMotion;
+  const activeIndex = cstdLearningPath.findIndex((entry) => entry.year === activeYear);
 
   useMotionValueEvent(scrollYProgress, "change", (value) => {
+    if (!horizontalPath) return;
     const index = Math.min(cstdLearningPath.length - 1, Math.floor(value * cstdLearningPath.length));
     const year = cstdLearningPath[index].year;
     setActiveYear((current) => (current === year ? current : year));
   });
+
+  useEffect(() => {
+    if (horizontalPath) return;
+    const section = pathRef.current;
+    if (!section) return;
+    const steps = Array.from(section.querySelectorAll<HTMLElement>("[data-cstd-learning-step]"));
+    const observer = new IntersectionObserver(
+      () => {
+        const focusLine = window.innerHeight * 0.48;
+        const closest = steps.reduce((winner, step) => {
+          const rect = step.getBoundingClientRect();
+          const distance = Math.abs(rect.top + rect.height * 0.42 - focusLine);
+          return distance < winner.distance ? { step, distance } : winner;
+        }, { step: steps[0], distance: Number.POSITIVE_INFINITY });
+        const year = closest.step?.dataset.cstdLearningStep as CstdLearningEntry["year"] | undefined;
+        if (year) setActiveYear((current) => (current === year ? current : year));
+      },
+      { threshold: [0, 0.2, 0.5, 0.8] },
+    );
+    steps.forEach((step) => observer.observe(step));
+    return () => observer.disconnect();
+  }, [horizontalPath]);
 
   return (
     <section
@@ -324,61 +539,54 @@ function ResearchPath({ reducedMotion, isWide }: { reducedMotion: boolean; isWid
       ref={pathRef}
       data-cstd-chapter="path"
       data-cstd-research-state={activeYear}
+      data-cstd-path-mode={horizontalPath ? "horizontal" : "vertical"}
       aria-labelledby="path-heading"
-      className="relative z-10 bg-[#090a08]/82 text-[#f4efe4] lg:min-h-[400svh]"
+      className={clsx(
+        "relative z-10 bg-[#090a08]/88 text-[#f4efe4]",
+        horizontalPath && "min-h-[420svh]",
+      )}
     >
-      <div className="lg:sticky lg:top-0 lg:h-svh lg:overflow-hidden">
-        <header className="relative z-10 flex items-end justify-between border-b border-white/20 px-5 pb-7 pt-24 md:px-10 lg:absolute lg:inset-x-0 lg:top-0 lg:px-16">
+      <div
+        data-cstd-path-stage
+        className={horizontalPath ? "sticky top-0 h-svh overflow-hidden" : "relative"}
+      >
+        <header className={clsx(
+          "z-30 border-b border-white/20 bg-[#090a08]/78 px-5 pb-7 pt-24 backdrop-blur-md md:px-10 lg:px-16",
+          horizontalPath ? "absolute inset-x-0 top-0" : "relative",
+        )}>
+          <div className="flex items-end justify-between gap-10">
           <div>
             <p className="text-xs font-black text-[#f4b72f]">03 / RESEARCH PATH</p>
-            <h2 id="path-heading" className="mt-3 text-4xl font-black tracking-[0] md:text-6xl">学习不是履历，是镜头继续向前。</h2>
+              <h2 id="path-heading" className="mt-3 max-w-5xl text-4xl font-black leading-[0.96] tracking-[0] md:text-6xl">
+                学习不是履历，是镜头继续向前。
+              </h2>
+            </div>
+            <div className="hidden items-end gap-5 lg:flex">
+              <span className="pb-2 text-[10px] font-black text-white/38">0{activeIndex + 1} / 0{cstdLearningPath.length}</span>
+              <span className="text-7xl font-black leading-none text-white/12">{activeYear}</span>
+            </div>
           </div>
-          <span className="hidden text-7xl font-black text-white/12 lg:block">{activeYear}</span>
+          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-white/12">
+            <motion.div data-cstd-path-progress className="h-px origin-left bg-[#f4b72f]" style={{ scaleX: scrollYProgress }} />
+          </div>
         </header>
 
         <motion.ol
-          style={!reducedMotion && isWide ? { x: pathX } : undefined}
-          className="flex w-full flex-col lg:h-svh lg:w-[400vw] lg:flex-row motion-reduce:!w-full motion-reduce:!flex-col"
+          style={horizontalPath ? { x: pathX } : undefined}
+          className={horizontalPath ? "flex h-svh w-[400vw] flex-row will-change-transform" : "flex w-full flex-col"}
         >
           {cstdLearningPath.map((entry, index) => {
-            const asset = learningAssets[entry.year];
             return (
-              <li
+              <ResearchPathPanel
                 key={entry.year}
-                data-cstd-learning-step={entry.year}
-                data-cstd-learning-active={entry.year === activeYear ? "true" : "false"}
-                className="relative grid min-h-svh w-full flex-none items-center gap-10 border-b border-white/20 px-5 py-32 md:grid-cols-[0.8fr_1.2fr] md:px-10 lg:h-svh lg:w-screen lg:border-b-0 lg:border-r lg:px-16 lg:pb-16 lg:pt-40"
-              >
-                <div className="relative z-10 max-w-xl">
-                  <div className="flex items-center gap-4 text-xs font-black text-white/45">
-                    <span>0{index + 1}</span>
-                    <span aria-hidden="true" className="h-px w-12 bg-[#f4b72f]" />
-                    <span>{entry.focus}</span>
-                  </div>
-                  <p className="mt-8 text-8xl font-black leading-none text-[#f4b72f] md:text-9xl">{entry.year}</p>
-                  <h3 className="mt-5 text-3xl font-black tracking-[0] md:text-5xl">{entry.title}</h3>
-                  <p className="mt-6 max-w-lg text-base leading-8 text-white/65 md:text-lg">{entry.note}</p>
-                </div>
-
-                <motion.figure
-                  className="relative aspect-[4/5] max-h-[64svh] min-h-0 overflow-hidden border border-white/25 bg-black"
-                  whileHover={reducedMotion ? undefined : { rotate: index % 2 === 0 ? -1.5 : 1.5, scale: 1.025 }}
-                  transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <Image
-                    src={asset.src}
-                    alt={asset.alt}
-                    fill
-                    loading="eager"
-                    sizes="(min-width: 1024px) 45vw, 100vw"
-                    className="object-cover"
-                  />
-                  <div aria-hidden="true" className="absolute inset-0 border-[12px] border-black/10" />
-                  <figcaption className="absolute bottom-0 right-0 bg-[#f4b72f] px-4 py-3 text-[10px] font-black text-black">
-                    CSTD ARCHIVE / {entry.year}
-                  </figcaption>
-                </motion.figure>
-              </li>
+                entry={entry}
+                index={index}
+                active={entry.year === activeYear}
+                horizontalPath={horizontalPath}
+                reducedMotion={reducedMotion}
+                scrollProgress={scrollYProgress}
+                velocityTilt={velocityTilt}
+              />
             );
           })}
         </motion.ol>
@@ -389,7 +597,13 @@ function ResearchPath({ reducedMotion, isWide }: { reducedMotion: boolean; isWid
 
 function ChapterRail({ activeChapter }: { activeChapter: ChapterId }) {
   return (
-    <nav aria-label="章节导航" className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 border-l border-white/30 pl-4 xl:block">
+    <nav
+      aria-label="章节导航"
+      className={clsx(
+        "fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 border-l border-white/30 pl-4 transition-opacity duration-500 xl:block",
+        activeChapter === "path" ? "pointer-events-none opacity-0" : "opacity-100",
+      )}
+    >
       <ol className="space-y-5">
         {chapterLinks.map((chapter, index) => {
           const active = activeChapter === chapter.id;
@@ -408,11 +622,12 @@ function ChapterRail({ activeChapter }: { activeChapter: ChapterId }) {
 }
 
 export function CstdLanding() {
-  const reducedMotion = useSyncExternalStore(
-    subscribeReducedMotion,
-    getReducedMotionSnapshot,
-    getReducedMotionServerSnapshot,
+  const motionMode = useSyncExternalStore(
+    subscribeMotionMode,
+    getMotionModeSnapshot,
+    getMotionModeServerSnapshot,
   );
+  const reducedMotion = motionMode === "calm";
   const isWide = useWideViewport();
   const progressRef = useRef(0);
   const pointerRef = useRef({ x: 0, y: 0 });
@@ -465,6 +680,17 @@ export function CstdLanding() {
     cursorY.set(-80);
   }
 
+  function toggleMotionMode() {
+    const next = motionMode === "full" ? "calm" : "full";
+    volatileMotionMode = next;
+    try {
+      window.localStorage.setItem(motionModeStorageKey, next);
+    } catch {
+      // The in-session toggle still works when storage is unavailable.
+    }
+    window.dispatchEvent(new Event(motionModeChangeEvent));
+  }
+
   return (
     <main
       data-cstd-kinetic-world
@@ -502,7 +728,10 @@ export function CstdLanding() {
       <motion.div
         aria-hidden="true"
         data-cstd-pointer-field
-        className="pointer-events-none fixed left-0 top-0 z-[80] hidden h-9 w-9 items-center justify-center border border-white/65 text-[#f4b72f] mix-blend-difference lg:flex motion-reduce:!hidden"
+        className={clsx(
+          "pointer-events-none fixed left-0 top-0 z-[80] hidden h-9 w-9 items-center justify-center border border-white/65 text-[#f4b72f] mix-blend-difference lg:flex",
+          reducedMotion && "lg:!hidden",
+        )}
         style={{ x: smoothCursorX, y: smoothCursorY }}
       >
         <Crosshair className="h-4 w-4" strokeWidth={1.6} />
@@ -522,13 +751,29 @@ export function CstdLanding() {
           <span className="hidden text-[10px] font-bold text-white/55 sm:inline">{chapterLabels[activeChapter]}</span>
         </a>
 
-        <nav aria-label="主导航" className="flex items-center gap-5 text-xs font-black md:gap-8">
-          {chapterLinks.map((chapter) => (
-            <a key={chapter.id} href={`#${chapter.id}`} className="text-white/60 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f]">
-              {chapter.label}
-            </a>
-          ))}
-        </nav>
+        <div className="flex items-center gap-4 md:gap-7">
+          <nav aria-label="主导航" className="flex items-center gap-5 text-xs font-black md:gap-8">
+            {chapterLinks.map((chapter) => (
+              <a key={chapter.id} href={`#${chapter.id}`} className="text-white/60 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f]">
+                {chapter.label}
+              </a>
+            ))}
+          </nav>
+          <span aria-hidden="true" className="hidden h-4 w-px bg-white/25 sm:block" />
+          <button
+            type="button"
+            data-cstd-motion-toggle
+            aria-pressed={!reducedMotion}
+            aria-label={reducedMotion ? "开启增强动效" : "关闭增强动效"}
+            onClick={toggleMotionMode}
+            className="group relative hidden h-8 w-8 items-center justify-center border border-white/35 text-white transition-colors hover:border-[#f4b72f] hover:text-[#f4b72f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f] sm:flex"
+          >
+            <Sparkles aria-hidden="true" className="h-4 w-4" />
+            <span role="tooltip" className="pointer-events-none absolute right-0 top-10 hidden whitespace-nowrap border border-white/20 bg-[#090a08] px-3 py-2 text-[10px] font-black text-white group-hover:block group-focus-visible:block">
+              {reducedMotion ? "FULL MOTION" : "CALM MOTION"}
+            </span>
+          </button>
+        </div>
       </motion.header>
 
       <ChapterRail activeChapter={activeChapter} />
@@ -585,7 +830,7 @@ export function CstdLanding() {
       <SelectedWork />
       <ResearchPath reducedMotion={reducedMotion} isWide={isWide} />
 
-      <footer className="relative z-20 border-t border-white/20 bg-[#090a08] px-5 py-16 text-white md:px-10 lg:px-16">
+      <footer id="cstd-footer" className="relative z-20 border-t border-white/20 bg-[#090a08] px-5 py-16 text-white md:px-10 lg:px-16">
         <div className="mx-auto flex max-w-[1540px] flex-col justify-between gap-8 md:flex-row md:items-end">
           <div>
             <p className="text-5xl font-black tracking-[0] md:text-7xl">CSTD</p>
