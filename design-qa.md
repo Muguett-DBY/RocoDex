@@ -1,44 +1,55 @@
-# CSTD Kinetic Studio Design QA
+# CSTD Elastic Research Archive Design QA
 
 ## Evidence
 
-- Source visual truth: `output/playwright/cstd-motion-systems.png`
-- Rendered implementation: `output/playwright/cstd-kinetic-systems-v3.png`
-- Combined comparison: `output/playwright/cstd-systems-comparison.png`
-- Focused states: `output/playwright/cstd-kinetic-hero-signal.png`, `output/playwright/cstd-kinetic-proof-v2.png`, `output/playwright/cstd-kinetic-path-v2.png`, `output/playwright/cstd-kinetic-path-2026.png`
-- Responsive states: `output/playwright/cstd-kinetic-mobile-systems-v2.png`, `output/playwright/cstd-kinetic-mobile-path-v2.png`
-- Desktop source and implementation: 1440 x 1000 pixels, 1440 x 1000 CSS viewport, device scale factor 1
-- Mobile implementation: 390 x 844 pixels, 390 x 844 CSS viewport, device scale factor 1
-- Route and state: local `/cstd`, hero, Systems, Proof, Path, and the active 2026 research step
+- Source visual truth: `output/playwright/cstd-elastic-reference.png`
+- Final implementation: `output/playwright/cstd-elastic-hero-final.png`
+- Normalized full-view comparison: `output/playwright/cstd-elastic-compare-final.png`
+- Focused copy comparison: `output/playwright/cstd-elastic-copy-compare-final.png`
+- Interaction state: `output/playwright/cstd-elastic-trail-final.png`
+- Chapter states: `output/playwright/cstd-elastic-systems-final.png`, `output/playwright/cstd-elastic-proof-pass1.png`, `output/playwright/cstd-elastic-path-pass1.png`
+- Responsive state: `output/playwright/cstd-elastic-mobile-final.png`
+- Source pixels: 1487 x 1058, normalized to 1440 x 1024 for comparison
+- Desktop implementation: 1440 x 1024 pixels, 1440 x 1024 CSS viewport, device scale factor 1
+- Mobile implementation: 393 x 852 pixels, 393 x 852 CSS viewport, device scale factor 1
+- Route and state: local `/cstd`, desktop hero at rest, pointer trail, Systems, Proof, Path, and mobile hero
 
 ## Full-View Comparison
 
-The implementation preserves the established ivory, charcoal, custard, mint, cobalt, and coral system; the same generated imagery; the same typography hierarchy; and the same restrained corner and shadow treatment. The Systems composition remains aligned to the source while the sticky header now joins the active chapter instead of remaining visually detached.
+The implementation matches the selected elastic-archive composition: a slim charcoal header, oversized CSTD typography, staggered portrait material columns, an identity block inside the letterform negative space, edge timelines, and a visible transition into the next chapter. The generated imagery uses the same tactile resin, film, paper, cobalt ceramic, charcoal, and warm-studio language as the source while remaining individually animatable.
+
+## Required Fidelity Surfaces
+
+- Fonts and typography: the implementation uses the established Chinese system sans stack with the source's heavy display hierarchy, compact utility labels, zero letter spacing, and stable two-line heading wraps. The source mock's exact generated typeface is not distributable; the fallback preserves its weight and geometry without clipping or truncation.
+- Spacing and layout rhythm: the 1440px frame, five-column stagger, timeline edges, slim header, and next-section reveal align with the source. Material columns use explicit tracks and height constraints, and the 393px state keeps text and controls inside the viewport.
+- Colors and visual tokens: warm ivory, charcoal, custard yellow, mint, cobalt, and restrained coral/blue accents remain balanced. No gradients, decorative orbs, or unrelated neon hues were introduced.
+- Image quality and asset fidelity: five dedicated 960 x 1440 WebP assets replace generic placeholders. Their subjects, crops, palette, and lighting match the source art direction, remain sharp at rendered sizes, and are not recreated with CSS, SVG, or div art.
+- Copy and content: the CSTD identity, Chinese value statement, system evidence, real project names, live destinations, and research history are preserved. Search, comparison, filters, and tutorial copy remain absent.
 
 ## Focused Comparison
 
-- Typography: display scale, weight, line height, wrapping, and zero letter spacing remain consistent. Masked heading reveals settle into the exact source layout without changing final metrics.
-- Spacing and layout: the 1520px content frame, two-column chapter introductions, media proportions, section rhythm, and compact mobile stacking remain intact. Anchor offsets now clear the 64px sticky header.
-- Colors and tokens: all additions reuse the existing palette. Header transitions and signal lanes introduce no gradients or unrelated hues, and contrast remains strong on light and dark chapters.
-- Image quality: all three generated raster assets retain their intended crops, native sharpness, and aspect ratios. No source imagery was replaced by CSS or handcrafted vector approximations.
-- Copy and content: all existing personal-site copy remains unchanged. The signal lanes reuse real system titles and technology-stack data rather than decorative placeholder text.
-- Interaction states: the signal lanes move continuously, header and chapter rail themes follow the active section, research years update the sticky archive caption, pointer depth remains responsive, and reduced-motion mode freezes continuous and pointer movement.
+The focused copy crop confirms that the identity block occupies the CSTD letterform's negative space without covering the first material column. Weight, line height, custard accent, ivory surface, and two-line Chinese statement remain readable at the intended desktop scale. Additional focused chapter captures were required because image loading, sticky active states, and the expanding proof reel are not legible in one full-page image.
+
+## Interaction And Browser Verification
+
+- Pointer parallax changes the full material field without shifting layout.
+- Cursor movement produced five transient real-image trail items in the captured state.
+- Systems rows update the sticky generated-material stage on focus, hover, and viewport entry.
+- The proof reel elastically reallocates width while preserving live project links.
+- Research years update the archive image and caption as the path advances.
+- Reduced-motion mode freezes continuous lanes, pointer depth, and image trails.
+- Desktop CSTD browser suite: 7/7 passed in the first implementation pass.
+- Browser console: 0 errors and 0 warnings in final desktop and mobile inspections; development-only informational HMR messages remain.
+- No horizontal overflow was observed at 1440 x 1024 or 393 x 852.
 
 ## Comparison History
 
-1. P1: Direct chapter entry left all three masked headings invisible because the translated child was also the viewport observer. Fixed by moving viewport observation to the stationary heading container. Post-fix evidence: `cstd-kinetic-systems-v2.png`, `cstd-kinetic-proof-v2.png`, and `cstd-kinetic-path-v2.png`.
-2. P2: The Systems hash offset exposed a clipped 16px slice of the moving technology lane beneath the header. Fixed by matching chapter scroll margins to the 64px sticky header. Post-fix evidence: `cstd-kinetic-systems-v3.png`.
-
-## Browser Verification
-
-- Primary interactions: signal movement, chapter navigation, header theme changes, system atlas selection, proof-card pointer depth, research-step activation, and reduced-motion behavior.
-- Layout: no horizontal overflow at 1440 x 1000 or 390 x 844.
-- Runtime: zero browser console warnings, console errors, or page errors in the final desktop state audit.
-- Focused regions were required because continuous signal motion, sticky research state, and mobile heading wrapping were not legible enough in a single full-page capture.
+1. P2: the first 1440 x 1024 capture filled the viewport with the hero and did not reveal the next chapter; the Systems heading also wrapped with an isolated final character. Fixed by shortening the hero's constrained viewport height and balancing the heading into two stable lines. Post-fix evidence: `cstd-elastic-hero-pass2.png` and `cstd-elastic-systems-final.png`.
+2. P2: the enlarged identity block overlapped the first resin material column. Fixed by narrowing and repositioning the copy block and moving the desktop column grid right. Post-fix evidence: `cstd-elastic-compare-final.png` and `cstd-elastic-copy-compare-final.png`.
 
 ## Findings
 
-No actionable P0, P1, or P2 visual differences remain. The intentional additions extend the existing design language without changing the site's information architecture.
+No actionable P0, P1, or P2 differences remain. The source's tiny print-registration details and handwritten signature were intentionally omitted because they do not carry product meaning and would reduce legibility; this is acceptable P3 fidelity drift.
 
 ## Final Result
 
