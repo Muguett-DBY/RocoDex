@@ -14,6 +14,16 @@ describe("CSTD creative systems landing", () => {
     expect(source).toContain("useScroll(");
   });
 
+  test("turns the narrative into a responsive motion system", () => {
+    expect(source).toContain("useMotionValue(");
+    expect(source).toContain("useMotionTemplate`");
+    expect(source).toContain("data-cstd-hero");
+    expect(source).toContain("data-cstd-chapter={chapter.id}");
+    expect(source).toContain("data-cstd-atlas-node={system.id}");
+    expect(source).toContain("aria-pressed={activeSystemId === system.id}");
+    expect(source).toContain("onPointerMove={handlePointerMove}");
+  });
+
   test("keeps the few live product links behind the shared external-link policy", () => {
     expect(source).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
     expect(source).toContain("{...targetProps}");
