@@ -39,7 +39,7 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 - Scroll progress changes background textures, particles, archive panels, project planes, camera position, and the active header chapter.
 - Project planes animate their clipping geometry and image transform on hover.
 - The site defaults to full motion even when the operating system reports reduced motion. A persisted header control explicitly switches to calm mode, where the pointer field is hidden, signal lanes freeze, consecutive canvas frames are identical, and every research chapter remains scrollable.
-- The scene starts with a lightweight first frame, promotes to full post-processing on hardware GPUs, and retains a lower-cost composition on software rasterizers.
+- The scene starts with a lightweight first frame, promotes to continuous full post-processing on hardware GPUs, and retains a lower-cost demand-rendered composition on software rasterizers.
 - A lost WebGL context removes the invalid canvas and preserves the generated static material field without emitting an application error.
 - Desktop and 393px states have zero horizontal overflow.
 
@@ -56,6 +56,7 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 9. P1: conflicting `relative` and `absolute` utilities made the research header consume 210px in the horizontal stage, pushing content below the viewport. Fixed with exclusive positioning classes and visual checks at 2048 x 900 and 1440 x 1024.
 10. P2: repeated development refreshes could lose the WebGL context while the post-processing composer was remounting. Fixed with context-loss detection and an immediate static-material fallback.
 11. Product decision: operating-system reduced-motion preference no longer silently changes the first visit. Full motion is the default and an explicit, persisted calm-mode control owns the choice.
+12. P1: default full motion kept SwiftShader in a continuous frame loop, starving CI screenshots and chapter-state polling until the 45-second test timeout. Fixed by demand-rendering the existing lite composition while preserving continuous rendering on hardware GPUs.
 
 ## Automated Acceptance
 
@@ -63,6 +64,7 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 - Targeted desktop browser regression: 3/3 passed for horizontal scroll, calm mode, and WebGL context loss.
 - Full desktop and mobile browser suite: 15 passed, 7 intentional capability skips.
 - CI-equivalent CSTD suite with operating-system reduced motion: 7 passed, 1 intentional hardware-interaction skip.
+- Full CI-equivalent desktop and mobile suite: 14 passed, 8 intentional capability skips in 1.3 minutes.
 - Browser interaction checks include Canvas frame changes, real wheel-driven track transforms, 2026 visibility, footer reachability, chapter state, project links, keyboard focus, no utility workflows, calm mode, and context-loss fallback.
 - Production build: 734 static pages generated successfully; dependency audit reports zero vulnerabilities.
 

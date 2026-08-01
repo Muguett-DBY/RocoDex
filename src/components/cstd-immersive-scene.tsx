@@ -555,7 +555,7 @@ export function CstdImmersiveScene(props: CstdImmersiveSceneProps) {
           data-cstd-webgl-canvas
           camera={{ position: [0, 0, 7.2], fov: 42, near: 0.1, far: 40 }}
           dpr={quality === "lite" ? 1 : [1, 1.5]}
-          frameloop={props.reducedMotion ? "demand" : "always"}
+          frameloop={quality === "lite" ? "demand" : "always"}
           gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
           onCreated={({ gl }) => {
             gl.outputColorSpace = THREE.SRGBColorSpace;
