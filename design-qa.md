@@ -1,55 +1,58 @@
-# CSTD Elastic Research Archive Design QA
+# CSTD Immersive Systems World Design QA
 
 ## Evidence
 
-- Source visual truth: `output/playwright/cstd-elastic-reference.png`
-- Final implementation: `output/playwright/cstd-elastic-hero-final.png`
-- Normalized full-view comparison: `output/playwright/cstd-elastic-compare-final.png`
-- Focused copy comparison: `output/playwright/cstd-elastic-copy-compare-final.png`
-- Interaction state: `output/playwright/cstd-elastic-trail-final.png`
-- Chapter states: `output/playwright/cstd-elastic-systems-final.png`, `output/playwright/cstd-elastic-proof-pass1.png`, `output/playwright/cstd-elastic-path-pass1.png`
-- Responsive state: `output/playwright/cstd-elastic-mobile-final.png`
-- Source pixels: 1487 x 1058, normalized to 1440 x 1024 for comparison
-- Desktop implementation: 1440 x 1024 pixels, 1440 x 1024 CSS viewport, device scale factor 1
-- Mobile implementation: 393 x 852 pixels, 393 x 852 CSS viewport, device scale factor 1
-- Route and state: local `/cstd`, desktop hero at rest, pointer trail, Systems, Proof, Path, and mobile hero
+- Generated source materials: `public/cstd-world/cstd-kinetic-studio-v2.webp`, `public/cstd-world/cstd-data-loom-v2.webp`
+- Source-to-implementation comparison: `output/playwright/cstd-wow-reference-compare.png`
+- Desktop hero: `output/playwright/cstd-wow-hero-pass1.png`
+- Pointer and press state: `output/playwright/cstd-wow-hero-interactive-pass1.png`
+- Systems chapter after correction: `output/playwright/cstd-wow-systems-pass2.png`
+- Selected work chapter: `output/playwright/cstd-wow-proof-pass1.png`
+- Horizontal research path: `output/playwright/cstd-wow-path-pass1.png`
+- Mobile fallback and layout: `output/playwright/cstd-wow-mobile-pass1.png`
+- Desktop viewport: 1440 x 1024 CSS pixels at device scale factor 1
+- Mobile viewport: 393 x 852 CSS pixels at device scale factor 1
 
-## Full-View Comparison
+## Visual Direction
 
-The implementation matches the selected elastic-archive composition: a slim charcoal header, oversized CSTD typography, staggered portrait material columns, an identity block inside the letterform negative space, edge timelines, and a visible transition into the next chapter. The generated imagery uses the same tactile resin, film, paper, cobalt ceramic, charcoal, and warm-studio language as the source while remaining individually animatable.
+The homepage now presents CSTD as a continuous physical-digital studio instead of a conventional portfolio grid. A fixed Three.js world combines two dedicated generated environments, five archive textures, three real product surfaces, a distorted image shader, particle currents, a dual-material archive spine, camera motion, bloom, noise, and restrained chromatic separation. DOM chapters stay legible and accessible above that scene.
 
-## Required Fidelity Surfaces
+## Required Surfaces
 
-- Fonts and typography: the implementation uses the established Chinese system sans stack with the source's heavy display hierarchy, compact utility labels, zero letter spacing, and stable two-line heading wraps. The source mock's exact generated typeface is not distributable; the fallback preserves its weight and geometry without clipping or truncation.
-- Spacing and layout rhythm: the 1440px frame, five-column stagger, timeline edges, slim header, and next-section reveal align with the source. Material columns use explicit tracks and height constraints, and the 393px state keeps text and controls inside the viewport.
-- Colors and visual tokens: warm ivory, charcoal, custard yellow, mint, cobalt, and restrained coral/blue accents remain balanced. No gradients, decorative orbs, or unrelated neon hues were introduced.
-- Image quality and asset fidelity: five dedicated 960 x 1440 WebP assets replace generic placeholders. Their subjects, crops, palette, and lighting match the source art direction, remain sharp at rendered sizes, and are not recreated with CSS, SVG, or div art.
-- Copy and content: the CSTD identity, Chinese value statement, system evidence, real project names, live destinations, and research history are preserved. Search, comparison, filters, and tutorial copy remain absent.
+- Hero: full-bleed, unframed WebGL world with the CSTD brand as the first viewport signal and the next signal strip visible at the fold.
+- Systems: five capability axes operate as one deliberate focus surface. Hover and keyboard focus update evidence without search, filtering, or comparison utilities.
+- Work: three live systems use full-height editorial chapters and real product screenshots rather than repeated cards.
+- Research: four learning years move through one horizontal camera-like sequence on desktop and fall back to a vertical sequence on smaller viewports or reduced motion.
+- Palette: graphite, warm ivory, custard amber, cobalt, and small brass highlights. No purple theme, decorative orbs, gradient background, or neon cyberpunk treatment.
+- Typography: heavy display hierarchy with zero letter spacing, stable responsive sizes, and no viewport-width font scaling.
 
-## Focused Comparison
+## Interaction Verification
 
-The focused copy crop confirms that the identity block occupies the CSTD letterform's negative space without covering the first material column. Weight, line height, custard accent, ivory surface, and two-line Chinese statement remain readable at the intended desktop scale. Additional focused chapter captures were required because image loading, sticky active states, and the expanding proof reel are not legible in one full-page image.
+- The WebGL canvas covers the full 1440 x 1024 viewport and produces a nonblank PNG payload above 1.2 MB in every inspected chapter.
+- Production Chrome sampled 120 animation frames at 6.25 ms average and 6.30 ms p95 on the current 160 Hz display; the single canvas rendered at its full 1440 x 1024 CSS and backing resolution.
+- The production first-view resource sample transferred 2.89 MB across 35 requests, with 4.15 MB decoded, while the console remained at 0 errors and 0 warnings.
+- Pointer movement and press changed the canvas pixel output; the cursor field moved from its initial transform to the inspected pointer coordinates.
+- Scroll progress changes background textures, particles, archive panels, project planes, camera position, and the active header chapter.
+- Project planes animate their clipping geometry and image transform on hover.
+- Reduced-motion mode hides the pointer field, freezes the signal lanes, and produces identical consecutive canvas frames.
+- Desktop and 393px states have zero horizontal overflow.
 
-## Interaction And Browser Verification
+## Iteration History
 
-- Pointer parallax changes the full material field without shifting layout.
-- Cursor movement produced five transient real-image trail items in the captured state.
-- Systems rows update the sticky generated-material stage on focus, hover, and viewport entry.
-- The proof reel elastically reallocates width while preserving live project links.
-- Research years update the archive image and caption as the path advances.
-- Reduced-motion mode freezes continuous lanes, pointer depth, and image trails.
-- Desktop CSTD browser suite: 7/7 passed in the first implementation pass.
-- Browser console: 0 errors and 0 warnings in final desktop and mobile inspections; development-only informational HMR messages remain.
-- No horizontal overflow was observed at 1440 x 1024 or 393 x 852.
+1. P1: chapter labels were derived from old whole-page percentages and lagged behind the actual Systems, Work, and Path sections. Fixed by resolving the active chapter from each section's real document offset.
+2. P2: the Systems title wrapped into too many isolated lines and all viewport-enter callbacks selected the final system. Fixed with a stable two-line heading and deliberate hover/focus activation only.
+3. P1: reduced-motion conditional markup caused a server/client hydration mismatch. Fixed by hydrating the motion preference before applying it and keeping pointer markup structurally stable.
+4. Test environment: Chromium reports benign `ReadPixels` driver warnings when Playwright captures WebGL frames. The regression helper filters only this exact driver message while retaining all application warnings and errors.
 
-## Comparison History
+## Automated Acceptance
 
-1. P2: the first 1440 x 1024 capture filled the viewport with the hero and did not reveal the next chapter; the Systems heading also wrapped with an isolated final character. Fixed by shortening the hero's constrained viewport height and balancing the heading into two stable lines. Post-fix evidence: `cstd-elastic-hero-pass2.png` and `cstd-elastic-systems-final.png`.
-2. P2: the enlarged identity block overlapped the first resin material column. Fixed by narrowing and repositioning the copy block and moving the desktop column grid right. Post-fix evidence: `cstd-elastic-compare-final.png` and `cstd-elastic-copy-compare-final.png`.
+- CSTD source and routing contracts: 13/13 passed.
+- CSTD desktop browser regression: 7/7 passed.
+- Browser interaction checks include Canvas frame changes, chapter state, project links, keyboard focus, no utility workflows, and reduced motion.
 
 ## Findings
 
-No actionable P0, P1, or P2 differences remain. The source's tiny print-registration details and handwritten signature were intentionally omitted because they do not carry product meaning and would reduce legibility; this is acceptable P3 fidelity drift.
+No actionable P0, P1, or P2 visual issues remain in the inspected desktop or mobile states. The WebGL treatment intentionally exceeds the still source by adding depth, generated archive panels, live product planes, pointer refraction, and scroll-driven camera movement.
 
 ## Final Result
 

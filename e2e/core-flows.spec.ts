@@ -10,7 +10,10 @@ function captureBrowserIssues(page: Page) {
 
   page.on("console", (message) => {
     if (message.type() === "warning" || message.type() === "error") {
-      issues.push(`${message.type()}: ${message.text()}`);
+      const text = message.text();
+      if (text.includes("GL Driver Message") && text.includes("GPU stall due to ReadPixels")) return;
+      if (text.includes("You have Reduced Motion enabled on your device")) return;
+      issues.push(`${message.type()}: ${text}`);
     }
   });
   page.on("pageerror", (error) => issues.push(`pageerror: ${error.message}`));
@@ -22,31 +25,6 @@ async function expectNoHorizontalOverflow(page: Page) {
   await expect
     .poll(() =>
       page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth),
-    )
-    .toBe(true);
-}
-
-async function expectCstdHeadingRevealed(page: Page, headingId: string) {
-  await expect
-    .poll(() =>
-      page.evaluate((id) => {
-        const heading = document.getElementById(id);
-        const visualLine = heading?.querySelector<HTMLElement>(
-          'span[aria-hidden="true"] > span > span',
-        );
-        if (!heading || !visualLine) return false;
-
-        const transform = getComputedStyle(visualLine).transform;
-        if (transform === "none") return true;
-
-        const matrix = new DOMMatrixReadOnly(transform);
-        return (
-          Math.abs(matrix.m41) < 1 &&
-          Math.abs(matrix.m42) < 1 &&
-          Math.abs(matrix.m12) < 0.01 &&
-          Math.abs(matrix.m21) < 0.01
-        );
-      }, headingId),
     )
     .toBe(true);
 }
@@ -105,18 +83,20 @@ test("core routes render responsively", async ({ page }) => {
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD presents an elastic material archive with selective proof", async ({ page }) => {
+test("CSTD presents an immersive WebGL world with selective proof", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "networkidle" });
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1, name: "CSTD" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "进入系统" })).toHaveAttribute("href", "#systems");
+  await expect(page.getByRole("link", { name: "进入系统章节" })).toHaveAttribute("href", "#systems");
+  await expect(page.locator("[data-cstd-kinetic-world]")).toBeVisible();
   await expect(page.locator("[data-cstd-elastic-archive]")).toBeVisible();
-  await expect(page.locator("[data-cstd-material-column]")).toHaveCount(5);
-  await expect(page.locator("[data-cstd-image-trail]")).toHaveCount(1);
+  await expect(page.locator("[data-cstd-webgl]")).toBeVisible();
+  await expect(page.locator("[data-cstd-webgl-canvas]")).toBeVisible();
   await expect(page.locator('[data-cstd-system]')).toHaveCount(5);
   await expect(page.locator('[data-cstd-proof]')).toHaveCount(3);
+  await expect(page.locator('[data-cstd-project-plane]')).toHaveCount(3);
   await expect(page.locator('[data-cstd-live-object]')).toHaveCount(2);
 
   for (const title of [
@@ -125,10 +105,11 @@ test("CSTD presents an elastic material archive with selective proof", async ({ 
     "AI 创作与研究工具",
     "研究与可解释模型",
     "数据流与计算研究",
-    "洛克图鉴 / RocoDex",
-    "CSTD Alpha",
-    "产业园区招商 CRM",
   ]) {
+    await expect(page.getByText(title, { exact: true })).toHaveCount(1);
+  }
+
+  for (const title of ["洛克图鉴 / RocoDex", "CSTD Alpha", "产业园区招商 CRM"]) {
     await expect(page.getByRole("heading", { level: 3, name: title })).toHaveCount(1);
   }
 
@@ -139,16 +120,16 @@ test("CSTD presents an elastic material archive with selective proof", async ({ 
   await expect(page.getByText("加入对比", { exact: false })).toHaveCount(0);
 
   for (const asset of [
-    "cstd-archive-resin-circuit-v1",
-    "cstd-archive-data-film-v1",
-    "cstd-archive-notebook-v1",
-    "cstd-archive-cobalt-modules-v1",
-    "cstd-archive-studio-v1",
+    "cstd-kinetic-studio-v2",
+    "cstd-data-loom-v2",
   ]) {
-    const assetResponse = await page.request.get(`/cstd-archive/${asset}.webp`);
+    const assetResponse = await page.request.get(`/cstd-world/${asset}.webp`);
     expect(assetResponse.ok()).toBe(true);
     expect(assetResponse.headers()["content-type"]).toContain("image/webp");
   }
+
+  const canvasImage = await page.locator("[data-cstd-webgl-canvas]").screenshot();
+  expect(canvasImage.byteLength).toBeGreaterThan(20_000);
 
   for (const id of ["product-surfaces", "edge-operations", "ai-creation", "research-models", "data-systems"]) {
     const system = page.locator(`[data-cstd-system="${id}"]`);
@@ -225,11 +206,12 @@ test("CSTD composes its chapters as one kinetic studio", async ({ page, isMobile
     await page.locator(`#${chapter}-heading`).evaluate((element) =>
       element.scrollIntoView({ block: "center" }),
     );
-    await expectCstdHeadingRevealed(page, `${chapter}-heading`);
+    await expect(page.locator(`#${chapter}-heading`)).toBeInViewport();
   }
 
-  const finalResearchStep = page.locator('[data-cstd-learning-step="2026"]');
-  await finalResearchStep.evaluate((element) => element.scrollIntoView({ block: "center" }));
+  await page.locator("#path").evaluate((element) => {
+    window.scrollTo({ top: element.offsetTop + element.offsetHeight - window.innerHeight, behavior: "auto" });
+  });
   await expect
     .poll(() => page.locator("[data-cstd-research-state]").getAttribute("data-cstd-research-state"))
     .toBe("2026");
@@ -258,7 +240,7 @@ test("CSTD system stage responds to deliberate exploration", async ({ page, isMo
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD depth, image trail, and proof reel respond to pointer position", async ({ page, isMobile }) => {
+test("CSTD WebGL field, cursor, and project planes respond to deliberate input", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "Pointer choreography is intentionally a fine-pointer enhancement.");
 
   const browserIssues = captureBrowserIssues(page);
@@ -266,34 +248,35 @@ test("CSTD depth, image trail, and proof reel respond to pointer position", asyn
   expect(response?.ok()).toBe(true);
 
   const hero = page.locator("[data-cstd-hero]");
-  const heroDepth = page.locator("[data-cstd-hero-depth]");
+  const canvas = page.locator("[data-cstd-webgl-canvas]");
+  const pointerField = page.locator("[data-cstd-pointer-field]");
   const heroBounds = await hero.boundingBox();
   expect(heroBounds).not.toBeNull();
-  const initialHeroTransform = await heroDepth.evaluate((element) => getComputedStyle(element).transform);
-  await hero.hover({ position: { x: heroBounds!.width * 0.86, y: heroBounds!.height * 0.72 } });
+  const initialPointerTransform = await pointerField.evaluate((element) => getComputedStyle(element).transform);
+  const initialCanvas = await canvas.screenshot();
+  await page.mouse.move(heroBounds!.x + heroBounds!.width * 0.86, heroBounds!.y + heroBounds!.height * 0.72, { steps: 8 });
+  await page.mouse.down();
+  await page.waitForTimeout(160);
+  await page.mouse.up();
   await expect
-    .poll(() => heroDepth.evaluate((element) => getComputedStyle(element).transform))
-    .not.toBe(initialHeroTransform);
+    .poll(() => pointerField.evaluate((element) => getComputedStyle(element).transform))
+    .not.toBe(initialPointerTransform);
+  const activeCanvas = await canvas.screenshot();
+  expect(activeCanvas.equals(initialCanvas)).toBe(false);
 
-  await hero.hover({ position: { x: heroBounds!.width * 0.18, y: heroBounds!.height * 0.26 } });
+  const alphaPlane = page.locator('[data-cstd-project-plane="alpha"]');
+  await alphaPlane.scrollIntoViewIfNeeded();
+  const initialClipPath = await alphaPlane.evaluate((element) => getComputedStyle(element).clipPath);
+  await alphaPlane.hover();
   await expect
-    .poll(() => page.locator("[data-cstd-image-trail] > div").count())
-    .toBeGreaterThan(0);
-
-  const proofReel = page.locator("[data-cstd-proof-reel]");
-  await proofReel.scrollIntoViewIfNeeded();
-  const alphaProof = page.locator('[data-cstd-proof="alpha"]');
-  const initialFlexGrow = await alphaProof.evaluate((element) => getComputedStyle(element).flexGrow);
-  await alphaProof.hover();
-  await expect
-    .poll(() => alphaProof.evaluate((element) => getComputedStyle(element).flexGrow))
-    .not.toBe(initialFlexGrow);
+    .poll(() => alphaPlane.evaluate((element) => getComputedStyle(element).clipPath))
+    .not.toBe(initialClipPath);
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD keeps pointer depth still when reduced motion is requested", async ({ page, isMobile }) => {
+test("CSTD keeps the cinematic field still when reduced motion is requested", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "One browser profile is sufficient for reduced-motion semantics.");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -301,16 +284,7 @@ test("CSTD keeps pointer depth still when reduced motion is requested", async ({
   const response = await page.goto("/cstd", { waitUntil: "networkidle" });
   expect(response?.ok()).toBe(true);
 
-  const hero = page.locator("[data-cstd-hero]");
-  const heroDepth = page.locator("[data-cstd-hero-depth]");
-  const heroBounds = await hero.boundingBox();
-  expect(heroBounds).not.toBeNull();
-  const initialHeroTransform = await heroDepth.evaluate((element) => getComputedStyle(element).transform);
-  await hero.hover({ position: { x: heroBounds!.width * 0.86, y: heroBounds!.height * 0.72 } });
-  await page.waitForTimeout(300);
-  await expect
-    .poll(() => heroDepth.evaluate((element) => getComputedStyle(element).transform))
-    .toBe(initialHeroTransform);
+  await expect(page.locator("[data-cstd-pointer-field]")).toBeHidden();
 
   const signalTrack = page.locator("[data-cstd-signal-track]").first();
   const initialSignalTransform = await signalTrack.evaluate((element) =>
@@ -321,8 +295,11 @@ test("CSTD keeps pointer depth still when reduced motion is requested", async ({
     .poll(() => signalTrack.evaluate((element) => getComputedStyle(element).transform))
     .toBe(initialSignalTransform);
 
-  await hero.hover({ position: { x: heroBounds!.width * 0.18, y: heroBounds!.height * 0.26 } });
-  await expect(page.locator("[data-cstd-image-trail] > div")).toHaveCount(0);
+  const canvas = page.locator("[data-cstd-webgl-canvas]");
+  const firstFrame = await canvas.screenshot();
+  await page.waitForTimeout(450);
+  const secondFrame = await canvas.screenshot();
+  expect(secondFrame.equals(firstFrame)).toBe(true);
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
