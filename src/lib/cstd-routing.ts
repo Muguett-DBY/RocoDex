@@ -38,7 +38,8 @@ export function getCstdRouteDecision(host: string, path: string): CstdRouteDecis
 
 function isAllowedCstdPath(path: string) {
   return CSTD_ALLOWED_PATHS.has(path)
-    || path.startsWith("/cstd-projects/");
+    || path.startsWith("/cstd-projects/")
+    || path.startsWith("/cstd-archive/");
 }
 
 function normalizeHost(host: string) {
