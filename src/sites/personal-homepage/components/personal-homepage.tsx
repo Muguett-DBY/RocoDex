@@ -10,9 +10,6 @@ import {
   useMotionValueEvent,
   useScroll,
   useSpring,
-  useTransform,
-  useVelocity,
-  type MotionValue,
 } from "framer-motion";
 import * as m from "framer-motion/m";
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from "react";
@@ -139,20 +136,6 @@ function getMotionModeServerSnapshot(): MotionMode {
   return "full";
 }
 
-function useWideViewport() {
-  const [isWide, setIsWide] = useState(false);
-
-  useEffect(() => {
-    const media = window.matchMedia("(min-width: 1024px)");
-    const sync = () => setIsWide(media.matches);
-    sync();
-    media.addEventListener("change", sync);
-    return () => media.removeEventListener("change", sync);
-  }, []);
-
-  return isWide;
-}
-
 function useDeferredEnhancements() {
   const [ready, setReady] = useState(false);
 
@@ -167,6 +150,19 @@ function useDeferredEnhancements() {
   }, []);
 
   return ready;
+}
+
+function useDocumentVisibility() {
+  const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    const sync = () => setVisible(document.visibilityState !== "hidden");
+    sync();
+    document.addEventListener("visibilitychange", sync);
+    return () => document.removeEventListener("visibilitychange", sync);
+  }, []);
+
+  return visible;
 }
 
 function SignalStrip({ reducedMotion }: { reducedMotion: boolean }) {
@@ -370,60 +366,24 @@ function ResearchPathPanel({
   entry,
   index,
   active,
-  horizontalPath,
   reducedMotion,
-  scrollProgress,
-  velocityTilt,
 }: {
   entry: CstdLearningEntry;
   index: number;
   active: boolean;
-  horizontalPath: boolean;
   reducedMotion: boolean;
-  scrollProgress: MotionValue<number>;
-  velocityTilt: MotionValue<number>;
 }) {
   const asset = learningAssets[entry.year];
   const accent = researchAccents[index];
   const lastIndex = cstdLearningPath.length - 1;
-  const center = index / lastIndex;
-  const reach = 0.22;
-  const inputRange = index === 0
-    ? [0, reach]
-    : index === lastIndex
-      ? [1 - reach, 1]
-      : [center - reach, center, center + reach];
-  const mediaShift = useTransform(
-    scrollProgress,
-    inputRange,
-    index === 0 ? [0, -72] : index === lastIndex ? [72, 0] : [72, 0, -72],
-  );
-  const copyShift = useTransform(
-    scrollProgress,
-    inputRange,
-    index === 0 ? [0, -34] : index === lastIndex ? [34, 0] : [34, 0, -34],
-  );
-  const mediaScale = useTransform(
-    scrollProgress,
-    inputRange,
-    index === 0 ? [1, 0.92] : index === lastIndex ? [0.92, 1] : [0.92, 1, 0.92],
-  );
-  const mediaOpacity = useTransform(
-    scrollProgress,
-    inputRange,
-    index === 0 ? [1, 0.42] : index === lastIndex ? [0.42, 1] : [0.42, 1, 0.42],
-  );
-  const motionStyle = horizontalPath && !reducedMotion;
 
   return (
     <li
       data-cstd-learning-step={entry.year}
       data-cstd-learning-active={active ? "true" : "false"}
       className={clsx(
-        "group relative grid w-full flex-none items-center overflow-hidden border-white/20 px-5 md:px-10 lg:px-16",
-        horizontalPath
-          ? "h-svh w-screen grid-cols-[0.72fr_1.08fr_0.2fr] gap-12 border-r pb-14 pt-40"
-          : "min-h-svh gap-12 border-b py-28 md:grid-cols-[0.82fr_1.18fr] lg:gap-20 lg:py-32",
+        "group relative grid min-h-svh w-full items-center gap-12 overflow-hidden border-b border-white/20 px-5 py-28 md:px-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20 lg:px-16 lg:py-32",
+        index % 2 === 1 && "lg:grid-cols-[1.18fr_0.82fr]",
       )}
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -443,8 +403,14 @@ function ResearchPathPanel({
       </div>
 
       <m.div
-        className="relative z-20 min-w-0 max-w-2xl"
-        style={motionStyle ? { x: copyShift } : undefined}
+        className={clsx(
+          "relative z-20 min-w-0 max-w-2xl",
+          index % 2 === 1 && "lg:order-2 lg:pl-8",
+        )}
+        initial={reducedMotion ? false : { opacity: 0, y: 44 }}
+        whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
+        viewport={{ amount: 0.28, once: true }}
+        transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="flex items-center gap-4 text-[10px] font-black text-white/48 md:text-xs">
           <span className={accent.text}>0{index + 1}</span>
@@ -463,23 +429,26 @@ function ResearchPathPanel({
 
       <m.figure
         className={clsx(
-          "relative z-10 min-h-0 overflow-hidden border bg-black shadow-[0_30px_90px_rgba(0,0,0,0.42)]",
+          "relative z-10 aspect-[4/5] max-h-[72svh] min-h-0 overflow-hidden border bg-black shadow-[0_30px_90px_rgba(0,0,0,0.42)]",
           accent.border,
-          horizontalPath ? "aspect-[5/4] max-h-[62svh]" : "aspect-[4/5] max-h-[70svh]",
+          index % 2 === 1 && "lg:order-1",
         )}
-        style={motionStyle ? { y: mediaShift, opacity: mediaOpacity, rotate: velocityTilt } : undefined}
+        initial={reducedMotion ? false : { opacity: 0.5, y: 70, scale: 0.94 }}
+        whileInView={reducedMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+        viewport={{ amount: 0.24, once: true }}
         whileHover={reducedMotion ? undefined : { scale: 1.018 }}
-        transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+        transition={{ duration: 0.82, ease: [0.22, 1, 0.36, 1] }}
       >
         <m.div
           className="absolute inset-[-4%]"
-          style={motionStyle ? { scale: mediaScale } : undefined}
+          whileHover={reducedMotion ? undefined : { scale: 1.035 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
         >
           <Image
             src={asset.src}
             alt={asset.alt}
             fill
-            loading="eager"
+            loading={index === 0 ? "eager" : "lazy"}
             sizes="(min-width: 1024px) 42vw, 100vw"
             className="object-cover saturate-[0.78] transition duration-700 group-hover:saturate-100"
           />
@@ -491,14 +460,6 @@ function ResearchPathPanel({
           CSTD ARCHIVE / {entry.year}
         </figcaption>
       </m.figure>
-
-      {horizontalPath ? (
-        <div aria-hidden="true" className="relative z-20 hidden h-[62svh] flex-col items-end justify-between border-l border-white/18 pl-6 lg:flex">
-          <span className="text-[10px] font-black text-white/38">FRAME {String(index + 1).padStart(2, "0")}</span>
-          <span className={clsx("text-6xl font-black", accent.text)}>0{index + 1}</span>
-          <span className="text-[10px] font-black text-white/38">CSTD / {entry.year}</span>
-        </div>
-      ) : null}
 
       {index === lastIndex ? (
         <a
@@ -513,26 +474,12 @@ function ResearchPathPanel({
   );
 }
 
-function ResearchPath({ reducedMotion, isWide }: { reducedMotion: boolean; isWide: boolean }) {
+function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
   const pathRef = useRef<HTMLElement>(null);
   const [activeYear, setActiveYear] = useState<CstdLearningEntry["year"]>(cstdLearningPath[0].year);
-  const { scrollYProgress } = useScroll({ target: pathRef, offset: ["start start", "end end"] });
-  const pathX = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
-  const pathVelocity = useVelocity(scrollYProgress);
-  const smoothPathVelocity = useSpring(pathVelocity, { stiffness: 90, damping: 24, mass: 0.45 });
-  const velocityTilt = useTransform(smoothPathVelocity, [-0.65, 0.65], [-2.2, 2.2]);
-  const horizontalPath = isWide && !reducedMotion;
   const activeIndex = cstdLearningPath.findIndex((entry) => entry.year === activeYear);
 
-  useMotionValueEvent(scrollYProgress, "change", (value) => {
-    if (!horizontalPath) return;
-    const index = Math.min(cstdLearningPath.length - 1, Math.floor(value * cstdLearningPath.length));
-    const year = cstdLearningPath[index].year;
-    setActiveYear((current) => (current === year ? current : year));
-  });
-
   useEffect(() => {
-    if (horizontalPath) return;
     const section = pathRef.current;
     if (!section) return;
     const steps = Array.from(section.querySelectorAll<HTMLElement>("[data-cstd-learning-step]"));
@@ -551,7 +498,7 @@ function ResearchPath({ reducedMotion, isWide }: { reducedMotion: boolean; isWid
     );
     steps.forEach((step) => observer.observe(step));
     return () => observer.disconnect();
-  }, [horizontalPath]);
+  }, []);
 
   return (
     <section
@@ -559,21 +506,13 @@ function ResearchPath({ reducedMotion, isWide }: { reducedMotion: boolean; isWid
       ref={pathRef}
       data-cstd-chapter="path"
       data-cstd-research-state={activeYear}
-      data-cstd-path-mode={horizontalPath ? "horizontal" : "vertical"}
+      data-cstd-path-mode="vertical"
+      data-cstd-path-continuous="true"
       aria-labelledby="path-heading"
-      className={clsx(
-        "relative z-10 bg-[#090a08]/88 text-[#f4efe4]",
-        horizontalPath && "min-h-[420svh]",
-      )}
+      className="relative z-10 bg-[#090a08]/92 text-[#f4efe4]"
     >
-      <div
-        data-cstd-path-stage
-        className={horizontalPath ? "sticky top-0 h-svh overflow-hidden" : "relative"}
-      >
-        <header className={clsx(
-          "z-30 border-b border-white/20 bg-[#090a08]/78 px-5 pb-7 pt-24 backdrop-blur-md md:px-10 lg:px-16",
-          horizontalPath ? "absolute inset-x-0 top-0" : "relative",
-        )}>
+      <div data-cstd-path-stage className="relative">
+        <header className="relative z-30 border-b border-white/20 bg-[#090a08]/92 px-5 pb-10 pt-24 md:px-10 lg:px-16 lg:pb-14 lg:pt-32">
           <div className="flex items-end justify-between gap-10">
           <div>
             <p className="text-xs font-black text-[#f4b72f]">03 / RESEARCH PATH</p>
@@ -587,14 +526,16 @@ function ResearchPath({ reducedMotion, isWide }: { reducedMotion: boolean; isWid
             </div>
           </div>
           <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-white/12">
-            <m.div data-cstd-path-progress className="h-px origin-left bg-[#f4b72f]" style={{ scaleX: scrollYProgress }} />
+            <m.div
+              data-cstd-path-progress
+              className="h-px origin-left bg-[#f4b72f]"
+              animate={{ scaleX: (activeIndex + 1) / cstdLearningPath.length }}
+              transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+            />
           </div>
         </header>
 
-        <m.ol
-          style={horizontalPath ? { x: pathX } : undefined}
-          className={horizontalPath ? "flex h-svh w-[400vw] flex-row will-change-transform" : "flex w-full flex-col"}
-        >
+        <ol className="flex w-full flex-col">
           {cstdLearningPath.map((entry, index) => {
             return (
               <ResearchPathPanel
@@ -602,14 +543,11 @@ function ResearchPath({ reducedMotion, isWide }: { reducedMotion: boolean; isWid
                 entry={entry}
                 index={index}
                 active={entry.year === activeYear}
-                horizontalPath={horizontalPath}
                 reducedMotion={reducedMotion}
-                scrollProgress={scrollYProgress}
-                velocityTilt={velocityTilt}
               />
             );
           })}
-        </m.ol>
+        </ol>
       </div>
     </section>
   );
@@ -649,7 +587,7 @@ export function PersonalHomepage() {
   );
   const reducedMotion = motionMode === "calm";
   const enhancementsReady = useDeferredEnhancements();
-  const isWide = useWideViewport();
+  const documentVisible = useDocumentVisibility();
   const progressRef = useRef(0);
   const pointerRef = useRef({ x: 0, y: 0 });
   const impulseRef = useRef(0);
@@ -681,8 +619,14 @@ export function PersonalHomepage() {
   });
 
   const sceneProps = useMemo(
-    () => ({ progressRef, pointerRef, impulseRef, reducedMotion }),
-    [reducedMotion],
+    () => ({
+      progressRef,
+      pointerRef,
+      impulseRef,
+      reducedMotion,
+      active: documentVisible && activeChapter !== "path",
+    }),
+    [activeChapter, documentVisible, reducedMotion],
   );
 
   function handlePointerMove(event: ReactPointerEvent<HTMLElement>) {
@@ -851,7 +795,7 @@ export function PersonalHomepage() {
       <SignalStrip reducedMotion={reducedMotion} />
       <SystemsChapter activeSystemId={activeSystemId} setActiveSystemId={setActiveSystemId} />
       <SelectedWork />
-      <ResearchPath reducedMotion={reducedMotion} isWide={isWide} />
+      <ResearchPath reducedMotion={reducedMotion} />
 
       <footer id="cstd-footer" className="relative z-20 border-t border-white/20 bg-[#090a08] px-5 py-16 text-white md:px-10 lg:px-16">
         <div className="mx-auto flex max-w-[1540px] flex-col justify-between gap-8 md:flex-row md:items-end">

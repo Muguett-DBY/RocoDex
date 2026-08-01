@@ -56,10 +56,14 @@ describe("CSTD immersive systems world", () => {
     expect(landingSource).toContain('return "full";');
     expect(landingSource).not.toContain("prefers-reduced-motion: reduce");
     expect(landingSource).toContain("data-cstd-motion-toggle");
-    expect(landingSource).toContain('data-cstd-path-mode={horizontalPath ? "horizontal" : "vertical"}');
+    expect(landingSource).toContain('data-cstd-path-mode="vertical"');
+    expect(landingSource).not.toContain("min-h-[420svh]");
+    expect(landingSource).not.toContain("w-[400vw]");
+    expect(landingSource).not.toContain("will-change-transform");
     expect(landingSource).toContain("reducedMotion={reducedMotion}");
     expect(landingSource).toContain('src="/cstd-world/cstd-kinetic-studio-v2.webp"');
-    expect(sceneSource).toContain('frameloop={quality === "lite" ? "demand" : "always"}');
+    expect(sceneSource).toContain('data-cstd-render-active={props.active ? "true" : "false"}');
+    expect(sceneSource).toContain('frameloop={props.active && quality === "full" ? "always" : "demand"}');
   });
 
   test("defers animation and WebGL enhancements behind the static first paint", () => {

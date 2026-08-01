@@ -30,7 +30,7 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 - Hero: full-bleed, unframed WebGL world with the CSTD brand as the first viewport signal and the next signal strip visible at the fold.
 - Systems: five capability axes operate as one deliberate focus surface. Hover and keyboard focus update evidence without search, filtering, or comparison utilities.
 - Work: three live systems use full-height editorial chapters and real product screenshots rather than repeated cards.
-- Research: four learning years move through one horizontal camera-like sequence on desktop and fall back to a complete vertical sequence on smaller viewports or the explicit calm mode.
+- Research: four learning years use one continuous vertical camera-like sequence at every viewport. Alternating editorial frames preserve motion and depth without converting vertical wheel input into a pinned horizontal stage.
 - Palette: graphite, warm ivory, custard amber, cobalt, and small brass highlights. No purple theme, decorative orbs, gradient background, or neon cyberpunk treatment.
 - Typography: heavy display hierarchy with zero letter spacing, stable responsive sizes, and no viewport-width font scaling.
 
@@ -43,7 +43,7 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 - Scroll progress changes background textures, particles, archive panels, project planes, camera position, and the active header chapter.
 - Project planes animate their clipping geometry and image transform on hover.
 - The site defaults to full motion even when the operating system reports reduced motion. A persisted header control explicitly switches to calm mode, where the pointer field is hidden, signal lanes freeze, consecutive canvas frames are identical, and every research chapter remains scrollable.
-- The scene starts with a lightweight first frame, promotes to continuous full post-processing on hardware GPUs, and retains a lower-cost demand-rendered composition on software rasterizers.
+- The scene starts with a lightweight first frame, promotes to continuous full post-processing on hardware GPUs, and retains a lower-cost demand-rendered composition on software rasterizers. Entering Research or hiding the document also switches the scene to a one-frame DPR 1 composition and removes post-processing until the scene becomes active again.
 - A lost WebGL context removes the invalid canvas and preserves the generated static material field without emitting an application error.
 - Desktop and 393px states have zero horizontal overflow.
 
@@ -63,18 +63,20 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 12. P1: default full motion kept SwiftShader in a continuous frame loop, starving CI screenshots and chapter-state polling until the 45-second test timeout. Fixed by demand-rendering the existing lite composition while preserving continuous rendering on hardware GPUs.
 13. Performance: replaced the full Motion component runtime with `LazyMotion` and `framer-motion/m`, deferred WebGL mounting until browser idle time, and split archive textures behind a nested Suspense boundary. Production initial JS fell from 308,385 bytes to 254,038 bytes while retaining the full visual field.
 14. Compatibility: Three.js r183-r185 emit a `THREE.Clock` deprecation warning through React Three Fiber 9.7.0. Pinned Three.js and its types to r182, the newest warning-free release for the current Fiber runtime, and kept future `0.x` upgrades behind manual migration and visual review.
+15. P1: the desktop Research chapter pinned a 400vw composited track for 420svh. Continuous wheel input remained inside one viewport composition long enough to feel locked, while the oversized `will-change` layer and full WebGL post-processing competed for GPU memory. Replaced it with natural vertical editorial frames, removed the oversized layer, and demand-rendered WebGL at DPR 1 without post-processing throughout Research and the footer.
 
 ## Automated Acceptance
 
 - Unit and source contracts: 156/156 passed across 45 files.
 - Dual-site architecture boundary: 9/9 contracts passed.
-- Targeted desktop browser regression: 3/3 passed for horizontal scroll, calm mode, and WebGL context loss.
-- Full desktop and mobile browser suite: 17 passed, 7 intentional capability skips.
+- Targeted desktop scroll regression: 2/2 passed for continuous wheel release and calm mode.
+- Personal homepage desktop and mobile browser suite: 11 passed, 5 intentional capability skips.
 - CI-equivalent CSTD suite with operating-system reduced motion: 7 passed, 1 intentional hardware-interaction skip.
 - Full CI-equivalent desktop and mobile suite: 16 passed, 8 intentional capability skips.
-- Browser interaction checks include Canvas frame changes, real wheel-driven track transforms, 2026 visibility, footer reachability, chapter state, project links, keyboard focus, no utility workflows, calm mode, and context-loss fallback.
+- Browser interaction checks include Canvas frame changes, real wheel traversal through every Research frame, 2026 visibility, footer reachability, bottom-frame responsiveness, chapter state, project links, keyboard focus, no utility workflows, calm mode, and context-loss fallback.
 - Node 24.18.0 / npm 12.0.2 production build: 734 static pages generated successfully; dependency audit reports zero vulnerabilities.
-- Production bundle guard: 254,038 initial JS bytes under a 290,000-byte budget; 1,099,900 async WebGL bytes under a 1,250,000-byte budget; no WebGL marker in the initial entry.
+- Production bundle guard: 252,906 initial JS bytes under a 290,000-byte budget; 1,099,980 async WebGL bytes under a 1,250,000-byte budget; no WebGL marker in the initial entry.
+- Real Chrome 1920 x 1080 continuous-wheel check: the old production path peaked at 88 ms command latency; the revised local path peaked at 41 ms, produced no long tasks or over-40 ms RAF gaps in Research/footer, reached the exact scroll maximum, and left WebGL in its inactive state.
 - Real Chrome runtime upgrade check: desktop and mobile both rendered at `full` quality, pointer input changed canvas hashes, all 10 generated WebGL materials loaded, horizontal overflow was zero, and the browser console remained clean.
 
 ## Findings
