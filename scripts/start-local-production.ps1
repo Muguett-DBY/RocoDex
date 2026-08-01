@@ -16,7 +16,8 @@ while (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction Silently
 
 $node = Get-Command node -ErrorAction Stop
 $nextCli = Join-Path $repositoryRoot "node_modules\next\dist\bin\next"
-$logRoot = Join-Path $repositoryRoot ".next"
+$logRoot = Join-Path $repositoryRoot "output\local-production"
+New-Item -ItemType Directory -Force -Path $logRoot | Out-Null
 $stdout = Join-Path $logRoot "local-production-$Port.stdout.log"
 $stderr = Join-Path $logRoot "local-production-$Port.stderr.log"
 $baseUrl = "http://127.0.0.1:$Port"

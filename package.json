@@ -11,6 +11,7 @@
     "build": "next build",
     "start": "next start",
     "start:local": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/start-local-production.ps1",
+    "stop:local": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/stop-local-next.ps1",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

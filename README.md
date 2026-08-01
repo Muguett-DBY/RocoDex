@@ -47,7 +47,7 @@ npm run dev
 - RocoDex：`http://localhost:3000`
 - 个人主站：`http://localhost:3000/cstd`
 
-完成生产构建后可用 `npm run start:local` 在后台启动本地生产服务器。脚本会从 3200 起选择空闲端口，并把 URL、PID 与日志位置输出到终端；可用 `scripts/stop-local-next.ps1` 结束该仓库的本地 Next 进程。
+完成生产构建后可用 `npm run start:local` 在后台启动本地生产服务器。脚本会从 3200 起选择空闲端口，并把 PID、端口与日志写入 `output/local-production`；使用 `npm run stop:local` 可结束该仓库的本地 Next 进程。
 
 ## 验证命令
 
