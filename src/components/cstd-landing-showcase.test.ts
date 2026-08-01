@@ -4,25 +4,33 @@ import { describe, expect, test } from "vitest";
 const source = readFileSync(new URL("./cstd-landing.tsx", import.meta.url), "utf8");
 
 describe("CSTD creative systems landing", () => {
-  test("uses the generated visual system for a technical narrative", () => {
-    expect(source).toContain('src="/cstd-systems-hero-v1.png"');
-    expect(source).toContain('src="/cstd-systems-map-v1.png"');
-    expect(source).toContain('src="/cstd-research-archive-v1.png"');
+  test("builds the elastic archive from dedicated generated materials", () => {
+    for (const asset of [
+      "cstd-archive-resin-circuit-v1.webp",
+      "cstd-archive-data-film-v1.webp",
+      "cstd-archive-notebook-v1.webp",
+      "cstd-archive-cobalt-modules-v1.webp",
+      "cstd-archive-studio-v1.webp",
+    ]) {
+      expect(source).toContain(asset);
+    }
+    expect(source).toContain("data-cstd-elastic-archive");
+    expect(source).toContain("data-cstd-material-column");
+    expect(source).toContain("data-cstd-image-trail");
     expect(source).toContain("data-cstd-system={system.id}");
     expect(source).toContain("data-cstd-proof={proof.projectId}");
     expect(source).toContain("useReducedMotion()");
     expect(source).toContain("useScroll(");
   });
 
-  test("turns the narrative into a responsive motion system", () => {
+  test("turns the archive into a responsive motion system", () => {
     expect(source).toContain("useMotionValue(");
-    expect(source).toContain("useMotionTemplate`");
+    expect(source).toContain("useSpring(");
     expect(source).toContain("data-cstd-hero");
+    expect(source).toContain("data-cstd-hero-depth");
     expect(source).toContain("data-cstd-chapter={chapter.id}");
-    expect(source).toContain("data-cstd-atlas-node={system.id}");
-    expect(source).toContain("aria-pressed={activeSystemId === system.id}");
     expect(source).toContain("onPointerMove={handlePointerMove}");
-    expect(source).toContain('<AnimatePresence mode="popLayout" initial={false}>');
+    expect(source).toContain("onViewportEnter");
   });
 
   test("composes every chapter into one continuous kinetic studio", () => {
@@ -30,6 +38,7 @@ describe("CSTD creative systems landing", () => {
     expect(source).toContain("data-cstd-signal-strip");
     expect(source).toContain("data-cstd-signal-track");
     expect(source).toContain("function RevealHeading");
+    expect(source).toContain("data-cstd-proof-reel");
     expect(source).toContain("data-cstd-learning-step={entry.year}");
     expect(source).toContain("data-cstd-research-state={activeEntry.year}");
   });

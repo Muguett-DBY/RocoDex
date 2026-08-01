@@ -105,13 +105,16 @@ test("core routes render responsively", async ({ page }) => {
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD presents a calm technical narrative with selective proof", async ({ page }) => {
+test("CSTD presents an elastic material archive with selective proof", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "networkidle" });
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1, name: "CSTD" })).toBeVisible();
-  await expect(page.getByRole("link", { name: "看系统" })).toHaveAttribute("href", "#systems");
+  await expect(page.getByRole("link", { name: "进入系统" })).toHaveAttribute("href", "#systems");
+  await expect(page.locator("[data-cstd-elastic-archive]")).toBeVisible();
+  await expect(page.locator("[data-cstd-material-column]")).toHaveCount(5);
+  await expect(page.locator("[data-cstd-image-trail]")).toHaveCount(1);
   await expect(page.locator('[data-cstd-system]')).toHaveCount(5);
   await expect(page.locator('[data-cstd-proof]')).toHaveCount(3);
   await expect(page.locator('[data-cstd-live-object]')).toHaveCount(2);
@@ -135,17 +138,16 @@ test("CSTD presents a calm technical narrative with selective proof", async ({ p
   await expect(page.getByText("按目标找项目", { exact: true })).toHaveCount(0);
   await expect(page.getByText("加入对比", { exact: false })).toHaveCount(0);
 
-  for (const asset of ["cstd-systems-hero-v1", "cstd-systems-map-v1", "cstd-research-archive-v1"]) {
-    const image = page.locator(`img[src*="${asset}"]`);
-    await image.scrollIntoViewIfNeeded();
-    await expect
-      .poll(() =>
-        image.evaluate((element) => {
-          const imageElement = element as HTMLImageElement;
-          return imageElement.complete && imageElement.naturalWidth > 0;
-        }),
-      )
-      .toBe(true);
+  for (const asset of [
+    "cstd-archive-resin-circuit-v1",
+    "cstd-archive-data-film-v1",
+    "cstd-archive-notebook-v1",
+    "cstd-archive-cobalt-modules-v1",
+    "cstd-archive-studio-v1",
+  ]) {
+    const assetResponse = await page.request.get(`/cstd-archive/${asset}.webp`);
+    expect(assetResponse.ok()).toBe(true);
+    expect(assetResponse.headers()["content-type"]).toContain("image/webp");
   }
 
   for (const id of ["product-surfaces", "edge-operations", "ai-creation", "research-models", "data-systems"]) {
@@ -236,8 +238,8 @@ test("CSTD composes its chapters as one kinetic studio", async ({ page, isMobile
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD systems atlas responds to deliberate exploration", async ({ page, isMobile }) => {
-  test.skip(Boolean(isMobile), "The atlas uses the compact system list on smaller screens.");
+test("CSTD system stage responds to deliberate exploration", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "Desktop covers the sticky material stage.");
 
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd#systems", { waitUntil: "networkidle" });
@@ -246,22 +248,18 @@ test("CSTD systems atlas responds to deliberate exploration", async ({ page, isM
   const chapterNavigation = page.getByRole("navigation", { name: "章节导航" });
   await expect(chapterNavigation.getByRole("link")).toHaveCount(3);
 
-  const atlas = page.getByRole("group", { name: "技术系统图" });
-  const nodes = atlas.getByRole("button");
-  await expect(nodes).toHaveCount(5);
-  await expect(nodes.first()).toHaveAttribute("aria-pressed", "true");
-
-  const dataNode = atlas.getByRole("button", { name: /数据流与计算研究/ });
-  await dataNode.focus();
-  await expect(dataNode).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator('[data-cstd-atlas-detail="data-systems"]')).toBeVisible();
+  const dataSystem = page.locator('[data-cstd-system="data-systems"]');
+  await dataSystem.scrollIntoViewIfNeeded();
+  await dataSystem.focus();
+  await expect(dataSystem).toHaveAttribute("data-cstd-system-active", "true");
+  await expect(page.locator('[data-cstd-system-visual="data-systems"]')).toBeVisible();
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD depth and proof surfaces respond to pointer position", async ({ page, isMobile }) => {
-  test.skip(Boolean(isMobile), "Pointer depth is intentionally a fine-pointer enhancement.");
+test("CSTD depth, image trail, and proof reel respond to pointer position", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "Pointer choreography is intentionally a fine-pointer enhancement.");
 
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "networkidle" });
@@ -277,17 +275,19 @@ test("CSTD depth and proof surfaces respond to pointer position", async ({ page,
     .poll(() => heroDepth.evaluate((element) => getComputedStyle(element).transform))
     .not.toBe(initialHeroTransform);
 
-  const proof = page.locator('[data-cstd-proof="rocodex"]');
-  await proof.scrollIntoViewIfNeeded();
-  await page.mouse.move(1, 1);
-  await page.waitForTimeout(350);
-  const proofBounds = await proof.boundingBox();
-  expect(proofBounds).not.toBeNull();
-  const initialProofTransform = await proof.evaluate((element) => getComputedStyle(element).transform);
-  await proof.hover({ position: { x: proofBounds!.width * 0.82, y: proofBounds!.height * 0.28 } });
+  await hero.hover({ position: { x: heroBounds!.width * 0.18, y: heroBounds!.height * 0.26 } });
   await expect
-    .poll(() => proof.evaluate((element) => getComputedStyle(element).transform))
-    .not.toBe(initialProofTransform);
+    .poll(() => page.locator("[data-cstd-image-trail] > div").count())
+    .toBeGreaterThan(0);
+
+  const proofReel = page.locator("[data-cstd-proof-reel]");
+  await proofReel.scrollIntoViewIfNeeded();
+  const alphaProof = page.locator('[data-cstd-proof="alpha"]');
+  const initialFlexGrow = await alphaProof.evaluate((element) => getComputedStyle(element).flexGrow);
+  await alphaProof.hover();
+  await expect
+    .poll(() => alphaProof.evaluate((element) => getComputedStyle(element).flexGrow))
+    .not.toBe(initialFlexGrow);
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
@@ -321,17 +321,8 @@ test("CSTD keeps pointer depth still when reduced motion is requested", async ({
     .poll(() => signalTrack.evaluate((element) => getComputedStyle(element).transform))
     .toBe(initialSignalTransform);
 
-  const proof = page.locator('[data-cstd-proof="rocodex"]');
-  await proof.scrollIntoViewIfNeeded();
-  await page.waitForTimeout(350);
-  const proofBounds = await proof.boundingBox();
-  expect(proofBounds).not.toBeNull();
-  const initialProofTransform = await proof.evaluate((element) => getComputedStyle(element).transform);
-  await proof.hover({ position: { x: proofBounds!.width * 0.82, y: proofBounds!.height * 0.28 } });
-  await page.waitForTimeout(300);
-  await expect
-    .poll(() => proof.evaluate((element) => getComputedStyle(element).transform))
-    .toBe(initialProofTransform);
+  await hero.hover({ position: { x: heroBounds!.width * 0.18, y: heroBounds!.height * 0.26 } });
+  await expect(page.locator("[data-cstd-image-trail] > div")).toHaveCount(0);
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
