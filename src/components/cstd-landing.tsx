@@ -639,7 +639,7 @@ function SystemMap() {
         })}
       </div>
 
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={activeSystem.id}
           data-cstd-atlas-detail={activeSystem.id}
