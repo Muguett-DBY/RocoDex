@@ -448,7 +448,7 @@ function ResearchPathPanel({
             src={asset.src}
             alt={asset.alt}
             fill
-            loading={index === 0 ? "eager" : "lazy"}
+            loading="lazy"
             sizes="(min-width: 1024px) 42vw, 100vw"
             className="object-cover saturate-[0.78] transition duration-700 group-hover:saturate-100"
           />
@@ -624,7 +624,7 @@ export function PersonalHomepage() {
       pointerRef,
       impulseRef,
       reducedMotion,
-      active: documentVisible && activeChapter !== "path",
+      active: documentVisible && (activeChapter === "hero" || activeChapter === "systems"),
     }),
     [activeChapter, documentVisible, reducedMotion],
   );

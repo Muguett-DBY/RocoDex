@@ -535,7 +535,7 @@ function World(
         quality={props.quality}
       />
       <CameraRig {...props} />
-      {props.quality === "full" && props.active ? (
+      {props.quality === "full" ? (
         <EffectComposer multisampling={0}>
           <Bloom intensity={0.62} luminanceThreshold={0.72} luminanceSmoothing={0.32} mipmapBlur />
           <ChromaticAberration offset={chromaticOffset} radialModulation modulationOffset={0.35} />
@@ -568,7 +568,7 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
         <Canvas
           data-cstd-webgl-canvas
           camera={{ position: [0, 0, 7.2], fov: 42, near: 0.1, far: 40 }}
-          dpr={props.active && quality === "full" ? [1, 1.5] : 1}
+          dpr={quality === "full" ? [1, 1.5] : 1}
           frameloop={props.active && quality === "full" ? "always" : "demand"}
           gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
           onCreated={({ gl }) => {
