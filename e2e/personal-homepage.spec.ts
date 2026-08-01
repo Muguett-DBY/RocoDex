@@ -94,8 +94,8 @@ test("CSTD navigation moves through the narrative and keeps proof links safe", a
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD composes its chapters as one kinetic studio", async ({ page, isMobile }) => {
-  test.skip(Boolean(isMobile), "Desktop covers the full chapter rail and sticky research composition.");
+test("CSTD composes its chapters as one kinetic studio without trapping vertical scroll", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "Desktop covers the full chapter rail and continuous research composition.");
 
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "networkidle" });
@@ -115,6 +115,9 @@ test("CSTD composes its chapters as one kinetic studio", async ({ page, isMobile
     .poll(() => signalTracks.first().evaluate((element) => getComputedStyle(element).transform))
     .not.toBe(initialSignalTransform);
 
+  // End LCP sampling with the same input a visitor uses before scripted chapter positioning.
+  await page.mouse.wheel(0, 4);
+
   for (const chapter of ["systems", "proof", "path"] as const) {
     await page.locator(`#${chapter}`).evaluate((element) =>
       element.scrollIntoView({ block: "center" }),
@@ -129,30 +132,51 @@ test("CSTD composes its chapters as one kinetic studio", async ({ page, isMobile
   }
 
   const researchPath = page.locator("#path");
-  await expect(researchPath).toHaveAttribute("data-cstd-path-mode", "horizontal");
+  await expect(researchPath).toHaveAttribute("data-cstd-path-mode", "vertical");
+  await expect(researchPath).toHaveAttribute("data-cstd-path-continuous", "true");
+  await expect(researchPath.locator("[data-cstd-path-stage]")).toHaveCSS("position", "relative");
+  const learningSteps = researchPath.locator("[data-cstd-learning-step]");
+  const naturalFlow = await learningSteps.evaluateAll((steps) =>
+    steps.map((step) => Math.round(step.getBoundingClientRect().top)),
+  );
+  expect(naturalFlow[naturalFlow.length - 1] - naturalFlow[0]).toBeGreaterThan(1_000);
+
   await researchPath.evaluate((element) => {
     const section = element as HTMLElement;
     window.scrollTo({ top: section.offsetTop, behavior: "instant" });
   });
-  const pathTrack = researchPath.locator("ol");
-  const initialPathTransform = await pathTrack.evaluate((element) => getComputedStyle(element).transform);
-  await page.mouse.wheel(0, 720);
-  await expect
-    .poll(() => pathTrack.evaluate((element) => getComputedStyle(element).transform))
-    .not.toBe(initialPathTransform);
+  await expect(page.locator("[data-cstd-webgl]")).toHaveAttribute("data-cstd-render-active", "false");
 
-  await researchPath.evaluate((element) => {
-    const section = element as HTMLElement;
-    window.scrollTo({ top: section.offsetTop + section.offsetHeight - window.innerHeight, behavior: "auto" });
-  });
+  const finalStep = page.locator('[data-cstd-learning-step="2026"]');
+  for (let index = 0; index < 12; index += 1) {
+    const activeYear = await researchPath.getAttribute("data-cstd-research-state");
+    if (activeYear === "2026") break;
+    await page.mouse.wheel(0, 520);
+    await page.waitForTimeout(24);
+  }
   await expect
     .poll(() => page.locator("[data-cstd-research-state]").getAttribute("data-cstd-research-state"))
     .toBe("2026");
-  await expect(page.locator('[data-cstd-learning-step="2026"]')).toBeInViewport({ ratio: 0.65 });
+  await expect(finalStep).toBeInViewport({ ratio: 0.2 });
 
   const footer = page.locator("#cstd-footer");
-  await footer.scrollIntoViewIfNeeded();
+  for (let index = 0; index < 8; index += 1) {
+    const intersectsViewport = await footer.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return rect.bottom > 0 && rect.top < window.innerHeight;
+    });
+    if (intersectsViewport) break;
+    await page.mouse.wheel(0, 520);
+    await page.waitForTimeout(24);
+  }
   await expect(footer).toBeInViewport({ ratio: 0.4 });
+  const bottomFrameDelay = await page.evaluate(() =>
+    new Promise<number>((resolve) => {
+      const started = performance.now();
+      window.requestAnimationFrame(() => resolve(performance.now() - started));
+    }),
+  );
+  expect(bottomFrameDelay).toBeLessThan(500);
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
@@ -254,7 +278,7 @@ test("CSTD defaults to full motion and keeps an explicit calm mode scrollable", 
   const fullQuality = await webgl.getAttribute("data-cstd-render-quality");
   await expect(motionToggle).toHaveAttribute("aria-pressed", "true");
   await expect(page.locator("[data-cstd-pointer-field]")).toBeVisible();
-  await expect(page.locator('[data-cstd-chapter="path"]')).toHaveAttribute("data-cstd-path-mode", "horizontal");
+  await expect(page.locator('[data-cstd-chapter="path"]')).toHaveAttribute("data-cstd-path-mode", "vertical");
 
   await motionToggle.click();
   await expect(motionToggle).toHaveAttribute("aria-pressed", "false");

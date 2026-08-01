@@ -41,6 +41,7 @@ rocodex.custard.top/*
 - Vercel 与 GitHub Actions 固定使用 Node.js 24 LTS；npm 版本由 `packageManager` 声明。
 - Three.js、React Three Fiber 和 Postprocessing 只能由个人主站的异步 `immersive-scene.tsx` 导入，架构测试会阻止它们进入共享层或 RocoDex。
 - 个人主站先交付可读 HTML 和静态主视觉，再异步加载 Motion 特性与 WebGL。档案纹理位于独立 Suspense 边界，不阻塞场景核心背景首次成帧。
+- 个人主站的 Research 章节必须保留原生纵向文档流；禁止用超宽 sticky 合成层接管滚轮。进入该章节或页脚后，WebGL 转为按需单帧并卸载后处理。
 - `scripts/verify-personal-bundle.mjs` 在生产构建后检查首屏与 WebGL 异步包预算，并确认 Three.js 标记没有进入首屏入口。
 - Dependabot 只自动提出兼容的常规升级；Three.js 与其类型包的 `0.x` 次版本升级必须人工阅读迁移指南并完成视觉回归。
 - Three.js 当前固定在 r182。r183 起 `Clock` 被废弃，而 React Three Fiber 9.7.0 仍在内部使用它；升级到更高版本会污染浏览器控制台，需等待 Fiber 提供兼容版本后再重新验证。
