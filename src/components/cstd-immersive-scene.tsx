@@ -3,7 +3,7 @@
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { Bloom, ChromaticAberration, EffectComposer, Noise } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 
 type NumberRef = { current: number };
@@ -15,6 +15,22 @@ export type CstdImmersiveSceneProps = {
   impulseRef: NumberRef;
   reducedMotion: boolean;
 };
+
+type SceneQuality = "full" | "lite";
+
+const softwareRendererPattern = /swiftshader|llvmpipe|software rasterizer|softpipe/i;
+
+function getSceneQuality(renderer: THREE.WebGLRenderer): SceneQuality {
+  const context = renderer.getContext();
+  const debugInfo = context.getExtension("WEBGL_debug_renderer_info") as {
+    UNMASKED_RENDERER_WEBGL: number;
+  } | null;
+  const rendererName = String(
+    context.getParameter(debugInfo?.UNMASKED_RENDERER_WEBGL ?? context.RENDERER),
+  );
+
+  return softwareRendererPattern.test(rendererName) ? "lite" : "full";
+}
 
 const archiveTextures = [
   "/cstd-archive/cstd-archive-resin-circuit-v1.webp",
@@ -102,8 +118,15 @@ function seeded(index: number) {
   return value - Math.floor(value);
 }
 
-function BackgroundField({ progressRef, pointerRef, impulseRef, reducedMotion }: CstdImmersiveSceneProps) {
+function BackgroundField({
+  progressRef,
+  pointerRef,
+  impulseRef,
+  reducedMotion,
+  quality,
+}: CstdImmersiveSceneProps & { quality: SceneQuality }) {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const pointerTarget = useMemo(() => new THREE.Vector2(), []);
   const [studioTexture, loomTexture] = useLoader(THREE.TextureLoader, [
     "/cstd-world/cstd-kinetic-studio-v2.webp",
     "/cstd-world/cstd-data-loom-v2.webp",
@@ -131,22 +154,27 @@ function BackgroundField({ progressRef, pointerRef, impulseRef, reducedMotion }:
   useFrame(({ clock }, delta) => {
     const material = materialRef.current;
     if (!material) return;
-    if (!reducedMotion) material.uniforms.uTime.value = clock.elapsedTime;
+    if (reducedMotion) {
+      material.uniforms.uTime.value = 0;
+      material.uniforms.uProgress.value = progressRef.current;
+      material.uniforms.uPointer.value.set(0, 0);
+      material.uniforms.uImpulse.value = 0;
+      return;
+    }
+    material.uniforms.uTime.value = clock.elapsedTime;
     material.uniforms.uProgress.value = THREE.MathUtils.lerp(
       material.uniforms.uProgress.value,
       progressRef.current,
       1 - Math.exp(-delta * 4.5),
     );
-    material.uniforms.uPointer.value.lerp(
-      new THREE.Vector2(pointerRef.current.x, pointerRef.current.y),
-      1 - Math.exp(-delta * 7),
-    );
+    pointerTarget.set(pointerRef.current.x, pointerRef.current.y);
+    material.uniforms.uPointer.value.lerp(pointerTarget, 1 - Math.exp(-delta * 7));
     material.uniforms.uImpulse.value = impulseRef.current;
   });
 
   return (
     <mesh position={[0, 0, -7.5]} scale={[22, 12.4, 1]}>
-      <planeGeometry args={[1, 1, 56, 32]} />
+      <planeGeometry args={[1, 1, quality === "lite" ? 12 : 56, quality === "lite" ? 8 : 32]} />
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}
@@ -158,9 +186,14 @@ function BackgroundField({ progressRef, pointerRef, impulseRef, reducedMotion }:
   );
 }
 
-function ParticleCurrent({ progressRef, pointerRef, reducedMotion }: Omit<CstdImmersiveSceneProps, "impulseRef">) {
+function ParticleCurrent({
+  progressRef,
+  pointerRef,
+  reducedMotion,
+  quality,
+}: Omit<CstdImmersiveSceneProps, "impulseRef"> & { quality: SceneQuality }) {
   const pointsRef = useRef<THREE.Points>(null);
-  const count = 1150;
+  const count = quality === "lite" ? 280 : 1150;
   const { positions, colors } = useMemo(() => {
     const pointPositions = new Float32Array(count * 3);
     const pointColors = new Float32Array(count * 3);
@@ -181,16 +214,21 @@ function ParticleCurrent({ progressRef, pointerRef, reducedMotion }: Omit<CstdIm
     }
 
     return { positions: pointPositions, colors: pointColors };
-  }, []);
+  }, [count]);
 
   useFrame(({ clock }, delta) => {
     const points = pointsRef.current;
     if (!points) return;
+    if (reducedMotion) {
+      points.rotation.set(0, 0, 0);
+      points.position.y = 0;
+      return;
+    }
     const targetRotation = progressRef.current * Math.PI * 1.35 + pointerRef.current.x * 0.12;
     points.rotation.z = THREE.MathUtils.lerp(points.rotation.z, targetRotation, 1 - Math.exp(-delta * 1.8));
     points.rotation.y = THREE.MathUtils.lerp(points.rotation.y, pointerRef.current.x * 0.18, 1 - Math.exp(-delta * 3));
     points.position.y = THREE.MathUtils.lerp(points.position.y, pointerRef.current.y * 0.2, 1 - Math.exp(-delta * 3));
-    if (!reducedMotion) points.rotation.x = Math.sin(clock.elapsedTime * 0.12) * 0.12;
+    points.rotation.x = Math.sin(clock.elapsedTime * 0.12) * 0.12;
   });
 
   return (
@@ -212,7 +250,13 @@ function ParticleCurrent({ progressRef, pointerRef, reducedMotion }: Omit<CstdIm
   );
 }
 
-function ArchiveSpine({ progressRef, pointerRef, impulseRef, reducedMotion }: CstdImmersiveSceneProps) {
+function ArchiveSpine({
+  progressRef,
+  pointerRef,
+  impulseRef,
+  reducedMotion,
+  quality,
+}: CstdImmersiveSceneProps & { quality: SceneQuality }) {
   const groupRef = useRef<THREE.Group>(null);
   const geometry = useMemo(() => {
     const curve = new THREE.CatmullRomCurve3([
@@ -223,23 +267,37 @@ function ArchiveSpine({ progressRef, pointerRef, impulseRef, reducedMotion }: Cs
       new THREE.Vector3(3.4, -1.0, -0.2),
       new THREE.Vector3(6.8, 2.4, 0.5),
     ]);
-    return new THREE.TubeGeometry(curve, 260, 0.105, 12, false);
-  }, []);
+    return new THREE.TubeGeometry(
+      curve,
+      quality === "lite" ? 96 : 260,
+      0.105,
+      quality === "lite" ? 8 : 12,
+      false,
+    );
+  }, [quality]);
 
   useFrame(({ clock }, delta) => {
     const group = groupRef.current;
     if (!group) return;
     const progress = progressRef.current;
     const impulse = impulseRef.current;
+    const scale = 1 + impulse * 0.12 + Math.sin(progress * Math.PI) * 0.08;
+    if (reducedMotion) {
+      group.rotation.set(0, 0, -0.16 + progress * 0.72);
+      group.scale.setScalar(scale);
+      group.position.y = 0;
+      impulseRef.current = 0;
+      return;
+    }
     group.rotation.z = THREE.MathUtils.lerp(
       group.rotation.z,
       -0.16 + progress * 0.72 + pointerRef.current.x * 0.08,
       1 - Math.exp(-delta * 2.8),
     );
     group.rotation.y = THREE.MathUtils.lerp(group.rotation.y, pointerRef.current.x * 0.11, 1 - Math.exp(-delta * 4));
-    const scale = 1 + impulse * 0.12 + Math.sin(progress * Math.PI) * 0.08;
-    group.scale.lerp(new THREE.Vector3(scale, scale, scale), 1 - Math.exp(-delta * 5));
-    if (!reducedMotion) group.position.y = Math.sin(clock.elapsedTime * 0.32) * 0.08;
+    const nextScale = THREE.MathUtils.lerp(group.scale.x, scale, 1 - Math.exp(-delta * 5));
+    group.scale.setScalar(nextScale);
+    group.position.y = Math.sin(clock.elapsedTime * 0.32) * 0.08;
   });
 
   return (
@@ -276,9 +334,17 @@ type FloatingPanelProps = {
   progressRef: NumberRef;
   pointerRef: PointerRef;
   project?: boolean;
+  reducedMotion: boolean;
 };
 
-function FloatingPanel({ texture, index, progressRef, pointerRef, project = false }: FloatingPanelProps) {
+function FloatingPanel({
+  texture,
+  index,
+  progressRef,
+  pointerRef,
+  project = false,
+  reducedMotion,
+}: FloatingPanelProps) {
   const meshRef = useRef<THREE.Mesh>(null);
   const materialRef = useRef<THREE.MeshBasicMaterial>(null);
 
@@ -291,23 +357,38 @@ function FloatingPanel({ texture, index, progressRef, pointerRef, project = fals
       ? THREE.MathUtils.smoothstep(progress, 0.48, 0.74) * (1 - THREE.MathUtils.smoothstep(progress, 0.84, 1))
       : 1 - THREE.MathUtils.smoothstep(progress, 0.25, 0.5);
     const baseX = project ? (index - 1) * 2.7 : (index - 2) * 1.42;
-    const wave = Math.sin(clock.elapsedTime * 0.38 + index * 1.4) * 0.1;
+    const wave = reducedMotion ? 0 : Math.sin(clock.elapsedTime * 0.38 + index * 1.4) * 0.1;
     const targetZ = project ? 0.35 + Math.abs(index - 1) * -0.55 : 0.5 - Math.abs(index - 2) * 0.42;
+    const targetX = baseX + (reducedMotion ? 0 : pointerRef.current.x * (0.12 + index * 0.018));
+    const targetY =
+      (project ? (index - 1) * -0.2 : Math.sin(index * 1.8) * 0.58) +
+      wave +
+      (reducedMotion ? 0 : pointerRef.current.y * 0.12);
+    const targetRotationY = (index - (project ? 1 : 2)) * -0.1 + (reducedMotion ? 0 : pointerRef.current.x * 0.06);
+    const targetRotationZ = (index - 2) * 0.025;
+    const targetOpacity = Math.max(0, chapter) * (project ? 0.88 : 0.76);
+    const targetScale = (project ? 1.32 : 1) * (0.84 + chapter * 0.16);
 
-    mesh.position.x = THREE.MathUtils.lerp(mesh.position.x, baseX + pointerRef.current.x * (0.12 + index * 0.018), 1 - Math.exp(-delta * 3));
+    if (reducedMotion) {
+      mesh.position.set(targetX, targetY, targetZ);
+      mesh.rotation.set(0, targetRotationY, targetRotationZ);
+      mesh.scale.setScalar(targetScale);
+      material.opacity = targetOpacity;
+      return;
+    }
+
+    mesh.position.x = THREE.MathUtils.lerp(mesh.position.x, targetX, 1 - Math.exp(-delta * 3));
     mesh.position.y = THREE.MathUtils.lerp(
       mesh.position.y,
-      (project ? (index - 1) * -0.2 : Math.sin(index * 1.8) * 0.58) + wave + pointerRef.current.y * 0.12,
+      targetY,
       1 - Math.exp(-delta * 3),
     );
     mesh.position.z = THREE.MathUtils.lerp(mesh.position.z, targetZ, 1 - Math.exp(-delta * 3));
-    mesh.rotation.y = THREE.MathUtils.lerp(mesh.rotation.y, (index - (project ? 1 : 2)) * -0.1 + pointerRef.current.x * 0.06, 1 - Math.exp(-delta * 3));
-    mesh.rotation.z = THREE.MathUtils.lerp(mesh.rotation.z, (index - 2) * 0.025, 1 - Math.exp(-delta * 3));
-    material.opacity = THREE.MathUtils.lerp(material.opacity, Math.max(0, chapter) * (project ? 0.88 : 0.76), 1 - Math.exp(-delta * 4));
-    mesh.scale.lerp(
-      new THREE.Vector3(project ? 1.32 : 1, project ? 1.32 : 1, 1).multiplyScalar(0.84 + chapter * 0.16),
-      1 - Math.exp(-delta * 3),
-    );
+    mesh.rotation.y = THREE.MathUtils.lerp(mesh.rotation.y, targetRotationY, 1 - Math.exp(-delta * 3));
+    mesh.rotation.z = THREE.MathUtils.lerp(mesh.rotation.z, targetRotationZ, 1 - Math.exp(-delta * 3));
+    material.opacity = THREE.MathUtils.lerp(material.opacity, targetOpacity, 1 - Math.exp(-delta * 4));
+    const scale = THREE.MathUtils.lerp(mesh.scale.x, targetScale, 1 - Math.exp(-delta * 3));
+    mesh.scale.setScalar(scale);
   });
 
   return (
@@ -318,7 +399,14 @@ function FloatingPanel({ texture, index, progressRef, pointerRef, project = fals
   );
 }
 
-function FloatingArchives({ progressRef, pointerRef }: Pick<CstdImmersiveSceneProps, "progressRef" | "pointerRef">) {
+function FloatingArchives({
+  progressRef,
+  pointerRef,
+  quality,
+  reducedMotion,
+}: Pick<CstdImmersiveSceneProps, "progressRef" | "pointerRef" | "reducedMotion"> & {
+  quality: SceneQuality;
+}) {
   const archives = useLoader(THREE.TextureLoader, [...archiveTextures]);
   const projects = useLoader(THREE.TextureLoader, [...projectTextures]);
 
@@ -331,15 +419,18 @@ function FloatingArchives({ progressRef, pointerRef }: Pick<CstdImmersiveScenePr
 
   return (
     <group position={[0, 0, 0.8]}>
-      {archives.map((texture, index) => (
-        <FloatingPanel
-          key={archiveTextures[index]}
-          texture={texture}
-          index={index}
-          progressRef={progressRef}
-          pointerRef={pointerRef}
-        />
-      ))}
+      {archives.map((texture, index) =>
+        quality === "lite" && index % 2 === 1 ? null : (
+          <FloatingPanel
+            key={archiveTextures[index]}
+            texture={texture}
+            index={index}
+            progressRef={progressRef}
+            pointerRef={pointerRef}
+            reducedMotion={reducedMotion}
+          />
+        ),
+      )}
       {projects.map((texture, index) => (
         <FloatingPanel
           key={projectTextures[index]}
@@ -348,6 +439,7 @@ function FloatingArchives({ progressRef, pointerRef }: Pick<CstdImmersiveScenePr
           progressRef={progressRef}
           pointerRef={pointerRef}
           project
+          reducedMotion={reducedMotion}
         />
       ))}
     </group>
@@ -362,17 +454,51 @@ function CameraRig({ progressRef, pointerRef, impulseRef, reducedMotion }: CstdI
     const targetX = Math.sin(progress * Math.PI * 1.7) * 0.42 + easedPointer.x * 0.32;
     const targetY = Math.cos(progress * Math.PI * 1.2) * 0.2 + easedPointer.y * 0.2;
     const targetZ = 7.2 - Math.sin(progress * Math.PI) * 0.7 - impulseRef.current * 0.16;
+    if (reducedMotion) {
+      camera.position.set(targetX, targetY, targetZ);
+      camera.rotation.z = 0;
+      camera.lookAt(0, 0, -0.2);
+      impulseRef.current = 0;
+      return;
+    }
     camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 1 - Math.exp(-delta * 3.5));
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 1 - Math.exp(-delta * 3.5));
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 1 - Math.exp(-delta * 3.5));
-    if (!reducedMotion) camera.rotation.z = Math.sin(clock.elapsedTime * 0.18) * 0.004;
+    camera.rotation.z = Math.sin(clock.elapsedTime * 0.18) * 0.004;
     camera.lookAt(0, 0, -0.2);
     impulseRef.current = THREE.MathUtils.lerp(impulseRef.current, 0, 1 - Math.exp(-delta * 4.8));
   });
   return null;
 }
 
-function World(props: CstdImmersiveSceneProps) {
+function SceneReady({
+  onReady,
+  quality,
+}: {
+  onReady: (quality: SceneQuality) => void;
+  quality: SceneQuality;
+}) {
+  useEffect(() => {
+    let secondFrame = 0;
+    const firstFrame = window.requestAnimationFrame(() => {
+      secondFrame = window.requestAnimationFrame(() => onReady(quality));
+    });
+
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      window.cancelAnimationFrame(secondFrame);
+    };
+  }, [onReady, quality]);
+
+  return null;
+}
+
+function World(
+  props: CstdImmersiveSceneProps & {
+    onReady: (quality: SceneQuality) => void;
+    quality: SceneQuality;
+  },
+) {
   const chromaticOffset = useMemo(() => new THREE.Vector2(0.0007, 0.0005), []);
 
   return (
@@ -382,36 +508,59 @@ function World(props: CstdImmersiveSceneProps) {
       <directionalLight position={[4, 6, 5]} intensity={2.4} color="#fff4db" />
       <pointLight position={[-4, -2, 3]} intensity={10} distance={10} color="#2e72b3" />
       <BackgroundField {...props} />
-      <ParticleCurrent progressRef={props.progressRef} pointerRef={props.pointerRef} reducedMotion={props.reducedMotion} />
+      <ParticleCurrent
+        progressRef={props.progressRef}
+        pointerRef={props.pointerRef}
+        reducedMotion={props.reducedMotion}
+        quality={props.quality}
+      />
       <ArchiveSpine {...props} />
-      <FloatingArchives progressRef={props.progressRef} pointerRef={props.pointerRef} />
+      <FloatingArchives
+        progressRef={props.progressRef}
+        pointerRef={props.pointerRef}
+        reducedMotion={props.reducedMotion}
+        quality={props.quality}
+      />
       <CameraRig {...props} />
-      <EffectComposer multisampling={0}>
-        <Bloom intensity={0.62} luminanceThreshold={0.72} luminanceSmoothing={0.32} mipmapBlur />
-        <ChromaticAberration offset={chromaticOffset} radialModulation modulationOffset={0.35} />
-        <Noise opacity={0.022} blendFunction={BlendFunction.SOFT_LIGHT} />
-      </EffectComposer>
+      {props.quality === "full" ? (
+        <EffectComposer multisampling={0}>
+          <Bloom intensity={0.62} luminanceThreshold={0.72} luminanceSmoothing={0.32} mipmapBlur />
+          <ChromaticAberration offset={chromaticOffset} radialModulation modulationOffset={0.35} />
+          <Noise opacity={0.022} blendFunction={BlendFunction.SOFT_LIGHT} />
+        </EffectComposer>
+      ) : null}
+      <SceneReady onReady={props.onReady} quality={props.quality} />
     </>
   );
 }
 
 export function CstdImmersiveScene(props: CstdImmersiveSceneProps) {
+  const [quality, setQuality] = useState<SceneQuality>("lite");
+  const [readyQuality, setReadyQuality] = useState<SceneQuality | null>(null);
+  const markSceneReady = useCallback((renderedQuality: SceneQuality) => setReadyQuality(renderedQuality), []);
+
   return (
-    <div data-cstd-webgl className="absolute inset-0">
+    <div
+      data-cstd-webgl
+      data-cstd-render-quality={quality}
+      data-cstd-render-ready={readyQuality === quality ? "true" : "false"}
+      className="absolute inset-0"
+    >
       <Canvas
         data-cstd-webgl-canvas
         camera={{ position: [0, 0, 7.2], fov: 42, near: 0.1, far: 40 }}
-        dpr={[1, 1.5]}
+        dpr={quality === "lite" ? 1 : [1, 1.5]}
         frameloop={props.reducedMotion ? "demand" : "always"}
         gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
         onCreated={({ gl }) => {
           gl.outputColorSpace = THREE.SRGBColorSpace;
           gl.toneMapping = THREE.ACESFilmicToneMapping;
           gl.toneMappingExposure = 1.06;
+          setQuality(props.reducedMotion ? "lite" : getSceneQuality(gl));
         }}
       >
         <Suspense fallback={null}>
-          <World {...props} />
+          <World {...props} quality={quality} onReady={markSceneReady} />
         </Suspense>
       </Canvas>
     </div>

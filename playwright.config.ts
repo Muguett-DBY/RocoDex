@@ -17,6 +17,9 @@ export default defineConfig({
   expect: { timeout: 10_000 },
   use: {
     baseURL,
+    contextOptions: {
+      reducedMotion: process.env.CI ? "reduce" : "no-preference",
+    },
     screenshot: "only-on-failure",
     trace: "retain-on-failure",
   },

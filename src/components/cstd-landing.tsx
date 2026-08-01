@@ -240,8 +240,8 @@ function ProofChapter({ proof, index }: { proof: CstdProof; index: number }) {
       <motion.figure
         data-cstd-project-plane={proof.projectId}
         className="relative mt-14 aspect-[16/11] min-h-0 overflow-hidden border border-black/20 bg-black lg:mt-0"
-        initial={{ clipPath: "polygon(7% 0, 100% 0, 93% 100%, 0 100%)" }}
-        whileHover={{ clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)" }}
+        initial={{ clipPath: "polygon(7% 0%, 100% 0%, 93% 100%, 0% 100%)" }}
+        whileHover={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
         transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
       >
         <motion.div className="absolute inset-[-2%]" whileHover={{ scale: 1.055, rotate: index % 2 === 0 ? -0.7 : 0.7 }} transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}>

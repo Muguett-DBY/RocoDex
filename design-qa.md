@@ -35,6 +35,7 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 - Scroll progress changes background textures, particles, archive panels, project planes, camera position, and the active header chapter.
 - Project planes animate their clipping geometry and image transform on hover.
 - Reduced-motion mode hides the pointer field, freezes the signal lanes, and produces identical consecutive canvas frames.
+- The scene starts with a lightweight first frame, promotes to full post-processing on hardware GPUs, and retains a lower-cost composition on software rasterizers.
 - Desktop and 393px states have zero horizontal overflow.
 
 ## Iteration History
@@ -43,11 +44,16 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 2. P2: the Systems title wrapped into too many isolated lines and all viewport-enter callbacks selected the final system. Fixed with a stable two-line heading and deliberate hover/focus activation only.
 3. P1: reduced-motion conditional markup caused a server/client hydration mismatch. Fixed by hydrating the motion preference before applying it and keeping pointer markup structurally stable.
 4. Test environment: Chromium reports benign `ReadPixels` driver warnings when Playwright captures WebGL frames. The regression helper filters only this exact driver message while retaining all application warnings and errors.
+5. P1: continuous full-quality WebGL saturated GitHub's software rasterizer and caused unrelated DOM assertions to time out. Fixed with renderer-aware quality, reduced-motion CI contexts, and a scene-ready signal after texture decode.
+6. P2: reduced-motion demand frames could still advance lerped object transforms while textures settled. Fixed by assigning deterministic transforms directly and proving identical canvas output across five consecutive runs.
+7. P2: mixed unitless and percentage clip-path coordinates produced invalid intermediate keyframes during hover. Fixed with consistent percentage coordinates and verified across three consecutive hardware-interaction runs.
 
 ## Automated Acceptance
 
 - CSTD source and routing contracts: 13/13 passed.
 - CSTD desktop browser regression: 7/7 passed.
+- Full desktop and mobile browser suite: 14 passed, 6 intentional capability skips.
+- CI-equivalent CSTD suite: 9 passed, 5 intentional hardware-interaction skips in 54.5 seconds.
 - Browser interaction checks include Canvas frame changes, chapter state, project links, keyboard focus, no utility workflows, and reduced motion.
 
 ## Findings

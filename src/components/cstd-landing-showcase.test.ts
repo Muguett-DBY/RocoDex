@@ -44,6 +44,9 @@ describe("CSTD immersive systems world", () => {
   test("keeps live product links behind the shared external-link policy", () => {
     expect(landingSource).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
     expect(landingSource).toContain("{...targetProps}");
+    expect(sceneSource).toContain('data-cstd-render-quality={quality}');
+    expect(sceneSource).toContain('data-cstd-render-ready={readyQuality === quality ? "true" : "false"}');
+    expect(sceneSource).toContain("softwareRendererPattern");
   });
 
   test("retains reduced-motion semantics and a static visual fallback", () => {
