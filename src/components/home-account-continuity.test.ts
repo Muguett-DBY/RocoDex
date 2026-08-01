@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 describe("homepage account continuity", () => {
   it("mounts the account continuity notice in the homepage hero", () => {
-    const homePage = readFileSync(join(process.cwd(), "src", "app", "page.tsx"), "utf8");
+    const homePage = readFileSync(join(process.cwd(), "src", "app", "(rocodex)", "page.tsx"), "utf8");
 
     expect(homePage).toContain("HomeAccountContinuity");
     expect(homePage.indexOf("<HomeSearch />")).toBeLessThan(homePage.indexOf("<HomeAccountContinuity />"));
