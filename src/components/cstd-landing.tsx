@@ -35,6 +35,7 @@ import {
   cstdProofs,
   cstdSystems,
   getCstdProjectsById,
+  type CstdLearningEntry,
   type CstdProof,
   type CstdSystem,
   type CstdSystemIcon,
@@ -65,6 +66,40 @@ const chapters = [
 ] as const;
 
 type ChapterId = (typeof chapters)[number]["id"];
+type VisualChapter = "hero" | ChapterId;
+
+const headerPalettes: Record<
+  VisualChapter,
+  { backgroundColor: string; borderColor: string; color: string; accent: string }
+> = {
+  hero: {
+    backgroundColor: "rgba(16, 18, 15, 0.88)",
+    borderColor: "rgba(255, 255, 255, 0.16)",
+    color: "#ffffff",
+    accent: "#f4bd3f",
+  },
+  systems: {
+    backgroundColor: "rgba(243, 240, 231, 0.92)",
+    borderColor: "rgba(24, 25, 20, 0.15)",
+    color: "#181914",
+    accent: "#276eae",
+  },
+  proof: {
+    backgroundColor: "rgba(23, 26, 22, 0.92)",
+    borderColor: "rgba(255, 255, 255, 0.16)",
+    color: "#ffffff",
+    accent: "#f4bd3f",
+  },
+  path: {
+    backgroundColor: "rgba(229, 239, 233, 0.92)",
+    borderColor: "rgba(24, 25, 20, 0.15)",
+    color: "#181914",
+    accent: "#276eae",
+  },
+};
+
+const systemSignals = cstdSystems.map((system) => system.title);
+const technologySignals = Array.from(new Set(cstdSystems.flatMap((system) => system.stack)));
 
 const reducedMotionQuery = "(prefers-reduced-motion: reduce)";
 
@@ -119,6 +154,8 @@ function useActiveChapter() {
 export function CstdLanding() {
   const reducedMotion = useReducedMotion();
   const activeChapter = useActiveChapter();
+  const visualChapter: VisualChapter = activeChapter ?? "hero";
+  const headerPalette = headerPalettes[visualChapter];
   const { scrollYProgress } = useScroll();
   const progressScale = useSpring(scrollYProgress, {
     stiffness: 110,
@@ -140,6 +177,15 @@ export function CstdLanding() {
   const telemetryY = useTransform(smoothPointerY, [-1, 1], reducedMotion ? [0, 0] : [-8, 8]);
   const telemetryTransform = useMotionTemplate`translate3d(${telemetryX}px, ${telemetryY}px, 0)`;
 
+  useEffect(() => {
+    const root = document.documentElement;
+    const previousScrollBehavior = root.style.scrollBehavior;
+    root.style.scrollBehavior = reducedMotion ? "auto" : "smooth";
+    return () => {
+      root.style.scrollBehavior = previousScrollBehavior;
+    };
+  }, [reducedMotion]);
+
   const handlePointerMove = (event: ReactPointerEvent<HTMLElement>) => {
     if (reducedMotion || event.pointerType === "touch") return;
     const bounds = event.currentTarget.getBoundingClientRect();
@@ -160,16 +206,29 @@ export function CstdLanding() {
         style={{ scaleX: progressScale }}
       />
 
-      <ChapterRail activeChapter={activeChapter} reducedMotion={reducedMotion} />
+      <ChapterRail
+        activeChapter={activeChapter}
+        reducedMotion={reducedMotion}
+        visualChapter={visualChapter}
+      />
 
-      <header className="sticky top-0 z-50 border-b border-[#181914]/15 bg-[#f3f0e7]/90 backdrop-blur-xl">
+      <motion.header
+        data-cstd-header-theme={visualChapter}
+        animate={{
+          backgroundColor: headerPalette.backgroundColor,
+          borderColor: headerPalette.borderColor,
+          color: headerPalette.color,
+        }}
+        transition={reducedMotion ? { duration: 0 } : { duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
+        className="sticky top-0 z-50 border-b backdrop-blur-xl"
+      >
         <div className="mx-auto flex h-16 max-w-[1520px] items-center justify-between gap-4 px-5 sm:px-8 lg:px-12">
           <a
             href="#top"
             aria-label="返回 CSTD 首页顶部"
-            className="inline-flex items-center gap-3 text-sm font-black text-[#181914] no-underline"
+            className="inline-flex items-center gap-3 text-sm font-black text-current no-underline"
           >
-            <span className="grid h-8 w-8 place-items-center rounded-md bg-[#f4bd3f] text-[11px] font-black">
+            <span className="grid h-8 w-8 place-items-center rounded-md bg-[#f4bd3f] text-[11px] font-black text-[#181914]">
               CS
             </span>
             <span>CSTD</span>
@@ -181,15 +240,16 @@ export function CstdLanding() {
                 key={chapter.id}
                 href={`#${chapter.id}`}
                 aria-current={activeChapter === chapter.id ? "location" : undefined}
-                className={`relative px-2 py-2 text-xs font-bold no-underline transition-colors sm:px-3 sm:text-sm ${
-                  activeChapter === chapter.id ? "text-[#181914]" : "text-[#625e52] hover:text-[#181914]"
+                className={`relative px-2 py-2 text-xs font-bold text-current no-underline transition-opacity sm:px-3 sm:text-sm ${
+                  activeChapter === chapter.id ? "opacity-100" : "opacity-55 hover:opacity-100"
                 }`}
               >
                 {chapter.label}
                 {activeChapter === chapter.id ? (
                   <motion.span
                     layoutId="cstd-header-chapter"
-                    className="absolute inset-x-2 -bottom-[1px] h-0.5 bg-[#276eae] sm:inset-x-3"
+                    animate={{ backgroundColor: headerPalette.accent }}
+                    className="absolute inset-x-2 -bottom-[1px] h-0.5 sm:inset-x-3"
                     transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 260, damping: 28 }}
                   />
                 ) : null}
@@ -197,7 +257,7 @@ export function CstdLanding() {
             ))}
           </nav>
         </div>
-      </header>
+      </motion.header>
 
       <section
         id="top"
@@ -328,19 +388,18 @@ export function CstdLanding() {
         </motion.div>
       </section>
 
-      <section id="systems" aria-labelledby="systems-heading" className="scroll-mt-20 bg-[#f3f0e7]">
+      <SignalStrip />
+
+      <section id="systems" aria-labelledby="systems-heading" className="scroll-mt-16 bg-[#f3f0e7]">
         <div className="mx-auto max-w-[1520px] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
           <div className="grid items-end gap-10 lg:grid-cols-[0.9fr_1.1fr]">
             <div>
               <p className="text-xs font-black text-[#6f6758]">01 / SYSTEMS</p>
-              <h2
+              <RevealHeading
                 id="systems-heading"
+                lines={["把技术藏在", "能用的东西里。"]}
                 className="mt-5 max-w-2xl text-5xl font-black leading-[1.02] text-[#181914] sm:text-6xl lg:text-7xl"
-              >
-                把技术藏在
-                <br />
-                能用的东西里。
-              </h2>
+              />
             </div>
             <p className="max-w-2xl text-lg font-semibold leading-8 text-[#625e52] sm:text-xl sm:leading-9 lg:justify-self-end">
               从产品表面开始，延伸到边缘服务、AI 工作流和数据研究。每一层都保持真实边界，
@@ -358,19 +417,16 @@ export function CstdLanding() {
         </div>
       </section>
 
-      <section id="proof" aria-labelledby="proof-heading" className="scroll-mt-20 bg-[#171a16] text-white">
+      <section id="proof" aria-labelledby="proof-heading" className="scroll-mt-16 bg-[#171a16] text-white">
         <div className="mx-auto max-w-[1520px] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
           <div className="grid gap-8 border-b border-white/20 pb-12 lg:grid-cols-[0.85fr_1.15fr] lg:pb-16">
             <div>
               <p className="text-xs font-black text-[#f4bd3f]">02 / SELECTED PROOF</p>
-              <h2
+              <RevealHeading
                 id="proof-heading"
+                lines={["三个已上线的", "系统切面。"]}
                 className="mt-5 max-w-2xl text-5xl font-black leading-[1.02] sm:text-6xl lg:text-7xl"
-              >
-                三个已上线的
-                <br />
-                系统切面。
-              </h2>
+              />
             </div>
             <p className="max-w-2xl self-end text-lg font-semibold leading-8 text-white/70 sm:text-xl sm:leading-9 lg:justify-self-end">
               只挑出足以说明方法的三件事。它们不是完整案例复盘，而是正在运行的、可直接抵达的证据。
@@ -419,40 +475,9 @@ export function CstdLanding() {
         </div>
       </section>
 
-      <section id="path" aria-labelledby="path-heading" className="scroll-mt-20 bg-[#e5efe9] text-[#181914]">
+      <section id="path" aria-labelledby="path-heading" className="scroll-mt-16 bg-[#e5efe9] text-[#181914]">
         <div className="mx-auto max-w-[1520px] px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
-          <div className="grid gap-12 lg:grid-cols-[1.04fr_0.96fr] lg:items-center lg:gap-16">
-            <ResearchArchive />
-
-            <div>
-              <p className="text-xs font-black text-[#2c6254]">03 / RESEARCH PATH</p>
-              <h2
-                id="path-heading"
-                className="mt-5 max-w-xl text-5xl font-black leading-[1.02] sm:text-6xl lg:text-7xl"
-              >
-                深度来自
-                <br />
-                反复做过的练习。
-              </h2>
-              <p className="mt-7 max-w-xl text-lg font-semibold leading-8 text-[#4e5d55] sm:text-xl sm:leading-9">
-                产品交付和研究训练并行发生。这里记录的是技术方向如何一点点变得具体，
-                不是把课程名换成一面标签墙。
-              </p>
-
-              <ol className="mt-10 border-t border-[#181914]/20">
-                {cstdLearningPath.map((entry) => (
-                  <li key={entry.year} className="grid grid-cols-[74px_1fr] gap-4 border-b border-[#181914]/20 py-5 sm:grid-cols-[92px_1fr] sm:gap-6">
-                    <p className="text-xl font-black text-[#276eae] sm:text-2xl">{entry.year}</p>
-                    <div>
-                      <h3 className="text-base font-black sm:text-lg">{entry.title}</h3>
-                      <p className="mt-1 text-sm font-bold text-[#2c6254]">{entry.focus}</p>
-                      <p className="mt-2 text-sm font-semibold leading-6 text-[#59655e]">{entry.note}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-          </div>
+          <ResearchPath />
         </div>
       </section>
 
@@ -487,20 +512,156 @@ export function CstdLanding() {
   );
 }
 
+function SignalStrip() {
+  return (
+    <section
+      data-cstd-signal-strip
+      aria-labelledby="technology-signal-heading"
+      className="relative z-10 overflow-hidden border-y border-[#181914]"
+    >
+      <h2 id="technology-signal-heading" className="sr-only">
+        技术栈信号
+      </h2>
+      <p className="sr-only">
+        系统方向：{systemSignals.join("、")}。技术栈：{technologySignals.join("、")}。
+      </p>
+      <SignalLane
+        signalId="systems"
+        items={systemSignals}
+        direction="left"
+        duration={24}
+        className="bg-[#f4bd3f] py-3.5 text-sm text-[#181914] sm:text-base"
+      />
+      <SignalLane
+        signalId="technology"
+        items={technologySignals}
+        direction="right"
+        duration={54}
+        className="border-t border-[#181914] bg-[#276eae] py-2.5 text-xs text-white sm:text-sm"
+      />
+    </section>
+  );
+}
+
+function SignalLane({
+  signalId,
+  items,
+  direction,
+  duration,
+  className,
+}: {
+  signalId: string;
+  items: readonly string[];
+  direction: "left" | "right";
+  duration: number;
+  className: string;
+}) {
+  const reducedMotion = useReducedMotion();
+  const groups = reducedMotion ? [0] : [0, 1];
+
+  return (
+    <div aria-hidden="true" className={`overflow-hidden ${className}`}>
+      <motion.div
+        data-cstd-signal-track={signalId}
+        initial={
+          reducedMotion
+            ? false
+            : { x: direction === "left" ? "0%" : "-50%" }
+        }
+        animate={
+          reducedMotion
+            ? { x: 0 }
+            : { x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"] }
+        }
+        transition={{ duration, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+        className="flex w-max will-change-transform motion-reduce:!transform-none"
+      >
+        {groups.map((group) => (
+          <div key={group} className="flex shrink-0 items-center pr-8">
+            {items.map((item, index) => (
+              <span key={`${group}-${item}`} className="flex shrink-0 items-center font-black whitespace-nowrap">
+                <span className="px-4 sm:px-6">{item}</span>
+                {index < items.length - 1 || !reducedMotion ? (
+                  <span className="font-semibold opacity-45">/</span>
+                ) : null}
+              </span>
+            ))}
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+function RevealHeading({
+  id,
+  lines,
+  className,
+}: {
+  id: string;
+  lines: readonly string[];
+  className: string;
+}) {
+  const reducedMotion = useReducedMotion();
+
+  return (
+    <motion.h2
+      id={id}
+      data-cstd-reveal-heading
+      initial={reducedMotion ? false : "hidden"}
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.42 }}
+      className={className}
+    >
+      <span className="sr-only">{lines.join(" ")}</span>
+      <span aria-hidden="true" className="block">
+        {lines.map((line, index) => (
+          <span key={line} className="block overflow-hidden pb-[0.08em]">
+            <motion.span
+              className="block origin-bottom-left motion-reduce:!transform-none"
+              variants={{
+                hidden: { y: "112%", rotate: 2.5 },
+                visible: { y: 0, rotate: 0 },
+              }}
+              transition={{
+                duration: 0.82,
+                delay: index * 0.09,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              {line}
+            </motion.span>
+          </span>
+        ))}
+      </span>
+    </motion.h2>
+  );
+}
+
 function ChapterRail({
   activeChapter,
   reducedMotion,
+  visualChapter,
 }: {
   activeChapter: ChapterId | null;
   reducedMotion: boolean;
+  visualChapter: VisualChapter;
 }) {
+  const isDarkSurface = visualChapter === "hero" || visualChapter === "proof";
+
   return (
     <nav
       aria-label="章节导航"
+      data-cstd-rail-theme={visualChapter}
       className="fixed right-3 top-1/2 z-40 hidden -translate-y-1/2 lg:block"
     >
       <div className="relative flex flex-col items-center gap-5 py-3">
-        <span aria-hidden="true" className="absolute bottom-5 top-5 w-px bg-[#181914]/20" />
+        <span
+          aria-hidden="true"
+          className={`absolute bottom-5 top-5 w-px transition-colors duration-500 ${
+            isDarkSurface ? "bg-white/30" : "bg-[#181914]/20"
+          }`}
+        />
         {chapters.map((chapter) => {
           const isActive = activeChapter === chapter.id;
           return (
@@ -510,24 +671,36 @@ function ChapterRail({
               href={`#${chapter.id}`}
               aria-label={`${chapter.index} ${chapter.label}`}
               aria-current={isActive ? "location" : undefined}
-              className="group relative grid h-8 w-8 place-items-center text-[#181914] no-underline"
+              className={`group relative grid h-8 w-8 place-items-center no-underline transition-colors duration-500 ${
+                isDarkSurface ? "text-white" : "text-[#181914]"
+              }`}
             >
               <span
                 className={`relative z-10 block h-2.5 w-2.5 rounded-full border transition-colors ${
                   isActive
                     ? "border-[#181914] bg-[#f4bd3f]"
-                    : "border-[#181914]/45 bg-[#f3f0e7] group-hover:border-[#181914]"
+                    : isDarkSurface
+                      ? "border-white/55 bg-[#171a16] group-hover:border-white"
+                      : "border-[#181914]/45 bg-[#f3f0e7] group-hover:border-[#181914]"
                 }`}
               />
               {isActive ? (
                 <motion.span
                   layoutId="cstd-chapter-rail"
                   aria-hidden="true"
-                  className="absolute inset-0 rounded-full border border-[#181914]/35 bg-[#f3f0e7]/85"
+                  className={`absolute inset-0 rounded-full border ${
+                    isDarkSurface ? "border-white/35 bg-[#171a16]/85" : "border-[#181914]/35 bg-[#f3f0e7]/85"
+                  }`}
                   transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 250, damping: 26 }}
                 />
               ) : null}
-              <span className="pointer-events-none absolute right-9 whitespace-nowrap border border-[#181914]/15 bg-[#f3f0e7] px-2 py-1 text-[10px] font-black opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+              <span
+                className={`pointer-events-none absolute right-9 whitespace-nowrap border px-2 py-1 text-[10px] font-black opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 ${
+                  isDarkSurface
+                    ? "border-white/20 bg-[#171a16] text-white"
+                    : "border-[#181914]/15 bg-[#f3f0e7] text-[#181914]"
+                }`}
+              >
                 {chapter.index} / {chapter.label}
               </span>
             </a>
@@ -807,7 +980,85 @@ function ProofCard({
   );
 }
 
-function ResearchArchive() {
+function ResearchPath() {
+  const reducedMotion = useReducedMotion();
+  const [activeYear, setActiveYear] = useState<CstdLearningEntry["year"]>(
+    cstdLearningPath[0].year,
+  );
+  const activeEntry =
+    cstdLearningPath.find((entry) => entry.year === activeYear) ?? cstdLearningPath[0];
+
+  return (
+    <div className="grid gap-12 lg:grid-cols-[1.04fr_0.96fr] lg:items-start lg:gap-16">
+      <div className="lg:sticky lg:top-28">
+        <ResearchArchive activeEntry={activeEntry} />
+      </div>
+
+      <div>
+        <p className="text-xs font-black text-[#2c6254]">03 / RESEARCH PATH</p>
+        <RevealHeading
+          id="path-heading"
+          lines={["深度来自", "反复做过的练习。"]}
+          className="mt-5 max-w-xl text-5xl font-black leading-[1.02] sm:text-6xl lg:text-7xl"
+        />
+        <p className="mt-7 max-w-xl text-lg font-semibold leading-8 text-[#4e5d55] sm:text-xl sm:leading-9">
+          产品交付和研究训练并行发生。这里记录的是技术方向如何一点点变得具体，
+          不是把课程名换成一面标签墙。
+        </p>
+
+        <ol className="mt-10 border-t border-[#181914]/20">
+          {cstdLearningPath.map((entry) => {
+            const isActive = entry.year === activeEntry.year;
+            return (
+              <motion.li
+                key={entry.year}
+                data-cstd-learning-step={entry.year}
+                data-cstd-learning-active={isActive ? "true" : "false"}
+                aria-current={isActive ? "step" : undefined}
+                onViewportEnter={() => setActiveYear(entry.year)}
+                viewport={{ amount: 0.58, margin: "-8% 0px -28% 0px" }}
+                animate={{ x: isActive && !reducedMotion ? 8 : 0 }}
+                transition={
+                  reducedMotion
+                    ? { duration: 0 }
+                    : { type: "spring", stiffness: 210, damping: 27 }
+                }
+                className={`relative grid min-h-[148px] grid-cols-[74px_1fr] gap-4 overflow-hidden border-b border-[#181914]/20 px-3 py-6 transition-colors duration-500 motion-reduce:!transform-none sm:grid-cols-[92px_1fr] sm:gap-6 sm:px-4 ${
+                  isActive ? "bg-[#f2f7f3]" : "bg-transparent"
+                }`}
+              >
+                <motion.span
+                  aria-hidden="true"
+                  animate={{ scaleY: isActive ? 1 : 0 }}
+                  transition={
+                    reducedMotion
+                      ? { duration: 0 }
+                      : { duration: 0.46, ease: [0.22, 1, 0.36, 1] }
+                  }
+                  className="absolute bottom-0 left-0 top-0 w-1 origin-center bg-[#276eae] motion-reduce:!transform-none"
+                />
+                <p
+                  className={`text-xl font-black transition-colors duration-500 sm:text-2xl ${
+                    isActive ? "text-[#276eae]" : "text-[#66786e]"
+                  }`}
+                >
+                  {entry.year}
+                </p>
+                <div>
+                  <h3 className="text-base font-black sm:text-lg">{entry.title}</h3>
+                  <p className="mt-1 text-sm font-bold text-[#2c6254]">{entry.focus}</p>
+                  <p className="mt-2 text-sm font-semibold leading-6 text-[#59655e]">{entry.note}</p>
+                </div>
+              </motion.li>
+            );
+          })}
+        </ol>
+      </div>
+    </div>
+  );
+}
+
+function ResearchArchive({ activeEntry }: { activeEntry: CstdLearningEntry }) {
   const reducedMotion = useReducedMotion();
   const archiveRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -819,6 +1070,7 @@ function ResearchArchive() {
   return (
     <figure
       ref={archiveRef}
+      data-cstd-research-state={activeEntry.year}
       className="relative aspect-[3/2] overflow-hidden rounded-md border border-[#181914]/20 bg-[#f8f2df] shadow-[16px_18px_0_rgba(24,25,20,0.12)]"
     >
       <motion.div className="absolute inset-[-5%] will-change-transform motion-reduce:!transform-none" style={{ y: archiveY }}>
@@ -831,9 +1083,24 @@ function ResearchArchive() {
         />
       </motion.div>
       <div aria-hidden="true" className="absolute inset-0 border-[10px] border-[#e5efe9]/45 sm:border-[18px]" />
-      <div aria-hidden="true" className="absolute bottom-5 right-5 bg-[#f4bd3f] px-3 py-2 text-xs font-black text-[#181914] sm:bottom-8 sm:right-8">
-        field notes
+      <div className="absolute left-5 top-5 border border-[#181914]/20 bg-[#f8f2df]/90 px-3 py-2 text-[10px] font-black text-[#181914] backdrop-blur-sm sm:left-8 sm:top-8">
+        RESEARCH LOG / {activeEntry.year}
       </div>
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.figcaption
+          key={activeEntry.year}
+          initial={reducedMotion ? false : { opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={reducedMotion ? undefined : { opacity: 0, y: -10 }}
+          transition={{ duration: 0.34, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4 border border-[#181914]/20 bg-[#f4bd3f]/95 px-4 py-3 text-[#181914] shadow-[6px_7px_0_rgba(24,25,20,0.14)] backdrop-blur-sm motion-reduce:!transform-none sm:bottom-8 sm:left-8 sm:right-8 sm:px-5 sm:py-4"
+        >
+          <span className="text-3xl font-black sm:text-4xl">{activeEntry.year}</span>
+          <span className="max-w-[68%] text-right text-[10px] font-black leading-4 sm:text-xs">
+            {activeEntry.focus}
+          </span>
+        </motion.figcaption>
+      </AnimatePresence>
     </figure>
   );
 }

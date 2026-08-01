@@ -25,6 +25,15 @@ describe("CSTD creative systems landing", () => {
     expect(source).toContain('<AnimatePresence mode="popLayout" initial={false}>');
   });
 
+  test("composes every chapter into one continuous kinetic studio", () => {
+    expect(source).toContain("data-cstd-header-theme={visualChapter}");
+    expect(source).toContain("data-cstd-signal-strip");
+    expect(source).toContain("data-cstd-signal-track");
+    expect(source).toContain("function RevealHeading");
+    expect(source).toContain("data-cstd-learning-step={entry.year}");
+    expect(source).toContain("data-cstd-research-state={activeEntry.year}");
+  });
+
   test("keeps the few live product links behind the shared external-link policy", () => {
     expect(source).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
     expect(source).toContain("{...targetProps}");
