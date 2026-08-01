@@ -1,62 +1,65 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 
-const source = readFileSync(new URL("./cstd-landing.tsx", import.meta.url), "utf8");
+const landingSource = readFileSync(new URL("./cstd-landing.tsx", import.meta.url), "utf8");
+const sceneSource = readFileSync(new URL("./cstd-immersive-scene.tsx", import.meta.url), "utf8");
 
-describe("CSTD creative systems landing", () => {
-  test("builds the elastic archive from dedicated generated materials", () => {
-    for (const asset of [
-      "cstd-archive-resin-circuit-v1.webp",
-      "cstd-archive-data-film-v1.webp",
-      "cstd-archive-notebook-v1.webp",
-      "cstd-archive-cobalt-modules-v1.webp",
-      "cstd-archive-studio-v1.webp",
-    ]) {
-      expect(source).toContain(asset);
-    }
-    expect(source).toContain("data-cstd-elastic-archive");
-    expect(source).toContain("data-cstd-material-column");
-    expect(source).toContain("data-cstd-image-trail");
-    expect(source).toContain("data-cstd-system={system.id}");
-    expect(source).toContain("data-cstd-proof={proof.projectId}");
-    expect(source).toContain("useReducedMotion()");
-    expect(source).toContain("useScroll(");
+describe("CSTD immersive systems world", () => {
+  test("builds a real WebGL scene from generated cinematic materials", () => {
+    expect(landingSource).toContain("cstd-kinetic-studio-v2.webp");
+    expect(sceneSource).toContain("cstd-data-loom-v2.webp");
+    expect(sceneSource).toContain("@react-three/fiber");
+    expect(sceneSource).toContain("<Canvas");
+    expect(sceneSource).toContain("<shaderMaterial");
+    expect(sceneSource).toContain("<ParticleCurrent");
+    expect(sceneSource).toContain("<ArchiveSpine");
+    expect(sceneSource).toContain("<EffectComposer");
+    expect(sceneSource).toContain("<Bloom");
+    expect(sceneSource).toContain("<ChromaticAberration");
   });
 
-  test("turns the archive into a responsive motion system", () => {
-    expect(source).toContain("useMotionValue(");
-    expect(source).toContain("useSpring(");
-    expect(source).toContain("data-cstd-hero");
-    expect(source).toContain("data-cstd-hero-depth");
-    expect(source).toContain("data-cstd-chapter={chapter.id}");
-    expect(source).toContain("onPointerMove={handlePointerMove}");
-    expect(source).toContain("onViewportEnter");
+  test("connects pointer, press, and scroll progress to the cinematic world", () => {
+    expect(landingSource).toContain("data-cstd-kinetic-world");
+    expect(sceneSource).toContain("data-cstd-webgl");
+    expect(landingSource).toContain("data-cstd-pointer-field");
+    expect(landingSource).toContain("onPointerMove={handlePointerMove}");
+    expect(landingSource).toContain("impulseRef.current = 1");
+    expect(landingSource).toContain("useMotionValueEvent(scrollYProgress");
+    expect(sceneSource).toContain("pointerRef.current");
+    expect(sceneSource).toContain("progressRef.current");
+    expect(sceneSource).toContain("impulseRef.current");
   });
 
-  test("composes every chapter into one continuous kinetic studio", () => {
-    expect(source).toContain("data-cstd-header-theme={visualChapter}");
-    expect(source).toContain("data-cstd-signal-strip");
-    expect(source).toContain("data-cstd-signal-track");
-    expect(source).toContain("function RevealHeading");
-    expect(source).toContain("data-cstd-proof-reel");
-    expect(source).toContain("data-cstd-learning-step={entry.year}");
-    expect(source).toContain("data-cstd-research-state={activeEntry.year}");
+  test("composes systems, proof, and research as continuous cinematic chapters", () => {
+    expect(landingSource).toContain('data-cstd-chapter="systems"');
+    expect(landingSource).toContain('data-cstd-chapter="proof"');
+    expect(landingSource).toContain('data-cstd-chapter="path"');
+    expect(landingSource).toContain("data-cstd-system={system.id}");
+    expect(landingSource).toContain("data-cstd-proof={proof.projectId}");
+    expect(landingSource).toContain("data-cstd-project-plane={proof.projectId}");
+    expect(landingSource).toContain("data-cstd-learning-step={entry.year}");
+    expect(landingSource).toContain("data-cstd-research-state={activeYear}");
   });
 
-  test("keeps the few live product links behind the shared external-link policy", () => {
-    expect(source).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
-    expect(source).toContain("{...targetProps}");
+  test("keeps live product links behind the shared external-link policy", () => {
+    expect(landingSource).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
+    expect(landingSource).toContain("{...targetProps}");
   });
 
-  test("does not restore the exhibition or portfolio-tool workflows", () => {
-    expect(source).not.toContain("ProjectShowcase");
-    expect(source).not.toContain("ShowcaseIndex");
-    expect(source).not.toContain("五个正在");
-    expect(source).not.toContain("project-directory");
-    expect(source).not.toContain("project-comparison");
-    expect(source).not.toContain("project-guide");
-    expect(source).not.toContain("project-focus");
-    expect(source).not.toContain("startCstdBgm");
-    expect(source).not.toContain('role="dialog"');
+  test("retains reduced-motion semantics and a static visual fallback", () => {
+    expect(landingSource).toContain("useSyncExternalStore(");
+    expect(landingSource).toContain("prefers-reduced-motion: reduce");
+    expect(landingSource).toContain("reducedMotion={reducedMotion}");
+    expect(landingSource).toContain('src="/cstd-world/cstd-kinetic-studio-v2.webp"');
+    expect(sceneSource).toContain('frameloop={props.reducedMotion ? "demand" : "always"}');
+  });
+
+  test("does not restore portfolio utility workflows", () => {
+    expect(landingSource).not.toContain("ProjectShowcase");
+    expect(landingSource).not.toContain("ShowcaseIndex");
+    expect(landingSource).not.toContain("project-directory");
+    expect(landingSource).not.toContain("project-comparison");
+    expect(landingSource).not.toContain("project-guide");
+    expect(landingSource).not.toContain('role="dialog"');
   });
 });
