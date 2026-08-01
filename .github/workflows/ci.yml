@@ -40,6 +40,8 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          AUTH_SECRET: rocodex-ci-build-secret-with-sufficient-length
 
       - name: End-to-end tests
         run: npm run test:e2e
