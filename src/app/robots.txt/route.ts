@@ -1,5 +1,5 @@
 import type { NextRequest } from "next/server";
-import { buildRobotsTxt } from "@/lib/cstd-robots";
+import { buildRobotsTxt } from "@/sites/shared/robots";
 
 export const dynamic = "force-dynamic";
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getCstdRouteDecision } from "@/lib/cstd-routing";
+import { getPersonalSiteRouteDecision } from "@/sites/personal-homepage/server";
 
 const CSTD_NOT_FOUND_HTML = `<!doctype html>
 <html lang="en">
@@ -20,7 +20,7 @@ const CSTD_NOT_FOUND_HTML = `<!doctype html>
 export function proxy(request: NextRequest) {
   const host = request.headers.get("host") ?? "";
   const path = request.nextUrl.pathname;
-  const cstdRouteDecision = getCstdRouteDecision(host, path);
+  const cstdRouteDecision = getPersonalSiteRouteDecision(host, path);
 
   if (cstdRouteDecision.kind === "rewrite") {
     return NextResponse.rewrite(new URL(cstdRouteDecision.path, request.url));

@@ -1,84 +1,81 @@
-# RocoDex / 洛克图鉴
+# Custard Web Platform
 
-RocoDex 是一个非官方《洛克王国世界》中文精灵图鉴 MVP，用于学习、研究和个人资料整理。
+这个仓库是两个独立网站共用的 Next.js / Vercel 部署容器。它们共享构建、域名分发和少量 SEO 基础设施，但不共享产品逻辑。
 
-当前版本包含首页、精灵列表、精灵详情、中文搜索、筛选、本地收藏、数据状态页、关于/免责声明页面，以及前 50 个图鉴编号的本地 TypeScript seed data。
-同时包含 `/pvp-teams` 页面，用于整理当前版本公开攻略中的 PVP META 阵容。
-`/guides` 页面用于汇总 PVE / PVP 强度榜和培养建议；缺少可靠资料的精灵显示为“未评级 / 待复核”。
-`/collection` 页面提供当前浏览器内的本地收藏工作台，用户可从精灵卡片或详情页收藏候选，复制 `/collection?ids=...` 分享链接，导入他人分享清单，查看属性/角色/攻略覆盖洞察，并直接打开每只收藏精灵的培养攻略，再将 2-4 只收藏精灵带入 `/compare` 对比。
+| 产品 | 生产域名 | Next 路由 | 主要代码 | 浏览器回归 |
+| --- | --- | --- | --- | --- |
+| 奶黄包个人主站 / CSTD | `https://custard.top` | 内部重写到 `/cstd` | `src/sites/personal-homepage` | `e2e/personal-homepage.spec.ts` |
+| 洛克图鉴 / RocoDex | `https://rocodex.custard.top` | `/` 及图鉴路由 | `src/app/(rocodex)` 与现有 RocoDex 模块 | `e2e/rocodex.spec.ts` |
 
-## 技术栈
+## 架构
 
-- Next.js App Router
-- TypeScript
-- Tailwind CSS
-- shadcn/ui 风格的本地 UI 组件
-- Vitest
-- 本地 TypeScript seed data
+```text
+src/
+├─ app/
+│  ├─ (personal)/cstd/       # 个人主站的薄 Next 页面适配器，URL 仍为 /cstd
+│  ├─ (rocodex)/             # RocoDex 页面和仅属于它的 AuthProvider
+│  ├─ api/                   # RocoDex 账号 API
+│  ├─ robots.txt/            # 按 Host 分发的共享 HTTP 适配器
+│  ├─ sitemap.xml/           # 按 Host 分发的共享 HTTP 适配器
+│  └─ layout.tsx             # 两站共用的最小 HTML 文档
+├─ sites/
+│  ├─ personal-homepage/     # 个人主站的组件、内容、元数据和 Host 路由
+│  ├─ rocodex/               # RocoDex 元数据、sitemap 和产品边界说明
+│  └─ shared/                # 只放真正跨站点的 SEO 基础设施
+├─ components/               # RocoDex 组件；ui/ 是其本地 UI 基础层
+├─ data/                     # RocoDex 图鉴、攻略和阵容数据
+├─ hooks/                    # RocoDex 浏览器状态 Hook
+├─ lib/                      # RocoDex 领域与服务逻辑
+└─ types/                    # RocoDex 类型
+```
 
-## 安装依赖
+`src/proxy.ts` 是生产 Host 边界：`custard.top/` 重写到 `/cstd`，`www.custard.top` 308 跳转到 apex，其余个人主站域名路径不会泄露 RocoDex 页面。公开资源 URL 继续使用 `public/cstd-*`、`public/cstd-world`、`public/cstd-archive` 和 `public/cstd-projects`，避免部署迁移和缓存失效。
+
+架构约束由 `src/sites/site-boundaries.test.ts` 自动验证。个人主站不得导入 `src/components`、`src/data`、`src/hooks`、`src/lib` 或 `src/types` 中的 RocoDex 模块；外部适配器只能通过个人主站的 `index.ts`、`metadata.ts` 和 `server.ts` 访问它。
+
+详细决策见 `docs/architecture.md`。站点维护入口见 `src/sites/personal-homepage/README.md` 与 `src/sites/rocodex/README.md`。
+
+## 本地开发
 
 ```bash
 npm install
-```
-
-## 运行开发服务器
-
-```bash
 npm run dev
 ```
 
-默认访问：
+- RocoDex：`http://localhost:3000`
+- 个人主站：`http://localhost:3000/cstd`
 
-```text
-http://localhost:3000
-```
-
-## 构建
+## 验证命令
 
 ```bash
-npm run build
-```
+npm run test:architecture
+npm run test:personal
+npm run test:e2e:personal
+npm run test:e2e:rocodex
 
-## 运行检查
-
-```bash
 npm run lint
-npm run test
+npm test
+npm run build
+npm run test:e2e
 ```
 
-## 账号与本地收藏
+前四条适合站点内快速迭代；后四条是推送前的完整仓库门禁。
 
-收藏功能只把精灵编号保存在当前浏览器的 `localStorage` 中，不需要登录，也不会上传账号或设备信息。分享链接只包含精灵编号，打开后需要用户点击“导入分享清单”才会合并到本地收藏。
-
-账号登录/注册依赖 NextAuth 认证密钥。未配置 `AUTH_SECRET` 或 `NEXTAUTH_SECRET` 时，页面会隐藏账号入口，并在 `/login`、`/register` 显示“账号功能暂未启用”的降级说明；配置密钥后保留原有账号表单能力。
-
-## 数据在哪里修改
+## RocoDex 数据维护
 
 - 精灵数据：`src/data/creatures.ts`
 - 数据类型：`src/types/creature.ts`
-- 搜索和筛选逻辑：`src/lib/creature-query.ts`
-- 图片占位图：`public/images/creatures/placeholder.svg`
-- PVP 阵容数据：`src/data/pvp-teams.ts`
-- PVP 来源说明：`docs/pvp_sources.md`
-- PVP 更新规则：`docs/pvp_update_policy.md`
-- 攻略页数据：`src/data/guide-builds.ts`
-- 攻略页查询逻辑：`src/lib/guide-query.ts`
-- 攻略页来源说明：`docs/guide_sources.md`
-- 攻略页缺口记录：`docs/guide_gaps.md`
-- 本地收藏存储逻辑：`src/lib/creature-collection.ts`
-- 本地收藏浏览器 Hook：`src/hooks/use-creature-collection.ts`
-- 本地收藏洞察逻辑：`src/lib/collection-insights.ts`
-- 本地收藏攻略链接：`src/lib/collection-guide-links.ts`
+- 搜索和筛选：`src/lib/creature-query.ts`
+- PVP 阵容：`src/data/pvp-teams.ts`
+- 攻略数据：`src/data/guide-builds.ts`
+- 本地收藏：`src/lib/creature-collection.ts`
+- 数据缺口：`docs/data_gaps.md`
+- PVP 与攻略来源：`docs/pvp_sources.md`、`docs/guide_sources.md`
 
-## 数据说明
+账号能力依赖 `AUTH_SECRET` 或 `NEXTAUTH_SECRET`。认证上下文只存在于 `(rocodex)` 路由组，访问个人主站不会初始化 NextAuth 会话。
 
-第一版按《洛克王国世界》图鉴体系收录 NO.001 至 NO.050。主来源为洛克王国:手游WIKI_BWIKI 精灵图鉴。MVP 不下载、不热链公开网页图片，统一使用本地占位图，并在数据里保留来源 URL 与说明。
+## 部署
 
-无法可靠确认的字段统一写为“待确认”，并记录在 `docs/data_gaps.md`。
+仓库继续由一个 Vercel 项目部署。路由组不改变 URL，目录迁移不需要修改 DNS、Vercel 域名或现有外链。`main` 推送后应同时检查 GitHub Actions、Vercel 状态、`custard.top` 和 `rocodex.custard.top`。
 
-攻略页数据维护时，PVE/PVP Tier 只能使用 `S/A/B/C/D/未评级`。配招、性格、天分每项都要标记 `source-derived`、`analysis-derived` 或 `unknown`；其中 `analysis-derived` 会在页面显示“本站分析”，`unknown` 不允许填入推断内容。
-
-## 免责声明
-
-请阅读 `DISCLAIMER.md`。本项目不是官方网站，不隶属于任何官方运营方，仅用于学习、研究和资料整理。
+本项目不是《洛克王国世界》官方网站，也不隶属于其运营方。完整声明见 `DISCLAIMER.md`。
