@@ -36,6 +36,15 @@ rocodex.custard.top/*
 5. `app/layout.tsx` 保持中立；认证和 RocoDex 视觉底色只放在 `(rocodex)/layout.tsx`。
 6. `public/cstd-*` 是个人主站公开 URL 契约。若要重命名，必须先提供兼容重写并验证缓存与社交预览。
 
+## 工具链与重型运行时
+
+- Vercel 与 GitHub Actions 固定使用 Node.js 24 LTS；npm 版本由 `packageManager` 声明。
+- Three.js、React Three Fiber 和 Postprocessing 只能由个人主站的异步 `immersive-scene.tsx` 导入，架构测试会阻止它们进入共享层或 RocoDex。
+- 个人主站先交付可读 HTML 和静态主视觉，再异步加载 Motion 特性与 WebGL。档案纹理位于独立 Suspense 边界，不阻塞场景核心背景首次成帧。
+- `scripts/verify-personal-bundle.mjs` 在生产构建后检查首屏与 WebGL 异步包预算，并确认 Three.js 标记没有进入首屏入口。
+- Dependabot 只自动提出兼容的常规升级；Three.js 与其类型包的 `0.x` 次版本升级必须人工阅读迁移指南并完成视觉回归。
+- Three.js 当前固定在 r182。r183 起 `Clock` 被废弃，而 React Three Fiber 9.7.0 仍在内部使用它；升级到更高版本会污染浏览器控制台，需等待 Fiber 提供兼容版本后再重新验证。
+
 ## 何时拆成两个部署
 
 只有当两站需要不同发布节奏、不同 Next 版本、独立权限/团队，或个人主站资源明显拖累 RocoDex 构建时，才值得迁移为 workspace 或两个仓库。当前方案已经隔离业务边界，同时保留一次构建和现有域名配置。
@@ -46,4 +55,5 @@ rocodex.custard.top/*
 - 个人主站单元与 SEO：`npm run test:personal`
 - 个人主站浏览器：`npm run test:e2e:personal`
 - RocoDex 浏览器：`npm run test:e2e:rocodex`
-- 全仓：`npm run lint && npm test && npm run build && npm run test:e2e`
+- 全仓静态门禁：`npm run verify && npm run audit:dependencies`
+- 全仓浏览器：`npm run test:e2e`

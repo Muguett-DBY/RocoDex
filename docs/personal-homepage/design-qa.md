@@ -14,8 +14,12 @@
 - Rebuilt path at 1440 x 1024: `output/playwright/cstd-path-1440-start.png`
 - Path-to-footer handoff at 1440 x 1024: `output/playwright/cstd-path-1440-last.png`
 - Mobile fallback and layout: `output/playwright/cstd-wow-mobile-pass1.png`
+- Runtime-upgrade desktop hero and systems: `output/playwright/cstd-runtime-desktop-hero.png`, `output/playwright/cstd-runtime-desktop-systems.png`
+- Runtime-upgrade mobile hero and systems: `output/playwright/cstd-runtime-mobile-hero.png`, `output/playwright/cstd-runtime-mobile-systems.png`
+- Runtime-upgrade canvas and asset report: `output/playwright/cstd-runtime-upgrade-report.json`
 - Desktop viewport: 1440 x 1024 CSS pixels at device scale factor 1
 - Mobile viewport: 393 x 852 CSS pixels at device scale factor 1
+- Runtime-upgrade mobile viewport: 390 x 844 CSS pixels at device scale factor 1
 
 ## Visual Direction
 
@@ -57,17 +61,21 @@ The homepage now presents CSTD as a continuous physical-digital studio instead o
 10. P2: repeated development refreshes could lose the WebGL context while the post-processing composer was remounting. Fixed with context-loss detection and an immediate static-material fallback.
 11. Product decision: operating-system reduced-motion preference no longer silently changes the first visit. Full motion is the default and an explicit, persisted calm-mode control owns the choice.
 12. P1: default full motion kept SwiftShader in a continuous frame loop, starving CI screenshots and chapter-state polling until the 45-second test timeout. Fixed by demand-rendering the existing lite composition while preserving continuous rendering on hardware GPUs.
+13. Performance: replaced the full Motion component runtime with `LazyMotion` and `framer-motion/m`, deferred WebGL mounting until browser idle time, and split archive textures behind a nested Suspense boundary. Production initial JS fell from 308,385 bytes to 254,038 bytes while retaining the full visual field.
+14. Compatibility: Three.js r183-r185 emit a `THREE.Clock` deprecation warning through React Three Fiber 9.7.0. Pinned Three.js and its types to r182, the newest warning-free release for the current Fiber runtime, and kept future `0.x` upgrades behind manual migration and visual review.
 
 ## Automated Acceptance
 
-- Unit and source contracts: 153/153 passed across 45 files.
-- Dual-site architecture boundary: 8/8 contracts passed.
+- Unit and source contracts: 156/156 passed across 45 files.
+- Dual-site architecture boundary: 9/9 contracts passed.
 - Targeted desktop browser regression: 3/3 passed for horizontal scroll, calm mode, and WebGL context loss.
 - Full desktop and mobile browser suite: 17 passed, 7 intentional capability skips.
 - CI-equivalent CSTD suite with operating-system reduced motion: 7 passed, 1 intentional hardware-interaction skip.
 - Full CI-equivalent desktop and mobile suite: 16 passed, 8 intentional capability skips.
 - Browser interaction checks include Canvas frame changes, real wheel-driven track transforms, 2026 visibility, footer reachability, chapter state, project links, keyboard focus, no utility workflows, calm mode, and context-loss fallback.
-- Production build: 734 static pages generated successfully; dependency audit reports zero vulnerabilities.
+- Node 24.18.0 / npm 12.0.2 production build: 734 static pages generated successfully; dependency audit reports zero vulnerabilities.
+- Production bundle guard: 254,038 initial JS bytes under a 290,000-byte budget; 1,099,900 async WebGL bytes under a 1,250,000-byte budget; no WebGL marker in the initial entry.
+- Real Chrome runtime upgrade check: desktop and mobile both rendered at `full` quality, pointer input changed canvas hashes, all 10 generated WebGL materials loaded, horizontal overflow was zero, and the browser console remained clean.
 
 ## Findings
 

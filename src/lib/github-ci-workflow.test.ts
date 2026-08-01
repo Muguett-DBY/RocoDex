@@ -12,11 +12,14 @@ describe("GitHub Actions CI workflow", () => {
     expect(workflow).toContain("branches: [main]");
     expect(workflow).toContain("actions/checkout@v7");
     expect(workflow).toContain("actions/setup-node@v6");
-    expect(workflow).toContain("node-version: 22");
+    expect(workflow).toContain("node-version: 24");
     expect(workflow).toContain("npm ci");
+    expect(workflow).toContain("npm run audit:dependencies");
     expect(workflow).toContain("npm run lint");
+    expect(workflow).toContain("npm run typecheck");
     expect(workflow).toContain("npm test");
     expect(workflow).toContain("npm run build");
+    expect(workflow).toContain("npm run verify:personal-bundle");
     expect(workflow).toContain("npx playwright install --with-deps chromium");
     expect(workflow).toContain("npm run test:e2e");
   });

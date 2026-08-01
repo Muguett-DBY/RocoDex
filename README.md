@@ -37,13 +37,17 @@ src/
 
 ## 本地开发
 
+工具链固定为 Node.js 24 LTS 与 npm 12.0.2。Vercel、GitHub Actions 和本地版本文件使用同一 Node 主版本，避免构建环境漂移。
+
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
 - RocoDex：`http://localhost:3000`
 - 个人主站：`http://localhost:3000/cstd`
+
+完成生产构建后可用 `npm run start:local` 在后台启动本地生产服务器。脚本会从 3200 起选择空闲端口，并把 URL、PID 与日志位置输出到终端；可用 `scripts/stop-local-next.ps1` 结束该仓库的本地 Next 进程。
 
 ## 验证命令
 
@@ -54,12 +58,15 @@ npm run test:e2e:personal
 npm run test:e2e:rocodex
 
 npm run lint
+npm run typecheck
 npm test
 npm run build
+npm run verify:personal-bundle
+npm run audit:dependencies
 npm run test:e2e
 ```
 
-前四条适合站点内快速迭代；后四条是推送前的完整仓库门禁。
+前四条适合站点内快速迭代；其余命令构成推送前的完整仓库门禁。`npm run verify` 会串行执行静态检查、类型检查、单测、生产构建和个人主站包体边界。
 
 ## RocoDex 数据维护
 

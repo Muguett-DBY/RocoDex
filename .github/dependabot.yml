@@ -1,0 +1,35 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    groups:
+      runtime-compatible:
+        dependency-type: production
+        update-types:
+          - minor
+          - patch
+      tooling-compatible:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: three
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+      - dependency-name: "@types/three"
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 3

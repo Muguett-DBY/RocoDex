@@ -62,6 +62,16 @@ describe("CSTD immersive systems world", () => {
     expect(sceneSource).toContain('frameloop={quality === "lite" ? "demand" : "always"}');
   });
 
+  test("defers animation and WebGL enhancements behind the static first paint", () => {
+    expect(landingSource).toContain('from "framer-motion/m"');
+    expect(landingSource).toContain("<LazyMotion");
+    expect(landingSource).toContain('import("./motion-features")');
+    expect(landingSource).toContain("requestIdleCallback");
+    expect(landingSource).toContain("data-cstd-enhancements-ready");
+    expect(landingSource).not.toContain("<motion.");
+    expect(sceneSource).toContain("<ProgressiveArchiveLayer");
+  });
+
   test("does not restore portfolio utility workflows", () => {
     expect(landingSource).not.toContain("ProjectShowcase");
     expect(landingSource).not.toContain("ShowcaseIndex");

@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -32,8 +32,14 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
+      - name: Audit dependencies
+        run: npm run audit:dependencies
+
       - name: Lint
         run: npm run lint
+
+      - name: Type check
+        run: npm run typecheck
 
       - name: Test
         run: npm test
@@ -42,6 +48,9 @@ jobs:
         run: npm run build
         env:
           AUTH_SECRET: rocodex-ci-build-secret-with-sufficient-length
+
+      - name: Verify personal homepage bundle boundaries
+        run: npm run verify:personal-bundle
 
       - name: End-to-end tests
         run: npm run test:e2e
