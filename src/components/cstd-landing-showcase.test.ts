@@ -59,7 +59,7 @@ describe("CSTD immersive systems world", () => {
     expect(landingSource).toContain('data-cstd-path-mode={horizontalPath ? "horizontal" : "vertical"}');
     expect(landingSource).toContain("reducedMotion={reducedMotion}");
     expect(landingSource).toContain('src="/cstd-world/cstd-kinetic-studio-v2.webp"');
-    expect(sceneSource).toContain('frameloop={props.reducedMotion ? "demand" : "always"}');
+    expect(sceneSource).toContain('frameloop={quality === "lite" ? "demand" : "always"}');
   });
 
   test("does not restore portfolio utility workflows", () => {
