@@ -14,7 +14,7 @@
 
 外部代码不要直接导入内部子目录。新增个人主站功能时优先在本模块内完成；只有两个站点都需要且语义一致的无产品逻辑代码，才进入 `src/sites/shared`。
 
-Three.js、React Three Fiber 与 Postprocessing 只能存在于 `components/immersive-scene.tsx`。页面先渲染静态主视觉，再在浏览器空闲阶段挂载 WebGL；进入 Research/页脚或文档隐藏时必须切换为按需单帧并移除后处理。不要把这些包静态导入页面或共享布局。Motion DOM 特性由 `components/motion-features.ts` 单独异步加载。
+Three.js、React Three Fiber 与 Postprocessing 只能存在于 `components/immersive-scene.tsx`。页面先渲染静态主视觉，再在浏览器空闲阶段挂载 WebGL；进入不透明的 Work、Research、页脚或文档隐藏时必须停止连续帧循环，同时保持 Canvas DPR 与后处理缓冲区稳定，避免滚动途中销毁并重建 GPU 资源。不要把这些包静态导入页面或共享布局。Motion DOM 特性由 `components/motion-features.ts` 单独异步加载。
 
 ## 静态资源
 

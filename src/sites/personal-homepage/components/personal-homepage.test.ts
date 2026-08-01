@@ -64,6 +64,12 @@ describe("CSTD immersive systems world", () => {
     expect(landingSource).toContain('src="/cstd-world/cstd-kinetic-studio-v2.webp"');
     expect(sceneSource).toContain('data-cstd-render-active={props.active ? "true" : "false"}');
     expect(sceneSource).toContain('frameloop={props.active && quality === "full" ? "always" : "demand"}');
+    expect(sceneSource).toContain('dpr={quality === "full" ? [1, 1.5] : 1}');
+    expect(sceneSource).toContain('{props.quality === "full" ? (');
+    expect(landingSource).toContain(
+      'active: documentVisible && (activeChapter === "hero" || activeChapter === "systems")',
+    );
+    expect(landingSource).toContain('loading="lazy"');
   });
 
   test("defers animation and WebGL enhancements behind the static first paint", () => {
