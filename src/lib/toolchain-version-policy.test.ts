@@ -86,10 +86,19 @@ describe("toolchain version policy", () => {
       join(process.cwd(), "scripts", "start-local-production.ps1"),
       "utf8",
     );
+    const stopLauncher = readFileSync(
+      join(process.cwd(), "scripts", "stop-local-next.ps1"),
+      "utf8",
+    );
 
     expect(packageJson.scripts?.["start:local"]).toContain("start-local-production.ps1");
+    expect(packageJson.scripts?.["stop:local"]).toContain("stop-local-next.ps1");
     expect(launcher).toContain('$env:AUTH_TRUST_HOST = "true"');
     expect(launcher).toContain("-WindowStyle Hidden");
+    expect(launcher).toContain('Join-Path $repositoryRoot "output\\local-production"');
+    expect(launcher).not.toContain('Join-Path $repositoryRoot ".next"');
     expect(launcher).toContain('"$baseUrl/cstd"');
+    expect(stopLauncher).toContain('Join-Path $repoRoot "output\\local-production"');
+    expect(stopLauncher).toContain('"production-server.pid"');
   });
 });
