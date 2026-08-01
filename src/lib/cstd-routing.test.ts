@@ -31,6 +31,7 @@ describe("CSTD host routing", () => {
     expect(getCstdRouteDecision("custard.top", "/cstd-systems-hero-v1.png")).toEqual({ kind: "next" });
     expect(getCstdRouteDecision("custard.top", "/cstd-systems-map-v1.png")).toEqual({ kind: "next" });
     expect(getCstdRouteDecision("custard.top", "/cstd-research-archive-v1.png")).toEqual({ kind: "next" });
+    expect(getCstdRouteDecision("custard.top", "/cstd-archive/cstd-archive-resin-circuit-v1.webp")).toEqual({ kind: "next" });
     expect(getCstdRouteDecision("custard.top", "/cstd-projects/rocodex.png")).toEqual({ kind: "next" });
     expect(getCstdRouteDecision("custard.top", "/favicon.ico")).toEqual({ kind: "next" });
     expect(getCstdRouteDecision("custard.top", "/robots.txt")).toEqual({ kind: "next" });
