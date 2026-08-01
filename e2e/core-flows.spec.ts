@@ -93,6 +93,7 @@ test("CSTD presents an immersive WebGL world with selective proof", async ({ pag
   await expect(page.locator("[data-cstd-kinetic-world]")).toBeVisible();
   await expect(page.locator("[data-cstd-elastic-archive]")).toBeVisible();
   await expect(page.locator("[data-cstd-webgl]")).toBeVisible();
+  await expect(page.locator("[data-cstd-webgl]")).toHaveAttribute("data-cstd-render-ready", "true");
   await expect(page.locator("[data-cstd-webgl-canvas]")).toBeVisible();
   await expect(page.locator('[data-cstd-system]')).toHaveCount(5);
   await expect(page.locator('[data-cstd-proof]')).toHaveCount(3);
@@ -192,9 +193,15 @@ test("CSTD composes its chapters as one kinetic studio", async ({ page, isMobile
   const initialSignalTransform = await signalTracks.first().evaluate((element) =>
     getComputedStyle(element).transform,
   );
-  await expect
-    .poll(() => signalTracks.first().evaluate((element) => getComputedStyle(element).transform))
-    .not.toBe(initialSignalTransform);
+  const reducedMotion = await page.evaluate(() => window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  const signalTransform = expect.poll(() =>
+    signalTracks.first().evaluate((element) => getComputedStyle(element).transform),
+  );
+  if (reducedMotion) {
+    await signalTransform.toBe(initialSignalTransform);
+  } else {
+    await signalTransform.not.toBe(initialSignalTransform);
+  }
 
   for (const chapter of ["systems", "proof", "path"] as const) {
     await page.locator(`#${chapter}`).evaluate((element) =>
@@ -242,6 +249,7 @@ test("CSTD system stage responds to deliberate exploration", async ({ page, isMo
 
 test("CSTD WebGL field, cursor, and project planes respond to deliberate input", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "Pointer choreography is intentionally a fine-pointer enhancement.");
+  test.skip(Boolean(process.env.CI), "Hardware WebGL choreography is covered by local and production Chrome acceptance.");
 
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "networkidle" });
@@ -250,6 +258,7 @@ test("CSTD WebGL field, cursor, and project planes respond to deliberate input",
   const hero = page.locator("[data-cstd-hero]");
   const canvas = page.locator("[data-cstd-webgl-canvas]");
   const pointerField = page.locator("[data-cstd-pointer-field]");
+  await expect(page.locator("[data-cstd-webgl]")).toHaveAttribute("data-cstd-render-ready", "true");
   const heroBounds = await hero.boundingBox();
   expect(heroBounds).not.toBeNull();
   const initialPointerTransform = await pointerField.evaluate((element) => getComputedStyle(element).transform);
@@ -266,6 +275,8 @@ test("CSTD WebGL field, cursor, and project planes respond to deliberate input",
 
   const alphaPlane = page.locator('[data-cstd-project-plane="alpha"]');
   await alphaPlane.scrollIntoViewIfNeeded();
+  await page.mouse.move(8, 8);
+  await page.waitForTimeout(800);
   const initialClipPath = await alphaPlane.evaluate((element) => getComputedStyle(element).clipPath);
   await alphaPlane.hover();
   await expect
@@ -296,6 +307,8 @@ test("CSTD keeps the cinematic field still when reduced motion is requested", as
     .toBe(initialSignalTransform);
 
   const canvas = page.locator("[data-cstd-webgl-canvas]");
+  await expect(page.locator("[data-cstd-webgl]")).toHaveAttribute("data-cstd-render-ready", "true");
+  await page.waitForTimeout(100);
   const firstFrame = await canvas.screenshot();
   await page.waitForTimeout(450);
   const secondFrame = await canvas.screenshot();
