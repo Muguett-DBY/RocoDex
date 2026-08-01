@@ -45,13 +45,18 @@ describe("CSTD immersive systems world", () => {
     expect(landingSource).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
     expect(landingSource).toContain("{...targetProps}");
     expect(sceneSource).toContain('data-cstd-render-quality={quality}');
-    expect(sceneSource).toContain('data-cstd-render-ready={readyQuality === quality ? "true" : "false"}');
+    expect(sceneSource).toContain("data-cstd-render-ready={renderReady}");
+    expect(sceneSource).toContain('data-cstd-render-fallback={contextLost ? "true" : "false"}');
+    expect(sceneSource).toContain('addEventListener("webglcontextlost"');
     expect(sceneSource).toContain("softwareRendererPattern");
   });
 
-  test("retains reduced-motion semantics and a static visual fallback", () => {
+  test("defaults to full motion and keeps an explicit calm visual fallback", () => {
     expect(landingSource).toContain("useSyncExternalStore(");
-    expect(landingSource).toContain("prefers-reduced-motion: reduce");
+    expect(landingSource).toContain('return "full";');
+    expect(landingSource).not.toContain("prefers-reduced-motion: reduce");
+    expect(landingSource).toContain("data-cstd-motion-toggle");
+    expect(landingSource).toContain('data-cstd-path-mode={horizontalPath ? "horizontal" : "vertical"}');
     expect(landingSource).toContain("reducedMotion={reducedMotion}");
     expect(landingSource).toContain('src="/cstd-world/cstd-kinetic-studio-v2.webp"');
     expect(sceneSource).toContain('frameloop={props.reducedMotion ? "demand" : "always"}');
