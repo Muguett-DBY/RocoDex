@@ -167,6 +167,98 @@ test("CSTD navigation moves through the narrative and keeps proof links safe", a
   expect(browserIssues).toEqual([]);
 });
 
+test("CSTD systems atlas responds to deliberate exploration", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "The atlas uses the compact system list on smaller screens.");
+
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto("/cstd#systems", { waitUntil: "networkidle" });
+  expect(response?.ok()).toBe(true);
+
+  const chapterNavigation = page.getByRole("navigation", { name: "章节导航" });
+  await expect(chapterNavigation.getByRole("link")).toHaveCount(3);
+
+  const atlas = page.getByRole("group", { name: "技术系统图" });
+  const nodes = atlas.getByRole("button");
+  await expect(nodes).toHaveCount(5);
+  await expect(nodes.first()).toHaveAttribute("aria-pressed", "true");
+
+  const dataNode = atlas.getByRole("button", { name: /数据流与计算研究/ });
+  await dataNode.focus();
+  await expect(dataNode).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator('[data-cstd-atlas-detail="data-systems"]')).toBeVisible();
+
+  await expectNoHorizontalOverflow(page);
+  expect(browserIssues).toEqual([]);
+});
+
+test("CSTD depth and proof surfaces respond to pointer position", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "Pointer depth is intentionally a fine-pointer enhancement.");
+
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto("/cstd", { waitUntil: "networkidle" });
+  expect(response?.ok()).toBe(true);
+
+  const hero = page.locator("[data-cstd-hero]");
+  const heroDepth = page.locator("[data-cstd-hero-depth]");
+  const heroBounds = await hero.boundingBox();
+  expect(heroBounds).not.toBeNull();
+  const initialHeroTransform = await heroDepth.evaluate((element) => getComputedStyle(element).transform);
+  await hero.hover({ position: { x: heroBounds!.width * 0.86, y: heroBounds!.height * 0.72 } });
+  await expect
+    .poll(() => heroDepth.evaluate((element) => getComputedStyle(element).transform))
+    .not.toBe(initialHeroTransform);
+
+  const proof = page.locator('[data-cstd-proof="rocodex"]');
+  await proof.scrollIntoViewIfNeeded();
+  await page.mouse.move(1, 1);
+  await page.waitForTimeout(350);
+  const proofBounds = await proof.boundingBox();
+  expect(proofBounds).not.toBeNull();
+  const initialProofTransform = await proof.evaluate((element) => getComputedStyle(element).transform);
+  await proof.hover({ position: { x: proofBounds!.width * 0.82, y: proofBounds!.height * 0.28 } });
+  await expect
+    .poll(() => proof.evaluate((element) => getComputedStyle(element).transform))
+    .not.toBe(initialProofTransform);
+
+  await expectNoHorizontalOverflow(page);
+  expect(browserIssues).toEqual([]);
+});
+
+test("CSTD keeps pointer depth still when reduced motion is requested", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "One browser profile is sufficient for reduced-motion semantics.");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  const browserIssues = captureBrowserIssues(page);
+  const response = await page.goto("/cstd", { waitUntil: "networkidle" });
+  expect(response?.ok()).toBe(true);
+
+  const hero = page.locator("[data-cstd-hero]");
+  const heroDepth = page.locator("[data-cstd-hero-depth]");
+  const heroBounds = await hero.boundingBox();
+  expect(heroBounds).not.toBeNull();
+  const initialHeroTransform = await heroDepth.evaluate((element) => getComputedStyle(element).transform);
+  await hero.hover({ position: { x: heroBounds!.width * 0.86, y: heroBounds!.height * 0.72 } });
+  await page.waitForTimeout(300);
+  await expect
+    .poll(() => heroDepth.evaluate((element) => getComputedStyle(element).transform))
+    .toBe(initialHeroTransform);
+
+  const proof = page.locator('[data-cstd-proof="rocodex"]');
+  await proof.scrollIntoViewIfNeeded();
+  await page.waitForTimeout(350);
+  const proofBounds = await proof.boundingBox();
+  expect(proofBounds).not.toBeNull();
+  const initialProofTransform = await proof.evaluate((element) => getComputedStyle(element).transform);
+  await proof.hover({ position: { x: proofBounds!.width * 0.82, y: proofBounds!.height * 0.28 } });
+  await page.waitForTimeout(300);
+  await expect
+    .poll(() => proof.evaluate((element) => getComputedStyle(element).transform))
+    .toBe(initialProofTransform);
+
+  await expectNoHorizontalOverflow(page);
+  expect(browserIssues).toEqual([]);
+});
+
 test("CSTD does not revive gallery index or playful click-through interactions", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd#path", { waitUntil: "networkidle" });
