@@ -25,6 +25,20 @@ import {
   type CstdProof,
   type CstdSystem,
 } from "../content/systems";
+import { ClickSpark } from "./click-spark";
+import { DecryptedText } from "./decrypted-text";
+import { Magnet } from "./magnet";
+import { NoiseOverlay } from "./noise-overlay";
+import { ShinyText } from "./shiny-text";
+import { SpotlightCard } from "./spotlight-card";
+import { TiltFrame } from "./tilt-frame";
+import { TracingProgress } from "./tracing-progress";
+
+// anime.js 驱动的文字特效走异步 chunk，保住初始 JS 预算
+const LetterReveal = dynamic(
+  () => import("./letter-reveal").then((module) => module.LetterReveal),
+);
+const CountUp = dynamic(() => import("./count-up").then((module) => module.CountUp));
 
 const PersonalImmersiveScene = dynamic(
   () => import("./immersive-scene").then((module) => module.PersonalImmersiveScene),
@@ -84,21 +98,21 @@ const researchAccents = [
     code: "AMBER / ORIGIN",
   },
   {
-    text: "text-[#75b8ee]",
-    background: "bg-[#75b8ee]",
-    border: "border-[#75b8ee]",
+    text: "text-[#8ec9f0]",
+    background: "bg-[#8ec9f0]",
+    border: "border-[#8ec9f0]",
     code: "COBALT / SIGNAL",
   },
   {
-    text: "text-[#ee7862]",
-    background: "bg-[#ee7862]",
-    border: "border-[#ee7862]",
+    text: "text-[#f08a6d]",
+    background: "bg-[#f08a6d]",
+    border: "border-[#f08a6d]",
     code: "CORAL / STRUCTURE",
   },
   {
-    text: "text-[#b7d9c2]",
-    background: "bg-[#b7d9c2]",
-    border: "border-[#b7d9c2]",
+    text: "text-[#bfe0c8]",
+    background: "bg-[#bfe0c8]",
+    border: "border-[#bfe0c8]",
     code: "MINT / CONTINUUM",
   },
 ] as const;
@@ -169,12 +183,12 @@ function SignalStrip({ reducedMotion }: { reducedMotion: boolean }) {
   const content = [...heroSignals, ...heroSignals];
 
   return (
-    <div data-cstd-signal-strip className="relative z-20 h-[8svh] min-h-16 overflow-hidden border-y border-black bg-[#f4b72f] text-[#11130f]">
+    <div data-cstd-signal-strip className="relative z-20 h-[8svh] min-h-16 overflow-hidden border-y border-black bg-[#f4b72f] text-[#2a1d0e]">
       {[0, 1].map((track) => (
         <m.div
           key={track}
           data-cstd-signal-track={track}
-          className={`flex h-1/2 w-max items-center border-black ${track === 0 ? "border-b" : "bg-[#2d6fae] text-white"}`}
+          className={`flex h-1/2 w-max items-center border-black ${track === 0 ? "border-b" : "bg-[#3d7fc0] text-white"}`}
           animate={reducedMotion ? undefined : { x: track === 0 ? ["0%", "-50%"] : ["-50%", "0%"] }}
           transition={{ duration: track === 0 ? 24 : 31, ease: "linear", repeat: Infinity }}
         >
@@ -193,9 +207,11 @@ function SignalStrip({ reducedMotion }: { reducedMotion: boolean }) {
 function SystemsChapter({
   activeSystemId,
   setActiveSystemId,
+  reducedMotion,
 }: {
   activeSystemId: CstdSystem["id"];
   setActiveSystemId: (id: CstdSystem["id"]) => void;
+  reducedMotion: boolean;
 }) {
   const activeSystem = cstdSystems.find((system) => system.id === activeSystemId) ?? cstdSystems[0];
 
@@ -204,7 +220,7 @@ function SystemsChapter({
       id="systems"
       data-cstd-chapter="systems"
       aria-labelledby="systems-heading"
-      className="relative z-10 min-h-[150svh] border-b border-white/20 bg-[#090a08]/76 text-[#f4efe4] lg:min-h-[185svh]"
+      className="relative z-10 min-h-[150svh] border-b border-white/20 bg-[#171208]/76 text-[#fbf1df] lg:min-h-[185svh]"
     >
       <div className="sticky top-0 flex min-h-svh items-center px-5 py-24 md:px-10 lg:px-16">
         <div className="mx-auto grid w-full max-w-[1540px] gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:gap-20">
@@ -212,26 +228,40 @@ function SystemsChapter({
             <div>
               <p className="text-xs font-bold text-[#f4b72f]">01 / SYSTEM FIELD</p>
               <h2 id="systems-heading" className="mt-5 max-w-3xl text-5xl font-black leading-[0.98] tracking-[0] md:text-6xl xl:text-7xl">
-                五条能力轴，
-                <br />
-                汇成一条流。
+                <span className="block">
+                  <LetterReveal trigger="view" disabled={reducedMotion} staggerDelay={30} duration={850} fromY={90} fromRotate={3}>
+                    五条能力轴，
+                  </LetterReveal>
+                </span>
+                <span className="block">
+                  <LetterReveal trigger="view" disabled={reducedMotion} staggerDelay={30} duration={850} delay={200} fromY={90} fromRotate={3}>
+                    汇成一条流。
+                  </LetterReveal>
+                </span>
               </h2>
             </div>
 
-            <m.div
-              key={activeSystem.id}
-              data-cstd-system-visual={activeSystem.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-xl border-l-2 border-[#f4b72f] pl-6"
+            <SpotlightCard
+              disabled={reducedMotion}
+              spotlightColor="rgba(255, 217, 122, 0.16)"
+              size={640}
+              className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 shadow-[0_24px_70px_rgba(0,0,0,0.35)] backdrop-blur-sm md:p-8"
             >
-              <p className="text-lg leading-8 text-white/82 md:text-xl">{activeSystem.summary}</p>
-              <p className="mt-4 text-sm leading-6 text-white/55">{activeSystem.evidence}</p>
-              <p className="mt-6 text-xs font-bold leading-6 text-[#f4b72f]">
-                {activeSystem.stack.join("  /  ")}
-              </p>
-            </m.div>
+              <m.div
+                key={activeSystem.id}
+                data-cstd-system-visual={activeSystem.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+                className="max-w-xl border-l-2 border-[#f4b72f] pl-6"
+              >
+                <p className="text-lg leading-8 text-white/82 md:text-xl">{activeSystem.summary}</p>
+                <p className="mt-4 text-sm leading-6 text-white/55">{activeSystem.evidence}</p>
+                <p className="mt-6 text-xs font-bold leading-6 text-[#f4b72f]">
+                  {activeSystem.stack.join("  /  ")}
+                </p>
+              </m.div>
+            </SpotlightCard>
           </div>
 
           <div className="border-t border-white/25">
@@ -264,7 +294,7 @@ function SystemsChapter({
   );
 }
 
-function ProofChapter({ proof, index }: { proof: CstdProof; index: number }) {
+function ProofChapter({ proof, index, reducedMotion }: { proof: CstdProof; index: number; reducedMotion: boolean }) {
   const project = proofProjects.find((candidate) => candidate.id === proof.projectId);
   if (!project?.preview) return null;
   const targetProps = getCstdLinkTargetProps(project.href);
@@ -286,50 +316,64 @@ function ProofChapter({ proof, index }: { proof: CstdProof; index: number }) {
         <a
           href={project.href}
           {...targetProps}
-          className="mt-10 inline-flex items-center gap-3 border-b-2 border-black pb-2 text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2d6fae]"
+          className="mt-10 inline-flex items-center gap-3 border-b-2 border-black pb-2 text-sm font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3d7fc0]"
         >
           {project.action}
           <ArrowUpRight aria-hidden="true" className="h-4 w-4" strokeWidth={2.4} />
         </a>
       </div>
 
-      <m.figure
-        data-cstd-project-plane={proof.projectId}
-        className="relative mt-14 aspect-[16/11] min-h-0 overflow-hidden border border-black/20 bg-black lg:mt-0"
-        initial={{ clipPath: "polygon(7% 0%, 100% 0%, 93% 100%, 0% 100%)" }}
-        whileHover={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
-        transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+      <TiltFrame
+        disabled={reducedMotion}
+        rotateAmplitude={4.5}
+        scaleOnHover={1.015}
+        className="mt-14 min-h-0 lg:mt-0"
       >
-        <m.div className="absolute inset-[-2%]" whileHover={{ scale: 1.055, rotate: index % 2 === 0 ? -0.7 : 0.7 }} transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}>
-          <Image
-            src={project.preview.src}
-            alt={project.preview.alt}
-            fill
-            sizes="(min-width: 1024px) 58vw, 100vw"
-            className="object-cover"
-            style={{ objectPosition: project.preview.position }}
-          />
-        </m.div>
-        <div aria-hidden="true" className="absolute inset-0 border-[10px] border-[#efe8dc]/10" />
-        <figcaption className="absolute bottom-0 left-0 bg-[#11130f] px-4 py-3 text-[10px] font-black text-white">
-          LIVE / {project.kicker.toUpperCase()}
-        </figcaption>
-      </m.figure>
+        <m.figure
+          data-cstd-project-plane={proof.projectId}
+          className="relative aspect-[16/11] min-h-0 overflow-hidden rounded-3xl border border-black/15 bg-black shadow-[0_30px_80px_rgba(42,29,14,0.30)] lg:mt-0"
+          initial={{ clipPath: "polygon(7% 0%, 100% 0%, 93% 100%, 0% 100%)" }}
+          whileHover={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
+          transition={{ duration: 0.62, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <m.div className="absolute inset-[-2%]" whileHover={{ scale: 1.055, rotate: index % 2 === 0 ? -0.7 : 0.7 }} transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}>
+            <Image
+              src={project.preview.src}
+              alt={project.preview.alt}
+              fill
+              sizes="(min-width: 1024px) 58vw, 100vw"
+              className="object-cover"
+              style={{ objectPosition: project.preview.position }}
+            />
+          </m.div>
+          <div aria-hidden="true" className="absolute inset-0 rounded-3xl border-[10px] border-[#fdf3e0]/10" />
+          <figcaption className="absolute bottom-4 left-4 rounded-full bg-[#2a1d0e] px-4 py-2 text-[10px] font-black text-[#ffd97a]">
+            LIVE / {project.kicker.toUpperCase()}
+          </figcaption>
+        </m.figure>
+      </TiltFrame>
     </article>
   );
 }
 
-function SelectedWork() {
+function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
   return (
-    <section id="proof" data-cstd-chapter="proof" aria-labelledby="proof-heading" className="relative z-20 bg-[#efe8dc] text-[#11130f]">
+    <section id="proof" data-cstd-chapter="proof" aria-labelledby="proof-heading" className="relative z-20 bg-[#fdf3e0] text-[#2a1d0e]">
       <header className="border-b border-black/25 px-5 pb-10 pt-24 md:px-10 lg:px-16 lg:pb-16 lg:pt-32">
         <div className="mx-auto flex max-w-[1540px] flex-col justify-between gap-8 lg:flex-row lg:items-end">
           <div>
-            <p className="text-xs font-black text-[#2d6fae]">02 / SELECTED WORK</p>
+            <p className="text-xs font-black text-[#3d7fc0]">02 / SELECTED WORK</p>
             <h2 id="proof-heading" className="mt-5 text-5xl font-black leading-[0.95] tracking-[0] md:text-7xl xl:text-8xl">
-              不陈列全部，
-              <br />
-              只放真实运行的证据。
+              <span className="block">
+                <LetterReveal trigger="view" disabled={reducedMotion} staggerDelay={34} duration={880} fromY={95} fromRotate={3}>
+                  不陈列全部，
+                </LetterReveal>
+              </span>
+              <span className="block">
+                <LetterReveal trigger="view" disabled={reducedMotion} staggerDelay={34} duration={880} delay={210} fromY={95} fromRotate={3}>
+                  只放真实运行的证据。
+                </LetterReveal>
+              </span>
             </h2>
           </div>
           <p className="max-w-md text-base leading-7 text-black/58">三个项目，分别验证资料结构、研究过程和业务边界。画面可以夸张，结果必须能用。</p>
@@ -338,7 +382,7 @@ function SelectedWork() {
 
       <div data-cstd-proof-reel>
         {cstdProofs.map((proof, index) => (
-          <ProofChapter key={proof.projectId} proof={proof} index={index} />
+          <ProofChapter key={proof.projectId} proof={proof} index={index} reducedMotion={reducedMotion} />
         ))}
       </div>
 
@@ -349,7 +393,7 @@ function SelectedWork() {
             return (
               <div key={project.id} data-cstd-live-object={project.id} className="border-b border-black/25 py-8 md:odd:border-r md:odd:pr-10 md:even:pl-10">
                 <p className="text-xs font-black text-black/45">LIVE OBJECT / {project.kicker.toUpperCase()}</p>
-                <a href={project.href} {...targetProps} className="mt-4 flex items-center justify-between gap-4 text-2xl font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2d6fae] md:text-3xl">
+                <a href={project.href} {...targetProps} className="mt-4 flex items-center justify-between gap-4 text-2xl font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3d7fc0] md:text-3xl">
                   {project.title}
                   <ArrowUpRight aria-hidden="true" className="h-6 w-6 flex-none" />
                 </a>
@@ -394,7 +438,7 @@ function ResearchPathPanel({
           sizes="100vw"
           className="scale-125 object-cover opacity-[0.09] saturate-50 transition duration-1000 group-hover:scale-[1.29] group-hover:opacity-[0.14] group-hover:saturate-100"
         />
-        <div className="absolute inset-0 bg-[#090a08]/78" />
+        <div className="absolute inset-0 bg-[#171208]/78" />
         <span className="absolute -bottom-12 right-2 text-[13rem] font-black leading-none text-white/[0.035] md:text-[20rem] lg:-right-5 lg:text-[27rem]">
           {entry.year.slice(2)}
         </span>
@@ -417,7 +461,9 @@ function ResearchPathPanel({
           <span aria-hidden="true" className={clsx("h-px w-12", accent.background)} />
           <span>{entry.focus}</span>
         </div>
-        <p className={clsx("mt-8 text-8xl font-black leading-none md:text-9xl", accent.text)}>{entry.year}</p>
+        <p className={clsx("mt-8 text-8xl font-black leading-none md:text-9xl", accent.text)}>
+          <CountUp disabled={reducedMotion} value={Number(entry.year)} duration={1150} threshold={0.3} />
+        </p>
         <h3 className="mt-6 text-balance text-4xl font-black leading-[0.96] tracking-[0] md:text-5xl xl:text-6xl">{entry.title}</h3>
         <p className="mt-7 max-w-lg text-balance text-base leading-8 text-white/66">{entry.note}</p>
         <div className="mt-10 flex items-center gap-4 text-[10px] font-black text-white/38">
@@ -509,15 +555,18 @@ function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
       data-cstd-path-mode="vertical"
       data-cstd-path-continuous="true"
       aria-labelledby="path-heading"
-      className="relative z-10 bg-[#090a08]/92 text-[#f4efe4]"
+      className="relative z-10 bg-[#171208]/92 text-[#fbf1df]"
     >
+      <TracingProgress disabled={reducedMotion} color="#f4b72f" className="left-4 md:left-8" />
       <div data-cstd-path-stage className="relative">
-        <header className="relative z-30 border-b border-white/20 bg-[#090a08]/92 px-5 pb-10 pt-24 md:px-10 lg:px-16 lg:pb-14 lg:pt-32">
+        <header className="relative z-30 border-b border-white/20 bg-[#171208]/92 px-5 pb-10 pt-24 md:px-10 lg:px-16 lg:pb-14 lg:pt-32">
           <div className="flex items-end justify-between gap-10">
           <div>
             <p className="text-xs font-black text-[#f4b72f]">03 / RESEARCH PATH</p>
               <h2 id="path-heading" className="mt-3 max-w-5xl text-4xl font-black leading-[0.96] tracking-[0] md:text-6xl">
-                学习不是履历，是镜头继续向前。
+                <LetterReveal trigger="view" disabled={reducedMotion} staggerDelay={26} duration={820} fromY={90} fromRotate={3}>
+                  学习不是履历，是镜头继续向前。
+                </LetterReveal>
               </h2>
             </div>
             <div className="hidden items-end gap-5 lg:flex">
@@ -666,13 +715,20 @@ export function PersonalHomepage() {
         onPointerDown={() => {
           if (!reducedMotion) impulseRef.current = 1;
         }}
-        className="relative isolate overflow-clip bg-[#090a08] font-sans text-[#f4efe4]"
+        className="relative isolate overflow-clip bg-[#171208] font-sans text-[#fbf1df]"
+      >
+      <ClickSpark
+        disabled={reducedMotion}
+        sparkColor="#ffd97a"
+        sparkCount={10}
+        sparkRadius={20}
+        sparkSize={8}
       >
       <a href="#systems" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:px-4 focus:py-3 focus:text-black">
         跳到主要内容
       </a>
 
-      <div aria-hidden="true" className="fixed inset-0 z-0 bg-[#090a08]">
+      <div aria-hidden="true" className="fixed inset-0 z-0 bg-[#171208]">
         <Image
           src="/cstd-world/cstd-kinetic-studio-v2.webp"
           alt=""
@@ -685,11 +741,22 @@ export function PersonalHomepage() {
         {enhancementsReady ? <PersonalImmersiveScene {...sceneProps} /> : null}
       </div>
 
+      <NoiseOverlay
+        staticMode={reducedMotion}
+        opacity={0.07}
+        blendMode="overlay"
+        className="fixed inset-0 z-[64]"
+      />
+
       <m.div
         aria-hidden="true"
         data-cstd-page-progress
-        className="fixed inset-x-0 top-0 z-[70] h-1 origin-left bg-[#f4b72f]"
-        style={{ scaleX: pageProgress }}
+        className="fixed inset-x-0 top-0 z-[70] h-1 origin-left"
+        style={{
+          scaleX: pageProgress,
+          background: "linear-gradient(90deg, #f4b72f 0%, #ffd97a 42%, #8ec9f0 100%)",
+          boxShadow: "0 0 14px rgba(244,183,47,0.5)",
+        }}
       />
 
       <m.div
@@ -706,24 +773,38 @@ export function PersonalHomepage() {
 
       <m.header
         data-cstd-header-theme={activeChapter}
-        className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/18 bg-[#090a08]/72 px-5 text-white backdrop-blur-md md:px-10 lg:px-12"
+        className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/18 bg-[#171208]/72 px-5 text-white backdrop-blur-md md:px-10 lg:px-12"
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.72, ease: [0.22, 1, 0.36, 1] }}
       >
-        <a href="#top" className="flex items-center gap-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f]">
-          <span className="flex h-8 w-8 items-center justify-center rounded-[6px] bg-[#f4b72f] text-xs font-black text-black">CS</span>
-          <span className="text-sm font-black">CSTD</span>
-          <span aria-hidden="true" className="h-4 w-px bg-white/30" />
-          <span className="hidden text-[10px] font-bold text-white/55 sm:inline">{chapterLabels[activeChapter]}</span>
-        </a>
+        <Magnet disabled={reducedMotion} padding={24} magnetStrength={4}>
+          <a href="#top" className="flex items-center gap-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f]">
+            <span className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-[#f4b72f] text-xs font-black text-black shadow-[0_0_18px_rgba(244,183,47,0.45)]">CS</span>
+            <span className="text-sm font-black">CSTD</span>
+            <span aria-hidden="true" className="h-4 w-px bg-white/30" />
+            <DecryptedText
+              key={activeChapter}
+              text={chapterLabels[activeChapter]}
+              animateOn="view"
+              sequential
+              speed={30}
+              maxIterations={6}
+              className="text-[10px] font-bold text-white/90"
+              encryptedClassName="text-white/30"
+              parentClassName="hidden sm:inline-block"
+            />
+          </a>
+        </Magnet>
 
         <div className="flex items-center gap-4 md:gap-7">
           <nav aria-label="主导航" className="flex items-center gap-5 text-xs font-black md:gap-8">
             {chapterLinks.map((chapter) => (
-              <a key={chapter.id} href={`#${chapter.id}`} className="text-white/60 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f]">
-                {chapter.label}
-              </a>
+              <Magnet key={chapter.id} disabled={reducedMotion} padding={20} magnetStrength={4}>
+                <a href={`#${chapter.id}`} className="text-white/60 transition-colors hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f]">
+                  {chapter.label}
+                </a>
+              </Magnet>
             ))}
           </nav>
           <span aria-hidden="true" className="hidden h-4 w-px bg-white/25 sm:block" />
@@ -736,7 +817,7 @@ export function PersonalHomepage() {
             className="group relative hidden h-8 w-8 items-center justify-center border border-white/35 text-white transition-colors hover:border-[#f4b72f] hover:text-[#f4b72f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f] sm:flex"
           >
             <Sparkles aria-hidden="true" className="h-4 w-4" />
-            <span role="tooltip" className="pointer-events-none absolute right-0 top-10 hidden whitespace-nowrap border border-white/20 bg-[#090a08] px-3 py-2 text-[10px] font-black text-white group-hover:block group-focus-visible:block">
+            <span role="tooltip" className="pointer-events-none absolute right-0 top-10 hidden whitespace-nowrap border border-white/20 bg-[#171208] px-3 py-2 text-[10px] font-black text-white group-hover:block group-focus-visible:block">
               {reducedMotion ? "FULL MOTION" : "CALM MOTION"}
             </span>
           </button>
@@ -761,54 +842,85 @@ export function PersonalHomepage() {
           >
             奶黄包的个人技术工作室 / CREATIVE SYSTEMS LAB
           </m.p>
-          <m.h1
+          <h1
             id="cstd-hero-title"
             data-cstd-hero-depth
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.05, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
             className="text-[7rem] font-black leading-[0.72] tracking-[0] text-white mix-blend-difference md:text-[11rem] xl:text-[16rem] 2xl:text-[20rem]"
           >
-            CSTD
-          </m.h1>
+            <LetterReveal
+              disabled={reducedMotion || !enhancementsReady}
+              staggerDelay={85}
+              duration={1050}
+              delay={160}
+              fromY={115}
+              fromRotate={7}
+              fromSkew={9}
+            >
+              CSTD
+            </LetterReveal>
+          </h1>
 
           <div className="mt-8 grid items-end gap-8 border-t border-white/35 pt-6 md:grid-cols-[1fr_auto]">
             <div className="max-w-2xl">
               <p className="text-2xl font-black leading-tight text-white md:text-4xl">
                 把产品、数据、AI 和研究，
                 <br className="hidden sm:block" />
-                折进一条会呼吸的系统。
+                <ShinyText
+                  text="折进一条会呼吸的系统。"
+                  disabled={reducedMotion}
+                  speed={3.4}
+                  delay={0.8}
+                  color="rgba(251,241,223,0.95)"
+                  shineColor="#ffd97a"
+                />
               </p>
               <p className="mt-4 max-w-lg text-sm leading-6 text-white/62 md:text-base">真实项目持续运行，新的技术继续进入镜头。这里不是作品目录，而是一套正在演化的个人方法。</p>
             </div>
-            <a
-              href="#systems"
-              aria-label="进入系统章节"
-              className="flex h-14 w-14 items-center justify-center border border-white/60 text-white transition-colors hover:border-[#f4b72f] hover:bg-[#f4b72f] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f]"
-            >
-              <ArrowDown aria-hidden="true" className="h-5 w-5" />
-            </a>
+            <Magnet disabled={reducedMotion} padding={42} magnetStrength={3}>
+              <a
+                href="#systems"
+                aria-label="进入系统章节"
+                className="flex h-14 w-14 items-center justify-center border border-white/60 text-white transition-colors hover:border-[#f4b72f] hover:bg-[#f4b72f] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4b72f]"
+              >
+                <ArrowDown aria-hidden="true" className="h-5 w-5" />
+              </a>
+            </Magnet>
           </div>
         </div>
       </section>
 
       <SignalStrip reducedMotion={reducedMotion} />
-      <SystemsChapter activeSystemId={activeSystemId} setActiveSystemId={setActiveSystemId} />
-      <SelectedWork />
+      <SystemsChapter activeSystemId={activeSystemId} setActiveSystemId={setActiveSystemId} reducedMotion={reducedMotion} />
+      <SelectedWork reducedMotion={reducedMotion} />
       <ResearchPath reducedMotion={reducedMotion} />
 
-      <footer id="cstd-footer" className="relative z-20 border-t border-white/20 bg-[#090a08] px-5 py-16 text-white md:px-10 lg:px-16">
+      <footer id="cstd-footer" className="relative z-20 border-t border-white/20 bg-[#171208] px-5 py-16 text-white md:px-10 lg:px-16">
         <div className="mx-auto flex max-w-[1540px] flex-col justify-between gap-8 md:flex-row md:items-end">
           <div>
-            <p className="text-5xl font-black tracking-[0] md:text-7xl">CSTD</p>
+            <ShinyText
+              text="CSTD"
+              disabled={reducedMotion}
+              speed={4.2}
+              delay={1.2}
+              className="text-5xl font-black tracking-[0] md:text-7xl"
+              color="rgba(251,241,223,0.88)"
+              shineColor="#ffd97a"
+            />
             <p className="mt-3 text-sm text-white/48">奶黄包个人技术工作室 / Sydney · Nanjing · The web</p>
           </div>
           <div className="text-left text-xs font-bold text-white/45 md:text-right">
             <p>DESIGNED AND ENGINEERED AS A LIVING SYSTEM</p>
-            <p className="mt-2 text-[#f4b72f]">2022 — 2026 / STILL IN MOTION</p>
+            <p className="mt-2 flex items-center gap-2 text-[#f4b72f] md:justify-end">
+              <span aria-hidden="true" className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#f4b72f] opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#f4b72f]" />
+              </span>
+              2022 — 2026 / STILL IN MOTION
+            </p>
           </div>
         </div>
       </footer>
+      </ClickSpark>
       </main>
     </LazyMotion>
   );

@@ -450,11 +450,13 @@ function FloatingArchives({
 function ProgressiveArchiveLayer(
   props: Pick<PersonalImmersiveSceneProps, "progressRef" | "pointerRef" | "reducedMotion"> & {
     quality: SceneQuality;
+    onReady: (quality: SceneQuality) => void;
   },
 ) {
   return (
     <Suspense fallback={null}>
       <FloatingArchives {...props} />
+      <SceneReady onReady={props.onReady} quality={props.quality} />
     </Suspense>
   );
 }
@@ -533,6 +535,7 @@ function World(
         pointerRef={props.pointerRef}
         reducedMotion={props.reducedMotion}
         quality={props.quality}
+        onReady={props.onReady}
       />
       <CameraRig {...props} />
       {props.quality === "full" ? (
@@ -542,7 +545,6 @@ function World(
           <Noise opacity={0.022} blendFunction={BlendFunction.SOFT_LIGHT} />
         </EffectComposer>
       ) : null}
-      <SceneReady onReady={props.onReady} quality={props.quality} />
     </>
   );
 }
