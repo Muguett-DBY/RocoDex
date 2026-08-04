@@ -1,8 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
-import { useAnimationFrame, useMotionValue, useTransform } from "framer-motion";
-import * as m from "framer-motion/m";
+import { useState } from "react";
+import { clsx } from "clsx";
 
 type ShinyTextProps = {
   text: string;
@@ -14,18 +13,19 @@ type ShinyTextProps = {
   color?: string;
   /** 光泽色 */
   shineColor?: string;
-  /** 光泽渐变展开角度 */
-  spread?: number;
+  /** 光泽带宽度（相对文字宽度百分比） */
+  shineWidth?: number;
   /** 往返扫（true）还是单向循环（false） */
   yoyo?: boolean;
   pauseOnHover?: boolean;
   direction?: "left" | "right";
+  /** 首轮延迟（秒） */
   delay?: number;
 };
 
 /**
- * 金属光泽扫过文字：渐变高光沿文字周期移动。
- * framer-motion 适配版（ReactBits ShinyText），LazyMotion 兼容。
+ * 金属光泽扫过文字：纯 CSS keyframes（transform 合成器线程），
+ * 零主线程开销；calm 模式直接关闭动画。
  */
 export function ShinyText({
   text,
@@ -34,96 +34,45 @@ export function ShinyText({
   className = "",
   color = "inherit",
   shineColor = "#ffd97a",
-  spread = 110,
+  shineWidth = 34,
   yoyo = false,
   pauseOnHover = false,
   direction = "left",
   delay = 0,
 }: ShinyTextProps) {
   const [isPaused, setIsPaused] = useState(false);
-  const progress = useMotionValue(0);
-  const elapsedRef = useRef(0);
-  const lastTimeRef = useRef<number | null>(null);
-  const directionRef = useRef(direction === "left" ? 1 : -1);
 
-  const animationDuration = speed * 1000;
-  const delayDuration = delay * 1000;
-
-  useAnimationFrame((time) => {
-    if (disabled || isPaused) {
-      lastTimeRef.current = null;
-      return;
-    }
-    if (lastTimeRef.current === null) {
-      lastTimeRef.current = time;
-      return;
-    }
-
-    const deltaTime = time - lastTimeRef.current;
-    lastTimeRef.current = time;
-    elapsedRef.current += deltaTime;
-
-    const cycleDuration = animationDuration + delayDuration;
-    const fullCycle = cycleDuration * (yoyo ? 2 : 1);
-    const cycleTime = elapsedRef.current % fullCycle;
-
-    if (yoyo) {
-      if (cycleTime < animationDuration) {
-        const p = (cycleTime / animationDuration) * 100;
-        progress.set(directionRef.current === 1 ? p : 100 - p);
-      } else if (cycleTime < cycleDuration) {
-        progress.set(directionRef.current === 1 ? 100 : 0);
-      } else if (cycleTime < cycleDuration + animationDuration) {
-        const reverseTime = cycleTime - cycleDuration;
-        const p = 100 - (reverseTime / animationDuration) * 100;
-        progress.set(directionRef.current === 1 ? p : 100 - p);
-      } else {
-        progress.set(directionRef.current === 1 ? 0 : 100);
-      }
-    } else {
-      if (cycleTime < animationDuration) {
-        const p = (cycleTime / animationDuration) * 100;
-        progress.set(directionRef.current === 1 ? p : 100 - p);
-      } else {
-        progress.set(directionRef.current === 1 ? 100 : 0);
-      }
-    }
-  });
-
-  useEffect(() => {
-    directionRef.current = direction === "left" ? 1 : -1;
-    elapsedRef.current = 0;
-    progress.set(0);
-  }, [direction, progress]);
-
-  const backgroundPosition = useTransform(progress, (p) => `${150 - p * 2}% center`);
-
-  const handleMouseEnter = useCallback(() => {
-    if (pauseOnHover) setIsPaused(true);
-  }, [pauseOnHover]);
-
-  const handleMouseLeave = useCallback(() => {
-    if (pauseOnHover) setIsPaused(false);
-  }, [pauseOnHover]);
-
-  const gradientStyle: CSSProperties = {
-    backgroundImage: `linear-gradient(${spread}deg, ${color} 0%, ${color} 35%, ${shineColor} 50%, ${color} 65%, ${color} 100%)`,
-    backgroundSize: "200% auto",
-    WebkitBackgroundClip: "text",
-    backgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    color: "transparent",
-  };
+  const animationActive = !disabled && !isPaused;
 
   return (
-    <m.span
+    <span
       data-cstd-shiny
-      className={`inline-block ${className}`}
-      style={{ ...gradientStyle, backgroundPosition }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className={clsx("relative inline-block overflow-hidden", className)}
+      style={{ color }}
+      onMouseEnter={() => pauseOnHover && setIsPaused(true)}
+      onMouseLeave={() => pauseOnHover && setIsPaused(false)}
     >
-      {text}
-    </m.span>
+      <span className="relative z-10">{text}</span>
+      {/* 光泽层：CSS transform 扫过（合成器线程），background-clip: text 只显示在文字内 */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-y-0 z-20 w-full"
+        style={{
+          backgroundImage: `linear-gradient(105deg, transparent 0%, transparent ${100 - shineWidth}%, ${shineColor} 50%, transparent ${100 - shineWidth / 2}%, transparent 100%)`,
+          backgroundSize: `${100 + shineWidth}% 100%`,
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "0% 0%",
+          WebkitBackgroundClip: "text",
+          backgroundClip: "text",
+          color: "transparent",
+          animation: animationActive
+            ? `cstd-shine-sweep ${speed}s ease-in-out ${delay}s infinite ${yoyo ? "alternate" : ""} ${direction === "right" ? "reverse" : ""}`
+            : undefined,
+          willChange: animationActive ? "transform" : undefined,
+        }}
+      >
+        {text}
+      </span>
+    </span>
   );
 }
