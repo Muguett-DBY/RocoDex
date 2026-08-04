@@ -1,13 +1,8 @@
 "use client";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-  type CSSProperties,
-  type HTMLAttributes,
-  type ReactNode,
-} from "react";
+import { useEffect, useRef, useState, type HTMLAttributes, type ReactNode } from "react";
+import { useMotionValue, useSpring } from "framer-motion";
+import * as m from "framer-motion/m";
 
 type MagnetProps = HTMLAttributes<HTMLDivElement> & {
   children: ReactNode;
@@ -17,30 +12,31 @@ type MagnetProps = HTMLAttributes<HTMLDivElement> & {
   disabled?: boolean;
   /** 磁吸强度：位移 = 距离 / strength，越小越黏 */
   magnetStrength?: number;
-  activeTransition?: string;
-  inactiveTransition?: string;
   wrapperClassName?: string;
   innerClassName?: string;
 };
 
 /**
- * 磁吸：鼠标靠近时元素被"吸"向指针，离开后弹性归位。
- * 零依赖（ReactBits Magnet 适配版）。
+ * 磁吸：鼠标靠近时元素被弹簧物理"吸"向指针，离开后弹性归位。
+ * framer-motion useSpring 实现——无 CSS transition 硬切，全程丝滑。
  */
 export function Magnet({
   children,
   padding = 100,
   disabled = false,
   magnetStrength = 2,
-  activeTransition = "transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)",
-  inactiveTransition = "transform 0.55s cubic-bezier(0.22, 1, 0.36, 1)",
   wrapperClassName = "",
   innerClassName = "",
   ...props
 }: MagnetProps) {
   const [isActive, setIsActive] = useState(false);
-  const [position, setPosition] = useState({ x: 0, y: 0 });
   const magnetRef = useRef<HTMLDivElement>(null);
+
+  // 目标值：指针位置或 0；弹簧物理跟踪目标
+  const targetX = useMotionValue(0);
+  const targetY = useMotionValue(0);
+  const x = useSpring(targetX, { stiffness: 220, damping: 18, mass: 0.55 });
+  const y = useSpring(targetY, { stiffness: 220, damping: 18, mass: 0.55 });
 
   useEffect(() => {
     if (disabled) return;
@@ -57,32 +53,32 @@ export function Magnet({
 
       if (distX < width / 2 + padding && distY < height / 2 + padding) {
         setIsActive(true);
-        setPosition({
-          x: (event.clientX - centerX) / magnetStrength,
-          y: (event.clientY - centerY) / magnetStrength,
-        });
+        targetX.set((event.clientX - centerX) / magnetStrength);
+        targetY.set((event.clientY - centerY) / magnetStrength);
       } else {
         setIsActive(false);
-        setPosition({ x: 0, y: 0 });
+        targetX.set(0);
+        targetY.set(0);
       }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [padding, disabled, magnetStrength]);
-
-  const transitionStyle: CSSProperties = {
-    transition: isActive ? activeTransition : inactiveTransition,
-  };
+  }, [padding, disabled, magnetStrength, targetX, targetY]);
 
   return (
     <div ref={magnetRef} className={`inline-flex ${wrapperClassName}`} {...props}>
-      <div
+      <m.div
         className={`inline-block ${innerClassName}`}
-        style={{ transform: `translate3d(${position.x}px, ${position.y}px, 0)`, ...transitionStyle }}
+        style={{
+          x,
+          y,
+          scale: isActive && !disabled ? 1.03 : 1,
+          transition: "scale 0.45s cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
       >
         {children}
-      </div>
+      </m.div>
     </div>
   );
 }

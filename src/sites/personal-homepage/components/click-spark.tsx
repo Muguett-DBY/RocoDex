@@ -24,7 +24,7 @@ interface Spark {
 
 /**
  * 点击火花：在包裹区域内任意点击处爆出一圈射线火花。
- * canvas 2D 实现，零依赖（ReactBits ClickSpark 适配版）。
+ * canvas 2D 实现，惰性 rAF（无火花时零开销）。
  */
 export function ClickSpark({
   sparkColor = "#f4b72f",
@@ -40,6 +40,7 @@ export function ClickSpark({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sparksRef = useRef<Spark[]>([]);
   const startTimeRef = useRef<number | null>(null);
+  const startLoopRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -95,8 +96,9 @@ export function ClickSpark({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let animationId: number;
+    let animationId: number | null = null;
 
+    // 实验：常驻 rAF 版本（对比惰性版）
     const draw = (timestamp: number) => {
       if (!startTimeRef.current) {
         startTimeRef.current = timestamp;
@@ -131,7 +133,10 @@ export function ClickSpark({
     };
 
     animationId = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(animationId);
+
+    return () => {
+      if (animationId !== null) cancelAnimationFrame(animationId);
+    };
   }, [sparkColor, sparkSize, sparkRadius, sparkCount, duration, easeFunc, extraScale]);
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
@@ -152,6 +157,7 @@ export function ClickSpark({
     }));
 
     sparksRef.current.push(...newSparks);
+    startLoopRef.current?.();
   };
 
   return (

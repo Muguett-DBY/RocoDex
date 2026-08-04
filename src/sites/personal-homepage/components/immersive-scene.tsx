@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { Bloom, ChromaticAberration, EffectComposer, Noise } from "@react-three/postprocessing";
 import { BlendFunction } from "postprocessing";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -515,6 +515,13 @@ function World(
   },
 ) {
   const chromaticOffset = useMemo(() => new THREE.Vector2(0.0007, 0.0005), []);
+  const advance = useThree((state) => state.advance);
+
+  // quality / reducedMotion 切换（如进入 calm）时同步渲染一帧，
+  // 避免切换后的 invalidate 渲染依赖 rAF 时序（截图窗口内迟到渲染导致帧对比不稳定）
+  useEffect(() => {
+    advance(Date.now());
+  }, [props.quality, props.reducedMotion, advance]);
 
   return (
     <>
@@ -571,8 +578,8 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
           data-cstd-webgl-canvas
           camera={{ position: [0, 0, 7.2], fov: 42, near: 0.1, far: 40 }}
           dpr={quality === "full" ? [1, 1.5] : 1}
+          gl={{ antialias: true, alpha: false, powerPreference: "high-performance", preserveDrawingBuffer: true }}
           frameloop={props.active && quality === "full" ? "always" : "demand"}
-          gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
           onCreated={({ gl }) => {
             gl.outputColorSpace = THREE.SRGBColorSpace;
             gl.toneMapping = THREE.ACESFilmicToneMapping;

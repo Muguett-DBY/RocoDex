@@ -29,6 +29,7 @@ type LetterRevealProps = {
   /** immediate = 挂载即播；view = 进入视口触发 */
   trigger?: "immediate" | "view";
   threshold?: number;
+  /** anime.js 缓动，默认 spring 物理（轻微果冻回弹） */
   ease?: string;
   disabled?: boolean;
   className?: string;
@@ -49,7 +50,7 @@ export function LetterReveal({
   fromRotate = 4,
   fromSkew = 7,
   from = "bottom",
-  ease = "outExpo",
+  ease = "spring(1, 110, 16)",
   trigger = "immediate",
   threshold = 0.3,
   disabled = false,
@@ -57,6 +58,8 @@ export function LetterReveal({
   charClassName = "",
 }: LetterRevealProps) {
   const containerRef = useRef<HTMLSpanElement>(null);
+  const animationRef = useRef<ReturnType<typeof animate> | null>(null);
+  const playedRef = useRef(false);
 
   const play = useCallback(() => {
     const container = containerRef.current;
@@ -77,7 +80,8 @@ export function LetterReveal({
     });
 
     const frame = window.requestAnimationFrame(() => {
-      animate(targets, {
+      animationRef.current?.pause();
+      animationRef.current = animate(targets, {
         opacity: [0, 1],
         translateY: [sign * fromY, 0],
         rotate: [fromRotate, 0],
@@ -85,16 +89,46 @@ export function LetterReveal({
         duration,
         delay: stagger(staggerDelay, { start: delay }),
         ease,
+        onComplete: () => {
+          // 动画完成：锁死最终态并释放合成层提示（杜绝 spring 残余振荡）
+          targets.forEach((target) => {
+            target.style.transform = "translateY(0) rotate(0deg) skewY(0deg)";
+            target.style.opacity = "1";
+            target.style.willChange = "auto";
+          });
+          animationRef.current = null;
+        },
       });
     });
 
     return () => window.cancelAnimationFrame(frame);
   }, [from, fromY, fromRotate, fromSkew, duration, staggerDelay, delay, ease]);
 
+  // 锁死最终态：disabled（如切 calm）时立即停止动画并归零，
+  // 避免动画跨模式切换继续播放导致画面漂移（e2e 帧对比依赖静止）
+  const lockFinal = useCallback(() => {
+    const container = containerRef.current;
+    if (!container) return;
+    animationRef.current?.pause();
+    animationRef.current = null;
+    container
+      .querySelectorAll<HTMLElement>("[data-letter-reveal-unit]")
+      .forEach((target) => {
+        target.style.transform = "translateY(0) rotate(0deg) skewY(0deg)";
+        target.style.opacity = "1";
+        target.style.willChange = "auto";
+      });
+  }, []);
+
   useLayoutEffect(() => {
-    if (disabled || trigger !== "immediate") return undefined;
+    if (disabled) {
+      lockFinal();
+      return undefined;
+    }
+    if (trigger !== "immediate" || playedRef.current) return undefined;
+    playedRef.current = true;
     return play();
-  }, [disabled, trigger, play]);
+  }, [disabled, trigger, play, lockFinal]);
 
   useEffect(() => {
     if (disabled || trigger !== "view") return;
@@ -104,8 +138,9 @@ export function LetterReveal({
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
+          if (!entry.isIntersecting || playedRef.current) return;
           observer.disconnect();
+          playedRef.current = true;
           play();
         });
       },

@@ -1,5 +1,35 @@
 @import "tailwindcss";
 
+/* 合成器线程漂浮动画（不占主线程，calm 模式通过移除 class 停止） */
+@keyframes cstd-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(var(--cstd-bob-amp, -10px));
+  }
+}
+
+@keyframes cstd-float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(var(--cstd-float-amp, 5px));
+  }
+}
+
+@keyframes cstd-shine-sweep {
+  0% {
+    transform: translateX(-110%);
+  }
+  100% {
+    transform: translateX(60%);
+  }
+}
+
 :root {
   --background: #f7f6f1;
   --foreground: #172033;
