@@ -810,6 +810,8 @@ export function PersonalHomepage() {
   const activeChapterRef = useRef<ChapterId>("hero");
   const [activeChapter, setActiveChapter] = useState<ChapterId>("hero");
   const [activeSystemId, setActiveSystemId] = useState<CstdSystem["id"]>(cstdSystems[0].id);
+  const [termPath, setTermPath] = useState("~");
+  const [terminalMinimized, setTerminalMinimized] = useState(false);
   const heroRef = useRef<HTMLElement>(null);
   const { scrollY, scrollYProgress } = useScroll();
   const pageProgress = useSpring(scrollYProgress, { stiffness: 110, damping: 24, mass: 0.35 });
@@ -916,6 +918,12 @@ export function PersonalHomepage() {
             { text: "  open <项目名>         — 打开项目（新窗口）", tone: "dim" },
             { text: "  top                  — 实时系统负载", tone: "dim" },
             { text: "  ping custard.top     — 网络延迟测试", tone: "dim" },
+            { text: "  tree                 — 目录树", tone: "dim" },
+            { text: "  whois                — 域名信息", tone: "dim" },
+            { text: "  curl <host>          — 模拟 HTTP 请求", tone: "dim" },
+            { text: "  matrix               — 数字雨（彩蛋）", tone: "dim" },
+            { text: "  history              — 命令历史", tone: "dim" },
+            { text: "  echo <文本>          — 回显", tone: "dim" },
             { text: "  neofetch             — 系统信息", tone: "dim" },
             { text: "  date                 — 当前时间", tone: "dim" },
             { text: "  clear                — 清屏", tone: "dim" },
@@ -956,9 +964,58 @@ export function PersonalHomepage() {
           const id = map[target ?? ""];
           if (id) {
             document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+            setTermPath(target ?? "~");
             echo([{ text: `→ ~/${target}`, tone: "accent" }]);
           } else {
             echo([{ text: `cd: no such directory: ${target ?? ""}`, tone: "error" }]);
+          }
+          break;
+        }
+        case "tree":
+          echo([
+            { text: "~/", tone: "accent" },
+            { text: "├── systems/", tone: "dim" },
+            ...cstdSystems.map((system) => ({
+              text: `│   ├── ${system.id}.service [RUNNING]`,
+              tone: "default" as const,
+            })),
+            { text: "├── work/", tone: "dim" },
+            ...proofProjects.map((project) => ({
+              text: `│   ├── ${project.id}/ (${project.title})`,
+              tone: "default" as const,
+            })),
+            { text: "├── path/", tone: "dim" },
+            { text: "│   └── 2022 → 2026 learning log", tone: "default" },
+            { text: "└── README.md — 把产品、数据、AI 和研究折进一条会呼吸的系统。", tone: "dim" },
+          ]);
+          break;
+        case "echo": {
+          const rest = cmd.slice(4).trim();
+          echo([{ text: rest || "", tone: "default" }]);
+          break;
+        }
+        case "whois":
+          echo([
+            { text: "Domain: custard.top", tone: "dim" },
+            { text: "Registrant: 奶黄包 (product engineer)", tone: "default" },
+            { text: "Registered: 2022 · Updated: 2026", tone: "dim" },
+            { text: "Status: clientTransferProhibited", tone: "dim" },
+            { text: "Name servers: curiosity.work · persistence.dev · taste.studio", tone: "accent" },
+          ]);
+          break;
+        case "curl": {
+          const target = cmd.split(/\s+/)[1];
+          if (target && target.includes("custard.top")) {
+            echo([
+              { text: "HTTP/1.1 200 OK", tone: "dim", type: 7 },
+              { text: "Content-Type: text/html; charset=utf-8", tone: "dim", type: 7 },
+              { text: "Cache-Control: public, max-age=3600", tone: "dim", type: 7 },
+              { text: "", type: 0 },
+              { text: "<!doctype html><title>cstd@custard.top</title>", tone: "default", type: 7 },
+              { text: "<body class='terminal'>把产品、数据、AI 和研究，折进一条会呼吸的系统。</body>", tone: "default", type: 7 },
+            ]);
+          } else {
+            echo([{ text: `curl: could not resolve host: ${target ?? ""}`, tone: "error" }]);
           }
           break;
         }
@@ -1221,15 +1278,40 @@ export function PersonalHomepage() {
         >
           {/* 交互终端窗口 */}
           <div className="relative overflow-hidden rounded-lg border border-[#2a2d33] bg-[#0b0c0e]/80 shadow-[0_40px_120px_rgba(0,0,0,0.6)] transition-[border-color,box-shadow] duration-300 focus-within:border-[#33ff66]/50 focus-within:shadow-[0_0_0_1px_rgba(51,255,102,0.25),0_0_60px_rgba(51,255,102,0.15),0_40px_120px_rgba(0,0,0,0.6)]">
-            <TerminalBar title="cstd@custard.top: ~" right={<span className="flex items-center gap-1.5">
-              <span className="relative flex h-2 w-2">
-                {!reducedMotion && (
-                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#33ff66] opacity-60" />
-                )}
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#33ff66]" />
-              </span>
-              INTERACTIVE
-            </span>} />
+            <TerminalBar
+              title={`cstd@custard.top: ${termPath}`}
+              right={
+                <span className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setTerminalMinimized((current) => !current)}
+                    aria-label={terminalMinimized ? "展开终端窗口" : "最小化终端窗口"}
+                    className="flex h-5 items-center rounded border border-[#2a2d33] px-2 font-mono text-[10px] font-bold leading-none text-[#8a8f98] transition-colors hover:border-[#33ff66]/50 hover:text-[#33ff66] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#33ff66]"
+                  >
+                    {terminalMinimized ? "+" : "–"}
+                  </button>
+                  <span className="flex items-center gap-1.5">
+                    <span className="relative flex h-2 w-2">
+                      {!reducedMotion && (
+                        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#33ff66] opacity-60" />
+                      )}
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-[#33ff66]" />
+                    </span>
+                    INTERACTIVE
+                  </span>
+                </span>
+              }
+            />
+            <m.div
+              initial={false}
+              animate={{ height: terminalMinimized ? 0 : "auto", opacity: terminalMinimized ? 0 : 1 }}
+              transition={
+                reducedMotion
+                  ? { duration: 0 }
+                  : { height: { type: "spring", stiffness: 260, damping: 30 }, opacity: { duration: 0.22 } }
+              }
+              className="overflow-hidden"
+            >
             <div className="px-5 py-5 md:px-8 md:py-6">
               <TerminalCommand
                 bootLines={heroBootLines}
@@ -1243,6 +1325,7 @@ export function PersonalHomepage() {
                 }}
               />
             </div>
+            </m.div>
             {/* CRT 扫描线（克制） */}
             <div
               aria-hidden="true"
