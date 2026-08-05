@@ -103,6 +103,16 @@
   }
 }
 
+/* footer 终端风锯齿波 */
+@keyframes cstd-wave-slide {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 :root {
   --background: #f7f6f1;
   --foreground: #172033;
