@@ -63,6 +63,16 @@
   }
 }
 
+/* conic 边框旋转（Work 卡片 hover 扫描） */
+@keyframes cstd-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 :root {
   --background: #f7f6f1;
   --foreground: #172033;

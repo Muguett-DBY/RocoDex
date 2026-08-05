@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { clsx } from "clsx";
+import { terminalSound } from "./terminal-sound";
 
 export type TerminalLine = {
   /** 内容（支持 \n 换行） */
@@ -63,6 +64,11 @@ export function TerminalCommand({
   const inputRef = useRef<HTMLInputElement>(null);
   const typeRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const bootDoneRef = useRef(disabled);
+  const [muted, setMuted] = useState(terminalSound.isMuted());
+  // echo 打字机队列
+  const echoQueueRef = useRef<TerminalLine[]>([]);
+  const echoTypingRef = useRef(false);
+  const echoTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // 命令历史持久化（↑ 可回翻上次会话）
   useEffect(() => {
@@ -127,12 +133,56 @@ export function TerminalCommand({
     if (el) el.scrollTop = el.scrollHeight;
   }, [lines, input]);
 
+  // echo：支持打字机输出（type>0 的行逐字打出），普通行立即追加
   const echo = useCallback((output: TerminalLine[]) => {
-    setLines((current) => [...current, ...output]);
+    // 用户输入打断 boot 打字机
+    if (typeRef.current) {
+      clearInterval(typeRef.current);
+      typeRef.current = null;
+    }
+    // 错误行提示音
+    if (output.some((line) => line.tone === "error")) {
+      terminalSound.error();
+    }
+    echoQueueRef.current.push(...output);
+    if (echoTypingRef.current) return;
+    echoTypingRef.current = true;
+
+    const pump = () => {
+      if (echoQueueRef.current.length === 0) {
+        echoTypingRef.current = false;
+        if (echoTimerRef.current) {
+          clearInterval(echoTimerRef.current);
+          echoTimerRef.current = null;
+        }
+        return;
+      }
+      const line = echoQueueRef.current.shift() as TerminalLine;
+      const speed = line.type ?? 0;
+      if (speed <= 0) {
+        setLines((current) => [...current, line]);
+        pump();
+        return;
+      }
+      let charIndex = 0;
+      echoTimerRef.current = setInterval(() => {
+        charIndex += 1;
+        setLines((current) => [...current.slice(0, -1), { ...line, text: line.text.slice(0, charIndex) }]);
+        if (charIndex >= line.text.length) {
+          if (echoTimerRef.current) {
+            clearInterval(echoTimerRef.current);
+            echoTimerRef.current = null;
+          }
+          pump();
+        }
+      }, speed);
+    };
+    pump();
   }, []);
 
   function handleSubmit() {
     const raw = input.trim();
+    terminalSound.enter();
     if (raw === "clear") {
       setLines([]);
       setInput("");
@@ -191,6 +241,7 @@ export function TerminalCommand({
       handleSubmit();
     } else if (event.key === "Tab") {
       event.preventDefault();
+      terminalSound.tab();
       handleTab();
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
@@ -204,6 +255,8 @@ export function TerminalCommand({
         historyIndexRef.current += 1;
         setInput(historyRef.current[historyIndexRef.current] ?? "");
       }
+    } else if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
+      terminalSound.key();
     }
   }
 
@@ -258,6 +311,20 @@ export function TerminalCommand({
             className="inline-block h-[1.1em] w-[0.55em] flex-none bg-[#33ff66]"
             style={{ animation: disabled ? undefined : "cstd-blink 1.1s step-end infinite" }}
           />
+          <button
+            type="button"
+            onClick={() => {
+              const next = !muted;
+              setMuted(next);
+              terminalSound.toggle(next);
+            }}
+            aria-label={muted ? "开启终端音效" : "静音终端音效"}
+            aria-pressed={muted}
+            title={muted ? "开启音效" : "静音"}
+            className="flex-none rounded border border-transparent px-1.5 py-0.5 text-[11px] leading-none text-[#5b616b] transition-colors hover:border-[#33ff66]/40 hover:text-[#33ff66] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#33ff66]"
+          >
+            {muted ? "🔇" : "🔊"}
+          </button>
         </div>
       </div>
     </div>
