@@ -3,6 +3,15 @@ import { describe, expect, test } from "vitest";
 
 const landingSource = readFileSync(new URL("./personal-homepage.tsx", import.meta.url), "utf8");
 const sceneSource = readFileSync(new URL("./immersive-scene.tsx", import.meta.url), "utf8");
+// 章节级 code-splitting 后，章节组件位于独立文件；合并读取以保持架构断言强度
+const chapterSource = [
+  "signal-strip",
+  "systems-chapter",
+  "selected-work",
+  "research-path",
+]
+  .map((name) => readFileSync(new URL(`./sections/${name}.tsx`, import.meta.url), "utf8"))
+  .join("\n");
 
 describe("CSTD immersive systems world", () => {
   test("builds a real WebGL scene from generated cinematic materials", () => {
@@ -31,19 +40,19 @@ describe("CSTD immersive systems world", () => {
   });
 
   test("composes systems, proof, and research as continuous cinematic chapters", () => {
-    expect(landingSource).toContain('data-cstd-chapter="systems"');
-    expect(landingSource).toContain('data-cstd-chapter="proof"');
-    expect(landingSource).toContain('data-cstd-chapter="path"');
-    expect(landingSource).toContain("data-cstd-system={system.id}");
-    expect(landingSource).toContain("data-cstd-proof={proof.projectId}");
-    expect(landingSource).toContain("data-cstd-project-plane={proof.projectId}");
-    expect(landingSource).toContain("data-cstd-learning-step={entry.year}");
-    expect(landingSource).toContain("data-cstd-research-state={activeYear}");
+    expect(chapterSource).toContain('data-cstd-chapter="systems"');
+    expect(chapterSource).toContain('data-cstd-chapter="proof"');
+    expect(chapterSource).toContain('data-cstd-chapter="path"');
+    expect(chapterSource).toContain("data-cstd-system={system.id}");
+    expect(chapterSource).toContain("data-cstd-proof={proof.projectId}");
+    expect(chapterSource).toContain("data-cstd-project-plane={proof.projectId}");
+    expect(chapterSource).toContain("data-cstd-learning-step={entry.year}");
+    expect(chapterSource).toContain("data-cstd-research-state={activeYear}");
   });
 
   test("keeps live product links behind the shared external-link policy", () => {
-    expect(landingSource).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
-    expect(landingSource).toContain("{...targetProps}");
+    expect(chapterSource).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
+    expect(chapterSource).toContain("{...targetProps}");
     expect(sceneSource).toContain('data-cstd-render-quality={quality}');
     expect(sceneSource).toContain("data-cstd-render-ready={renderReady}");
     expect(sceneSource).toContain('data-cstd-render-fallback={contextLost ? "true" : "false"}');
@@ -56,7 +65,7 @@ describe("CSTD immersive systems world", () => {
     expect(landingSource).toContain('return "full";');
     expect(landingSource).not.toContain("prefers-reduced-motion: reduce");
     expect(landingSource).toContain("data-cstd-motion-toggle");
-    expect(landingSource).toContain('data-cstd-path-mode="vertical"');
+    expect(chapterSource).toContain('data-cstd-path-mode="vertical"');
     expect(landingSource).not.toContain("min-h-[420svh]");
     expect(landingSource).not.toContain("w-[400vw]");
     expect(landingSource).not.toContain("will-change-transform");
@@ -69,7 +78,7 @@ describe("CSTD immersive systems world", () => {
     expect(landingSource).toContain(
       'active: documentVisible && (activeChapter === "hero" || activeChapter === "systems")',
     );
-    expect(landingSource).toContain('loading="lazy"');
+    expect(chapterSource).toContain('loading="lazy"');
   });
 
   test("defers animation and WebGL enhancements behind the static first paint", () => {
