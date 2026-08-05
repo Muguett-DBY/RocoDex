@@ -5,8 +5,8 @@ const NOISE_SVG = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' 
 type NoiseOverlayProps = {
   /** 不透明度，默认极低做胶片质感 */
   opacity?: number;
-  /** 混合模式 */
-  blendMode?: "overlay" | "soft-light" | "multiply" | "screen";
+  /** 混合模式；normal = 普通透明层（性能最佳） */
+  blendMode?: "normal" | "overlay" | "soft-light" | "multiply" | "screen";
   /** 兼容旧接口：静止（实现上本就静态，恒为 true 语义） */
   staticMode?: boolean;
   className?: string;
@@ -18,7 +18,7 @@ type NoiseOverlayProps = {
  */
 export function NoiseOverlay({
   opacity = 0.05,
-  blendMode = "overlay",
+  blendMode = "normal",
   staticMode = true,
   className = "",
 }: NoiseOverlayProps) {
@@ -31,7 +31,7 @@ export function NoiseOverlay({
         backgroundImage: `url("${NOISE_SVG}")`,
         backgroundSize: "160px 160px",
         opacity: staticMode ? opacity : opacity,
-        mixBlendMode: blendMode,
+        mixBlendMode: blendMode === "normal" ? undefined : blendMode,
       }}
     />
   );
