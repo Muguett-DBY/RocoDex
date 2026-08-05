@@ -57,9 +57,9 @@ function MatrixRain({ disabled }: { disabled: boolean }) {
 
     if (disabled) {
       // 静态一帧
-      ctx.fillStyle = "#0b0c0e";
+      ctx.fillStyle = "#0d0a16";
       ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = "#33ff66";
+      ctx.fillStyle = "#fcee0a";
       ctx.font = `${fontSize}px monospace`;
       for (let i = 0; i < cols; i += 1) {
         const y = (Math.abs(drops[i]) % (height / fontSize)) * fontSize;
@@ -71,9 +71,9 @@ function MatrixRain({ disabled }: { disabled: boolean }) {
     let raf = 0;
     const start = performance.now();
     const draw = () => {
-      ctx.fillStyle = "rgba(11,12,14,0.12)";
+      ctx.fillStyle = "rgba(13,10,22,0.12)";
       ctx.fillRect(0, 0, width, height);
-      ctx.fillStyle = "#33ff66";
+      ctx.fillStyle = "#fcee0a";
       ctx.font = `${fontSize}px monospace`;
       for (let i = 0; i < cols; i += 1) {
         const ch = MATRIX_CHARS[Math.floor(Math.random() * MATRIX_CHARS.length)];
@@ -84,7 +84,7 @@ function MatrixRain({ disabled }: { disabled: boolean }) {
       if (performance.now() - start < 4000) {
         raf = requestAnimationFrame(draw);
       } else {
-        ctx.fillStyle = "#0b0c0e";
+        ctx.fillStyle = "#0d0a16";
         ctx.fillRect(0, 0, width, height);
       }
     };
@@ -93,7 +93,7 @@ function MatrixRain({ disabled }: { disabled: boolean }) {
   }, [disabled]);
 
   return (
-    <div ref={wrapRef} className="my-1 overflow-hidden rounded border border-[#33ff66]/20">
+    <div ref={wrapRef} className="my-1 overflow-hidden rounded border border-[#fcee0a]/20">
       <canvas ref={canvasRef} className="block h-[200px] w-full" />
     </div>
   );
@@ -101,10 +101,10 @@ function MatrixRain({ disabled }: { disabled: boolean }) {
 const MATRIX_CHARS = "01アイウエオカキクケコサシスセソタチツテト0123ABCDEF";
 
 const TONE_CLASS: Record<NonNullable<TerminalLine["tone"]>, string> = {
-  default: "text-[#d7d7d7]",
-  dim: "text-[#8a8f98]",
-  accent: "text-[#33ff66]",
-  warn: "text-[#febc2e]",
+  default: "text-[#e9e6f5]",
+  dim: "text-[#9d96bd]",
+  accent: "text-[#fcee0a]",
+  warn: "text-[#ff2a6d]",
   error: "text-[#ff5f57]",
 };
 
@@ -412,8 +412,8 @@ export function TerminalCommand({
           >
             {line.prompt ? (
               <>
-                <span className="text-[#33ff66]">$ </span>
-                <span className="text-[#d7d7d7]">{line.text}</span>
+                <span className="text-[#fcee0a]">$ </span>
+                <span className="text-[#e9e6f5]">{line.text}</span>
               </>
             ) : (
               line.text
@@ -422,8 +422,8 @@ export function TerminalCommand({
         ))}
         {matrixActive ? <MatrixRain disabled={disabled} /> : null}
         {/* 输入槽：明显的可输入区域 */}
-        <div className="relative mt-1 flex items-center gap-2 rounded-md border border-[#33ff66]/25 bg-[#0e1114] px-3 py-2.5 transition-colors focus-within:border-[#33ff66]/70 focus-within:bg-[#101418]">
-          <span className="flex-none font-bold text-[#33ff66]">$</span>
+        <div className="relative mt-1 flex items-center gap-2 rounded-md border border-[#fcee0a]/25 bg-[#150f26] px-3 py-2.5 transition-colors focus-within:border-[#fcee0a]/70 focus-within:bg-[#191130]">
+          <span className="flex-none font-bold text-[#fcee0a]">$</span>
           <input
             ref={inputRef}
             value={input}
@@ -434,7 +434,7 @@ export function TerminalCommand({
             autoCapitalize="off"
             spellCheck={false}
             aria-label="终端命令输入"
-            className="min-w-0 flex-1 border-none bg-transparent text-[#d7d7d7] caret-transparent outline-none placeholder:text-[#3a3f47]"
+            className="min-w-0 flex-1 border-none bg-transparent text-[#e9e6f5] caret-transparent outline-none placeholder:text-[#4d4468]"
           />
           {/* zsh 风格自动补全建议（灰字，点击补全） */}
           {suggestion ? (
@@ -442,7 +442,7 @@ export function TerminalCommand({
               type="button"
               onClick={() => setInput((current) => current + suggestion)}
               aria-label={`补全为 ${suggestion}`}
-              className="absolute inset-y-0 z-10 flex items-center pr-3 font-mono text-[#3a3f47] hover:text-[#33ff66]/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#33ff66]"
+              className="absolute inset-y-0 z-10 flex items-center pr-3 font-mono text-[#4d4468] hover:text-[#fcee0a]/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fcee0a]"
               style={{ left: `calc(0.6ch + 0.5rem + 0.75rem + ${input.length}ch)` }}
             >
               {suggestion}
@@ -450,7 +450,7 @@ export function TerminalCommand({
           ) : null}
           <span
             aria-hidden="true"
-            className="inline-block h-[1.1em] w-[0.55em] flex-none bg-[#33ff66]"
+            className="inline-block h-[1.1em] w-[0.55em] flex-none bg-[#fcee0a]"
             style={{ animation: disabled ? undefined : "cstd-blink 1.1s step-end infinite" }}
           />
           <button
@@ -463,7 +463,7 @@ export function TerminalCommand({
             aria-label={muted ? "开启终端音效" : "静音终端音效"}
             aria-pressed={muted}
             title={muted ? "开启音效" : "静音"}
-            className="flex h-10 w-10 flex-none items-center justify-center rounded border border-transparent text-sm leading-none text-[#5b616b] transition-colors hover:border-[#33ff66]/40 hover:text-[#33ff66] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#33ff66]"
+            className="flex h-10 w-10 flex-none items-center justify-center rounded border border-transparent text-sm leading-none text-[#6a6390] transition-colors hover:border-[#fcee0a]/40 hover:text-[#fcee0a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fcee0a]"
           >
             {muted ? "🔇" : "🔊"}
           </button>

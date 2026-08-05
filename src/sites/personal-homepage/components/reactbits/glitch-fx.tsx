@@ -65,7 +65,7 @@ export function GlitchFx({
         <>
           <span
             aria-hidden="true"
-            className="absolute inset-0 z-0 inline-block text-[#33ff66]"
+            className="absolute inset-0 z-0 inline-block text-[#fcee0a]"
             style={{
               clipPath: clipGreen,
               transform: `translate(${-2 - jitter.a * 3}px, ${-1 - jitter.b * 2}px)`,
@@ -75,7 +75,7 @@ export function GlitchFx({
           </span>
           <span
             aria-hidden="true"
-            className="absolute inset-0 z-0 inline-block text-[#5b8dff]"
+            className="absolute inset-0 z-0 inline-block text-[#05d9e8]"
             style={{
               clipPath: clipBlue,
               transform: `translate(${2 + jitter.c * 3}px, ${1 + jitter.d * 2}px)`,

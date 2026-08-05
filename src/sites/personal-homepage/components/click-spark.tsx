@@ -27,7 +27,7 @@ interface Spark {
  * canvas 2D 实现，惰性 rAF（无火花时零开销）。
  */
 export function ClickSpark({
-  sparkColor = "#f4b72f",
+  sparkColor = "#ff2a6d",
   sparkSize = 9,
   sparkRadius = 16,
   sparkCount = 10,

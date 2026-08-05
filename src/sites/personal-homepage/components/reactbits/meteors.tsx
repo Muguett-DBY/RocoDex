@@ -49,8 +49,8 @@ export function Meteors({ count = 10, disabled = false, className = "" }: Meteor
           style={{
             left: meteor.left,
             background:
-              "linear-gradient(90deg, transparent 0%, rgba(51,255,102,0.85) 55%, rgba(91,141,255,0.9) 100%)",
-            boxShadow: "0 0 8px rgba(51,255,102,0.45)",
+              "linear-gradient(90deg, transparent 0%, rgba(252,238,10,0.85) 55%, rgba(5,217,232,0.9) 100%)",
+            boxShadow: "0 0 8px rgba(252,238,10,0.45)",
             transform: `translateY(0) rotate(215deg) scaleY(${meteor.size})`,
             animation: `cstd-meteor ${meteor.duration} linear ${meteor.delay} infinite`,
             willChange: "transform, opacity",

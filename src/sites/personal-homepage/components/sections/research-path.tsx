@@ -37,31 +37,31 @@ const learningAssets: Record<CstdLearningEntry["year"], { src: string; alt: stri
 
 const researchAccents = [
   {
-    text: "text-[#33ff66]",
-    background: "bg-[#33ff66]",
-    border: "border-[#33ff66]",
-    glow: "shadow-[0_0_20px_rgba(51,255,102,0.25)]",
+    text: "text-[#fcee0a]",
+    background: "bg-[#fcee0a]",
+    border: "border-[#fcee0a]",
+    glow: "shadow-[0_0_20px_rgba(252,238,10,0.25)]",
     code: "AMBER / ORIGIN",
   },
   {
-    text: "text-[#5b8dff]",
-    background: "bg-[#5b8dff]",
-    border: "border-[#5b8dff]",
-    glow: "shadow-[0_0_20px_rgba(91,141,255,0.22)]",
+    text: "text-[#05d9e8]",
+    background: "bg-[#05d9e8]",
+    border: "border-[#05d9e8]",
+    glow: "shadow-[0_0_20px_rgba(5,217,232,0.22)]",
     code: "COBALT / SIGNAL",
   },
   {
-    text: "text-[#f4b72f]",
-    background: "bg-[#f4b72f]",
-    border: "border-[#f4b72f]",
-    glow: "shadow-[0_0_20px_rgba(244,183,47,0.22)]",
+    text: "text-[#ff2a6d]",
+    background: "bg-[#ff2a6d]",
+    border: "border-[#ff2a6d]",
+    glow: "shadow-[0_0_20px_rgba(255,42,109,0.22)]",
     code: "CORAL / STRUCTURE",
   },
   {
-    text: "text-[#7ee8a2]",
-    background: "bg-[#7ee8a2]",
-    border: "border-[#7ee8a2]",
-    glow: "shadow-[0_0_20px_rgba(126,232,162,0.2)]",
+    text: "text-[#c8f04c]",
+    background: "bg-[#c8f04c]",
+    border: "border-[#c8f04c]",
+    glow: "shadow-[0_0_20px_rgba(200,240,76,0.2)]",
     code: "MINT / CONTINUUM",
   },
 ] as const;
@@ -98,11 +98,11 @@ function ResearchPathPanel({
           sizes="100vw"
           className="scale-125 object-cover opacity-[0.07] saturate-50 transition duration-1000 group-hover:scale-[1.29] group-hover:opacity-[0.12] group-hover:saturate-100"
         />
-        <div className="absolute inset-0 bg-[#0b0c0e]/85" />
+        <div className="absolute inset-0 bg-[#0d0a16]/85" />
         <span className="absolute -bottom-12 right-2 font-mono text-[13rem] font-black leading-none text-white/[0.03] md:text-[20rem] lg:-right-5 lg:text-[27rem]">
           {entry.year.slice(2)}
         </span>
-        <span className="absolute inset-x-0 top-[42%] h-px bg-[#2a2d33]" />
+        <span className="absolute inset-x-0 top-[42%] h-px bg-[#33284f]" />
       </div>
 
       {/* 年份发光节点（commit 点） */}
@@ -110,7 +110,7 @@ function ResearchPathPanel({
         aria-hidden="true"
         className={clsx(
           "absolute left-3 top-1/2 z-30 hidden h-3.5 w-3.5 -translate-y-1/2 rotate-45 transition-all duration-500 lg:block",
-          active ? `${accent.background} ${accent.glow} scale-125` : "bg-[#3a3f47]",
+          active ? `${accent.background} ${accent.glow} scale-125` : "bg-[#4d4468]",
         )}
       />
 
@@ -124,7 +124,7 @@ function ResearchPathPanel({
         viewport={{ amount: 0.28, once: true }}
         transition={springSoft}
       >
-        <div className="flex items-center gap-4 text-[10px] font-bold text-[#8a8f98] md:text-xs">
+        <div className="flex items-center gap-4 text-[10px] font-bold text-[#9d96bd] md:text-xs">
           <span className={clsx("rounded-sm border border-current px-2 py-0.5", accent.text)}>commit {String(index + 1).padStart(2, "0")}</span>
           <span aria-hidden="true" className={clsx("h-px w-12", accent.background)} />
           <span>{entry.focus}</span>
@@ -133,10 +133,10 @@ function ResearchPathPanel({
           <CountUp disabled={reducedMotion} value={Number(entry.year)} duration={1150} threshold={0.3} />
         </p>
         <h3 className="mt-6 text-balance text-4xl font-black leading-[0.96] tracking-[0] md:text-5xl xl:text-6xl">{entry.title}</h3>
-        <p className="mt-7 max-w-lg text-balance text-base leading-8 text-[#a8adb5]">{entry.note}</p>
-        <div className="mt-10 flex items-center gap-4 text-[10px] font-bold text-[#5a5f66]">
+        <p className="mt-7 max-w-lg text-balance text-base leading-8 text-[#b4acd8]">{entry.note}</p>
+        <div className="mt-10 flex items-center gap-4 text-[10px] font-bold text-[#625b85]">
           <span>{accent.code}</span>
-          <span aria-hidden="true" className="h-px flex-1 bg-[#2a2d33]" />
+          <span aria-hidden="true" className="h-px flex-1 bg-[#33284f]" />
           <span>{String(index + 1).padStart(2, "0")} / {String(cstdLearningPath.length).padStart(2, "0")}</span>
         </div>
       </m.div>
@@ -178,7 +178,7 @@ function ResearchPathPanel({
         <a
           href="#cstd-footer"
           aria-label="继续到页脚"
-          className="absolute bottom-8 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-md border border-[#3a3f47] text-[#8a8f98] transition-colors hover:border-[#33ff66] hover:text-[#33ff66] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#33ff66] md:right-10 lg:right-16"
+          className="absolute bottom-8 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-md border border-[#4d4468] text-[#9d96bd] transition-colors hover:border-[#fcee0a] hover:text-[#fcee0a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#fcee0a] md:right-10 lg:right-16"
         >
           <ArrowDown aria-hidden="true" className="h-5 w-5" />
         </a>
@@ -222,16 +222,16 @@ function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
       data-cstd-path-mode="vertical"
       data-cstd-path-continuous="true"
       aria-labelledby="path-heading"
-      className="relative z-10 bg-[#0b0c0e] text-[#d7d7d7] contain-paint"
+      className="relative z-10 bg-[#0d0a16] text-[#e9e6f5] contain-paint"
     >
       <Suspense fallback={null}>
-        <LazyTracingProgress disabled={reducedMotion} color="#33ff66" className="left-4 md:left-8" />
+        <LazyTracingProgress disabled={reducedMotion} color="#fcee0a" className="left-4 md:left-8" />
       </Suspense>
       <div data-cstd-path-stage className="relative">
-        <header className="relative z-30 border-b border-[#2a2d33] px-5 pb-10 pt-24 md:px-10 lg:px-16 lg:pb-14 lg:pt-32">
+        <header className="relative z-30 border-b border-[#33284f] px-5 pb-10 pt-24 md:px-10 lg:px-16 lg:pb-14 lg:pt-32">
           <div className="flex items-end justify-between gap-10">
             <div>
-              <p className="font-mono text-xs font-black text-[#33ff66]">$ git log --oneline ▍</p>
+              <p className="font-mono text-xs font-black text-[#fcee0a]">$ git log --oneline ▍</p>
               <h2 id="path-heading" className="mt-3 max-w-5xl text-4xl font-black leading-[0.96] tracking-[0] md:text-6xl">
                 <LetterReveal trigger="view" disabled={reducedMotion} staggerDelay={26} duration={800} fromY={90} fromRotate={3}>
                   学习不是履历，是镜头继续向前。
@@ -239,17 +239,17 @@ function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
               </h2>
             </div>
             <div className="hidden items-end gap-5 font-mono lg:flex">
-              <span className="pb-2 text-[10px] font-bold text-[#5a5f66]">commit {String(activeIndex + 1).padStart(2, "0")}/{String(cstdLearningPath.length).padStart(2, "0")}</span>
+              <span className="pb-2 text-[10px] font-bold text-[#625b85]">commit {String(activeIndex + 1).padStart(2, "0")}/{String(cstdLearningPath.length).padStart(2, "0")}</span>
               <span className="text-7xl font-black leading-none text-white/10">{activeYear}</span>
             </div>
           </div>
-          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-[#2a2d33]">
+          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-[#33284f]">
             <m.div
               data-cstd-path-progress
               className="h-px origin-left"
               style={{
-                background: "linear-gradient(90deg, #33ff66, #7ee8a2)",
-                boxShadow: "0 0 10px rgba(51,255,102,0.5)",
+                background: "linear-gradient(90deg, #fcee0a, #c8f04c)",
+                boxShadow: "0 0 10px rgba(252,238,10,0.5)",
               }}
               animate={{ scaleX: (activeIndex + 1) / cstdLearningPath.length }}
               transition={springSnappy}

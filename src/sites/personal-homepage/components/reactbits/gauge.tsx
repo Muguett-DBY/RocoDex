@@ -51,7 +51,7 @@ export function Gauge({ value, label, unit = "", disabled = false }: GaugeProps)
     <div className="flex flex-col items-center gap-1 font-mono">
       <div className="relative">
         <svg viewBox="0 0 120 120" className="h-24 w-24 md:h-28 md:w-28" aria-hidden="true">
-          <circle cx="60" cy="60" r={radius} fill="none" stroke="#1c1f24" strokeWidth="10" />
+          <circle cx="60" cy="60" r={radius} fill="none" stroke="#251c40" strokeWidth="10" />
           <circle
             cx="60"
             cy="60"
@@ -67,19 +67,19 @@ export function Gauge({ value, label, unit = "", disabled = false }: GaugeProps)
           />
           <defs>
             <linearGradient id="cstd-gauge-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#33ff66" />
-              <stop offset="100%" stopColor="#5b8dff" />
+              <stop offset="0%" stopColor="#fcee0a" />
+              <stop offset="100%" stopColor="#05d9e8" />
             </linearGradient>
           </defs>
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-lg font-bold text-[#d7d7d7]">
+          <span className="text-lg font-bold text-[#e9e6f5]">
             {clamped}
-            <span className="text-[10px] text-[#8a8f98]">{unit}</span>
+            <span className="text-[10px] text-[#9d96bd]">{unit}</span>
           </span>
         </div>
       </div>
-      <span className="text-[10px] font-bold tracking-[0.18em] text-[#8a8f98]">{label}</span>
+      <span className="text-[10px] font-bold tracking-[0.18em] text-[#9d96bd]">{label}</span>
     </div>
   );
 }
