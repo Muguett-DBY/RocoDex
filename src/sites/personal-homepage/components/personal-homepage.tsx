@@ -85,13 +85,11 @@ const heroSignals = [
   "RESEARCH MODELS",
 ] as const;
 
-// Hero 浮动进程标签：位置（视口 %）、视差深度、漂浮参数
+// Hero 浮动进程标签：位置（视口 %）、视差深度、漂浮参数（精简 3 个，全部贴边不遮挡中央内容）
 const heroOrbitItems: OrbitItem[] = [
-  { label: "PROC 001 · PRODUCT ENGINEERING", left: 6, top: 22, depth: 1.5, float: 8, speed: 1.1, phase: 0 },
-  { label: "PROC 002 · AI CREATION", left: 82, top: 16, depth: 1.1, float: 10, speed: 0.9, phase: 2.1 },
-  { label: "PROC 003 · DATA SYSTEMS", left: 88, top: 58, depth: 1.7, float: 7, speed: 1.3, phase: 4.2 },
-  { label: "PROC 004 · EDGE DELIVERY", left: 3, top: 64, depth: 0.9, float: 9, speed: 0.75, phase: 1.2 },
-  { label: "PROC 005 · RESEARCH MODELS", left: 44, top: 10, depth: 1.3, float: 8, speed: 1.05, phase: 3.3 },
+  { label: "PROC 001 · PRODUCT ENGINEERING", left: 3, top: 24, depth: 1.5, float: 8, speed: 1.1, phase: 0 },
+  { label: "PROC 003 · DATA SYSTEMS", left: 90, top: 62, depth: 1.7, float: 7, speed: 1.3, phase: 4.2 },
+  { label: "PROC 005 · RESEARCH MODELS", left: 86, top: 12, depth: 1.1, float: 9, speed: 0.9, phase: 2.4 },
 ];
 
 const learningAssets: Record<CstdLearningEntry["year"], { src: string; alt: string }> = {
@@ -211,7 +209,7 @@ function useDocumentVisibility() {
 }
 
 /** 终端窗口标题栏（红黄绿圆点 + 标题） */
-function TerminalBar({ title, right }: { title: string; right?: string }) {
+function TerminalBar({ title, right }: { title: string; right?: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between border-b border-[#2a2d33] bg-[#14161a] px-4 py-2.5">
       <div className="flex items-center gap-2">
@@ -242,7 +240,7 @@ const heroBootLines: TerminalLine[] = [
   { text: "uptime", prompt: true, type: 14 },
   { text: "up 4 years, building live products with product, data, AI and research.", type: 10 },
   { text: "", type: 0 },
-  { text: "hint: type 'help' to explore →", tone: "dim", type: 9 },
+  { text: "▸ 这是活的终端 —— 试试输入 help 回车，或按 Tab 补全", tone: "accent", type: 9 },
 ];
 
 function SignalStrip({ reducedMotion }: { reducedMotion: boolean }) {
@@ -1036,10 +1034,16 @@ export function PersonalHomepage() {
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-60"
+          className="object-cover opacity-40"
         />
-        <div className="absolute inset-0 bg-[#0b0c0e]/70" />
-        {enhancementsReady ? <PersonalImmersiveScene {...sceneProps} /> : null}
+        <div className="absolute inset-0 bg-[#0b0c0e]/75" />
+        {enhancementsReady ? (
+          <>
+            <PersonalImmersiveScene {...sceneProps} />
+            {/* 压暗层：让粒子成为氛围而不是噪音 */}
+            <div className="absolute inset-0 bg-[#0b0c0e]/40" />
+          </>
+        ) : null}
       </div>
 
       <NoiseOverlay
@@ -1156,14 +1160,25 @@ export function PersonalHomepage() {
           style={{ y: heroY, opacity: heroOpacity }}
         >
           {/* 交互终端窗口 */}
-          <div className="relative overflow-hidden rounded-lg border border-[#2a2d33] bg-[#0b0c0e]/80 shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
-            <TerminalBar title="cstd@custard.top: ~" right="zsh — 120×40" />
+          <div className="relative overflow-hidden rounded-lg border border-[#2a2d33] bg-[#0b0c0e]/80 shadow-[0_40px_120px_rgba(0,0,0,0.6)] transition-[border-color,box-shadow] duration-300 focus-within:border-[#33ff66]/50 focus-within:shadow-[0_0_0_1px_rgba(51,255,102,0.25),0_0_60px_rgba(51,255,102,0.15),0_40px_120px_rgba(0,0,0,0.6)]">
+            <TerminalBar title="cstd@custard.top: ~" right={<span className="flex items-center gap-1.5">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#33ff66] opacity-60" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-[#33ff66]" />
+              </span>
+              INTERACTIVE
+            </span>} />
             <div className="px-5 py-5 md:px-8 md:py-6">
               <TerminalCommand
                 bootLines={heroBootLines}
                 disabled={reducedMotion || !enhancementsReady}
                 onCommand={handleTerminalCommand}
+                placeholder="输入 help 回车，或 Tab 补全…"
                 height="230px"
+                completions={{
+                  cd: ["~", "/", "systems", "work", "projects", "path"],
+                  open: [...proofProjects, ...liveProjects].map((project) => project.id),
+                }}
               />
             </div>
             {/* CRT 扫描线（克制） */}

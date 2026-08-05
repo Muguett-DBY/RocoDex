@@ -23,11 +23,16 @@ type TerminalCommandProps = {
   placeholder?: string;
   /** 命令处理器：返回输出行（可含跳转副作用） */
   onCommand: (command: string, echo: (lines: TerminalLine[]) => void) => void;
+  /** Tab 补全候选：命令名 → 候选列表（cd/open 等） */
+  completions?: Record<string, string[]>;
   /** 可选：已知命令提示列表 */
   className?: string;
   /** 内容区高度 */
   height?: string;
 };
+
+const BUILTIN_COMMANDS = ["help", "whoami", "ls", "cd", "ps", "open", "neofetch", "date", "clear", "exit", "sudo"];
+const HISTORY_KEY = "cstd-terminal-history";
 
 const TONE_CLASS: Record<NonNullable<TerminalLine["tone"]>, string> = {
   default: "text-[#d7d7d7]",
@@ -46,6 +51,7 @@ export function TerminalCommand({
   disabled = false,
   placeholder = "type 'help' for commands",
   onCommand,
+  completions,
   className = "",
   height = "320px",
 }: TerminalCommandProps) {
@@ -57,6 +63,22 @@ export function TerminalCommand({
   const inputRef = useRef<HTMLInputElement>(null);
   const typeRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const bootDoneRef = useRef(disabled);
+
+  // 命令历史持久化（↑ 可回翻上次会话）
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(HISTORY_KEY);
+      if (saved) {
+        const parsed: unknown = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          historyRef.current = parsed.filter((item): item is string => typeof item === "string").slice(-50);
+          historyIndexRef.current = historyRef.current.length;
+        }
+      }
+    } catch {
+      // 存储不可用时历史仅存于本次会话
+    }
+  }, []);
 
   // 打字机：逐行逐字渲染 bootLines
   useEffect(() => {
@@ -119,14 +141,57 @@ export function TerminalCommand({
     if (!raw) return;
     historyRef.current.push(raw);
     historyIndexRef.current = historyRef.current.length;
+    try {
+      window.localStorage.setItem(HISTORY_KEY, JSON.stringify(historyRef.current.slice(-50)));
+    } catch {
+      // 存储不可用则历史仅存于本次会话
+    }
     setLines((current) => [...current, { text: raw, prompt: true }]);
     onCommand(raw, echo);
     setInput("");
   }
 
+  /** Tab 补全：命令名 / cd 目录 / open 项目 */
+  function handleTab() {
+    const current = input;
+    const parts = current.split(/\s+/);
+    const last = parts[parts.length - 1] ?? "";
+    if (!last) {
+      setInput("help ");
+      return;
+    }
+    const head = parts[0] ?? "";
+    const candidates =
+      parts.length === 1
+        ? BUILTIN_COMMANDS
+        : (completions?.[head] ?? []);
+    const matches = candidates.filter((candidate) => candidate.startsWith(last));
+    if (matches.length === 0) return;
+    if (matches.length === 1) {
+      parts[parts.length - 1] = matches[0];
+      setInput(parts.join(" ") + (parts.length === 1 ? " " : ""));
+      return;
+    }
+    // 多个候选：公共前缀 + 提示
+    let common = matches[0];
+    for (const candidate of matches) {
+      while (!candidate.startsWith(common)) {
+        common = common.slice(0, -1);
+      }
+    }
+    if (common.length > last.length) {
+      parts[parts.length - 1] = common;
+      setInput(parts.join(" "));
+    }
+    echo([{ text: matches.join("   "), tone: "dim" }]);
+  }
+
   function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
     if (event.key === "Enter") {
       handleSubmit();
+    } else if (event.key === "Tab") {
+      event.preventDefault();
+      handleTab();
     } else if (event.key === "ArrowUp") {
       event.preventDefault();
       if (historyIndexRef.current > 0) {
@@ -173,9 +238,9 @@ export function TerminalCommand({
             )}
           </p>
         ))}
-        {/* 输入行 + 闪烁光标块 */}
-        <p className="flex items-center gap-2">
-          <span className="text-[#33ff66]">$</span>
+        {/* 输入槽：明显的可输入区域 */}
+        <div className="mt-1 flex items-center gap-2 rounded-md border border-[#33ff66]/25 bg-[#0e1114] px-3 py-1.5 transition-colors focus-within:border-[#33ff66]/70 focus-within:bg-[#101418]">
+          <span className="flex-none font-bold text-[#33ff66]">$</span>
           <input
             ref={inputRef}
             value={input}
@@ -193,7 +258,7 @@ export function TerminalCommand({
             className="inline-block h-[1.1em] w-[0.55em] flex-none bg-[#33ff66]"
             style={{ animation: disabled ? undefined : "cstd-blink 1.1s step-end infinite" }}
           />
-        </p>
+        </div>
       </div>
     </div>
   );
