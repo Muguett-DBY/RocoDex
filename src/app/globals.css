@@ -149,11 +149,11 @@ a {
 }
 
 ::selection {
-  background: #a7f3d0;
-  color: #0f172a;
+  background: #fcee0a;
+  color: #0d0a16;
 }
 
 .dark ::selection {
-  background: #065f46;
-  color: #d1fae5;
+  background: #ff2a6d;
+  color: #0d0a16;
 }

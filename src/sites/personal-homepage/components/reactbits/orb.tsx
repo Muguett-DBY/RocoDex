@@ -15,9 +15,9 @@ type OrbProps = {
 export function Orb({ disabled = false, className = "" }: OrbProps) {
   const layers = useMemo(
     () => [
-      { size: 340, x: 12, y: 18, color: "rgba(51,255,102,0.16)", delay: 0, duration: 11 },
-      { size: 240, x: 68, y: 62, color: "rgba(91,141,255,0.12)", delay: 2.4, duration: 9 },
-      { size: 190, x: 42, y: 84, color: "rgba(254,188,46,0.08)", delay: 4.8, duration: 13 },
+      { size: 340, x: 12, y: 18, color: "rgba(252,238,10,0.16)", delay: 0, duration: 11 },
+      { size: 240, x: 68, y: 62, color: "rgba(5,217,232,0.12)", delay: 2.4, duration: 9 },
+      { size: 190, x: 42, y: 84, color: "rgba(255,42,109,0.08)", delay: 4.8, duration: 13 },
     ],
     [],
   );

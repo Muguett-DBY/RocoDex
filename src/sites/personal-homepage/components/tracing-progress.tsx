@@ -18,7 +18,7 @@ type TracingProgressProps = {
  * Aceternity TracingBeam 简化思路，framer-motion 实现，LazyMotion 兼容。
  */
 export function TracingProgress({
-  color = "#f4b72f",
+  color = "#ff2a6d",
   dotSize = 14,
   disabled = false,
   className = "",

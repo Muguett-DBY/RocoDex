@@ -198,7 +198,7 @@ function ParticleCurrent({
   const { positions, colors } = useMemo(() => {
     const pointPositions = new Float32Array(count * 3);
     const pointColors = new Float32Array(count * 3);
-    const palette = [new THREE.Color("#f5efe1"), new THREE.Color("#f4b72f"), new THREE.Color("#2d6fae")];
+    const palette = [new THREE.Color("#f5efe1"), new THREE.Color("#ff2a6d"), new THREE.Color("#2d6fae")];
 
     for (let index = 0; index < count; index += 1) {
       const radius = 2.2 + seeded(index * 3) * 6.8;
@@ -305,7 +305,7 @@ function ArchiveSpine({
     <group ref={groupRef} position={[0, -0.15, -0.45]}>
       <mesh geometry={geometry}>
         <meshPhysicalMaterial
-          color="#f4b72f"
+          color="#ff2a6d"
           emissive="#7a4300"
           emissiveIntensity={0.78}
           roughness={0.18}
@@ -318,8 +318,8 @@ function ArchiveSpine({
       </mesh>
       <mesh geometry={geometry} scale={0.48} position={[0, 0.18, -0.2]}>
         <meshStandardMaterial
-          color="#2e72b3"
-          emissive="#0b3159"
+          color="#05d9e8"
+          emissive="#2a1a5e"
           emissiveIntensity={0.8}
           roughness={0.24}
           metalness={0.42}
@@ -528,7 +528,7 @@ function World(
       <color attach="background" args={["#090a08"]} />
       <ambientLight intensity={0.75} />
       <directionalLight position={[4, 6, 5]} intensity={2.4} color="#fff4db" />
-      <pointLight position={[-4, -2, 3]} intensity={10} distance={10} color="#2e72b3" />
+      <pointLight position={[-4, -2, 3]} intensity={10} distance={10} color="#05d9e8" />
       <BackgroundField {...props} />
       <ParticleCurrent
         progressRef={props.progressRef}

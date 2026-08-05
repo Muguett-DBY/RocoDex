@@ -18,15 +18,21 @@ function SignalStrip({ reducedMotion }: { reducedMotion: boolean }) {
   return (
     <div
       data-cstd-signal-strip
-      className="relative z-20 h-[8svh] min-h-16 overflow-hidden border-y border-[#2a2d33] bg-[#0b0c0e] text-[#33ff66] font-mono"
+      className="relative z-20 h-[8svh] min-h-16 overflow-hidden border-y border-[#33284f] bg-[#0d0a16] text-[#fcee0a] font-mono"
     >
+      {/* 赛博朋克警示条纹（顶部） */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-1 opacity-80"
+        style={{ background: "repeating-linear-gradient(-45deg, #fcee0a 0 10px, #0d0a16 10px 20px)" }}
+      />
       {[0, 1].map((track) => (
         <m.div
           key={track}
           data-cstd-signal-track={track}
           className={clsx(
-            "flex h-1/2 w-max items-center border-[#2a2d33]",
-            track === 0 ? "border-b" : "bg-[#101214] text-[#5b8dff]",
+            "flex h-1/2 w-max items-center border-[#33284f]",
+            track === 0 ? "border-b" : "bg-[#171028] text-[#05d9e8]",
           )}
           animate={reducedMotion ? undefined : { x: track === 0 ? ["0%", "-50%"] : ["-50%", "0%"] }}
           transition={{ duration: track === 0 ? 24 : 31, ease: "linear", repeat: Infinity }}
