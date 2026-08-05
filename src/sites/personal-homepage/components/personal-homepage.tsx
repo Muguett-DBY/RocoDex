@@ -21,6 +21,8 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
+  lazy,
+  Suspense,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { getCstdLinkTargetProps } from "../domain/link-target";
@@ -37,14 +39,23 @@ import {
 } from "../content/systems";
 import { ClickSpark } from "./click-spark";
 import { DecryptedText } from "./decrypted-text";
-import { HeroOrbit, type OrbitItem } from "./hero-orbit";
 import { Magnet } from "./magnet";
-import { NoiseOverlay } from "./noise-overlay";
 import { ShinyText } from "./shiny-text";
-import { SpotlightCard } from "./spotlight-card";
 import { TerminalCommand, type TerminalLine } from "./terminal-command";
-import { TiltFrame } from "./tilt-frame";
-import { TracingProgress } from "./tracing-progress";
+import type { OrbitItem } from "./hero-orbit";
+
+// 特效组件全部动态加载（不进初始 bundle）：ReactBits 风格新组件 + 大体积旧组件
+const LazyGlitchFx = lazy(() => import("./reactbits/glitch-fx").then((m) => ({ default: m.GlitchFx })));
+const LazyMeteors = lazy(() => import("./reactbits/meteors").then((m) => ({ default: m.Meteors })));
+const LazyFocusTitle = lazy(() => import("./reactbits/focus-title").then((m) => ({ default: m.FocusTitle })));
+const LazyGauge = lazy(() => import("./reactbits/gauge").then((m) => ({ default: m.Gauge })));
+const LazyConfettiBurst = lazy(() => import("./reactbits/confetti-burst").then((m) => ({ default: m.ConfettiBurst })));
+const LazyOrb = lazy(() => import("./reactbits/orb").then((m) => ({ default: m.Orb })));
+const LazyTracingProgress = lazy(() => import("./tracing-progress").then((m) => ({ default: m.TracingProgress })));
+const LazyHeroOrbit = lazy(() => import("./hero-orbit").then((m) => ({ default: m.HeroOrbit })));
+const LazySpotlightCard = lazy(() => import("./spotlight-card").then((m) => ({ default: m.SpotlightCard })));
+const LazyNoiseOverlay = lazy(() => import("./noise-overlay").then((m) => ({ default: m.NoiseOverlay })));
+const LazyTiltFrame = lazy(() => import("./tilt-frame").then((m) => ({ default: m.TiltFrame })));
 
 // anime.js 驱动的文字特效走异步 chunk，保住初始 JS 预算
 const LetterReveal = dynamic(
@@ -294,11 +305,21 @@ function SystemsChapter({
       aria-labelledby="systems-heading"
       className="relative z-10 min-h-[150svh] bg-[#0b0c0e] text-[#d7d7d7] contain-paint lg:min-h-[185svh]"
     >
+      {/* ReactBits 风格流星背景（calm 下不渲染） */}
+      <Suspense fallback={null}>
+        <LazyMeteors disabled={reducedMotion} count={8} />
+      </Suspense>
       <div className="sticky top-0 flex min-h-svh items-center px-5 py-24 md:px-10 lg:px-16">
         <div className="mx-auto grid w-full max-w-[1540px] gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
           <div className="flex flex-col justify-between gap-12 lg:min-h-[66svh]">
             <div>
-              <p className="font-mono text-xs font-bold text-[#33ff66]">$ ps aux | grep cstd ▍</p>
+              <p className="font-mono text-xs font-bold text-[#33ff66]">
+                <Suspense fallback={<>$ ps aux | grep cstd ▍</>}>
+                  <LazyGlitchFx disabled={reducedMotion} interval={2600}>
+                    $ ps aux | grep cstd ▍
+                  </LazyGlitchFx>
+                </Suspense>
+              </p>
               <h2 id="systems-heading" className="mt-5 max-w-3xl text-5xl font-black leading-[0.98] tracking-[0] md:text-6xl xl:text-7xl">
                 <span className="block">
                   <LetterReveal trigger="view" disabled={reducedMotion} staggerDelay={30} duration={820} fromY={90} fromRotate={3}>
@@ -313,7 +334,8 @@ function SystemsChapter({
               </h2>
             </div>
 
-            <SpotlightCard
+            <Suspense fallback={null}>
+            <LazySpotlightCard
               disabled={reducedMotion}
               spotlightColor="rgba(51, 255, 102, 0.1)"
               size={680}
@@ -334,8 +356,17 @@ function SystemsChapter({
                 <p className="mt-5 border-t border-[#2a2d33] pt-4 text-xs font-bold leading-6 text-[#33ff66]">
                   $ stack: {activeSystem.stack.join("  /  ")}
                 </p>
+                {/* ReactBits 风格仪表（calm 下静态显示） */}
+                <div className="mt-6 grid grid-cols-3 gap-4 border-t border-[#2a2d33] pt-5">
+                  <Suspense fallback={null}>
+                    <LazyGauge disabled={reducedMotion} value={92} label="HEALTH" unit="%" />
+                    <LazyGauge disabled={reducedMotion} value={38} label="LOAD" unit="%" />
+                    <LazyGauge disabled={reducedMotion} value={12} label="LATENCY" unit="ms" />
+                  </Suspense>
+                </div>
               </m.div>
-            </SpotlightCard>
+            </LazySpotlightCard>
+            </Suspense>
           </div>
 
           <div className="flex flex-col gap-2 font-mono md:gap-3">
@@ -425,7 +456,8 @@ function ProofChapter({ proof, index, reducedMotion }: { proof: CstdProof; index
         </a>
       </div>
 
-      <TiltFrame
+      <Suspense fallback={null}>
+      <LazyTiltFrame
         disabled={reducedMotion}
         rotateAmplitude={5}
         scaleOnHover={1.02}
@@ -469,7 +501,8 @@ function ProofChapter({ proof, index, reducedMotion }: { proof: CstdProof; index
             [LIVE] {project.kicker.toUpperCase()}
           </figcaption>
         </m.figure>
-      </TiltFrame>
+      </LazyTiltFrame>
+      </Suspense>
     </article>
   );
 }
@@ -484,6 +517,10 @@ function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
     >
       {/* 终端暗纹：极淡网格 */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.35]" style={{ backgroundImage: "linear-gradient(#ffffff08 1px, transparent 1px), linear-gradient(90deg, #ffffff08 1px, transparent 1px)", backgroundSize: "48px 48px" }} />
+      {/* ReactBits 风格光球背景（calm 下静态） */}
+      <Suspense fallback={null}>
+        <LazyOrb disabled={reducedMotion} />
+      </Suspense>
 
       <header className="relative border-b border-[#2a2d33] px-5 pb-10 pt-24 md:px-10 lg:px-16 lg:pb-14 lg:pt-32">
         <div className="mx-auto flex max-w-[1540px] flex-col justify-between gap-8 lg:flex-row lg:items-end">
@@ -528,7 +565,14 @@ function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
                   {...targetProps}
                   className="mt-3 flex items-center justify-between gap-4 text-2xl font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#33ff66] md:text-3xl"
                 >
-                  {project.title}
+                  <Suspense fallback={<>{project.title}</>}>
+                    <LazyFocusTitle
+                      text={project.title}
+                      disabled={reducedMotion}
+                      blurRadius={5}
+                      className="md:inline-block"
+                    />
+                  </Suspense>
                   <span className="flex h-10 w-10 flex-none items-center justify-center rounded-md border border-[#33ff66]/40 text-[#33ff66] transition-all duration-300 group-hover:rotate-45 group-hover:bg-[#33ff66] group-hover:text-[#0b0c0e]">
                     <ArrowUpRight aria-hidden="true" className="h-5 w-5" />
                   </span>
@@ -702,7 +746,9 @@ function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
       aria-labelledby="path-heading"
       className="relative z-10 bg-[#0b0c0e] text-[#d7d7d7] contain-paint"
     >
-      <TracingProgress disabled={reducedMotion} color="#33ff66" className="left-4 md:left-8" />
+      <Suspense fallback={null}>
+        <LazyTracingProgress disabled={reducedMotion} color="#33ff66" className="left-4 md:left-8" />
+      </Suspense>
       <div data-cstd-path-stage className="relative">
         <header className="relative z-30 border-b border-[#2a2d33] px-5 pb-10 pt-24 md:px-10 lg:px-16 lg:pb-14 lg:pt-32">
           <div className="flex items-end justify-between gap-10">
@@ -906,7 +952,6 @@ export function PersonalHomepage() {
     (raw: string, echo: (lines: TerminalLine[]) => void) => {
       const cmd = raw.trim();
       const first = cmd.split(/\s+/)[0].toLowerCase();
-
       switch (first) {
         case "help":
           echo([
@@ -1104,12 +1149,25 @@ export function PersonalHomepage() {
           echo([
             { text: "奶黄包 is not in the sudoers file. This incident will be reported. ☕", tone: "error" },
           ]);
+          // 彩蛋：即使没权限，也值得一场庆祝（动态加载 canvas-confetti）
+          if (!reducedMotion) {
+            void import("canvas-confetti").then(({ default: confetti }) => {
+              const defaults = {
+                spread: 80,
+                ticks: 100,
+                zIndex: 200,
+                colors: ["#33ff66", "#5b8dff", "#febc2e", "#d7d7d7"],
+              };
+              confetti({ ...defaults, particleCount: 70, origin: { x: 0.25, y: 0.55 } });
+              confetti({ ...defaults, particleCount: 70, origin: { x: 0.75, y: 0.55 } });
+            });
+          }
           break;
         default:
           echo([{ text: `zsh: command not found: ${first}（试试 help）`, tone: "error" }]);
       }
     },
-    [],
+    [reducedMotion],
   );
 
   return (
@@ -1154,12 +1212,14 @@ export function PersonalHomepage() {
         ) : null}
       </div>
 
-      <NoiseOverlay
-        staticMode={reducedMotion}
-        opacity={0.05}
-        blendMode="normal"
-        className="fixed inset-0 z-[64]"
-      />
+      <Suspense fallback={null}>
+        <LazyNoiseOverlay
+          staticMode={reducedMotion}
+          opacity={0.05}
+          blendMode="normal"
+          className="fixed inset-0 z-[64]"
+        />
+      </Suspense>
 
       <m.div
         aria-hidden="true"
@@ -1270,7 +1330,9 @@ export function PersonalHomepage() {
         aria-labelledby="cstd-hero-title"
         className="relative z-10 flex min-h-[92svh] items-center overflow-hidden px-5 pb-16 pt-24 contain-paint md:px-10 md:pb-20 lg:px-16"
       >
-        <HeroOrbit items={heroOrbitItems} disabled={reducedMotion || !enhancementsReady} />
+        <Suspense fallback={null}>
+          <LazyHeroOrbit items={heroOrbitItems} disabled={reducedMotion || !enhancementsReady} />
+        </Suspense>
 
         <m.div
           className="mx-auto w-full max-w-[1540px]"
@@ -1408,7 +1470,11 @@ export function PersonalHomepage() {
       {/* 终端虚线分隔 */}
       <div aria-hidden="true" className="relative z-20 flex items-center gap-4 bg-[#0b0c0e] px-5 py-6 font-mono text-[10px] font-bold tracking-[0.2em] text-[#3a3f47] md:px-10 lg:px-16">
         <span className="flex-1 border-t border-dashed border-[#2a2d33]" />
-        <span>~/work</span>
+        <Suspense fallback={<span>~/work</span>}>
+          <LazyGlitchFx disabled={reducedMotion} interval={3400} className="text-[#5a5f66]">
+            ~/work
+          </LazyGlitchFx>
+        </Suspense>
         <span className="flex-1 border-t border-dashed border-[#2a2d33]" />
       </div>
 
@@ -1417,7 +1483,11 @@ export function PersonalHomepage() {
       {/* 终端虚线分隔 */}
       <div aria-hidden="true" className="relative z-20 flex items-center gap-4 bg-[#0b0c0e] px-5 py-6 font-mono text-[10px] font-bold tracking-[0.2em] text-[#3a3f47] md:px-10 lg:px-16">
         <span className="flex-1 border-t border-dashed border-[#2a2d33]" />
-        <span>~/path</span>
+        <Suspense fallback={<span>~/path</span>}>
+          <LazyGlitchFx disabled={reducedMotion} interval={3800} className="text-[#5a5f66]">
+            ~/path
+          </LazyGlitchFx>
+        </Suspense>
         <span className="flex-1 border-t border-dashed border-[#2a2d33]" />
       </div>
 
@@ -1451,6 +1521,11 @@ export function PersonalHomepage() {
               </span>
               $ exit — 2022—2026 · STILL IN MOTION
             </p>
+            <div className="mt-6 md:flex md:justify-end">
+              <Suspense fallback={null}>
+                <LazyConfettiBurst disabled={reducedMotion} />
+              </Suspense>
+            </div>
           </div>
         </div>
       </footer>
