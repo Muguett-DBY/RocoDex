@@ -433,11 +433,23 @@ function ProofChapter({ proof, index, reducedMotion }: { proof: CstdProof; index
       >
         <m.figure
           data-cstd-project-plane={proof.projectId}
-          className="relative aspect-[16/11] min-h-0 overflow-hidden rounded-lg border border-[#2a2d33] bg-black shadow-[0_20px_50px_rgba(0,0,0,0.5)] lg:mt-0"
+          className="group relative aspect-[16/11] min-h-0 overflow-hidden rounded-lg border border-[#2a2d33] bg-black shadow-[0_20px_50px_rgba(0,0,0,0.5)] lg:mt-0"
           initial={{ clipPath: "polygon(6% 0%, 100% 0%, 94% 100%, 0% 100%)" }}
           whileHover={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
         >
+          {/* hover 时 conic 扫描边框 */}
+          {!reducedMotion && (
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, transparent 0deg, rgba(51,255,102,0.9) 42deg, transparent 90deg, transparent 180deg, rgba(91,141,255,0.55) 222deg, transparent 270deg)",
+                animation: "cstd-spin 2.6s linear infinite",
+              }}
+            />
+          )}
           <m.div
             className="absolute inset-[-2%]"
             whileHover={{ scale: 1.06, rotate: index % 2 === 0 ? -0.8 : 0.8 }}
@@ -801,6 +813,8 @@ export function PersonalHomepage() {
   const heroRef = useRef<HTMLElement>(null);
   const { scrollY, scrollYProgress } = useScroll();
   const pageProgress = useSpring(scrollYProgress, { stiffness: 110, damping: 24, mass: 0.35 });
+  // ASCII 滚动百分比文本（MotionValue 直渲染，零重渲染）
+  const scrollPercent = useTransform(pageProgress, (value) => `${Math.round(value * 100)}%`);
 
   // Hero 滚动视差
   const { scrollYProgress: heroProgress } = useScroll({
@@ -900,6 +914,8 @@ export function PersonalHomepage() {
             { text: "  cd systems|work|path — 跳转章节", tone: "dim" },
             { text: "  ps                   — 查看运行中的能力进程", tone: "dim" },
             { text: "  open <项目名>         — 打开项目（新窗口）", tone: "dim" },
+            { text: "  top                  — 实时系统负载", tone: "dim" },
+            { text: "  ping custard.top     — 网络延迟测试", tone: "dim" },
             { text: "  neofetch             — 系统信息", tone: "dim" },
             { text: "  date                 — 当前时间", tone: "dim" },
             { text: "  clear                — 清屏", tone: "dim" },
@@ -964,6 +980,41 @@ export function PersonalHomepage() {
           } else {
             echo([{ text: `open: no such project: ${target ?? ""}（试试 ls）`, tone: "error" }]);
           }
+          break;
+        }
+        case "top": {
+          // 预生成三帧"实时"负载，打字机打出（模拟 top 刷新）
+          const bar = (pct: number) =>
+            "█".repeat(Math.round(pct / 10)) + "░".repeat(10 - Math.round(pct / 10));
+          const frames = [
+            [38, 12, 55, 24, 8],
+            [42, 14, 58, 22, 9],
+            [36, 11, 61, 26, 7],
+          ];
+          echo([
+            { text: "top - up 4 years, 1 user, load average: 0.42, 0.35, 0.28", tone: "dim", type: 8 },
+            { text: "", type: 0 },
+            { text: "PID   CPU%  MEM%  PROCESS", tone: "dim", type: 8 },
+            ...frames.flatMap((frame) =>
+              cstdSystems.map((system, index) => ({
+                text: `${String(index + 1).padStart(3)}   ${bar(frame[index])} ${String(frame[index]).padStart(3)}%  ${system.title}`,
+                tone: "default" as const,
+                type: 5,
+              })),
+            ),
+          ]);
+          break;
+        }
+        case "ping": {
+          const rtt = () => (Math.random() * 18 + 6).toFixed(1);
+          echo([
+            { text: "PING custard.top (140.82.114.4): 56 data bytes", tone: "dim", type: 8 },
+            { text: `64 bytes from 140.82.114.4: icmp_seq=0 ttl=56 time=${rtt()} ms`, type: 7 },
+            { text: `64 bytes from 140.82.114.4: icmp_seq=1 ttl=56 time=${rtt()} ms`, type: 7 },
+            { text: `64 bytes from 140.82.114.4: icmp_seq=2 ttl=56 time=${rtt()} ms`, type: 7 },
+            { text: "--- custard.top ping statistics ---", tone: "dim", type: 8 },
+            { text: "3 packets transmitted, 3 received, 0% packet loss", tone: "accent", type: 8 },
+          ]);
           break;
         }
         case "neofetch":
@@ -1064,6 +1115,15 @@ export function PersonalHomepage() {
         }}
       />
 
+      {/* ASCII 滚动百分比（终端风） */}
+      <m.span
+        aria-hidden="true"
+        className="fixed right-3 top-2 z-[70] font-mono text-[10px] font-bold text-[#33ff66]/85"
+        style={{ textShadow: "0 0 8px rgba(51,255,102,0.5)" }}
+      >
+        {scrollPercent}
+      </m.span>
+
       {/* 终端方块光标（内） */}
       <m.div
         aria-hidden="true"
@@ -1163,7 +1223,9 @@ export function PersonalHomepage() {
           <div className="relative overflow-hidden rounded-lg border border-[#2a2d33] bg-[#0b0c0e]/80 shadow-[0_40px_120px_rgba(0,0,0,0.6)] transition-[border-color,box-shadow] duration-300 focus-within:border-[#33ff66]/50 focus-within:shadow-[0_0_0_1px_rgba(51,255,102,0.25),0_0_60px_rgba(51,255,102,0.15),0_40px_120px_rgba(0,0,0,0.6)]">
             <TerminalBar title="cstd@custard.top: ~" right={<span className="flex items-center gap-1.5">
               <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#33ff66] opacity-60" />
+                {!reducedMotion && (
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#33ff66] opacity-60" />
+                )}
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-[#33ff66]" />
               </span>
               INTERACTIVE
