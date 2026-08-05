@@ -1286,7 +1286,7 @@ export function PersonalHomepage() {
                     type="button"
                     onClick={() => setTerminalMinimized((current) => !current)}
                     aria-label={terminalMinimized ? "展开终端窗口" : "最小化终端窗口"}
-                    className="flex h-5 items-center rounded border border-[#2a2d33] px-2 font-mono text-[10px] font-bold leading-none text-[#8a8f98] transition-colors hover:border-[#33ff66]/50 hover:text-[#33ff66] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#33ff66]"
+                    className="flex h-10 w-10 items-center justify-center rounded border border-[#2a2d33] font-mono text-xs font-bold leading-none text-[#8a8f98] transition-colors hover:border-[#33ff66]/50 hover:text-[#33ff66] active:scale-95 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#33ff66]"
                   >
                     {terminalMinimized ? "+" : "–"}
                   </button>
@@ -1318,7 +1318,7 @@ export function PersonalHomepage() {
                 disabled={reducedMotion || !enhancementsReady}
                 onCommand={handleTerminalCommand}
                 placeholder="输入 help 回车，或 Tab 补全…"
-                height="230px"
+                height="min(230px, 24svh)"
                 completions={{
                   cd: ["~", "/", "systems", "work", "projects", "path"],
                   open: [...proofProjects, ...liveProjects].map((project) => project.id),
@@ -1391,7 +1391,7 @@ export function PersonalHomepage() {
                   <a
                     href="#systems"
                     aria-label="进入系统章节"
-                    className="flex h-12 items-center justify-center gap-2 rounded-md border border-[#33ff66]/60 bg-[#33ff66]/[0.08] px-5 font-mono text-sm font-bold text-[#33ff66] transition-colors hover:bg-[#33ff66] hover:text-[#0b0c0e] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#33ff66]"
+                    className="flex h-12 items-center justify-center gap-2 rounded-md border border-[#33ff66]/60 bg-[#33ff66]/[0.08] px-5 font-mono text-sm font-bold text-[#33ff66] transition-colors hover:bg-[#33ff66] hover:text-[#0b0c0e] active:scale-[0.97] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#33ff66]"
                   >
                     cd systems/
                     <ArrowDown aria-hidden="true" className="h-4 w-4" />
