@@ -30,6 +30,39 @@
   }
 }
 
+/* 终端光标块闪烁 */
+@keyframes cstd-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* CRT 扫描线移动 */
+@keyframes cstd-scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+/* 终端标题呼吸辉光 */
+@keyframes cstd-glow-breathe {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 :root {
   --background: #f7f6f1;
   --foreground: #172033;

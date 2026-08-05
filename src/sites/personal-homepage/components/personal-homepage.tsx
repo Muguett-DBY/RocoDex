@@ -17,6 +17,7 @@ import {
   useEffect,
   memo,
   useMemo,
+  useCallback,
   useRef,
   useState,
   useSyncExternalStore,
@@ -41,6 +42,7 @@ import { Magnet } from "./magnet";
 import { NoiseOverlay } from "./noise-overlay";
 import { ShinyText } from "./shiny-text";
 import { SpotlightCard } from "./spotlight-card";
+import { TerminalCommand, type TerminalLine } from "./terminal-command";
 import { TiltFrame } from "./tilt-frame";
 import { TracingProgress } from "./tracing-progress";
 
@@ -232,6 +234,16 @@ function Prompt({ children, dim = false }: { children: React.ReactNode; dim?: bo
     </span>
   );
 }
+
+// Hero 终端启动日志（打字机剧本）
+const heroBootLines: TerminalLine[] = [
+  { text: "whoami", prompt: true, type: 14 },
+  { text: "奶黄包 — product engineer / creative systems builder", type: 10 },
+  { text: "uptime", prompt: true, type: 14 },
+  { text: "up 4 years, building live products with product, data, AI and research.", type: 10 },
+  { text: "", type: 0 },
+  { text: "hint: type 'help' to explore →", tone: "dim", type: 9 },
+];
 
 function SignalStrip({ reducedMotion }: { reducedMotion: boolean }) {
   const content = [...heroSignals, ...heroSignals];
@@ -875,6 +887,125 @@ export function PersonalHomepage() {
     window.dispatchEvent(new Event(motionModeChangeEvent));
   }
 
+  // Hero 交互终端的命令处理器
+  const handleTerminalCommand = useCallback(
+    (raw: string, echo: (lines: TerminalLine[]) => void) => {
+      const cmd = raw.trim();
+      const first = cmd.split(/\s+/)[0].toLowerCase();
+
+      switch (first) {
+        case "help":
+          echo([
+            { text: "可用命令：", tone: "accent" },
+            { text: "  whoami               — 我是谁", tone: "dim" },
+            { text: "  ls                   — 列出项目目录", tone: "dim" },
+            { text: "  cd systems|work|path — 跳转章节", tone: "dim" },
+            { text: "  ps                   — 查看运行中的能力进程", tone: "dim" },
+            { text: "  open <项目名>         — 打开项目（新窗口）", tone: "dim" },
+            { text: "  neofetch             — 系统信息", tone: "dim" },
+            { text: "  date                 — 当前时间", tone: "dim" },
+            { text: "  clear                — 清屏", tone: "dim" },
+            { text: "  exit                 — 退出到页脚", tone: "dim" },
+          ]);
+          break;
+        case "whoami":
+          echo([
+            { text: "奶黄包 — product engineer / creative systems builder", tone: "accent" },
+            { text: "base: Sydney · Nanjing · The web", tone: "dim" },
+            { text: "focus: 把产品、数据、AI 和研究折进一条会呼吸的系统。", tone: "dim" },
+          ]);
+          break;
+        case "ls":
+          echo([
+            { text: "~/projects/", tone: "accent" },
+            ...proofProjects.map((project) => ({
+              text: `  drwxr-xr-x  ${project.id}/`,
+              tone: "default" as const,
+            })),
+            ...liveProjects.map((project) => ({
+              text: `  lrwxrwxrwx  ${project.id} → live`,
+              tone: "dim" as const,
+            })),
+            { text: `  ${proofProjects.length + liveProjects.length} entries`, tone: "dim" },
+          ]);
+          break;
+        case "cd": {
+          const target = cmd.split(/\s+/)[1];
+          const map: Record<string, string> = {
+            "~": "top",
+            "/": "top",
+            systems: "systems",
+            work: "proof",
+            projects: "proof",
+            path: "path",
+          };
+          const id = map[target ?? ""];
+          if (id) {
+            document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+            echo([{ text: `→ ~/${target}`, tone: "accent" }]);
+          } else {
+            echo([{ text: `cd: no such directory: ${target ?? ""}`, tone: "error" }]);
+          }
+          break;
+        }
+        case "ps":
+          echo([
+            { text: "PID   STATUS    PROCESS", tone: "dim" },
+            ...cstdSystems.map((system, index) => ({
+              text: `${String(index + 1).padStart(4, " ")}  [RUNNING]  ${system.title}`,
+              tone: "default" as const,
+            })),
+          ]);
+          break;
+        case "open": {
+          const target = cmd.split(/\s+/)[1];
+          const project = [...proofProjects, ...liveProjects].find((p) => p.id === target);
+          if (project) {
+            echo([{ text: `opening ${project.id}...`, tone: "dim" }]);
+            window.open(project.href, "_blank", "noopener,noreferrer");
+          } else {
+            echo([{ text: `open: no such project: ${target ?? ""}（试试 ls）`, tone: "error" }]);
+          }
+          break;
+        }
+        case "neofetch":
+          echo([
+            { text: "        ████████████", tone: "accent" },
+            { text: "       ██          ██        cstd@custard.top", tone: "accent" },
+            { text: "      ██              ██     -------------------", tone: "accent" },
+            { text: "     ██                ██    OS: Personal Platform v4", tone: "accent" },
+            { text: "     ██    ████████    ██    Shell: zsh 5.9", tone: "accent" },
+            { text: "     ██    ████████    ██    Uptime: 4 years", tone: "accent" },
+            { text: "     ██                ██    Stack: React/Next/Three", tone: "accent" },
+            { text: "      ██              ██     Flavors: 奶黄", tone: "accent" },
+            { text: "       ██          ██", tone: "accent" },
+            { text: "        ████████████", tone: "accent" },
+          ]);
+          break;
+        case "date":
+          echo([
+            { text: new Date().toLocaleString("zh-CN", { timeZone: "Asia/Shanghai" }) + " (CST)", tone: "default" },
+          ]);
+          break;
+        case "clear":
+          // 清屏由 TerminalCommand 内部处理（不 echo）
+          break;
+        case "exit":
+          document.getElementById("cstd-footer")?.scrollIntoView({ behavior: "smooth" });
+          echo([{ text: "logout", tone: "dim" }]);
+          break;
+        case "sudo":
+          echo([
+            { text: "奶黄包 is not in the sudoers file. This incident will be reported. ☕", tone: "error" },
+          ]);
+          break;
+        default:
+          echo([{ text: `zsh: command not found: ${first}（试试 help）`, tone: "error" }]);
+      }
+    },
+    [],
+  );
+
   return (
     <LazyMotion features={loadPersonalMotionFeatures} strict>
       <main
@@ -1016,7 +1147,7 @@ export function PersonalHomepage() {
         data-cstd-hero
         data-cstd-elastic-archive
         aria-labelledby="cstd-hero-title"
-        className="relative z-10 flex h-[92svh] min-h-[680px] items-center overflow-hidden px-5 pb-16 pt-24 contain-paint md:px-10 md:pb-20 lg:px-16"
+        className="relative z-10 flex min-h-[92svh] items-center overflow-hidden px-5 pb-16 pt-24 contain-paint md:px-10 md:pb-20 lg:px-16"
       >
         <HeroOrbit items={heroOrbitItems} disabled={reducedMotion || !enhancementsReady} />
 
@@ -1024,39 +1155,63 @@ export function PersonalHomepage() {
           className="mx-auto w-full max-w-[1540px]"
           style={{ y: heroY, opacity: heroOpacity }}
         >
-          {/* 终端大窗口 */}
-          <div className="overflow-hidden rounded-lg border border-[#2a2d33] bg-[#0b0c0e]/80 shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
+          {/* 交互终端窗口 */}
+          <div className="relative overflow-hidden rounded-lg border border-[#2a2d33] bg-[#0b0c0e]/80 shadow-[0_40px_120px_rgba(0,0,0,0.6)]">
             <TerminalBar title="cstd@custard.top: ~" right="zsh — 120×40" />
-            <div className="px-6 py-8 md:px-10 md:py-10">
-              <p className="font-mono text-xs leading-6 text-[#8a8f98] md:text-sm">
-                <span className="text-[#33ff66]">$ </span>whoami
-                <br />
-                <span className="text-[#d7d7d7]">奶黄包 — product engineer / creative systems builder</span>
-                <br />
-                <span className="text-[#33ff66]">$ </span>uptime
-                <br />
-                <span className="text-[#d7d7d7]">up 4 years, building live products with product, data, AI and research.</span>
-              </p>
-              <h1
-                id="cstd-hero-title"
-                data-cstd-hero-depth
-                className="mt-6 text-[4.5rem] font-black leading-[0.8] tracking-[-0.02em] text-[#33ff66] md:text-[8rem] xl:text-[11rem] 2xl:text-[13rem]"
-                style={{ textShadow: "0 0 40px rgba(51,255,102,0.35), 0 0 120px rgba(51,255,102,0.15)" }}
-              >
-                <LetterReveal
-                  disabled={reducedMotion || !enhancementsReady}
-                  staggerDelay={85}
-                  duration={1050}
-                  delay={160}
-                  fromY={115}
-                  fromRotate={7}
-                  fromSkew={9}
-                >
-                  CSTD
-                </LetterReveal>
-              </h1>
+            <div className="px-5 py-5 md:px-8 md:py-6">
+              <TerminalCommand
+                bootLines={heroBootLines}
+                disabled={reducedMotion || !enhancementsReady}
+                onCommand={handleTerminalCommand}
+                height="230px"
+              />
+            </div>
+            {/* CRT 扫描线（克制） */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 overflow-hidden"
+            >
+              <div
+                className="h-24 w-full bg-[#33ff66] opacity-[0.05]"
+                style={{
+                  animation: reducedMotion ? undefined : "cstd-scanline 9s linear infinite",
+                }}
+              />
+            </div>
+          </div>
 
-              <div className="mt-8 grid items-end gap-6 border-t border-[#2a2d33] pt-6 font-mono md:grid-cols-[1fr_auto]">
+          {/* CSTD 巨型标题 + 呼吸辉光 */}
+          <div className="relative mt-6">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute -inset-x-10 -top-12 bottom-0"
+              style={{
+                background:
+                  "radial-gradient(50% 60% at 50% 40%, rgba(51,255,102,0.16), transparent 70%)",
+                animation: reducedMotion ? undefined : "cstd-glow-breathe 4.5s ease-in-out infinite",
+              }}
+            />
+            <h1
+              id="cstd-hero-title"
+              data-cstd-hero-depth
+              className="relative text-[4.5rem] font-black leading-[0.8] tracking-[-0.02em] text-[#33ff66] md:text-[7rem] xl:text-[10rem] 2xl:text-[12rem]"
+              style={{ textShadow: "0 0 40px rgba(51,255,102,0.35), 0 0 120px rgba(51,255,102,0.15)" }}
+            >
+              <LetterReveal
+                disabled={reducedMotion || !enhancementsReady}
+                staggerDelay={85}
+                duration={1050}
+                delay={160}
+                fromY={115}
+                fromRotate={7}
+                fromSkew={9}
+              >
+                CSTD
+              </LetterReveal>
+            </h1>
+          </div>
+
+          <div className="mt-6 grid items-end gap-6 border-t border-[#2a2d33] pt-6 font-mono md:grid-cols-[1fr_auto]">
                 <div className="max-w-2xl">
                   <p className="text-lg font-bold leading-tight text-[#d7d7d7] md:text-2xl">
                     <span className="text-[#33ff66]">$ </span>cat about.md
@@ -1083,8 +1238,6 @@ export function PersonalHomepage() {
                   </a>
                 </Magnet>
               </div>
-            </div>
-          </div>
         </m.div>
       </section>
 
