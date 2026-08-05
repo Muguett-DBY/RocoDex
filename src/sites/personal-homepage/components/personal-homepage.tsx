@@ -13,7 +13,15 @@ import {
   useTransform,
 } from "framer-motion";
 import * as m from "framer-motion/m";
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore, type PointerEvent as ReactPointerEvent } from "react";
+import {
+  useEffect,
+  memo,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
 import { getCstdLinkTargetProps } from "../domain/link-target";
 import { cstdProjects } from "../content/projects";
 import {
@@ -43,10 +51,14 @@ const LetterReveal = dynamic(
 );
 const CountUp = dynamic(() => import("./count-up").then((module) => module.CountUp));
 
-const PersonalImmersiveScene = dynamic(
-  () => import("./immersive-scene").then((module) => module.PersonalImmersiveScene),
-  { ssr: false },
+const PersonalImmersiveScene = memo(
+  dynamic(
+    () => import("./immersive-scene").then((module) => module.PersonalImmersiveScene),
+    { ssr: false },
+  ),
 );
+
+// 章节组件与 scene 全部 memo 化：滚动触发的 activeChapter 更新不再重渲染整棵子树
 
 const loadPersonalMotionFeatures = () =>
   import("./motion-features").then((module) => module.default);
@@ -107,28 +119,28 @@ const researchAccents = [
     text: "text-[#f4b72f]",
     background: "bg-[#f4b72f]",
     border: "border-[#f4b72f]",
-    glow: "shadow-[0_0_50px_rgba(244,183,47,0.35)]",
+    glow: "shadow-[0_0_20px_rgba(244,183,47,0.28)]",
     code: "AMBER / ORIGIN",
   },
   {
     text: "text-[#8ec9f0]",
     background: "bg-[#8ec9f0]",
     border: "border-[#8ec9f0]",
-    glow: "shadow-[0_0_50px_rgba(142,201,240,0.3)]",
+    glow: "shadow-[0_0_20px_rgba(142,201,240,0.24)]",
     code: "COBALT / SIGNAL",
   },
   {
     text: "text-[#f08a6d]",
     background: "bg-[#f08a6d]",
     border: "border-[#f08a6d]",
-    glow: "shadow-[0_0_50px_rgba(240,138,109,0.3)]",
+    glow: "shadow-[0_0_20px_rgba(240,138,109,0.24)]",
     code: "CORAL / STRUCTURE",
   },
   {
     text: "text-[#bfe0c8]",
     background: "bg-[#bfe0c8]",
     border: "border-[#bfe0c8]",
-    glow: "shadow-[0_0_50px_rgba(191,224,200,0.28)]",
+    glow: "shadow-[0_0_20px_rgba(191,224,200,0.22)]",
     code: "MINT / CONTINUUM",
   },
 ] as const;
@@ -205,7 +217,7 @@ function SignalStrip({ reducedMotion }: { reducedMotion: boolean }) {
   return (
     <div
       data-cstd-signal-strip
-      className="relative z-20 h-[8svh] min-h-16 overflow-hidden rounded-t-[2.5rem] border-y border-black/20 bg-[#f4b72f] text-[#2a1d0e] shadow-[0_-20px_60px_rgba(244,183,47,0.25)]"
+      className="relative z-20 h-[8svh] min-h-16 overflow-hidden rounded-t-[2.5rem] border-y border-black/20 bg-[#f4b72f] text-[#2a1d0e] shadow-[0_-10px_28px_rgba(244,183,47,0.2)]"
     >
       {[0, 1].map((track) => (
         <m.div
@@ -227,11 +239,14 @@ function SignalStrip({ reducedMotion }: { reducedMotion: boolean }) {
   );
 }
 
+const MemoizedSignalStrip = memo(SignalStrip);
+
 function SystemsChapter({
   activeSystemId,
   setActiveSystemId,
   reducedMotion,
-}: {
+}
+: {
   activeSystemId: CstdSystem["id"];
   setActiveSystemId: (id: CstdSystem["id"]) => void;
   reducedMotion: boolean;
@@ -243,7 +258,7 @@ function SystemsChapter({
       id="systems"
       data-cstd-chapter="systems"
       aria-labelledby="systems-heading"
-      className="relative z-10 min-h-[150svh] bg-[#171208] text-[#fbf1df] lg:min-h-[185svh]"
+      className="relative z-10 min-h-[150svh] bg-[#171208] text-[#fbf1df] contain-paint lg:min-h-[185svh]"
     >
       <div className="sticky top-0 flex min-h-svh items-center px-5 py-24 md:px-10 lg:px-16">
         <div className="mx-auto grid w-full max-w-[1540px] gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
@@ -268,7 +283,7 @@ function SystemsChapter({
               disabled={reducedMotion}
               spotlightColor="rgba(255, 217, 122, 0.18)"
               size={680}
-              className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-7 shadow-[0_30px_90px_rgba(0,0,0,0.4)] backdrop-blur-md md:p-9"
+              className="rounded-[2rem] border border-white/10 bg-white/[0.05] p-7 shadow-[0_16px_40px_rgba(0,0,0,0.3)] md:p-9"
             >
               <m.div
                 key={activeSystem.id}
@@ -332,6 +347,8 @@ function SystemsChapter({
   );
 }
 
+const MemoizedSystemsChapter = memo(SystemsChapter);
+
 function ProofChapter({ proof, index, reducedMotion }: { proof: CstdProof; index: number; reducedMotion: boolean }) {
   const project = proofProjects.find((candidate) => candidate.id === proof.projectId);
   if (!project?.preview) return null;
@@ -340,7 +357,7 @@ function ProofChapter({ proof, index, reducedMotion }: { proof: CstdProof; index
   return (
     <article
       data-cstd-proof={proof.projectId}
-      className="group relative grid min-h-svh items-center overflow-hidden px-5 py-24 md:px-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14 lg:px-16"
+      className="group relative grid min-h-svh items-center overflow-hidden px-5 py-24 contain-paint md:px-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-14 lg:px-16"
     >
       {/* 超大编号背景字 */}
       <span
@@ -362,7 +379,7 @@ function ProofChapter({ proof, index, reducedMotion }: { proof: CstdProof; index
         <a
           href={project.href}
           {...targetProps}
-          className="mt-10 inline-flex items-center gap-3 rounded-full bg-[#2a1d0e] px-6 py-3 text-sm font-black text-[#ffd97a] shadow-[0_14px_36px_rgba(42,29,14,0.3)] transition-transform duration-300 hover:scale-[1.04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3d7fc0]"
+          className="mt-10 inline-flex items-center gap-3 rounded-full bg-[#2a1d0e] px-6 py-3 text-sm font-black text-[#ffd97a] shadow-[0_8px_20px_rgba(42,29,14,0.28)] transition-transform duration-300 hover:scale-[1.04] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3d7fc0]"
         >
           {project.action}
           <ArrowUpRight aria-hidden="true" className="h-4 w-4" strokeWidth={2.4} />
@@ -377,7 +394,7 @@ function ProofChapter({ proof, index, reducedMotion }: { proof: CstdProof; index
       >
         <m.figure
           data-cstd-project-plane={proof.projectId}
-          className="relative aspect-[16/11] min-h-0 overflow-hidden rounded-[2rem] border border-white/40 bg-black shadow-[0_40px_100px_rgba(42,29,14,0.35)] lg:mt-0"
+          className="relative aspect-[16/11] min-h-0 overflow-hidden rounded-[2rem] border border-white/40 bg-black shadow-[0_20px_50px_rgba(42,29,14,0.28)] lg:mt-0"
           initial={{ clipPath: "polygon(6% 0%, 100% 0%, 94% 100%, 0% 100%)" }}
           whileHover={{ clipPath: "polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
@@ -406,18 +423,25 @@ function ProofChapter({ proof, index, reducedMotion }: { proof: CstdProof; index
   );
 }
 
-function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
+function SelectedWork({ reducedMotion }
+: { reducedMotion: boolean }) {
   return (
     <section
       id="proof"
       data-cstd-chapter="proof"
       aria-labelledby="proof-heading"
-      className="relative z-20 bg-[#fdf3e0] text-[#2a1d0e]"
+      className="relative z-20 bg-[#fdf3e0] text-[#2a1d0e] contain-paint"
     >
-      {/* 奶油暖光：极淡琥珀径向光晕，非霓虹 */}
+      {/* 奶油暖光：radial-gradient 直接渲染（无 filter blur，paint 廉价） */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
-        <div className="absolute -top-40 left-1/2 h-[34rem] w-[60rem] -translate-x-1/2 rounded-full bg-[#f4b72f]/[0.1] blur-[120px]" />
-        <div className="absolute bottom-0 right-0 h-[26rem] w-[30rem] rounded-full bg-[#f08a6d]/[0.06] blur-[110px]" />
+        <div
+          className="absolute -top-40 left-1/2 h-[34rem] w-[60rem] -translate-x-1/2 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(244,183,47,0.12) 0%, transparent 65%)" }}
+        />
+        <div
+          className="absolute bottom-0 right-0 h-[26rem] w-[30rem] rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(240,138,109,0.08) 0%, transparent 65%)" }}
+        />
       </div>
 
       <header className="relative border-b border-black/20 px-5 pb-10 pt-24 md:px-10 lg:px-16 lg:pb-14 lg:pt-32">
@@ -455,7 +479,7 @@ function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
               <div
                 key={project.id}
                 data-cstd-live-object={project.id}
-                className="group rounded-3xl border border-black/15 bg-white/70 px-6 py-7 shadow-[0_18px_50px_rgba(42,29,14,0.12)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white/90 hover:shadow-[0_26px_60px_rgba(42,29,14,0.2)]"
+                className="group rounded-3xl border border-black/15 bg-white/70 px-6 py-7 shadow-[0_10px_24px_rgba(42,29,14,0.1)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:bg-white/90 hover:shadow-[0_14px_32px_rgba(42,29,14,0.18)]"
               >
                 <p className="text-[10px] font-black tracking-[0.12em] text-black/45">LIVE OBJECT / {project.kicker.toUpperCase()}</p>
                 <a
@@ -477,6 +501,8 @@ function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
   );
 }
 
+const MemoizedSelectedWork = memo(SelectedWork);
+
 function ResearchPathPanel({
   entry,
   index,
@@ -497,7 +523,7 @@ function ResearchPathPanel({
       data-cstd-learning-step={entry.year}
       data-cstd-learning-active={active ? "true" : "false"}
       className={clsx(
-        "group relative grid min-h-svh w-full items-center gap-12 overflow-hidden px-5 py-28 md:px-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20 lg:px-16 lg:py-32",
+        "group relative grid min-h-svh w-full items-center gap-12 overflow-hidden px-5 py-28 contain-paint md:px-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20 lg:px-16 lg:py-32",
         index % 2 === 1 && "lg:grid-cols-[1.18fr_0.82fr]",
       )}
     >
@@ -598,7 +624,8 @@ function ResearchPathPanel({
   );
 }
 
-function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
+function ResearchPath({ reducedMotion }
+: { reducedMotion: boolean }) {
   const pathRef = useRef<HTMLElement>(null);
   const [activeYear, setActiveYear] = useState<CstdLearningEntry["year"]>(cstdLearningPath[0].year);
   const activeIndex = cstdLearningPath.findIndex((entry) => entry.year === activeYear);
@@ -633,7 +660,7 @@ function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
       data-cstd-path-mode="vertical"
       data-cstd-path-continuous="true"
       aria-labelledby="path-heading"
-      className="relative z-10 bg-[#171208] text-[#fbf1df]"
+      className="relative z-10 bg-[#171208] text-[#fbf1df] contain-paint"
     >
       <TracingProgress disabled={reducedMotion} color="#f4b72f" className="left-4 md:left-8" />
       <div data-cstd-path-stage className="relative">
@@ -683,6 +710,8 @@ function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
     </section>
   );
 }
+
+const MemoizedResearchPath = memo(ResearchPath);
 
 function ChapterRail({ activeChapter }: { activeChapter: ChapterId }) {
   return (
@@ -866,8 +895,8 @@ export function PersonalHomepage() {
 
       <NoiseOverlay
         staticMode={reducedMotion}
-        opacity={0.07}
-        blendMode="overlay"
+        opacity={0.05}
+        blendMode="normal"
         className="fixed inset-0 z-[64]"
       />
 
@@ -887,7 +916,7 @@ export function PersonalHomepage() {
         aria-hidden="true"
         data-cstd-pointer-field
         className={clsx(
-          "pointer-events-none fixed left-0 top-0 z-[80] hidden h-9 w-9 items-center justify-center border border-white/65 text-[#f4b72f] mix-blend-difference lg:flex",
+          "pointer-events-none fixed left-0 top-0 z-[80] hidden h-9 w-9 items-center justify-center border border-white/70 text-[#ffd97a] lg:flex",
           reducedMotion && "lg:!hidden",
         )}
         style={{ x: smoothCursorX, y: smoothCursorY }}
@@ -912,7 +941,7 @@ export function PersonalHomepage() {
 
       <m.header
         data-cstd-header-theme={activeChapter}
-        className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/15 bg-[#171208]/70 px-5 text-white backdrop-blur-xl md:px-10 lg:px-12"
+        className="fixed inset-x-0 top-0 z-50 flex h-16 items-center justify-between border-b border-white/15 bg-[#171208]/85 px-5 text-white md:px-10 lg:px-12"
         initial={{ y: -80 }}
         animate={{ y: 0 }}
         transition={springSoft}
@@ -971,7 +1000,7 @@ export function PersonalHomepage() {
         data-cstd-hero
         data-cstd-elastic-archive
         aria-labelledby="cstd-hero-title"
-        className="relative z-10 flex h-[92svh] min-h-[680px] items-center overflow-hidden px-5 pb-16 pt-24 md:px-10 md:pb-20 lg:px-16"
+        className="relative z-10 flex h-[92svh] min-h-[680px] items-center overflow-hidden px-5 pb-16 pt-24 contain-paint md:px-10 md:pb-20 lg:px-16"
       >
         <HeroOrbit items={heroOrbitItems} disabled={reducedMotion || !enhancementsReady} />
 
@@ -990,7 +1019,7 @@ export function PersonalHomepage() {
           <h1
             id="cstd-hero-title"
             data-cstd-hero-depth
-            className="text-[7rem] font-black leading-[0.72] tracking-[0] text-white mix-blend-difference md:text-[11rem] xl:text-[16rem] 2xl:text-[20rem]"
+            className="text-[7rem] font-black leading-[0.72] tracking-[0] text-white/90 md:text-[11rem] xl:text-[16rem] 2xl:text-[20rem]"
           >
             <LetterReveal
               disabled={reducedMotion || !enhancementsReady}
@@ -1034,22 +1063,22 @@ export function PersonalHomepage() {
         </m.div>
       </section>
 
-      <SignalStrip reducedMotion={reducedMotion} />
+      <MemoizedSignalStrip reducedMotion={reducedMotion} />
 
       {/* 琥珀信号条 → 深色系统的弧形过渡 */}
-      <CreamDivider fill="#171208" height={72} float={reducedMotion ? 0 : 4} disabled={reducedMotion} className="-mt-px z-20" />
+      <CreamDivider fill="#171208" height={72} float={reducedMotion ? 0 : 2} disabled={reducedMotion} className="-mt-px z-20" />
 
-      <SystemsChapter activeSystemId={activeSystemId} setActiveSystemId={setActiveSystemId} reducedMotion={reducedMotion} />
+      <MemoizedSystemsChapter activeSystemId={activeSystemId} setActiveSystemId={setActiveSystemId} reducedMotion={reducedMotion} />
 
       {/* 深色 → 奶油区弧形过渡 */}
-      <CreamDivider fill="#fdf3e0" height={88} flip float={reducedMotion ? 0 : 5} disabled={reducedMotion} className="z-20" />
+      <CreamDivider fill="#fdf3e0" height={88} flip float={reducedMotion ? 0 : 3} disabled={reducedMotion} className="z-20" />
 
-      <SelectedWork reducedMotion={reducedMotion} />
+      <MemoizedSelectedWork reducedMotion={reducedMotion} />
 
       {/* 奶油区 → 深色区弧形过渡 */}
-      <CreamDivider fill="#171208" height={88} float={reducedMotion ? 0 : 5} disabled={reducedMotion} className="z-20" />
+      <CreamDivider fill="#171208" height={88} float={reducedMotion ? 0 : 3} disabled={reducedMotion} className="z-20" />
 
-      <ResearchPath reducedMotion={reducedMotion} />
+      <MemoizedResearchPath reducedMotion={reducedMotion} />
 
       <footer id="cstd-footer" className="relative z-20 border-t border-white/15 bg-[#171208] px-5 py-20 text-white md:px-10 lg:px-16">
         <div className="mx-auto flex max-w-[1540px] flex-col justify-between gap-10 md:flex-row md:items-end">

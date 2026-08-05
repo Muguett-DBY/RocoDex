@@ -175,7 +175,7 @@ function BackgroundField({
 
   return (
     <mesh position={[0, 0, -7.5]} scale={[22, 12.4, 1]}>
-      <planeGeometry args={[1, 1, quality === "lite" ? 12 : 56, quality === "lite" ? 8 : 32]} />
+      <planeGeometry args={[1, 1, quality === "lite" ? 12 : 48, quality === "lite" ? 8 : 28]} />
       <shaderMaterial
         ref={materialRef}
         vertexShader={vertexShader}
@@ -194,7 +194,7 @@ function ParticleCurrent({
   quality,
 }: Omit<PersonalImmersiveSceneProps, "impulseRef" | "active"> & { quality: SceneQuality }) {
   const pointsRef = useRef<THREE.Points>(null);
-  const count = quality === "lite" ? 280 : 1150;
+  const count = quality === "lite" ? 280 : 950;
   const { positions, colors } = useMemo(() => {
     const pointPositions = new Float32Array(count * 3);
     const pointColors = new Float32Array(count * 3);
@@ -514,7 +514,7 @@ function World(
     quality: SceneQuality;
   },
 ) {
-  const chromaticOffset = useMemo(() => new THREE.Vector2(0.0007, 0.0005), []);
+  const chromaticOffset = useMemo(() => new THREE.Vector2(0.00055, 0.0004), []);
   const advance = useThree((state) => state.advance);
 
   // quality / reducedMotion 切换（如进入 calm）时同步渲染一帧，
@@ -547,9 +547,9 @@ function World(
       <CameraRig {...props} />
       {props.quality === "full" ? (
         <EffectComposer multisampling={0}>
-          <Bloom intensity={0.62} luminanceThreshold={0.72} luminanceSmoothing={0.32} mipmapBlur />
+          <Bloom intensity={0.5} luminanceThreshold={0.72} luminanceSmoothing={0.32} mipmapBlur />
           <ChromaticAberration offset={chromaticOffset} radialModulation modulationOffset={0.35} />
-          <Noise opacity={0.022} blendFunction={BlendFunction.SOFT_LIGHT} />
+          <Noise opacity={0.015} blendFunction={BlendFunction.SOFT_LIGHT} />
         </EffectComposer>
       ) : null}
     </>
@@ -560,9 +560,45 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
   const [detectedQuality, setDetectedQuality] = useState<SceneQuality>("lite");
   const [readyQuality, setReadyQuality] = useState<SceneQuality | null>(null);
   const [contextLost, setContextLost] = useState(false);
-  const quality: SceneQuality = props.reducedMotion ? "lite" : detectedQuality;
+  const [autoLite, setAutoLite] = useState(false);
+  const quality: SceneQuality =
+    props.reducedMotion || autoLite ? "lite" : detectedQuality;
   const markSceneReady = useCallback((renderedQuality: SceneQuality) => setReadyQuality(renderedQuality), []);
   const renderReady = contextLost ? "fallback" : readyQuality === quality ? "true" : "false";
+
+  // 帧率自适应降级：全效模式下持续 2 秒低于 35fps → 自动切 lite
+  // （低端 GPU / 高分屏用户保流畅；降级后保持，不抖动）
+  useEffect(() => {
+    if (props.reducedMotion || detectedQuality === "lite" || autoLite) return;
+
+    let frames = 0;
+    let last = performance.now();
+    let lowSeconds = 0;
+    let rafId = 0;
+
+    const loop = (now: number) => {
+      frames += 1;
+      const elapsed = now - last;
+      if (elapsed >= 1000) {
+        const fps = (frames * 1000) / elapsed;
+        frames = 0;
+        last = now;
+        if (fps < 35) {
+          lowSeconds += 1;
+          if (lowSeconds >= 2) {
+            setAutoLite(true);
+            return;
+          }
+        } else {
+          lowSeconds = 0;
+        }
+      }
+      rafId = requestAnimationFrame(loop);
+    };
+
+    rafId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafId);
+  }, [props.reducedMotion, detectedQuality, autoLite]);
 
   return (
     <div
@@ -577,7 +613,7 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
         <Canvas
           data-cstd-webgl-canvas
           camera={{ position: [0, 0, 7.2], fov: 42, near: 0.1, far: 40 }}
-          dpr={quality === "full" ? [1, 1.5] : 1}
+          dpr={quality === "full" ? [1, 1.25] : 1}
           gl={{ antialias: true, alpha: false, powerPreference: "high-performance", preserveDrawingBuffer: true }}
           frameloop={props.active && quality === "full" ? "always" : "demand"}
           onCreated={({ gl }) => {
