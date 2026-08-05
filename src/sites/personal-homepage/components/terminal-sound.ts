@@ -59,10 +59,15 @@ export const terminalSound = {
   key(): void {
     beep(620 + Math.random() * 60, 22, 0.012);
   },
-  /** 回车执行音 */
+  /** 回车执行音（含轻振动反馈，Android 有效） */
   enter(): void {
     beep(880, 55, 0.03);
     setTimeout(() => beep(1245, 45, 0.02), 45);
+    try {
+      navigator.vibrate?.(12);
+    } catch {
+      // 不支持振动的环境静默降级
+    }
   },
   /** Tab 补全音 */
   tab(): void {

@@ -59,6 +59,7 @@ export function TiltFrame({
           transformStyle: "preserve-3d",
           willChange: "transform",
         }}
+        whileTap={disabled ? undefined : { scale: 0.975 }}
         className="h-full w-full"
       >
         {children}

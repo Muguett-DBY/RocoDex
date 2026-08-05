@@ -422,7 +422,7 @@ export function TerminalCommand({
         ))}
         {matrixActive ? <MatrixRain disabled={disabled} /> : null}
         {/* 输入槽：明显的可输入区域 */}
-        <div className="relative mt-1 flex items-center gap-2 rounded-md border border-[#33ff66]/25 bg-[#0e1114] px-3 py-1.5 transition-colors focus-within:border-[#33ff66]/70 focus-within:bg-[#101418]">
+        <div className="relative mt-1 flex items-center gap-2 rounded-md border border-[#33ff66]/25 bg-[#0e1114] px-3 py-2.5 transition-colors focus-within:border-[#33ff66]/70 focus-within:bg-[#101418]">
           <span className="flex-none font-bold text-[#33ff66]">$</span>
           <input
             ref={inputRef}
@@ -463,7 +463,7 @@ export function TerminalCommand({
             aria-label={muted ? "开启终端音效" : "静音终端音效"}
             aria-pressed={muted}
             title={muted ? "开启音效" : "静音"}
-            className="flex-none rounded border border-transparent px-1.5 py-0.5 text-[11px] leading-none text-[#5b616b] transition-colors hover:border-[#33ff66]/40 hover:text-[#33ff66] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#33ff66]"
+            className="flex h-10 w-10 flex-none items-center justify-center rounded border border-transparent text-sm leading-none text-[#5b616b] transition-colors hover:border-[#33ff66]/40 hover:text-[#33ff66] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#33ff66]"
           >
             {muted ? "🔇" : "🔊"}
           </button>
