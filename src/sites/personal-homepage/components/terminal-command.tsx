@@ -101,11 +101,11 @@ function MatrixRain({ disabled }: { disabled: boolean }) {
 const MATRIX_CHARS = "01アイウエオカキクケコサシスセソタチツテト0123ABCDEF";
 
 const TONE_CLASS: Record<NonNullable<TerminalLine["tone"]>, string> = {
-  default: "text-[#e9e6f5]",
-  dim: "text-[#9d96bd]",
-  accent: "text-[#fcee0a]",
-  warn: "text-[#ff2a6d]",
-  error: "text-[#ff5f57]",
+  default: "text-[#f2efe7]",
+  dim: "text-[#8f9599]",
+  accent: "text-[#f4c95d]",
+  warn: "text-[#ef7868]",
+  error: "text-[#ff6b6b]",
 };
 
 /**
@@ -412,8 +412,8 @@ export function TerminalCommand({
           >
             {line.prompt ? (
               <>
-                <span className="text-[#fcee0a]">$ </span>
-                <span className="text-[#e9e6f5]">{line.text}</span>
+                <span className="text-[#f4c95d]">$ </span>
+                <span className="text-[#f2efe7]">{line.text}</span>
               </>
             ) : (
               line.text
@@ -422,8 +422,8 @@ export function TerminalCommand({
         ))}
         {matrixActive ? <MatrixRain disabled={disabled} /> : null}
         {/* 输入槽：明显的可输入区域 */}
-        <div className="relative mt-1 flex items-center gap-2 rounded-md border border-[#fcee0a]/25 bg-[#150f26] px-3 py-2.5 transition-colors focus-within:border-[#fcee0a]/70 focus-within:bg-[#191130]">
-          <span className="flex-none font-bold text-[#fcee0a]">$</span>
+        <div className="relative mt-1 flex items-center gap-2 rounded-md border border-[#f4c95d]/25 bg-[#111317] px-3 py-2.5 transition-colors focus-within:border-[#f4c95d]/70 focus-within:bg-[#15181b]">
+          <span className="flex-none font-bold text-[#f4c95d]">$</span>
           <input
             ref={inputRef}
             value={input}
@@ -434,7 +434,7 @@ export function TerminalCommand({
             autoCapitalize="off"
             spellCheck={false}
             aria-label="终端命令输入"
-            className="min-w-0 flex-1 border-none bg-transparent text-[#e9e6f5] caret-transparent outline-none placeholder:text-[#4d4468]"
+            className="min-w-0 flex-1 border-none bg-transparent text-[#f2efe7] caret-transparent outline-none placeholder:text-[#5e6468]"
           />
           {/* zsh 风格自动补全建议（灰字，点击补全） */}
           {suggestion ? (
@@ -442,7 +442,7 @@ export function TerminalCommand({
               type="button"
               onClick={() => setInput((current) => current + suggestion)}
               aria-label={`补全为 ${suggestion}`}
-              className="absolute inset-y-0 z-10 flex items-center pr-3 font-mono text-[#4d4468] hover:text-[#fcee0a]/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fcee0a]"
+              className="absolute inset-y-0 z-10 flex items-center pr-3 font-mono text-[#5e6468] hover:text-[#f4c95d]/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4c95d]"
               style={{ left: `calc(0.6ch + 0.5rem + 0.75rem + ${input.length}ch)` }}
             >
               {suggestion}
@@ -450,7 +450,7 @@ export function TerminalCommand({
           ) : null}
           <span
             aria-hidden="true"
-            className="inline-block h-[1.1em] w-[0.55em] flex-none bg-[#fcee0a]"
+            className="inline-block h-[1.1em] w-[0.55em] flex-none bg-[#f4c95d]"
             style={{ animation: disabled ? undefined : "cstd-blink 1.1s step-end infinite" }}
           />
           <button
@@ -463,7 +463,7 @@ export function TerminalCommand({
             aria-label={muted ? "开启终端音效" : "静音终端音效"}
             aria-pressed={muted}
             title={muted ? "开启音效" : "静音"}
-            className="flex h-10 w-10 flex-none items-center justify-center rounded border border-transparent text-sm leading-none text-[#6a6390] transition-colors hover:border-[#fcee0a]/40 hover:text-[#fcee0a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#fcee0a]"
+            className="flex h-10 w-10 flex-none items-center justify-center rounded border border-transparent text-sm leading-none text-[#777d81] transition-colors hover:border-[#f4c95d]/40 hover:text-[#f4c95d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4c95d]"
           >
             {muted ? "🔇" : "🔊"}
           </button>

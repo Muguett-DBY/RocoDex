@@ -12,7 +12,7 @@ const loadableManifestPath = path.join(
   nextRoot,
   "server/app/(personal)/cstd/page/react-loadable-manifest.json",
 );
-const initialBudget = 290_000;
+const initialBudget = 190_000;
 const webglBudget = 1_250_000;
 
 function assetPath(asset) {

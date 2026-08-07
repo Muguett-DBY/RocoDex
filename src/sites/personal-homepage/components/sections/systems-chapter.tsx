@@ -1,31 +1,25 @@
 "use client";
 
-import { lazy, memo, Suspense } from "react";
-import dynamic from "next/dynamic";
+import { Bot, Boxes, CloudCog, DatabaseZap, Microscope } from "lucide-react";
 import { clsx } from "clsx";
-import * as m from "framer-motion/m";
-import { cstdSystems, type CstdSystem } from "../../content/systems";
-import { TerminalBar } from "../terminal-bar";
+import { memo, type ComponentType } from "react";
+import { cstdSystems, type CstdSystem, type CstdSystemIcon } from "../../content/systems";
 
-const LetterReveal = dynamic(() => import("../letter-reveal").then((module) => module.LetterReveal));
-const LazyMeteors = lazy(() => import("../reactbits/meteors").then((module) => ({ default: module.Meteors })));
-const LazyGlitchFx = lazy(() => import("../reactbits/glitch-fx").then((module) => ({ default: module.GlitchFx })));
-const LazySpotlightCard = lazy(() => import("../spotlight-card").then((module) => ({ default: module.SpotlightCard })));
-const LazyGauge = lazy(() => import("../reactbits/gauge").then((module) => ({ default: module.Gauge })));
+const systemIcons: Record<CstdSystemIcon, ComponentType<{ className?: string; "aria-hidden"?: boolean }>> = {
+  product: Boxes,
+  edge: CloudCog,
+  ai: Bot,
+  research: Microscope,
+  data: DatabaseZap,
+};
 
-// 统一 spring 物理参数
-const springSoft = { type: "spring", stiffness: 90, damping: 18, mass: 0.7 } as const;
-const springSnappy = { type: "spring", stiffness: 260, damping: 24, mass: 0.5 } as const;
-
-/** 终端提示符 */
-function Prompt({ children, dim = false }: { children: React.ReactNode; dim?: boolean }) {
-  return (
-    <span className={clsx("whitespace-pre-wrap", dim && "text-[#6e6690]")}>
-      <span className="text-[#fcee0a]">$ </span>
-      {children}
-    </span>
-  );
-}
+const systemAccents: Record<CstdSystemIcon, string> = {
+  product: "#f4c95d",
+  edge: "#55c2c8",
+  ai: "#ef7868",
+  research: "#8bcaa8",
+  data: "#b5a7e8",
+};
 
 function SystemsChapter({
   activeSystemId,
@@ -37,118 +31,94 @@ function SystemsChapter({
   reducedMotion: boolean;
 }) {
   const activeSystem = cstdSystems.find((system) => system.id === activeSystemId) ?? cstdSystems[0];
+  const accent = systemAccents[activeSystem.icon];
+  const ActiveIcon = systemIcons[activeSystem.icon];
 
   return (
     <section
       id="systems"
       data-cstd-chapter="systems"
+      data-cstd-motion={reducedMotion ? "calm" : "full"}
       aria-labelledby="systems-heading"
-      className="relative z-10 min-h-[150svh] bg-[#0d0a16] text-[#e9e6f5] contain-paint lg:min-h-[185svh]"
+      className="relative z-10 bg-[#101216] px-5 py-24 text-[#f2efe7] contain-paint md:px-10 md:py-32 lg:px-16"
     >
-      {/* ReactBits 风格流星背景（calm 下不渲染） */}
-      <Suspense fallback={null}>
-        <LazyMeteors disabled={reducedMotion} count={8} />
-      </Suspense>
-      <div className="sticky top-0 flex min-h-svh items-center px-5 py-24 md:px-10 lg:px-16">
-        <div className="mx-auto grid w-full max-w-[1540px] gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
-          <div className="flex flex-col justify-between gap-12 lg:min-h-[66svh]">
-            <div>
-              <p className="font-mono text-xs font-bold text-[#fcee0a]">
-                <Suspense fallback={<>$ ps aux | grep cstd ▍</>}>
-                  <LazyGlitchFx disabled={reducedMotion} interval={2600}>
-                    $ ps aux | grep cstd ▍
-                  </LazyGlitchFx>
-                </Suspense>
-              </p>
-              <h2 id="systems-heading" className="mt-5 max-w-3xl text-5xl font-black leading-[0.98] tracking-[0] md:text-6xl xl:text-7xl">
-                <span className="block">
-                  <LetterReveal trigger="view" disabled={reducedMotion} staggerDelay={30} duration={820} fromY={90} fromRotate={3}>
-                    五条能力轴，
-                  </LetterReveal>
-                </span>
-                <span className="block">
-                  <LetterReveal trigger="view" disabled={reducedMotion} staggerDelay={30} duration={820} delay={200} fromY={90} fromRotate={3}>
-                    汇成一条流。
-                  </LetterReveal>
-                </span>
-              </h2>
-            </div>
+      <div className="mx-auto max-w-[1540px]">
+        <header className="grid gap-8 border-b border-white/10 pb-12 lg:grid-cols-[1fr_30rem] lg:items-end">
+          <div>
+            <p className="font-mono text-[11px] font-bold uppercase text-[#f4c95d]">01 / Operating systems</p>
+            <h2 id="systems-heading" className="mt-5 max-w-5xl text-5xl font-semibold leading-[0.96] tracking-[0] md:text-7xl xl:text-8xl">
+              五条能力轴，汇成一条交付链。
+            </h2>
+          </div>
+          <p className="max-w-xl text-base leading-8 text-[#979da1]">
+            从可用的产品表面，到边缘交付、AI 工具与数据研究。选择一条能力轴，查看它如何落到真实系统中。
+          </p>
+        </header>
 
-            <Suspense fallback={null}>
-            <LazySpotlightCard
-              disabled={reducedMotion}
-              spotlightColor="rgba(51, 255, 102, 0.1)"
-              size={680}
-              className="overflow-hidden rounded-lg border border-[#33284f] bg-[#171028] shadow-[0_16px_40px_rgba(0,0,0,0.4)]"
-            >
-              <TerminalBar title={`cstd@custard.top: ~/systems/${activeSystem.id}`} right="bash" />
-              <m.div
-                key={activeSystem.id}
-                data-cstd-system-visual={activeSystem.id}
-                initial={{ opacity: 0, y: 24, scale: 0.985 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={springSoft}
-                className="max-w-xl p-6 font-mono md:p-8"
-              >
-                <Prompt dim>cat systems/{activeSystem.id}.md</Prompt>
-                <p className="mt-3 text-base leading-7 text-[#e9e6f5] md:text-lg">{activeSystem.summary}</p>
-                <p className="mt-3 text-sm leading-6 text-[#9d96bd]">{activeSystem.evidence}</p>
-                <p className="mt-5 border-t border-[#33284f] pt-4 text-xs font-bold leading-6 text-[#fcee0a]">
-                  $ stack: {activeSystem.stack.join("  /  ")}
+        <div className="mt-14 grid gap-14 lg:grid-cols-[minmax(0,0.92fr)_minmax(32rem,1.08fr)] lg:gap-20">
+          <div className="self-start border-y border-white/10 py-8 lg:sticky lg:top-24">
+            <div className="flex items-start justify-between gap-6">
+              <div>
+                <p className="font-mono text-[10px] font-bold uppercase text-[#777d81]">Active capability</p>
+                <p className="mt-3 font-mono text-xs font-bold" style={{ color: accent }}>
+                  {activeSystem.track === "shipped" ? "SHIPPED SYSTEM" : "RESEARCH TRACK"}
                 </p>
-                {/* ReactBits 风格仪表（calm 下静态显示） */}
-                <div className="mt-6 grid grid-cols-3 gap-4 border-t border-[#33284f] pt-5">
-                  <Suspense fallback={null}>
-                    <LazyGauge disabled={reducedMotion} value={92} label="HEALTH" unit="%" />
-                    <LazyGauge disabled={reducedMotion} value={38} label="LOAD" unit="%" />
-                    <LazyGauge disabled={reducedMotion} value={12} label="LATENCY" unit="ms" />
-                  </Suspense>
-                </div>
-              </m.div>
-            </LazySpotlightCard>
-            </Suspense>
+              </div>
+              <span className="flex h-12 w-12 items-center justify-center rounded-md border border-white/15" style={{ color: accent }}>
+                <ActiveIcon aria-hidden={true} className="h-5 w-5" />
+              </span>
+            </div>
+            <div
+              key={activeSystem.id}
+              data-cstd-system-visual={activeSystem.id}
+              className={clsx("mt-10 transition-opacity", reducedMotion ? "duration-0" : "duration-300")}
+            >
+              <h3 className="text-4xl font-semibold leading-tight md:text-5xl">{activeSystem.title}</h3>
+              <p className="mt-6 text-lg leading-8 text-[#d6d4ce]">{activeSystem.summary}</p>
+              <p className="mt-5 border-l-2 pl-5 text-sm leading-7 text-[#8f9599]" style={{ borderColor: accent }}>
+                {activeSystem.evidence}
+              </p>
+              <ul className="mt-8 flex flex-wrap gap-x-5 gap-y-3 border-t border-white/10 pt-6 font-mono text-[11px] font-semibold text-[#aeb3b6]">
+                {activeSystem.stack.map((item) => <li key={item}>/ {item}</li>)}
+              </ul>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-2 font-mono md:gap-3">
-            <p className="px-1 pb-1 text-[10px] font-bold tracking-[0.14em] text-[#9d96bd]">PID  CPU%  STATUS  PROCESS</p>
+          <ol className="border-t border-white/10">
             {cstdSystems.map((system, index) => {
-              const isActive = system.id === activeSystem.id;
+              const active = system.id === activeSystem.id;
+              const Icon = systemIcons[system.icon];
+              const itemAccent = systemAccents[system.icon];
               return (
-                <m.button
-                  type="button"
-                  key={system.id}
-                  data-cstd-system={system.id}
-                  data-cstd-system-active={isActive ? "true" : "false"}
-                  onPointerEnter={() => setActiveSystemId(system.id)}
-                  onFocus={() => setActiveSystemId(system.id)}
-                  className={clsx(
-                    "group grid w-full grid-cols-[1.4rem_1fr_auto] items-center gap-3 rounded-md border px-4 py-3 text-left transition-colors duration-300 [clip-path:polygon(10px_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%,0_10px)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#fcee0a] md:gap-4 md:px-5 md:py-4",
-                    isActive
-                      ? "border-[#fcee0a]/50 bg-[#fcee0a]/[0.06]"
-                      : "border-[#33284f] bg-[#171028] hover:border-[#4d4468] hover:bg-[#1b1430]",
-                  )}
-                  animate={{ x: isActive ? 12 : 0 }}
-                  transition={springSnappy}
-                >
-                  <span className={clsx("text-[10px] font-bold md:text-xs", isActive ? "text-[#fcee0a]" : "text-[#6e6690]")}>
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <span className={clsx("text-base font-bold leading-none tracking-[0] md:text-xl xl:text-2xl", isActive ? "text-[#fcee0a]" : "text-[#b4acd8] group-hover:text-[#e9e6f5]")}>
-                    {system.title}
-                  </span>
-                  <span
-                    aria-hidden="true"
+                <li key={system.id} className="border-b border-white/10">
+                  <button
+                    type="button"
+                    data-cstd-system={system.id}
+                    data-cstd-system-active={active ? "true" : "false"}
+                    onClick={() => setActiveSystemId(system.id)}
+                    onPointerEnter={() => setActiveSystemId(system.id)}
+                    onFocus={() => setActiveSystemId(system.id)}
                     className={clsx(
-                      "text-[9px] font-bold tracking-widest md:text-[10px]",
-                      isActive ? "text-[#fcee0a]" : "text-[#625b85]",
+                      "group grid w-full grid-cols-[2rem_2.75rem_1fr_auto] items-center gap-3 py-6 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4c95d] md:gap-5 md:py-7",
+                      active ? "text-[#f2efe7]" : "text-[#8f9599] hover:text-[#d6d4ce]",
                     )}
                   >
-                    {isActive ? "[RUNNING]" : "[READY]"}
-                  </span>
-                </m.button>
+                    <span className="font-mono text-[10px] font-bold text-[#656b6f]">{String(index + 1).padStart(2, "0")}</span>
+                    <span
+                      className={clsx("flex h-10 w-10 items-center justify-center rounded-md border transition-colors", active ? "border-current" : "border-white/10")}
+                      style={active ? { color: itemAccent } : undefined}
+                    >
+                      <Icon aria-hidden={true} className="h-4 w-4" />
+                    </span>
+                    <span className="text-xl font-semibold md:text-2xl">{system.title}</span>
+                    <span className="hidden font-mono text-[10px] font-bold uppercase sm:block" style={active ? { color: itemAccent } : undefined}>
+                      {active ? "Inspecting" : system.track}
+                    </span>
+                  </button>
+                </li>
               );
             })}
-          </div>
+          </ol>
         </div>
       </div>
     </section>

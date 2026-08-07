@@ -3,43 +3,76 @@ import { describe, expect, test } from "vitest";
 
 const landingSource = readFileSync(new URL("./personal-homepage.tsx", import.meta.url), "utf8");
 const sceneSource = readFileSync(new URL("./immersive-scene.tsx", import.meta.url), "utf8");
-// 章节级 code-splitting 后，章节组件位于独立文件；合并读取以保持架构断言强度
-const chapterSource = [
-  "signal-strip",
-  "systems-chapter",
-  "selected-work",
-  "research-path",
-]
-  .map((name) => readFileSync(new URL(`./sections/${name}.tsx`, import.meta.url), "utf8"))
-  .join("\n");
+const commandSource = readFileSync(new URL("./command-drawer.tsx", import.meta.url), "utf8");
+const sectionSources = {
+  signal: readFileSync(new URL("./sections/signal-strip.tsx", import.meta.url), "utf8"),
+  systems: readFileSync(new URL("./sections/systems-chapter.tsx", import.meta.url), "utf8"),
+  proof: readFileSync(new URL("./sections/selected-work.tsx", import.meta.url), "utf8"),
+  path: readFileSync(new URL("./sections/research-path.tsx", import.meta.url), "utf8"),
+};
+const chapterSource = Object.values(sectionSources).join("\n");
 
-describe("CSTD immersive systems world", () => {
-  test("builds a real WebGL scene from generated cinematic materials", () => {
+describe("CSTD personal systems studio", () => {
+  test("puts the personal identity and representative proof ahead of tooling", () => {
+    expect(landingSource).toContain('id="cstd-hero-title"');
+    expect(landingSource).toContain("把产品、数据、AI 与研究");
+    expect(landingSource).toContain("奶黄包的个人技术工作室");
+    expect(landingSource).toContain('href="#proof"');
+    expect(landingSource).not.toContain("ProjectShowcase");
+    expect(landingSource).not.toContain("project-comparison");
+    expect(landingSource).not.toContain("project-directory");
+  });
+
+  test("keeps the WebGL identity progressive and desktop-only", () => {
     expect(landingSource).toContain("cstd-kinetic-studio-v2.webp");
-    expect(sceneSource).toContain("cstd-data-loom-v2.webp");
+    expect(landingSource).toContain("desktopSceneQuery");
+    expect(landingSource).toContain("enhancementsReady && desktopScene");
     expect(sceneSource).toContain("@react-three/fiber");
     expect(sceneSource).toContain("<Canvas");
     expect(sceneSource).toContain("<shaderMaterial");
     expect(sceneSource).toContain("<ParticleCurrent");
     expect(sceneSource).toContain("<ArchiveSpine");
-    expect(sceneSource).toContain("<EffectComposer");
-    expect(sceneSource).toContain("<Bloom");
-    expect(sceneSource).toContain("<ChromaticAberration");
+    expect(sceneSource).toContain("deviceMemory");
+    expect(sceneSource).toContain('dpr={quality === "full" ? [1, 1.25] : 1}');
   });
 
-  test("connects pointer, press, and scroll progress to the cinematic world", () => {
-    expect(landingSource).toContain("data-cstd-kinetic-world");
-    expect(sceneSource).toContain("data-cstd-webgl");
-    expect(landingSource).toContain("data-cstd-pointer-field");
-    expect(landingSource).toContain("onPointerMove={handlePointerMove}");
-    expect(landingSource).toContain("impulseRef.current = 1");
-    expect(landingSource).toContain("useMotionValueEvent(scrollYProgress");
-    expect(sceneSource).toContain("pointerRef.current");
-    expect(sceneSource).toContain("progressRef.current");
-    expect(sceneSource).toContain("impulseRef.current");
+  test("does not download archive textures until the systems chapter is active", () => {
+    expect(landingSource).toContain('showArchive: activeChapter === "systems"');
+    expect(sceneSource).toContain("props.showArchive ? (");
+    expect(sceneSource).toContain("<ProgressiveArchiveLayer");
+    expect(sceneSource).toContain("<SceneReady onReady={props.onReady}");
   });
 
-  test("composes systems, proof, and research as continuous cinematic chapters", () => {
+  test("uses one native scroll loop instead of a motion runtime on first paint", () => {
+    expect(landingSource).toContain('window.addEventListener("scroll", requestSync, { passive: true })');
+    expect(landingSource).toContain("requestAnimationFrame(syncScroll)");
+    expect(landingSource).toContain("progressBarRef.current.style.transform");
+    expect(landingSource).not.toContain('from "framer-motion"');
+    expect(landingSource).not.toContain("<LazyMotion");
+    expect(landingSource).not.toContain("useMotionValue");
+  });
+
+  test("loads the command console only after deliberate input", () => {
+    expect(landingSource).toContain('import("./command-drawer")');
+    expect(landingSource).toContain("consoleOpen ? (");
+    expect(landingSource).not.toContain('from "./terminal-command"');
+    expect(commandSource).toContain("<TerminalCommand");
+    expect(commandSource).toContain('aria-label="关闭控制台"');
+    expect(commandSource).toContain('event.key === "Escape"');
+  });
+
+  test("removes continuous decorative loops from the DOM chapters", () => {
+    expect(sectionSources.signal).not.toContain("repeat: Infinity");
+    expect(sectionSources.signal).not.toContain("data-cstd-signal-track");
+    expect(sectionSources.systems).not.toContain("Meteors");
+    expect(sectionSources.systems).not.toContain("Gauge");
+    expect(sectionSources.proof).not.toContain("LazyOrb");
+    expect(sectionSources.proof).not.toContain("cstd-spin");
+    expect(sectionSources.path).not.toContain("CountUp");
+    expect(sectionSources.path).not.toContain("TracingProgress");
+  });
+
+  test("composes systems, proof, and research as concise interactive chapters", () => {
     expect(chapterSource).toContain('data-cstd-chapter="systems"');
     expect(chapterSource).toContain('data-cstd-chapter="proof"');
     expect(chapterSource).toContain('data-cstd-chapter="path"');
@@ -47,56 +80,23 @@ describe("CSTD immersive systems world", () => {
     expect(chapterSource).toContain("data-cstd-proof={proof.projectId}");
     expect(chapterSource).toContain("data-cstd-project-plane={proof.projectId}");
     expect(chapterSource).toContain("data-cstd-learning-step={entry.year}");
-    expect(chapterSource).toContain("data-cstd-research-state={activeYear}");
+    expect(sectionSources.systems).not.toContain("min-h-[185svh]");
+    expect(sectionSources.path).not.toContain("min-h-svh");
   });
 
-  test("keeps live product links behind the shared external-link policy", () => {
-    expect(chapterSource).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
-    expect(chapterSource).toContain("{...targetProps}");
-    expect(sceneSource).toContain('data-cstd-render-quality={quality}');
-    expect(sceneSource).toContain("data-cstd-render-ready={renderReady}");
+  test("keeps live links behind the shared external-link policy", () => {
+    expect(sectionSources.proof).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
+    expect(sectionSources.proof).toContain("{...targetProps}");
     expect(sceneSource).toContain('data-cstd-render-fallback={contextLost ? "true" : "false"}');
     expect(sceneSource).toContain('addEventListener("webglcontextlost"');
-    expect(sceneSource).toContain("softwareRendererPattern");
   });
 
-  test("defaults to full motion and keeps an explicit calm visual fallback", () => {
+  test("keeps explicit calm mode without inheriting operating-system motion settings", () => {
     expect(landingSource).toContain("useSyncExternalStore(");
     expect(landingSource).toContain('return "full";');
-    expect(landingSource).not.toContain("prefers-reduced-motion: reduce");
     expect(landingSource).toContain("data-cstd-motion-toggle");
-    expect(chapterSource).toContain('data-cstd-path-mode="vertical"');
-    expect(landingSource).not.toContain("min-h-[420svh]");
-    expect(landingSource).not.toContain("w-[400vw]");
-    expect(landingSource).not.toContain("will-change-transform");
+    expect(landingSource).not.toContain("prefers-reduced-motion: reduce");
     expect(landingSource).toContain("reducedMotion={reducedMotion}");
-    expect(landingSource).toContain('src="/cstd-world/cstd-kinetic-studio-v2.webp"');
-    expect(sceneSource).toContain('data-cstd-render-active={props.active ? "true" : "false"}');
     expect(sceneSource).toContain('frameloop={props.active && quality === "full" ? "always" : "demand"}');
-    expect(sceneSource).toContain('dpr={quality === "full" ? [1, 1.25] : 1}');
-    expect(sceneSource).toContain('{props.quality === "full" ? (');
-    expect(landingSource).toContain(
-      'active: documentVisible && (activeChapter === "hero" || activeChapter === "systems")',
-    );
-    expect(chapterSource).toContain('loading="lazy"');
-  });
-
-  test("defers animation and WebGL enhancements behind the static first paint", () => {
-    expect(landingSource).toContain('from "framer-motion/m"');
-    expect(landingSource).toContain("<LazyMotion");
-    expect(landingSource).toContain('import("./motion-features")');
-    expect(landingSource).toContain("requestIdleCallback");
-    expect(landingSource).toContain("data-cstd-enhancements-ready");
-    expect(landingSource).not.toContain("<motion.");
-    expect(sceneSource).toContain("<ProgressiveArchiveLayer");
-  });
-
-  test("does not restore portfolio utility workflows", () => {
-    expect(landingSource).not.toContain("ProjectShowcase");
-    expect(landingSource).not.toContain("ShowcaseIndex");
-    expect(landingSource).not.toContain("project-directory");
-    expect(landingSource).not.toContain("project-comparison");
-    expect(landingSource).not.toContain("project-guide");
-    expect(landingSource).not.toContain('role="dialog"');
   });
 });
