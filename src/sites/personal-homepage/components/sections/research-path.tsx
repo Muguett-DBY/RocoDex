@@ -1,20 +1,10 @@
 "use client";
 
-import { lazy, memo, Suspense, useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
 import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 import { clsx } from "clsx";
-import { ArrowDown } from "lucide-react";
-import * as m from "framer-motion/m";
+import { memo, useEffect, useRef, useState } from "react";
 import { cstdLearningPath, type CstdLearningEntry } from "../../content/systems";
-
-const LetterReveal = dynamic(() => import("../letter-reveal").then((module) => module.LetterReveal));
-const CountUp = dynamic(() => import("../count-up").then((module) => module.CountUp));
-const LazyTracingProgress = lazy(() => import("../tracing-progress").then((module) => ({ default: module.TracingProgress })));
-
-// 统一 spring 物理参数
-const springSoft = { type: "spring", stiffness: 90, damping: 18, mass: 0.7 } as const;
-const springSnappy = { type: "spring", stiffness: 260, damping: 24, mass: 0.5 } as const;
 
 const learningAssets: Record<CstdLearningEntry["year"], { src: string; alt: string }> = {
   "2022": {
@@ -35,241 +25,113 @@ const learningAssets: Record<CstdLearningEntry["year"], { src: string; alt: stri
   },
 };
 
-const researchAccents = [
-  {
-    text: "text-[#fcee0a]",
-    background: "bg-[#fcee0a]",
-    border: "border-[#fcee0a]",
-    glow: "shadow-[0_0_20px_rgba(252,238,10,0.25)]",
-    code: "AMBER / ORIGIN",
-  },
-  {
-    text: "text-[#05d9e8]",
-    background: "bg-[#05d9e8]",
-    border: "border-[#05d9e8]",
-    glow: "shadow-[0_0_20px_rgba(5,217,232,0.22)]",
-    code: "COBALT / SIGNAL",
-  },
-  {
-    text: "text-[#ff2a6d]",
-    background: "bg-[#ff2a6d]",
-    border: "border-[#ff2a6d]",
-    glow: "shadow-[0_0_20px_rgba(255,42,109,0.22)]",
-    code: "CORAL / STRUCTURE",
-  },
-  {
-    text: "text-[#c8f04c]",
-    background: "bg-[#c8f04c]",
-    border: "border-[#c8f04c]",
-    glow: "shadow-[0_0_20px_rgba(200,240,76,0.2)]",
-    code: "MINT / CONTINUUM",
-  },
-] as const;
-
-function ResearchPathPanel({
-  entry,
-  index,
-  active,
-  reducedMotion,
-}: {
-  entry: CstdLearningEntry;
-  index: number;
-  active: boolean;
-  reducedMotion: boolean;
-}) {
-  const asset = learningAssets[entry.year];
-  const accent = researchAccents[index];
-  const lastIndex = cstdLearningPath.length - 1;
-
-  return (
-    <li
-      data-cstd-learning-step={entry.year}
-      data-cstd-learning-active={active ? "true" : "false"}
-      className={clsx(
-        "group relative grid min-h-svh w-full items-center gap-12 overflow-hidden px-5 py-28 contain-paint md:px-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-20 lg:px-16 lg:py-32",
-        index % 2 === 1 && "lg:grid-cols-[1.18fr_0.82fr]",
-      )}
-    >
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <Image
-          src={asset.src}
-          alt=""
-          fill
-          sizes="100vw"
-          className="scale-125 object-cover opacity-[0.07] saturate-50 transition duration-1000 group-hover:scale-[1.29] group-hover:opacity-[0.12] group-hover:saturate-100"
-        />
-        <div className="absolute inset-0 bg-[#0d0a16]/85" />
-        <span className="absolute -bottom-12 right-2 font-mono text-[13rem] font-black leading-none text-white/[0.03] md:text-[20rem] lg:-right-5 lg:text-[27rem]">
-          {entry.year.slice(2)}
-        </span>
-        <span className="absolute inset-x-0 top-[42%] h-px bg-[#33284f]" />
-      </div>
-
-      {/* 年份发光节点（commit 点） */}
-      <span
-        aria-hidden="true"
-        className={clsx(
-          "absolute left-3 top-1/2 z-30 hidden h-3.5 w-3.5 -translate-y-1/2 rotate-45 transition-all duration-500 lg:block",
-          active ? `${accent.background} ${accent.glow} scale-125` : "bg-[#4d4468]",
-        )}
-      />
-
-      <m.div
-        className={clsx(
-          "relative z-20 min-w-0 max-w-2xl font-mono",
-          index % 2 === 1 && "lg:order-2 lg:pl-8",
-        )}
-        initial={reducedMotion ? false : { opacity: 0, y: 48 }}
-        whileInView={reducedMotion ? undefined : { opacity: 1, y: 0 }}
-        viewport={{ amount: 0.28, once: true }}
-        transition={springSoft}
-      >
-        <div className="flex items-center gap-4 text-[10px] font-bold text-[#9d96bd] md:text-xs">
-          <span className={clsx("rounded-sm border border-current px-2 py-0.5", accent.text)}>commit {String(index + 1).padStart(2, "0")}</span>
-          <span aria-hidden="true" className={clsx("h-px w-12", accent.background)} />
-          <span>{entry.focus}</span>
-        </div>
-        <p className={clsx("mt-8 text-8xl font-black leading-none md:text-9xl", accent.text)}>
-          <CountUp disabled={reducedMotion} value={Number(entry.year)} duration={1150} threshold={0.3} />
-        </p>
-        <h3 className="mt-6 text-balance text-4xl font-black leading-[0.96] tracking-[0] md:text-5xl xl:text-6xl">{entry.title}</h3>
-        <p className="mt-7 max-w-lg text-balance text-base leading-8 text-[#b4acd8]">{entry.note}</p>
-        <div className="mt-10 flex items-center gap-4 text-[10px] font-bold text-[#625b85]">
-          <span>{accent.code}</span>
-          <span aria-hidden="true" className="h-px flex-1 bg-[#33284f]" />
-          <span>{String(index + 1).padStart(2, "0")} / {String(cstdLearningPath.length).padStart(2, "0")}</span>
-        </div>
-      </m.div>
-
-      <m.figure
-        className={clsx(
-          "relative z-10 aspect-[4/5] max-h-[72svh] min-h-0 overflow-hidden rounded-lg border bg-black",
-          accent.border,
-          accent.glow,
-          index % 2 === 1 && "lg:order-1",
-        )}
-        initial={reducedMotion ? false : { opacity: 0.5, y: 70, scale: 0.94 }}
-        whileInView={reducedMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
-        viewport={{ amount: 0.24, once: true }}
-        whileHover={reducedMotion ? undefined : { scale: 1.02 }}
-        transition={springSoft}
-      >
-        <m.div
-          className="absolute inset-[-4%]"
-          whileHover={reducedMotion ? undefined : { scale: 1.04 }}
-          transition={springSoft}
-        >
-          <Image
-            src={asset.src}
-            alt={asset.alt}
-            fill
-            loading="lazy"
-            sizes="(min-width: 1024px) 42vw, 100vw"
-            className="object-cover saturate-[0.78] transition duration-700 group-hover:saturate-100"
-          />
-        </m.div>
-        <div aria-hidden="true" className="absolute inset-0 rounded-lg border-[6px] border-white/10" />
-        <figcaption className={clsx("absolute bottom-4 right-4 rounded-sm px-3 py-1.5 text-[10px] font-bold text-black", accent.background)}>
-          [ARCHIVE] {entry.year}
-        </figcaption>
-      </m.figure>
-
-      {index === lastIndex ? (
-        <a
-          href="#cstd-footer"
-          aria-label="继续到页脚"
-          className="absolute bottom-8 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-md border border-[#4d4468] text-[#9d96bd] transition-colors hover:border-[#fcee0a] hover:text-[#fcee0a] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#fcee0a] md:right-10 lg:right-16"
-        >
-          <ArrowDown aria-hidden="true" className="h-5 w-5" />
-        </a>
-      ) : null}
-    </li>
-  );
-}
+const researchAccents: Record<CstdLearningEntry["year"], string> = {
+  "2022": "#f4c95d",
+  "2024": "#55c2c8",
+  "2025": "#ef7868",
+  "2026": "#8bcaa8",
+};
 
 function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
-  const pathRef = useRef<HTMLElement>(null);
-  const [activeYear, setActiveYear] = useState<CstdLearningEntry["year"]>(cstdLearningPath[0].year);
-  const activeIndex = cstdLearningPath.findIndex((entry) => entry.year === activeYear);
+  const [activeYear, setActiveYear] = useState<CstdLearningEntry["year"]>("2026");
+  const [imageReady, setImageReady] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const activeEntry = cstdLearningPath.find((entry) => entry.year === activeYear) ?? cstdLearningPath.at(-1)!;
+  const asset = learningAssets[activeEntry.year];
+  const accent = researchAccents[activeEntry.year];
 
   useEffect(() => {
-    const section = pathRef.current;
+    const section = sectionRef.current;
     if (!section) return;
-    const steps = Array.from(section.querySelectorAll<HTMLElement>("[data-cstd-learning-step]"));
     const observer = new IntersectionObserver(
-      () => {
-        const focusLine = window.innerHeight * 0.48;
-        const closest = steps.reduce((winner, step) => {
-          const rect = step.getBoundingClientRect();
-          const distance = Math.abs(rect.top + rect.height * 0.42 - focusLine);
-          return distance < winner.distance ? { step, distance } : winner;
-        }, { step: steps[0], distance: Number.POSITIVE_INFINITY });
-        const year = closest.step?.dataset.cstdLearningStep as CstdLearningEntry["year"] | undefined;
-        if (year) setActiveYear((current) => (current === year ? current : year));
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setImageReady(true);
+          observer.disconnect();
+        }
       },
-      { threshold: [0, 0.2, 0.5, 0.8] },
+      { rootMargin: "320px 0px" },
     );
-    steps.forEach((step) => observer.observe(step));
+    observer.observe(section);
     return () => observer.disconnect();
   }, []);
 
   return (
     <section
       id="path"
-      ref={pathRef}
+      ref={sectionRef}
       data-cstd-chapter="path"
       data-cstd-research-state={activeYear}
-      data-cstd-path-mode="vertical"
-      data-cstd-path-continuous="true"
+      data-cstd-path-mode="interactive-timeline"
       aria-labelledby="path-heading"
-      className="relative z-10 bg-[#0d0a16] text-[#e9e6f5] contain-paint"
+      className="relative z-10 bg-[#0a0b0d] px-5 py-24 text-[#f2efe7] contain-paint md:px-10 md:py-32 lg:px-16"
     >
-      <Suspense fallback={null}>
-        <LazyTracingProgress disabled={reducedMotion} color="#fcee0a" className="left-4 md:left-8" />
-      </Suspense>
-      <div data-cstd-path-stage className="relative">
-        <header className="relative z-30 border-b border-[#33284f] px-5 pb-10 pt-24 md:px-10 lg:px-16 lg:pb-14 lg:pt-32">
-          <div className="flex items-end justify-between gap-10">
-            <div>
-              <p className="font-mono text-xs font-black text-[#fcee0a]">$ git log --oneline ▍</p>
-              <h2 id="path-heading" className="mt-3 max-w-5xl text-4xl font-black leading-[0.96] tracking-[0] md:text-6xl">
-                <LetterReveal trigger="view" disabled={reducedMotion} staggerDelay={26} duration={800} fromY={90} fromRotate={3}>
-                  学习不是履历，是镜头继续向前。
-                </LetterReveal>
-              </h2>
-            </div>
-            <div className="hidden items-end gap-5 font-mono lg:flex">
-              <span className="pb-2 text-[10px] font-bold text-[#625b85]">commit {String(activeIndex + 1).padStart(2, "0")}/{String(cstdLearningPath.length).padStart(2, "0")}</span>
-              <span className="text-7xl font-black leading-none text-white/10">{activeYear}</span>
-            </div>
+      <div className="mx-auto max-w-[1540px]" data-cstd-path-stage>
+        <header className="grid gap-8 border-b border-white/10 pb-12 lg:grid-cols-[1fr_28rem] lg:items-end">
+          <div>
+            <p className="font-mono text-[11px] font-bold uppercase text-[#8bcaa8]">03 / Research path</p>
+            <h2 id="path-heading" className="mt-5 max-w-5xl text-5xl font-semibold leading-[0.94] tracking-[0] md:text-7xl xl:text-8xl">
+              学习不是履历，是系统继续向前。
+            </h2>
           </div>
-          <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-px bg-[#33284f]">
-            <m.div
-              data-cstd-path-progress
-              className="h-px origin-left"
-              style={{
-                background: "linear-gradient(90deg, #fcee0a, #c8f04c)",
-                boxShadow: "0 0 10px rgba(252,238,10,0.5)",
-              }}
-              animate={{ scaleX: (activeIndex + 1) / cstdLearningPath.length }}
-              transition={springSnappy}
-            />
-          </div>
+          <p className="text-base leading-8 text-[#92989c]">
+            四个节点不是完整清单，而是工程直觉如何从计算基础走向数据系统与独立交付的缩影。
+          </p>
         </header>
 
-        <ol className="flex w-full flex-col">
-          {cstdLearningPath.map((entry, index) => {
-            return (
-              <ResearchPathPanel
-                key={entry.year}
-                entry={entry}
-                index={index}
-                active={entry.year === activeYear}
-                reducedMotion={reducedMotion}
+        <div className="mt-14 grid gap-12 lg:grid-cols-[minmax(0,1.12fr)_minmax(28rem,0.88fr)] lg:items-stretch lg:gap-16">
+          <figure className="relative aspect-[4/3] min-h-0 overflow-hidden rounded-lg border border-white/15 bg-[#121417] shadow-[0_28px_90px_rgba(0,0,0,0.35)] lg:aspect-auto lg:min-h-[650px]">
+            {imageReady ? (
+              <Image
+                key={activeEntry.year}
+                src={asset.src}
+                alt={asset.alt}
+                fill
+                loading="eager"
+                sizes="(min-width: 1024px) 58vw, 100vw"
+                className={clsx("object-cover saturate-[0.82] transition-opacity", reducedMotion ? "duration-0" : "duration-500")}
               />
-            );
-          })}
-        </ol>
+            ) : (
+              <div aria-hidden="true" className="absolute inset-0 bg-[#15181b]" />
+            )}
+            <div aria-hidden="true" className="absolute inset-0 bg-black/10" />
+            <figcaption className="absolute inset-x-0 bottom-0 grid gap-3 bg-[#0a0b0d]/86 p-5 backdrop-blur-xl md:grid-cols-[auto_1fr] md:items-end md:p-7">
+              <span className="font-mono text-5xl font-black" style={{ color: accent }}>{activeEntry.year}</span>
+              <span className="text-sm leading-6 text-[#c0c3c3] md:text-right">{activeEntry.note}</span>
+            </figcaption>
+          </figure>
+
+          <ol className="border-t border-white/10">
+            {cstdLearningPath.map((entry, index) => {
+              const active = entry.year === activeYear;
+              const itemAccent = researchAccents[entry.year];
+              return (
+                <li
+                  key={entry.year}
+                  data-cstd-learning-step={entry.year}
+                  data-cstd-learning-active={active ? "true" : "false"}
+                  className="border-b border-white/10"
+                >
+                  <button
+                    type="button"
+                    onClick={() => setActiveYear(entry.year)}
+                    onPointerEnter={() => setActiveYear(entry.year)}
+                    onFocus={() => setActiveYear(entry.year)}
+                    className="group grid w-full grid-cols-[2rem_5rem_1fr_auto] items-start gap-3 py-6 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4c95d] md:gap-5 md:py-7"
+                  >
+                    <span className="pt-1 font-mono text-[10px] font-bold text-[#656b6f]">0{index + 1}</span>
+                    <span className="font-mono text-xl font-black transition-colors" style={{ color: active ? itemAccent : "#8f9599" }}>{entry.year}</span>
+                    <span>
+                      <span className={clsx("block text-xl font-semibold transition-colors md:text-2xl", active ? "text-[#f2efe7]" : "text-[#9ba0a4] group-hover:text-[#d8d7d2]")}>{entry.title}</span>
+                      <span className="mt-2 block font-mono text-[10px] font-semibold leading-5 text-[#777d81]">{entry.focus}</span>
+                    </span>
+                    <ArrowRight aria-hidden="true" className={clsx("mt-1 h-4 w-4 transition-transform", active && "translate-x-1")} style={{ color: active ? itemAccent : "#656b6f" }} />
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
       </div>
     </section>
   );

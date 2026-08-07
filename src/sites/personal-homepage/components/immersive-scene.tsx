@@ -15,6 +15,7 @@ export type PersonalImmersiveSceneProps = {
   impulseRef: NumberRef;
   reducedMotion: boolean;
   active: boolean;
+  showArchive: boolean;
 };
 
 type SceneQuality = "full" | "lite";
@@ -30,7 +31,12 @@ function getSceneQuality(renderer: THREE.WebGLRenderer): SceneQuality {
     context.getParameter(debugInfo?.UNMASKED_RENDERER_WEBGL ?? context.RENDERER),
   );
 
-  return softwareRendererPattern.test(rendererName) ? "lite" : "full";
+  const device = navigator as Navigator & { deviceMemory?: number };
+  const constrainedDevice =
+    (device.hardwareConcurrency ?? 8) <= 4 ||
+    (device.deviceMemory ?? 8) <= 4;
+
+  return softwareRendererPattern.test(rendererName) || constrainedDevice ? "lite" : "full";
 }
 
 const archiveTextures = [
@@ -192,7 +198,7 @@ function ParticleCurrent({
   pointerRef,
   reducedMotion,
   quality,
-}: Omit<PersonalImmersiveSceneProps, "impulseRef" | "active"> & { quality: SceneQuality }) {
+}: Omit<PersonalImmersiveSceneProps, "impulseRef" | "active" | "showArchive"> & { quality: SceneQuality }) {
   const pointsRef = useRef<THREE.Points>(null);
   const count = quality === "lite" ? 280 : 950;
   const { positions, colors } = useMemo(() => {
@@ -450,13 +456,11 @@ function FloatingArchives({
 function ProgressiveArchiveLayer(
   props: Pick<PersonalImmersiveSceneProps, "progressRef" | "pointerRef" | "reducedMotion"> & {
     quality: SceneQuality;
-    onReady: (quality: SceneQuality) => void;
   },
 ) {
   return (
     <Suspense fallback={null}>
       <FloatingArchives {...props} />
-      <SceneReady onReady={props.onReady} quality={props.quality} />
     </Suspense>
   );
 }
@@ -537,13 +541,15 @@ function World(
         quality={props.quality}
       />
       <ArchiveSpine {...props} />
-      <ProgressiveArchiveLayer
-        progressRef={props.progressRef}
-        pointerRef={props.pointerRef}
-        reducedMotion={props.reducedMotion}
-        quality={props.quality}
-        onReady={props.onReady}
-      />
+      {props.showArchive ? (
+        <ProgressiveArchiveLayer
+          progressRef={props.progressRef}
+          pointerRef={props.pointerRef}
+          reducedMotion={props.reducedMotion}
+          quality={props.quality}
+        />
+      ) : null}
+      <SceneReady onReady={props.onReady} quality={props.quality} />
       <CameraRig {...props} />
       {props.quality === "full" ? (
         <EffectComposer multisampling={0}>
