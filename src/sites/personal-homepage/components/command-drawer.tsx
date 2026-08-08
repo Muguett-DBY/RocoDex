@@ -1,6 +1,6 @@
 "use client";
 
-import { X } from "lucide-react";
+import { Activity, Boxes, Fingerprint, Route, X } from "lucide-react";
 import { useCallback, useEffect, useRef } from "react";
 import { cstdProjects } from "../content/projects";
 import {
@@ -19,8 +19,16 @@ const projects = getCstdProjectsById(cstdProjects, [
 
 const bootLines: TerminalLine[] = [
   { text: "[NEURAL LINK ESTABLISHED] cstd cyberdeck online", tone: "accent", type: 7 },
-  { text: "输入 help 查看命令；breach 可启动视觉超载。", tone: "dim", type: 7 },
+  { text: "5 systems · 5 live nodes · neural city synchronized", tone: "dim", type: 6 },
+  { text: "输入 scan 扫描网络；jack <project> 接入项目。", tone: "dim", type: 6 },
 ];
+
+const quickLinks = [
+  { id: "systems", label: "系统", icon: Boxes },
+  { id: "proof", label: "作品", icon: Activity },
+  { id: "operator", label: "身份", icon: Fingerprint },
+  { id: "path", label: "路径", icon: Route },
+] as const;
 
 export function CommandDrawer({
   reducedMotion,
@@ -45,6 +53,14 @@ export function CommandDrawer({
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [onClose]);
 
+  const jumpTo = useCallback(
+    (id: string) => {
+      document.getElementById(id)?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+      window.setTimeout(onClose, reducedMotion ? 0 : 180);
+    },
+    [onClose, reducedMotion],
+  );
+
   const handleCommand = useCallback(
     (raw: string, echo: (lines: TerminalLine[]) => void) => {
       const command = raw.trim();
@@ -53,14 +69,41 @@ export function CommandDrawer({
       switch (name.toLowerCase()) {
         case "help":
           echo([
-            { text: "help · whoami · ls · cd <chapter> · open <project> · breach · matrix · date · clear · exit", tone: "accent" },
-            { text: "chapters: systems / work / path", tone: "dim" },
+            { text: "status · scan · signal · ls · tree · cd <chapter> · jack <project>", tone: "accent" },
+            { text: "open <project> · breach · matrix · neofetch · ping · date · clear · exit", tone: "dim" },
+            { text: "chapters: systems / work / operator / path", tone: "dim" },
           ]);
           break;
         case "whoami":
           echo([
             { text: "奶黄包 / product engineer / creative systems builder", tone: "accent" },
             { text: "把产品、数据、AI 与研究做成真正运行的系统。", tone: "dim" },
+          ]);
+          break;
+        case "status":
+        case "top":
+          echo([
+            { text: "CSTD://NIGHT-OPS                         ONLINE", tone: "accent" },
+            { text: `SYSTEMS  ${String(cstdSystems.length).padStart(2, "0")}   PROJECT NODES  ${String(projects.length).padStart(2, "0")}   TRACE  CLEAN`, tone: "default" },
+            { text: "RENDER   NEURAL CITY   LINK  STABLE   REGION  SYD", tone: "dim" },
+          ]);
+          break;
+        case "scan":
+          echo([
+            { text: "scanning cstd neural bus...", tone: "dim", type: 4 },
+            ...cstdSystems.map((system, index) => ({
+              text: `[${String(index + 1).padStart(2, "0")}] ${system.track === "shipped" ? "SHIPPED " : "RESEARCH"}  ${system.title}`,
+              tone: system.track === "shipped" ? "accent" as const : "default" as const,
+            })),
+            { text: `scan complete · ${projects.length}/${projects.length} project nodes responding`, tone: "accent" },
+          ]);
+          break;
+        case "signal":
+          echo([
+            { text: "PRODUCT  ██████████  LOCKED", tone: "accent" },
+            { text: "DATA     █████████░  98.4%", tone: "default" },
+            { text: "AI       ████████░░  92.7%", tone: "default" },
+            { text: "RESEARCH ███████░░░  87.1%", tone: "dim" },
           ]);
           break;
         case "ls":
@@ -74,6 +117,7 @@ export function CommandDrawer({
             systems: "systems",
             work: "proof",
             projects: "proof",
+            operator: "operator",
             path: "path",
             "~": "top",
             "/": "top",
@@ -85,6 +129,18 @@ export function CommandDrawer({
           }
           document.getElementById(id)?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
           echo([{ text: `→ ~/${argument}`, tone: "accent" }]);
+          break;
+        }
+        case "jack": {
+          const project = projects.find((candidate) => candidate.id === argument);
+          if (!project) {
+            echo([{ text: `jack: unknown node: ${argument ?? ""}（试试 ls）`, tone: "error" }]);
+            break;
+          }
+          const target = document.getElementById(`proof-${project.id}`) ?? document.querySelector(`[data-cstd-live-object="${project.id}"]`);
+          target?.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "center" });
+          echo([{ text: `neural route locked → ${project.id}`, tone: "accent" }]);
+          window.setTimeout(onClose, reducedMotion ? 0 : 220);
           break;
         }
         case "open": {
@@ -109,6 +165,39 @@ export function CommandDrawer({
             text: `${String(index + 1).padStart(2, "0")}  RUNNING  ${system.title}`,
             tone: "default" as const,
           })));
+          break;
+        case "tree":
+          echo([
+            { text: "~/cstd", tone: "accent" },
+            { text: "├─ systems/     product · edge · ai · research · data", tone: "default" },
+            { text: "├─ proof/       rocodex · alpha · crm", tone: "default" },
+            { text: "├─ operator/    cstd-01 · night-runner", tone: "default" },
+            { text: "└─ path/        2022 → 2026", tone: "dim" },
+          ]);
+          break;
+        case "neofetch":
+        case "whois":
+          echo([
+            { text: "CSTD-01 @ custard.top", tone: "accent" },
+            { text: "OS: independent product studio / Sydney", tone: "default" },
+            { text: "Stack: TypeScript · React · Cloudflare · Python · Data · AI", tone: "dim" },
+          ]);
+          break;
+        case "ping":
+          echo([
+            { text: `PING ${argument || "custard.top"}: 64 bytes`, tone: "dim" },
+            { text: "reply: ttl=64 time=12ms · reply: ttl=64 time=11ms", tone: "accent" },
+            { text: "0% packet loss", tone: "default" },
+          ]);
+          break;
+        case "sudo":
+          echo([{ text: "cstd-01 already owns this machine.", tone: "warn" }]);
+          break;
+        case "echo":
+          echo([{ text: command.slice(name.length).trim(), tone: "default" }]);
+          break;
+        case "curl":
+          echo([{ text: "HTTP/2 200 · server: cstd-edge · signal: online", tone: "accent" }]);
           break;
         case "breach":
           onOverdrive();
@@ -153,6 +242,19 @@ export function CommandDrawer({
             </button>
           }
         />
+        <nav aria-label="Cyberdeck 快速链路" className="grid grid-cols-4 border-b border-white/10 bg-[#07090b]">
+          {quickLinks.map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => jumpTo(id)}
+              className="flex min-h-14 items-center justify-center gap-2 border-r border-white/10 px-2 font-mono text-[10px] font-black text-[#8f9599] transition-colors last:border-r-0 hover:bg-[#24e0ff]/10 hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#24e0ff]"
+            >
+              <Icon aria-hidden="true" className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">{label}</span>
+            </button>
+          ))}
+        </nav>
         <div className="min-h-0 flex-1 p-4 md:p-6">
           <TerminalCommand
             bootLines={bootLines}
@@ -162,8 +264,9 @@ export function CommandDrawer({
             height="100%"
             className="h-full"
             completions={{
-              cd: ["~", "/", "systems", "work", "projects", "path"],
+              cd: ["~", "/", "systems", "work", "projects", "operator", "path"],
               open: projects.map((project) => project.id),
+              jack: projects.map((project) => project.id),
             }}
           />
         </div>

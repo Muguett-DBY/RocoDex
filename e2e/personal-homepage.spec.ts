@@ -13,7 +13,9 @@ test("CSTD presents a concise personal studio with progressive visuals", async (
   await expect(page.locator("[data-cstd-system]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-proof]")).toHaveCount(3);
   await expect(page.locator("[data-cstd-project-plane]")).toHaveCount(3);
+  await expect(page.locator("[data-cstd-live-feed]")).toHaveCount(3);
   await expect(page.locator("[data-cstd-live-object]")).toHaveCount(2);
+  await expect(page.locator('[data-cstd-generated-visual="night-runner-v1"]')).toHaveCount(1);
   await expect(page.locator("[data-cstd-learning-step]")).toHaveCount(4);
 
   if (isMobile) {
@@ -116,6 +118,17 @@ test("CSTD console is absent from first paint and opens on demand", async ({ pag
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-overdrive", "true");
   await page.keyboard.press("Escape");
   await expect(drawer).toHaveCount(0);
+
+  await page.locator("[data-cstd-console-trigger]").click();
+  const reopenedDrawer = page.locator("#cstd-command-drawer");
+  const reopenedInput = reopenedDrawer.getByPlaceholder("输入 help，或按 Tab 补全...");
+  await reopenedInput.fill("scan");
+  await reopenedInput.press("Enter");
+  await expect(reopenedDrawer.getByText("scan complete", { exact: false })).toBeVisible();
+  await reopenedInput.fill("jack alpha");
+  await reopenedInput.press("Enter");
+  await expect(reopenedDrawer).toHaveCount(0);
+  await expect(page.locator("#proof-alpha")).toBeInViewport({ ratio: 0.2 });
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);

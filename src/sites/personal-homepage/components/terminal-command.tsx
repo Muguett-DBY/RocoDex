@@ -33,7 +33,7 @@ type TerminalCommandProps = {
   height?: string;
 };
 
-const BUILTIN_COMMANDS = ["help", "whoami", "ls", "cd", "ps", "open", "breach", "neofetch", "date", "clear", "exit", "sudo", "top", "ping", "tree", "echo", "whois", "curl", "history", "matrix"];
+const BUILTIN_COMMANDS = ["help", "whoami", "status", "scan", "signal", "ls", "tree", "cd", "jack", "ps", "open", "breach", "neofetch", "date", "clear", "exit", "sudo", "top", "ping", "echo", "whois", "curl", "history", "matrix"];
 const HISTORY_KEY = "cstd-terminal-history";
 
 /** matrix 数字雨：4 秒自动停止；calm 下只渲染静态帧 */

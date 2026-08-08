@@ -28,11 +28,13 @@ describe("CSTD host routing", () => {
   test("allows CSTD assets and SEO endpoints on the apex domain", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-mascot.svg")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-og.svg")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-og-v2.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-systems-hero-v1.png")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-systems-map-v1.png")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-research-archive-v1.png")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-archive/cstd-archive-resin-circuit-v1.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-world/cstd-kinetic-studio-v2.webp")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-persona/cstd-night-runner-v1.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-projects/rocodex.png")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/favicon.ico")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/robots.txt")).toEqual({ kind: "next" });

@@ -257,6 +257,157 @@ function ParticleCurrent({
   );
 }
 
+type NeuralCityProps = Pick<
+  PersonalImmersiveSceneProps,
+  "progressRef" | "pointerRef" | "reducedMotion"
+> & {
+  quality: SceneQuality;
+};
+
+const neuralBeacons = [
+  { position: [-2.35, 0.34, 0.45] as const, color: "#f4d431" },
+  { position: [0.15, 0.46, -1.45] as const, color: "#24e0ff" },
+  { position: [2.45, 0.4, -0.2] as const, color: "#ff3b30" },
+] as const;
+
+function NeuralBeacon({
+  position,
+  color,
+  reducedMotion,
+  index,
+}: {
+  position: readonly [number, number, number];
+  color: string;
+  reducedMotion: boolean;
+  index: number;
+}) {
+  const beaconRef = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    const beacon = beaconRef.current;
+    if (!beacon || reducedMotion) return;
+    beacon.rotation.y = clock.elapsedTime * (0.24 + index * 0.06);
+    const pulse = 1 + Math.sin(clock.elapsedTime * 1.7 + index * 1.4) * 0.08;
+    beacon.scale.setScalar(pulse);
+  });
+
+  return (
+    <group ref={beaconRef} position={[...position]}>
+      <mesh rotation={[Math.PI / 2, 0, 0]}>
+        <torusGeometry args={[0.24, 0.016, 6, 48]} />
+        <meshBasicMaterial color={color} toneMapped={false} />
+      </mesh>
+      <mesh position={[0, 0.66, 0]}>
+        <boxGeometry args={[0.045, 1.3, 0.045]} />
+        <meshBasicMaterial color={color} transparent opacity={0.76} toneMapped={false} />
+      </mesh>
+      <pointLight position={[0, 0.45, 0]} intensity={2.8} distance={2.5} color={color} />
+    </group>
+  );
+}
+
+function NeuralCity({ progressRef, pointerRef, reducedMotion, quality }: NeuralCityProps) {
+  const cityRef = useRef<THREE.Group>(null);
+  const buildingsRef = useRef<THREE.InstancedMesh>(null);
+  const wireframeRef = useRef<THREE.InstancedMesh>(null);
+  const cells = useMemo(() => {
+    const columns = quality === "full" ? 8 : 6;
+    const rows = quality === "full" ? 5 : 4;
+    return Array.from({ length: columns * rows }, (_, index) => {
+      const column = index % columns;
+      const row = Math.floor(index / columns);
+      return {
+        x: (column - (columns - 1) / 2) * 0.72 + (seeded(index * 17) - 0.5) * 0.18,
+        z: (row - (rows - 1) / 2) * 0.82 + (seeded(index * 19) - 0.5) * 0.2,
+        width: 0.2 + seeded(index * 23) * 0.28,
+        depth: 0.2 + seeded(index * 29) * 0.3,
+        height: 0.35 + Math.pow(seeded(index * 31), 1.7) * 2.15,
+        color: index % 11 === 0 ? "#f4d431" : index % 9 === 0 ? "#ff3b30" : "#24e0ff",
+      };
+    });
+  }, [quality]);
+
+  useEffect(() => {
+    const buildings = buildingsRef.current;
+    const wireframe = wireframeRef.current;
+    if (!buildings || !wireframe) return;
+    const matrix = new THREE.Matrix4();
+    const position = new THREE.Vector3();
+    const rotation = new THREE.Quaternion();
+    const scale = new THREE.Vector3();
+
+    cells.forEach((cell, index) => {
+      position.set(cell.x, cell.height / 2, cell.z);
+      scale.set(cell.width, cell.height, cell.depth);
+      matrix.compose(position, rotation, scale);
+      buildings.setMatrixAt(index, matrix);
+      wireframe.setMatrixAt(index, matrix);
+      buildings.setColorAt(index, new THREE.Color(cell.color));
+    });
+    buildings.instanceMatrix.needsUpdate = true;
+    wireframe.instanceMatrix.needsUpdate = true;
+    if (buildings.instanceColor) buildings.instanceColor.needsUpdate = true;
+  }, [cells]);
+
+  useFrame(({ clock }, delta) => {
+    const city = cityRef.current;
+    if (!city) return;
+    const dive = THREE.MathUtils.smoothstep(progressRef.current, 0, 0.34);
+    const pointer = reducedMotion ? { x: 0, y: 0 } : pointerRef.current;
+    const targetX = 1.62 + pointer.x * 0.24;
+    const targetY = -2.55 + dive * 0.92 + pointer.y * 0.12;
+    const targetZ = -1.55 + dive * 0.7;
+    const targetRotation = -0.1 + dive * 0.38 + pointer.x * 0.06;
+
+    if (reducedMotion) {
+      city.position.set(targetX, targetY, targetZ);
+      city.rotation.set(-0.08, targetRotation, 0);
+      return;
+    }
+
+    const easing = 1 - Math.exp(-delta * 3.2);
+    city.position.x = THREE.MathUtils.lerp(city.position.x, targetX, easing);
+    city.position.y = THREE.MathUtils.lerp(city.position.y, targetY, easing);
+    city.position.z = THREE.MathUtils.lerp(city.position.z, targetZ, easing);
+    city.rotation.y = THREE.MathUtils.lerp(city.rotation.y, targetRotation, easing);
+    city.rotation.z = Math.sin(clock.elapsedTime * 0.24) * 0.008;
+  });
+
+  return (
+    <group ref={cityRef} position={[1.62, -2.55, -1.55]} rotation={[-0.08, -0.1, 0]}>
+      <gridHelper args={[8, 16, "#2b6870", "#15363d"]} position={[0, 0, 0]} />
+      <mesh position={[0, -0.035, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[8, 5]} />
+        <meshStandardMaterial color="#061015" metalness={0.62} roughness={0.42} transparent opacity={0.72} />
+      </mesh>
+      <instancedMesh ref={buildingsRef} args={[undefined, undefined, cells.length]} frustumCulled={false}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshStandardMaterial
+          vertexColors
+          color="#9ab5b9"
+          emissive="#0b252c"
+          emissiveIntensity={0.92}
+          metalness={0.72}
+          roughness={0.3}
+        />
+      </instancedMesh>
+      <instancedMesh ref={wireframeRef} args={[undefined, undefined, cells.length]} frustumCulled={false}>
+        <boxGeometry args={[1.025, 1.012, 1.025]} />
+        <meshBasicMaterial color="#24e0ff" wireframe transparent opacity={0.16} depthWrite={false} toneMapped={false} />
+      </instancedMesh>
+      {neuralBeacons.map((beacon, index) => (
+        <NeuralBeacon
+          key={beacon.color}
+          position={beacon.position}
+          color={beacon.color}
+          reducedMotion={reducedMotion}
+          index={index}
+        />
+      ))}
+    </group>
+  );
+}
+
 function ArchiveSpine({
   progressRef,
   pointerRef,
@@ -540,6 +691,12 @@ function World(
         reducedMotion={props.reducedMotion}
         quality={props.quality}
       />
+      <NeuralCity
+        progressRef={props.progressRef}
+        pointerRef={props.pointerRef}
+        reducedMotion={props.reducedMotion}
+        quality={props.quality}
+      />
       <ArchiveSpine {...props} />
       {props.showArchive ? (
         <ProgressiveArchiveLayer
@@ -613,6 +770,7 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
       data-cstd-render-ready={renderReady}
       data-cstd-render-fallback={contextLost ? "true" : "false"}
       data-cstd-render-active={props.active ? "true" : "false"}
+      data-cstd-neural-city
       className="absolute inset-0"
     >
       {contextLost ? null : (

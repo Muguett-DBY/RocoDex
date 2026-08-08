@@ -6,6 +6,7 @@ const PERSONAL_SITE_EXPLICIT_ENTRY_PATHS = new Set(["/cstd"]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",
   "/cstd-og.svg",
+  "/cstd-og-v2.webp",
   "/cstd-systems-hero-v1.png",
   "/cstd-systems-map-v1.png",
   "/cstd-research-archive-v1.png",
@@ -40,6 +41,7 @@ function isAllowedPersonalSitePath(path: string) {
   return PERSONAL_SITE_ALLOWED_PATHS.has(path)
     || path.startsWith("/cstd-projects/")
     || path.startsWith("/cstd-archive/")
+    || path.startsWith("/cstd-persona/")
     || path.startsWith("/cstd-world/");
 }
 

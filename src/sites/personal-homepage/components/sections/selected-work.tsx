@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { clsx } from "clsx";
-import { memo } from "react";
+import { memo, type PointerEvent as ReactPointerEvent } from "react";
 import { cstdProjects } from "../../content/projects";
 import { cstdLiveObjectIds, cstdProofs, getCstdProjectsById, type CstdProof } from "../../content/systems";
 import { getCstdLinkTargetProps } from "../../domain/link-target";
@@ -15,6 +15,27 @@ const proofProjects = getCstdProjectsById(
 const liveProjects = getCstdProjectsById(cstdProjects, cstdLiveObjectIds);
 const proofAccents = ["#f4d431", "#24e0ff", "#ff3b30"] as const;
 const proofSurfaces = ["bg-[#090c0f]", "bg-[#0b1418]", "bg-[#140a0a]"] as const;
+
+function moveLiveFeed(event: ReactPointerEvent<HTMLElement>) {
+  const bounds = event.currentTarget.getBoundingClientRect();
+  const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+  const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+  event.currentTarget.style.setProperty("--feed-x", `${x * -16}px`);
+  event.currentTarget.style.setProperty("--feed-y", `${y * -12}px`);
+  event.currentTarget.style.setProperty("--feed-rx", `${y * -2.4}deg`);
+  event.currentTarget.style.setProperty("--feed-ry", `${x * 3.2}deg`);
+  event.currentTarget.style.setProperty("--feed-scan-x", `${(x + 0.5) * 100}%`);
+  event.currentTarget.style.setProperty("--feed-scan-y", `${(y + 0.5) * 100}%`);
+}
+
+function resetLiveFeed(event: ReactPointerEvent<HTMLElement>) {
+  event.currentTarget.style.setProperty("--feed-x", "0px");
+  event.currentTarget.style.setProperty("--feed-y", "0px");
+  event.currentTarget.style.setProperty("--feed-rx", "0deg");
+  event.currentTarget.style.setProperty("--feed-ry", "0deg");
+  event.currentTarget.style.setProperty("--feed-scan-x", "50%");
+  event.currentTarget.style.setProperty("--feed-scan-y", "50%");
+}
 
 function ProofChapter({
   proof,
@@ -32,6 +53,7 @@ function ProofChapter({
 
   return (
     <article
+      id={`proof-${proof.projectId}`}
       data-cstd-proof={proof.projectId}
       className={clsx("flex min-h-[72svh] items-center border-t border-white/10 px-5 py-20 text-[#f2efe7] contain-paint md:px-10 lg:px-16 lg:py-24", proofSurfaces[index])}
     >
@@ -58,7 +80,10 @@ function ProofChapter({
 
         <figure
           data-cstd-project-plane={proof.projectId}
-          className="group relative aspect-[16/10] min-h-0 overflow-hidden border border-white/15 bg-[#050709] shadow-[0_24px_70px_rgba(0,0,0,0.45)] [clip-path:polygon(0_0,100%_0,100%_calc(100%-18px),calc(100%-18px)_100%,0_100%)]"
+          data-cstd-live-feed={proof.projectId}
+          onPointerMove={reducedMotion ? undefined : moveLiveFeed}
+          onPointerLeave={reducedMotion ? undefined : resetLiveFeed}
+          className="cstd-live-feed group relative aspect-[16/10] min-h-0 overflow-hidden border border-white/15 bg-[#050709] shadow-[0_24px_70px_rgba(0,0,0,0.45)] [clip-path:polygon(0_0,100%_0,100%_calc(100%-18px),calc(100%-18px)_100%,0_100%)]"
         >
           <Image
             src={project.preview.src}
@@ -67,15 +92,33 @@ function ProofChapter({
             loading="lazy"
             sizes="(min-width: 1024px) 58vw, 100vw"
             className={clsx(
-              "object-cover transition-[transform,filter] ease-out group-hover:saturate-100",
-              reducedMotion ? "duration-0" : "duration-700 group-hover:scale-[1.035]",
+              "cstd-live-feed-image object-cover saturate-[0.78] transition-[transform,filter] ease-out group-hover:saturate-100",
+              reducedMotion ? "duration-0" : "duration-500",
             )}
             style={{ objectPosition: project.preview.position }}
           />
-          <div aria-hidden="true" className="absolute inset-0 bg-black/5 transition-colors group-hover:bg-transparent" />
-          <figcaption className="absolute bottom-4 left-4 border-l-2 bg-[#050709]/90 px-3 py-2 font-mono text-[10px] font-bold uppercase text-white backdrop-blur-md" style={{ borderColor: accent }}>
+          <div aria-hidden="true" className="absolute inset-0 bg-black/10 transition-colors group-hover:bg-transparent" />
+          <div aria-hidden="true" className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.16)_1px,transparent_1px)] [background-size:48px_48px]" />
+          <div aria-hidden="true" className="cstd-feed-scan absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <span aria-hidden="true" className="absolute left-[var(--feed-scan-x,50%)] top-[var(--feed-scan-y,50%)] h-12 w-12 -translate-x-1/2 -translate-y-1/2 border border-white/55 opacity-0 transition-opacity group-hover:opacity-100">
+            <span className="absolute -left-1 -top-1 h-2 w-2 bg-white" />
+          </span>
+          <div className="absolute right-3 top-3 hidden min-w-32 border-r-2 border-[#24e0ff] bg-[#050709]/82 px-3 py-2 text-right font-mono text-[9px] font-black text-[#8f9ba0] backdrop-blur-md sm:block">
+            <p className="text-[#3dff8f]">● LIVE / 00{index + 1}</p>
+            <p className="mt-1">SYNC {99 - index * 2}.8%</p>
+            <p>LATENCY {12 + index * 7}MS</p>
+          </div>
+          <figcaption className="absolute left-4 top-4 border-l-2 bg-[#050709]/90 px-3 py-2 font-mono text-[10px] font-bold uppercase text-white backdrop-blur-md" style={{ borderColor: accent }}>
             LIVE NODE / {project.kicker}
           </figcaption>
+          <div className="absolute inset-x-0 bottom-0 hidden grid-cols-3 border-t border-white/15 bg-[#050709]/86 backdrop-blur-md sm:grid">
+            {project.metrics.map(([value, label]) => (
+              <div key={label} className="border-r border-white/10 px-3 py-3 last:border-r-0">
+                <p className="font-mono text-xs font-black" style={{ color: accent }}>{value}</p>
+                <p className="mt-1 font-mono text-[8px] font-bold uppercase text-[#718087]">{label}</p>
+              </div>
+            ))}
+          </div>
         </figure>
       </div>
     </article>
@@ -94,13 +137,13 @@ function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
         <span aria-hidden="true" className="absolute -right-6 bottom-[-3rem] font-mono text-[13rem] font-black leading-none text-black/[0.08] md:text-[22rem]">02</span>
         <div className="mx-auto grid max-w-[1540px] gap-8 lg:grid-cols-[1fr_28rem] lg:items-end">
           <div>
-            <p className="font-mono text-[11px] font-black uppercase text-[#050709]">02 // ARCHIVED PROOF</p>
+            <p className="font-mono text-[11px] font-black uppercase text-[#050709]">02 // LIVE DATA SHARDS</p>
             <h2 id="proof-heading" className="mt-5 max-w-5xl text-5xl font-semibold leading-[0.94] tracking-[0] md:text-7xl xl:text-8xl">
               少而真实的作品，胜过拥挤的目录。
             </h2>
           </div>
           <p className="relative text-base font-medium leading-8 text-[#34320f]">
-            三个代表项目，分别验证信息结构、研究过程与业务系统。每一个都面向真实需求，并持续运行。
+            三个代表项目持续发送实时信号。移动指针检查数据层、运行状态与交付证据，而不是浏览一排静态卡片。
           </p>
         </div>
       </header>
@@ -125,9 +168,22 @@ function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
                   <a
                     href={project.href}
                     {...targetProps}
-                    className="group grid grid-cols-[2rem_1fr_auto] items-center gap-4 py-5 text-[#d9dfe1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"
+                    className="group grid grid-cols-[2rem_1fr_auto] items-center gap-4 py-5 text-[#d9dfe1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff] md:grid-cols-[2rem_6rem_1fr_auto]"
                   >
                     <span className="font-mono text-[10px] font-bold text-[#68757b]">0{index + 1}</span>
+                    {project.preview ? (
+                      <span className="relative hidden aspect-[16/9] overflow-hidden border border-white/15 bg-black md:block">
+                        <Image
+                          src={project.preview.src}
+                          alt=""
+                          fill
+                          loading="lazy"
+                          sizes="96px"
+                          className="object-cover saturate-50 transition-[transform,filter] duration-500 group-hover:scale-110 group-hover:saturate-100"
+                          style={{ objectPosition: project.preview.position }}
+                        />
+                      </span>
+                    ) : null}
                     <span className="text-xl font-semibold md:text-2xl">{project.title}</span>
                     <ArrowUpRight aria-hidden="true" className="h-5 w-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
                   </a>
