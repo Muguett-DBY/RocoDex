@@ -17,6 +17,9 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import type { CstdSystem } from "../content/systems";
+import { getCstdNarrative, type CstdNarrativeMode } from "../content/narratives";
+import type { CstdRuntimeTier } from "../experience/runtime-capabilities";
+import { setCstdNarrativeMode, useCstdNarrativeMode } from "../experience/narrative-store";
 import { useCstdSceneClock } from "../experience/scene-clock";
 import {
   cstdSceneById,
@@ -70,7 +73,7 @@ const LitePersonalImmersiveScene = memo(
 );
 
 type MotionMode = "full" | "calm";
-type ImmersiveRuntime = "pending" | "full" | "lite";
+type ImmersiveRuntime = "pending" | CstdRuntimeTier;
 
 const chapterLinks = cstdSceneManifest.filter(
   (scene) => scene.id !== "hero" && scene.id !== "finale",
@@ -125,21 +128,6 @@ function getDesktopSceneSnapshot() {
 
 function getDesktopSceneServerSnapshot() {
   return false;
-}
-
-function detectImmersiveRuntime(): Exclude<ImmersiveRuntime, "pending"> {
-  const canvas = document.createElement("canvas");
-  const gl = canvas.getContext("webgl", { powerPreference: "high-performance" });
-  if (!gl) return "lite";
-  const debugInfo = gl.getExtension("WEBGL_debug_renderer_info") as {
-    UNMASKED_RENDERER_WEBGL: number;
-  } | null;
-  const renderer = String(gl.getParameter(debugInfo?.UNMASKED_RENDERER_WEBGL ?? gl.RENDERER));
-  const maximumTexture = Number(gl.getParameter(gl.MAX_TEXTURE_SIZE));
-  gl.getExtension("WEBGL_lose_context")?.loseContext();
-  return /swiftshader|llvmpipe|software rasterizer|softpipe/i.test(renderer) || maximumTexture < 8192
-    ? "lite"
-    : "full";
 }
 
 function useDeferredEnhancements() {
@@ -215,6 +203,7 @@ export function PersonalHomepage() {
     getDesktopSceneServerSnapshot,
   );
   const reducedMotion = motionMode === "calm";
+  const narrativeMode = useCstdNarrativeMode();
   const enhancementsReady = useDeferredEnhancements();
   const documentVisible = useDocumentVisibility();
   const rootRef = useRef<HTMLElement>(null);
@@ -243,6 +232,9 @@ export function PersonalHomepage() {
   const [overdrive, setOverdrive] = useState(false);
   const [ambienceOn, setAmbienceOn] = useState(false);
   const [immersiveRuntime, setImmersiveRuntime] = useState<ImmersiveRuntime>("pending");
+  const [renderBackend, setRenderBackend] = useState("pending");
+  const [webgpuAvailable, setWebgpuAvailable] = useState(false);
+  const [runtimeReason, setRuntimeReason] = useState("pending");
   const openConsole = useCallback(() => setConsoleOpen(true), []);
   const closeConsole = useCallback(() => setConsoleOpen(false), []);
   const toggleOverdrive = useCallback(() => {
@@ -267,7 +259,13 @@ export function PersonalHomepage() {
   useEffect(() => {
     if (!enhancementsReady || !desktopScene) return;
     const frame = window.requestAnimationFrame(() => {
-      setImmersiveRuntime(detectImmersiveRuntime());
+      void import("../experience/runtime-capabilities").then(({ detectCstdRuntimeCapabilities }) => {
+        const profile = detectCstdRuntimeCapabilities();
+        setImmersiveRuntime(profile.tier);
+        setRenderBackend(profile.backend);
+        setWebgpuAvailable(profile.webgpu);
+        setRuntimeReason(profile.reason);
+      });
     });
     return () => window.cancelAnimationFrame(frame);
   }, [desktopScene, enhancementsReady]);
@@ -397,6 +395,11 @@ export function PersonalHomepage() {
     window.dispatchEvent(new Event(motionModeChangeEvent));
   }
 
+  function handleNarrativeChange(mode: CstdNarrativeMode) {
+    setCstdNarrativeMode(mode);
+    setActiveSystemId(getCstdNarrative(mode).systemOrder[0]);
+  }
+
   function handleArchiveNavigation(event: ReactMouseEvent<HTMLAnchorElement>, path: string) {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     const host = window.location.hostname.toLowerCase();
@@ -412,6 +415,10 @@ export function PersonalHomepage() {
       data-cstd-enhancements-ready={enhancementsReady ? "true" : "false"}
       data-cstd-scene-mode={desktopScene ? "webgl" : "image"}
       data-cstd-immersive-runtime={desktopScene ? immersiveRuntime : "image"}
+      data-cstd-render-backend={desktopScene ? renderBackend : "image"}
+      data-cstd-webgpu={webgpuAvailable ? "available" : "unavailable"}
+      data-cstd-runtime-reason={desktopScene ? runtimeReason : "responsive-image"}
+      data-cstd-narrative-mode={narrativeMode}
       data-cstd-motion={reducedMotion ? "calm" : "full"}
       data-cstd-overdrive={overdrive ? "true" : "false"}
       data-cstd-ambience={ambienceOn ? "on" : "off"}
@@ -519,6 +526,7 @@ export function PersonalHomepage() {
             <a href="/work" onClick={(event) => handleArchiveNavigation(event, "/work")} className="transition-colors hover:text-[#f4c95d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4c95d]">档案</a>
             <a href="/notes" onClick={(event) => handleArchiveNavigation(event, "/notes")} className="transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]">札记</a>
             <a href="/lab" onClick={(event) => handleArchiveNavigation(event, "/lab")} className="transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]">LAB</a>
+            <a href="/map" onClick={(event) => handleArchiveNavigation(event, "/map")} className="transition-colors hover:text-[#3dff8f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#3dff8f]">图谱</a>
           </nav>
           <a
             href="#proof"
@@ -592,6 +600,8 @@ export function PersonalHomepage() {
         onToggleOverdrive={toggleOverdrive}
         activeSystemId={activeSystemId}
         onSelectSystem={setActiveSystemId}
+        narrativeMode={narrativeMode}
+        onNarrativeChange={handleNarrativeChange}
       />
 
       <Suspense fallback={<div className="relative z-20 h-24 border-y border-white/10 bg-[#0d0f12]" />}>
@@ -603,11 +613,12 @@ export function PersonalHomepage() {
           activeSystemId={activeSystemId}
           setActiveSystemId={setActiveSystemId}
           reducedMotion={reducedMotion}
+          narrativeMode={narrativeMode}
         />
       </Suspense>
 
       <Suspense fallback={<div className="relative z-20 min-h-[70svh] bg-[#f4d431]" />}>
-        <LazySelectedWork reducedMotion={reducedMotion} />
+        <LazySelectedWork reducedMotion={reducedMotion} narrativeMode={narrativeMode} />
       </Suspense>
 
       <Suspense fallback={<div className="relative z-20 min-h-[80svh] bg-[#050709]" />}>

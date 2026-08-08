@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, BookOpen, CalendarDays, CornerDownLeft, Search, ShieldCheck, X } from "lucide-react";
+import { ArrowUpRight, BookOpen, CalendarDays, CornerDownLeft, GitBranch, Route, Search, ShieldCheck, X } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import { CstdLink } from "./cstd-link";
@@ -23,6 +23,9 @@ export function TechnicalGuide({ locale, open, onClose }: { locale: CstdLocale; 
     submit: "检索档案",
     sources: "来源",
     matched: "匹配依据",
+    why: "为什么得到这个答案",
+    next: "继续沿证据路径",
+    related: "关联路径",
     limited: "请求太快，请稍后再试。",
   } : {
     eyebrow: "SOURCE-CONSTRAINED GUIDE",
@@ -32,6 +35,9 @@ export function TechnicalGuide({ locale, open, onClose }: { locale: CstdLocale; 
     submit: "Search archive",
     sources: "Sources",
     matched: "Matched terms",
+    why: "Why this answer",
+    next: "Continue through evidence",
+    related: "Related paths",
     limited: "Too many requests. Try again in a moment.",
   }, [locale]);
 
@@ -41,7 +47,7 @@ export function TechnicalGuide({ locale, open, onClose }: { locale: CstdLocale; 
     const now = Date.now();
     recentRequests.current = recentRequests.current.filter((timestamp) => now - timestamp < 10_000);
     if (recentRequests.current.length >= 6) {
-      setResult({ answer: copy.limited, sources: [], refused: true, matchedTerms: [] });
+      setResult({ answer: copy.limited, sources: [], refused: true, matchedTerms: [], relatedPaths: [], suggestedQuestions: [] });
       return;
     }
     recentRequests.current.push(now);
@@ -85,6 +91,7 @@ export function TechnicalGuide({ locale, open, onClose }: { locale: CstdLocale; 
                 {result.confidence ? <span className="flex items-center gap-1.5 border-l border-white/15 pl-3 text-[#3dff8f]"><ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" />{result.confidence.toUpperCase()} CONFIDENCE</span> : null}
               </div>
               {result.answer.split("\n\n").map((paragraph) => <p key={paragraph} className="mt-4 text-sm leading-7 text-[#d8ddde]">{paragraph}</p>)}
+              {result.why ? <div className="mt-5 border-y border-white/10 py-4"><p className="flex items-center gap-2 font-mono text-[8px] font-black text-[#68757b]"><GitBranch aria-hidden="true" className="h-3.5 w-3.5" />{copy.why.toUpperCase()}</p><p className="mt-2 text-xs leading-6 text-[#aeb7ba]">{result.why}</p></div> : null}
               {result.matchedTerms.length > 0 ? <div className="mt-5 flex flex-wrap items-center gap-2"><span className="font-mono text-[8px] font-black text-[#68757b]">{copy.matched.toUpperCase()}</span>{result.matchedTerms.map((term) => <span key={term} className="border border-white/12 px-2 py-1 font-mono text-[8px] font-black text-[#9ba6aa]">{term}</span>)}</div> : null}
               {result.sources.length > 0 ? (
                 <div className="mt-6 border-t border-white/12 pt-4">
@@ -97,6 +104,15 @@ export function TechnicalGuide({ locale, open, onClose }: { locale: CstdLocale; 
                   ))}
                 </div>
               ) : null}
+              {result.relatedPaths.length > 0 ? (
+                <div className="mt-6 border-t border-white/12 pt-4">
+                  <p className="flex items-center gap-2 font-mono text-[9px] font-black text-[#778286]"><Route aria-hidden="true" className="h-3.5 w-3.5" />{copy.related.toUpperCase()}</p>
+                  <div className="mt-3 grid gap-px bg-white/10 sm:grid-cols-2">
+                    {result.relatedPaths.map((source) => <CstdLink key={source.id} href={source.href[locale]} onClick={onClose} className="bg-[#0b0e11] px-3 py-3 text-xs leading-5 text-[#aeb7ba] transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff]"><span className="block font-mono text-[7px] font-black text-[#68757b]">{source.type.toUpperCase()}</span><span className="mt-1 block">{source.title[locale]}</span></CstdLink>)}
+                  </div>
+                </div>
+              ) : null}
+              {result.suggestedQuestions.length > 0 ? <div className="mt-6 border-t border-white/12 pt-4"><p className="font-mono text-[9px] font-black text-[#778286]">{copy.next.toUpperCase()}</p><div className="mt-3 flex flex-col items-start gap-2">{result.suggestedQuestions.map((suggestion) => <button key={suggestion} type="button" onClick={() => { setQuestion(suggestion); submit(suggestion); }} className="text-left text-xs leading-5 text-[#24e0ff] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]">+ {suggestion}</button>)}</div></div> : null}
             </div>
           ) : (
             <div className="mt-10 border-y border-white/10 py-10 text-center">

@@ -11,6 +11,8 @@ describe("CSTD publishing infrastructure", () => {
     expect(urls).toContain("https://custard.top/notes/evidence-first-ai-research");
     expect(urls).toContain("https://custard.top/en/lab/render-lab");
     expect(urls).toContain("https://custard.top/resume");
+    expect(urls).toContain("https://custard.top/map");
+    expect(urls).toContain("https://custard.top/en/map");
     expect(new Set(urls).size).toBe(urls.length);
   });
 

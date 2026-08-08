@@ -1,5 +1,10 @@
 import { VercelObservability } from "@/sites/shared/vercel-observability";
+import type { Metadata } from "next";
 import "./globals.css";
+
+export const metadata: Metadata = {
+  metadataBase: new URL("https://rocodex.custard.top"),
+};
 
 export default function RootLayout({
   children,

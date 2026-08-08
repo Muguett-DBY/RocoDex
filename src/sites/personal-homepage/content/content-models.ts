@@ -10,6 +10,35 @@ import type {
 } from "./content-types";
 import type { CstdSystem } from "./systems";
 
+export type CstdCaseFilmPhase = "problem" | "constraint" | "decision" | "architecture" | "failure" | "evidence" | "outcome";
+
+export type CstdCaseFilmBeat = Readonly<{
+  id: string;
+  phase: CstdCaseFilmPhase;
+  title: LocalizedText;
+  detail: LocalizedText;
+  signal: LocalizedText;
+}>;
+
+export type CstdCaseFilm = Readonly<{
+  durationSeconds: number;
+  logline: LocalizedText;
+  beats: readonly CstdCaseFilmBeat[];
+}>;
+
+export type CstdProofMeshEntry = Readonly<{
+  id: string;
+  caseSlug: string;
+  projectId: string;
+  title: LocalizedText;
+  capabilityIds: readonly CstdSystem["id"][];
+  verifiedAt: string;
+  artifactCount: number;
+  artifactKinds: readonly ContentArtifact["kind"][];
+  coverageScore: number;
+  status: "verified" | "documented";
+}>;
+
 export type CstdCaseStudy = Readonly<{
   slug: string;
   projectId: string;
@@ -21,6 +50,7 @@ export type CstdCaseStudy = Readonly<{
   title: LocalizedText;
   kicker: LocalizedText;
   summary: LocalizedText;
+  film: CstdCaseFilm;
   role: LocalizedText;
   status: LocalizedText;
   liveHref?: string;

@@ -1,12 +1,15 @@
 "use client";
 
 import { clsx } from "clsx";
+import Image from "next/image";
 import { memo } from "react";
 import {
   cstdSystems,
   cstdTechnicalNotes,
   type CstdSystem,
 } from "../../content/systems";
+import { cstdArtBible } from "../../content/art-bible";
+import { getNarrativeSystems, type CstdNarrativeMode } from "../../content/narratives";
 import { cstdSystemAccents as systemAccents, cstdSystemIcons as systemIcons } from "../atlas/system-presentation";
 
 const reactorCoordinates: Record<CstdSystem["id"], { left: string; top: string; x: number; y: number }> = {
@@ -21,13 +24,17 @@ function SystemsChapter({
   activeSystemId,
   setActiveSystemId,
   reducedMotion,
+  narrativeMode,
 }: {
   activeSystemId: CstdSystem["id"];
   setActiveSystemId: (id: CstdSystem["id"]) => void;
   reducedMotion: boolean;
+  narrativeMode: CstdNarrativeMode;
 }) {
-  const activeSystem = cstdSystems.find((system) => system.id === activeSystemId) ?? cstdSystems[0];
-  const accent = systemAccents[activeSystem.icon];
+  const systems: readonly CstdSystem[] = getNarrativeSystems(narrativeMode);
+  const activeSystem: CstdSystem = cstdSystems.find((system) => system.id === activeSystemId) ?? systems[0] ?? cstdSystems[0];
+  const activeArt = cstdArtBible[activeSystem.id];
+  const accent = activeArt.accent;
   const ActiveIcon = systemIcons[activeSystem.icon];
 
   return (
@@ -37,11 +44,15 @@ function SystemsChapter({
       data-cstd-scene="systems"
       data-cstd-skill-reactor
       data-cstd-motion={reducedMotion ? "calm" : "full"}
+      data-cstd-narrative={narrativeMode}
       aria-labelledby="systems-heading"
       className="relative z-20 text-[#f2efe7] contain-paint"
     >
       <div className="relative lg:h-[190svh]">
         <div className="relative min-h-svh overflow-hidden border-y border-[#24e0ff]/25 bg-[#050709]/28 px-5 py-24 backdrop-blur-[2px] md:px-10 lg:sticky lg:top-0 lg:flex lg:items-center lg:px-16 lg:py-20">
+          <div className="absolute inset-0">
+            <Image key={activeArt.image} src={activeArt.image} alt={activeArt.imageAlt.zh} fill sizes="100vw" className="cstd-district-backdrop object-cover" />
+          </div>
           <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,9,0.93)_0%,rgba(5,7,9,0.48)_42%,rgba(5,7,9,0.24)_100%)]" />
           <div aria-hidden="true" className="cstd-reactor-scan absolute inset-x-0 top-0 h-px bg-[#24e0ff]/75 shadow-[0_0_24px_rgba(36,224,255,0.8)]" />
 
@@ -77,6 +88,7 @@ function SystemsChapter({
                 <p className="mt-6 text-lg leading-8 text-[#d6dadd]">{activeSystem.summary}</p>
                 <p className="mt-5 text-sm leading-7 text-[#8f9ba0]">{activeSystem.relation}</p>
                 <p className="mt-6 border-t border-white/15 pt-5 font-mono text-[10px] font-bold leading-5 text-[#aeb6b9]">EVIDENCE / {activeSystem.evidence}</p>
+                <div className="mt-5 grid grid-cols-2 gap-4 border-t border-white/12 pt-5 font-mono text-[8px] font-black leading-4 text-[#8f9ba0]"><p><span className="block text-[#68757b]">MATERIAL</span><span className="mt-1 block">{activeArt.material.zh}</span></p><p><span className="block text-[#68757b]">MOTION</span><span className="mt-1 block">{activeArt.motion.zh}</span></p></div>
                 <ul className="mt-5 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[10px] font-black text-[#c8d0d3]">
                   {activeSystem.stack.map((item) => <li key={item}>/ {item}</li>)}
                 </ul>
@@ -85,7 +97,7 @@ function SystemsChapter({
               <div className="relative hidden aspect-[10/6.5] min-h-[31rem] lg:block" data-cstd-reactor-map>
                 <svg viewBox="0 0 1000 650" aria-hidden="true" className="absolute inset-0 h-full w-full overflow-visible">
                   <g className="cstd-reactor-links" fill="none" strokeWidth="1.2">
-                    {cstdSystems.map((system) => {
+                    {systems.map((system) => {
                       const coordinate = reactorCoordinates[system.id];
                       const active = system.id === activeSystem.id;
                       return (
@@ -112,7 +124,7 @@ function SystemsChapter({
                   </div>
                 </div>
 
-                {cstdSystems.map((system, index) => {
+                {systems.map((system, index) => {
                   const coordinate = reactorCoordinates[system.id];
                   const active = system.id === activeSystem.id;
                   const Icon = systemIcons[system.icon];
@@ -147,7 +159,7 @@ function SystemsChapter({
               </div>
 
               <ol className="border-t border-white/15 lg:hidden">
-                {cstdSystems.map((system, index) => {
+                {systems.map((system, index) => {
                   const active = system.id === activeSystem.id;
                   const Icon = systemIcons[system.icon];
                   const itemAccent = systemAccents[system.icon];

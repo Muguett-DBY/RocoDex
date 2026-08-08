@@ -26,6 +26,10 @@ describe("CSTD content registry", () => {
       expect(entry.technologies.length).toBeGreaterThanOrEqual(4);
       expect(entry.artifacts.length).toBeGreaterThanOrEqual(2);
       expect(entry.capabilityIds.length).toBeGreaterThan(0);
+      expect(entry.film.durationSeconds).toBeGreaterThanOrEqual(45);
+      expect(entry.film.beats.length).toBeGreaterThanOrEqual(4);
+      expect(unique(entry.film.beats.map((beat) => beat.id))).toBe(true);
+      expect(entry.film.beats.every((beat) => beat.title.zh && beat.title.en && beat.signal.zh && beat.signal.en)).toBe(true);
     }
   });
 

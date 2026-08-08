@@ -4,7 +4,7 @@ import { cstdLabs } from "../content/labs";
 import { cstdTechnicalNotes } from "../content/technical-notes";
 
 export function getPersonalHomepageSitemapEntries(): SitemapEntry[] {
-  const stablePages = ["/work", "/notes", "/lab", "/about", "/now", "/resume"];
+  const stablePages = ["/work", "/notes", "/lab", "/map", "/about", "/now", "/resume"];
   const zhPaths = [
     ...stablePages,
     ...cstdCaseStudies.map((entry) => `/work/${entry.slug}`),

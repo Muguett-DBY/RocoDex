@@ -13,6 +13,11 @@ test("CSTD presents a concise personal studio with progressive visuals", async (
   await expect(page.locator("[data-cstd-atlas]")).toBeVisible();
   await expect(page.locator("[data-cstd-atlas-district]")).toHaveCount(10);
   await expect(page.locator("[data-cstd-atlas-district]:visible")).toHaveCount(5);
+  await expect(page.locator("[data-cstd-narrative-switcher]").getByRole("radio")).toHaveCount(3);
+  await page.locator("[data-cstd-narrative-switcher]").getByRole("radio", { name: "研究" }).click();
+  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-narrative-mode", "researcher");
+  await expect(page.locator("[data-cstd-atlas]")).toHaveAttribute("data-cstd-atlas-active", "research-models");
+  await page.locator("[data-cstd-narrative-switcher]").getByRole("radio", { name: "建造" }).click();
   const atlasData = page.locator('[data-cstd-atlas-district="data-systems"]:visible');
   await atlasData.click();
   await expect(page.locator("[data-cstd-atlas]")).toHaveAttribute("data-cstd-atlas-active", "data-systems");
@@ -29,6 +34,8 @@ test("CSTD presents a concise personal studio with progressive visuals", async (
   await expect(page.locator("[data-cstd-skill-reactor]")).toHaveCount(1);
   await expect(page.locator("[data-cstd-technical-note]")).toHaveCount(3);
   await expect(page.locator("[data-cstd-proof]")).toHaveCount(3);
+  await expect(page.locator("[data-cstd-proof-mesh]").first()).toBeVisible();
+  await expect(page.locator("[data-cstd-proof-node]").first()).toBeVisible();
   await expect(page.locator("[data-cstd-project-plane]")).toHaveCount(3);
   await expect(page.locator("[data-cstd-live-feed]")).toHaveCount(3);
   await expect(page.locator("[data-cstd-project-broadcast]")).toHaveCount(3);
@@ -45,6 +52,7 @@ test("CSTD presents a concise personal studio with progressive visuals", async (
   } else {
     const webgl = page.locator("[data-cstd-webgl]");
     await expect(webgl).toHaveAttribute("data-cstd-render-ready", "true");
+    await expect(page.locator("[data-cstd-kinetic-world]")).not.toHaveAttribute("data-cstd-render-backend", "pending");
     await expect(page.locator("[data-cstd-webgl-canvas]")).toBeVisible();
     const canvasImage = await page.locator("[data-cstd-webgl-canvas]").screenshot();
     expect(canvasImage.byteLength).toBeGreaterThan(20_000);
@@ -139,6 +147,11 @@ test("CSTD serves the original world and dual-format broadcast assets", async ({
     "/cstd-universe/cstd-departure-city-v1.webp",
     "/cstd-broadcasts/rocodex-broadcast-v1.webm",
     "/cstd-broadcasts/rocodex-broadcast-v1.mp4",
+    "/cstd-districts/product-surfaces-v1.webp",
+    "/cstd-districts/edge-operations-v1.webp",
+    "/cstd-districts/ai-creation-v1.webp",
+    "/cstd-districts/research-models-v1.webp",
+    "/cstd-districts/data-systems-v1.webp",
   ];
 
   for (const asset of assets) {

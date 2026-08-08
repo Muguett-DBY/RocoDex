@@ -8,6 +8,8 @@ import { CstdLink } from "../site/cstd-link";
 import { CstdSiteChrome } from "../site/cstd-site-chrome";
 import { CstdEvidenceGraph } from "../site/evidence-graph";
 import { StructuredData } from "../site/structured-data";
+import { CinematicCaseFilm } from "../site/cinematic-case-film";
+import { LiveProofMesh } from "../site/live-proof-mesh";
 import { CstdPageHero } from "./page-hero";
 
 const workHero = {
@@ -60,7 +62,7 @@ export function CstdWorkIndexPage({ locale }: { locale: CstdLocale }) {
                     </div>
                     <div>
                       <dt className="font-mono text-[8px] font-black text-[#677379]">{copy.status.toUpperCase()}</dt>
-                      <dd className="mt-2 text-sm text-[#d9dfe1]">{entry.status[locale]}</dd>
+                      <dd className="mt-2 text-sm text-[#d9dfe1]">{entry.status[locale]} · {entry.film.durationSeconds}s film</dd>
                     </div>
                   </dl>
                   <span className="mt-8 inline-flex items-center gap-3 border-b-2 border-[#f4d431] pb-2 font-mono text-xs font-black text-white transition-[gap,color] group-hover:gap-5 group-hover:text-[#f4d431]">
@@ -135,6 +137,10 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
           </div>
         </section>
 
+        <CinematicCaseFilm caseStudy={entry} locale={locale} />
+
+        <LiveProofMesh locale={locale} caseSlug={entry.slug} />
+
         <CstdEvidenceGraph entry={entry} locale={locale} />
 
         <article className="bg-[#080a0c]">{document}</article>
@@ -172,7 +178,7 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
         </CstdLink>
       </main>
       <StructuredData value={[
-        { "@context": "https://schema.org", "@type": "CreativeWork", name: entry.title[locale], description: entry.summary[locale], url: `https://custard.top${getCaseStudyPath(entry, locale)}`, image: `https://custard.top${entry.image.src}`, creator: { "@type": "Person", name: locale === "zh" ? "奶黄包" : "Custard" } },
+        { "@context": "https://schema.org", "@type": ["CreativeWork", "SoftwareSourceCode"], name: entry.title[locale], description: entry.summary[locale], url: `https://custard.top${getCaseStudyPath(entry, locale)}`, image: `https://custard.top${entry.image.src}`, programmingLanguage: entry.technologies, runtimePlatform: entry.status[locale], keywords: entry.capabilityIds, creator: { "@type": "Person", name: locale === "zh" ? "奶黄包" : "Custard" } },
         { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
           { "@type": "ListItem", position: 1, name: locale === "zh" ? "作品" : "Work", item: `https://custard.top${locale === "en" ? "/en/work" : "/work"}` },
           { "@type": "ListItem", position: 2, name: entry.title[locale], item: `https://custard.top${getCaseStudyPath(entry, locale)}` },

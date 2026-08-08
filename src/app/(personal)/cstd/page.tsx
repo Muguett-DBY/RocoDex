@@ -1,8 +1,8 @@
-import { PersonalHomepage } from "@/sites/personal-homepage";
-import { personalHomepageMetadata } from "@/sites/personal-homepage/metadata";
+import { PersonalHomepage, StructuredData } from "@/sites/personal-homepage";
+import { personalHomepageMetadata, personalHomepageStructuredData } from "@/sites/personal-homepage/metadata";
 
 export const metadata = personalHomepageMetadata;
 
 export default function PersonalHomepagePage() {
-  return <PersonalHomepage />;
+  return <><PersonalHomepage /><StructuredData value={personalHomepageStructuredData} /></>;
 }

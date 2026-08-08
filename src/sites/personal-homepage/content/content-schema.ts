@@ -42,6 +42,18 @@ const artifactSchema = z.object({
   verifiedAt: isoDate,
 }).strict();
 
+const caseFilmSchema = z.object({
+  durationSeconds: z.number().int().min(45).max(240),
+  logline: localizedTextSchema,
+  beats: z.array(z.object({
+    id: slug,
+    phase: z.enum(["problem", "constraint", "decision", "architecture", "failure", "evidence", "outcome"]),
+    title: localizedTextSchema,
+    detail: localizedTextSchema,
+    signal: localizedTextSchema,
+  }).strict()).min(4).max(7),
+}).strict();
+
 const publicationSchema = {
   schemaVersion: z.literal(1),
   publicationStatus: z.enum(["draft", "scheduled", "published"]),
@@ -59,6 +71,7 @@ export const caseDocumentSchema = z.object({
   title: localizedTextSchema,
   kicker: localizedTextSchema,
   summary: localizedTextSchema,
+  film: caseFilmSchema,
   role: localizedTextSchema,
   runtimeStatus: localizedTextSchema,
   liveHref: z.string().url().nullable(),

@@ -7,16 +7,17 @@ import { cstdLiveObjectIds, cstdProofs, getCstdProjectsById, type CstdProof } fr
 import { getCstdLinkTargetProps } from "../../domain/link-target";
 import { cstdBroadcasts } from "../../media/asset-manifest";
 import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
+import { cstdArtBible } from "../../content/art-bible";
+import { getCstdNarrative, type CstdNarrativeMode } from "../../content/narratives";
 import { ProjectBroadcast } from "../project-broadcast";
 import { CstdLink } from "../site/cstd-link";
+import { LiveProofMesh } from "../site/live-proof-mesh";
 
 const proofProjects = getCstdProjectsById(
   cstdProjects,
   cstdProofs.map((proof) => proof.projectId),
 );
 const liveProjects = getCstdProjectsById(cstdProjects, cstdLiveObjectIds);
-const proofAccents = ["#f4d431", "#24e0ff", "#ff3b30"] as const;
-
 function moveLiveFeed(event: ReactPointerEvent<HTMLElement>) {
   const bounds = event.currentTarget.getBoundingClientRect();
   const x = (event.clientX - bounds.left) / bounds.width - 0.5;
@@ -50,9 +51,9 @@ function ProofChapter({
   const project = proofProjects.find((candidate) => candidate.id === proof.projectId);
   if (!project?.preview) return null;
   const targetProps = getCstdLinkTargetProps(project.href);
-  const accent = proofAccents[index];
   const sources = cstdBroadcasts[proof.projectId];
   const caseStudy = cstdCaseStudies.find((entry) => entry.projectId === proof.projectId);
+  const accent = caseStudy ? cstdArtBible[caseStudy.capabilityIds[0]].accent : "#f4d431";
 
   return (
     <article
@@ -141,7 +142,13 @@ function ProofChapter({
   );
 }
 
-function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
+function SelectedWork({ reducedMotion, narrativeMode }: { reducedMotion: boolean; narrativeMode: CstdNarrativeMode }) {
+  const projectOrder = getCstdNarrative(narrativeMode).projectOrder;
+  const orderedProofs: CstdProof[] = [];
+  for (const projectId of projectOrder) {
+    const proof = cstdProofs.find((candidate) => candidate.projectId === projectId);
+    if (proof) orderedProofs.push(proof);
+  }
   return (
     <section
       id="proof"
@@ -169,8 +176,10 @@ function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
         </div>
       </header>
 
+      <LiveProofMesh locale="zh" />
+
       <div data-cstd-proof-reel>
-        {cstdProofs.map((proof, index) => (
+        {orderedProofs.map((proof, index) => (
           <ProofChapter key={proof.projectId} proof={proof} index={index} reducedMotion={reducedMotion} />
         ))}
       </div>

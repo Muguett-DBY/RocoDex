@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, BriefcaseBusiness, FileText, FlaskConical, Gauge, Languages, Sparkles, UserRound } from "lucide-react";
+import { BookOpen, BriefcaseBusiness, FileText, FlaskConical, Gauge, Languages, Network, Sparkles, UserRound } from "lucide-react";
 import { lazy, Suspense, useMemo, useState, useSyncExternalStore } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import { CstdLink } from "./cstd-link";
@@ -39,6 +39,7 @@ const navItems = [
   { href: "/work", label: { zh: "作品", en: "Work" }, icon: BriefcaseBusiness },
   { href: "/notes", label: { zh: "札记", en: "Notes" }, icon: BookOpen },
   { href: "/lab", label: { zh: "实验", en: "Lab" }, icon: FlaskConical },
+  { href: "/map", label: { zh: "图谱", en: "Map" }, icon: Network },
   { href: "/about", label: { zh: "关于", en: "About" }, icon: UserRound },
 ] as const;
 
@@ -81,7 +82,7 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
     <div data-cstd-deep-shell data-cstd-visual-mode={visualMode} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
       <a href="#cstd-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:bg-white focus:px-4 focus:py-3 focus:text-black">{locale === "zh" ? "跳到主要内容" : "Skip to content"}</a>
       <SignalField mode={visualMode} />
-      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(7,9,11,0.18),rgba(7,9,11,0.82)_80%)]" />
+      <div data-cstd-shell-overlay aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(7,9,11,0.18),rgba(7,9,11,0.82)_80%)]" />
       <div aria-hidden="true" className="cstd-route-progress fixed inset-x-0 top-0 z-[80] h-0.5 origin-left bg-[#f4d431] shadow-[0_0_16px_rgba(244,212,49,0.6)]" />
 
       <header className="sticky top-0 z-50 border-b border-white/12 bg-[#07090b]/90 backdrop-blur-xl">
@@ -137,6 +138,7 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
           <div className="flex flex-wrap gap-x-5 gap-y-3 font-mono text-[10px] font-black text-[#8f9ba0]">
             <CstdLink href={localizedHref("/now", locale)} className="hover:text-[#f4d431]">{copy.now}</CstdLink>
             <CstdLink href={localizedHref("/resume", locale)} className="inline-flex items-center gap-2 hover:text-[#f4d431]"><FileText aria-hidden="true" className="h-3.5 w-3.5" /> {copy.resume}</CstdLink>
+            <CstdLink href={localizedHref("/map", locale)} className="hover:text-[#24e0ff]">MAP</CstdLink>
             <a href={locale === "zh" ? "/rss.xml" : "/rss.xml?lang=en"} className="hover:text-[#f4d431]">RSS</a>
           </div>
         </div>

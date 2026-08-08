@@ -12,6 +12,15 @@ describe("Ask CSTD source-constrained retrieval", () => {
     expect(result.refused).toBe(false);
     expect(result.sources.some((source) => source.id === expectedId)).toBe(true);
     expect(result.matchedTerms.length).toBeGreaterThan(0);
+    expect(result.why).toBeTruthy();
+    expect(result.suggestedQuestions).toHaveLength(3);
+  });
+
+  test("returns a connected follow-up path instead of an isolated answer", () => {
+    const result = answerGuideQuestion("How are host boundaries verified?", "en");
+    expect(result.refused).toBe(false);
+    expect(result.relatedPaths.length).toBeGreaterThan(0);
+    expect(result.relatedPaths.every((entry) => entry.href.en.startsWith("/") || entry.href.en.startsWith("https://"))).toBe(true);
   });
 
   test("refuses unsupported questions instead of fabricating", () => {
