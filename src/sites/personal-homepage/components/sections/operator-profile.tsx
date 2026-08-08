@@ -26,6 +26,7 @@ function OperatorProfile() {
           alt="原创 Night Runner 角色站在夜间数据中心，佩戴透明数据面罩并手持终端"
           fill
           loading="lazy"
+          unoptimized
           sizes="(min-width: 1024px) 65vw, 100vw"
           className="object-cover object-[67%_center] opacity-55 saturate-[0.82] contrast-110 transition-[filter,transform] duration-700 group-hover:saturate-100 group-hover:scale-[1.012] lg:opacity-90"
         />

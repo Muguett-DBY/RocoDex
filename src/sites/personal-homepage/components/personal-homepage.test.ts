@@ -105,6 +105,7 @@ describe("CSTD personal systems studio", () => {
     expect(chapterSource).toContain("data-cstd-project-plane={proof.projectId}");
     expect(chapterSource).toContain("data-cstd-live-feed={proof.projectId}");
     expect(sectionSources.operator).toContain("cstd-night-runner-v1.webp");
+    expect(sectionSources.operator).toContain("unoptimized");
     expect(sectionSources.operator).toContain('data-cstd-generated-visual="night-runner-v1"');
     expect(chapterSource).toContain("data-cstd-learning-step={entry.year}");
     expect(sectionSources.path).toContain("setImageLoaded(true)");
