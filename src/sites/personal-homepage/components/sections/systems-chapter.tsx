@@ -1,30 +1,13 @@
 "use client";
 
-import { Bot, Boxes, CloudCog, DatabaseZap, Microscope } from "lucide-react";
 import { clsx } from "clsx";
-import { memo, type ComponentType, type CSSProperties } from "react";
+import { memo } from "react";
 import {
   cstdSystems,
   cstdTechnicalNotes,
   type CstdSystem,
-  type CstdSystemIcon,
 } from "../../content/systems";
-
-const systemIcons: Record<CstdSystemIcon, ComponentType<{ className?: string; style?: CSSProperties; "aria-hidden"?: boolean }>> = {
-  product: Boxes,
-  edge: CloudCog,
-  ai: Bot,
-  research: Microscope,
-  data: DatabaseZap,
-};
-
-const systemAccents: Record<CstdSystemIcon, string> = {
-  product: "#f4d431",
-  edge: "#24e0ff",
-  ai: "#ff3b30",
-  research: "#3dff8f",
-  data: "#e8edf0",
-};
+import { cstdSystemAccents as systemAccents, cstdSystemIcons as systemIcons } from "../atlas/system-presentation";
 
 const reactorCoordinates: Record<CstdSystem["id"], { left: string; top: string; x: number; y: number }> = {
   "product-surfaces": { left: "11%", top: "18%", x: 150, y: 145 },

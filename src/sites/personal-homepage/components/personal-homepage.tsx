@@ -411,6 +411,7 @@ export function PersonalHomepage() {
       data-cstd-kinetic-world
       data-cstd-enhancements-ready={enhancementsReady ? "true" : "false"}
       data-cstd-scene-mode={desktopScene ? "webgl" : "image"}
+      data-cstd-immersive-runtime={desktopScene ? immersiveRuntime : "image"}
       data-cstd-motion={reducedMotion ? "calm" : "full"}
       data-cstd-overdrive={overdrive ? "true" : "false"}
       data-cstd-ambience={ambienceOn ? "on" : "off"}
@@ -498,7 +499,7 @@ export function PersonalHomepage() {
           <span className="flex h-8 w-8 items-center justify-center bg-[#f4d431] font-mono text-[11px] font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">
             CS
           </span>
-          <span className="font-mono text-sm font-black tracking-[0]">CSTD://</span>
+          <span className="min-w-14 whitespace-nowrap font-mono text-sm font-black tracking-[0]">CSTD://</span>
           <span className="hidden font-mono text-[10px] font-bold uppercase text-[#7f8b90] sm:inline">{cstdSceneById[activeSceneId].label}</span>
         </a>
 
@@ -589,6 +590,8 @@ export function PersonalHomepage() {
         overdrive={overdrive}
         onOpenConsole={openConsole}
         onToggleOverdrive={toggleOverdrive}
+        activeSystemId={activeSystemId}
+        onSelectSystem={setActiveSystemId}
       />
 
       <Suspense fallback={<div className="relative z-20 h-24 border-y border-white/10 bg-[#0d0f12]" />}>

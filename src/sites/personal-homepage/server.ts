@@ -8,3 +8,4 @@ export {
 export { getPersonalHomepageSitemapEntries } from "./infrastructure/sitemap";
 export { serializeCstdRss } from "./infrastructure/rss";
 export { parseCstdMetric, type CstdMetric } from "./infrastructure/telemetry";
+export { serializeCstdResume } from "./infrastructure/resume";

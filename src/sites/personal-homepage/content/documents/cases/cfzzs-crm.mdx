@@ -1,0 +1,70 @@
+---
+kind: "case"
+schemaVersion: 1
+slug: "cfzzs-crm"
+projectId: "crm"
+year: "2026"
+publicationStatus: "published"
+revision: 1
+publishedAt: "2026-01-01"
+updatedAt: "2026-08-09"
+title: {"zh":"CFZZS 招商 CRM","en":"CFZZS industrial CRM"}
+kicker: {"zh":"业务系统 / 权限与并发","en":"Operations / permissions and concurrency"}
+summary: {"zh":"面向产业园区招商团队的完整线索工作流：权限范围、阶段流转、企业查重、空间资源和审计型导出。","en":"A complete lead workflow for industrial park teams: scoped permissions, stage transitions, deduplication, spatial inventory, and auditable exports."}
+role: {"zh":"需求拆解、全栈实现与生产验收","en":"Requirements, full stack, and production acceptance"}
+runtimeStatus: {"zh":"线上运行","en":"Live"}
+liveHref: "https://cfzzs.custard.top"
+image: {"src":"/cstd-projects/crm.png","alt":{"zh":"CFZZS 招商 CRM 仪表盘","en":"CFZZS CRM dashboard"},"position":"50% 26%"}
+technologies: ["React 19","Hono","TanStack Query","D1","R2","Playwright"]
+metrics: [{"value":"5","label":{"zh":"角色层级","en":"role levels"}},{"value":"RBAC","label":{"zh":"服务端数据范围","en":"server data scopes"}},{"value":"E2E","label":{"zh":"关键业务覆盖","en":"critical flow coverage"}}]
+evidence: [{"label":{"zh":"权限","en":"Permissions"},"detail":{"zh":"RBAC 与数据范围在服务端执行。","en":"RBAC and data scope are enforced server-side."}},{"label":{"zh":"完整性","en":"Integrity"},"detail":{"zh":"企业查重、乐观锁和审批导出减少脏数据。","en":"Deduplication, optimistic locking, and approved exports reduce bad data."}},{"label":{"zh":"运行","en":"Operations"},"detail":{"zh":"GitHub Actions 自动部署到 Cloudflare Pages。","en":"GitHub Actions deploy automatically to Cloudflare Pages."}}]
+capabilityIds: ["edge-operations","product-surfaces","data-systems"]
+relatedNoteSlugs: ["optimistic-locking-for-operations"]
+relatedLabSlugs: ["system-trace"]
+artifacts: [{"kind":"production","label":{"zh":"生产系统","en":"Production system"},"detail":{"zh":"公开可访问的实际运行界面。","en":"The publicly reachable running product."},"href":{"zh":"https://cfzzs.custard.top","en":"https://cfzzs.custard.top"},"verifiedAt":"2026-08-09"},{"kind":"note","label":{"zh":"多人 CRM 里，最后提交不应该自动获胜","en":"In a multi-user CRM, last write should not automatically win"},"detail":{"zh":"从该系统实现中沉淀的技术决策记录。","en":"An engineering decision record derived from this system."},"href":{"zh":"/notes/optimistic-locking-for-operations","en":"/en/notes/optimistic-locking-for-operations"},"verifiedAt":"2026-08-09"},{"kind":"lab","label":{"zh":"可复现实验 / system-trace","en":"Reproducible lab / system-trace"},"detail":{"zh":"在浏览器中重放核心机制。","en":"Replay the core mechanism in the browser."},"href":{"zh":"/lab/system-trace","en":"/en/lab/system-trace"},"verifiedAt":"2026-08-09"}]
+toc: [{"id":"workflow","eyebrow":{"zh":"01 / 工作流","en":"01 / Workflow"},"title":{"zh":"CRM 的核心是状态可信，而不是表格数量。","en":"A CRM is only as good as its trustworthy state."}},{"id":"concurrency","eyebrow":{"zh":"02 / 并发","en":"02 / Concurrency"},"title":{"zh":"阶段流转用乐观锁保护。","en":"Optimistic locking protects stage transitions."}},{"id":"delivery","eyebrow":{"zh":"03 / 交付","en":"03 / Delivery"},"title":{"zh":"生产验收覆盖真实角色动作。","en":"Production acceptance follows real role actions."}}]
+---
+
+<LocaleBlock locale="zh">
+
+<ArchiveSection id="workflow" title="CRM 的核心是状态可信，而不是表格数量。" eyebrow="01 / 工作流">
+
+线索、联系人、企业、跟进记录和园区空间必须在同一权限模型下协作。仪表盘只是结果，服务端数据范围才是产品骨架。
+
+</ArchiveSection>
+
+<ArchiveSection id="concurrency" title="阶段流转用乐观锁保护。" eyebrow="02 / 并发">
+
+多人同时编辑时，旧版本更新会被拒绝并要求重新读取，避免后提交的人悄悄覆盖现场信息。
+
+</ArchiveSection>
+
+<ArchiveSection id="delivery" title="生产验收覆盖真实角色动作。" eyebrow="03 / 交付">
+
+E2E 不只检查页面能开，还覆盖登录、业务路由、后台路由、用户创建与 CSV 导入。
+
+</ArchiveSection>
+
+</LocaleBlock>
+
+<LocaleBlock locale="en">
+
+<ArchiveSection id="workflow" title="A CRM is only as good as its trustworthy state." eyebrow="01 / Workflow">
+
+Leads, contacts, companies, follow-ups, and spatial inventory must cooperate under one permission model. The dashboard is an output; server-side scope is the product skeleton.
+
+</ArchiveSection>
+
+<ArchiveSection id="concurrency" title="Optimistic locking protects stage transitions." eyebrow="02 / Concurrency">
+
+When multiple operators edit the same lead, stale updates are rejected and refreshed instead of silently overwriting field intelligence.
+
+</ArchiveSection>
+
+<ArchiveSection id="delivery" title="Production acceptance follows real role actions." eyebrow="03 / Delivery">
+
+E2E checks more than page availability: login, business and admin routes, user creation, and CSV import are exercised.
+
+</ArchiveSection>
+
+</LocaleBlock>

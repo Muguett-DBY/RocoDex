@@ -21,9 +21,12 @@ describe("CSTD publishing infrastructure", () => {
   });
 
   test("accepts only bounded anonymous telemetry", () => {
-    expect(parseCstdMetric({ name: "LCP", value: 842.3, page: "home", path: "/" })).toEqual({ name: "LCP", value: 842.3, page: "home", path: "/" });
-    expect(parseCstdMetric({ name: "email", value: 1, page: "home", path: "/" })).toBeNull();
-    expect(parseCstdMetric({ name: "CLS", value: Number.NaN, page: "home", path: "/" })).toBeNull();
-    expect(parseCstdMetric({ name: "INP", value: 100, page: "x".repeat(81), path: "/" })).toBeNull();
+    const dimensions = { device: "desktop", renderTier: "lite" } as const;
+    expect(parseCstdMetric({ name: "LCP", value: 842.3, page: "home", path: "/", ...dimensions })).toEqual({ name: "LCP", value: 842.3, page: "home", path: "/", ...dimensions });
+    expect(parseCstdMetric({ name: "atlas_district", value: 3, page: "home", path: "/", device: "mobile", renderTier: "image" })).not.toBeNull();
+    expect(parseCstdMetric({ name: "email", value: 1, page: "home", path: "/", ...dimensions })).toBeNull();
+    expect(parseCstdMetric({ name: "CLS", value: Number.NaN, page: "home", path: "/", ...dimensions })).toBeNull();
+    expect(parseCstdMetric({ name: "INP", value: 100, page: "x".repeat(81), path: "/", ...dimensions })).toBeNull();
+    expect(parseCstdMetric({ name: "INP", value: 100, page: "home", path: "/", device: "desktop", renderTier: "unknown" })).toBeNull();
   });
 });

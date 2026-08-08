@@ -1,9 +1,10 @@
 "use client";
 
-import { ArrowDown, Command, RadioTower, Zap } from "lucide-react";
+import { ArrowDown, Command, Zap } from "lucide-react";
 import { clsx } from "clsx";
 import { memo } from "react";
-import { cstdProofs, cstdSystems } from "../../content/systems";
+import type { CstdSystem } from "../../content/systems";
+import { CstdAtlasPanel } from "../../components/atlas/cstd-atlas-panel";
 
 const gateSignals = [
   { code: "A-01", label: "PRODUCT", x: "74%", y: "29%", color: "#f4d431" },
@@ -15,10 +16,14 @@ function NeuralGate({
   overdrive,
   onOpenConsole,
   onToggleOverdrive,
+  activeSystemId,
+  onSelectSystem,
 }: {
   overdrive: boolean;
   onOpenConsole: () => void;
   onToggleOverdrive: () => void;
+  activeSystemId: CstdSystem["id"];
+  onSelectSystem: (id: CstdSystem["id"]) => void;
 }) {
   return (
     <section
@@ -44,13 +49,13 @@ function NeuralGate({
           ))}
         </div>
 
-        <div className="relative mx-auto grid w-full max-w-[1540px] gap-12 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-end lg:gap-20">
+        <div className="relative mx-auto grid w-full max-w-[1540px] gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(29rem,0.78fr)] lg:items-center lg:gap-14 xl:gap-20">
           <div className="max-w-6xl">
-            <p className="cstd-gate-eyebrow flex items-center gap-3 font-mono text-[10px] font-black uppercase text-[#f4d431] md:text-xs">
+            <p className="cstd-gate-eyebrow flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] font-black uppercase text-[#f4d431] md:text-xs">
               <span aria-hidden="true" className="h-2 w-2 bg-[#3dff8f] shadow-[0_0_18px_rgba(61,255,143,0.7)]" />
-              CSTD NEURAL GATE / ACCESS GRANTED
+              <span>CSTD NEURAL GATE / ACCESS GRANTED</span>
               <span aria-hidden="true" className="hidden h-px w-20 bg-[#f4d431]/55 sm:block" />
-              SYD 22:47
+              <span className="whitespace-nowrap">SYD 22:47</span>
             </p>
 
             <div className="cstd-gate-title-stack mt-8">
@@ -58,7 +63,7 @@ function NeuralGate({
                 id="cstd-hero-title"
                 aria-label="CSTD"
                 data-text="CSTD"
-                className="cstd-glitch-title cstd-gate-monogram w-fit text-[6rem] font-black leading-[0.76] tracking-[0] text-[#f2efe7] md:text-[9rem] lg:text-[11rem] xl:text-[13rem]"
+                className="cstd-glitch-title cstd-gate-monogram w-fit text-[6rem] font-black leading-[0.76] tracking-[0] text-[#f2efe7] md:text-[9rem] lg:text-[9rem] xl:text-[11rem]"
               >
                 CSTD
               </h1>
@@ -111,33 +116,7 @@ function NeuralGate({
             </div>
           </div>
 
-          <aside className="cstd-gate-monitor border-y border-[#24e0ff]/30 bg-[#050709]/72 px-5 py-6 font-mono backdrop-blur-md" aria-label="城市运行状态">
-            <div className="flex items-center justify-between gap-3">
-              <p className="flex items-center gap-2 text-[9px] font-black text-[#24e0ff]">
-                <RadioTower aria-hidden="true" className="h-3.5 w-3.5" /> CITY TELEMETRY
-              </p>
-              <span className={clsx("text-[9px] font-black", overdrive ? "text-[#ff5a50]" : "text-[#3dff8f]")}>{overdrive ? "REDLINE" : "NOMINAL"}</span>
-            </div>
-            <dl className="mt-6 grid grid-cols-3 gap-4 lg:grid-cols-1">
-              <div className="border-l-2 border-[#f4d431] pl-3">
-                <dt className="text-[9px] text-[#777d81]">DISTRICTS</dt>
-                <dd className="mt-1 text-2xl font-black">{cstdSystems.length}</dd>
-              </div>
-              <div className="border-l-2 border-[#24e0ff] pl-3">
-                <dt className="text-[9px] text-[#777d81]">BROADCASTS</dt>
-                <dd className="mt-1 text-2xl font-black">{cstdProofs.length}</dd>
-              </div>
-              <div className="border-l-2 border-[#ff3b30] pl-3">
-                <dt className="text-[9px] text-[#777d81]">UPLINK</dt>
-                <dd className="mt-1 text-sm font-black text-[#3dff8f]">LIVE</dd>
-              </div>
-            </dl>
-            <div className="mt-6 border-t border-[#24e0ff]/20 pt-4 text-[9px] font-bold leading-5 text-[#718087]">
-              <p>WORLD CLOCK: NATIVE SCROLL</p>
-              <p>CAMERA BUS: SYNCHRONIZED</p>
-              <p>QUALITY: PERFORMANCE ADAPTIVE</p>
-            </div>
-          </aside>
+          <CstdAtlasPanel activeSystemId={activeSystemId} onSelectSystem={onSelectSystem} overdrive={overdrive} />
         </div>
 
         <a

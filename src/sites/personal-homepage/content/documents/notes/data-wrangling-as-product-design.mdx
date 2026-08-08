@@ -1,0 +1,63 @@
+---
+kind: "note"
+schemaVersion: 1
+slug: "data-wrangling-as-product-design"
+publicationStatus: "published"
+revision: 1
+publishedAt: "2026-07-18"
+updatedAt: "2026-08-09"
+readingMinutes: 9
+category: {"zh":"数据科学","en":"Data science"}
+series: {"zh":"从课程到系统","en":"From coursework to systems"}
+title: {"zh":"数据清洗也是产品设计","en":"Data wrangling is product design"}
+summary: {"zh":"从 USYD 数据课程、Monash data wrangling 与实际研究管线中形成的一套数据契约观。","en":"A view of data contracts shaped by USYD data coursework, Monash data wrangling, and production research pipelines."}
+image: {"src":"/cstd-archive/cstd-archive-data-film-v1.webp","alt":{"zh":"记录数据血缘的胶片档案","en":"A film archive preserving data lineage"}}
+relatedCaseSlugs: ["alpha-research-system","dcf-quantum"]
+tags: ["Data wrangling","R","Python","Contracts"]
+corrections: []
+toc: [{"id":"contract","eyebrow":null,"title":{"zh":"脏数据通常是未写下的产品决策","en":"Dirty data often reveals an unwritten product decision"}},{"id":"layers","eyebrow":null,"title":{"zh":"保留原始层、规范层和派生层","en":"Keep raw, normalized, and derived layers"}},{"id":"quality","eyebrow":null,"title":{"zh":"数据质量要成为界面状态","en":"Data quality should become interface state"}}]
+---
+
+<LocaleBlock locale="zh">
+
+<ArchiveSection id="contract" title="脏数据通常是未写下的产品决策">
+
+缺失值是未知、未适用还是抓取失败？日期属于交易所还是用户时区？同名公司是否同一上市主体？每个清洗规则都在替产品回答问题。
+
+</ArchiveSection>
+
+<ArchiveSection id="layers" title="保留原始层、规范层和派生层">
+
+原始响应用于追溯，规范记录用于跨来源比较，派生指标用于产品决策。覆盖原始值会让未来无法解释变化来自数据源、清洗规则还是业务公式。
+
+</ArchiveSection>
+
+<ArchiveSection id="quality" title="数据质量要成为界面状态">
+
+与其给不完整数据一个看似精确的数字，不如把来源、缺口、更新时间与确认级别展示给用户。好的产品不隐藏不确定性，而是让它可操作。
+
+</ArchiveSection>
+
+</LocaleBlock>
+
+<LocaleBlock locale="en">
+
+<ArchiveSection id="contract" title="Dirty data often reveals an unwritten product decision">
+
+Does missing mean unknown, not applicable, or collection failure? Does a date belong to an exchange or user timezone? Are same-name companies the same listing? Every cleaning rule answers a product question.
+
+</ArchiveSection>
+
+<ArchiveSection id="layers" title="Keep raw, normalized, and derived layers">
+
+Raw responses support traceability, normalized records support comparison, and derived metrics support decisions. Overwriting raw values makes later changes impossible to attribute.
+
+</ArchiveSection>
+
+<ArchiveSection id="quality" title="Data quality should become interface state">
+
+Instead of producing a precise-looking number from incomplete data, expose source, gaps, freshness, and confirmation level. Good products make uncertainty actionable.
+
+</ArchiveSection>
+
+</LocaleBlock>

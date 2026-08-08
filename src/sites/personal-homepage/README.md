@@ -5,7 +5,8 @@
 ## 目录
 
 - `components/`：个人主站页面、延迟加载的 Motion 特性与 Three.js 沉浸场景。
-- `content/`：作品、系统能力和学习路径等可编辑内容。
+- `content/documents/`：案例与文章的单文件双语 MDX 真源。
+- `content/`：schema、生成索引、能力证据图谱、Lab 协议、时间线与个人资料。
 - `domain/`：与框架无关的小型展示规则。
 - `infrastructure/`：apex Host 路由和个人 sitemap。
 - `index.ts`：React 公开入口。
@@ -31,9 +32,13 @@ Three.js、React Three Fiber 与 Postprocessing 只能存在于 `components/imme
 ## 验证
 
 ```bash
+npm run content:check
 npm run test:architecture
+npm run test:host
 npm run test:personal
 npm run test:e2e:personal
 npm run build
 npm run verify:personal-bundle
 ```
+
+CI 将 Host/模块边界、静态质量与构建、CSTD E2E、RocoDex E2E 分成独立状态。`resume.json` 与 `en/resume.json` 是机器可读履历入口；`/api/cstd-vitals`、Vercel Web Analytics 和 Speed Insights 组成匿名生产观测层。

@@ -7,7 +7,11 @@
     "node": "24.x"
   },
   "scripts": {
+    "content:generate": "tsx scripts/generate-cstd-content.ts",
+    "content:check": "tsx scripts/generate-cstd-content.ts --check",
+    "predev": "npm run content:generate",
     "dev": "next dev",
+    "prebuild": "npm run content:generate",
     "build": "next build",
     "start": "next start",
     "start:local": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/start-local-production.ps1",
@@ -17,12 +21,13 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "test:architecture": "vitest run src/sites/site-boundaries.test.ts",
+    "test:host": "vitest run src/sites/site-boundaries.test.ts src/sites/personal-homepage/infrastructure/routing.test.ts src/app/robots.txt/route.test.ts src/app/sitemap.xml/route.test.ts",
     "test:personal": "vitest run src/sites/personal-homepage src/sites/shared src/app/robots.txt src/app/sitemap.xml",
     "test:e2e:personal": "playwright test e2e/personal-homepage.spec.ts e2e/personal-archive.spec.ts",
     "test:e2e:rocodex": "playwright test e2e/rocodex.spec.ts",
     "audit:dependencies": "npm audit --audit-level=high",
     "verify:personal-bundle": "node scripts/verify-personal-bundle.mjs",
-    "verify": "npm run lint && npm run typecheck && npm test && npm run build && npm run verify:personal-bundle",
+    "verify": "npm run content:check && npm run lint && npm run typecheck && npm test && npm run build && npm run verify:personal-bundle",
     "verify:live-registration": "node --experimental-strip-types scripts/verify-live-registration.mts",
     "ci:local": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& './scripts/stop-local-next.ps1'; npm ci\""
   },
@@ -30,19 +35,28 @@
     "@react-three/fiber": "^9.7.0",
     "@react-three/postprocessing": "^3.0.4",
     "@upstash/redis": "^1.38.1",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "animejs": "^4.5.0",
     "bcryptjs": "^3.0.3",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "framer-motion": "^12.43.0",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^1.28.0",
     "next": "16.2.12",
     "next-auth": "5.0.0-beta.32",
+    "next-mdx-remote": "^6.0.0",
     "postprocessing": "^6.39.4",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "rehype-pretty-code": "^0.14.5",
+    "rehype-slug": "^6.0.0",
+    "remark-gfm": "^4.0.1",
+    "shiki": "^4.4.2",
     "tailwind-merge": "^3.6.0",
-    "three": "0.182.0"
+    "three": "0.182.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -60,6 +74,7 @@
     "eslint-plugin-react-hooks": "7.1.1",
     "globals": "17.8.0",
     "tailwindcss": "4.3.3",
+    "tsx": "^4.23.11",
     "typescript": "^6.0.3",
     "typescript-eslint": "8.65.0",
     "vitest": "4.1.10"
@@ -70,6 +85,7 @@
     "sharp": "0.35.3"
   },
   "allowScripts": {
+    "esbuild@0.28.1": true,
     "sharp@0.35.3": true,
     "unrs-resolver@1.12.2": true
   }

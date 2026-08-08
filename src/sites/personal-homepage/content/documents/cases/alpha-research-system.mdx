@@ -1,0 +1,90 @@
+---
+kind: "case"
+schemaVersion: 1
+slug: "alpha-research-system"
+projectId: "alpha"
+year: "2026"
+publicationStatus: "published"
+revision: 1
+publishedAt: "2026-01-01"
+updatedAt: "2026-08-09"
+title: {"zh":"CSTD Alpha 研究系统","en":"CSTD Alpha research system"}
+kicker: {"zh":"证据管线 / 决策工作台","en":"Evidence pipeline / decision workspace"}
+summary: {"zh":"把公司研究从一次性 AI 回答改造成有数据来源、异步任务、不可变估值版本和反证条件的私人研究工作流。","en":"Company research becomes a source-aware workflow with background jobs, immutable valuation versions, and explicit disconfirming conditions instead of a one-shot AI answer."}
+role: {"zh":"产品、全栈、数据管线与 AI 编排","en":"Product, full stack, data pipeline, and AI orchestration"}
+runtimeStatus: {"zh":"私有生产系统","en":"Private production system"}
+liveHref: "https://alpha.custard.top"
+image: {"src":"/cstd-projects/alpha.png","alt":{"zh":"CSTD Alpha 公司研究界面","en":"CSTD Alpha research interface"},"position":"50% 24%"}
+technologies: ["React 19","Cloudflare Pages","D1","R2","GitHub Actions","NDJSON"]
+metrics: [{"value":"20","label":{"zh":"评分维度","en":"scoring dimensions"}},{"value":"3","label":{"zh":"估值情景","en":"valuation scenarios"}},{"value":"2","label":{"zh":"模型回退层","en":"model fallback tiers"}}]
+evidence: [{"label":{"zh":"来源","en":"Sources"},"detail":{"zh":"数据快照、引用、缺失项与 fallback 随估值版本保存。","en":"Snapshots, citations, missing fields, and fallbacks travel with each valuation version."}},{"label":{"zh":"并发","en":"Concurrency"},"detail":{"zh":"D1 运行令牌原子认领任务，过期回调不能覆盖新结果。","en":"Atomic D1 run tokens stop stale callbacks from overwriting newer results."}},{"label":{"zh":"隐私","en":"Privacy"},"detail":{"zh":"固定账号、哈希密码与哈希 session token，不提供公开注册。","en":"Fixed accounts, hashed passwords and session tokens, with no public registration."}}]
+capabilityIds: ["ai-creation","research-models","data-systems"]
+relatedNoteSlugs: ["evidence-first-ai-research","deterministic-core-ai-edge","data-wrangling-as-product-design","chemical-engineering-to-software-systems"]
+relatedLabSlugs: ["agent-replay","data-lens"]
+artifacts: [{"kind":"production","label":{"zh":"生产系统","en":"Production system"},"detail":{"zh":"公开可访问的实际运行界面。","en":"The publicly reachable running product."},"href":{"zh":"https://alpha.custard.top","en":"https://alpha.custard.top"},"verifiedAt":"2026-08-09"},{"kind":"note","label":{"zh":"先刷新证据，再让模型说话","en":"Refresh evidence before asking the model to speak"},"detail":{"zh":"从该系统实现中沉淀的技术决策记录。","en":"An engineering decision record derived from this system."},"href":{"zh":"/notes/evidence-first-ai-research","en":"/en/notes/evidence-first-ai-research"},"verifiedAt":"2026-08-09"},{"kind":"note","label":{"zh":"AI 放在解释层，公式留在决策层","en":"Put AI at the explanation edge, not the decision core"},"detail":{"zh":"从该系统实现中沉淀的技术决策记录。","en":"An engineering decision record derived from this system."},"href":{"zh":"/notes/deterministic-core-ai-edge","en":"/en/notes/deterministic-core-ai-edge"},"verifiedAt":"2026-08-09"},{"kind":"lab","label":{"zh":"可复现实验 / agent-replay","en":"Reproducible lab / agent-replay"},"detail":{"zh":"在浏览器中重放核心机制。","en":"Replay the core mechanism in the browser."},"href":{"zh":"/lab/agent-replay","en":"/en/lab/agent-replay"},"verifiedAt":"2026-08-09"},{"kind":"lab","label":{"zh":"可复现实验 / data-lens","en":"Reproducible lab / data-lens"},"detail":{"zh":"在浏览器中重放核心机制。","en":"Replay the core mechanism in the browser."},"href":{"zh":"/lab/data-lens","en":"/en/lab/data-lens"},"verifiedAt":"2026-08-09"}]
+toc: [{"id":"problem","eyebrow":{"zh":"01 / 问题","en":"01 / Problem"},"title":{"zh":"研究质量取决于证据寿命，而不是回答长度。","en":"Research quality depends on evidence freshness, not answer length."}},{"id":"pipeline","eyebrow":{"zh":"02 / 管线","en":"02 / Pipeline"},"title":{"zh":"先生成证据指纹，再决定是否调用模型。","en":"Fingerprint evidence before invoking a model."}},{"id":"valuation","eyebrow":{"zh":"03 / 估值","en":"03 / Valuation"},"title":{"zh":"确定性公式拥有最终决定权。","en":"Deterministic formulas retain final authority."}}]
+---
+
+<LocaleBlock locale="zh">
+
+<ArchiveSection id="problem" title="研究质量取决于证据寿命，而不是回答长度。" eyebrow="01 / 问题">
+
+行情、财务、公告和行业线索更新频率不同。把抓取、综合与页面请求绑在一起，会同时得到超时、重复成本和不可追溯结论。
+
+</ArchiveSection>
+
+<ArchiveSection id="pipeline" title="先生成证据指纹，再决定是否调用模型。" eyebrow="02 / 管线">
+
+定时 Action 负责收集和归一化公开数据；Pages Function 只创建或复用任务；后台工作流完成深度综合并写回 D1/R2。证据没有实质变化时复用缓存。
+
+<CodeSample language="text" label="异步研究链">
+
+```text
+collect -> normalize -> fingerprint
+        -> queue -> synthesize -> publish
+        -> version -> review
+```
+
+</CodeSample>
+
+</ArchiveSection>
+
+<ArchiveSection id="valuation" title="确定性公式拥有最终决定权。" eyebrow="03 / 估值">
+
+五年 FCFF DCF 在浏览器预览和服务端保存中使用同一套公式。AI 只解释假设，不直接修改最终计算；每次保存创建不可变后继版本。
+
+</ArchiveSection>
+
+</LocaleBlock>
+
+<LocaleBlock locale="en">
+
+<ArchiveSection id="problem" title="Research quality depends on evidence freshness, not answer length." eyebrow="01 / Problem">
+
+Prices, filings, disclosures, and industry signals age at different rates. Binding collection and synthesis to a page request creates timeouts, repeated cost, and untraceable conclusions.
+
+</ArchiveSection>
+
+<ArchiveSection id="pipeline" title="Fingerprint evidence before invoking a model." eyebrow="02 / Pipeline">
+
+Scheduled Actions collect and normalize public data. Pages Functions create or reuse jobs; background workflows synthesize and persist to D1/R2. Unchanged evidence reuses cached work.
+
+<CodeSample language="text" label="Asynchronous research chain">
+
+```text
+collect -> normalize -> fingerprint
+        -> queue -> synthesize -> publish
+        -> version -> review
+```
+
+</CodeSample>
+
+</ArchiveSection>
+
+<ArchiveSection id="valuation" title="Deterministic formulas retain final authority." eyebrow="03 / Valuation">
+
+The five-year FCFF DCF uses the same deterministic formula in browser preview and server persistence. AI explains assumptions but cannot decide outputs; every save creates an immutable successor.
+
+</ArchiveSection>
+
+</LocaleBlock>

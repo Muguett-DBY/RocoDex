@@ -1,53 +1,15 @@
 "use client";
 
-import { ArrowUpRight, BookOpen, CornerDownLeft, Search, X } from "lucide-react";
+import { ArrowUpRight, BookOpen, CalendarDays, CornerDownLeft, Search, ShieldCheck, X } from "lucide-react";
 import { useMemo, useRef, useState } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import { CstdLink } from "./cstd-link";
-import { guideKnowledge, type GuideKnowledgeEntry } from "./guide-knowledge";
-
-type GuideResult = {
-  answer: string;
-  sources: readonly GuideKnowledgeEntry[];
-  refused: boolean;
-};
+import { answerGuideQuestion, type GuideResult } from "./guide-retrieval";
 
 const suggestions = {
   zh: ["你的双站架构怎么隔离？", "AI 研究如何避免幻觉？", "DCF 为什么不用模型计算？"],
   en: ["How are the two sites isolated?", "How does AI research stay grounded?", "Why is DCF deterministic?"],
 } as const;
-
-function normalize(value: string) {
-  return value.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
-}
-
-function answerQuestion(question: string, locale: CstdLocale): GuideResult {
-  const normalized = normalize(question);
-  const ranked = guideKnowledge
-    .map((entry) => ({
-      entry,
-      score: entry.keywords.reduce((score, keyword) => score + (normalized.includes(keyword.toLowerCase()) ? Math.max(2, keyword.length) : 0), 0),
-    }))
-    .filter((candidate) => candidate.score > 0)
-    .sort((left, right) => right.score - left.score)
-    .slice(0, 2);
-
-  if (ranked.length === 0) {
-    return {
-      refused: true,
-      sources: [],
-      answer: locale === "zh"
-        ? "这超出了当前公开档案。我不会用猜测补齐答案。可以改问架构、AI 研究、DCF、性能、CRM、前端动效或学习路径。"
-        : "That is outside the published archive, so I will not fill the gap with a guess. Ask about architecture, AI research, DCF, performance, CRM, motion, or the learning path.",
-    };
-  }
-
-  return {
-    refused: false,
-    sources: ranked.map((candidate) => candidate.entry),
-    answer: ranked.map((candidate) => candidate.entry.summary[locale]).join(locale === "zh" ? "\n\n" : "\n\n"),
-  };
-}
 
 export function TechnicalGuide({ locale, open, onClose }: { locale: CstdLocale; open: boolean; onClose: () => void }) {
   const [question, setQuestion] = useState("");
@@ -60,6 +22,7 @@ export function TechnicalGuide({ locale, open, onClose }: { locale: CstdLocale; 
     placeholder: "问一个具体技术问题…",
     submit: "检索档案",
     sources: "来源",
+    matched: "匹配依据",
     limited: "请求太快，请稍后再试。",
   } : {
     eyebrow: "SOURCE-CONSTRAINED GUIDE",
@@ -68,6 +31,7 @@ export function TechnicalGuide({ locale, open, onClose }: { locale: CstdLocale; 
     placeholder: "Ask a specific technical question…",
     submit: "Search archive",
     sources: "Sources",
+    matched: "Matched terms",
     limited: "Too many requests. Try again in a moment.",
   }, [locale]);
 
@@ -77,11 +41,11 @@ export function TechnicalGuide({ locale, open, onClose }: { locale: CstdLocale; 
     const now = Date.now();
     recentRequests.current = recentRequests.current.filter((timestamp) => now - timestamp < 10_000);
     if (recentRequests.current.length >= 6) {
-      setResult({ answer: copy.limited, sources: [], refused: true });
+      setResult({ answer: copy.limited, sources: [], refused: true, matchedTerms: [] });
       return;
     }
     recentRequests.current.push(now);
-    const nextResult = answerQuestion(value, locale);
+    const nextResult = answerGuideQuestion(value, locale);
     setResult(nextResult);
     window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: nextResult.refused ? "guide_refusal" : "guide_answer", value: nextResult.sources.length } }));
   }
@@ -116,16 +80,18 @@ export function TechnicalGuide({ locale, open, onClose }: { locale: CstdLocale; 
 
           {result ? (
             <div data-cstd-guide-result className="mt-8 border-l-2 border-[#f4d431] bg-white/[0.035] px-5 py-5">
-              <div className="flex items-center gap-2 font-mono text-[9px] font-black text-[#f4d431]">
+              <div className="flex flex-wrap items-center gap-3 font-mono text-[9px] font-black text-[#f4d431]">
                 <BookOpen aria-hidden="true" className="h-4 w-4" /> ARCHIVE RESPONSE
+                {result.confidence ? <span className="flex items-center gap-1.5 border-l border-white/15 pl-3 text-[#3dff8f]"><ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" />{result.confidence.toUpperCase()} CONFIDENCE</span> : null}
               </div>
               {result.answer.split("\n\n").map((paragraph) => <p key={paragraph} className="mt-4 text-sm leading-7 text-[#d8ddde]">{paragraph}</p>)}
+              {result.matchedTerms.length > 0 ? <div className="mt-5 flex flex-wrap items-center gap-2"><span className="font-mono text-[8px] font-black text-[#68757b]">{copy.matched.toUpperCase()}</span>{result.matchedTerms.map((term) => <span key={term} className="border border-white/12 px-2 py-1 font-mono text-[8px] font-black text-[#9ba6aa]">{term}</span>)}</div> : null}
               {result.sources.length > 0 ? (
                 <div className="mt-6 border-t border-white/12 pt-4">
                   <p className="font-mono text-[9px] font-black text-[#778286]">{copy.sources.toUpperCase()}</p>
                   {result.sources.map((source) => (
-                    <CstdLink key={source.id} href={source.href[locale]} onClick={onClose} className="group mt-3 flex items-center justify-between gap-4 text-sm text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]">
-                      {source.title[locale]}
+                    <CstdLink key={source.id} href={source.href[locale]} onClick={onClose} className="group mt-3 flex items-center justify-between gap-4 border-b border-white/8 pb-3 text-sm text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]">
+                      <span><span className="block">{source.title[locale]}</span><span className="mt-1 flex items-center gap-2 font-mono text-[8px] font-black text-[#68757b]"><CalendarDays aria-hidden="true" className="h-3 w-3" />{source.type.toUpperCase()} / {source.updatedAt}</span></span>
                       <ArrowUpRight aria-hidden="true" className="h-4 w-4 shrink-0 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
                     </CstdLink>
                   ))}

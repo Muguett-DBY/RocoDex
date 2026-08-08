@@ -1,0 +1,63 @@
+---
+kind: "note"
+schemaVersion: 1
+slug: "observable-dcf-pipeline"
+publicationStatus: "published"
+revision: 1
+publishedAt: "2026-07-30"
+updatedAt: "2026-08-09"
+readingMinutes: 11
+category: {"zh":"数据与性能","en":"Data and performance"}
+series: {"zh":"可审计计算","en":"Auditable computation"}
+title: {"zh":"全市场 DCF 扫描为什么先优化缓存 JSON","en":"Why a market-wide DCF scan optimized cache JSON first"}
+summary: {"zh":"性能分析显示瓶颈不在财务公式，而在重复解析与序列化；正确优化从实测调用栈开始。","en":"Profiling found repeated parsing and serialization, not finance math, dominating runtime. Optimization started with the measured call stack."}
+image: {"src":"/cstd-world/cstd-data-loom-v2.webp","alt":{"zh":"高速数据织机","en":"A high-throughput data loom"}}
+relatedCaseSlugs: ["dcf-quantum"]
+tags: ["Python","Profiling","Caching","Data lineage"]
+corrections: []
+toc: [{"id":"measure","eyebrow":null,"title":{"zh":"先测正式可执行文件","en":"Profile the executable users run"}},{"id":"hotpath","eyebrow":null,"title":{"zh":"公式很快，重复搬运数据很慢","en":"The formula was fast; repeated data movement was slow"}},{"id":"integrity","eyebrow":null,"title":{"zh":"优化不能跳过数据指纹","en":"Optimization must preserve data fingerprints"}}]
+---
+
+<LocaleBlock locale="zh">
+
+<ArchiveSection id="measure" title="先测正式可执行文件">
+
+只测孤立函数会错过启动、缓存、数据归一化和报告输出。性能调查应该从完整扫描命令开始，再沿调用栈缩小范围。
+
+</ArchiveSection>
+
+<ArchiveSection id="hotpath" title="公式很快，重复搬运数据很慢">
+
+同一缓存载荷在扫描中被多次读取、JSON 解析和序列化。把已解析对象绑定到一次运行，并延迟只为最终工件序列化，收益远高于微调 DCF 公式。
+
+</ArchiveSection>
+
+<ArchiveSection id="integrity" title="优化不能跳过数据指纹">
+
+缓存对象可以复用，但运行清单仍要记录原始文件、接口参数、创建与到期时间以及载荷哈希。速度提升不能以失去审计能力为代价。
+
+</ArchiveSection>
+
+</LocaleBlock>
+
+<LocaleBlock locale="en">
+
+<ArchiveSection id="measure" title="Profile the executable users run">
+
+Isolated functions miss startup, cache access, normalization, and report output. Performance work should begin with the complete scan command and narrow down the measured call stack.
+
+</ArchiveSection>
+
+<ArchiveSection id="hotpath" title="The formula was fast; repeated data movement was slow">
+
+The same cached payload was repeatedly read, parsed, and serialized. Binding parsed objects to one run and serializing only final artifacts mattered more than micro-optimizing DCF math.
+
+</ArchiveSection>
+
+<ArchiveSection id="integrity" title="Optimization must preserve data fingerprints">
+
+Cached objects may be reused, but manifests still record source files, parameters, creation and expiry times, and payload hashes. Speed cannot trade away auditability.
+
+</ArchiveSection>
+
+</LocaleBlock>

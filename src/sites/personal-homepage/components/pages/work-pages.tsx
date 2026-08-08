@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, CheckCircle2, ExternalLink, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, ExternalLink, ShieldCheck } from "lucide-react";
 import type { CstdLocale } from "../../content/content-types";
 import { cstdCaseStudies, getCaseStudyPath, getCstdCaseStudy } from "../../content/case-studies";
+import { loadCstdContentDocument } from "../../content/content-document";
 import { CstdLink } from "../site/cstd-link";
 import { CstdSiteChrome } from "../site/cstd-site-chrome";
+import { CstdEvidenceGraph } from "../site/evidence-graph";
 import { StructuredData } from "../site/structured-data";
 import { CstdPageHero } from "./page-hero";
 
@@ -87,9 +89,10 @@ export function CstdWorkIndexPage({ locale }: { locale: CstdLocale }) {
   );
 }
 
-export function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; slug: string }) {
+export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; slug: string }) {
   const entry = getCstdCaseStudy(slug);
   if (!entry) notFound();
+  const document = await loadCstdContentDocument("cases", entry.slug, locale);
   const copy = locale === "zh" ? {
     back: "全部作品",
     role: "承担角色",
@@ -132,33 +135,9 @@ export function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; slug: 
           </div>
         </section>
 
-        <div className="bg-[#080a0c]">
-          {entry.sections.map((section, sectionIndex) => (
-            <section key={section.id} id={section.id} className="border-b border-white/12 px-5 py-20 md:px-10 lg:px-16 lg:py-28">
-              <div className="mx-auto grid max-w-[1320px] gap-10 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-20">
-                <div>
-                  <p className="font-mono text-[9px] font-black text-[#f4d431]">{section.eyebrow?.[locale] ?? String(sectionIndex + 1).padStart(2, "0")}</p>
-                  <span aria-hidden="true" className="mt-5 block h-px w-16 bg-[#24e0ff]" />
-                </div>
-                <div>
-                  <h2 className="max-w-4xl text-4xl font-semibold leading-[1.02] text-white md:text-6xl">{section.title[locale]}</h2>
-                  {section.paragraphs.map((paragraph) => <p key={paragraph[locale]} className="mt-7 max-w-3xl text-base leading-8 text-[#aeb7ba] md:text-lg md:leading-9">{paragraph[locale]}</p>)}
-                  {section.bullets ? (
-                    <ul className="mt-8 grid gap-3">
-                      {section.bullets.map((bullet) => <li key={bullet[locale]} className="flex gap-3 border-t border-white/10 pt-4 text-sm leading-7 text-[#d4dadc]"><CheckCircle2 aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-[#24e0ff]" />{bullet[locale]}</li>)}
-                    </ul>
-                  ) : null}
-                  {section.code ? (
-                    <figure className="mt-9 overflow-x-auto border-l-2 border-[#24e0ff] bg-black/45 p-5">
-                      <figcaption className="font-mono text-[8px] font-black text-[#758287]">{section.code.label[locale].toUpperCase()} / {section.code.language}</figcaption>
-                      <pre className="mt-4 text-sm leading-7 text-[#d9f9ff]"><code>{section.code.value}</code></pre>
-                    </figure>
-                  ) : null}
-                </div>
-              </div>
-            </section>
-          ))}
-        </div>
+        <CstdEvidenceGraph entry={entry} locale={locale} />
+
+        <article className="bg-[#080a0c]">{document}</article>
 
         <section className="border-b border-[#f4d431]/40 bg-[#f4d431] px-5 py-20 text-[#050709] md:px-10 lg:px-16 lg:py-24">
           <div className="mx-auto max-w-[1320px]">

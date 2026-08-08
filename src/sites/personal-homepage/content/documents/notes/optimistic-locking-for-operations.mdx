@@ -1,0 +1,83 @@
+---
+kind: "note"
+schemaVersion: 1
+slug: "optimistic-locking-for-operations"
+publicationStatus: "published"
+revision: 1
+publishedAt: "2026-07-26"
+updatedAt: "2026-08-09"
+readingMinutes: 7
+category: {"zh":"业务系统","en":"Operational systems"}
+series: {"zh":"可信状态","en":"Trustworthy state"}
+title: {"zh":"多人 CRM 里，最后提交不应该自动获胜","en":"In a multi-user CRM, last write should not automatically win"}
+summary: {"zh":"用乐观锁、服务端数据范围和显式冲突恢复保护现场业务信息。","en":"Optimistic locking, server-side scopes, and explicit conflict recovery protect operational truth."}
+image: {"src":"/cstd-world/cstd-kinetic-studio-v2.webp","alt":{"zh":"并发运行的业务控制台","en":"Concurrent operational consoles"}}
+relatedCaseSlugs: ["cfzzs-crm"]
+tags: ["CRM","Concurrency","RBAC","D1"]
+corrections: []
+toc: [{"id":"conflict","eyebrow":null,"title":{"zh":"静默覆盖是最昂贵的成功响应","en":"A silent overwrite is the most expensive success response"}},{"id":"version","eyebrow":null,"title":{"zh":"更新必须携带读取时版本","en":"Every update carries its read version"}},{"id":"scope","eyebrow":null,"title":{"zh":"并发保护不能替代权限边界","en":"Concurrency control does not replace authorization"}}]
+---
+
+<LocaleBlock locale="zh">
+
+<ArchiveSection id="conflict" title="静默覆盖是最昂贵的成功响应">
+
+两个招商人员可能同时更新同一线索：一个刚电话确认需求，另一个还停留在旧页面。若后者提交成功，系统看似稳定，实际已经丢掉业务事实。
+
+</ArchiveSection>
+
+<ArchiveSection id="version" title="更新必须携带读取时版本">
+
+服务端用记录版本作为条件更新。受影响行数为零时返回冲突，前端重新读取并让用户决定合并，而不是自动重放旧输入。
+
+<CodeSample language="sql" label="条件更新">
+
+```sql
+UPDATE leads
+SET stage = ?, version = version + 1
+WHERE id = ? AND version = ?
+```
+
+</CodeSample>
+
+</ArchiveSection>
+
+<ArchiveSection id="scope" title="并发保护不能替代权限边界">
+
+版本检查只回答数据是否变化，RBAC 与数据范围回答用户是否有权看到和修改。两者都必须在服务端执行。
+
+</ArchiveSection>
+
+</LocaleBlock>
+
+<LocaleBlock locale="en">
+
+<ArchiveSection id="conflict" title="A silent overwrite is the most expensive success response">
+
+Two operators may update one lead at once: one has just confirmed requirements by phone while the other still holds an old page. A successful stale write makes the system look healthy while losing business truth.
+
+</ArchiveSection>
+
+<ArchiveSection id="version" title="Every update carries its read version">
+
+The server conditions updates on the record version. Zero affected rows becomes a conflict; the client refreshes and lets the user reconcile instead of replaying stale input.
+
+<CodeSample language="sql" label="Conditional update">
+
+```sql
+UPDATE leads
+SET stage = ?, version = version + 1
+WHERE id = ? AND version = ?
+```
+
+</CodeSample>
+
+</ArchiveSection>
+
+<ArchiveSection id="scope" title="Concurrency control does not replace authorization">
+
+Version checks answer whether data changed; RBAC and data scope answer whether a user may see or change it. Both belong on the server.
+
+</ArchiveSection>
+
+</LocaleBlock>

@@ -9,6 +9,15 @@ type MetricPayload = {
   rating?: "good" | "needs-improvement" | "poor";
 };
 
+type RenderTier = "full" | "lite" | "image" | "archive";
+
+function getRenderTier(): RenderTier {
+  const root = document.querySelector<HTMLElement>("[data-cstd-immersive-runtime]");
+  const tier = root?.dataset.cstdImmersiveRuntime;
+  if (tier === "full" || tier === "lite" || tier === "image") return tier;
+  return "archive";
+}
+
 type LayoutShiftEntry = PerformanceEntry & {
   value: number;
   hadRecentInput: boolean;
@@ -27,6 +36,8 @@ function sendMetric(payload: MetricPayload) {
     ...payload,
     value: Math.round(payload.value * 1000) / 1000,
     path: window.location.pathname.slice(0, 180),
+    device: window.matchMedia("(max-width: 768px)").matches ? "mobile" : "desktop",
+    renderTier: getRenderTier(),
   });
   if (navigator.sendBeacon) {
     navigator.sendBeacon("/api/cstd-vitals", new Blob([body], { type: "application/json" }));
@@ -41,6 +52,8 @@ export function CstdTelemetry({ page }: { page: string }) {
     let cls = 0;
     let lcp = 0;
     let inp = 0;
+
+    const pageViewTimer = window.setTimeout(() => sendMetric({ name: "page_view", value: 1, page }), 1500);
 
     const observe = (type: string, callback: PerformanceObserverCallback) => {
       try {
@@ -76,13 +89,19 @@ export function CstdTelemetry({ page }: { page: string }) {
       if (typeof detail?.name !== "string" || typeof detail.value !== "number") return;
       sendMetric({ name: detail.name.slice(0, 40), value: detail.value, page });
     };
+    const onClientError = () => sendMetric({ name: "client_error", value: 1, page });
 
     window.addEventListener("pagehide", onPageHide, { once: true });
     window.addEventListener("cstd:metric", onCustomMetric);
+    window.addEventListener("error", onClientError);
+    window.addEventListener("unhandledrejection", onClientError);
     return () => {
       observers.forEach((observer) => observer.disconnect());
+      window.clearTimeout(pageViewTimer);
       window.removeEventListener("pagehide", onPageHide);
       window.removeEventListener("cstd:metric", onCustomMetric);
+      window.removeEventListener("error", onClientError);
+      window.removeEventListener("unhandledrejection", onClientError);
     };
   }, [page]);
 

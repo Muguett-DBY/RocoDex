@@ -984,3 +984,96 @@ a {
   background: #ff2a6d;
   color: #0d0a16;
 }
+
+@keyframes cstd-atlas-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes cstd-atlas-detail-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cstd-atlas-orbit {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: cstd-atlas-orbit 18s linear infinite;
+}
+
+.cstd-atlas-detail {
+  animation: cstd-atlas-detail-enter 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+[data-cstd-motion="calm"] .cstd-atlas-orbit,
+[data-cstd-motion="calm"] .cstd-atlas-detail {
+  animation: none;
+}
+
+.cstd-mdx-prose > p {
+  max-width: 48rem;
+  margin-top: 1.5rem;
+  font-size: 1.05rem;
+  line-height: 2rem;
+}
+
+.cstd-mdx-prose-dark > p {
+  color: #aeb7ba;
+}
+
+.cstd-mdx-prose-light > p {
+  color: rgb(0 0 0 / 72%);
+}
+
+.cstd-mdx-prose ul,
+.cstd-mdx-prose ol {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.cstd-mdx-prose li {
+  padding: 0.8rem 0 0.8rem 1rem;
+  border-left: 2px solid #e3b800;
+  font-size: 1rem;
+  line-height: 1.9rem;
+}
+
+.cstd-mdx-prose-dark li {
+  color: #d4dadc;
+  border-top: 1px solid rgb(255 255 255 / 10%);
+  border-left-color: #24e0ff;
+}
+
+.cstd-mdx-prose [data-rehype-pretty-code-figure] {
+  margin: 0;
+}
+
+.cstd-mdx-prose pre {
+  overflow-x: auto;
+  padding: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.75rem;
+}
+
+.cstd-mdx-prose code:not(pre code) {
+  border: 1px solid currentcolor;
+  padding: 0.1rem 0.35rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.85em;
+}
+
+@media (min-width: 768px) {
+  .cstd-mdx-prose > p {
+    font-size: 1.125rem;
+    line-height: 2.25rem;
+  }
+}

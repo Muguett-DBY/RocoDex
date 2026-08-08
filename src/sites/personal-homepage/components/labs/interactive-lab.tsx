@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight, Pause, Play, RotateCcw } from "lucide-react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import type { CstdLab } from "../../content/labs";
 
@@ -302,9 +302,19 @@ function RenderLab({ locale }: { locale: CstdLocale }) {
   );
 }
 
+const labRenderers: Record<CstdLab["renderer"], ComponentType<{ locale: CstdLocale }>> = {
+  "system-trace": SystemTraceLab,
+  "agent-replay": AgentReplayLab,
+  "data-lens": DataLensLab,
+  "render-lab": RenderLab,
+};
+
 export function InteractiveLab({ lab, locale }: { lab: CstdLab; locale: CstdLocale }) {
-  if (lab.slug === "system-trace") return <SystemTraceLab locale={locale} />;
-  if (lab.slug === "agent-replay") return <AgentReplayLab locale={locale} />;
-  if (lab.slug === "data-lens") return <DataLensLab locale={locale} />;
-  return <RenderLab locale={locale} />;
+  const Renderer = labRenderers[lab.renderer];
+
+  useEffect(() => {
+    window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: "lab_loaded", value: Number(lab.number) } }));
+  }, [lab.number]);
+
+  return <Renderer locale={locale} />;
 }

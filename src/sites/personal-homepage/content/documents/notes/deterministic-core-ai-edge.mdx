@@ -1,0 +1,63 @@
+---
+kind: "note"
+schemaVersion: 1
+slug: "deterministic-core-ai-edge"
+publicationStatus: "published"
+revision: 1
+publishedAt: "2026-08-03"
+updatedAt: "2026-08-09"
+readingMinutes: 9
+category: {"zh":"产品工程","en":"Product engineering"}
+series: {"zh":"证据优先的智能系统","en":"Evidence-first intelligence"}
+title: {"zh":"AI 放在解释层，公式留在决策层","en":"Put AI at the explanation edge, not the decision core"}
+summary: {"zh":"估值系统如何让生成式能力增加理解，而不污染可复算的财务结果。","en":"How a valuation system adds generative explanation without contaminating reproducible financial outputs."}
+image: {"src":"/cstd-archive/cstd-archive-cobalt-modules-v1.webp","alt":{"zh":"相互隔离的确定性模块","en":"Isolated deterministic modules"}}
+relatedCaseSlugs: ["alpha-research-system","dcf-quantum"]
+tags: ["AI","DCF","Determinism","Product"]
+corrections: []
+toc: [{"id":"authority","eyebrow":null,"title":{"zh":"先标记谁拥有最终决定权","en":"Declare who owns final authority"}},{"id":"provenance","eyebrow":null,"title":{"zh":"版本要保存来源，也要保存缺口","en":"Versions preserve sources and gaps"}},{"id":"language","eyebrow":null,"title":{"zh":"语言模型负责把不确定性说清楚","en":"Language models explain uncertainty"}}]
+---
+
+<LocaleBlock locale="zh">
+
+<ArchiveSection id="authority" title="先标记谁拥有最终决定权">
+
+预测假设可以来自用户、历史基线或模型建议，但现金流、折现和终值计算只有一个确定性实现。界面预览与服务端持久化调用同一公式，避免两个真相。
+
+</ArchiveSection>
+
+<ArchiveSection id="provenance" title="版本要保存来源，也要保存缺口">
+
+数据快照、来源引用、缺失字段、fallback 与警告都属于估值版本。只保存最终数字会让未来的复盘失去上下文。
+
+</ArchiveSection>
+
+<ArchiveSection id="language" title="语言模型负责把不确定性说清楚">
+
+模型可以比较情景、总结风险和提出需要验证的问题，但不能悄悄改写折现率，也不能把代理估值描述成确认结果。
+
+</ArchiveSection>
+
+</LocaleBlock>
+
+<LocaleBlock locale="en">
+
+<ArchiveSection id="authority" title="Declare who owns final authority">
+
+Assumptions may come from users, historical baselines, or model suggestions, but cash flow, discounting, and terminal value have one deterministic implementation shared by preview and persistence.
+
+</ArchiveSection>
+
+<ArchiveSection id="provenance" title="Versions preserve sources and gaps">
+
+Snapshots, citations, missing fields, fallbacks, and warnings all belong to a valuation version. Saving only the final number destroys future review context.
+
+</ArchiveSection>
+
+<ArchiveSection id="language" title="Language models explain uncertainty">
+
+A model can compare scenarios, summarize risks, and propose verification questions, but it cannot silently rewrite discount rates or describe a proxy estimate as confirmed.
+
+</ArchiveSection>
+
+</LocaleBlock>

@@ -12,6 +12,29 @@ export type ContentEvidence = Readonly<{
   detail: LocalizedText;
 }>;
 
+export type ContentArtifactKind = "production" | "release" | "ci" | "test" | "note" | "lab";
+
+export type ContentArtifact = Readonly<{
+  kind: ContentArtifactKind;
+  label: LocalizedText;
+  detail: LocalizedText;
+  href: LocalizedText;
+  verifiedAt: string;
+}>;
+
+export type ContentTocEntry = Readonly<{
+  id: string;
+  eyebrow: LocalizedText | null;
+  title: LocalizedText;
+}>;
+
+export type PublicationStatus = "draft" | "scheduled" | "published";
+
+export type ContentCorrection = Readonly<{
+  date: string;
+  note: LocalizedText;
+}>;
+
 export type ContentSection = Readonly<{
   id: string;
   eyebrow?: LocalizedText;
