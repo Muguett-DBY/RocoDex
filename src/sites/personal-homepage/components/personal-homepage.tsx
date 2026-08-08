@@ -8,6 +8,7 @@ import {
   lazy,
   memo,
   Suspense,
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -183,20 +184,24 @@ export function PersonalHomepage() {
   const [activeSystemId, setActiveSystemId] = useState<CstdSystem["id"]>(cstdSystems[0].id);
   const [consoleOpen, setConsoleOpen] = useState(false);
   const [overdrive, setOverdrive] = useState(false);
+  const openConsole = useCallback(() => setConsoleOpen(true), []);
+  const closeConsole = useCallback(() => setConsoleOpen(false), []);
+  const toggleOverdrive = useCallback(() => setOverdrive((current) => !current), []);
+  const enableOverdrive = useCallback(() => setOverdrive(true), []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
         event.preventDefault();
-        setConsoleOpen(true);
+        openConsole();
       }
       if (event.shiftKey && event.key.toLowerCase() === "o") {
-        setOverdrive((current) => !current);
+        toggleOverdrive();
       }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [openConsole, toggleOverdrive]);
 
   useEffect(() => {
     let frame = 0;
@@ -406,7 +411,7 @@ export function PersonalHomepage() {
             aria-pressed={overdrive}
             aria-label={overdrive ? "关闭超载模式" : "启动超载模式"}
             title={overdrive ? "关闭 OVERDRIVE" : "启动 OVERDRIVE"}
-            onClick={() => setOverdrive((current) => !current)}
+            onClick={toggleOverdrive}
             className={clsx(
               "flex h-9 w-9 items-center justify-center border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff3b30]",
               overdrive
@@ -434,7 +439,7 @@ export function PersonalHomepage() {
             aria-controls="cstd-command-drawer"
             aria-label="打开控制台"
             title="打开控制台"
-            onClick={() => setConsoleOpen(true)}
+            onClick={openConsole}
             className="flex h-9 w-9 items-center justify-center border border-[#24e0ff]/45 bg-[#24e0ff]/10 text-[#24e0ff] transition-colors hover:bg-[#24e0ff] hover:text-[#050709] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"
           >
             <Command aria-hidden="true" className="h-4 w-4" />
@@ -483,7 +488,7 @@ export function PersonalHomepage() {
               </a>
               <button
                 type="button"
-                onClick={() => setConsoleOpen(true)}
+                onClick={openConsole}
                 className="inline-flex h-12 items-center gap-3 border border-[#24e0ff]/45 bg-[#061015]/70 px-5 font-mono text-sm font-bold text-[#d8fbff] transition-colors hover:border-[#24e0ff] hover:bg-[#24e0ff] hover:text-[#050709] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"
               >
                 <Command aria-hidden="true" className="h-4 w-4" />
@@ -492,7 +497,7 @@ export function PersonalHomepage() {
               <button
                 type="button"
                 aria-pressed={overdrive}
-                onClick={() => setOverdrive((current) => !current)}
+                onClick={toggleOverdrive}
                 className={clsx(
                   "inline-flex h-12 items-center gap-3 border px-5 font-mono text-sm font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff3b30]",
                   overdrive
@@ -586,8 +591,8 @@ export function PersonalHomepage() {
         <Suspense fallback={null}>
           <LazyCommandDrawer
             reducedMotion={reducedMotion}
-            onClose={() => setConsoleOpen(false)}
-            onOverdrive={() => setOverdrive(true)}
+            onClose={closeConsole}
+            onOverdrive={enableOverdrive}
           />
         </Suspense>
       ) : null}

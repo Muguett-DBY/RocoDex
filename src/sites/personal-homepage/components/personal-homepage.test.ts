@@ -63,6 +63,9 @@ describe("CSTD personal systems studio", () => {
     expect(commandSource).toContain('event.key === "Escape"');
     expect(commandSource).toContain('case "breach"');
     expect(commandSource).toContain("onOverdrive();");
+    expect(landingSource).toContain("const closeConsole = useCallback");
+    expect(landingSource).toContain("onClose={closeConsole}");
+    expect(landingSource).toContain("onOverdrive={enableOverdrive}");
   });
 
   test("keeps high-intensity cyber effects behind a deliberate overdrive state", () => {

@@ -35,6 +35,9 @@ export function CommandDrawer({
 
   useEffect(() => {
     closeButtonRef.current?.focus();
+  }, []);
+
+  useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") onClose();
     };
