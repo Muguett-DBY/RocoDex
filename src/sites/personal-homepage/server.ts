@@ -7,5 +7,6 @@ export {
 } from "./infrastructure/routing";
 export { getPersonalHomepageSitemapEntries } from "./infrastructure/sitemap";
 export { serializeCstdRss } from "./infrastructure/rss";
+export { cstdProofMeshManifest } from "./content/proof-mesh";
 export { parseCstdMetric, type CstdMetric } from "./infrastructure/telemetry";
 export { serializeCstdResume } from "./infrastructure/resume";

@@ -4,6 +4,7 @@ import { ArrowRight, Pause, Play, RotateCcw } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import type { CstdLab } from "../../content/labs";
+import { detectCstdRuntimeCapabilities, type CstdRuntimeCapabilities } from "../../experience/runtime-capabilities";
 
 type TraceStep = {
   label: string;
@@ -277,12 +278,18 @@ function RenderProbe({ budget, onFps }: { budget: RenderBudget; onFps: (value: n
 function RenderLab({ locale }: { locale: CstdLocale }) {
   const [budget, setBudget] = useState<RenderBudget>("full");
   const [fps, setFps] = useState(0);
+  const [runtime, setRuntime] = useState<CstdRuntimeCapabilities | null>(null);
   const onFps = useMemo(() => (value: number) => setFps(value), []);
   const config = {
     full: { particles: 130, dpr: "1.5x", glow: locale === "zh" ? "完整" : "full" },
     balanced: { particles: 62, dpr: "1.0x", glow: locale === "zh" ? "收敛" : "restrained" },
     calm: { particles: 18, dpr: "1.0x", glow: locale === "zh" ? "关闭" : "off" },
   }[budget];
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => setRuntime(detectCstdRuntimeCapabilities()));
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
 
   return (
     <div data-cstd-lab="render-lab">
@@ -297,6 +304,12 @@ function RenderLab({ locale }: { locale: CstdLocale }) {
         <div className="border-r border-white/15 p-4"><dt className="font-mono text-[8px] font-black text-[#68757b]">PARTICLES</dt><dd className="mt-2 text-lg font-semibold text-[#24e0ff]">{config.particles}</dd></div>
         <div className="border-r border-white/15 p-4"><dt className="font-mono text-[8px] font-black text-[#68757b]">DPR CAP</dt><dd className="mt-2 text-lg font-semibold text-[#f4d431]">{config.dpr}</dd></div>
         <div className="p-4"><dt className="font-mono text-[8px] font-black text-[#68757b]">GLOW</dt><dd className="mt-2 text-lg font-semibold text-white">{config.glow}</dd></div>
+      </dl>
+      <dl data-cstd-runtime-diagnostics className="grid border-x border-b border-white/15 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="border-b border-white/15 p-4 sm:border-r lg:border-b-0"><dt className="font-mono text-[8px] font-black text-[#68757b]">AUTO TIER</dt><dd className="mt-2 font-mono text-sm font-black text-[#3dff8f]">{runtime?.tier.toUpperCase() ?? "PROBING"}</dd></div>
+        <div className="border-b border-white/15 p-4 lg:border-b-0 lg:border-r"><dt className="font-mono text-[8px] font-black text-[#68757b]">BACKEND</dt><dd className="mt-2 font-mono text-sm font-black text-[#24e0ff]">{runtime?.backend.toUpperCase() ?? "--"}</dd></div>
+        <div className="border-b border-white/15 p-4 sm:border-r lg:border-b-0"><dt className="font-mono text-[8px] font-black text-[#68757b]">WEBGPU READY</dt><dd className="mt-2 font-mono text-sm font-black text-[#f4d431]">{runtime ? (runtime.webgpu ? "YES" : "NO / FALLBACK") : "--"}</dd></div>
+        <div className="p-4"><dt className="font-mono text-[8px] font-black text-[#68757b]">DEVICE SIGNAL</dt><dd className="mt-2 font-mono text-sm font-black text-white">{runtime ? `${runtime.hardwareConcurrency}C / ${runtime.deviceMemory ?? "?"}GB / ${runtime.dpr}DPR` : "--"}</dd></div>
       </dl>
     </div>
   );

@@ -2,9 +2,12 @@
 
 import { ArrowDown, Command, Zap } from "lucide-react";
 import { clsx } from "clsx";
-import { memo } from "react";
+import { lazy, memo, Suspense } from "react";
 import type { CstdSystem } from "../../content/systems";
-import { CstdAtlasPanel } from "../../components/atlas/cstd-atlas-panel";
+import { getCstdNarrative, type CstdNarrativeMode } from "../../content/narratives";
+
+const LazyNarrativeSwitcher = lazy(() => import("../../components/site/narrative-switcher").then((module) => ({ default: module.NarrativeSwitcher })));
+const LazyCstdAtlasPanel = lazy(() => import("../../components/atlas/cstd-atlas-panel").then((module) => ({ default: module.CstdAtlasPanel })));
 
 const gateSignals = [
   { code: "A-01", label: "PRODUCT", x: "74%", y: "29%", color: "#f4d431" },
@@ -18,13 +21,18 @@ function NeuralGate({
   onToggleOverdrive,
   activeSystemId,
   onSelectSystem,
+  narrativeMode,
+  onNarrativeChange,
 }: {
   overdrive: boolean;
   onOpenConsole: () => void;
   onToggleOverdrive: () => void;
   activeSystemId: CstdSystem["id"];
   onSelectSystem: (id: CstdSystem["id"]) => void;
+  narrativeMode: CstdNarrativeMode;
+  onNarrativeChange: (mode: CstdNarrativeMode) => void;
 }) {
+  const narrative = getCstdNarrative(narrativeMode);
   return (
     <section
       id="top"
@@ -75,20 +83,22 @@ function NeuralGate({
             <p className="cstd-gate-code mt-7 font-mono text-[11px] font-black text-[#24e0ff] md:text-sm">
               CODE / SHIP / VERIFY / EVOLVE
             </p>
-            <p className="cstd-gate-statement mt-5 max-w-4xl text-3xl font-semibold leading-[1.04] text-[#f2efe7] md:text-5xl lg:text-6xl">
-              穿过一座由真实系统点亮的城市。
-              <span className="block text-[#f4d431]">每一束光，都对应一次交付。</span>
+            <p key={narrative.id} className="cstd-gate-statement cstd-narrative-copy mt-5 max-w-4xl text-3xl font-semibold leading-[1.04] text-[#f2efe7] md:text-5xl lg:text-6xl">
+              {narrative.thesis.zh}
+              <span className="block text-[#f4d431]">每一束光，都对应一份可检查证据。</span>
             </p>
-            <p className="cstd-gate-copy mt-6 max-w-2xl text-base leading-8 text-[#b0b8bb] md:text-lg">
-              奶黄包的个人技术工作室。产品工程、AI 工作流、数据系统、边缘交付与量化研究在这里汇入同一条可验证的运行链路。
+            <p key={`${narrative.id}-detail`} className="cstd-gate-copy cstd-narrative-copy mt-6 max-w-2xl text-base leading-8 text-[#b0b8bb] md:text-lg">
+              {narrative.description.zh}
             </p>
 
-            <div className="cstd-gate-actions mt-9 flex flex-wrap items-center gap-3">
+            <div className="cstd-gate-actions mt-7"><Suspense fallback={<div aria-hidden="true" className="h-[4.5rem] w-[17rem] border border-white/12 bg-[#050709]/55" />}><LazyNarrativeSwitcher mode={narrativeMode} onChange={onNarrativeChange} /></Suspense></div>
+
+            <div className="cstd-gate-actions mt-6 flex flex-wrap items-center gap-3">
               <a
                 href="#systems"
                 className="inline-flex h-12 items-center gap-3 bg-[#f4d431] px-5 font-mono text-sm font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_70%,calc(100%-14px)_100%,0_100%)] transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[#ffe95f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
               >
-                进入神经城市
+                {narrative.action.zh}
                 <ArrowDown aria-hidden="true" className="h-4 w-4" />
               </a>
               <button
@@ -116,7 +126,9 @@ function NeuralGate({
             </div>
           </div>
 
-          <CstdAtlasPanel activeSystemId={activeSystemId} onSelectSystem={onSelectSystem} overdrive={overdrive} />
+          <Suspense fallback={<div aria-hidden="true" className="relative aspect-[10/11] min-h-[30rem] border border-[#24e0ff]/25 bg-[#050709]/55"><div className="absolute inset-6 border border-white/10" /><div className="absolute inset-0 flex items-center justify-center font-mono text-[9px] font-black text-[#24e0ff]">LINKING 05 DISTRICTS</div></div>}>
+            <LazyCstdAtlasPanel activeSystemId={activeSystemId} onSelectSystem={onSelectSystem} overdrive={overdrive} />
+          </Suspense>
         </div>
 
         <a

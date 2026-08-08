@@ -1,4 +1,4 @@
-const allowedMetricName = /^(?:LCP|CLS|INP|page_view|client_error|atlas_district|lab_loaded|guide_(?:answer|refusal)|visual_(?:full|balanced|calm))$/;
+const allowedMetricName = /^(?:LCP|CLS|INP|page_view|client_error|atlas_district|graph_node|case_film_beat|lab_loaded|guide_(?:answer|refusal)|narrative_(?:builder|researcher|collaborator)|visual_(?:full|balanced|calm))$/;
 
 export type CstdMetric = Readonly<{
   name: string;

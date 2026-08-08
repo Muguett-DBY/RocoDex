@@ -11,6 +11,8 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/about",
   "/resume",
   "/resume.json",
+  "/map",
+  "/proof.json",
   "/en",
   "/en/work",
   "/en/notes",
@@ -19,6 +21,8 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/en/about",
   "/en/resume",
   "/en/resume.json",
+  "/en/map",
+  "/en/proof.json",
 ]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",
@@ -27,6 +31,7 @@ const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-systems-hero-v1.png",
   "/cstd-systems-map-v1.png",
   "/cstd-research-archive-v1.png",
+  "/cstd-resume.pdf",
   "/favicon.ico",
   "/robots.txt",
   "/rss.xml",
@@ -76,7 +81,8 @@ function isPublicPersonalPagePath(path: string) {
     || path.startsWith("/en/lab/")
     || path === "/en/now"
     || path === "/en/about"
-    || path === "/en/resume";
+    || path === "/en/resume"
+    || path === "/en/map";
 }
 
 function isAllowedPersonalSitePath(path: string) {
@@ -86,7 +92,8 @@ function isAllowedPersonalSitePath(path: string) {
     || path.startsWith("/cstd-persona/")
     || path.startsWith("/cstd-world/")
     || path.startsWith("/cstd-universe/")
-    || path.startsWith("/cstd-broadcasts/");
+    || path.startsWith("/cstd-broadcasts/")
+    || path.startsWith("/cstd-districts/");
 }
 
 function normalizeHost(host: string) {

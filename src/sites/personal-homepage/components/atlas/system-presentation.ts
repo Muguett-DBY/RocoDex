@@ -1,5 +1,6 @@
 import { Bot, Boxes, CloudCog, DatabaseZap, Microscope, type LucideIcon } from "lucide-react";
 import type { CstdSystem, CstdSystemIcon } from "../../content/systems";
+import { cstdDistrictAccents } from "../../content/district-tokens";
 
 export const cstdSystemIcons: Record<CstdSystemIcon, LucideIcon> = {
   product: Boxes,
@@ -10,11 +11,11 @@ export const cstdSystemIcons: Record<CstdSystemIcon, LucideIcon> = {
 };
 
 export const cstdSystemAccents: Record<CstdSystemIcon, string> = {
-  product: "#f4d431",
-  edge: "#24e0ff",
-  ai: "#ff3b30",
-  research: "#3dff8f",
-  data: "#e8edf0",
+  product: cstdDistrictAccents["product-surfaces"],
+  edge: cstdDistrictAccents["edge-operations"],
+  ai: cstdDistrictAccents["ai-creation"],
+  research: cstdDistrictAccents["research-models"],
+  data: cstdDistrictAccents["data-systems"],
 };
 
 export const cstdAtlasCoordinates: Record<CstdSystem["id"], { x: number; y: number }> = {

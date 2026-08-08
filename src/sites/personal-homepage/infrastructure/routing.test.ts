@@ -33,6 +33,10 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/en/resume")).toEqual({ kind: "rewrite", path: "/cstd/en/resume" });
     expect(getPersonalSiteRouteDecision("custard.top", "/resume.json")).toEqual({ kind: "rewrite", path: "/cstd/resume.json" });
     expect(getPersonalSiteRouteDecision("custard.top", "/en/resume.json")).toEqual({ kind: "rewrite", path: "/cstd/en/resume.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/map")).toEqual({ kind: "rewrite", path: "/cstd/map" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/map")).toEqual({ kind: "rewrite", path: "/cstd/en/map" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/proof.json")).toEqual({ kind: "rewrite", path: "/cstd/proof.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/proof.json")).toEqual({ kind: "rewrite", path: "/cstd/en/proof.json" });
   });
 
   test("returns not found for CSTD paths that belong on the RocoDex subdomain", () => {
@@ -60,6 +64,8 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-universe/cstd-departure-city-v1.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-broadcasts/rocodex-broadcast-v1.webm")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-broadcasts/rocodex-broadcast-v1.mp4")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-districts/ai-creation-v1.webp")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-resume.pdf")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/favicon.ico")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/robots.txt")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/sitemap.xml")).toEqual({ kind: "next" });

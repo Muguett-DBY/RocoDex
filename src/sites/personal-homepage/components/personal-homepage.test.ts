@@ -14,6 +14,8 @@ const gateSource = readFileSync(new URL("../scenes/neural-gate/neural-gate.tsx",
 const sceneClockSource = readFileSync(new URL("../experience/scene-clock.ts", import.meta.url), "utf8");
 const sceneManifestSource = readFileSync(new URL("../experience/scene-manifest.ts", import.meta.url), "utf8");
 const qualitySource = readFileSync(new URL("../experience/quality-controller.ts", import.meta.url), "utf8");
+const runtimeSource = readFileSync(new URL("../experience/runtime-capabilities.ts", import.meta.url), "utf8");
+const narrativeSource = readFileSync(new URL("../content/narratives.ts", import.meta.url), "utf8");
 const assetManifestSource = readFileSync(new URL("../media/asset-manifest.ts", import.meta.url), "utf8");
 const globalsSource = readFileSync(new URL("../../../app/globals.css", import.meta.url), "utf8");
 const sectionSources = {
@@ -30,8 +32,9 @@ describe("CSTD personal systems studio", () => {
   test("puts the personal identity and representative proof ahead of tooling", () => {
     expect(gateSource).toContain('id="cstd-hero-title"');
     expect(gateSource).toContain('aria-label="CSTD"');
-    expect(gateSource).toContain("穿过一座由真实系统点亮的城市");
-    expect(gateSource).toContain("奶黄包的个人技术工作室");
+    expect(gateSource).toContain("narrative.thesis.zh");
+    expect(gateSource).toContain("LazyNarrativeSwitcher");
+    expect(narrativeSource).toContain("奶黄包的个人技术工作室");
     expect(gateSource).toContain('href="#systems"');
     expect(landingSource).toContain("<MemoizedNeuralGate");
     expect(landingSource).not.toContain("ProjectShowcase");
@@ -42,7 +45,9 @@ describe("CSTD personal systems studio", () => {
   test("keeps the WebGL identity progressive and desktop-only", () => {
     expect(assetManifestSource).toContain("cstd-neural-gate-v1.webp");
     expect(landingSource).toContain("desktopSceneQuery");
-    expect(landingSource).toContain("detectImmersiveRuntime");
+    expect(landingSource).toContain('import("../experience/runtime-capabilities")');
+    expect(runtimeSource).toContain("WEBGL_debug_renderer_info");
+    expect(runtimeSource).toContain("runtimeNavigator.gpu");
     expect(landingSource).toContain('<LitePersonalImmersiveScene {...sceneProps} />');
     expect(sceneSource).toContain("@react-three/fiber");
     expect(sceneSource).toContain("<Canvas");
