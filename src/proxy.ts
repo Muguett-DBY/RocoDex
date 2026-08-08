@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getPersonalSiteRouteDecision } from "@/sites/personal-homepage/server";
+import { getPersonalSiteRouteDecision, isPersonalSiteHost, PERSONAL_SITE_SECURITY_HEADERS } from "@/sites/personal-homepage/server";
 
 const CSTD_NOT_FOUND_HTML = `<!doctype html>
 <html lang="zh-CN">
@@ -30,27 +30,35 @@ export function proxy(request: NextRequest) {
   const cstdRouteDecision = getPersonalSiteRouteDecision(host, path);
 
   if (cstdRouteDecision.kind === "rewrite") {
-    return NextResponse.rewrite(new URL(cstdRouteDecision.path, request.url));
+    const rewriteUrl = request.nextUrl.clone();
+    rewriteUrl.pathname = cstdRouteDecision.path;
+    return withPersonalSiteHeaders(NextResponse.rewrite(rewriteUrl), host);
   }
 
   if (cstdRouteDecision.kind === "redirect") {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.hostname = cstdRouteDecision.host;
     redirectUrl.protocol = "https:";
-    return NextResponse.redirect(redirectUrl, 308);
+    return withPersonalSiteHeaders(NextResponse.redirect(redirectUrl, 308), host);
   }
 
   if (cstdRouteDecision.kind === "not-found") {
-    return new NextResponse(CSTD_NOT_FOUND_HTML, {
+    return withPersonalSiteHeaders(new NextResponse(CSTD_NOT_FOUND_HTML, {
       status: 404,
       headers: {
         "content-type": "text/html; charset=utf-8",
         "x-robots-tag": "noindex",
       },
-    });
+    }), host);
   }
 
-  return NextResponse.next();
+  return withPersonalSiteHeaders(NextResponse.next(), host);
+}
+
+function withPersonalSiteHeaders(response: NextResponse, host: string) {
+  if (!isPersonalSiteHost(host)) return response;
+  for (const [name, value] of Object.entries(PERSONAL_SITE_SECURITY_HEADERS)) response.headers.set(name, value);
+  return response;
 }
 
 export const config = {

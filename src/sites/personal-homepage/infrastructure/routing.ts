@@ -3,6 +3,21 @@ const PERSONAL_SITE_REDIRECT_HOSTS = new Set(["www.custard.top"]);
 const PERSONAL_SITE_HOSTS = new Set([PERSONAL_SITE_HOST, ...PERSONAL_SITE_REDIRECT_HOSTS]);
 const PERSONAL_SITE_ENTRY_PATHS = new Set(["/", "/index.html"]);
 const PERSONAL_SITE_EXPLICIT_ENTRY_PATHS = new Set(["/cstd"]);
+const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
+  "/work",
+  "/notes",
+  "/lab",
+  "/now",
+  "/about",
+  "/resume",
+  "/en",
+  "/en/work",
+  "/en/notes",
+  "/en/lab",
+  "/en/now",
+  "/en/about",
+  "/en/resume",
+]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",
   "/cstd-og.svg",
@@ -12,11 +27,22 @@ const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-research-archive-v1.png",
   "/favicon.ico",
   "/robots.txt",
+  "/rss.xml",
   "/sitemap.xml",
+  "/api/cstd-vitals",
 ]);
 
+export const PERSONAL_SITE_SECURITY_HEADERS = {
+  "content-security-policy": "base-uri 'self'; frame-ancestors 'none'; object-src 'none'; form-action 'self'; upgrade-insecure-requests",
+  "cross-origin-opener-policy": "same-origin",
+  "permissions-policy": "camera=(), microphone=(), geolocation=(), browsing-topics=()",
+  "referrer-policy": "strict-origin-when-cross-origin",
+  "x-content-type-options": "nosniff",
+  "x-frame-options": "DENY",
+} as const;
+
 export type PersonalSiteRouteDecision =
-  | { kind: "rewrite"; path: "/cstd" }
+  | { kind: "rewrite"; path: string }
   | { kind: "redirect"; host: typeof PERSONAL_SITE_HOST }
   | { kind: "next" }
   | { kind: "not-found" };
@@ -31,10 +57,24 @@ export function getPersonalSiteRouteDecision(host: string, path: string): Person
   if (PERSONAL_SITE_REDIRECT_HOSTS.has(normalizedHost)) return { kind: "redirect", host: PERSONAL_SITE_HOST };
   if (!PERSONAL_SITE_HOSTS.has(normalizedHost)) return { kind: "next" };
   if (PERSONAL_SITE_ENTRY_PATHS.has(path)) return { kind: "rewrite", path: "/cstd" };
-  if (PERSONAL_SITE_EXPLICIT_ENTRY_PATHS.has(path)) return { kind: "next" };
+  if (PERSONAL_SITE_EXPLICIT_ENTRY_PATHS.has(path) || path.startsWith("/cstd/")) return { kind: "next" };
+  if (isPublicPersonalPagePath(path)) return { kind: "rewrite", path: `/cstd${path}` };
   if (isAllowedPersonalSitePath(path)) return { kind: "next" };
 
   return { kind: "not-found" };
+}
+
+function isPublicPersonalPagePath(path: string) {
+  if (PERSONAL_SITE_PUBLIC_PAGE_ROOTS.has(path)) return true;
+  return path.startsWith("/work/")
+    || path.startsWith("/notes/")
+    || path.startsWith("/lab/")
+    || path.startsWith("/en/work/")
+    || path.startsWith("/en/notes/")
+    || path.startsWith("/en/lab/")
+    || path === "/en/now"
+    || path === "/en/about"
+    || path === "/en/resume";
 }
 
 function isAllowedPersonalSitePath(path: string) {

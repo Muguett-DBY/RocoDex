@@ -1,5 +1,99 @@
 @import "tailwindcss";
 
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation: cstd-route-out 180ms ease-in both;
+}
+
+::view-transition-new(root) {
+  animation: cstd-route-in 420ms cubic-bezier(0.2, 0.75, 0.2, 1) both;
+}
+
+@keyframes cstd-route-out {
+  to { opacity: 0; filter: blur(5px); transform: scale(0.995); }
+}
+
+@keyframes cstd-route-in {
+  from { opacity: 0; filter: blur(7px); transform: translateY(12px); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+
+[data-cstd-deep-shell] {
+  --cstd-signal-opacity: 0.8;
+  background-image:
+    linear-gradient(rgba(36, 224, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(36, 224, 255, 0.025) 1px, transparent 1px);
+  background-size: 72px 72px;
+}
+
+[data-cstd-deep-shell]::before {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  content: "";
+  opacity: 0.12;
+  background-image: repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.055) 0, rgba(255, 255, 255, 0.055) 1px, transparent 1px, transparent 4px);
+  mix-blend-mode: soft-light;
+}
+
+[data-cstd-visual-mode="balanced"] [data-cstd-signal-field] {
+  opacity: 0.5;
+}
+
+[data-cstd-visual-mode="calm"] [data-cstd-signal-field] {
+  opacity: 0;
+}
+
+[data-cstd-visual-mode="calm"] .animate-bounce,
+[data-cstd-visual-mode="calm"] .animate-pulse {
+  animation: none;
+}
+
+.cstd-route-progress {
+  transform: scaleX(0);
+}
+
+@supports (animation-timeline: scroll()) {
+  .cstd-route-progress {
+    animation: cstd-scroll-progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+@keyframes cstd-scroll-progress {
+  to { transform: scaleX(1); }
+}
+
+@media print {
+  [data-cstd-deep-shell] > header,
+  [data-cstd-deep-shell] > footer,
+  [data-cstd-signal-field],
+  .cstd-route-progress,
+  .cstd-print-trigger,
+  [role="dialog"] {
+    display: none !important;
+  }
+
+  [data-cstd-deep-shell],
+  .cstd-resume {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .cstd-resume {
+    padding: 0 !important;
+  }
+
+  @page {
+    size: A4;
+    margin: 14mm;
+  }
+}
+
 /* 合成器线程漂浮动画（不占主线程，calm 模式通过移除 class 停止） */
 @keyframes cstd-bob {
   0%,

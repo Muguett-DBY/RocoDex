@@ -12,7 +12,7 @@
 ```text
 src/
 ├─ app/
-│  ├─ (personal)/cstd/       # 个人主站的薄 Next 页面适配器，URL 仍为 /cstd
+│  ├─ (personal)/cstd/       # 个人主站页面适配器；生产公开为 /work、/notes、/lab、/en 等干净 URL
 │  ├─ (rocodex)/             # RocoDex 页面和仅属于它的 AuthProvider
 │  ├─ api/                   # RocoDex 账号 API
 │  ├─ robots.txt/            # 按 Host 分发的共享 HTTP 适配器
@@ -29,11 +29,13 @@ src/
 └─ types/                    # RocoDex 类型
 ```
 
-`src/proxy.ts` 是生产 Host 边界：`custard.top/` 重写到 `/cstd`，`www.custard.top` 308 跳转到 apex，其余个人主站域名路径不会泄露 RocoDex 页面。公开资源 URL 继续使用 `public/cstd-*`、`public/cstd-world`、`public/cstd-archive` 和 `public/cstd-projects`，避免部署迁移和缓存失效。
+`src/proxy.ts` 是生产 Host 边界：`custard.top/` 重写到 `/cstd`，作品、札记、Lab 与双语公开路径重写到对应 `/cstd/*` 适配器，`www.custard.top` 308 跳转到 apex，其余个人主站域名路径不会泄露 RocoDex 页面。公开资源 URL 继续使用 `public/cstd-*`、`public/cstd-world`、`public/cstd-archive` 和 `public/cstd-projects`，避免部署迁移和缓存失效。
 
 架构约束由 `src/sites/site-boundaries.test.ts` 自动验证。个人主站不得导入 `src/components`、`src/data`、`src/hooks`、`src/lib` 或 `src/types` 中的 RocoDex 模块；外部适配器只能通过个人主站的 `index.ts`、`metadata.ts` 和 `server.ts` 访问它。
 
 详细决策见 `docs/architecture.md`。站点维护入口见 `src/sites/personal-homepage/README.md` 与 `src/sites/rocodex/README.md`。
+
+个人主站内容维护见 `src/sites/personal-homepage/content/README.md`，视觉与运行规范见 `docs/cstd-visual-system.md`、`docs/cstd-operations.md`。
 
 ## 本地开发
 

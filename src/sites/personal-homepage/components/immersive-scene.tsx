@@ -1,9 +1,7 @@
 "use client";
 
 import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
-import { Bloom, ChromaticAberration, EffectComposer, Noise } from "@react-three/postprocessing";
-import { BlendFunction } from "postprocessing";
-import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
 import { cstdSceneManifest } from "../experience/scene-manifest";
 import {
@@ -30,6 +28,12 @@ export type PersonalImmersiveSceneProps = {
 };
 
 type SceneQuality = CstdSceneQuality;
+
+const LazyImmersivePostprocessing = lazy(() =>
+  import("./immersive-postprocessing").then((module) => ({
+    default: module.ImmersivePostprocessing,
+  })),
+);
 
 const archiveTextures = [
   "/cstd-archive/cstd-archive-resin-circuit-v1.webp",
@@ -837,7 +841,6 @@ function World(
     quality: SceneQuality;
   },
 ) {
-  const chromaticOffset = useMemo(() => new THREE.Vector2(0.00055, 0.0004), []);
   const advance = useThree((state) => state.advance);
 
   // quality / reducedMotion 切换（如进入 calm）时同步渲染一帧，
@@ -881,11 +884,9 @@ function World(
       <QualityProbe quality={props.quality} onDecline={props.onQualityDecline} />
       <CameraRig {...props} />
       {props.quality === "full" ? (
-        <EffectComposer multisampling={0}>
-          <Bloom intensity={0.5} luminanceThreshold={0.72} luminanceSmoothing={0.32} mipmapBlur />
-          <ChromaticAberration offset={chromaticOffset} radialModulation modulationOffset={0.35} />
-          <Noise opacity={0.015} blendFunction={BlendFunction.SOFT_LIGHT} />
-        </EffectComposer>
+        <Suspense fallback={null}>
+          <LazyImmersivePostprocessing />
+        </Suspense>
       ) : null}
     </>
   );

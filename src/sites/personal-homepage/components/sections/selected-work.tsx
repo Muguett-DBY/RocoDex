@@ -1,12 +1,14 @@
 "use client";
 
-import { ArrowUpRight, Braces, RadioTower } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Braces, RadioTower } from "lucide-react";
 import { memo, type PointerEvent as ReactPointerEvent } from "react";
 import { cstdProjects } from "../../content/projects";
 import { cstdLiveObjectIds, cstdProofs, getCstdProjectsById, type CstdProof } from "../../content/systems";
 import { getCstdLinkTargetProps } from "../../domain/link-target";
 import { cstdBroadcasts } from "../../media/asset-manifest";
+import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
 import { ProjectBroadcast } from "../project-broadcast";
+import { CstdLink } from "../site/cstd-link";
 
 const proofProjects = getCstdProjectsById(
   cstdProjects,
@@ -50,6 +52,7 @@ function ProofChapter({
   const targetProps = getCstdLinkTargetProps(project.href);
   const accent = proofAccents[index];
   const sources = cstdBroadcasts[proof.projectId];
+  const caseStudy = cstdCaseStudies.find((entry) => entry.projectId === proof.projectId);
 
   return (
     <article
@@ -81,15 +84,26 @@ function ProofChapter({
               <p className="mt-4 font-mono text-[9px] font-black" style={{ color: accent }}>SIGNAL / {proof.signal}</p>
             </div>
 
-            <a
-              href={project.href}
-              {...targetProps}
-              className="mt-8 inline-flex items-center gap-3 border-b-2 pb-2 font-mono text-sm font-black text-[#f2efe7] transition-[gap,color] hover:gap-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
-              style={{ borderColor: accent }}
-            >
-              {project.action}
-              <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
-            </a>
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-4">
+              {caseStudy ? (
+                <CstdLink
+                  href={getCaseStudyPath(caseStudy, "zh")}
+                  className="inline-flex items-center gap-3 border-b-2 pb-2 font-mono text-sm font-black text-[#f2efe7] transition-[gap,color] hover:gap-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
+                  style={{ borderColor: accent }}
+                >
+                  查看案例
+                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                </CstdLink>
+              ) : null}
+              <a
+                href={project.href}
+                {...targetProps}
+                className="inline-flex items-center gap-3 border-b border-white/30 pb-2 font-mono text-[11px] font-black text-[#9fa9ac] transition-[gap,color] hover:gap-5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
+              >
+                {project.action}
+                <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+              </a>
+            </div>
           </div>
 
           <figure
