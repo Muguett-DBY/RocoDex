@@ -5,39 +5,31 @@ import { Bloom, ChromaticAberration, EffectComposer, Noise } from "@react-three/
 import { BlendFunction } from "postprocessing";
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import * as THREE from "three";
+import { cstdSceneManifest } from "../experience/scene-manifest";
+import {
+  CstdFrameBudgetController,
+  detectInitialSceneQuality,
+  type CstdSceneQuality,
+} from "../experience/quality-controller";
 
 type NumberRef = { current: number };
 type PointerRef = { current: { x: number; y: number } };
+type BooleanRef = { current: boolean };
 
 export type PersonalImmersiveSceneProps = {
   progressRef: NumberRef;
+  sceneProgressRef: NumberRef;
+  sceneIndexRef: NumberRef;
+  velocityRef: NumberRef;
   pointerRef: PointerRef;
   impulseRef: NumberRef;
+  overdriveRef: BooleanRef;
   reducedMotion: boolean;
   active: boolean;
   showArchive: boolean;
 };
 
-type SceneQuality = "full" | "lite";
-
-const softwareRendererPattern = /swiftshader|llvmpipe|software rasterizer|softpipe/i;
-
-function getSceneQuality(renderer: THREE.WebGLRenderer): SceneQuality {
-  const context = renderer.getContext();
-  const debugInfo = context.getExtension("WEBGL_debug_renderer_info") as {
-    UNMASKED_RENDERER_WEBGL: number;
-  } | null;
-  const rendererName = String(
-    context.getParameter(debugInfo?.UNMASKED_RENDERER_WEBGL ?? context.RENDERER),
-  );
-
-  const device = navigator as Navigator & { deviceMemory?: number };
-  const constrainedDevice =
-    (device.hardwareConcurrency ?? 8) <= 4 ||
-    (device.deviceMemory ?? 8) <= 4;
-
-  return softwareRendererPattern.test(rendererName) || constrainedDevice ? "lite" : "full";
-}
+type SceneQuality = CstdSceneQuality;
 
 const archiveTextures = [
   "/cstd-archive/cstd-archive-resin-circuit-v1.webp",
@@ -198,7 +190,7 @@ function ParticleCurrent({
   pointerRef,
   reducedMotion,
   quality,
-}: Omit<PersonalImmersiveSceneProps, "impulseRef" | "active" | "showArchive"> & { quality: SceneQuality }) {
+}: Pick<PersonalImmersiveSceneProps, "progressRef" | "pointerRef" | "reducedMotion"> & { quality: SceneQuality }) {
   const pointsRef = useRef<THREE.Points>(null);
   const count = quality === "lite" ? 280 : 950;
   const { positions, colors } = useMemo(() => {
@@ -259,7 +251,13 @@ function ParticleCurrent({
 
 type NeuralCityProps = Pick<
   PersonalImmersiveSceneProps,
-  "progressRef" | "pointerRef" | "reducedMotion"
+  | "progressRef"
+  | "sceneProgressRef"
+  | "sceneIndexRef"
+  | "velocityRef"
+  | "pointerRef"
+  | "overdriveRef"
+  | "reducedMotion"
 > & {
   quality: SceneQuality;
 };
@@ -270,6 +268,9 @@ const neuralBeacons = [
   { position: [2.45, 0.4, -0.2] as const, color: "#ff3b30" },
 ] as const;
 
+const transitCyan = new THREE.Color("#24e0ff");
+const transitRed = new THREE.Color("#ff3b30");
+
 type CityCell = {
   x: number;
   z: number;
@@ -279,7 +280,11 @@ type CityCell = {
   color: string;
 };
 
-function TransitLanes({ reducedMotion }: { reducedMotion: boolean }) {
+function TransitLanes({
+  reducedMotion,
+  velocityRef,
+  overdriveRef,
+}: Pick<PersonalImmersiveSceneProps, "reducedMotion" | "velocityRef" | "overdriveRef">) {
   const lanesRef = useRef<THREE.LineSegments>(null);
   const geometry = useMemo(() => {
     const points: THREE.Vector3[] = [];
@@ -294,9 +299,13 @@ function TransitLanes({ reducedMotion }: { reducedMotion: boolean }) {
 
   useFrame(({ clock }) => {
     const lanes = lanesRef.current;
-    if (!lanes || reducedMotion) return;
+    if (!lanes) return;
     const material = lanes.material as THREE.LineBasicMaterial;
-    material.opacity = 0.3 + Math.sin(clock.elapsedTime * 1.4) * 0.1;
+    const overdrive = overdriveRef.current ? 1 : 0;
+    material.color.lerpColors(transitCyan, transitRed, overdrive);
+    material.opacity = reducedMotion
+      ? 0.32
+      : 0.3 + Math.sin(clock.elapsedTime * (1.4 + overdrive * 2.6)) * 0.1 + velocityRef.current * 0.28;
   });
 
   return (
@@ -370,19 +379,22 @@ function NeuralBeacon({
   color,
   reducedMotion,
   index,
+  overdriveRef,
 }: {
   position: readonly [number, number, number];
   color: string;
   reducedMotion: boolean;
   index: number;
+  overdriveRef: BooleanRef;
 }) {
   const beaconRef = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
     const beacon = beaconRef.current;
     if (!beacon || reducedMotion) return;
-    beacon.rotation.y = clock.elapsedTime * (0.24 + index * 0.06);
-    const pulse = 1 + Math.sin(clock.elapsedTime * 1.7 + index * 1.4) * 0.08;
+    const overdrive = overdriveRef.current ? 1 : 0;
+    beacon.rotation.y = clock.elapsedTime * (0.24 + index * 0.06 + overdrive * 0.46);
+    const pulse = 1 + Math.sin(clock.elapsedTime * (1.7 + overdrive * 2.2) + index * 1.4) * (0.08 + overdrive * 0.05);
     beacon.scale.setScalar(pulse);
   });
 
@@ -405,7 +417,15 @@ function NeuralBeacon({
   );
 }
 
-function NeuralCity({ progressRef, pointerRef, reducedMotion, quality }: NeuralCityProps) {
+function NeuralCity({
+  sceneProgressRef,
+  sceneIndexRef,
+  velocityRef,
+  pointerRef,
+  overdriveRef,
+  reducedMotion,
+  quality,
+}: NeuralCityProps) {
   const cityRef = useRef<THREE.Group>(null);
   const buildingsRef = useRef<THREE.InstancedMesh>(null);
   const wireframeRef = useRef<THREE.InstancedMesh>(null);
@@ -451,16 +471,21 @@ function NeuralCity({ progressRef, pointerRef, reducedMotion, quality }: NeuralC
   useFrame(({ clock }, delta) => {
     const city = cityRef.current;
     if (!city) return;
-    const dive = THREE.MathUtils.smoothstep(progressRef.current, 0, 0.34);
+    const sceneIndex = Math.min(cstdSceneManifest.length - 1, Math.max(0, Math.round(sceneIndexRef.current)));
+    const frame = cstdSceneManifest[sceneIndex].camera;
+    const sceneProgress = THREE.MathUtils.smootherstep(sceneProgressRef.current, 0, 1);
     const pointer = reducedMotion ? { x: 0, y: 0 } : pointerRef.current;
-    const targetX = 1.62 + pointer.x * 0.24;
-    const targetY = -2.55 + dive * 0.92 + pointer.y * 0.12;
-    const targetZ = -1.55 + dive * 0.7;
-    const targetRotation = -0.1 + dive * 0.38 + pointer.x * 0.06;
+    const overdrive = overdriveRef.current ? 1 : 0;
+    const targetX = THREE.MathUtils.lerp(frame.from.cityOffset[0], frame.to.cityOffset[0], sceneProgress) + pointer.x * 0.2;
+    const targetY = THREE.MathUtils.lerp(frame.from.cityOffset[1], frame.to.cityOffset[1], sceneProgress) + pointer.y * 0.11;
+    const targetZ = THREE.MathUtils.lerp(frame.from.cityOffset[2], frame.to.cityOffset[2], sceneProgress) - overdrive * 0.18;
+    const targetRotation = -0.12 + sceneIndex * 0.09 + sceneProgress * 0.14 + pointer.x * 0.05 + overdrive * 0.2;
+    const targetScale = 1 + velocityRef.current * 0.035 + overdrive * 0.08;
 
     if (reducedMotion) {
       city.position.set(targetX, targetY, targetZ);
       city.rotation.set(-0.08, targetRotation, 0);
+      city.scale.setScalar(targetScale);
       return;
     }
 
@@ -469,13 +494,14 @@ function NeuralCity({ progressRef, pointerRef, reducedMotion, quality }: NeuralC
     city.position.y = THREE.MathUtils.lerp(city.position.y, targetY, easing);
     city.position.z = THREE.MathUtils.lerp(city.position.z, targetZ, easing);
     city.rotation.y = THREE.MathUtils.lerp(city.rotation.y, targetRotation, easing);
-    city.rotation.z = Math.sin(clock.elapsedTime * 0.24) * 0.008;
+    city.rotation.z = Math.sin(clock.elapsedTime * (0.24 + overdrive * 0.8)) * (0.008 + overdrive * 0.012);
+    city.scale.setScalar(THREE.MathUtils.lerp(city.scale.x, targetScale, easing));
   });
 
   return (
     <group ref={cityRef} position={[1.62, -2.55, -1.55]} rotation={[-0.08, -0.1, 0]}>
       <gridHelper args={[8, 16, "#2b6870", "#15363d"]} position={[0, 0, 0]} />
-      <TransitLanes reducedMotion={reducedMotion} />
+      <TransitLanes reducedMotion={reducedMotion} velocityRef={velocityRef} overdriveRef={overdriveRef} />
       <mesh position={[0, -0.035, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[8, 5]} />
         <meshStandardMaterial color="#061015" metalness={0.62} roughness={0.42} transparent opacity={0.72} />
@@ -503,6 +529,7 @@ function NeuralCity({ progressRef, pointerRef, reducedMotion, quality }: NeuralC
           color={beacon.color}
           reducedMotion={reducedMotion}
           index={index}
+          overdriveRef={overdriveRef}
         />
       ))}
     </group>
@@ -717,29 +744,49 @@ function ProgressiveArchiveLayer(
   );
 }
 
-function CameraRig({ progressRef, pointerRef, impulseRef, reducedMotion }: PersonalImmersiveSceneProps) {
+function CameraRig({
+  sceneProgressRef,
+  sceneIndexRef,
+  velocityRef,
+  pointerRef,
+  impulseRef,
+  overdriveRef,
+  reducedMotion,
+}: PersonalImmersiveSceneProps) {
+  const lookAt = useMemo(() => new THREE.Vector3(), []);
+
   useFrame(({ camera, clock }, delta) => {
-    const progress = progressRef.current;
+    const sceneIndex = Math.min(cstdSceneManifest.length - 1, Math.max(0, Math.round(sceneIndexRef.current)));
+    const frame = cstdSceneManifest[sceneIndex].camera;
+    const progress = THREE.MathUtils.smootherstep(sceneProgressRef.current, 0, 1);
     const pointer = pointerRef.current;
     const easedPointer = reducedMotion ? { x: 0, y: 0 } : pointer;
-    const approach = THREE.MathUtils.smoothstep(progress, 0, 0.13);
-    const ascent = THREE.MathUtils.smoothstep(progress, 0.1, 0.34);
-    const departure = THREE.MathUtils.smoothstep(progress, 0.34, 0.58);
-    const targetX = -0.18 + approach * 0.46 - departure * 0.24 + easedPointer.x * 0.32;
-    const targetY = 0.18 + ascent * 0.38 - departure * 0.22 + easedPointer.y * 0.2;
-    const targetZ = 7.45 - approach * 1.08 + departure * 0.72 - impulseRef.current * 0.16;
+    const overdrive = overdriveRef.current ? 1 : 0;
+    const velocity = velocityRef.current;
+    const targetX = THREE.MathUtils.lerp(frame.from.position[0], frame.to.position[0], progress) + easedPointer.x * 0.25;
+    const targetY = THREE.MathUtils.lerp(frame.from.position[1], frame.to.position[1], progress) + easedPointer.y * 0.16;
+    const targetZ = THREE.MathUtils.lerp(frame.from.position[2], frame.to.position[2], progress) - impulseRef.current * 0.14 - velocity * 0.12;
+    lookAt.set(
+      THREE.MathUtils.lerp(frame.from.target[0], frame.to.target[0], progress),
+      THREE.MathUtils.lerp(frame.from.target[1], frame.to.target[1], progress),
+      THREE.MathUtils.lerp(frame.from.target[2], frame.to.target[2], progress),
+    );
     if (reducedMotion) {
       camera.position.set(targetX, targetY, targetZ);
       camera.rotation.z = 0;
-      camera.lookAt(0, 0, -0.2);
+      camera.lookAt(lookAt);
       impulseRef.current = 0;
       return;
     }
     camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 1 - Math.exp(-delta * 3.5));
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 1 - Math.exp(-delta * 3.5));
     camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 1 - Math.exp(-delta * 3.5));
-    camera.rotation.z = Math.sin(clock.elapsedTime * 0.18) * 0.004;
-    camera.lookAt(0, 0, -0.2);
+    camera.rotation.z = Math.sin(clock.elapsedTime * (0.18 + overdrive * 0.9)) * (0.004 + overdrive * 0.01);
+    const perspectiveCamera = camera as THREE.PerspectiveCamera;
+    const targetFov = 42 + velocity * 3.2 + overdrive * 1.8;
+    perspectiveCamera.fov = THREE.MathUtils.lerp(perspectiveCamera.fov, targetFov, 1 - Math.exp(-delta * 4));
+    perspectiveCamera.updateProjectionMatrix();
+    camera.lookAt(lookAt);
     impulseRef.current = THREE.MathUtils.lerp(impulseRef.current, 0, 1 - Math.exp(-delta * 4.8));
   });
   return null;
@@ -767,9 +814,26 @@ function SceneReady({
   return null;
 }
 
+function QualityProbe({
+  quality,
+  onDecline,
+}: {
+  quality: SceneQuality;
+  onDecline: () => void;
+}) {
+  const [controller] = useState(() => new CstdFrameBudgetController());
+
+  useFrame((_, delta) => {
+    if (quality === "full" && controller.sample(delta)) onDecline();
+  });
+
+  return null;
+}
+
 function World(
   props: PersonalImmersiveSceneProps & {
     onReady: (quality: SceneQuality) => void;
+    onQualityDecline: () => void;
     quality: SceneQuality;
   },
 ) {
@@ -784,7 +848,6 @@ function World(
 
   return (
     <>
-      <color attach="background" args={["#090a08"]} />
       <ambientLight intensity={0.75} />
       <directionalLight position={[4, 6, 5]} intensity={2.4} color="#fff4db" />
       <pointLight position={[-4, -2, 3]} intensity={10} distance={10} color="#05d9e8" />
@@ -797,7 +860,11 @@ function World(
       />
       <NeuralCity
         progressRef={props.progressRef}
+        sceneProgressRef={props.sceneProgressRef}
+        sceneIndexRef={props.sceneIndexRef}
+        velocityRef={props.velocityRef}
         pointerRef={props.pointerRef}
+        overdriveRef={props.overdriveRef}
         reducedMotion={props.reducedMotion}
         quality={props.quality}
       />
@@ -811,6 +878,7 @@ function World(
         />
       ) : null}
       <SceneReady onReady={props.onReady} quality={props.quality} />
+      <QualityProbe quality={props.quality} onDecline={props.onQualityDecline} />
       <CameraRig {...props} />
       {props.quality === "full" ? (
         <EffectComposer multisampling={0}>
@@ -831,41 +899,8 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
   const quality: SceneQuality =
     props.reducedMotion || autoLite ? "lite" : detectedQuality;
   const markSceneReady = useCallback((renderedQuality: SceneQuality) => setReadyQuality(renderedQuality), []);
+  const lowerQuality = useCallback(() => setAutoLite(true), []);
   const renderReady = contextLost ? "fallback" : readyQuality === quality ? "true" : "false";
-
-  // 帧率自适应降级：全效模式下持续 2 秒低于 35fps → 自动切 lite
-  // （低端 GPU / 高分屏用户保流畅；降级后保持，不抖动）
-  useEffect(() => {
-    if (props.reducedMotion || detectedQuality === "lite" || autoLite) return;
-
-    let frames = 0;
-    let last = performance.now();
-    let lowSeconds = 0;
-    let rafId = 0;
-
-    const loop = (now: number) => {
-      frames += 1;
-      const elapsed = now - last;
-      if (elapsed >= 1000) {
-        const fps = (frames * 1000) / elapsed;
-        frames = 0;
-        last = now;
-        if (fps < 35) {
-          lowSeconds += 1;
-          if (lowSeconds >= 2) {
-            setAutoLite(true);
-            return;
-          }
-        } else {
-          lowSeconds = 0;
-        }
-      }
-      rafId = requestAnimationFrame(loop);
-    };
-
-    rafId = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafId);
-  }, [props.reducedMotion, detectedQuality, autoLite]);
 
   return (
     <div
@@ -875,14 +910,14 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
       data-cstd-render-fallback={contextLost ? "true" : "false"}
       data-cstd-render-active={props.active ? "true" : "false"}
       data-cstd-neural-city
-      className="absolute inset-0"
+      className="absolute inset-0 opacity-[0.72] mix-blend-screen"
     >
       {contextLost ? null : (
         <Canvas
           data-cstd-webgl-canvas
           camera={{ position: [0, 0, 7.2], fov: 42, near: 0.1, far: 40 }}
           dpr={quality === "full" ? [1, 1.25] : 1}
-          gl={{ antialias: true, alpha: false, powerPreference: "high-performance", preserveDrawingBuffer: true }}
+          gl={{ antialias: true, alpha: true, powerPreference: "high-performance", preserveDrawingBuffer: true }}
           frameloop={props.active && quality === "full" ? "always" : "demand"}
           onCreated={({ gl }) => {
             gl.outputColorSpace = THREE.SRGBColorSpace;
@@ -893,11 +928,16 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
               setReadyQuality(null);
               setContextLost(true);
             }, { once: true });
-            setDetectedQuality(getSceneQuality(gl));
+            setDetectedQuality(detectInitialSceneQuality(gl));
           }}
         >
           <Suspense fallback={null}>
-            <World {...props} quality={quality} onReady={markSceneReady} />
+            <World
+              {...props}
+              quality={quality}
+              onReady={markSceneReady}
+              onQualityDecline={lowerQuality}
+            />
           </Suspense>
         </Canvas>
       )}

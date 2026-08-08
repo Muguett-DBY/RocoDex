@@ -68,11 +68,12 @@ function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
       id="path"
       ref={sectionRef}
       data-cstd-chapter="path"
+      data-cstd-scene="path"
       data-cstd-research-state={activeYear}
       data-cstd-path-mode="interactive-timeline"
       data-cstd-generated-visual="data-vault-v1"
       aria-labelledby="path-heading"
-      className="relative z-10 overflow-hidden bg-[#050709] px-5 py-24 text-[#f2efe7] contain-paint md:px-10 md:py-32 lg:px-16"
+      className="relative z-20 overflow-hidden bg-[#050709]/82 px-5 py-24 text-[#f2efe7] contain-paint backdrop-blur-md md:px-10 md:py-32 lg:px-16"
     >
       <div aria-hidden="true" className="absolute right-0 top-0 h-full w-1 bg-[#ff3b30]" />
       <span aria-hidden="true" className="absolute -left-8 top-24 font-mono text-[10rem] font-black leading-none text-white/[0.025] md:text-[18rem]">MEM</span>

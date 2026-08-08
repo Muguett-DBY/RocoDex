@@ -16,9 +16,10 @@ function OperatorProfile() {
     <section
       id="operator"
       data-cstd-chapter="operator"
+      data-cstd-scene="operator"
       data-cstd-generated-visual="night-runner-v1"
       aria-labelledby="operator-heading"
-      className="group relative z-20 min-h-[96svh] overflow-hidden border-y border-[#24e0ff]/20 bg-[#050709] text-[#f2efe7] contain-paint [content-visibility:auto] [contain-intrinsic-size:auto_980px]"
+      className="group relative z-20 min-h-[110svh] overflow-hidden border-y border-[#24e0ff]/20 bg-[#050709]/36 text-[#f2efe7] contain-paint [content-visibility:auto] [contain-intrinsic-size:auto_1080px]"
     >
       <div className="absolute inset-0 lg:left-[35%]">
         <Image
@@ -28,7 +29,7 @@ function OperatorProfile() {
           loading="lazy"
           unoptimized
           sizes="(min-width: 1024px) 65vw, 100vw"
-          className="object-cover object-[67%_center] opacity-55 saturate-[0.82] contrast-110 transition-[filter,transform] duration-700 group-hover:saturate-100 group-hover:scale-[1.012] lg:opacity-90"
+          className="object-cover object-[67%_center] opacity-50 saturate-[0.82] contrast-110 transition-[filter,transform] duration-700 group-hover:saturate-100 group-hover:scale-[1.012] lg:opacity-84"
         />
         <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,#050709_0%,rgba(5,7,9,0.94)_18%,rgba(5,7,9,0.34)_55%,rgba(5,7,9,0.08)_100%)]" />
         <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(0deg,#050709_0%,transparent_34%,rgba(5,7,9,0.2)_100%)]" />

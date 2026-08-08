@@ -1,8 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import Image from "next/image";
-import { ArrowDown, Command, Pause, Play, Volume2, VolumeX, Zap } from "lucide-react";
+import { Command, Pause, Play, Volume2, VolumeX, Zap } from "lucide-react";
 import { clsx } from "clsx";
 import {
   lazy,
@@ -16,9 +15,17 @@ import {
   useSyncExternalStore,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { cstdProofs, cstdSystems, type CstdSystem } from "../content/systems";
+import { cstdSystems, type CstdSystem } from "../content/systems";
+import { useCstdSceneClock } from "../experience/scene-clock";
+import {
+  cstdSceneById,
+  cstdSceneManifest,
+  type CstdSceneId,
+} from "../experience/scene-manifest";
+import { MemoizedNeuralGate } from "../scenes/neural-gate/neural-gate";
 import { ambientSound } from "./ambient-sound";
 import { MemoizedSceneDirector } from "./scene-director";
+import { MemoizedWorldBackdrop } from "./world-backdrop";
 
 const LazyCommandDrawer = lazy(() =>
   import("./command-drawer").then((module) => ({ default: module.CommandDrawer })),
@@ -49,29 +56,11 @@ const PersonalImmersiveScene = memo(
   ),
 );
 
-type ChapterId = "hero" | "systems" | "proof" | "operator" | "path";
 type MotionMode = "full" | "calm";
 
-const chapterLinks = [
-  { id: "systems", label: "系统" },
-  { id: "proof", label: "作品" },
-  { id: "operator", label: "身份" },
-  { id: "path", label: "路径" },
-] as const;
-
-const chapterLabels: Record<ChapterId, string> = {
-  hero: "Studio",
-  systems: "Systems",
-  proof: "Selected work",
-  operator: "Operator",
-  path: "Research path",
-};
-
-const neuralNodes = [
-  { id: "NODE-A", label: "ROCODEX", position: "right-[16%] top-[29%]", tone: "#f4d431" },
-  { id: "NODE-B", label: "ALPHA", position: "right-[31%] top-[50%]", tone: "#24e0ff" },
-  { id: "NODE-C", label: "CRM", position: "right-[10%] top-[62%]", tone: "#ff3b30" },
-] as const;
+const chapterLinks = cstdSceneManifest.filter(
+  (scene) => scene.id !== "hero" && scene.id !== "finale",
+);
 
 const motionModeStorageKey = "cstd-motion-mode";
 const motionModeChangeEvent = "cstd-motion-mode-change";
@@ -142,7 +131,7 @@ function useDocumentVisibility() {
   return visible;
 }
 
-function ChapterRail({ activeChapter }: { activeChapter: ChapterId }) {
+function ChapterRail({ activeChapter }: { activeChapter: CstdSceneId }) {
   return (
     <nav
       aria-label="章节导航"
@@ -154,7 +143,7 @@ function ChapterRail({ activeChapter }: { activeChapter: ChapterId }) {
           <a
             key={chapter.id}
             href={`#${chapter.id}`}
-            aria-label={chapter.label}
+            aria-label={chapter.navLabel}
             className="group flex items-center justify-end gap-3 font-mono text-[10px] font-semibold text-[#8f9599] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4c95d]"
           >
             <span className={clsx("transition-colors", active && "text-[#f4c95d]")}>
@@ -194,11 +183,21 @@ export function PersonalHomepage() {
   const diveChapterRef = useRef<HTMLParagraphElement>(null);
   const pulseRef = useRef<HTMLSpanElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef(0);
   const pointerRef = useRef({ x: 0, y: 0 });
   const impulseRef = useRef(0);
-  const activeChapterRef = useRef<ChapterId>("hero");
-  const [activeChapter, setActiveChapter] = useState<ChapterId>("hero");
+  const overdriveRef = useRef(false);
+  const {
+    activeSceneId,
+    progressRef,
+    sceneProgressRef,
+    sceneIndexRef,
+    velocityRef,
+  } = useCstdSceneClock({
+    rootRef,
+    progressBarRef,
+    depthRef: diveDepthRef,
+    chapterRef: diveChapterRef,
+  });
   const [activeSystemId, setActiveSystemId] = useState<CstdSystem["id"]>(cstdSystems[0].id);
   const [consoleOpen, setConsoleOpen] = useState(false);
   const [overdrive, setOverdrive] = useState(false);
@@ -237,79 +236,13 @@ export function PersonalHomepage() {
   }, [openConsole, toggleOverdrive]);
 
   useEffect(() => {
-    let frame = 0;
-    let velocityTimeout = 0;
-    let lastScrollY = window.scrollY;
-    let lastTimestamp = performance.now();
+    overdriveRef.current = overdrive;
+    ambientSound.setOverdrive(overdrive);
+  }, [overdrive]);
 
-    const syncScroll = () => {
-      frame = 0;
-      const timestamp = performance.now();
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
-      const elapsed = Math.max(16, timestamp - lastTimestamp);
-      const velocity = Math.min(1, Math.abs(window.scrollY - lastScrollY) / elapsed / 1.5);
-      lastScrollY = window.scrollY;
-      lastTimestamp = timestamp;
-      progressRef.current = progress;
-      rootRef.current?.style.setProperty("--cstd-progress", progress.toFixed(4));
-      rootRef.current?.style.setProperty("--cstd-scroll-velocity", velocity.toFixed(3));
-      rootRef.current?.style.setProperty("--cstd-scroll-velocity-percent", `${Math.round(velocity * 100)}%`);
-      rootRef.current?.style.setProperty("--cstd-speed-offset", `${Math.round(window.scrollY % 72)}px`);
-      window.clearTimeout(velocityTimeout);
-      velocityTimeout = window.setTimeout(() => {
-        rootRef.current?.style.setProperty("--cstd-scroll-velocity", "0");
-      }, 140);
-      if (progressBarRef.current) {
-        progressBarRef.current.style.transform = `scaleX(${progress})`;
-      }
-      if (diveDepthRef.current) {
-        diveDepthRef.current.textContent = `${String(Math.round(progress * 8192)).padStart(4, "0")}M`;
-      }
-
-      const activationLine = window.innerHeight * 0.42;
-      let nextChapter: ChapterId = "hero";
-      for (const chapter of chapterLinks) {
-        const section = document.getElementById(chapter.id);
-        if (section && section.getBoundingClientRect().top <= activationLine) {
-          nextChapter = chapter.id;
-        }
-      }
-      if (nextChapter !== activeChapterRef.current) {
-        activeChapterRef.current = nextChapter;
-        setActiveChapter(nextChapter);
-      }
-      if (diveChapterRef.current) {
-        diveChapterRef.current.textContent = chapterLabels[nextChapter].toUpperCase();
-      }
-      const activeSection = nextChapter === "hero"
-        ? document.getElementById("top")
-        : document.getElementById(nextChapter);
-      if (activeSection) {
-        const bounds = activeSection.getBoundingClientRect();
-        const chapterProgress = Math.min(1, Math.max(0, (window.innerHeight * 0.72 - bounds.top) / (bounds.height + window.innerHeight * 0.3)));
-        rootRef.current?.style.setProperty("--cstd-chapter-progress", chapterProgress.toFixed(4));
-        rootRef.current?.style.setProperty("--cstd-chapter-shift", `${Math.round(chapterProgress * 100)}%`);
-      }
-    };
-
-    const requestSync = () => {
-      if (!frame) frame = window.requestAnimationFrame(syncScroll);
-    };
-
-    syncScroll();
-    const resizeObserver = new ResizeObserver(requestSync);
-    resizeObserver.observe(document.documentElement);
-    window.addEventListener("scroll", requestSync, { passive: true });
-    window.addEventListener("resize", requestSync);
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener("scroll", requestSync);
-      window.removeEventListener("resize", requestSync);
-      window.clearTimeout(velocityTimeout);
-      if (frame) window.cancelAnimationFrame(frame);
-    };
-  }, []);
+  useEffect(() => {
+    ambientSound.setScene(activeSceneId);
+  }, [activeSceneId]);
 
   useEffect(() => {
     if (!enhancementsReady) return;
@@ -345,13 +278,25 @@ export function PersonalHomepage() {
   const sceneProps = useMemo(
     () => ({
       progressRef,
+      sceneProgressRef,
+      sceneIndexRef,
+      velocityRef,
       pointerRef,
       impulseRef,
+      overdriveRef,
       reducedMotion,
-      showArchive: activeChapter === "systems",
-      active: documentVisible && (activeChapter === "hero" || activeChapter === "systems"),
+      showArchive: activeSceneId === "systems" || activeSceneId === "path",
+      active: documentVisible,
     }),
-    [activeChapter, documentVisible, reducedMotion],
+    [
+      activeSceneId,
+      documentVisible,
+      progressRef,
+      reducedMotion,
+      sceneIndexRef,
+      sceneProgressRef,
+      velocityRef,
+    ],
   );
 
   function handlePointerMove(event: ReactPointerEvent<HTMLElement>) {
@@ -361,6 +306,8 @@ export function PersonalHomepage() {
     pointerRef.current = { x: x * 2 - 1, y: -(y * 2 - 1) };
     rootRef.current?.style.setProperty("--cstd-pointer-x", `${Math.round(x * 100)}%`);
     rootRef.current?.style.setProperty("--cstd-pointer-y", `${Math.round(y * 100)}%`);
+    rootRef.current?.style.setProperty("--cstd-pointer-shift-x", `${((x - 0.5) * -18).toFixed(2)}px`);
+    rootRef.current?.style.setProperty("--cstd-pointer-shift-y", `${((y - 0.5) * -12).toFixed(2)}px`);
     if (coordinateRef.current) {
       coordinateRef.current.textContent = `${String(Math.round(x * 999)).padStart(3, "0")}:${String(Math.round(y * 999)).padStart(3, "0")}`;
     }
@@ -370,6 +317,8 @@ export function PersonalHomepage() {
     pointerRef.current = { x: 0, y: 0 };
     rootRef.current?.style.setProperty("--cstd-pointer-x", "50%");
     rootRef.current?.style.setProperty("--cstd-pointer-y", "42%");
+    rootRef.current?.style.setProperty("--cstd-pointer-shift-x", "0px");
+    rootRef.current?.style.setProperty("--cstd-pointer-shift-y", "0px");
   }
 
   function handlePointerDown(event: ReactPointerEvent<HTMLElement>) {
@@ -424,32 +373,18 @@ export function PersonalHomepage() {
         </div>
       </div>
 
-      <div aria-hidden="true" className="fixed inset-0 z-0 overflow-hidden bg-[#0a0b0d]">
-        <Image
-          src="/cstd-universe/cstd-neural-city-v3.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="cstd-hero-image object-cover object-center opacity-80 saturate-[0.88] contrast-110"
-        />
+      <MemoizedWorldBackdrop activeSceneId={activeSceneId} />
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
         {enhancementsReady && desktopScene ? <PersonalImmersiveScene {...sceneProps} /> : null}
-        <div className="absolute inset-0 bg-[#050709]/45" />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,9,0.9)_0%,rgba(5,7,9,0.48)_47%,rgba(5,7,9,0.08)_78%)]" />
+      </div>
+      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[2] overflow-hidden">
+        <div className="cstd-world-copy-shade absolute inset-0" />
         <div
           data-cstd-pointer-field
           className="absolute inset-0 opacity-70 transition-opacity duration-500"
           style={{
             background:
-              "radial-gradient(36rem circle at var(--cstd-pointer-x, 50%) var(--cstd-pointer-y, 42%), rgba(36,224,255,0.18), transparent 62%)",
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-40"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px)",
-            backgroundSize: "72px 72px",
+              "radial-gradient(36rem circle at var(--cstd-pointer-x, 50%) var(--cstd-pointer-y, 42%), rgba(36,224,255,0.16), transparent 62%)",
           }}
         />
       </div>
@@ -478,7 +413,7 @@ export function PersonalHomepage() {
         </div>
       </div>
 
-      <MemoizedSceneDirector activeChapter={activeChapter} />
+      <MemoizedSceneDirector activeSceneId={activeSceneId} />
 
       <div
         ref={progressBarRef}
@@ -488,7 +423,7 @@ export function PersonalHomepage() {
       />
 
       <header
-        data-cstd-header-theme={activeChapter}
+        data-cstd-header-theme={activeSceneId}
         className="fixed inset-x-0 top-0 z-50 flex h-16 items-center border-b border-[#f4d431]/35 bg-[#050709]/88 px-5 backdrop-blur-xl md:px-10 lg:px-12"
       >
         <a
@@ -499,7 +434,7 @@ export function PersonalHomepage() {
             CS
           </span>
           <span className="font-mono text-sm font-black tracking-[0]">CSTD://</span>
-          <span className="hidden font-mono text-[10px] font-bold uppercase text-[#7f8b90] sm:inline">{chapterLabels[activeChapter]}</span>
+          <span className="hidden font-mono text-[10px] font-bold uppercase text-[#7f8b90] sm:inline">{cstdSceneById[activeSceneId].label}</span>
         </a>
 
         <div className="ml-auto flex items-center gap-2 md:gap-3">
@@ -508,10 +443,10 @@ export function PersonalHomepage() {
               <a
                 key={chapter.id}
                 href={`#${chapter.id}`}
-                aria-current={activeChapter === chapter.id ? "page" : undefined}
+                aria-current={activeSceneId === chapter.id ? "page" : undefined}
                 className="transition-colors hover:text-[#f4c95d] aria-[current=page]:text-[#f4c95d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4c95d]"
               >
-                {chapter.label}
+                {chapter.navLabel}
               </a>
             ))}
           </nav>
@@ -579,116 +514,13 @@ export function PersonalHomepage() {
         </div>
       </header>
 
-      <ChapterRail activeChapter={activeChapter} />
+      <ChapterRail activeChapter={activeSceneId} />
 
-      <section
-        id="top"
-        data-cstd-hero
-        data-cstd-chapter="hero"
-        data-cstd-elastic-archive
-        aria-labelledby="cstd-hero-title"
-        className="relative z-10 flex min-h-[96svh] items-center px-5 pb-20 pt-28 contain-paint md:px-10 md:pt-32 lg:px-16"
-      >
-        <div aria-hidden="true" data-cstd-neural-city-overlay className="pointer-events-none absolute inset-0 hidden lg:block">
-          {neuralNodes.map((node) => (
-            <span key={node.id} className={clsx("cstd-city-node absolute flex items-center gap-2 font-mono text-[9px] font-black", node.position)} style={{ color: node.tone }}>
-              <span className="h-1.5 w-1.5 bg-current shadow-[0_0_14px_currentColor]" />
-              {node.id} / {node.label}
-            </span>
-          ))}
-        </div>
-        <div className="mx-auto grid w-full max-w-[1540px] gap-14 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-end lg:gap-20">
-          <div className="max-w-6xl">
-            <p className="flex items-center gap-3 font-mono text-[11px] font-bold uppercase text-[#f4d431] md:text-xs">
-              <span aria-hidden="true" className="h-2 w-2 bg-[#3dff8f] shadow-[0_0_18px_rgba(61,255,143,0.7)]" />
-              [ NODE CSTD-01 ] · NIGHT OPERATIONS ONLINE
-            </p>
-            <h1
-              id="cstd-hero-title"
-              aria-label="CSTD"
-              data-text="CSTD"
-              className="cstd-glitch-title mt-8 w-fit text-[6rem] font-black leading-[0.78] tracking-[0] text-[#f2efe7] md:text-[9rem] lg:text-[11rem] xl:text-[13rem]"
-            >
-              CSTD
-            </h1>
-            <p className="mt-9 font-mono text-xs font-black tracking-[0] text-[#24e0ff] md:text-sm">CODE / SHIP / BREAK LIMITS / REPEAT</p>
-            <p className="mt-5 max-w-4xl text-3xl font-semibold leading-[1.06] text-[#f2efe7] md:text-5xl lg:text-6xl">
-              把代码写进现实，
-              <span className="text-[#f4d431]">让系统在霓虹里运行。</span>
-            </p>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-[#a5aaad] md:text-lg">
-              奶黄包的个人技术工作室。产品、数据、AI 与研究在这里接入同一条神经总线，每一项能力都必须通向真实交付。
-            </p>
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              <a
-                href="#proof"
-                aria-label="进入作品章节"
-                className="inline-flex h-12 items-center gap-3 bg-[#f4d431] px-5 font-mono text-sm font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_70%,calc(100%-14px)_100%,0_100%)] transition-[transform,background-color] hover:-translate-y-0.5 hover:bg-[#ffe95f] active:translate-y-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
-              >
-                接入作品档案
-                <ArrowDown aria-hidden="true" className="h-4 w-4" />
-              </a>
-              <button
-                type="button"
-                onClick={openConsole}
-                className="inline-flex h-12 items-center gap-3 border border-[#24e0ff]/45 bg-[#061015]/70 px-5 font-mono text-sm font-bold text-[#d8fbff] transition-colors hover:border-[#24e0ff] hover:bg-[#24e0ff] hover:text-[#050709] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"
-              >
-                <Command aria-hidden="true" className="h-4 w-4" />
-                打开 CYBERDECK
-              </button>
-              <button
-                type="button"
-                aria-pressed={overdrive}
-                onClick={toggleOverdrive}
-                className={clsx(
-                  "inline-flex h-12 items-center gap-3 border px-5 font-mono text-sm font-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff3b30]",
-                  overdrive
-                    ? "border-[#ff3b30] bg-[#ff3b30] text-[#050709]"
-                    : "border-[#ff3b30]/50 bg-[#1a0909]/70 text-[#ff6a60] hover:bg-[#ff3b30] hover:text-[#050709]",
-                )}
-              >
-                <Zap aria-hidden="true" className="h-4 w-4" />
-                {overdrive ? "关闭超载" : "启动超载"}
-              </button>
-            </div>
-          </div>
-
-          <aside className="border-y border-[#24e0ff]/25 bg-[#061015]/65 px-5 py-6 font-mono backdrop-blur-sm lg:mb-1" aria-label="工作室状态">
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-[10px] font-bold uppercase text-[#24e0ff]">Runtime monitor / 2026</p>
-              <span className={clsx("text-[9px] font-black", overdrive ? "text-[#ff5a50]" : "text-[#3dff8f]")}>{overdrive ? "OVERDRIVE" : "STABLE"}</span>
-            </div>
-            <dl className="mt-6 grid grid-cols-3 gap-4 lg:grid-cols-1">
-              <div className="border-l-2 border-[#f4d431] pl-3">
-                <dt className="text-[10px] uppercase text-[#777d81]">Systems</dt>
-                <dd className="mt-1 text-2xl font-black text-[#f2efe7]">{cstdSystems.length}</dd>
-              </div>
-              <div className="border-l-2 border-[#24e0ff] pl-3">
-                <dt className="text-[10px] uppercase text-[#777d81]">Proofs</dt>
-                <dd className="mt-1 text-2xl font-black text-[#f2efe7]">{cstdProofs.length}</dd>
-              </div>
-              <div className="border-l-2 border-[#ff3b30] pl-3">
-                <dt className="text-[10px] uppercase text-[#777d81]">Link</dt>
-                <dd className="mt-1 text-sm font-black text-[#3dff8f]">ONLINE</dd>
-              </div>
-            </dl>
-            <div className="mt-6 border-t border-[#24e0ff]/20 pt-4 text-[9px] font-bold leading-5 text-[#718087]">
-              <p>ACCESS: ROOT / READ-WRITE</p>
-              <p>TRACE: CLEAN / LATENCY 12MS</p>
-              <p>SIGNAL: PRODUCT · DATA · AI · RESEARCH</p>
-            </div>
-          </aside>
-        </div>
-
-        <a
-          href="#systems"
-          aria-label="进入系统章节"
-          className="absolute bottom-6 left-5 flex items-center gap-3 font-mono text-[10px] font-bold uppercase text-[#8f9599] transition-colors hover:text-[#f4c95d] md:left-10 lg:left-16"
-        >
-          Jack in / scroll to explore
-          <span aria-hidden="true" className="h-px w-10 bg-current" />
-        </a>
-      </section>
+      <MemoizedNeuralGate
+        overdrive={overdrive}
+        onOpenConsole={openConsole}
+        onToggleOverdrive={toggleOverdrive}
+      />
 
       <Suspense fallback={<div className="relative z-20 h-24 border-y border-white/10 bg-[#0d0f12]" />}>
         <LazySignalStrip reducedMotion={reducedMotion} />
