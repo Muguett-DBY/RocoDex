@@ -13,7 +13,7 @@ export function TerminalBar({ title, right }: TerminalBarProps) {
         <span aria-hidden="true" className="h-3 w-3 rounded-full bg-[#f4c95d]" />
         <span aria-hidden="true" className="h-3 w-3 rounded-full bg-[#8bcaa8]" />
       </div>
-      <span className="text-[10px] font-bold tracking-[0.12em] text-[#8f9599]">{title}</span>
+      <span className="text-[10px] font-bold tracking-[0] text-[#8f9599]">{title}</span>
       {right ? <span className="text-[10px] font-bold text-[#8f9599]">{right}</span> : <span aria-hidden="true" className="w-12" />}
     </div>
   );

@@ -135,7 +135,7 @@ function BackgroundField({
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const pointerTarget = useMemo(() => new THREE.Vector2(), []);
   const [studioTexture, loomTexture] = useLoader(THREE.TextureLoader, [
-    "/cstd-world/cstd-kinetic-studio-v2.webp",
+    "/cstd-world/cstd-night-ops-v1.webp",
     "/cstd-world/cstd-data-loom-v2.webp",
   ]);
 

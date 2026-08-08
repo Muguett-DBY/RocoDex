@@ -110,6 +110,10 @@ test("CSTD console is absent from first paint and opens on demand", async ({ pag
   await input.fill("whoami");
   await input.press("Enter");
   await expect(drawer.getByText("product engineer / creative systems builder", { exact: false })).toBeVisible();
+  await input.fill("breach");
+  await input.press("Enter");
+  await expect(drawer.getByText("BREACH PROTOCOL ACCEPTED", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-overdrive", "true");
   await page.keyboard.press("Escape");
   await expect(drawer).toHaveCount(0);
 

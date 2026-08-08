@@ -14,11 +14,11 @@ const systemIcons: Record<CstdSystemIcon, ComponentType<{ className?: string; "a
 };
 
 const systemAccents: Record<CstdSystemIcon, string> = {
-  product: "#f4c95d",
-  edge: "#55c2c8",
-  ai: "#ef7868",
-  research: "#8bcaa8",
-  data: "#b5a7e8",
+  product: "#f4d431",
+  edge: "#24e0ff",
+  ai: "#ff3b30",
+  research: "#3dff8f",
+  data: "#e8edf0",
 };
 
 function SystemsChapter({
@@ -40,14 +40,16 @@ function SystemsChapter({
       data-cstd-chapter="systems"
       data-cstd-motion={reducedMotion ? "calm" : "full"}
       aria-labelledby="systems-heading"
-      className="relative z-10 bg-[#101216] px-5 py-24 text-[#f2efe7] contain-paint md:px-10 md:py-32 lg:px-16"
+      className="relative z-10 overflow-hidden bg-[#090c0f] px-5 py-24 text-[#f2efe7] contain-paint md:px-10 md:py-32 lg:px-16"
     >
+      <div aria-hidden="true" className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(36,224,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(36,224,255,0.045)_1px,transparent_1px)] [background-size:56px_56px]" />
+      <div aria-hidden="true" className="absolute left-0 top-0 h-full w-1 bg-[#f4d431]" />
       <div className="mx-auto max-w-[1540px]">
         <header className="grid gap-8 border-b border-white/10 pb-12 lg:grid-cols-[1fr_30rem] lg:items-end">
           <div>
-            <p className="font-mono text-[11px] font-bold uppercase text-[#f4c95d]">01 / Operating systems</p>
+            <p className="font-mono text-[11px] font-bold uppercase text-[#f4d431]">01 // RUNNING PROCESSES</p>
             <h2 id="systems-heading" className="mt-5 max-w-5xl text-5xl font-semibold leading-[0.96] tracking-[0] md:text-7xl xl:text-8xl">
-              五条能力轴，汇成一条交付链。
+              五个进程，共用一条神经总线。
             </h2>
           </div>
           <p className="max-w-xl text-base leading-8 text-[#979da1]">
@@ -56,10 +58,11 @@ function SystemsChapter({
         </header>
 
         <div className="mt-14 grid gap-14 lg:grid-cols-[minmax(0,0.92fr)_minmax(32rem,1.08fr)] lg:gap-20">
-          <div className="self-start border-y border-white/10 py-8 lg:sticky lg:top-24">
+          <div className="relative self-start overflow-hidden border-y border-[#24e0ff]/25 bg-[#061015]/55 px-5 py-8 lg:sticky lg:top-24 lg:px-7">
+            <div aria-hidden="true" className="cstd-system-sweep absolute inset-x-0 top-0 h-px bg-[#24e0ff] opacity-0" />
             <div className="flex items-start justify-between gap-6">
               <div>
-                <p className="font-mono text-[10px] font-bold uppercase text-[#777d81]">Active capability</p>
+                <p className="font-mono text-[10px] font-bold uppercase text-[#718087]">INSPECTING PROCESS</p>
                 <p className="mt-3 font-mono text-xs font-bold" style={{ color: accent }}>
                   {activeSystem.track === "shipped" ? "SHIPPED SYSTEM" : "RESEARCH TRACK"}
                 </p>
@@ -71,7 +74,7 @@ function SystemsChapter({
             <div
               key={activeSystem.id}
               data-cstd-system-visual={activeSystem.id}
-              className={clsx("mt-10 transition-opacity", reducedMotion ? "duration-0" : "duration-300")}
+              className={clsx("cstd-active-system mt-10 transition-opacity", reducedMotion ? "duration-0" : "duration-300")}
             >
               <h3 className="text-4xl font-semibold leading-tight md:text-5xl">{activeSystem.title}</h3>
               <p className="mt-6 text-lg leading-8 text-[#d6d4ce]">{activeSystem.summary}</p>
@@ -99,8 +102,8 @@ function SystemsChapter({
                     onPointerEnter={() => setActiveSystemId(system.id)}
                     onFocus={() => setActiveSystemId(system.id)}
                     className={clsx(
-                      "group grid w-full grid-cols-[2rem_2.75rem_1fr_auto] items-center gap-3 py-6 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4c95d] md:gap-5 md:py-7",
-                      active ? "text-[#f2efe7]" : "text-[#8f9599] hover:text-[#d6d4ce]",
+                      "group grid w-full grid-cols-[2rem_2.75rem_1fr_auto] items-center gap-3 px-3 py-6 text-left transition-colors [clip-path:polygon(0_0,100%_0,100%_calc(100%-10px),calc(100%-10px)_100%,0_100%)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431] md:gap-5 md:px-5 md:py-7",
+                      active ? "bg-white/[0.045] text-[#f2efe7]" : "text-[#8f9599] hover:bg-white/[0.025] hover:text-[#d6d4ce]",
                     )}
                   >
                     <span className="font-mono text-[10px] font-bold text-[#656b6f]">{String(index + 1).padStart(2, "0")}</span>

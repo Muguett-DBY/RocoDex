@@ -79,7 +79,7 @@ export function Gauge({ value, label, unit = "", disabled = false }: GaugeProps)
           </span>
         </div>
       </div>
-      <span className="text-[10px] font-bold tracking-[0.18em] text-[#9d96bd]">{label}</span>
+      <span className="text-[10px] font-bold tracking-[0] text-[#9d96bd]">{label}</span>
     </div>
   );
 }
