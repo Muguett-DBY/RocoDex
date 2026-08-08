@@ -1,0 +1,102 @@
+---
+kind: "case"
+schemaVersion: 1
+slug: "rocodex-platform"
+projectId: "rocodex"
+year: "2026"
+publicationStatus: "published"
+revision: 1
+publishedAt: "2026-01-01"
+updatedAt: "2026-08-09"
+title: {"zh":"RocoDex 双站平台","en":"RocoDex dual-site platform"}
+kicker: {"zh":"领域边界 / 内容产品","en":"Domain boundaries / content product"}
+summary: {"zh":"把个人主站与图鉴产品放进同一个 Next.js 部署容器，同时让域名、认证、内容和回归测试保持真正独立。","en":"Two independent websites share one Next.js deployment container while domains, authentication, content, and regression suites remain isolated."}
+role: {"zh":"产品设计、前后端、架构与发布","en":"Product, frontend, architecture, and release"}
+runtimeStatus: {"zh":"持续上线","en":"Live and evolving"}
+liveHref: "https://rocodex.custard.top"
+image: {"src":"/cstd-projects/rocodex.png","alt":{"zh":"RocoDex 图鉴产品界面","en":"RocoDex product interface"},"position":"50% 36%"}
+technologies: ["Next.js 16","React 19","TypeScript","Vercel","Vitest","Playwright"]
+metrics: [{"value":"2","label":{"zh":"独立网站","en":"independent sites"}},{"value":"1","label":{"zh":"部署容器","en":"deployment container"}},{"value":"Host","label":{"zh":"级别隔离","en":"level isolation"}}]
+evidence: [{"label":{"zh":"隔离","en":"Isolation"},"detail":{"zh":"Route group、Proxy 与导入守卫三层同时生效。","en":"Route groups, proxy rules, and import guards work together."}},{"label":{"zh":"验证","en":"Verification"},"detail":{"zh":"两套 Vitest 与 Playwright 流程分别覆盖两个站点。","en":"Separate Vitest and Playwright flows cover each website."}},{"label":{"zh":"发布","en":"Release"},"detail":{"zh":"main 推送后同时核验 GitHub Actions、Vercel 与两个生产域名。","en":"Every main release checks Actions, Vercel, and both production hosts."}}]
+capabilityIds: ["product-surfaces","edge-operations"]
+relatedNoteSlugs: ["host-boundaries-in-one-next-deployment","single-canvas-immersive-web"]
+relatedLabSlugs: ["system-trace","render-lab"]
+artifacts: [{"kind":"production","label":{"zh":"生产系统","en":"Production system"},"detail":{"zh":"公开可访问的实际运行界面。","en":"The publicly reachable running product."},"href":{"zh":"https://rocodex.custard.top","en":"https://rocodex.custard.top"},"verifiedAt":"2026-08-09"},{"kind":"note","label":{"zh":"一个 Next.js 部署，两个真正独立的网站","en":"One Next.js deployment, two genuinely separate websites"},"detail":{"zh":"从该系统实现中沉淀的技术决策记录。","en":"An engineering decision record derived from this system."},"href":{"zh":"/notes/host-boundaries-in-one-next-deployment","en":"/en/notes/host-boundaries-in-one-next-deployment"},"verifiedAt":"2026-08-09"},{"kind":"note","label":{"zh":"沉浸式网站只需要一个三维运行时","en":"An immersive website needs only one 3D runtime"},"detail":{"zh":"从该系统实现中沉淀的技术决策记录。","en":"An engineering decision record derived from this system."},"href":{"zh":"/notes/single-canvas-immersive-web","en":"/en/notes/single-canvas-immersive-web"},"verifiedAt":"2026-08-09"},{"kind":"lab","label":{"zh":"可复现实验 / system-trace","en":"Reproducible lab / system-trace"},"detail":{"zh":"在浏览器中重放核心机制。","en":"Replay the core mechanism in the browser."},"href":{"zh":"/lab/system-trace","en":"/en/lab/system-trace"},"verifiedAt":"2026-08-09"},{"kind":"lab","label":{"zh":"可复现实验 / render-lab","en":"Reproducible lab / render-lab"},"detail":{"zh":"在浏览器中重放核心机制。","en":"Replay the core mechanism in the browser."},"href":{"zh":"/lab/render-lab","en":"/en/lab/render-lab"},"verifiedAt":"2026-08-09"},{"kind":"release","label":{"zh":"CSTD 技术档案发布","en":"CSTD technical archive release"},"detail":{"zh":"提交 049d2de，包含双语档案与自适应视觉。","en":"Commit 049d2de shipped the bilingual archive and adaptive visuals."},"href":{"zh":"https://github.com/Muguett-DBY/RocoDex/commit/049d2de","en":"https://github.com/Muguett-DBY/RocoDex/commit/049d2de"},"verifiedAt":"2026-08-09"},{"kind":"ci","label":{"zh":"GitHub Actions 验证","en":"GitHub Actions verification"},"detail":{"zh":"构建、单元测试与边界测试通过。","en":"Build, unit, and boundary checks passed."},"href":{"zh":"https://github.com/Muguett-DBY/RocoDex/actions/runs/31271339739","en":"https://github.com/Muguett-DBY/RocoDex/actions/runs/31271339739"},"verifiedAt":"2026-08-09"}]
+toc: [{"id":"problem","eyebrow":{"zh":"01 / 问题","en":"01 / Problem"},"title":{"zh":"共享部署不等于共享产品。","en":"A shared deployment is not a shared product."}},{"id":"architecture","eyebrow":{"zh":"02 / 架构","en":"02 / Architecture"},"title":{"zh":"Host 决策先于页面渲染。","en":"Host decisions happen before rendering."}},{"id":"decision","eyebrow":{"zh":"03 / 决策","en":"03 / Decision"},"title":{"zh":"用测试守住目录无法守住的边界。","en":"Tests enforce what folders alone cannot."}}]
+---
+
+<LocaleBlock locale="zh">
+
+<ArchiveSection id="problem" title="共享部署不等于共享产品。" eyebrow="01 / 问题">
+
+个人主站 custard.top 与 RocoDex 图鉴拥有不同用户、路由和运行时需求。最危险的方案不是放在一起，而是边界只存在于口头约定。
+
+- 主站不应初始化图鉴的认证上下文。
+- 错误域名不能泄露另一站页面。
+- 每站都要有自己的浏览器回归与 SEO 输出。
+
+</ArchiveSection>
+
+<ArchiveSection id="architecture" title="Host 决策先于页面渲染。" eyebrow="02 / 架构">
+
+Proxy 先按 Host 决定重写、跳转、放行或 404；Next route group 再表达页面所有权；站点模块通过极小 public API 暴露给路由适配器。
+
+<CodeSample language="text" label="请求链路">
+
+```text
+request
+  -> host decision
+  -> route group
+  -> site public API
+  -> isolated product tree
+```
+
+</CodeSample>
+
+</ArchiveSection>
+
+<ArchiveSection id="decision" title="用测试守住目录无法守住的边界。" eyebrow="03 / 决策">
+
+架构测试扫描生产代码导入关系，禁止个人主站越界使用 RocoDex 模块，也限制 Three.js 运行时只出现在延迟场景中。
+
+</ArchiveSection>
+
+</LocaleBlock>
+
+<LocaleBlock locale="en">
+
+<ArchiveSection id="problem" title="A shared deployment is not a shared product." eyebrow="01 / Problem">
+
+custard.top and RocoDex serve different audiences with different routes and runtime needs. Co-location was not the risk; undocumented ownership was.
+
+- The portfolio must not initialize the encyclopedia auth context.
+- The wrong host must never expose pages owned by the other product.
+- Each site needs its own browser regression and SEO output.
+
+</ArchiveSection>
+
+<ArchiveSection id="architecture" title="Host decisions happen before rendering." eyebrow="02 / Architecture">
+
+The proxy chooses rewrite, redirect, pass-through, or 404 by host. Route groups then express ownership, while each site exposes only a narrow public API.
+
+<CodeSample language="text" label="Request path">
+
+```text
+request
+  -> host decision
+  -> route group
+  -> site public API
+  -> isolated product tree
+```
+
+</CodeSample>
+
+</ArchiveSection>
+
+<ArchiveSection id="decision" title="Tests enforce what folders alone cannot." eyebrow="03 / Decision">
+
+Architecture tests scan production imports, block cross-site dependencies, and keep the Three.js runtime confined to its lazy scene boundary.
+
+</ArchiveSection>
+
+</LocaleBlock>

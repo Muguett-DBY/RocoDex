@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowUpRight, Cpu, FlaskConical, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Cpu, FlaskConical, GitBranch, ShieldCheck } from "lucide-react";
 import type { CstdLocale } from "../../content/content-types";
 import { cstdLabs, getCstdLab, getLabPath } from "../../content/labs";
 import { InteractiveLab } from "../labs/interactive-lab";
@@ -70,6 +70,7 @@ export function CstdLabDetailPage({ locale, slug }: { locale: CstdLocale; slug: 
     methodBody: "先改变一个控制量，观察状态与输出，再重置基线。这个实验展示工程关系，不模拟生产数据。",
     fallback: "静态回退",
     fallbackBody: "即使 JavaScript 不可用，标题、原则和实验范围仍可被读取与索引。",
+    source: "查看真实系统证据",
     next: "下一实验",
   } : {
     back: "All labs",
@@ -79,6 +80,7 @@ export function CstdLabDetailPage({ locale, slug }: { locale: CstdLocale; slug: 
     methodBody: "Change one control, observe state and output, then reset the baseline. This demonstrates engineering relationships rather than production data.",
     fallback: "Static fallback",
     fallbackBody: "Even without JavaScript, the title, principle, and scope remain readable and indexable.",
+    source: "Open shipped-system evidence",
     next: "Next lab",
   };
   const index = cstdLabs.findIndex((candidate) => candidate.slug === lab.slug);
@@ -92,7 +94,10 @@ export function CstdLabDetailPage({ locale, slug }: { locale: CstdLocale; slug: 
           <div className="mx-auto max-w-[1320px]">
             <div className="flex flex-wrap items-center justify-between gap-5 border-b border-white/15 pb-6">
               <CstdLink href={locale === "en" ? "/en/lab" : "/lab"} className="inline-flex items-center gap-2 font-mono text-[9px] font-black text-[#24e0ff] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"><ArrowLeft aria-hidden="true" className="h-4 w-4" />{copy.back}</CstdLink>
-              <p className="flex items-center gap-3 font-mono text-[8px] font-black text-[#3dff8f]"><span className="h-2 w-2 animate-pulse bg-[#3dff8f]" />{copy.live}</p>
+              <div className="flex flex-wrap items-center gap-5">
+                <p className="flex items-center gap-3 font-mono text-[8px] font-black text-[#3dff8f]"><span className="h-2 w-2 animate-pulse bg-[#3dff8f]" />{copy.live}</p>
+                <p className="font-mono text-[8px] font-black text-[#718087]">PROTOCOL {lab.version} / UPDATED {lab.updatedAt}</p>
+              </div>
             </div>
 
             <div className="mt-10 border border-white/15 bg-[#0b0e11]/90 p-5 shadow-[0_36px_90px_rgba(0,0,0,0.35)] md:p-8 lg:p-10">
@@ -104,6 +109,7 @@ export function CstdLabDetailPage({ locale, slug }: { locale: CstdLocale; slug: 
               <div className="bg-[#0a0c0e] p-6"><ShieldCheck aria-hidden="true" className="h-5 w-5 text-[#24e0ff]" /><h2 className="mt-5 text-xl font-semibold">LOCAL / PRIVATE</h2><p className="mt-3 text-sm leading-7 text-[#8f9ba0]">{copy.noData}</p></div>
               <div className="bg-[#0a0c0e] p-6"><FlaskConical aria-hidden="true" className="h-5 w-5 text-[#3dff8f]" /><h2 className="mt-5 text-xl font-semibold">{copy.fallback}</h2><p className="mt-3 text-sm leading-7 text-[#8f9ba0]">{copy.fallbackBody}</p></div>
             </div>
+            <CstdLink href={lab.evidenceHref[locale]} className="mt-8 inline-flex items-center gap-3 border-b border-[#24e0ff] pb-2 font-mono text-[9px] font-black text-[#24e0ff] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"><GitBranch aria-hidden="true" className="h-4 w-4" />{copy.source}<ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
           </div>
         </section>
 

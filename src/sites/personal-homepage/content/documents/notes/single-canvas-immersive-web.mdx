@@ -1,0 +1,63 @@
+---
+kind: "note"
+schemaVersion: 1
+slug: "single-canvas-immersive-web"
+publicationStatus: "published"
+revision: 1
+publishedAt: "2026-07-22"
+updatedAt: "2026-08-09"
+readingMinutes: 8
+category: {"zh":"前端体验","en":"Frontend experience"}
+series: {"zh":"动效有预算","en":"Motion with a budget"}
+title: {"zh":"沉浸式网站只需要一个三维运行时","en":"An immersive website needs only one 3D runtime"}
+summary: {"zh":"将 Three.js 隔离为一个按需画布，让内容、滚动和辅助技术保持普通网页语义。","en":"Isolate Three.js in one lazy canvas so content, scrolling, and assistive technology retain ordinary web semantics."}
+image: {"src":"/cstd-universe/cstd-skill-reactor-v1.webp","alt":{"zh":"单画布技能反应堆","en":"A single-canvas skill reactor"}}
+relatedCaseSlugs: ["portrait-booking","rocodex-platform"]
+tags: ["Three.js","Performance","Accessibility","Canvas"]
+corrections: []
+toc: [{"id":"separation","eyebrow":null,"title":{"zh":"DOM 负责信息，Canvas 负责世界","en":"DOM owns information; canvas owns the world"}},{"id":"lifecycle","eyebrow":null,"title":{"zh":"渲染循环要服从页面生命周期","en":"The render loop follows page lifecycle"}},{"id":"preference","eyebrow":null,"title":{"zh":"系统偏好是默认值，站内开关是最终选择","en":"System preference is a default; the site switch is final"}}]
+---
+
+<LocaleBlock locale="zh">
+
+<ArchiveSection id="separation" title="DOM 负责信息，Canvas 负责世界">
+
+标题、链接、图片和表单都保留在 DOM；固定画布只接收滚动进度、指针和质量等级。即使 WebGL 未加载，网站仍然完整可读可用。
+
+</ArchiveSection>
+
+<ArchiveSection id="lifecycle" title="渲染循环要服从页面生命周期">
+
+页面不可见时暂停；窄屏与粗指针使用静态图；DPR 封顶；长任务或低帧率触发质量降级。动效不是例外线程，而是资源预算中的一部分。
+
+</ArchiveSection>
+
+<ArchiveSection id="preference" title="系统偏好是默认值，站内开关是最终选择">
+
+首次访问可参考 prefers-reduced-motion，但用户明确开启增强动效后应保存站内选择。关键是平静模式仍有构图、层次和状态反馈，而不是一张失去设计的静态页面。
+
+</ArchiveSection>
+
+</LocaleBlock>
+
+<LocaleBlock locale="en">
+
+<ArchiveSection id="separation" title="DOM owns information; canvas owns the world">
+
+Headings, links, images, and forms remain in the DOM. A fixed canvas receives only scroll progress, pointer input, and quality level. The site stays complete when WebGL never loads.
+
+</ArchiveSection>
+
+<ArchiveSection id="lifecycle" title="The render loop follows page lifecycle">
+
+Rendering pauses while hidden, coarse pointers use static imagery, DPR is capped, and long tasks or low frame rate lower quality. Motion is part of the resource budget, not an exception to it.
+
+</ArchiveSection>
+
+<ArchiveSection id="preference" title="System preference is a default; the site switch is final">
+
+The first visit may honor prefers-reduced-motion, while an explicit in-site choice persists. Calm mode must retain composition, hierarchy, and state feedback rather than becoming an undesigned static page.
+
+</ArchiveSection>
+
+</LocaleBlock>

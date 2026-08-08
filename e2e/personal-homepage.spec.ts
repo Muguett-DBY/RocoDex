@@ -10,6 +10,18 @@ test("CSTD presents a concise personal studio with progressive visuals", async (
   await expect(page.getByText("奶黄包的个人技术工作室", { exact: false })).toBeVisible();
   await expect(page.getByRole("link", { name: "进入技能反应堆" })).toHaveAttribute("href", "#systems");
   await expect(page.locator("[data-cstd-kinetic-world]")).toBeVisible();
+  await expect(page.locator("[data-cstd-atlas]")).toBeVisible();
+  await expect(page.locator("[data-cstd-atlas-district]")).toHaveCount(10);
+  await expect(page.locator("[data-cstd-atlas-district]:visible")).toHaveCount(5);
+  const atlasData = page.locator('[data-cstd-atlas-district="data-systems"]:visible');
+  await atlasData.click();
+  await expect(page.locator("[data-cstd-atlas]")).toHaveAttribute("data-cstd-atlas-active", "data-systems");
+  if (!isMobile) {
+    const atlasProduct = page.locator('#cstd-atlas-product-surfaces');
+    await atlasProduct.focus();
+    await atlasProduct.press("ArrowRight");
+    await expect(page.locator("[data-cstd-atlas]")).toHaveAttribute("data-cstd-atlas-active", "edge-operations");
+  }
   await expect(page.locator("[data-cstd-world-backdrop]")).toHaveAttribute("data-cstd-world-scene", "hero");
   await expect(page.locator("[data-cstd-world-frame]")).toHaveCount(2);
   await expect(page.locator("[data-cstd-scene]")).toHaveCount(6);

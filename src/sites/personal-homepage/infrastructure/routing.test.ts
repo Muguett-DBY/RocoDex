@@ -31,6 +31,8 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/en/lab")).toEqual({ kind: "rewrite", path: "/cstd/en/lab" });
     expect(getPersonalSiteRouteDecision("custard.top", "/en/work/cfzzs-crm")).toEqual({ kind: "rewrite", path: "/cstd/en/work/cfzzs-crm" });
     expect(getPersonalSiteRouteDecision("custard.top", "/en/resume")).toEqual({ kind: "rewrite", path: "/cstd/en/resume" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/resume.json")).toEqual({ kind: "rewrite", path: "/cstd/resume.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/resume.json")).toEqual({ kind: "rewrite", path: "/cstd/en/resume.json" });
   });
 
   test("returns not found for CSTD paths that belong on the RocoDex subdomain", () => {

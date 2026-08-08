@@ -3,7 +3,9 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, Clock3, Link2 } from "lucide-react";
 import type { ContentMetric, CstdLocale } from "../../content/content-types";
 import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
+import { loadCstdContentDocument } from "../../content/content-document";
 import { cstdTechnicalNotes, getCstdTechnicalNote, getTechnicalNotePath } from "../../content/technical-notes";
+import { CitationButton } from "../site/citation-button";
 import { CstdLink } from "../site/cstd-link";
 import { CstdSiteChrome } from "../site/cstd-site-chrome";
 import { StructuredData } from "../site/structured-data";
@@ -79,15 +81,18 @@ export function CstdNotesIndexPage({ locale }: { locale: CstdLocale }) {
   );
 }
 
-export function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLocale; slug: string }) {
+export async function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLocale; slug: string }) {
   const note = getCstdTechnicalNote(slug);
   if (!note) notFound();
+  const document = await loadCstdContentDocument("notes", note.slug, locale);
   const copy = locale === "zh" ? {
     back: "全部札记",
     read: "阅读时间",
     min: "分钟",
     published: "发布",
     series: "系列",
+    revision: "修订",
+    citation: "复制引用",
     related: "相关真实系统",
     relatedSummary: "这篇文章来自以下项目中的实际设计与交付工作。",
     next: "继续阅读",
@@ -97,6 +102,8 @@ export function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLocale; sl
     min: "min",
     published: "Published",
     series: "Series",
+    revision: "Revision",
+    citation: "Copy citation",
     related: "Related shipped systems",
     relatedSummary: "This note comes from design and delivery work in the following systems.",
     next: "Continue reading",
@@ -125,26 +132,13 @@ export function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLocale; sl
                 <ArrowLeft aria-hidden="true" className="h-4 w-4" /> {copy.back}
               </CstdLink>
               <nav aria-label={locale === "zh" ? "文章目录" : "Article contents"} className="mt-8 hidden border-l border-black/20 pl-4 lg:block">
-                {note.sections.map((section, sectionIndex) => <a key={section.id} href={`#${section.id}`} className="mt-4 block font-mono text-[8px] font-black leading-5 text-black/45 hover:text-black"><span className="mr-2 text-[#0b6473]">0{sectionIndex + 1}</span>{section.title[locale]}</a>)}
+                {note.toc.map((section, sectionIndex) => <a key={section.id} href={`#${section.id}`} className="mt-4 block font-mono text-[8px] font-black leading-5 text-black/45 hover:text-black"><span className="mr-2 text-[#0b6473]">0{sectionIndex + 1}</span>{section.title[locale]}</a>)}
               </nav>
+              <p className="mt-7 font-mono text-[8px] font-black leading-5 text-black/45">{copy.revision.toUpperCase()} {note.revision}<br />UPDATED {note.updatedAt}</p>
+              <CitationButton value={`${note.title[locale]} — ${locale === "zh" ? "奶黄包" : "Custard"}, https://custard.top${getTechnicalNotePath(note, locale)} (${note.updatedAt})`} label={copy.citation.toUpperCase()} />
             </aside>
 
-            <div>
-              {note.sections.map((section, sectionIndex) => (
-                <section key={section.id} id={section.id} className="scroll-mt-28 border-t border-black/15 py-12 first:border-t-0 first:pt-0">
-                  <p className="font-mono text-[9px] font-black text-[#0b6473]">SECTION {String(sectionIndex + 1).padStart(2, "0")}</p>
-                  <h2 className="mt-4 text-3xl font-semibold leading-tight md:text-4xl">{section.title[locale]}</h2>
-                  {section.paragraphs.map((paragraph) => <p key={paragraph[locale]} className="mt-6 text-[1.05rem] leading-8 text-black/72 md:text-lg md:leading-9">{paragraph[locale]}</p>)}
-                  {section.bullets ? <ul className="mt-7 grid gap-3">{section.bullets.map((bullet) => <li key={bullet[locale]} className="border-l-2 border-[#e3b800] pl-4 text-base leading-8 text-black/72">{bullet[locale]}</li>)}</ul> : null}
-                  {section.code ? (
-                    <figure className="mt-8 overflow-x-auto bg-[#0a0c0e] p-5 text-[#d9f9ff] shadow-[12px_12px_0_#e3b800]">
-                      <figcaption className="font-mono text-[8px] font-black text-[#24e0ff]">{section.code.label[locale].toUpperCase()} / {section.code.language}</figcaption>
-                      <pre className="mt-4 text-sm leading-7"><code>{section.code.value}</code></pre>
-                    </figure>
-                  ) : null}
-                </section>
-              ))}
-            </div>
+            <div>{document}</div>
           </div>
         </article>
 

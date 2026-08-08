@@ -13,6 +13,11 @@ export type CstdSystem = {
   evidence: string;
   relation: string;
   stack: readonly string[];
+  evidenceLinks: readonly {
+    kind: "case" | "note" | "lab";
+    label: string;
+    href: string;
+  }[];
 };
 
 export type CstdProof = {
@@ -51,6 +56,11 @@ export const cstdSystems = [
     evidence: "RocoDex 与摄影站持续面对真实访客和内容更新。",
     relation: "把研究、数据与业务能力编译成用户真正能进入的界面。",
     stack: ["React", "Next.js", "TypeScript", "Tailwind", "Framer Motion"],
+    evidenceLinks: [
+      { kind: "case", label: "RocoDex 双站平台", href: "/work/rocodex-platform" },
+      { kind: "case", label: "摄影预约与交付", href: "/work/portrait-booking" },
+      { kind: "lab", label: "Render Lab", href: "/lab/render-lab" },
+    ],
   },
   {
     id: "edge-operations",
@@ -63,6 +73,11 @@ export const cstdSystems = [
     evidence: "CRM 覆盖线索、空间、权限和端到端流程验证。",
     relation: "为产品表面提供身份、数据、缓存、审计与持续发布边界。",
     stack: ["Cloudflare", "Hono", "D1 / R2", "Redis", "Playwright"],
+    evidenceLinks: [
+      { kind: "case", label: "CFZZS 产业园 CRM", href: "/work/cfzzs-crm" },
+      { kind: "note", label: "Host 边界写进代码", href: "/notes/host-boundaries-in-one-next-deployment" },
+      { kind: "lab", label: "System Trace", href: "/lab/system-trace" },
+    ],
   },
   {
     id: "ai-creation",
@@ -75,6 +90,11 @@ export const cstdSystems = [
     evidence: "私有 AI 工作台与 Alpha 研究工具均已独立部署。",
     relation: "把模型能力限制在可追踪、可恢复、可复查的产品工作流中。",
     stack: ["React", "Streaming UI", "D1 / R2", "Pyodide", "Cloudflare Pages"],
+    evidenceLinks: [
+      { kind: "case", label: "CSTD Alpha 研究系统", href: "/work/alpha-research-system" },
+      { kind: "case", label: "私人 AI 创作工作台", href: "/work/creative-workbench" },
+      { kind: "lab", label: "Agent Replay", href: "/lab/agent-replay" },
+    ],
   },
   {
     id: "research-models",
@@ -87,6 +107,11 @@ export const cstdSystems = [
     evidence: "方法栈来自数据科学、交互分析与量化研究实践。",
     relation: "为判断提供假设、统计模型、估值与可解释图表。",
     stack: ["Python", "R Shiny", "Jupyter", "Plotly", "NumPy / pandas"],
+    evidenceLinks: [
+      { kind: "case", label: "DCF Quantum", href: "/work/dcf-quantum" },
+      { kind: "note", label: "确定性内核与 AI 边缘", href: "/notes/deterministic-core-ai-edge" },
+      { kind: "lab", label: "Data Lens", href: "/lab/data-lens" },
+    ],
   },
   {
     id: "data-systems",
@@ -99,6 +124,11 @@ export const cstdSystems = [
     evidence: "课程与实验项目覆盖服务建模、流式数据和分布式计算。",
     relation: "连接原始事件、并行计算、流式处理与研究模型。",
     stack: ["FastAPI", "Pydantic", "SQL / MongoDB", "Spark", "Kafka"],
+    evidenceLinks: [
+      { kind: "case", label: "CSTD Alpha 研究系统", href: "/work/alpha-research-system" },
+      { kind: "case", label: "DCF Quantum", href: "/work/dcf-quantum" },
+      { kind: "note", label: "可观测 DCF 管线", href: "/notes/observable-dcf-pipeline" },
+    ],
   },
 ] as const satisfies readonly CstdSystem[];
 

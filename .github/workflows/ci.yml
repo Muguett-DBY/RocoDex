@@ -11,46 +11,76 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify:
-    name: Lint, test, and build
+  boundaries:
+    name: Host and module boundaries
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
+    timeout-minutes: 12
     steps:
       - name: Checkout
         uses: actions/checkout@v7
-
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
-
       - name: Install dependencies
         run: npm ci
+      - name: Verify generated content
+        run: npm run content:check
+      - name: Test host and import ownership
+        run: npm run test:host
 
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-
+  quality:
+    name: Static quality, tests, and build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
       - name: Audit dependencies
         run: npm run audit:dependencies
-
+      - name: Verify generated content
+        run: npm run content:check
       - name: Lint
         run: npm run lint
-
       - name: Type check
         run: npm run typecheck
-
-      - name: Test
+      - name: Unit and integration tests
         run: npm test
-
-      - name: Build
+      - name: Build both sites
         run: npm run build
         env:
           AUTH_SECRET: rocodex-ci-build-secret-with-sufficient-length
-
       - name: Verify personal homepage bundle boundaries
         run: npm run verify:personal-bundle
 
-      - name: End-to-end tests
-        run: npm run test:e2e
+  e2e:
+    name: E2E / ${{ matrix.surface }}
+    needs: [boundaries, quality]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        surface: [personal, rocodex]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Run isolated browser suite
+        run: npm run test:e2e:${{ matrix.surface }}

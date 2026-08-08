@@ -10,6 +10,7 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/now",
   "/about",
   "/resume",
+  "/resume.json",
   "/en",
   "/en/work",
   "/en/notes",
@@ -17,6 +18,7 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/en/now",
   "/en/about",
   "/en/resume",
+  "/en/resume.json",
 ]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",
