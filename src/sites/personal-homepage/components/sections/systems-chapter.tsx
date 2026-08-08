@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Bot, Boxes, CloudCog, DatabaseZap, Microscope } from "lucide-react";
 import { clsx } from "clsx";
 import { memo, type ComponentType } from "react";
@@ -58,9 +59,23 @@ function SystemsChapter({
         </header>
 
         <div className="mt-14 grid gap-14 lg:grid-cols-[minmax(0,0.92fr)_minmax(32rem,1.08fr)] lg:gap-20">
-          <div className="relative self-start overflow-hidden border-y border-[#24e0ff]/25 bg-[#061015]/55 px-5 py-8 lg:sticky lg:top-24 lg:px-7">
+          <div
+            data-cstd-generated-visual="data-vault-v1"
+            className="relative self-start overflow-hidden border-y border-[#24e0ff]/25 bg-[#061015]/55 px-5 py-8 lg:sticky lg:top-24 lg:px-7"
+          >
+            <div aria-hidden="true" className="absolute inset-0">
+              <Image
+                src="/cstd-universe/cstd-data-vault-v1.webp"
+                alt=""
+                fill
+                loading="lazy"
+                sizes="(min-width: 1024px) 44vw, 100vw"
+                className="object-cover opacity-[0.16] saturate-50"
+              />
+              <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(6,16,21,0.98)_0%,rgba(6,16,21,0.88)_54%,rgba(6,16,21,0.42)_100%)]" />
+            </div>
             <div aria-hidden="true" className="cstd-system-sweep absolute inset-x-0 top-0 h-px bg-[#24e0ff] opacity-0" />
-            <div className="flex items-start justify-between gap-6">
+            <div className="relative z-10 flex items-start justify-between gap-6">
               <div>
                 <p className="font-mono text-[10px] font-bold uppercase text-[#718087]">INSPECTING PROCESS</p>
                 <p className="mt-3 font-mono text-xs font-bold" style={{ color: accent }}>
@@ -74,7 +89,7 @@ function SystemsChapter({
             <div
               key={activeSystem.id}
               data-cstd-system-visual={activeSystem.id}
-              className={clsx("cstd-active-system mt-10 transition-opacity", reducedMotion ? "duration-0" : "duration-300")}
+              className={clsx("cstd-active-system relative z-10 mt-10 transition-opacity", reducedMotion ? "duration-0" : "duration-300")}
             >
               <h3 className="text-4xl font-semibold leading-tight md:text-5xl">{activeSystem.title}</h3>
               <p className="mt-6 text-lg leading-8 text-[#d6d4ce]">{activeSystem.summary}</p>

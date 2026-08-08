@@ -4,6 +4,9 @@ import { describe, expect, test } from "vitest";
 const landingSource = readFileSync(new URL("./personal-homepage.tsx", import.meta.url), "utf8");
 const sceneSource = readFileSync(new URL("./immersive-scene.tsx", import.meta.url), "utf8");
 const commandSource = readFileSync(new URL("./command-drawer.tsx", import.meta.url), "utf8");
+const directorSource = readFileSync(new URL("./scene-director.tsx", import.meta.url), "utf8");
+const broadcastSource = readFileSync(new URL("./project-broadcast.tsx", import.meta.url), "utf8");
+const ambienceSource = readFileSync(new URL("./ambient-sound.ts", import.meta.url), "utf8");
 const globalsSource = readFileSync(new URL("../../../app/globals.css", import.meta.url), "utf8");
 const sectionSources = {
   signal: readFileSync(new URL("./sections/signal-strip.tsx", import.meta.url), "utf8"),
@@ -11,12 +14,14 @@ const sectionSources = {
   proof: readFileSync(new URL("./sections/selected-work.tsx", import.meta.url), "utf8"),
   operator: readFileSync(new URL("./sections/operator-profile.tsx", import.meta.url), "utf8"),
   path: readFileSync(new URL("./sections/research-path.tsx", import.meta.url), "utf8"),
+  finale: readFileSync(new URL("./sections/finale.tsx", import.meta.url), "utf8"),
 };
 const chapterSource = Object.values(sectionSources).join("\n");
 
 describe("CSTD personal systems studio", () => {
   test("puts the personal identity and representative proof ahead of tooling", () => {
     expect(landingSource).toContain('id="cstd-hero-title"');
+    expect(landingSource).toContain('aria-label="CSTD"');
     expect(landingSource).toContain("把代码写进现实");
     expect(landingSource).toContain("奶黄包的个人技术工作室");
     expect(landingSource).toContain('href="#proof"');
@@ -26,8 +31,8 @@ describe("CSTD personal systems studio", () => {
   });
 
   test("keeps the WebGL identity progressive and desktop-only", () => {
-    expect(landingSource).toContain("cstd-night-ops-v1.webp");
-    expect(sceneSource).toContain("cstd-night-ops-v1.webp");
+    expect(landingSource).toContain("cstd-neural-city-v3.webp");
+    expect(sceneSource).toContain("cstd-neural-city-v3.webp");
     expect(landingSource).toContain("desktopSceneQuery");
     expect(landingSource).toContain("enhancementsReady && desktopScene");
     expect(sceneSource).toContain("@react-three/fiber");
@@ -36,6 +41,8 @@ describe("CSTD personal systems studio", () => {
     expect(sceneSource).toContain("<ParticleCurrent");
     expect(sceneSource).toContain("<NeuralCity");
     expect(sceneSource).toContain("<NeuralBeacon");
+    expect(sceneSource).toContain("<TransitLanes");
+    expect(sceneSource).toContain("<CityWindowField");
     expect(sceneSource).toContain("data-cstd-neural-city");
     expect(sceneSource).toContain("<ArchiveSpine");
     expect(sceneSource).toContain("deviceMemory");
@@ -144,5 +151,50 @@ describe("CSTD personal systems studio", () => {
     expect(sectionSources.proof).toContain("SYNC {99 - index * 2}.8%");
     expect(globalsSource).toContain(".cstd-live-feed-image");
     expect(globalsSource).toContain("@keyframes cstd-persona-scan");
+  });
+
+  test("directs every chapter through one scroll-native cinematic controller", () => {
+    expect(landingSource).toContain("<MemoizedSceneDirector activeChapter={activeChapter}");
+    expect(landingSource).toContain('style.setProperty("--cstd-scroll-velocity"');
+    expect(landingSource).toContain('style.setProperty("--cstd-chapter-shift"');
+    expect(landingSource).toContain("new IntersectionObserver(");
+    expect(directorSource).toContain("data-cstd-scene-director");
+    expect(directorSource).toContain("cstd-director-aperture");
+    expect(globalsSource).toContain(".cstd-speed-lines");
+  });
+
+  test("plays lightweight project broadcasts only while their chapters are visible", () => {
+    expect(sectionSources.proof).toContain("<ProjectBroadcast");
+    expect(sectionSources.proof).toContain("rocodex-broadcast-v1.webm");
+    expect(sectionSources.proof).toContain("alpha-broadcast-v1.webm");
+    expect(sectionSources.proof).toContain("crm-broadcast-v1.webm");
+    expect(broadcastSource).toContain('preload="none"');
+    expect(broadcastSource).toContain("video.play()");
+    expect(broadcastSource).toContain("video.pause()");
+    expect(broadcastSource).toContain("rootMargin: \"180px 0px\"");
+  });
+
+  test("uses a coherent original visual universe across entry, archive, and finale", () => {
+    expect(landingSource).toContain("/cstd-universe/cstd-neural-city-v3.webp");
+    expect(sectionSources.systems).toContain("/cstd-universe/cstd-data-vault-v1.webp");
+    expect(sectionSources.path).toContain("/cstd-universe/cstd-data-vault-v1.webp");
+    expect(sectionSources.finale).toContain("/cstd-universe/cstd-night-workstation-v1.webp");
+    expect(sectionSources.finale).toContain('data-cstd-generated-visual="night-workstation-v1"');
+  });
+
+  test("keeps the reactive audio atmosphere explicitly user activated", () => {
+    expect(landingSource).toContain("data-cstd-ambience-toggle");
+    expect(landingSource).toContain("ambientSound.start()");
+    expect(landingSource).toContain('data-cstd-ambience={ambienceOn ? "on" : "off"}');
+    expect(ambienceSource).toContain("class AmbientSoundEngine");
+    expect(ambienceSource).not.toContain("autoplay");
+  });
+
+  test("closes with a full cinematic final transmission instead of a utility footer", () => {
+    expect(landingSource).toContain("<LazyFinale />");
+    expect(sectionSources.finale).toContain("data-cstd-finale");
+    expect(sectionSources.finale).toContain("FINAL TRANSMISSION");
+    expect(sectionSources.finale).toContain("STILL");
+    expect(sectionSources.finale).toContain('href="mailto:cstd@custard.top"');
   });
 });
