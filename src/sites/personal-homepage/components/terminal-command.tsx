@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { clsx } from "clsx";
+import { Volume2, VolumeX } from "lucide-react";
 import { terminalSound } from "./terminal-sound";
 
 export type TerminalLine = {
@@ -32,7 +33,7 @@ type TerminalCommandProps = {
   height?: string;
 };
 
-const BUILTIN_COMMANDS = ["help", "whoami", "ls", "cd", "ps", "open", "neofetch", "date", "clear", "exit", "sudo", "top", "ping", "tree", "echo", "whois", "curl", "history", "matrix"];
+const BUILTIN_COMMANDS = ["help", "whoami", "ls", "cd", "ps", "open", "breach", "neofetch", "date", "clear", "exit", "sudo", "top", "ping", "tree", "echo", "whois", "curl", "history", "matrix"];
 const HISTORY_KEY = "cstd-terminal-history";
 
 /** matrix 数字雨：4 秒自动停止；calm 下只渲染静态帧 */
@@ -136,6 +137,12 @@ export function TerminalCommand({
   const echoTypingRef = useRef(false);
   const echoTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  useEffect(() => () => {
+    if (echoTimerRef.current) clearInterval(echoTimerRef.current);
+    echoQueueRef.current = [];
+    echoTypingRef.current = false;
+  }, []);
+
   // 命令历史持久化（↑ 可回翻上次会话）
   useEffect(() => {
     try {
@@ -232,9 +239,14 @@ export function TerminalCommand({
         return;
       }
       let charIndex = 0;
+      setLines((current) => [...current, { ...line, text: "" }]);
       echoTimerRef.current = setInterval(() => {
         charIndex += 1;
-        setLines((current) => [...current.slice(0, -1), { ...line, text: line.text.slice(0, charIndex) }]);
+        setLines((current) => {
+          const next = [...current];
+          next[next.length - 1] = { ...line, text: line.text.slice(0, charIndex) };
+          return next;
+        });
         if (charIndex >= line.text.length) {
           if (echoTimerRef.current) {
             clearInterval(echoTimerRef.current);
@@ -465,7 +477,7 @@ export function TerminalCommand({
             title={muted ? "开启音效" : "静音"}
             className="flex h-10 w-10 flex-none items-center justify-center rounded border border-transparent text-sm leading-none text-[#777d81] transition-colors hover:border-[#f4c95d]/40 hover:text-[#f4c95d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4c95d]"
           >
-            {muted ? "🔇" : "🔊"}
+            {muted ? <VolumeX aria-hidden="true" className="h-4 w-4" /> : <Volume2 aria-hidden="true" className="h-4 w-4" />}
           </button>
         </div>
       </div>

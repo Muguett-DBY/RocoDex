@@ -67,7 +67,7 @@ function OrbitPill({ item, disabled }: { item: OrbitItem; disabled: boolean }) {
   return (
     <m.span
       className={clsx(
-        "absolute rounded-sm border border-[#fcee0a]/40 bg-[#0d0a16]/85 px-3 py-1.5 font-mono text-[9px] font-bold tracking-[0.1em] text-[#fcee0a] shadow-[0_4px_16px_rgba(0,0,0,0.5)]",
+        "absolute rounded-sm border border-[#fcee0a]/40 bg-[#0d0a16]/85 px-3 py-1.5 font-mono text-[9px] font-bold tracking-[0] text-[#fcee0a] shadow-[0_4px_16px_rgba(0,0,0,0.5)]",
         disabled && "opacity-0",
       )}
       style={{

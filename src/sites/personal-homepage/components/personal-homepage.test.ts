@@ -4,6 +4,7 @@ import { describe, expect, test } from "vitest";
 const landingSource = readFileSync(new URL("./personal-homepage.tsx", import.meta.url), "utf8");
 const sceneSource = readFileSync(new URL("./immersive-scene.tsx", import.meta.url), "utf8");
 const commandSource = readFileSync(new URL("./command-drawer.tsx", import.meta.url), "utf8");
+const globalsSource = readFileSync(new URL("../../../app/globals.css", import.meta.url), "utf8");
 const sectionSources = {
   signal: readFileSync(new URL("./sections/signal-strip.tsx", import.meta.url), "utf8"),
   systems: readFileSync(new URL("./sections/systems-chapter.tsx", import.meta.url), "utf8"),
@@ -15,7 +16,7 @@ const chapterSource = Object.values(sectionSources).join("\n");
 describe("CSTD personal systems studio", () => {
   test("puts the personal identity and representative proof ahead of tooling", () => {
     expect(landingSource).toContain('id="cstd-hero-title"');
-    expect(landingSource).toContain("把产品、数据、AI 与研究");
+    expect(landingSource).toContain("把代码写进现实");
     expect(landingSource).toContain("奶黄包的个人技术工作室");
     expect(landingSource).toContain('href="#proof"');
     expect(landingSource).not.toContain("ProjectShowcase");
@@ -24,7 +25,8 @@ describe("CSTD personal systems studio", () => {
   });
 
   test("keeps the WebGL identity progressive and desktop-only", () => {
-    expect(landingSource).toContain("cstd-kinetic-studio-v2.webp");
+    expect(landingSource).toContain("cstd-night-ops-v1.webp");
+    expect(sceneSource).toContain("cstd-night-ops-v1.webp");
     expect(landingSource).toContain("desktopSceneQuery");
     expect(landingSource).toContain("enhancementsReady && desktopScene");
     expect(sceneSource).toContain("@react-three/fiber");
@@ -59,6 +61,17 @@ describe("CSTD personal systems studio", () => {
     expect(commandSource).toContain("<TerminalCommand");
     expect(commandSource).toContain('aria-label="关闭控制台"');
     expect(commandSource).toContain('event.key === "Escape"');
+    expect(commandSource).toContain('case "breach"');
+    expect(commandSource).toContain("onOverdrive();");
+  });
+
+  test("keeps high-intensity cyber effects behind a deliberate overdrive state", () => {
+    expect(landingSource).toContain("data-cstd-overdrive-toggle");
+    expect(landingSource).toContain('data-cstd-overdrive={overdrive ? "true" : "false"}');
+    expect(landingSource).toContain("setOverdrive((current) => !current)");
+    expect(landingSource).toContain("data-cstd-crosshair");
+    expect(globalsSource).toContain('[data-cstd-overdrive="true"] .cstd-glitch-title::before');
+    expect(globalsSource).toContain('[data-cstd-motion="calm"] .cstd-hud-scan');
   });
 
   test("removes continuous decorative loops from the DOM chapters", () => {
@@ -80,8 +93,17 @@ describe("CSTD personal systems studio", () => {
     expect(chapterSource).toContain("data-cstd-proof={proof.projectId}");
     expect(chapterSource).toContain("data-cstd-project-plane={proof.projectId}");
     expect(chapterSource).toContain("data-cstd-learning-step={entry.year}");
+    expect(sectionSources.path).toContain("setImageLoaded(true)");
+    expect(sectionSources.path).toContain("cstd-memory-loader-scan");
     expect(sectionSources.systems).not.toContain("min-h-[185svh]");
     expect(sectionSources.path).not.toContain("min-h-svh");
+  });
+
+  test("queues typed terminal output without replacing the previous line", () => {
+    const terminalSource = readFileSync(new URL("./terminal-command.tsx", import.meta.url), "utf8");
+    expect(terminalSource).toContain('setLines((current) => [...current, { ...line, text: "" }])');
+    expect(terminalSource).toContain("next[next.length - 1]");
+    expect(commandSource).toContain("BREACH PROTOCOL ACCEPTED");
   });
 
   test("keeps live links behind the shared external-link policy", () => {

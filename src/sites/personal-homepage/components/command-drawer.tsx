@@ -18,16 +18,18 @@ const projects = getCstdProjectsById(cstdProjects, [
 ]);
 
 const bootLines: TerminalLine[] = [
-  { text: "cstd console / on-demand session", tone: "accent", type: 8 },
-  { text: "输入 help 查看命令，Tab 可补全。", tone: "dim", type: 8 },
+  { text: "[NEURAL LINK ESTABLISHED] cstd cyberdeck online", tone: "accent", type: 7 },
+  { text: "输入 help 查看命令；breach 可启动视觉超载。", tone: "dim", type: 7 },
 ];
 
 export function CommandDrawer({
   reducedMotion,
   onClose,
+  onOverdrive,
 }: {
   reducedMotion: boolean;
   onClose: () => void;
+  onOverdrive: () => void;
 }) {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -48,7 +50,7 @@ export function CommandDrawer({
       switch (name.toLowerCase()) {
         case "help":
           echo([
-            { text: "help · whoami · ls · cd <chapter> · open <project> · date · clear · exit", tone: "accent" },
+            { text: "help · whoami · ls · cd <chapter> · open <project> · breach · matrix · date · clear · exit", tone: "accent" },
             { text: "chapters: systems / work / path", tone: "dim" },
           ]);
           break;
@@ -105,13 +107,20 @@ export function CommandDrawer({
             tone: "default" as const,
           })));
           break;
+        case "breach":
+          onOverdrive();
+          echo([
+            { text: "BREACH PROTOCOL ACCEPTED", tone: "warn", type: 5 },
+            { text: "visual governor bypassed · overdrive online", tone: "accent", type: 5 },
+          ]);
+          break;
         case "clear":
           break;
         default:
           echo([{ text: `command not found: ${name}（试试 help）`, tone: "error" }]);
       }
     },
-    [onClose, reducedMotion],
+    [onClose, onOverdrive, reducedMotion],
   );
 
   return (
@@ -128,7 +137,7 @@ export function CommandDrawer({
         className="relative z-10 mt-14 flex h-[min(78svh,720px)] w-full max-w-3xl flex-col overflow-hidden rounded-lg border border-white/15 bg-[#0a0b0d] shadow-[0_32px_120px_rgba(0,0,0,0.65)]"
       >
         <TerminalBar
-          title="cstd@custard.top: ~/console"
+          title="cstd://night-ops/cyberdeck"
           right={
             <button
               ref={closeButtonRef}
