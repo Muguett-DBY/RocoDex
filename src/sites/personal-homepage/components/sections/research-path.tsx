@@ -20,8 +20,8 @@ const learningAssets: Record<CstdLearningEntry["year"], { src: string; alt: stri
     alt: "钴蓝色模块化系统材料",
   },
   "2026": {
-    src: "/cstd-archive/cstd-archive-studio-v1.webp",
-    alt: "暖光中的个人技术工作室材料",
+    src: "/cstd-universe/cstd-data-vault-v1.webp",
+    alt: "原创未来数据档案馆与透明研究模块",
   },
 };
 
@@ -70,6 +70,7 @@ function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
       data-cstd-chapter="path"
       data-cstd-research-state={activeYear}
       data-cstd-path-mode="interactive-timeline"
+      data-cstd-generated-visual="data-vault-v1"
       aria-labelledby="path-heading"
       className="relative z-10 overflow-hidden bg-[#050709] px-5 py-24 text-[#f2efe7] contain-paint md:px-10 md:py-32 lg:px-16"
     >

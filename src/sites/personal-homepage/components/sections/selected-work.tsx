@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { clsx } from "clsx";
 import { memo, type PointerEvent as ReactPointerEvent } from "react";
+import { ProjectBroadcast } from "../project-broadcast";
 import { cstdProjects } from "../../content/projects";
 import { cstdLiveObjectIds, cstdProofs, getCstdProjectsById, type CstdProof } from "../../content/systems";
 import { getCstdLinkTargetProps } from "../../domain/link-target";
@@ -15,6 +16,11 @@ const proofProjects = getCstdProjectsById(
 const liveProjects = getCstdProjectsById(cstdProjects, cstdLiveObjectIds);
 const proofAccents = ["#f4d431", "#24e0ff", "#ff3b30"] as const;
 const proofSurfaces = ["bg-[#090c0f]", "bg-[#0b1418]", "bg-[#140a0a]"] as const;
+const proofBroadcasts: Record<string, string> = {
+  rocodex: "/cstd-broadcasts/rocodex-broadcast-v1.webm",
+  alpha: "/cstd-broadcasts/alpha-broadcast-v1.webm",
+  crm: "/cstd-broadcasts/crm-broadcast-v1.webm",
+};
 
 function moveLiveFeed(event: ReactPointerEvent<HTMLElement>) {
   const bounds = event.currentTarget.getBoundingClientRect();
@@ -85,17 +91,12 @@ function ProofChapter({
           onPointerLeave={reducedMotion ? undefined : resetLiveFeed}
           className="cstd-live-feed group relative aspect-[16/10] min-h-0 overflow-hidden border border-white/15 bg-[#050709] shadow-[0_24px_70px_rgba(0,0,0,0.45)] [clip-path:polygon(0_0,100%_0,100%_calc(100%-18px),calc(100%-18px)_100%,0_100%)]"
         >
-          <Image
-            src={project.preview.src}
+          <ProjectBroadcast
+            src={proofBroadcasts[project.id]}
+            poster={project.preview.src}
             alt={project.preview.alt}
-            fill
-            loading="lazy"
-            sizes="(min-width: 1024px) 58vw, 100vw"
-            className={clsx(
-              "cstd-live-feed-image object-cover saturate-[0.78] transition-[transform,filter] ease-out group-hover:saturate-100",
-              reducedMotion ? "duration-0" : "duration-500",
-            )}
-            style={{ objectPosition: project.preview.position }}
+            position={project.preview.position}
+            reducedMotion={reducedMotion}
           />
           <div aria-hidden="true" className="absolute inset-0 bg-black/10 transition-colors group-hover:bg-transparent" />
           <div aria-hidden="true" className="absolute inset-0 opacity-25 [background-image:linear-gradient(rgba(255,255,255,0.16)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.16)_1px,transparent_1px)] [background-size:48px_48px]" />
@@ -143,7 +144,7 @@ function SelectedWork({ reducedMotion }: { reducedMotion: boolean }) {
             </h2>
           </div>
           <p className="relative text-base font-medium leading-8 text-[#34320f]">
-            三个代表项目持续发送实时信号。移动指针检查数据层、运行状态与交付证据，而不是浏览一排静态卡片。
+            三个代表项目以动态广播持续发送真实界面与交付证据。镜头只在进入视野时运行，离开即暂停。
           </p>
         </div>
       </header>

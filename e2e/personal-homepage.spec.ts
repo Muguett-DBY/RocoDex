@@ -14,9 +14,13 @@ test("CSTD presents a concise personal studio with progressive visuals", async (
   await expect(page.locator("[data-cstd-proof]")).toHaveCount(3);
   await expect(page.locator("[data-cstd-project-plane]")).toHaveCount(3);
   await expect(page.locator("[data-cstd-live-feed]")).toHaveCount(3);
+  await expect(page.locator("[data-cstd-project-broadcast]")).toHaveCount(3);
   await expect(page.locator("[data-cstd-live-object]")).toHaveCount(2);
   await expect(page.locator('[data-cstd-generated-visual="night-runner-v1"]')).toHaveCount(1);
+  await expect(page.locator('[data-cstd-generated-visual="data-vault-v1"]')).toHaveCount(2);
+  await expect(page.locator('[data-cstd-generated-visual="night-workstation-v1"]')).toHaveCount(1);
   await expect(page.locator("[data-cstd-learning-step]")).toHaveCount(4);
+  await expect(page.locator("[data-cstd-scene-director]")).toHaveCount(1);
 
   if (isMobile) {
     await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-scene-mode", "image");
@@ -27,6 +31,31 @@ test("CSTD presents a concise personal studio with progressive visuals", async (
     await expect(page.locator("[data-cstd-webgl-canvas]")).toBeVisible();
     const canvasImage = await page.locator("[data-cstd-webgl-canvas]").screenshot();
     expect(canvasImage.byteLength).toBeGreaterThan(20_000);
+    const canvasSignal = await page.locator("[data-cstd-webgl-canvas] canvas").evaluate((element) => {
+      const canvas = element as HTMLCanvasElement;
+      const gl = canvas.getContext("webgl2") ?? canvas.getContext("webgl");
+      if (!gl) return { colorSpan: 0, litSamples: 0 };
+      const pixels = new Uint8Array(canvas.width * canvas.height * 4);
+      gl.readPixels(0, 0, canvas.width, canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+      let minimum = 255;
+      let maximum = 0;
+      let litSamples = 0;
+      for (let index = 0; index < pixels.length; index += 64) {
+        const luminance = pixels[index] + pixels[index + 1] + pixels[index + 2];
+        minimum = Math.min(minimum, luminance / 3);
+        maximum = Math.max(maximum, luminance / 3);
+        if (luminance > 24) litSamples += 1;
+      }
+      return { colorSpan: maximum - minimum, litSamples };
+    });
+    expect(canvasSignal.colorSpan).toBeGreaterThan(24);
+    expect(canvasSignal.litSamples).toBeGreaterThan(500);
+
+    const ambienceToggle = page.locator("[data-cstd-ambience-toggle]");
+    await ambienceToggle.click();
+    await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-ambience", "on");
+    await ambienceToggle.click();
+    await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-ambience", "off");
   }
 
   await expect(page.getByRole("searchbox")).toHaveCount(0);
@@ -60,6 +89,14 @@ test("CSTD keeps representative work links safe and systems explorable", async (
     await expect(link).toHaveAttribute("rel", "noreferrer");
   }
 
+  const firstBroadcast = page.locator('[data-cstd-proof="rocodex"] [data-cstd-project-broadcast]');
+  await firstBroadcast.scrollIntoViewIfNeeded();
+  await expect(firstBroadcast).toHaveAttribute("data-cstd-broadcast-active", "true");
+  await expect.poll(() => firstBroadcast.locator("video").evaluate((element) => {
+    const video = element as HTMLVideoElement;
+    return !video.paused && video.readyState >= 2;
+  })).toBe(true);
+
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
 });
@@ -71,9 +108,12 @@ test("CSTD reaches the footer without a scroll trap or permanent animation load"
 
   const pageMetrics = await page.evaluate(() => ({
     height: document.documentElement.scrollHeight,
-    runningAnimations: document.getAnimations().filter((animation) => animation.playState === "running").length,
+    runningAnimations: document.getAnimations().filter((animation) => {
+      const timing = animation.effect?.getTiming();
+      return animation.playState === "running" && timing?.iterations === Infinity;
+    }).length,
   }));
-  expect(pageMetrics.height).toBeLessThan(9_000);
+  expect(pageMetrics.height).toBeLessThan(10_000);
   expect(pageMetrics.runningAnimations).toBeLessThanOrEqual(4);
 
   const researchPath = page.locator("#path");
@@ -86,6 +126,8 @@ test("CSTD reaches the footer without a scroll trap or permanent animation load"
   const footer = page.locator("#cstd-footer");
   await footer.scrollIntoViewIfNeeded();
   await expect(footer).toBeInViewport({ ratio: 0.35 });
+  await expect(footer).toHaveAttribute("data-cstd-finale", "true");
+  await expect(footer.getByRole("heading", { name: /STILL BUILDING/ })).toBeVisible();
   const bottomFrameDelay = await page.evaluate(() =>
     new Promise<number>((resolve) => {
       const started = performance.now();

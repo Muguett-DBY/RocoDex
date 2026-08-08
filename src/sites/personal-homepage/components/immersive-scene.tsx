@@ -135,7 +135,7 @@ function BackgroundField({
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const pointerTarget = useMemo(() => new THREE.Vector2(), []);
   const [studioTexture, loomTexture] = useLoader(THREE.TextureLoader, [
-    "/cstd-world/cstd-night-ops-v1.webp",
+    "/cstd-universe/cstd-neural-city-v3.webp",
     "/cstd-world/cstd-data-loom-v2.webp",
   ]);
 
@@ -270,6 +270,101 @@ const neuralBeacons = [
   { position: [2.45, 0.4, -0.2] as const, color: "#ff3b30" },
 ] as const;
 
+type CityCell = {
+  x: number;
+  z: number;
+  width: number;
+  depth: number;
+  height: number;
+  color: string;
+};
+
+function TransitLanes({ reducedMotion }: { reducedMotion: boolean }) {
+  const lanesRef = useRef<THREE.LineSegments>(null);
+  const geometry = useMemo(() => {
+    const points: THREE.Vector3[] = [];
+    for (const z of [-1.65, -0.82, 0.82, 1.65]) {
+      points.push(new THREE.Vector3(-4.2, 0.035, z), new THREE.Vector3(4.2, 0.035, z));
+    }
+    for (const x of [-2.9, -1.45, 0, 1.45, 2.9]) {
+      points.push(new THREE.Vector3(x, 0.04, -2.7), new THREE.Vector3(x, 0.04, 2.7));
+    }
+    return new THREE.BufferGeometry().setFromPoints(points);
+  }, []);
+
+  useFrame(({ clock }) => {
+    const lanes = lanesRef.current;
+    if (!lanes || reducedMotion) return;
+    const material = lanes.material as THREE.LineBasicMaterial;
+    material.opacity = 0.3 + Math.sin(clock.elapsedTime * 1.4) * 0.1;
+  });
+
+  return (
+    <lineSegments ref={lanesRef} geometry={geometry}>
+      <lineBasicMaterial color="#24e0ff" transparent opacity={0.34} toneMapped={false} />
+    </lineSegments>
+  );
+}
+
+function CityWindowField({
+  cells,
+  quality,
+  reducedMotion,
+}: {
+  cells: CityCell[];
+  quality: SceneQuality;
+  reducedMotion: boolean;
+}) {
+  const pointsRef = useRef<THREE.Points>(null);
+  const { positions, colors } = useMemo(() => {
+    const rowsPerBuilding = quality === "full" ? 5 : 2;
+    const positions = new Float32Array(cells.length * rowsPerBuilding * 3);
+    const colors = new Float32Array(cells.length * rowsPerBuilding * 3);
+    const cyan = new THREE.Color("#65efff");
+    const yellow = new THREE.Color("#f4d431");
+    let cursor = 0;
+    cells.forEach((cell, cellIndex) => {
+      for (let row = 1; row <= rowsPerBuilding; row += 1) {
+        const color = (cellIndex + row) % 9 === 0 ? yellow : cyan;
+        positions[cursor] = cell.x + (seeded(cellIndex * 41 + row) - 0.5) * cell.width * 0.58;
+        positions[cursor + 1] = Math.min(cell.height - 0.08, (cell.height * row) / (rowsPerBuilding + 1));
+        positions[cursor + 2] = cell.z + cell.depth * 0.515;
+        colors[cursor] = color.r;
+        colors[cursor + 1] = color.g;
+        colors[cursor + 2] = color.b;
+        cursor += 3;
+      }
+    });
+    return { positions, colors };
+  }, [cells, quality]);
+
+  useFrame(({ clock }) => {
+    const points = pointsRef.current;
+    if (!points || reducedMotion) return;
+    const material = points.material as THREE.PointsMaterial;
+    material.opacity = 0.55 + Math.sin(clock.elapsedTime * 1.9) * 0.16;
+  });
+
+  return (
+    <points ref={pointsRef} frustumCulled={false}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+        <bufferAttribute attach="attributes-color" args={[colors, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        size={quality === "full" ? 0.035 : 0.046}
+        sizeAttenuation
+        transparent
+        opacity={0.62}
+        vertexColors
+        depthWrite={false}
+        blending={THREE.AdditiveBlending}
+        toneMapped={false}
+      />
+    </points>
+  );
+}
+
 function NeuralBeacon({
   position,
   color,
@@ -293,6 +388,10 @@ function NeuralBeacon({
 
   return (
     <group ref={beaconRef} position={[...position]}>
+      <mesh position={[0, 0.28, 0]}>
+        <boxGeometry args={[0.3, 0.56, 0.3]} />
+        <meshStandardMaterial color="#071014" emissive={color} emissiveIntensity={0.38} metalness={0.84} roughness={0.24} />
+      </mesh>
       <mesh rotation={[Math.PI / 2, 0, 0]}>
         <torusGeometry args={[0.24, 0.016, 6, 48]} />
         <meshBasicMaterial color={color} toneMapped={false} />
@@ -310,21 +409,21 @@ function NeuralCity({ progressRef, pointerRef, reducedMotion, quality }: NeuralC
   const cityRef = useRef<THREE.Group>(null);
   const buildingsRef = useRef<THREE.InstancedMesh>(null);
   const wireframeRef = useRef<THREE.InstancedMesh>(null);
-  const cells = useMemo(() => {
-    const columns = quality === "full" ? 8 : 6;
-    const rows = quality === "full" ? 5 : 4;
+  const cells = useMemo<CityCell[]>(() => {
+    const columns = quality === "full" ? 10 : 7;
+    const rows = quality === "full" ? 6 : 5;
     return Array.from({ length: columns * rows }, (_, index) => {
       const column = index % columns;
       const row = Math.floor(index / columns);
       return {
-        x: (column - (columns - 1) / 2) * 0.72 + (seeded(index * 17) - 0.5) * 0.18,
-        z: (row - (rows - 1) / 2) * 0.82 + (seeded(index * 19) - 0.5) * 0.2,
+        x: (column - (columns - 1) / 2) * 0.68 + (seeded(index * 17) - 0.5) * 0.16,
+        z: (row - (rows - 1) / 2) * 0.78 + (seeded(index * 19) - 0.5) * 0.18,
         width: 0.2 + seeded(index * 23) * 0.28,
         depth: 0.2 + seeded(index * 29) * 0.3,
-        height: 0.35 + Math.pow(seeded(index * 31), 1.7) * 2.15,
+        height: 0.38 + Math.pow(seeded(index * 31), 1.55) * 2.45 + (row === 0 ? 0.38 : 0),
         color: index % 11 === 0 ? "#f4d431" : index % 9 === 0 ? "#ff3b30" : "#24e0ff",
       };
-    });
+    }).filter((cell) => Math.abs(cell.x) > 0.34 || cell.z < -1.25);
   }, [quality]);
 
   useEffect(() => {
@@ -376,6 +475,7 @@ function NeuralCity({ progressRef, pointerRef, reducedMotion, quality }: NeuralC
   return (
     <group ref={cityRef} position={[1.62, -2.55, -1.55]} rotation={[-0.08, -0.1, 0]}>
       <gridHelper args={[8, 16, "#2b6870", "#15363d"]} position={[0, 0, 0]} />
+      <TransitLanes reducedMotion={reducedMotion} />
       <mesh position={[0, -0.035, 0]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[8, 5]} />
         <meshStandardMaterial color="#061015" metalness={0.62} roughness={0.42} transparent opacity={0.72} />
@@ -395,6 +495,7 @@ function NeuralCity({ progressRef, pointerRef, reducedMotion, quality }: NeuralC
         <boxGeometry args={[1.025, 1.012, 1.025]} />
         <meshBasicMaterial color="#24e0ff" wireframe transparent opacity={0.16} depthWrite={false} toneMapped={false} />
       </instancedMesh>
+      <CityWindowField cells={cells} quality={quality} reducedMotion={reducedMotion} />
       {neuralBeacons.map((beacon, index) => (
         <NeuralBeacon
           key={beacon.color}
@@ -621,9 +722,12 @@ function CameraRig({ progressRef, pointerRef, impulseRef, reducedMotion }: Perso
     const progress = progressRef.current;
     const pointer = pointerRef.current;
     const easedPointer = reducedMotion ? { x: 0, y: 0 } : pointer;
-    const targetX = Math.sin(progress * Math.PI * 1.7) * 0.42 + easedPointer.x * 0.32;
-    const targetY = Math.cos(progress * Math.PI * 1.2) * 0.2 + easedPointer.y * 0.2;
-    const targetZ = 7.2 - Math.sin(progress * Math.PI) * 0.7 - impulseRef.current * 0.16;
+    const approach = THREE.MathUtils.smoothstep(progress, 0, 0.13);
+    const ascent = THREE.MathUtils.smoothstep(progress, 0.1, 0.34);
+    const departure = THREE.MathUtils.smoothstep(progress, 0.34, 0.58);
+    const targetX = -0.18 + approach * 0.46 - departure * 0.24 + easedPointer.x * 0.32;
+    const targetY = 0.18 + ascent * 0.38 - departure * 0.22 + easedPointer.y * 0.2;
+    const targetZ = 7.45 - approach * 1.08 + departure * 0.72 - impulseRef.current * 0.16;
     if (reducedMotion) {
       camera.position.set(targetX, targetY, targetZ);
       camera.rotation.z = 0;

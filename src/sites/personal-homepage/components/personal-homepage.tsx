@@ -2,7 +2,7 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { ArrowDown, Command, Pause, Play, Zap } from "lucide-react";
+import { ArrowDown, Command, Pause, Play, Volume2, VolumeX, Zap } from "lucide-react";
 import { clsx } from "clsx";
 import {
   lazy,
@@ -17,6 +17,8 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import { cstdProofs, cstdSystems, type CstdSystem } from "../content/systems";
+import { ambientSound } from "./ambient-sound";
+import { MemoizedSceneDirector } from "./scene-director";
 
 const LazyCommandDrawer = lazy(() =>
   import("./command-drawer").then((module) => ({ default: module.CommandDrawer })),
@@ -35,6 +37,9 @@ const LazyOperatorProfile = lazy(() =>
 );
 const LazyResearchPath = lazy(() =>
   import("./sections/research-path").then((module) => ({ default: module.MemoizedResearchPath })),
+);
+const LazyFinale = lazy(() =>
+  import("./sections/finale").then((module) => ({ default: module.MemoizedFinale })),
 );
 
 const PersonalImmersiveScene = memo(
@@ -197,10 +202,25 @@ export function PersonalHomepage() {
   const [activeSystemId, setActiveSystemId] = useState<CstdSystem["id"]>(cstdSystems[0].id);
   const [consoleOpen, setConsoleOpen] = useState(false);
   const [overdrive, setOverdrive] = useState(false);
+  const [ambienceOn, setAmbienceOn] = useState(false);
   const openConsole = useCallback(() => setConsoleOpen(true), []);
   const closeConsole = useCallback(() => setConsoleOpen(false), []);
-  const toggleOverdrive = useCallback(() => setOverdrive((current) => !current), []);
+  const toggleOverdrive = useCallback(() => {
+    ambientSound.pulse();
+    setOverdrive((current) => !current);
+  }, []);
   const enableOverdrive = useCallback(() => setOverdrive(true), []);
+  const toggleAmbience = useCallback(async () => {
+    if (ambienceOn) {
+      ambientSound.stop();
+      setAmbienceOn(false);
+      return;
+    }
+    await ambientSound.start();
+    setAmbienceOn(true);
+  }, [ambienceOn]);
+
+  useEffect(() => () => ambientSound.stop(), []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -218,12 +238,28 @@ export function PersonalHomepage() {
 
   useEffect(() => {
     let frame = 0;
+    let velocityTimeout = 0;
+    let lastScrollY = window.scrollY;
+    let lastTimestamp = performance.now();
 
     const syncScroll = () => {
       frame = 0;
+      const timestamp = performance.now();
       const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
       const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+      const elapsed = Math.max(16, timestamp - lastTimestamp);
+      const velocity = Math.min(1, Math.abs(window.scrollY - lastScrollY) / elapsed / 1.5);
+      lastScrollY = window.scrollY;
+      lastTimestamp = timestamp;
       progressRef.current = progress;
+      rootRef.current?.style.setProperty("--cstd-progress", progress.toFixed(4));
+      rootRef.current?.style.setProperty("--cstd-scroll-velocity", velocity.toFixed(3));
+      rootRef.current?.style.setProperty("--cstd-scroll-velocity-percent", `${Math.round(velocity * 100)}%`);
+      rootRef.current?.style.setProperty("--cstd-speed-offset", `${Math.round(window.scrollY % 72)}px`);
+      window.clearTimeout(velocityTimeout);
+      velocityTimeout = window.setTimeout(() => {
+        rootRef.current?.style.setProperty("--cstd-scroll-velocity", "0");
+      }, 140);
       if (progressBarRef.current) {
         progressBarRef.current.style.transform = `scaleX(${progress})`;
       }
@@ -246,6 +282,15 @@ export function PersonalHomepage() {
       if (diveChapterRef.current) {
         diveChapterRef.current.textContent = chapterLabels[nextChapter].toUpperCase();
       }
+      const activeSection = nextChapter === "hero"
+        ? document.getElementById("top")
+        : document.getElementById(nextChapter);
+      if (activeSection) {
+        const bounds = activeSection.getBoundingClientRect();
+        const chapterProgress = Math.min(1, Math.max(0, (window.innerHeight * 0.72 - bounds.top) / (bounds.height + window.innerHeight * 0.3)));
+        rootRef.current?.style.setProperty("--cstd-chapter-progress", chapterProgress.toFixed(4));
+        rootRef.current?.style.setProperty("--cstd-chapter-shift", `${Math.round(chapterProgress * 100)}%`);
+      }
     };
 
     const requestSync = () => {
@@ -261,9 +306,41 @@ export function PersonalHomepage() {
       resizeObserver.disconnect();
       window.removeEventListener("scroll", requestSync);
       window.removeEventListener("resize", requestSync);
+      window.clearTimeout(velocityTimeout);
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);
+
+  useEffect(() => {
+    if (!enhancementsReady) return;
+    const root = rootRef.current;
+    if (!root) return;
+    const observed = new WeakSet<Element>();
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.setAttribute("data-cstd-revealed", "true");
+          revealObserver.unobserve(entry.target);
+        }
+      },
+      { rootMargin: "0px 0px -12%", threshold: 0.08 },
+    );
+    const scan = () => {
+      root.querySelectorAll("[data-cstd-chapter], [data-cstd-finale]").forEach((chapter) => {
+        if (observed.has(chapter)) return;
+        observed.add(chapter);
+        revealObserver.observe(chapter);
+      });
+    };
+    scan();
+    const mutationObserver = new MutationObserver(scan);
+    mutationObserver.observe(root, { childList: true, subtree: true });
+    return () => {
+      mutationObserver.disconnect();
+      revealObserver.disconnect();
+    };
+  }, [enhancementsReady]);
 
   const sceneProps = useMemo(
     () => ({
@@ -297,6 +374,7 @@ export function PersonalHomepage() {
 
   function handlePointerDown(event: ReactPointerEvent<HTMLElement>) {
     if (reducedMotion) return;
+    ambientSound.pulse();
     impulseRef.current = 1;
     const pulse = pulseRef.current;
     if (!pulse) return;
@@ -326,6 +404,7 @@ export function PersonalHomepage() {
       data-cstd-scene-mode={desktopScene ? "webgl" : "image"}
       data-cstd-motion={reducedMotion ? "calm" : "full"}
       data-cstd-overdrive={overdrive ? "true" : "false"}
+      data-cstd-ambience={ambienceOn ? "on" : "off"}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       onPointerDown={handlePointerDown}
@@ -347,12 +426,12 @@ export function PersonalHomepage() {
 
       <div aria-hidden="true" className="fixed inset-0 z-0 overflow-hidden bg-[#0a0b0d]">
         <Image
-          src="/cstd-world/cstd-night-ops-v1.webp"
+          src="/cstd-universe/cstd-neural-city-v3.webp"
           alt=""
           fill
           priority
           sizes="100vw"
-          className="cstd-hero-image object-cover opacity-70 saturate-[0.86] contrast-110"
+          className="cstd-hero-image object-cover object-center opacity-80 saturate-[0.88] contrast-110"
         />
         {enhancementsReady && desktopScene ? <PersonalImmersiveScene {...sceneProps} /> : null}
         <div className="absolute inset-0 bg-[#050709]/45" />
@@ -376,6 +455,7 @@ export function PersonalHomepage() {
       </div>
 
       <div aria-hidden="true" data-cstd-global-hud className="pointer-events-none fixed inset-0 z-[30] overflow-hidden">
+        <div data-cstd-speed-lines className="cstd-speed-lines absolute inset-0 opacity-0" />
         <div className="cstd-hud-scan absolute inset-x-0 top-0 h-px bg-[#24e0ff]/70 shadow-[0_0_18px_rgba(36,224,255,0.75)]" />
         <div className="absolute left-4 top-24 hidden h-28 w-px bg-[#f4d431]/60 lg:block" />
         <div className="absolute left-3 top-56 hidden -rotate-90 origin-left font-mono text-[9px] font-bold tracking-[0] text-[#f4d431]/70 lg:block">CSTD // NEURAL BUS</div>
@@ -397,6 +477,8 @@ export function PersonalHomepage() {
           <p ref={diveChapterRef} className="mb-1 text-[9px] font-black text-[#24e0ff]">STUDIO</p>
         </div>
       </div>
+
+      <MemoizedSceneDirector activeChapter={activeChapter} />
 
       <div
         ref={progressBarRef}
@@ -457,6 +539,22 @@ export function PersonalHomepage() {
           </button>
           <button
             type="button"
+            data-cstd-ambience-toggle
+            aria-pressed={ambienceOn}
+            aria-label={ambienceOn ? "关闭环境声场" : "开启环境声场"}
+            title={ambienceOn ? "关闭环境声场" : "开启环境声场"}
+            onClick={() => void toggleAmbience()}
+            className={clsx(
+              "hidden h-9 w-9 items-center justify-center border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff] sm:flex",
+              ambienceOn
+                ? "border-[#24e0ff] bg-[#24e0ff] text-[#050709]"
+                : "border-white/15 text-[#a5aaad] hover:border-[#24e0ff]/70 hover:text-[#24e0ff]",
+            )}
+          >
+            {ambienceOn ? <Volume2 aria-hidden="true" className="h-4 w-4" /> : <VolumeX aria-hidden="true" className="h-4 w-4" />}
+          </button>
+          <button
+            type="button"
             data-cstd-motion-toggle
             aria-pressed={!reducedMotion}
             aria-label={reducedMotion ? "开启增强动效" : "切换到平静模式"}
@@ -486,6 +584,7 @@ export function PersonalHomepage() {
       <section
         id="top"
         data-cstd-hero
+        data-cstd-chapter="hero"
         data-cstd-elastic-archive
         aria-labelledby="cstd-hero-title"
         className="relative z-10 flex min-h-[96svh] items-center px-5 pb-20 pt-28 contain-paint md:px-10 md:pt-32 lg:px-16"
@@ -506,6 +605,7 @@ export function PersonalHomepage() {
             </p>
             <h1
               id="cstd-hero-title"
+              aria-label="CSTD"
               data-text="CSTD"
               className="cstd-glitch-title mt-8 w-fit text-[6rem] font-black leading-[0.78] tracking-[0] text-[#f2efe7] md:text-[9rem] lg:text-[11rem] xl:text-[13rem]"
             >
@@ -614,24 +714,9 @@ export function PersonalHomepage() {
         <LazyResearchPath reducedMotion={reducedMotion} />
       </Suspense>
 
-      <footer
-        id="cstd-footer"
-        className="relative z-20 overflow-hidden border-t border-[#f4d431]/40 bg-[#050709] px-5 py-20 text-[#f2efe7] [content-visibility:auto] [contain-intrinsic-size:auto_420px] md:px-10 lg:px-16"
-      >
-        <div aria-hidden="true" className="absolute inset-x-0 top-0 h-2 bg-[repeating-linear-gradient(135deg,#f4d431_0_14px,#050709_14px_28px)]" />
-        <span aria-hidden="true" className="absolute -right-4 -top-8 font-mono text-[9rem] font-black leading-none text-[#f4d431]/[0.04] md:text-[16rem]">EOF</span>
-        <div className="mx-auto grid max-w-[1540px] gap-12 md:grid-cols-[1fr_auto] md:items-end">
-          <div>
-            <p className="font-mono text-[10px] font-bold uppercase text-[#f4d431]">SYSTEM // STILL LIVE</p>
-            <p className="mt-4 max-w-3xl text-4xl font-semibold leading-tight md:text-6xl">继续编译现实，直到复杂问题失去噪声。</p>
-          </div>
-          <div className="font-mono text-xs text-[#8f9599] md:text-right">
-            <a href="#top" className="font-bold text-[#f2efe7] transition-colors hover:text-[#f4c95d]">cstd@custard.top ↑</a>
-            <p className="mt-3">奶黄包个人技术工作室</p>
-            <p className="mt-1">2022–2026 / STILL BUILDING</p>
-          </div>
-        </div>
-      </footer>
+      <Suspense fallback={<div className="relative z-20 min-h-[70svh] bg-[#050709]" />}>
+        <LazyFinale />
+      </Suspense>
 
       {consoleOpen ? (
         <Suspense fallback={null}>
