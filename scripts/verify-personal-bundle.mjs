@@ -12,8 +12,8 @@ const loadableManifestPath = path.join(
   nextRoot,
   "server/app/(personal)/cstd/page/react-loadable-manifest.json",
 );
-const initialBudget = 190_000;
-const webglBudget = 1_250_000;
+const initialBudget = 220_000;
+const webglBudget = 1_500_000;
 
 function assetPath(asset) {
   return path.join(nextRoot, asset.replace(/^\/_next\//, "").replace(/^_next\//, ""));

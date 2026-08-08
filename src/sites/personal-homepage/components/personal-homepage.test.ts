@@ -7,6 +7,12 @@ const commandSource = readFileSync(new URL("./command-drawer.tsx", import.meta.u
 const directorSource = readFileSync(new URL("./scene-director.tsx", import.meta.url), "utf8");
 const broadcastSource = readFileSync(new URL("./project-broadcast.tsx", import.meta.url), "utf8");
 const ambienceSource = readFileSync(new URL("./ambient-sound.ts", import.meta.url), "utf8");
+const worldSource = readFileSync(new URL("./world-backdrop.tsx", import.meta.url), "utf8");
+const gateSource = readFileSync(new URL("../scenes/neural-gate/neural-gate.tsx", import.meta.url), "utf8");
+const sceneClockSource = readFileSync(new URL("../experience/scene-clock.ts", import.meta.url), "utf8");
+const sceneManifestSource = readFileSync(new URL("../experience/scene-manifest.ts", import.meta.url), "utf8");
+const qualitySource = readFileSync(new URL("../experience/quality-controller.ts", import.meta.url), "utf8");
+const assetManifestSource = readFileSync(new URL("../media/asset-manifest.ts", import.meta.url), "utf8");
 const globalsSource = readFileSync(new URL("../../../app/globals.css", import.meta.url), "utf8");
 const sectionSources = {
   signal: readFileSync(new URL("./sections/signal-strip.tsx", import.meta.url), "utf8"),
@@ -20,19 +26,19 @@ const chapterSource = Object.values(sectionSources).join("\n");
 
 describe("CSTD personal systems studio", () => {
   test("puts the personal identity and representative proof ahead of tooling", () => {
-    expect(landingSource).toContain('id="cstd-hero-title"');
-    expect(landingSource).toContain('aria-label="CSTD"');
-    expect(landingSource).toContain("把代码写进现实");
-    expect(landingSource).toContain("奶黄包的个人技术工作室");
-    expect(landingSource).toContain('href="#proof"');
+    expect(gateSource).toContain('id="cstd-hero-title"');
+    expect(gateSource).toContain('aria-label="CSTD"');
+    expect(gateSource).toContain("穿过一座由真实系统点亮的城市");
+    expect(gateSource).toContain("奶黄包的个人技术工作室");
+    expect(gateSource).toContain('href="#systems"');
+    expect(landingSource).toContain("<MemoizedNeuralGate");
     expect(landingSource).not.toContain("ProjectShowcase");
     expect(landingSource).not.toContain("project-comparison");
     expect(landingSource).not.toContain("project-directory");
   });
 
   test("keeps the WebGL identity progressive and desktop-only", () => {
-    expect(landingSource).toContain("cstd-neural-city-v3.webp");
-    expect(sceneSource).toContain("cstd-neural-city-v3.webp");
+    expect(assetManifestSource).toContain("cstd-neural-gate-v1.webp");
     expect(landingSource).toContain("desktopSceneQuery");
     expect(landingSource).toContain("enhancementsReady && desktopScene");
     expect(sceneSource).toContain("@react-three/fiber");
@@ -45,21 +51,25 @@ describe("CSTD personal systems studio", () => {
     expect(sceneSource).toContain("<CityWindowField");
     expect(sceneSource).toContain("data-cstd-neural-city");
     expect(sceneSource).toContain("<ArchiveSpine");
-    expect(sceneSource).toContain("deviceMemory");
+    expect(qualitySource).toContain("CstdFrameBudgetController");
+    expect(qualitySource).toContain("MAX_TEXTURE_SIZE");
+    expect(sceneSource).toContain("<QualityProbe");
     expect(sceneSource).toContain('dpr={quality === "full" ? [1, 1.25] : 1}');
   });
 
   test("does not download archive textures until the systems chapter is active", () => {
-    expect(landingSource).toContain('showArchive: activeChapter === "systems"');
+    expect(landingSource).toContain('activeSceneId === "systems" || activeSceneId === "path"');
     expect(sceneSource).toContain("props.showArchive ? (");
     expect(sceneSource).toContain("<ProgressiveArchiveLayer");
     expect(sceneSource).toContain("<SceneReady onReady={props.onReady}");
   });
 
   test("uses one native scroll loop instead of a motion runtime on first paint", () => {
-    expect(landingSource).toContain('window.addEventListener("scroll", requestSync, { passive: true })');
-    expect(landingSource).toContain("requestAnimationFrame(syncScroll)");
-    expect(landingSource).toContain("progressBarRef.current.style.transform");
+    expect(landingSource).toContain("useCstdSceneClock");
+    expect(sceneClockSource).toContain('window.addEventListener("scroll", requestSync, { passive: true })');
+    expect(sceneClockSource).toContain("requestAnimationFrame(sync)");
+    expect(sceneClockSource).toContain("progressBarRef.current.style.transform");
+    expect(sceneClockSource).toContain('root.dataset.cstdSceneCurrent = nextSceneId');
     expect(landingSource).not.toContain('from "framer-motion"');
     expect(landingSource).not.toContain("<LazyMotion");
     expect(landingSource).not.toContain("useMotionValue");
@@ -89,6 +99,9 @@ describe("CSTD personal systems studio", () => {
     expect(landingSource).toContain("data-cstd-crosshair");
     expect(globalsSource).toContain('[data-cstd-overdrive="true"] .cstd-glitch-title::before');
     expect(globalsSource).toContain('[data-cstd-motion="calm"] .cstd-hud-scan');
+    expect(globalsSource).toContain('transform: translate3d(-2%, 6%, 0)');
+    expect(globalsSource).toContain('[data-cstd-scene-current="path"] .cstd-memory-loader-scan');
+    expect(globalsSource).toContain('[data-cstd-kinetic-world]:has([data-cstd-render-quality="lite"]) .cstd-world-rain');
   });
 
   test("removes continuous decorative loops from the DOM chapters", () => {
@@ -117,7 +130,9 @@ describe("CSTD personal systems studio", () => {
     expect(chapterSource).toContain("data-cstd-learning-step={entry.year}");
     expect(sectionSources.path).toContain("setImageLoaded(true)");
     expect(sectionSources.path).toContain("cstd-memory-loader-scan");
-    expect(sectionSources.systems).not.toContain("min-h-[185svh]");
+    expect(sectionSources.systems).toContain("data-cstd-skill-reactor");
+    expect(sectionSources.systems).toContain("cstdTechnicalNotes");
+    expect(sectionSources.systems).toContain("data-cstd-reactor-map");
     expect(sectionSources.path).not.toContain("min-h-svh");
   });
 
@@ -132,6 +147,7 @@ describe("CSTD personal systems studio", () => {
     expect(sectionSources.proof).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
     expect(sectionSources.proof).toContain("{...targetProps}");
     expect(sceneSource).toContain('data-cstd-render-fallback={contextLost ? "true" : "false"}');
+    expect(sceneSource).toContain("preserveDrawingBuffer: true");
     expect(sceneSource).toContain('addEventListener("webglcontextlost"');
   });
 
@@ -148,38 +164,46 @@ describe("CSTD personal systems studio", () => {
     expect(landingSource).toContain("cstd-boot-sequence");
     expect(landingSource).toContain("data-cstd-neural-dive");
     expect(landingSource).toContain("diveDepthRef");
-    expect(sectionSources.proof).toContain("SYNC {99 - index * 2}.8%");
+    expect(sectionSources.proof).toContain("ENGINEERING DECISION");
+    expect(sectionSources.proof).toContain("WEBM + H264");
     expect(globalsSource).toContain(".cstd-live-feed-image");
     expect(globalsSource).toContain("@keyframes cstd-persona-scan");
   });
 
   test("directs every chapter through one scroll-native cinematic controller", () => {
-    expect(landingSource).toContain("<MemoizedSceneDirector activeChapter={activeChapter}");
-    expect(landingSource).toContain('style.setProperty("--cstd-scroll-velocity"');
-    expect(landingSource).toContain('style.setProperty("--cstd-chapter-shift"');
+    expect(landingSource).toContain("<MemoizedSceneDirector activeSceneId={activeSceneId}");
+    expect(sceneClockSource).toContain('style.setProperty("--cstd-scroll-velocity"');
+    expect(sceneClockSource).toContain('style.setProperty("--cstd-chapter-shift"');
     expect(landingSource).toContain("new IntersectionObserver(");
     expect(directorSource).toContain("data-cstd-scene-director");
     expect(directorSource).toContain("cstd-director-aperture");
+    expect(sceneManifestSource).toContain('id: "finale"');
+    expect(worldSource).toContain("getCstdSceneWindow");
     expect(globalsSource).toContain(".cstd-speed-lines");
   });
 
   test("plays lightweight project broadcasts only while their chapters are visible", () => {
     expect(sectionSources.proof).toContain("<ProjectBroadcast");
-    expect(sectionSources.proof).toContain("rocodex-broadcast-v1.webm");
-    expect(sectionSources.proof).toContain("alpha-broadcast-v1.webm");
-    expect(sectionSources.proof).toContain("crm-broadcast-v1.webm");
-    expect(broadcastSource).toContain('preload="none"');
+    expect(assetManifestSource).toContain("rocodex-broadcast-v1.webm");
+    expect(assetManifestSource).toContain("alpha-broadcast-v1.webm");
+    expect(assetManifestSource).toContain("crm-broadcast-v1.webm");
+    expect(assetManifestSource).toContain("rocodex-broadcast-v1.mp4");
+    expect(broadcastSource).toContain('preload="metadata"');
     expect(broadcastSource).toContain("video.play()");
     expect(broadcastSource).toContain("video.pause()");
-    expect(broadcastSource).toContain("rootMargin: \"180px 0px\"");
+    expect(broadcastSource).toContain("rootMargin: \"75% 0px\"");
+    expect(broadcastSource).toContain('type="video/webm"');
+    expect(broadcastSource).toContain('type="video/mp4"');
   });
 
   test("uses a coherent original visual universe across entry, archive, and finale", () => {
-    expect(landingSource).toContain("/cstd-universe/cstd-neural-city-v3.webp");
-    expect(sectionSources.systems).toContain("/cstd-universe/cstd-data-vault-v1.webp");
+    expect(assetManifestSource).toContain("/cstd-universe/cstd-neural-gate-v1.webp");
+    expect(assetManifestSource).toContain("/cstd-universe/cstd-skill-reactor-v1.webp");
+    expect(assetManifestSource).toContain("/cstd-universe/cstd-broadcast-nexus-v1.webp");
     expect(sectionSources.path).toContain("/cstd-universe/cstd-data-vault-v1.webp");
-    expect(sectionSources.finale).toContain("/cstd-universe/cstd-night-workstation-v1.webp");
-    expect(sectionSources.finale).toContain('data-cstd-generated-visual="night-workstation-v1"');
+    expect(assetManifestSource).toContain("/cstd-universe/cstd-night-workstation-v1.webp");
+    expect(assetManifestSource).toContain("/cstd-universe/cstd-departure-city-v1.webp");
+    expect(sectionSources.finale).toContain('data-cstd-generated-visual="departure-city-v1"');
   });
 
   test("keeps the reactive audio atmosphere explicitly user activated", () => {
@@ -187,6 +211,10 @@ describe("CSTD personal systems studio", () => {
     expect(landingSource).toContain("ambientSound.start()");
     expect(landingSource).toContain('data-cstd-ambience={ambienceOn ? "on" : "off"}');
     expect(ambienceSource).toContain("class AmbientSoundEngine");
+    expect(ambienceSource).toContain("city: GainNode");
+    expect(ambienceSource).toContain("data: GainNode");
+    expect(ambienceSource).toContain("rain: GainNode");
+    expect(ambienceSource).toContain("cue: GainNode");
     expect(ambienceSource).not.toContain("autoplay");
   });
 
