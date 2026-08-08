@@ -9,6 +9,7 @@ const sectionSources = {
   signal: readFileSync(new URL("./sections/signal-strip.tsx", import.meta.url), "utf8"),
   systems: readFileSync(new URL("./sections/systems-chapter.tsx", import.meta.url), "utf8"),
   proof: readFileSync(new URL("./sections/selected-work.tsx", import.meta.url), "utf8"),
+  operator: readFileSync(new URL("./sections/operator-profile.tsx", import.meta.url), "utf8"),
   path: readFileSync(new URL("./sections/research-path.tsx", import.meta.url), "utf8"),
 };
 const chapterSource = Object.values(sectionSources).join("\n");
@@ -33,6 +34,9 @@ describe("CSTD personal systems studio", () => {
     expect(sceneSource).toContain("<Canvas");
     expect(sceneSource).toContain("<shaderMaterial");
     expect(sceneSource).toContain("<ParticleCurrent");
+    expect(sceneSource).toContain("<NeuralCity");
+    expect(sceneSource).toContain("<NeuralBeacon");
+    expect(sceneSource).toContain("data-cstd-neural-city");
     expect(sceneSource).toContain("<ArchiveSpine");
     expect(sceneSource).toContain("deviceMemory");
     expect(sceneSource).toContain('dpr={quality === "full" ? [1, 1.25] : 1}');
@@ -62,6 +66,9 @@ describe("CSTD personal systems studio", () => {
     expect(commandSource).toContain('aria-label="关闭控制台"');
     expect(commandSource).toContain('event.key === "Escape"');
     expect(commandSource).toContain('case "breach"');
+    expect(commandSource).toContain('case "scan"');
+    expect(commandSource).toContain('case "jack"');
+    expect(commandSource).toContain("proof-${project.id}");
     expect(commandSource).toContain("onOverdrive();");
     expect(landingSource).toContain("const closeConsole = useCallback");
     expect(landingSource).toContain("onClose={closeConsole}");
@@ -91,10 +98,14 @@ describe("CSTD personal systems studio", () => {
   test("composes systems, proof, and research as concise interactive chapters", () => {
     expect(chapterSource).toContain('data-cstd-chapter="systems"');
     expect(chapterSource).toContain('data-cstd-chapter="proof"');
+    expect(chapterSource).toContain('data-cstd-chapter="operator"');
     expect(chapterSource).toContain('data-cstd-chapter="path"');
     expect(chapterSource).toContain("data-cstd-system={system.id}");
     expect(chapterSource).toContain("data-cstd-proof={proof.projectId}");
     expect(chapterSource).toContain("data-cstd-project-plane={proof.projectId}");
+    expect(chapterSource).toContain("data-cstd-live-feed={proof.projectId}");
+    expect(sectionSources.operator).toContain("cstd-night-runner-v1.webp");
+    expect(sectionSources.operator).toContain('data-cstd-generated-visual="night-runner-v1"');
     expect(chapterSource).toContain("data-cstd-learning-step={entry.year}");
     expect(sectionSources.path).toContain("setImageLoaded(true)");
     expect(sectionSources.path).toContain("cstd-memory-loader-scan");
@@ -123,5 +134,14 @@ describe("CSTD personal systems studio", () => {
     expect(landingSource).not.toContain("prefers-reduced-motion: reduce");
     expect(landingSource).toContain("reducedMotion={reducedMotion}");
     expect(sceneSource).toContain('frameloop={props.active && quality === "full" ? "always" : "demand"}');
+  });
+
+  test("ships the black-label boot, dive HUD, generated persona, and live project telemetry", () => {
+    expect(landingSource).toContain("cstd-boot-sequence");
+    expect(landingSource).toContain("data-cstd-neural-dive");
+    expect(landingSource).toContain("diveDepthRef");
+    expect(sectionSources.proof).toContain("SYNC {99 - index * 2}.8%");
+    expect(globalsSource).toContain(".cstd-live-feed-image");
+    expect(globalsSource).toContain("@keyframes cstd-persona-scan");
   });
 });

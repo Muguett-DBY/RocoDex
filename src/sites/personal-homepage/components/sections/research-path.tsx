@@ -78,7 +78,7 @@ function ResearchPath({ reducedMotion }: { reducedMotion: boolean }) {
       <div className="mx-auto max-w-[1540px]" data-cstd-path-stage>
         <header className="grid gap-8 border-b border-white/10 pb-12 lg:grid-cols-[1fr_28rem] lg:items-end">
           <div>
-            <p className="font-mono text-[11px] font-bold uppercase text-[#3dff8f]">03 // MEMORY PATH</p>
+            <p className="font-mono text-[11px] font-bold uppercase text-[#3dff8f]">04 // MEMORY PATH</p>
             <h2 id="path-heading" className="mt-5 max-w-5xl text-5xl font-semibold leading-[0.94] tracking-[0] md:text-7xl xl:text-8xl">
               学习不是履历，是人格芯片持续写入。
             </h2>

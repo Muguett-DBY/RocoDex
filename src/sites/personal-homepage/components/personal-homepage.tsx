@@ -30,6 +30,9 @@ const LazySystemsChapter = lazy(() =>
 const LazySelectedWork = lazy(() =>
   import("./sections/selected-work").then((module) => ({ default: module.MemoizedSelectedWork })),
 );
+const LazyOperatorProfile = lazy(() =>
+  import("./sections/operator-profile").then((module) => ({ default: module.MemoizedOperatorProfile })),
+);
 const LazyResearchPath = lazy(() =>
   import("./sections/research-path").then((module) => ({ default: module.MemoizedResearchPath })),
 );
@@ -41,12 +44,13 @@ const PersonalImmersiveScene = memo(
   ),
 );
 
-type ChapterId = "hero" | "systems" | "proof" | "path";
+type ChapterId = "hero" | "systems" | "proof" | "operator" | "path";
 type MotionMode = "full" | "calm";
 
 const chapterLinks = [
   { id: "systems", label: "系统" },
   { id: "proof", label: "作品" },
+  { id: "operator", label: "身份" },
   { id: "path", label: "路径" },
 ] as const;
 
@@ -54,8 +58,15 @@ const chapterLabels: Record<ChapterId, string> = {
   hero: "Studio",
   systems: "Systems",
   proof: "Selected work",
+  operator: "Operator",
   path: "Research path",
 };
+
+const neuralNodes = [
+  { id: "NODE-A", label: "ROCODEX", position: "right-[16%] top-[29%]", tone: "#f4d431" },
+  { id: "NODE-B", label: "ALPHA", position: "right-[31%] top-[50%]", tone: "#24e0ff" },
+  { id: "NODE-C", label: "CRM", position: "right-[10%] top-[62%]", tone: "#ff3b30" },
+] as const;
 
 const motionModeStorageKey = "cstd-motion-mode";
 const motionModeChangeEvent = "cstd-motion-mode-change";
@@ -174,6 +185,8 @@ export function PersonalHomepage() {
   const documentVisible = useDocumentVisibility();
   const rootRef = useRef<HTMLElement>(null);
   const coordinateRef = useRef<HTMLSpanElement>(null);
+  const diveDepthRef = useRef<HTMLSpanElement>(null);
+  const diveChapterRef = useRef<HTMLParagraphElement>(null);
   const pulseRef = useRef<HTMLSpanElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
@@ -214,6 +227,9 @@ export function PersonalHomepage() {
       if (progressBarRef.current) {
         progressBarRef.current.style.transform = `scaleX(${progress})`;
       }
+      if (diveDepthRef.current) {
+        diveDepthRef.current.textContent = `${String(Math.round(progress * 8192)).padStart(4, "0")}M`;
+      }
 
       const activationLine = window.innerHeight * 0.42;
       let nextChapter: ChapterId = "hero";
@@ -226,6 +242,9 @@ export function PersonalHomepage() {
       if (nextChapter !== activeChapterRef.current) {
         activeChapterRef.current = nextChapter;
         setActiveChapter(nextChapter);
+      }
+      if (diveChapterRef.current) {
+        diveChapterRef.current.textContent = chapterLabels[nextChapter].toUpperCase();
       }
     };
 
@@ -319,6 +338,13 @@ export function PersonalHomepage() {
         跳到主要内容
       </a>
 
+      <div aria-hidden="true" className="cstd-boot-sequence pointer-events-none fixed inset-0 z-[80] flex items-center justify-center bg-[#050709]">
+        <div className="font-mono text-center">
+          <p className="text-[10px] font-black text-[#24e0ff]">CSTD NEURAL LINK</p>
+          <p className="mt-2 text-3xl font-black text-[#f4d431]">BOOT://01</p>
+        </div>
+      </div>
+
       <div aria-hidden="true" className="fixed inset-0 z-0 overflow-hidden bg-[#0a0b0d]">
         <Image
           src="/cstd-world/cstd-night-ops-v1.webp"
@@ -362,6 +388,14 @@ export function PersonalHomepage() {
           style={{ left: "var(--cstd-pointer-x, 50%)", top: "var(--cstd-pointer-y, 42%)" }}
         />
         <span ref={pulseRef} className="cstd-click-pulse fixed h-10 w-10 -translate-x-1/2 -translate-y-1/2 opacity-0" />
+        <div data-cstd-neural-dive className="absolute bottom-7 left-6 hidden items-end gap-4 font-mono lg:flex">
+          <div>
+            <p className="text-[8px] font-black text-[#68757b]">NEURAL DIVE / DEPTH</p>
+            <p className="mt-1 text-lg font-black text-[#f4d431]"><span ref={diveDepthRef}>0000M</span></p>
+          </div>
+          <span aria-hidden="true" className="mb-1 h-8 w-px bg-[#24e0ff]/45" />
+          <p ref={diveChapterRef} className="mb-1 text-[9px] font-black text-[#24e0ff]">STUDIO</p>
+        </div>
       </div>
 
       <div
@@ -456,6 +490,14 @@ export function PersonalHomepage() {
         aria-labelledby="cstd-hero-title"
         className="relative z-10 flex min-h-[96svh] items-center px-5 pb-20 pt-28 contain-paint md:px-10 md:pt-32 lg:px-16"
       >
+        <div aria-hidden="true" data-cstd-neural-city-overlay className="pointer-events-none absolute inset-0 hidden lg:block">
+          {neuralNodes.map((node) => (
+            <span key={node.id} className={clsx("cstd-city-node absolute flex items-center gap-2 font-mono text-[9px] font-black", node.position)} style={{ color: node.tone }}>
+              <span className="h-1.5 w-1.5 bg-current shadow-[0_0_14px_currentColor]" />
+              {node.id} / {node.label}
+            </span>
+          ))}
+        </div>
         <div className="mx-auto grid w-full max-w-[1540px] gap-14 lg:grid-cols-[minmax(0,1fr)_19rem] lg:items-end lg:gap-20">
           <div className="max-w-6xl">
             <p className="flex items-center gap-3 font-mono text-[11px] font-bold uppercase text-[#f4d431] md:text-xs">
@@ -562,6 +604,10 @@ export function PersonalHomepage() {
 
       <Suspense fallback={<div className="relative z-20 min-h-[70svh] bg-[#f4d431]" />}>
         <LazySelectedWork reducedMotion={reducedMotion} />
+      </Suspense>
+
+      <Suspense fallback={<div className="relative z-20 min-h-[80svh] bg-[#050709]" />}>
+        <LazyOperatorProfile />
       </Suspense>
 
       <Suspense fallback={<div className="relative z-10 min-h-[70svh] bg-[#0a0b0d]" />}>
