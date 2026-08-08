@@ -3,6 +3,8 @@ import { describe, expect, test } from "vitest";
 
 const landingSource = readFileSync(new URL("./personal-homepage.tsx", import.meta.url), "utf8");
 const sceneSource = readFileSync(new URL("./immersive-scene.tsx", import.meta.url), "utf8");
+const liteSceneSource = readFileSync(new URL("./lite-immersive-scene.tsx", import.meta.url), "utf8");
+const postprocessingSource = readFileSync(new URL("./immersive-postprocessing.tsx", import.meta.url), "utf8");
 const commandSource = readFileSync(new URL("./command-drawer.tsx", import.meta.url), "utf8");
 const directorSource = readFileSync(new URL("./scene-director.tsx", import.meta.url), "utf8");
 const broadcastSource = readFileSync(new URL("./project-broadcast.tsx", import.meta.url), "utf8");
@@ -40,7 +42,8 @@ describe("CSTD personal systems studio", () => {
   test("keeps the WebGL identity progressive and desktop-only", () => {
     expect(assetManifestSource).toContain("cstd-neural-gate-v1.webp");
     expect(landingSource).toContain("desktopSceneQuery");
-    expect(landingSource).toContain("enhancementsReady && desktopScene");
+    expect(landingSource).toContain("detectImmersiveRuntime");
+    expect(landingSource).toContain('<LitePersonalImmersiveScene {...sceneProps} />');
     expect(sceneSource).toContain("@react-three/fiber");
     expect(sceneSource).toContain("<Canvas");
     expect(sceneSource).toContain("<shaderMaterial");
@@ -55,6 +58,11 @@ describe("CSTD personal systems studio", () => {
     expect(qualitySource).toContain("MAX_TEXTURE_SIZE");
     expect(sceneSource).toContain("<QualityProbe");
     expect(sceneSource).toContain('dpr={quality === "full" ? [1, 1.25] : 1}');
+    expect(sceneSource).toContain("const LazyImmersivePostprocessing = lazy(");
+    expect(sceneSource).not.toContain('from "@react-three/postprocessing"');
+    expect(postprocessingSource).toContain('from "@react-three/postprocessing"');
+    expect(liteSceneSource).toContain("data-cstd-lite-immersive");
+    expect(liteSceneSource).toContain('canvas.getContext("webgl"');
   });
 
   test("does not download archive textures until the systems chapter is active", () => {
@@ -171,9 +179,12 @@ describe("CSTD personal systems studio", () => {
   });
 
   test("directs every chapter through one scroll-native cinematic controller", () => {
-    expect(landingSource).toContain("<MemoizedSceneDirector activeSceneId={activeSceneId}");
+    expect(landingSource).toContain("const LazySceneDirector = lazy(");
+    expect(landingSource).toContain("<LazySceneDirector activeSceneId={activeSceneId}");
+    expect(landingSource).not.toContain('import { MemoizedSceneDirector');
     expect(sceneClockSource).toContain('style.setProperty("--cstd-scroll-velocity"');
     expect(sceneClockSource).toContain('style.setProperty("--cstd-chapter-shift"');
+    expect(sceneClockSource).toContain("if (window.scrollY > 1)");
     expect(landingSource).toContain("new IntersectionObserver(");
     expect(directorSource).toContain("data-cstd-scene-director");
     expect(directorSource).toContain("cstd-director-aperture");

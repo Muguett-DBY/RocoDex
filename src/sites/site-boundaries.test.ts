@@ -44,6 +44,7 @@ describe("site architecture boundaries", () => {
   it("owns personal homepage code inside one site module", () => {
     const expectedFiles = [
       "sites/personal-homepage/index.ts",
+      "sites/personal-homepage/routes.ts",
       "sites/personal-homepage/metadata.ts",
       "sites/personal-homepage/server.ts",
       "sites/personal-homepage/components/personal-homepage.tsx",
@@ -100,18 +101,22 @@ describe("site architecture boundaries", () => {
 
   it("keeps WebGL dependencies inside the personal homepage lazy scene", () => {
     const scenePath = sourcePath("sites/personal-homepage/components/immersive-scene.tsx");
+    const postprocessingPath = sourcePath("sites/personal-homepage/components/immersive-postprocessing.tsx");
+    const allowedWebglEntries = new Set([scenePath, postprocessingPath]);
     const heavyRuntimeImport = /(?:from\s+|import\s*\()\s*["'](?:@react-three\/(?:fiber|postprocessing)|postprocessing|three)["']/;
     const violations = collectSourceFiles(sourceRoot)
       .filter((file) => !file.endsWith(".test.ts") && !file.endsWith(".test.tsx"))
-      .filter((file) => file !== scenePath)
+      .filter((file) => !allowedWebglEntries.has(file))
       .filter((file) => heavyRuntimeImport.test(readFileSync(file, "utf8")))
       .map((file) => path.relative(repositoryRoot, file).replaceAll("\\", "/"));
 
     expect(violations).toEqual([]);
 
     const landingSource = readSource("sites/personal-homepage/components/personal-homepage.tsx");
+    const sceneSource = readFileSync(scenePath, "utf8");
     expect(landingSource).toContain('import("./immersive-scene")');
     expect(landingSource).toContain("{ ssr: false }");
+    expect(sceneSource).toContain('import("./immersive-postprocessing")');
   });
 
   it("removes the former personal-site files from generic RocoDex folders", () => {

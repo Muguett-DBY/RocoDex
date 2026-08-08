@@ -59,9 +59,11 @@ export function useCstdSceneClock({
 
       let nextSceneId: CstdSceneId = "hero";
       const activationLine = window.innerHeight * 0.52;
-      for (const scene of cstdSceneManifest) {
-        const element = document.getElementById(scene.elementId);
-        if (element && element.getBoundingClientRect().top <= activationLine) nextSceneId = scene.id;
+      if (window.scrollY > 1) {
+        for (const scene of cstdSceneManifest) {
+          const element = document.getElementById(scene.elementId);
+          if (element && element.getBoundingClientRect().top <= activationLine) nextSceneId = scene.id;
+        }
       }
 
       const scene = cstdSceneById[nextSceneId];

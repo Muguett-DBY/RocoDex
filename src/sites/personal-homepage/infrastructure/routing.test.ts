@@ -16,6 +16,21 @@ describe("CSTD host routing", () => {
 
   test("serves the CSTD landing route on both canonical and explicit CSTD paths", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd/work/rocodex-platform")).toEqual({ kind: "next" });
+  });
+
+  test("rewrites clean bilingual archive routes into the internal personal route group", () => {
+    expect(getPersonalSiteRouteDecision("custard.top", "/work")).toEqual({ kind: "rewrite", path: "/cstd/work" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/work/rocodex-platform")).toEqual({ kind: "rewrite", path: "/cstd/work/rocodex-platform" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/notes/evidence-first-ai-research")).toEqual({ kind: "rewrite", path: "/cstd/notes/evidence-first-ai-research" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/lab/data-lens")).toEqual({ kind: "rewrite", path: "/cstd/lab/data-lens" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/about")).toEqual({ kind: "rewrite", path: "/cstd/about" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en")).toEqual({ kind: "rewrite", path: "/cstd/en" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/work")).toEqual({ kind: "rewrite", path: "/cstd/en/work" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/notes")).toEqual({ kind: "rewrite", path: "/cstd/en/notes" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/lab")).toEqual({ kind: "rewrite", path: "/cstd/en/lab" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/work/cfzzs-crm")).toEqual({ kind: "rewrite", path: "/cstd/en/work/cfzzs-crm" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/resume")).toEqual({ kind: "rewrite", path: "/cstd/en/resume" });
   });
 
   test("returns not found for CSTD paths that belong on the RocoDex subdomain", () => {
@@ -46,6 +61,8 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/favicon.ico")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/robots.txt")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/sitemap.xml")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/rss.xml")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/api/cstd-vitals")).toEqual({ kind: "next" });
   });
 
   test("leaves RocoDex subdomain routes untouched", () => {

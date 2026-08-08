@@ -18,7 +18,7 @@
     "test:e2e": "playwright test",
     "test:architecture": "vitest run src/sites/site-boundaries.test.ts",
     "test:personal": "vitest run src/sites/personal-homepage src/sites/shared src/app/robots.txt src/app/sitemap.xml",
-    "test:e2e:personal": "playwright test e2e/personal-homepage.spec.ts",
+    "test:e2e:personal": "playwright test e2e/personal-homepage.spec.ts e2e/personal-archive.spec.ts",
     "test:e2e:rocodex": "playwright test e2e/rocodex.spec.ts",
     "audit:dependencies": "npm audit --audit-level=high",
     "verify:personal-bundle": "node scripts/verify-personal-bundle.mjs",

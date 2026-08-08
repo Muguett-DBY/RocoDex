@@ -13,9 +13,10 @@ import {
   useRef,
   useState,
   useSyncExternalStore,
+  type MouseEvent as ReactMouseEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
-import { cstdSystems, type CstdSystem } from "../content/systems";
+import type { CstdSystem } from "../content/systems";
 import { useCstdSceneClock } from "../experience/scene-clock";
 import {
   cstdSceneById,
@@ -23,9 +24,6 @@ import {
   type CstdSceneId,
 } from "../experience/scene-manifest";
 import { MemoizedNeuralGate } from "../scenes/neural-gate/neural-gate";
-import { ambientSound } from "./ambient-sound";
-import { MemoizedSceneDirector } from "./scene-director";
-import { MemoizedWorldBackdrop } from "./world-backdrop";
 
 const LazyCommandDrawer = lazy(() =>
   import("./command-drawer").then((module) => ({ default: module.CommandDrawer })),
@@ -48,6 +46,15 @@ const LazyResearchPath = lazy(() =>
 const LazyFinale = lazy(() =>
   import("./sections/finale").then((module) => ({ default: module.MemoizedFinale })),
 );
+const LazyCstdTelemetry = lazy(() =>
+  import("./site/cstd-telemetry").then((module) => ({ default: module.CstdTelemetry })),
+);
+const LazySceneDirector = lazy(() =>
+  import("./scene-director").then((module) => ({ default: module.MemoizedSceneDirector })),
+);
+const LazyWorldBackdrop = lazy(() =>
+  import("./world-backdrop").then((module) => ({ default: module.MemoizedWorldBackdrop })),
+);
 
 const PersonalImmersiveScene = memo(
   dynamic(
@@ -55,8 +62,15 @@ const PersonalImmersiveScene = memo(
     { ssr: false },
   ),
 );
+const LitePersonalImmersiveScene = memo(
+  dynamic(
+    () => import("./lite-immersive-scene").then((module) => module.LitePersonalImmersiveScene),
+    { ssr: false },
+  ),
+);
 
 type MotionMode = "full" | "calm";
+type ImmersiveRuntime = "pending" | "full" | "lite";
 
 const chapterLinks = cstdSceneManifest.filter(
   (scene) => scene.id !== "hero" && scene.id !== "finale",
@@ -66,6 +80,17 @@ const motionModeStorageKey = "cstd-motion-mode";
 const motionModeChangeEvent = "cstd-motion-mode-change";
 const desktopSceneQuery = "(min-width: 769px) and (pointer: fine)";
 let volatileMotionMode: MotionMode = "full";
+type AmbientSound = (typeof import("./ambient-sound"))["ambientSound"];
+let loadedAmbientSound: AmbientSound | null = null;
+let ambientSoundPromise: Promise<AmbientSound> | null = null;
+
+function loadAmbientSound() {
+  ambientSoundPromise ??= import("./ambient-sound").then((module) => {
+    loadedAmbientSound = module.ambientSound;
+    return module.ambientSound;
+  });
+  return ambientSoundPromise;
+}
 
 function subscribeMotionMode(onStoreChange: () => void) {
   window.addEventListener("storage", onStoreChange);
@@ -100,6 +125,21 @@ function getDesktopSceneSnapshot() {
 
 function getDesktopSceneServerSnapshot() {
   return false;
+}
+
+function detectImmersiveRuntime(): Exclude<ImmersiveRuntime, "pending"> {
+  const canvas = document.createElement("canvas");
+  const gl = canvas.getContext("webgl", { powerPreference: "high-performance" });
+  if (!gl) return "lite";
+  const debugInfo = gl.getExtension("WEBGL_debug_renderer_info") as {
+    UNMASKED_RENDERER_WEBGL: number;
+  } | null;
+  const renderer = String(gl.getParameter(debugInfo?.UNMASKED_RENDERER_WEBGL ?? gl.RENDERER));
+  const maximumTexture = Number(gl.getParameter(gl.MAX_TEXTURE_SIZE));
+  gl.getExtension("WEBGL_lose_context")?.loseContext();
+  return /swiftshader|llvmpipe|software rasterizer|softpipe/i.test(renderer) || maximumTexture < 8192
+    ? "lite"
+    : "full";
 }
 
 function useDeferredEnhancements() {
@@ -198,28 +238,39 @@ export function PersonalHomepage() {
     depthRef: diveDepthRef,
     chapterRef: diveChapterRef,
   });
-  const [activeSystemId, setActiveSystemId] = useState<CstdSystem["id"]>(cstdSystems[0].id);
+  const [activeSystemId, setActiveSystemId] = useState<CstdSystem["id"]>("product-surfaces");
   const [consoleOpen, setConsoleOpen] = useState(false);
   const [overdrive, setOverdrive] = useState(false);
   const [ambienceOn, setAmbienceOn] = useState(false);
+  const [immersiveRuntime, setImmersiveRuntime] = useState<ImmersiveRuntime>("pending");
   const openConsole = useCallback(() => setConsoleOpen(true), []);
   const closeConsole = useCallback(() => setConsoleOpen(false), []);
   const toggleOverdrive = useCallback(() => {
-    ambientSound.pulse();
     setOverdrive((current) => !current);
   }, []);
   const enableOverdrive = useCallback(() => setOverdrive(true), []);
   const toggleAmbience = useCallback(async () => {
     if (ambienceOn) {
-      ambientSound.stop();
+      loadedAmbientSound?.stop();
       setAmbienceOn(false);
       return;
     }
+    const ambientSound = await loadAmbientSound();
+    ambientSound.setScene(activeSceneId);
+    ambientSound.setOverdrive(overdrive);
     await ambientSound.start();
     setAmbienceOn(true);
-  }, [ambienceOn]);
+  }, [activeSceneId, ambienceOn, overdrive]);
 
-  useEffect(() => () => ambientSound.stop(), []);
+  useEffect(() => () => loadedAmbientSound?.stop(), []);
+
+  useEffect(() => {
+    if (!enhancementsReady || !desktopScene) return;
+    const frame = window.requestAnimationFrame(() => {
+      setImmersiveRuntime(detectImmersiveRuntime());
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [desktopScene, enhancementsReady]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -237,11 +288,12 @@ export function PersonalHomepage() {
 
   useEffect(() => {
     overdriveRef.current = overdrive;
-    ambientSound.setOverdrive(overdrive);
+    loadedAmbientSound?.setOverdrive(overdrive);
+    loadedAmbientSound?.pulse();
   }, [overdrive]);
 
   useEffect(() => {
-    ambientSound.setScene(activeSceneId);
+    loadedAmbientSound?.setScene(activeSceneId);
   }, [activeSceneId]);
 
   useEffect(() => {
@@ -323,7 +375,7 @@ export function PersonalHomepage() {
 
   function handlePointerDown(event: ReactPointerEvent<HTMLElement>) {
     if (reducedMotion) return;
-    ambientSound.pulse();
+    loadedAmbientSound?.pulse();
     impulseRef.current = 1;
     const pulse = pulseRef.current;
     if (!pulse) return;
@@ -343,6 +395,14 @@ export function PersonalHomepage() {
       // The in-session switch remains usable when storage is unavailable.
     }
     window.dispatchEvent(new Event(motionModeChangeEvent));
+  }
+
+  function handleArchiveNavigation(event: ReactMouseEvent<HTMLAnchorElement>, path: string) {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    const host = window.location.hostname.toLowerCase();
+    if (host === "custard.top" || host === "www.custard.top") return;
+    event.preventDefault();
+    window.location.assign(`/cstd${path}`);
   }
 
   return (
@@ -373,9 +433,12 @@ export function PersonalHomepage() {
         </div>
       </div>
 
-      <MemoizedWorldBackdrop activeSceneId={activeSceneId} />
+      <Suspense fallback={<div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 bg-[#050709]" />}>
+        <LazyWorldBackdrop activeSceneId={activeSceneId} />
+      </Suspense>
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
-        {enhancementsReady && desktopScene ? <PersonalImmersiveScene {...sceneProps} /> : null}
+        {enhancementsReady && desktopScene && immersiveRuntime === "full" ? <PersonalImmersiveScene {...sceneProps} /> : null}
+        {enhancementsReady && desktopScene && immersiveRuntime === "lite" ? <LitePersonalImmersiveScene {...sceneProps} /> : null}
       </div>
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[2] overflow-hidden">
         <div className="cstd-world-copy-shade absolute inset-0" />
@@ -413,7 +476,9 @@ export function PersonalHomepage() {
         </div>
       </div>
 
-      <MemoizedSceneDirector activeSceneId={activeSceneId} />
+      <Suspense fallback={null}>
+        <LazySceneDirector activeSceneId={activeSceneId} />
+      </Suspense>
 
       <div
         ref={progressBarRef}
@@ -438,17 +503,21 @@ export function PersonalHomepage() {
         </a>
 
         <div className="ml-auto flex items-center gap-2 md:gap-3">
-          <nav aria-label="主导航" className="hidden items-center gap-7 font-mono text-xs font-semibold text-[#a5aaad] md:flex">
+          <nav aria-label="主导航" className="hidden items-center gap-5 font-mono text-xs font-semibold text-[#a5aaad] md:flex">
             {chapterLinks.map((chapter) => (
               <a
                 key={chapter.id}
                 href={`#${chapter.id}`}
                 aria-current={activeSceneId === chapter.id ? "page" : undefined}
-                className="transition-colors hover:text-[#f4c95d] aria-[current=page]:text-[#f4c95d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4c95d]"
+                className="hidden transition-colors hover:text-[#f4c95d] aria-[current=page]:text-[#f4c95d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4c95d] xl:inline"
               >
                 {chapter.navLabel}
               </a>
             ))}
+            <span aria-hidden="true" className="hidden h-4 w-px bg-white/15 xl:block" />
+            <a href="/work" onClick={(event) => handleArchiveNavigation(event, "/work")} className="transition-colors hover:text-[#f4c95d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4c95d]">档案</a>
+            <a href="/notes" onClick={(event) => handleArchiveNavigation(event, "/notes")} className="transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]">札记</a>
+            <a href="/lab" onClick={(event) => handleArchiveNavigation(event, "/lab")} className="transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]">LAB</a>
           </nav>
           <a
             href="#proof"
@@ -559,6 +628,9 @@ export function PersonalHomepage() {
           />
         </Suspense>
       ) : null}
+      <Suspense fallback={null}>
+        <LazyCstdTelemetry page="home" />
+      </Suspense>
     </main>
   );
 }
