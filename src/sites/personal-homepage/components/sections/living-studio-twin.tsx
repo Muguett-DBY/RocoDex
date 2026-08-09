@@ -70,8 +70,8 @@ function LivingStudioTwin({
       className="relative z-20 overflow-hidden border-y border-[#24e0ff]/25 bg-[#06080a]/90 px-5 py-24 text-[#f2efe7] md:px-10 lg:px-16 lg:py-32"
     >
       <Image
-        src="/cstd-universe/cstd-observatory-core-v3.webp"
-        alt="近未来工程观测站与发光证据核心"
+        src="/cstd-universe/cstd-core-world-v4.webp"
+        alt="五个能力区域与发布观测站连接到中央 CSTD 核心"
         fill
         sizes="100vw"
         className="object-cover object-[64%_50%] opacity-50"
@@ -83,13 +83,13 @@ function LivingStudioTwin({
         <header className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_30rem] lg:items-end">
           <div>
             <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#24e0ff]">
-              <Activity aria-hidden="true" className="h-4 w-4" /> 01 / ENGINEERING OBSERVATORY
+              <Activity aria-hidden="true" className="h-4 w-4" /> 02 / CSTD CORE / LIVE SYSTEM MAP
             </p>
             <h2 id="studio-twin-heading" className="mt-6 max-w-4xl text-5xl font-semibold leading-[0.92] md:text-7xl xl:text-8xl">
-              不展示在线绿点，<span className="text-[#f4d431]">展示它为什么可信。</span>
+              能力不是图标，<span className="text-[#f4d431]">是一座持续运行的系统。</span>
             </h2>
             <p className="mt-6 max-w-3xl text-base leading-8 text-[#bbc4c7] md:text-lg">
-              五个能力区域仍由真实案例供电；现在进一步连接构建环境、提交来源、测试闸门、静态输出、资源预算与内容健康。访问时读取已发布快照，不等待第三方接口。
+              五个能力区域围绕 CSTD Core 运转，并连接构建环境、提交来源、测试闸门、静态输出、资源预算与内容健康。切换区域会重组当前证据视图，访问时只读取已发布快照，不等待第三方接口。
             </p>
           </div>
 
@@ -153,7 +153,7 @@ function LivingStudioTwin({
               <div className="mt-5 grid grid-cols-4 gap-2" aria-label="发布时间线">
                 {cstdStudioSnapshot.releases.map((entry, index) => (
                   <button
-                    key={`${entry.date}-${entry.kind}`}
+                    key={entry.id}
                     type="button"
                     aria-label={`${entry.date} ${entry.title.zh}`}
                     onClick={() => { setPlaying(false); setReplayIndex(index); }}
@@ -229,6 +229,7 @@ function LivingStudioTwin({
             <div className="flex flex-wrap gap-x-7 gap-y-4 border-t border-white/15 px-5 py-6 font-mono text-[9px] font-black md:px-8">
               <CstdLink href="/observatory.json" className="inline-flex items-center gap-2 text-[#24e0ff] hover:text-white">OBSERVATORY.JSON <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" /></CstdLink>
               <CstdLink href="/content-health.json" className="inline-flex items-center gap-2 text-[#3dff8f] hover:text-white">CONTENT {observatory.content.score}/100 <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" /></CstdLink>
+              <CstdLink href="/performance.json" className="inline-flex items-center gap-2 text-[#ff8a82] hover:text-white">PERFORMANCE CONTRACT <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" /></CstdLink>
               <CstdLink href="/studio.json" className="inline-flex items-center gap-2 text-[#f4d431] hover:text-white"><Fingerprint aria-hidden="true" className="h-3.5 w-3.5" /> {observatory.provenanceDigest.toUpperCase()}</CstdLink>
               <CstdLink href="/map" className="inline-flex items-center gap-2 text-[#b7c0c3] hover:text-white">OPEN KNOWLEDGE MAP <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" /></CstdLink>
             </div>

@@ -6,10 +6,11 @@ describe("CSTD proof mesh", () => {
   test("publishes one build-time proof node for every case", () => {
     expect(cstdProofMesh.map((entry) => entry.caseSlug).sort()).toEqual(cstdCaseStudies.map((entry) => entry.slug).sort());
     expect(cstdProofMeshManifest.schemaVersion).toBe(2);
-    expect(cstdProofMeshManifest.release).toBe("CSTD-9.0");
+    expect(cstdProofMeshManifest.release).toBe("CSTD-17.0");
     expect(cstdProofMeshManifest.totals.artifacts).toBeGreaterThanOrEqual(20);
     expect(cstdProofMeshManifest.related.graph).toBe("https://custard.top/graph.json");
     expect(cstdProofMeshManifest.related.observatory).toBe("https://custard.top/observatory.json");
+    expect(cstdProofMeshManifest.related.performance).toBe("https://custard.top/performance.json");
   });
 
   test("requires multi-lane evidence and bounded scores", () => {

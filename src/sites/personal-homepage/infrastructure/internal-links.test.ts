@@ -5,7 +5,7 @@ import { cstdLabs } from "../content/labs";
 import { cstdTechnicalNotes } from "../content/technical-notes";
 
 function publicRoutes() {
-  const stable = ["/", "/work", "/notes", "/lab", "/map", "/about", "/now", "/resume", "/resume.json", "/proof.json", "/observatory.json", "/content-health.json"];
+  const stable = ["/", "/work", "/notes", "/lab", "/map", "/about", "/now", "/resume", "/resume.json", "/proof.json", "/observatory.json", "/content-health.json", "/performance.json", "/experience.json"];
   const zh = [
     ...stable,
     ...cstdCaseStudies.map((entry) => `/work/${entry.slug}`),

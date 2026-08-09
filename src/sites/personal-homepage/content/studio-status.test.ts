@@ -5,7 +5,7 @@ describe("CSTD living studio snapshot", () => {
   test("derives five districts from published proof instead of hand-written status", () => {
     const snapshot = createCstdStudioSnapshot(new Date("2026-08-09T12:00:00Z"));
 
-    expect(snapshot.release).toBe("CSTD-9.0");
+    expect(snapshot.release).toBe("CSTD-17.0");
     expect(snapshot.schemaVersion).toBe(3);
     expect(snapshot.source).toBe("build-time-public-evidence");
     expect(snapshot.provenance.contract).toBe("cstd.studio-snapshot/v3");

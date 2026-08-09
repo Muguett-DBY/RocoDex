@@ -1,5 +1,14 @@
 import type { NextConfig } from "next";
 
+const cstdImmutableAssetRoots = [
+  "cstd-archive",
+  "cstd-broadcasts",
+  "cstd-districts",
+  "cstd-persona",
+  "cstd-universe",
+  "cstd-world",
+] as const;
+
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
@@ -7,20 +16,10 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 2_678_400,
   },
   async headers() {
-    return [
-      {
-        source: "/cstd-districts/:path*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
-      },
-      {
-        source: "/cstd-universe/:path*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
-      },
-      {
-        source: "/cstd-broadcasts/:path*",
-        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
-      },
-    ];
+    return cstdImmutableAssetRoots.map((root) => ({
+      source: `/${root}/:path*`,
+      headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+    }));
   },
 };
 

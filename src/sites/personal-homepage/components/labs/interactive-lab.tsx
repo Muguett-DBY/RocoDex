@@ -1,10 +1,12 @@
 "use client";
 
-import { ArrowRight, Pause, Play, RotateCcw } from "lucide-react";
+import { ArrowRight, CheckCircle2, Copy, GitCommitHorizontal, Pause, Play, RotateCcw, ShieldX } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import type { CstdLab } from "../../content/labs";
+import { buildCstdDcfSensitivity, calculateCstdDcf } from "../../domain/dcf-model";
 import { detectCstdRuntimeCapabilities, type CstdRuntimeCapabilities } from "../../experience/runtime-capabilities";
+import { getPersonalSiteRouteDecision } from "../../infrastructure/routing";
 import { ProofMuseumLab } from "./proof-museum";
 
 type TraceStep = {
@@ -64,21 +66,31 @@ function TraceTimeline({ locale, steps, active, staleFrom }: { locale: CstdLocal
 }
 
 function SystemTraceLab({ locale }: { locale: CstdLocale }) {
+  const [host, setHost] = useState("custard.top");
+  const [path, setPath] = useState("/work");
+  const decision = useMemo(() => getPersonalSiteRouteDecision(host, path), [host, path]);
+  const decisionTarget = decision.kind === "rewrite" ? decision.path : decision.kind === "redirect" ? decision.host : decision.kind;
   const steps = useMemo<readonly TraceStep[]>(() => locale === "zh" ? [
-    { label: "接收请求", detail: "读取 Host、路径与方法，不初始化任何产品运行时。", signal: "EDGE" },
-    { label: "Host 决策", detail: "custard.top 的公开路径被映射到个人站内部路由。", signal: "PROXY" },
-    { label: "路由所有权", detail: "(personal) route group 接管页面，不加载 RocoDex Provider。", signal: "ROUTE" },
-    { label: "站点 API", detail: "页面只从 personal-homepage 的 public entry 读取。", signal: "MODULE" },
-    { label: "渐进渲染", detail: "内容先到达，Canvas、向导与监控按生命周期增强。", signal: "RENDER" },
+    { label: "接收请求", detail: `读取 ${host}${path}，此时不初始化任何产品运行时。`, signal: "EDGE" },
+    { label: "Host 决策", detail: decision.kind === "redirect" ? `规范域名并重定向到 ${decision.host}。` : decision.kind === "next" ? "该 Host 不属于个人主站，继续交给 RocoDex。" : "命中 custard.top 的独立主站边界。", signal: "PROXY" },
+    { label: "路由所有权", detail: decision.kind === "rewrite" ? `公开路径被内部改写到 ${decision.path}。` : decision.kind === "not-found" ? "未知主站路径在边界处直接返回 404。" : "无需内部改写，沿当前路由继续。", signal: "ROUTE" },
+    { label: "站点模块", detail: decision.kind === "rewrite" ? "(personal) route group 只读取 personal-homepage 公共入口。" : "模块所有权保持不变，不发生跨站 Provider 泄漏。", signal: "MODULE" },
+    { label: "可见结果", detail: `决策 ${decision.kind.toUpperCase()} / ${decisionTarget}，内容优先到达，视觉层随后增强。`, signal: "RENDER" },
   ] : [
-    { label: "Receive request", detail: "Read host, path, and method before any product runtime initializes.", signal: "EDGE" },
-    { label: "Host decision", detail: "Public custard.top paths map to internal portfolio routes.", signal: "PROXY" },
-    { label: "Route ownership", detail: "The (personal) group takes over without RocoDex providers.", signal: "ROUTE" },
-    { label: "Site API", detail: "The page reads only from the portfolio public entry point.", signal: "MODULE" },
-    { label: "Progressive render", detail: "Content arrives first; canvas, guide, and telemetry enhance by lifecycle.", signal: "RENDER" },
-  ], [locale]);
+    { label: "Receive request", detail: `Read ${host}${path} before any product runtime initializes.`, signal: "EDGE" },
+    { label: "Host decision", detail: decision.kind === "redirect" ? `Canonicalize and redirect to ${decision.host}.` : decision.kind === "next" ? "This host is not the portfolio; continue into RocoDex." : "Match the isolated custard.top boundary.", signal: "PROXY" },
+    { label: "Route ownership", detail: decision.kind === "rewrite" ? `Rewrite the public path internally to ${decision.path}.` : decision.kind === "not-found" ? "Reject the unknown portfolio path at the boundary." : "Continue without an internal rewrite.", signal: "ROUTE" },
+    { label: "Site module", detail: decision.kind === "rewrite" ? "The (personal) group reads only from the portfolio public entry point." : "Module ownership remains unchanged with no cross-site provider leak.", signal: "MODULE" },
+    { label: "Visible result", detail: `Decision ${decision.kind.toUpperCase()} / ${decisionTarget}; content arrives before visual enhancement.`, signal: "RENDER" },
+  ], [decision, decisionTarget, host, locale, path]);
   const [active, setActive] = useState(0);
   const [playing, setPlaying] = useState(false);
+
+  function updateRequest(setter: (value: string) => void, value: string) {
+    setter(value);
+    setPlaying(false);
+    setActive(0);
+  }
 
   useEffect(() => {
     if (!playing) return;
@@ -95,8 +107,13 @@ function SystemTraceLab({ locale }: { locale: CstdLocale }) {
   return (
     <div data-cstd-lab="system-trace">
       <div className="flex flex-wrap items-center justify-between gap-5">
-        <div><p className="font-mono text-[9px] font-black text-[#24e0ff]">LIVE REQUEST / custard.top/work</p><p className="mt-2 text-sm text-[#8f9ba0]">{locale === "zh" ? "逐步执行一条生产请求。" : "Execute one production request step by step."}</p></div>
+        <div><p className="font-mono text-[9px] font-black text-[#24e0ff]">LIVE REQUEST / ROUTING CONTRACT</p><p className="mt-2 text-sm text-[#8f9ba0]">{locale === "zh" ? "修改 Host 与路径，执行真实边界函数。" : "Change host and path, then execute the real boundary function."}</p></div>
         <PlaybackControls locale={locale} playing={playing} canAdvance={active < steps.length - 1} onToggle={() => setPlaying((value) => !value)} onReset={() => { setPlaying(false); setActive(0); }} onAdvance={() => setActive((value) => Math.min(steps.length - 1, value + 1))} />
+      </div>
+      <div className="mt-7 grid gap-px bg-white/12 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_12rem]">
+        <label className="bg-[#07090b] p-4 font-mono text-[8px] font-black text-[#78858a]">HOST<input value={host} onChange={(event) => updateRequest(setHost, event.target.value)} className="mt-2 h-11 w-full border border-white/15 bg-black/25 px-3 font-mono text-sm text-white outline-none focus:border-[#24e0ff]" /></label>
+        <label className="bg-[#07090b] p-4 font-mono text-[8px] font-black text-[#78858a]">PATH<input value={path} onChange={(event) => updateRequest(setPath, event.target.value)} className="mt-2 h-11 w-full border border-white/15 bg-black/25 px-3 font-mono text-sm text-white outline-none focus:border-[#24e0ff]" /></label>
+        <div data-cstd-route-decision={decision.kind} className="flex min-h-20 flex-col justify-center bg-[#071012] p-4"><p className="font-mono text-[8px] font-black text-[#78858a]">DECISION</p><p className="mt-2 break-all font-mono text-sm font-black text-[#f4d431]">{decision.kind.toUpperCase()}<span className="mt-1 block text-[8px] text-[#24e0ff]">{decisionTarget}</span></p></div>
       </div>
       <TraceTimeline locale={locale} steps={steps} active={active} />
       <div className="mt-6 border-l-2 border-[#f4d431] bg-black/25 p-5 font-mono text-[10px] leading-6 text-[#b9c2c4]" aria-live="polite">
@@ -123,6 +140,9 @@ function AgentReplayLab({ locale }: { locale: CstdLocale }) {
   const [active, setActive] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [injectStale, setInjectStale] = useState(false);
+  const [serverVersion, setServerVersion] = useState(7);
+  const [clientVersion, setClientVersion] = useState(7);
+  const [commitState, setCommitState] = useState<"clean" | "committed" | "conflict">("clean");
 
   useEffect(() => {
     if (!playing) return;
@@ -135,6 +155,23 @@ function AgentReplayLab({ locale }: { locale: CstdLocale }) {
     }), 900);
     return () => window.clearInterval(timer);
   }, [playing, steps.length]);
+
+  function injectConcurrentEdit() {
+    setServerVersion((value) => value + 1);
+    setCommitState("clean");
+  }
+
+  function commitDraft() {
+    if (clientVersion !== serverVersion) {
+      setCommitState("conflict");
+      window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: "lab_conflict", value: 409 } }));
+      return;
+    }
+    const next = serverVersion + 1;
+    setServerVersion(next);
+    setClientVersion(next);
+    setCommitState("committed");
+  }
 
   return (
     <div data-cstd-lab="agent-replay">
@@ -151,26 +188,36 @@ function AgentReplayLab({ locale }: { locale: CstdLocale }) {
           ? (locale === "zh" ? "发布被拒绝：令牌 042 已被 043 取代。旧任务完成了计算，但没有覆盖新事实。" : "Publication rejected: token 042 was superseded by 043. The old job finished computation but did not overwrite newer truth.")
           : (locale === "zh" ? "当前运行仍拥有写权限。开启注入并播放到最后，观察过期保护。" : "The current run still owns write authority. Enable injection and play to the end to observe stale-run protection.")}
       </div>
+      <div data-cstd-conflict-forge data-cstd-conflict-state={commitState} className="mt-8 border-y border-white/15 bg-black/20 p-5 md:p-6">
+        <div className="flex flex-wrap items-start justify-between gap-5">
+          <div><p className="font-mono text-[9px] font-black text-[#f4d431]">OPTIMISTIC LOCK / CRM VERSION FORGE</p><p className="mt-2 text-sm leading-6 text-[#8f9ba0]">{locale === "zh" ? "让另一位操作者先写入，再提交当前草稿，观察版本锁如何拒绝覆盖。" : "Let another operator write first, then submit this draft to see the version lock reject overwrite."}</p></div>
+          <div className="flex gap-2">
+            <button type="button" onClick={injectConcurrentEdit} className="h-10 border border-[#24e0ff]/45 px-3 font-mono text-[8px] font-black text-[#24e0ff] hover:bg-[#24e0ff] hover:text-black">{locale === "zh" ? "注入并发编辑" : "Concurrent edit"}</button>
+            <button type="button" onClick={commitDraft} className="inline-flex h-10 items-center gap-2 bg-[#f4d431] px-3 font-mono text-[8px] font-black text-black hover:bg-white"><GitCommitHorizontal aria-hidden="true" className="h-3.5 w-3.5" />{locale === "zh" ? "提交草稿" : "Commit draft"}</button>
+          </div>
+        </div>
+        <div className="mt-6 grid gap-px bg-white/12 sm:grid-cols-3">
+          <div className="bg-[#07090b] p-4"><p className="font-mono text-[8px] font-black text-[#78858a]">CLIENT VERSION</p><p className="mt-2 font-mono text-3xl font-black text-[#24e0ff]">v{clientVersion}</p></div>
+          <div className="bg-[#07090b] p-4"><p className="font-mono text-[8px] font-black text-[#78858a]">SERVER VERSION</p><p className="mt-2 font-mono text-3xl font-black text-[#f4d431]">v{serverVersion}</p></div>
+          <div aria-live="polite" className="bg-[#07090b] p-4"><p className="font-mono text-[8px] font-black text-[#78858a]">COMMIT RESULT</p><p className={`mt-2 flex items-center gap-2 font-mono text-sm font-black ${commitState === "conflict" ? "text-[#ff5a50]" : "text-[#3dff8f]"}`}>{commitState === "conflict" ? <ShieldX aria-hidden="true" className="h-4 w-4" /> : <CheckCircle2 aria-hidden="true" className="h-4 w-4" />}{commitState === "conflict" ? "409 VERSION CONFLICT" : commitState === "committed" ? "200 COMMITTED" : "READY"}</p></div>
+        </div>
+        <button type="button" onClick={() => { setServerVersion(7); setClientVersion(7); setCommitState("clean"); }} className="mt-5 inline-flex items-center gap-2 font-mono text-[8px] font-black text-[#8f9ba0] hover:text-white"><RotateCcw aria-hidden="true" className="h-3.5 w-3.5" />RESET VERSIONS</button>
+      </div>
     </div>
   );
-}
-
-function presentValue(growth: number, discount: number) {
-  const baseCashFlow = 100;
-  const years = Array.from({ length: 5 }, (_, index) => baseCashFlow * (1 + growth) ** (index + 1));
-  const explicit = years.reduce((sum, cashFlow, index) => sum + cashFlow / (1 + discount) ** (index + 1), 0);
-  const terminalGrowth = Math.min(0.03, Math.max(0.005, growth * 0.45));
-  const terminal = years.at(-1)! * (1 + terminalGrowth) / Math.max(0.01, discount - terminalGrowth);
-  return { years, value: explicit + terminal / (1 + discount) ** 5 };
 }
 
 function DataLensLab({ locale }: { locale: CstdLocale }) {
   const [growth, setGrowth] = useState(6);
   const [discount, setDiscount] = useState(10);
   const [margin, setMargin] = useState(25);
-  const base = presentValue(growth / 100, discount / 100);
-  const bear = presentValue(Math.max(0, growth - 2) / 100, (discount + 1.5) / 100).value;
-  const bull = presentValue((growth + 2) / 100, Math.max(4, discount - 1.5) / 100).value;
+  const base = calculateCstdDcf(growth / 100, discount / 100);
+  const bear = calculateCstdDcf(Math.max(0, growth - 2) / 100, (discount + 1.5) / 100).value;
+  const bull = calculateCstdDcf((growth + 2) / 100, Math.max(4, discount - 1.5) / 100).value;
+  const sensitivity = buildCstdDcfSensitivity(growth, discount);
+  const sensitivityValues = sensitivity.flat().map((cell) => cell.value);
+  const sensitivityMin = Math.min(...sensitivityValues);
+  const sensitivityRange = Math.max(1, Math.max(...sensitivityValues) - sensitivityMin);
   const buyLine = base.value * (1 - margin / 100);
   const maxCash = Math.max(...base.years);
   const path = base.years.map((cashFlow, index) => `${index === 0 ? "M" : "L"} ${40 + index * 120} ${180 - (cashFlow / maxCash) * 130}`).join(" ");
@@ -208,6 +255,21 @@ function DataLensLab({ locale }: { locale: CstdLocale }) {
           ].map((metric) => <div key={metric.label} className="border-white/12 p-4 odd:border-r md:border-r md:last:border-r-0"><dt className="font-mono text-[8px] font-black text-[#68757b]">{metric.label.toUpperCase()}</dt><dd className={`mt-2 text-xl font-semibold ${metric.color}`}>{metric.value.toFixed(0)}</dd></div>)}
         </dl>
         <p className="mt-5 text-xs leading-6 text-[#78858a]">{copy.note}</p>
+        <div data-cstd-dcf-sensitivity className="mt-8 overflow-x-auto border-y border-white/15 py-5">
+          <div className="mb-4 flex items-center justify-between gap-5"><p className="font-mono text-[9px] font-black text-[#24e0ff]">5 × 5 SENSITIVITY SURFACE</p><button type="button" onClick={() => void navigator.clipboard?.writeText(JSON.stringify({ growth, discount, margin, value: Number(base.value.toFixed(2)) }))} aria-label={locale === "zh" ? "复制当前估值场景" : "Copy valuation scenario"} title={locale === "zh" ? "复制当前估值场景" : "Copy valuation scenario"} className="flex h-9 w-9 items-center justify-center border border-white/18 text-[#8f9ba0] hover:border-[#f4d431] hover:text-[#f4d431]"><Copy aria-hidden="true" className="h-4 w-4" /></button></div>
+          <div className="grid min-w-[34rem] grid-cols-[4.5rem_repeat(5,minmax(0,1fr))] gap-px bg-white/12">
+            <div className="bg-[#07090b] p-2 font-mono text-[7px] font-black text-[#68757b]">WACC \ G</div>
+            {sensitivity[0].map((cell) => <div key={`g-${cell.growth}`} className="bg-[#07090b] p-2 text-center font-mono text-[8px] font-black text-[#24e0ff]">{cell.growth.toFixed(1)}%</div>)}
+            {sensitivity.map((row) => [
+              <div key={`d-${row[0].discount}`} className="bg-[#07090b] p-3 text-center font-mono text-[8px] font-black text-[#f4d431]">{row[0].discount.toFixed(1)}%</div>,
+              ...row.map((cell) => {
+                const intensity = (cell.value - sensitivityMin) / sensitivityRange;
+                const activeCell = cell.growth === growth && cell.discount === discount;
+                return <button key={`${cell.discount}-${cell.growth}`} type="button" onClick={() => { setGrowth(cell.growth); setDiscount(cell.discount); }} aria-label={locale === "zh" ? `估值场景：增长 ${cell.growth}%，折现 ${cell.discount}%，价值 ${cell.value.toFixed(0)}` : `Valuation scenario: growth ${cell.growth}%, discount ${cell.discount}%, value ${cell.value.toFixed(0)}`} className={`min-h-12 p-2 font-mono text-[9px] font-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#f4d431] ${activeCell ? "ring-2 ring-inset ring-[#f4d431]" : ""}`} style={{ backgroundColor: `rgba(36,224,255,${(0.08 + intensity * 0.42).toFixed(3)})` }}>{cell.value.toFixed(0)}</button>;
+              }),
+            ])}
+          </div>
+        </div>
       </div>
     </div>
   );

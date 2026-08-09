@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "release": "CSTD-17.0",
+  "budgets": {
+    "initialJavascriptBytes": 150000,
+    "liteWebglBytes": 20000,
+    "baseWebglBytes": 1000000,
+    "fullWebglBytes": 1500000,
+    "webgpuBytes": 24000,
+    "sceneAssetBytes": 320000,
+    "universeAssetBytes": 3500000,
+    "desktopLcpMilliseconds": 1800,
+    "mobileLcpMilliseconds": 2500,
+    "inpMilliseconds": 150,
+    "cls": 0.03,
+    "highTierFramesPerSecond": 55
+  },
+  "delivery": {
+    "runtimeFallbackOrder": ["webgpu", "webgl", "image"],
+    "immutableAssetRoots": ["cstd-archive", "cstd-broadcasts", "cstd-districts", "cstd-persona", "cstd-universe", "cstd-world"],
+    "imageFormats": ["avif", "webp"],
+    "imageMinimumCacheTtlSeconds": 2678400
+  },
+  "cacheComponents": {
+    "status": "evaluated-not-enabled",
+    "reason": "The portfolio is already statically generated and uses force-static public contracts. Enabling Cache Components before migrating those route contracts would reduce predictability without improving the current static delivery path."
+  },
+  "invariants": [
+    "three-js-never-enters-initial-homepage-js",
+    "gpu-runtimes-remain-async-and-tiered",
+    "versioned-cstd-assets-are-immutable",
+    "content-remains-available-without-canvas",
+    "document-scroll-is-never-hijacked"
+  ]
+}

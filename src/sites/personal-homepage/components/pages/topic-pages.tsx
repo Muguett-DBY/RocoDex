@@ -6,7 +6,7 @@ import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
 import type { CstdLocale } from "../../content/content-types";
 import { cstdLabs, getLabPath } from "../../content/labs";
 import { cstdTechnicalNotes, getTechnicalNotePath } from "../../content/technical-notes";
-import { cstdTopics, getCstdTopic, getCstdTopicPath } from "../../content/topics";
+import { cstdTopics, getCstdTopic, getCstdTopicPath, getCstdTopicSequence } from "../../content/topics";
 import { CstdLink } from "../site/cstd-link";
 import { CstdSiteChrome } from "../site/cstd-site-chrome";
 import { StructuredData } from "../site/structured-data";
@@ -70,7 +70,8 @@ export function CstdTopicPage({ locale, slug }: { locale: CstdLocale; slug: stri
   const cases = topic.caseSlugs.flatMap((caseSlug) => cstdCaseStudies.filter((entry) => entry.slug === caseSlug));
   const notes = topic.noteSlugs.flatMap((noteSlug) => cstdTechnicalNotes.filter((entry) => entry.slug === noteSlug));
   const labs = topic.labSlugs.flatMap((labSlug) => cstdLabs.filter((entry) => entry.slug === labSlug));
-  const copy = locale === "zh" ? { back: "全部主题", cases: "真实系统", notes: "工程札记", labs: "可运行实验", open: "打开证据" } : { back: "All topics", cases: "Shipped systems", notes: "Engineering notes", labs: "Executable labs", open: "Open evidence" };
+  const sequence = getCstdTopicSequence(topic.slug)!;
+  const copy = locale === "zh" ? { back: "全部主题", cases: "真实系统", notes: "工程札记", labs: "可运行实验", open: "打开证据", path: "连续判断路径", next: "下一条路径" } : { back: "All topics", cases: "Shipped systems", notes: "Engineering notes", labs: "Executable labs", open: "Open evidence", path: "Continuous judgment path", next: "Next path" };
 
   return (
     <CstdSiteChrome locale={locale} page={`topic-${topic.slug}`}>
@@ -83,6 +84,15 @@ export function CstdTopicPage({ locale, slug }: { locale: CstdLocale; slug: stri
           </div>
         </section>
 
+        <nav data-cstd-topic-path aria-label={copy.path} className="border-b border-white/12 bg-[#07090b] px-5 py-7 md:px-10 lg:px-16">
+          <div className="mx-auto max-w-[1320px]">
+            <div className="flex items-center justify-between gap-5 font-mono text-[8px] font-black text-[#718087]"><span>{copy.path.toUpperCase()}</span><span>{String(sequence.position).padStart(2, "0")} / {String(sequence.total).padStart(2, "0")}</span></div>
+            <ol className="mt-4 grid gap-1 sm:grid-cols-5">
+              {cstdTopics.map((entry) => <li key={entry.slug}><CstdLink href={getCstdTopicPath(entry, locale)} aria-current={entry.slug === topic.slug ? "step" : undefined} className="group block border-t border-white/15 pt-3 font-mono text-[8px] font-black text-[#6f7b80] transition-colors hover:border-[#24e0ff] hover:text-white aria-[current=step]:border-[#f4d431] aria-[current=step]:text-[#f4d431]"><span className="mr-2">{entry.number}</span>{entry.title[locale]}</CstdLink></li>)}
+            </ol>
+          </div>
+        </nav>
+
         <TopicEvidenceSection icon={Layers3} eyebrow={copy.cases} accent={topic.accent}>
           {cases.map((entry) => <TopicEvidenceLink key={entry.slug} href={getCaseStudyPath(entry, locale)} label={entry.kicker[locale]} title={entry.title[locale]} summary={entry.summary[locale]} action={copy.open} />)}
         </TopicEvidenceSection>
@@ -92,6 +102,12 @@ export function CstdTopicPage({ locale, slug }: { locale: CstdLocale; slug: stri
         <TopicEvidenceSection icon={FlaskConical} eyebrow={copy.labs} accent="#3dff8f">
           {labs.map((entry) => <TopicEvidenceLink key={entry.slug} href={getLabPath(entry, locale)} label={`LAB ${entry.number} / ${entry.version}`} title={entry.title[locale]} summary={entry.principle[locale]} action={copy.open} />)}
         </TopicEvidenceSection>
+
+        <CstdLink href={getCstdTopicPath(sequence.next, locale)} className="group relative block min-h-[28rem] overflow-hidden border-b border-white/12 px-5 py-16 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#f4d431] md:px-10 lg:px-16">
+          <Image src="/cstd-universe/cstd-quiet-archive-v4.webp" alt={locale === "zh" ? "安静知识档案中的连续阅读路径" : "A continuous reading path through the quiet knowledge archive"} fill sizes="100vw" className="object-cover object-[44%_50%] opacity-55 transition-transform duration-700 group-hover:scale-[1.025]" />
+          <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,9,0.98),rgba(5,7,9,0.78)_55%,rgba(5,7,9,0.25))]" />
+          <div className="relative mx-auto flex min-h-[20rem] max-w-[1320px] items-end justify-between gap-8"><div><p className="font-mono text-[9px] font-black text-[#3dff8f]">{copy.next.toUpperCase()} / {sequence.next.number}</p><p className="mt-5 max-w-4xl text-4xl font-semibold leading-tight text-white md:text-6xl">{sequence.next.title[locale]}</p><p className="mt-5 max-w-2xl text-base leading-8 text-[#b8c1c4]">{sequence.next.thesis[locale]}</p></div><ArrowUpRight aria-hidden="true" className="h-9 w-9 shrink-0 text-[#f4d431] transition-transform group-hover:-translate-y-2 group-hover:translate-x-2" /></div>
+        </CstdLink>
       </main>
       <StructuredData value={{ "@context": "https://schema.org", "@type": "LearningResource", name: topic.title[locale], description: topic.summary[locale], url: `https://custard.top${getCstdTopicPath(topic, locale)}`, hasPart: [...cases.map((entry) => ({ "@type": "CreativeWork", name: entry.title[locale], url: `https://custard.top${getCaseStudyPath(entry, locale)}` })), ...notes.map((entry) => ({ "@type": "TechArticle", name: entry.title[locale], url: `https://custard.top${getTechnicalNotePath(entry, locale)}` }))] }} />
     </CstdSiteChrome>

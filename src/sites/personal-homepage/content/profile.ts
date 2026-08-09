@@ -12,8 +12,8 @@ export const cstdProfile = {
   now: {
     updatedAt: "2026-08-09",
     focus: {
-      zh: "把 CSTD 9.0 建成一座能解释方法、展示系统、公开证据并自我观测的个人技术工作室。",
-      en: "Building CSTD 9.0 into a personal engineering studio that explains method, presents systems, publishes proof, and observes itself.",
+      zh: "把 CSTD 17.0 建成奶黄包的个人工程宇宙：身份先于系统，作品连接方法，证据能够运行，知识可以继续生长。",
+      en: "Building CSTD 17.0 as Custard's personal engineering universe: identity before system, work connected to method, executable proof, and knowledge that keeps growing.",
     },
     building: [
       { zh: "证据优先的公司研究与确定性估值工具。", en: "Evidence-first company research and deterministic valuation tools." },

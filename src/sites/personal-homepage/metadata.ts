@@ -12,7 +12,7 @@ const CSTD_ORIGIN = "https://custard.top";
 
 export const personalHomepageMetadata: Metadata = {
   metadataBase: new URL(CSTD_ORIGIN),
-  title: "CSTD // Night Operations | 奶黄包个人技术工作室",
+  title: "奶黄包 / Custard | 产品工程师与创意系统构建者",
   description: "奶黄包的独立技术工作室：把产品、数据、AI、研究与边缘系统编译成真正运行的作品。",
   alternates: {
     canonical: "https://custard.top/",
@@ -20,15 +20,15 @@ export const personalHomepageMetadata: Metadata = {
   manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
-    siteName: "CSTD",
-    title: "CSTD // Night Operations",
-    description: "把代码写进现实，让系统在霓虹里运行。",
+    siteName: "奶黄包 / Custard",
+    title: "奶黄包 / Custard // Personal Engineering Universe",
+    description: "真实作品、工程判断、可执行证据与持续生长的知识路径。",
     url: "https://custard.top/",
   },
   twitter: {
     card: "summary_large_image",
-    title: "CSTD // Night Operations",
-    description: "把代码写进现实，让系统在霓虹里运行。",
+    title: "奶黄包 / Custard // Personal Engineering Universe",
+    description: "真实作品、工程判断、可执行证据与持续生长的知识路径。",
   },
 };
 
@@ -36,7 +36,7 @@ export const personalHomepageStructuredData = [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "CSTD",
+    name: "Custard / CSTD",
     url: CSTD_ORIGIN,
     inLanguage: ["zh-CN", "en-AU"],
     description: "Custard's personal engineering studio for shipped products, evidence-first AI, data systems, research, and visual engineering.",
@@ -62,12 +62,14 @@ export const personalHomepageStructuredData = [
     description: "Build-linked verification, public proof, content health, and release provenance for custard.top.",
     url: `${CSTD_ORIGIN}/observatory.json`,
     dateModified: cstdContentHealth.generatedAt,
-    version: "CSTD-9.0",
+    version: "CSTD-17.0",
     isAccessibleForFree: true,
     creator: { "@type": "Person", name: "Custard", alternateName: "奶黄包" },
     distribution: [
       { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}/observatory.json` },
       { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}/content-health.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}/performance.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}/experience.json` },
     ],
   },
 ] as const;
@@ -116,7 +118,7 @@ export function createCstdMetadata({
     },
     openGraph: {
       type,
-      siteName: "CSTD",
+      siteName: "Custard / CSTD",
       title,
       description,
       url: canonical,

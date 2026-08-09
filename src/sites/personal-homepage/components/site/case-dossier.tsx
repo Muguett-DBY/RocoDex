@@ -7,13 +7,17 @@ import {
   CheckCircle2,
   GitCompareArrows,
   Network,
+  Play,
+  RotateCcw,
   ShieldAlert,
+  ShieldCheck,
   XCircle,
 } from "lucide-react";
 import { clsx } from "clsx";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { CstdCaseDossier } from "../../content/case-dossiers";
 import type { CstdLocale } from "../../content/content-types";
+import { getFailureDrillProgress, getNextFailureDrillPhase, type CstdFailureDrillPhase } from "../../domain/failure-drill";
 import { CstdLink } from "./cstd-link";
 
 type DossierView = "architecture" | "decisions" | "failures";
@@ -29,6 +33,7 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
   const [selectedNode, setSelectedNode] = useState(dossier.architecture[0].id);
   const [selectedDecision, setSelectedDecision] = useState(dossier.decisions[0].id);
   const [selectedFailure, setSelectedFailure] = useState(dossier.failureModes[0].id);
+  const [drillPhase, setDrillPhase] = useState<CstdFailureDrillPhase>("idle");
   const node = dossier.architecture.find((entry) => entry.id === selectedNode) ?? dossier.architecture[0];
   const decision = dossier.decisions.find((entry) => entry.id === selectedDecision) ?? dossier.decisions[0];
   const failure = dossier.failureModes.find((entry) => entry.id === selectedFailure) ?? dossier.failureModes[0];
@@ -43,6 +48,11 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
     containment: "隔离",
     outcome: "可见结果",
     proof: "打开关联证据",
+    drill: "执行故障注入",
+    rerun: "重新执行",
+    drillIdle: "选择故障后执行一次完整隔离演练。",
+    drillRunning: "系统正在沿真实失败边界传播信号。",
+    drillComplete: "隔离完成，公开表面保持可解释状态。",
   } : {
     eyebrow: "SYSTEM DOSSIER / ENGINEERING RECORD",
     title: "Architecture decisions and failure boundaries, brought to the foreground.",
@@ -54,8 +64,29 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
     containment: "Containment",
     outcome: "Visible outcome",
     proof: "Open linked evidence",
+    drill: "Inject failure",
+    rerun: "Run again",
+    drillIdle: "Select a failure and run the complete containment drill.",
+    drillRunning: "The signal is moving through the real failure boundary.",
+    drillComplete: "Containment complete; the public surface remains explainable.",
   };
   const architectureIndex = dossier.architecture.findIndex((entry) => entry.id === node.id);
+
+  useEffect(() => {
+    if (drillPhase === "idle" || drillPhase === "outcome") return;
+    const timer = window.setTimeout(() => setDrillPhase((current) => getNextFailureDrillPhase(current)), 760);
+    return () => window.clearTimeout(timer);
+  }, [drillPhase]);
+
+  function selectFailure(id: string) {
+    setSelectedFailure(id);
+    setDrillPhase("idle");
+  }
+
+  function runFailureDrill() {
+    setDrillPhase("trigger");
+    window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: "case_failure_drill", value: 1 } }));
+  }
 
   return (
     <section
@@ -170,21 +201,39 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
             <div role="tabpanel" data-cstd-dossier-panel="failures" className="grid xl:grid-cols-[22rem_minmax(0,1fr)]">
               <div className="border-b border-white/15 xl:border-b-0 xl:border-r">
                 {dossier.failureModes.map((entry, index) => (
-                  <button key={entry.id} type="button" aria-pressed={entry.id === failure.id} onClick={() => setSelectedFailure(entry.id)} className="grid min-h-24 w-full grid-cols-[2.25rem_1fr] gap-3 border-b border-white/15 px-4 py-5 text-left text-[#929da1] hover:bg-white/7 hover:text-white aria-pressed:bg-[#17090a] aria-pressed:text-[#ff5a50] focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#ff5a50]">
+                  <button key={entry.id} type="button" aria-pressed={entry.id === failure.id} onClick={() => selectFailure(entry.id)} className="grid min-h-24 w-full grid-cols-[2.25rem_1fr] gap-3 border-b border-white/15 px-4 py-5 text-left text-[#929da1] hover:bg-white/7 hover:text-white aria-pressed:bg-[#17090a] aria-pressed:text-[#ff5a50] focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#ff5a50]">
                     <span className="font-mono text-[8px] font-black">0{index + 1}</span><span className="text-sm font-semibold leading-6">{entry.trigger[locale]}</span>
                   </button>
                 ))}
               </div>
-              <div className="p-5 md:p-8 lg:p-10">
-                <p className="font-mono text-[9px] font-black text-[#ff5a50]">FAILURE ENVELOPE / {failure.id.toUpperCase()}</p>
+              <div className="p-5 md:p-8 lg:p-10" data-cstd-failure-drill data-cstd-failure-drill-phase={drillPhase}>
+                <div className="flex flex-wrap items-start justify-between gap-5">
+                  <div>
+                    <p className="font-mono text-[9px] font-black text-[#ff5a50]">FAILURE ENVELOPE / {failure.id.toUpperCase()}</p>
+                    <p aria-live="polite" className="mt-3 max-w-xl text-sm leading-6 text-[#9da8ac]">
+                      {drillPhase === "idle" ? copy.drillIdle : drillPhase === "outcome" ? copy.drillComplete : copy.drillRunning}
+                    </p>
+                  </div>
+                  <button type="button" onClick={runFailureDrill} className="inline-flex h-11 items-center gap-3 border border-[#ff5a50]/60 bg-[#18090a] px-4 font-mono text-[9px] font-black text-[#ff6a60] transition-colors hover:bg-[#ff5a50] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#ff5a50]">
+                    {drillPhase === "idle" ? <Play aria-hidden="true" className="h-4 w-4" /> : <RotateCcw aria-hidden="true" className="h-4 w-4" />}
+                    {drillPhase === "idle" ? copy.drill : copy.rerun}
+                  </button>
+                </div>
+                <div aria-hidden="true" className="mt-7 h-1 overflow-hidden bg-white/12"><span className="block h-full origin-left bg-[linear-gradient(90deg,#ff5a50,#f4d431_55%,#3dff8f)] transition-transform duration-500" style={{ transform: `scaleX(${getFailureDrillProgress(drillPhase)})` }} /></div>
                 <div className="mt-8 grid gap-px bg-white/12 lg:grid-cols-3">
-                  {[
-                    [copy.trigger, failure.trigger[locale], "text-[#ff5a50]"],
-                    [copy.containment, failure.containment[locale], "text-[#f4d431]"],
-                    [copy.outcome, failure.visibleOutcome[locale], "text-[#3dff8f]"],
-                  ].map(([label, value, color]) => (
-                    <div key={label} className="min-h-44 bg-[#07090b] p-5"><p className={clsx("font-mono text-[8px] font-black", color)}>{label.toUpperCase()}</p><p className="mt-5 text-base font-semibold leading-8 text-white">{value}</p></div>
-                  ))}
+                  {([
+                    ["trigger", copy.trigger, failure.trigger[locale], "text-[#ff5a50]"],
+                    ["containment", copy.containment, failure.containment[locale], "text-[#f4d431]"],
+                    ["outcome", copy.outcome, failure.visibleOutcome[locale], "text-[#3dff8f]"],
+                  ] as const).map(([phase, label, value, color], index) => {
+                    const visible = getFailureDrillProgress(drillPhase) >= (index + 1) / 3;
+                    return (
+                      <div key={label} data-cstd-failure-step={phase} data-cstd-failure-step-active={visible ? "true" : "false"} className={clsx("relative min-h-44 bg-[#07090b] p-5 transition-[background-color,opacity] duration-500", visible ? "opacity-100" : "opacity-45")}>
+                        <p className={clsx("flex items-center gap-2 font-mono text-[8px] font-black", color)}>{visible && phase === "outcome" ? <ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" /> : null}{label.toUpperCase()}</p>
+                        <p className="mt-5 text-base font-semibold leading-8 text-white">{value}</p>
+                      </div>
+                    );
+                  })}
                 </div>
                 <CstdLink href={failure.proofHref[locale]} className="mt-7 inline-flex items-center gap-2 border-b border-[#24e0ff]/55 pb-1 font-mono text-[9px] font-black text-[#24e0ff] hover:text-white">{copy.proof} <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
               </div>

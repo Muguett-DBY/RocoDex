@@ -29,11 +29,12 @@ const methodSource = read("./sections/engineering-method.tsx");
 const finaleSource = read("./sections/finale.tsx");
 const globalsSource = read("../../../app/globals.css");
 
-describe("CSTD 9.0 evidence-driven engineering studio", () => {
-  test("keeps identity first and exposes shareable audience paths", () => {
+describe("CSTD 17.0 personal engineering universe", () => {
+  test("keeps Custard identity first and preserves shareable audience paths", () => {
     expect(gateSource).toContain('id="cstd-hero-title"');
+    expect(gateSource).toContain('data-text="奶黄包"');
+    expect(gateSource).toContain('href="/work"');
     expect(gateSource).toContain("narrative.thesis.zh");
-    expect(gateSource).toContain("getCstdNarrativeSharePath");
     expect(narrativeSource).toContain('return "/for/research"');
     expect(landingSource).toContain("initialNarrativeMode");
     expect(landingSource).not.toContain("project-comparison");
@@ -134,7 +135,7 @@ describe("CSTD 9.0 evidence-driven engineering studio", () => {
     expect(landingSource).toContain("LazySceneDirector");
     expect(directorSource).toContain("data-cstd-scene-director");
     expect(sceneManifestSource).toContain('label: "Executable evidence"');
-    expect(sceneManifestSource).toContain('label: "Knowledge intelligence"');
+    expect(sceneManifestSource).toContain('label: "Knowledge paths"');
     expect(worldSource).toContain("getCstdSceneWindow");
   });
 

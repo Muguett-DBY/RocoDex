@@ -18,15 +18,17 @@
 
 Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器加载；Lite WebGL 和原生 WebGPU 信号层保持独立 chunk。页面先渲染版本化静态主视觉，再在浏览器空闲阶段按 `full / lite / image` 能力挂载 GPU 增强；文档隐藏时必须停止连续帧循环。不要把 GPU 包静态导入页面、深度页面或共享布局。
 
-## CSTD 9.0 架构
+## CSTD 17.0 架构
 
 - `content/observatory.ts` 是完整工程观测站契约；首页只接收 `cstdHomepageObservatory` 的精简服务端投影，避免把发布账本和证据全集发送到浏览器。
 - `content/content-health.ts` 汇总双语完整度、关系覆盖率、孤立内容与过期证据；发布健康分数必须由内容真源计算，不能手填。
 - `content/case-dossiers.ts` 为重点案例提供架构、权衡、故障边界和证据链接；`components/site/case-dossier.tsx` 只负责交互呈现。
+- `content/experience-contract.ts` 固定身份优先的六幕叙事；`content/performance-contract.json` 同时供页面、测试、构建脚本与公开端点使用，禁止复制阈值。
+- `domain/dcf-model.ts`、`failure-drill.ts` 与 `route-transition.ts` 保存可独立测试的实验、纪录片和导航状态机，交互组件不得复制核心判断。
 - `experience/runtime-capabilities.ts` 依据数据节省、网络、视口像素与设备密度选择 `full / lite / image`；`quality-controller.ts` 在持续低帧率后可解释地降级。
 - `components/sections/engineering-method.tsx`、`living-studio-twin.tsx` 与 `knowledge-lens.tsx` 分别承担方法、发布观测和知识关系章节，保持普通文档流，不得接管页面滚动。
 
-公开机器契约包括 `observatory.json`、`content-health.json`、`studio.json`、`proof.json`、`graph.json`、`releases.json`、`topics.json`、`manifest.webmanifest` 与 `.well-known/security.txt`。中英文入口应保持同一 schema 和发布版本。
+公开机器契约包括 `observatory.json`、`performance.json`、`experience.json`、`content-health.json`、`studio.json`、`proof.json`、`graph.json`、`releases.json`、`topics.json`、`manifest.webmanifest` 与 `.well-known/security.txt`。中英文入口应保持同一 schema 和发布版本。
 
 ## 静态资源
 
@@ -52,6 +54,7 @@ npm run test:host
 npm run test:personal
 npm run test:e2e:personal
 npm run build
+npm run verify:cstd:performance-contract
 npm run verify:personal-bundle
 npm run verify:cstd
 npm run verify:cstd:release

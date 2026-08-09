@@ -29,7 +29,8 @@ function WorldBackdrop({ activeSceneId }: { activeSceneId: CstdSceneId }) {
               src={asset.src}
               alt=""
               fill
-              priority={Boolean(asset.priority)}
+              loading={asset.priority ? "eager" : "lazy"}
+              fetchPriority={asset.priority ? "high" : "auto"}
               sizes="100vw"
               className="cstd-world-frame-image object-cover"
               style={{ objectPosition: asset.position }}

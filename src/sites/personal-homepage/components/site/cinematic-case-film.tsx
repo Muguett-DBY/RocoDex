@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { CheckCircle2, Clapperboard, TimerReset } from "lucide-react";
+import { CheckCircle2, ChevronLeft, ChevronRight, Clapperboard, Link2, TimerReset } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cstdArtBible } from "../../content/art-bible";
 import type { CstdCaseStudy } from "../../content/content-models";
@@ -24,10 +24,32 @@ export function CinematicCaseFilm({ caseStudy, locale }: { caseStudy: CstdCaseSt
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => {
+    const requestedAct = new URLSearchParams(window.location.search).get("act");
+    const requestedIndex = caseStudy.film.beats.findIndex((beat) => beat.id === requestedAct);
+    if (requestedIndex < 0) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      setActiveIndex(requestedIndex);
+      beatRefs.current[requestedIndex]?.scrollIntoView({ behavior: "instant", block: "center" });
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [caseStudy.film.beats]);
+
   function selectBeat(index: number) {
     setActiveIndex(index);
     beatRefs.current[index]?.scrollIntoView({ behavior: "smooth", block: "center" });
+    const url = new URL(window.location.href);
+    url.searchParams.set("act", caseStudy.film.beats[index].id);
+    window.history.replaceState(window.history.state, "", url);
     window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: "case_film_beat", value: index + 1 } }));
+  }
+
+  async function copyActiveBeat() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("act", activeBeat.id);
+    await navigator.clipboard?.writeText(url.toString());
+    window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: "case_act_share", value: activeIndex + 1 } }));
   }
 
   return (
@@ -56,6 +78,11 @@ export function CinematicCaseFilm({ caseStudy, locale }: { caseStudy: CstdCaseSt
               <div className="flex items-center justify-between font-mono text-[8px] font-black text-[#778388]"><span className="flex items-center gap-2"><TimerReset aria-hidden="true" className="h-3.5 w-3.5" />{caseStudy.film.durationSeconds} SEC STORY</span><span>{activeIndex + 1} / {caseStudy.film.beats.length}</span></div>
               <div className="mt-3 grid gap-1" style={{ gridTemplateColumns: `repeat(${caseStudy.film.beats.length}, minmax(0, 1fr))` }}>
                 {caseStudy.film.beats.map((beat, index) => <button key={beat.id} type="button" aria-label={beat.title[locale]} aria-pressed={activeIndex === index} onClick={() => selectBeat(index)} className="h-1.5 bg-white/16 transition-[background-color,transform] hover:scale-y-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]" style={{ backgroundColor: activeIndex >= index ? art.accent : undefined }} />)}
+              </div>
+              <div className="mt-4 flex items-center gap-2">
+                <button type="button" onClick={() => selectBeat((activeIndex - 1 + caseStudy.film.beats.length) % caseStudy.film.beats.length)} aria-label={locale === "zh" ? "上一镜" : "Previous act"} title={locale === "zh" ? "上一镜" : "Previous act"} className="flex h-9 w-9 items-center justify-center border border-white/18 text-[#aeb7ba] hover:border-[#24e0ff] hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#24e0ff]"><ChevronLeft aria-hidden="true" className="h-4 w-4" /></button>
+                <button type="button" onClick={() => selectBeat((activeIndex + 1) % caseStudy.film.beats.length)} aria-label={locale === "zh" ? "下一镜" : "Next act"} title={locale === "zh" ? "下一镜" : "Next act"} className="flex h-9 w-9 items-center justify-center border border-white/18 text-[#aeb7ba] hover:border-[#24e0ff] hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#24e0ff]"><ChevronRight aria-hidden="true" className="h-4 w-4" /></button>
+                <button type="button" onClick={() => void copyActiveBeat()} aria-label={locale === "zh" ? "复制当前镜头链接" : "Copy current act link"} title={locale === "zh" ? "复制当前镜头链接" : "Copy current act link"} className="ml-auto flex h-9 w-9 items-center justify-center border border-white/18 text-[#aeb7ba] hover:border-[#f4d431] hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f4d431]"><Link2 aria-hidden="true" className="h-4 w-4" /></button>
               </div>
             </div>
           </div>

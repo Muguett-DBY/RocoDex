@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowDown, Share2, Zap } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Zap } from "lucide-react";
 import { clsx } from "clsx";
 import { lazy, memo, Suspense } from "react";
 import type { CstdSystem } from "../../content/systems";
-import { getCstdNarrative, getCstdNarrativeSharePath, type CstdNarrativeMode } from "../../content/narratives";
+import { getCstdNarrative, type CstdNarrativeMode } from "../../content/narratives";
 import { CstdLink } from "../../components/site/cstd-link";
 
 const LazyNarrativeSwitcher = lazy(() => import("../../components/site/narrative-switcher").then((module) => ({ default: module.NarrativeSwitcher })));
@@ -60,7 +60,7 @@ function NeuralGate({
           <div className="max-w-6xl">
             <p className="cstd-gate-eyebrow flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[10px] font-black uppercase text-[#f4d431] md:text-xs">
               <span aria-hidden="true" className="h-2 w-2 bg-[#3dff8f] shadow-[0_0_18px_rgba(61,255,143,0.7)]" />
-              <span>CSTD NEURAL GATE / ACCESS GRANTED</span>
+              <span>奶黄包 / CUSTARD / IDENTITY VERIFIED</span>
               <span aria-hidden="true" className="hidden h-px w-20 bg-[#f4d431]/55 sm:block" />
               <span className="whitespace-nowrap">SYD 22:47</span>
             </p>
@@ -68,23 +68,23 @@ function NeuralGate({
             <div className="cstd-gate-title-stack mt-8">
               <h1
                 id="cstd-hero-title"
-                aria-label="CSTD"
-                data-text="CSTD"
-                className="cstd-glitch-title cstd-gate-monogram w-fit text-[6rem] font-black leading-[0.76] tracking-[0] text-[#f2efe7] md:text-[9rem] lg:text-[9rem] xl:text-[11rem]"
+                aria-label="奶黄包"
+                data-text="奶黄包"
+                className="cstd-glitch-title cstd-gate-monogram w-fit text-[4.75rem] font-black leading-[0.82] tracking-[0] text-[#f2efe7] md:text-[7rem] lg:text-[7.5rem] xl:text-[9rem]"
               >
-                CSTD
+                奶黄包
               </h1>
-              <p aria-hidden="true" className="cstd-gate-secondary mt-2 font-mono text-4xl font-black leading-[0.82] text-[#24e0ff] md:text-6xl lg:text-8xl">
-                NEURAL<br />CITY
+              <p className="cstd-gate-secondary mt-2 font-mono text-3xl font-black leading-[0.88] text-[#24e0ff] md:text-5xl lg:text-6xl">
+                CUSTARD<br />ENGINEER
               </p>
             </div>
 
             <p className="cstd-gate-code mt-7 font-mono text-[11px] font-black text-[#24e0ff] md:text-sm">
-              CODE / SHIP / VERIFY / EVOLVE
+              CSTD://PERSONAL ENGINEERING UNIVERSE / RELEASE 17
             </p>
             <p key={narrative.id} className="cstd-gate-statement cstd-narrative-copy mt-5 max-w-4xl text-3xl font-semibold leading-[1.04] text-[#f2efe7] md:text-5xl lg:text-6xl">
               {narrative.thesis.zh}
-              <span className="block text-[#f4d431]">每一束光，都对应一份可检查证据。</span>
+              <span className="block text-[#f4d431]">把复杂系统做成可运行、可验证、可感知的作品。</span>
             </p>
             <p key={`${narrative.id}-detail`} className="cstd-gate-copy cstd-narrative-copy mt-6 max-w-2xl text-base leading-8 text-[#b0b8bb] md:text-lg">
               {narrative.description.zh}
@@ -101,11 +101,11 @@ function NeuralGate({
                 <ArrowDown aria-hidden="true" className="h-4 w-4" />
               </a>
               <CstdLink
-                href={getCstdNarrativeSharePath(narrativeMode)}
+                href="/work"
                 className="inline-flex h-12 items-center gap-3 border border-[#24e0ff]/50 bg-[#061015]/70 px-5 font-mono text-sm font-bold text-[#d8fbff] transition-colors hover:border-[#24e0ff] hover:bg-[#24e0ff] hover:text-[#050709] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"
               >
-                <Share2 aria-hidden="true" className="h-4 w-4" />
-                分享当前路径
+                查看真实作品
+                <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
               </CstdLink>
               <button
                 type="button"

@@ -13,16 +13,16 @@ export const cstdVisualAssets = [
   {
     id: "neural-gate",
     sceneId: "hero",
-    src: "/cstd-universe/cstd-neural-foundry-v2.webp",
-    alt: "由工程图、树脂电路与光纤汇入的神经工业入口",
-    position: "58% center",
+    src: "/cstd-universe/cstd-custard-core-v4.webp",
+    alt: "奶油白陶瓷计算核心置于雨夜工程工作室中",
+    position: "62% center",
     priority: true,
   },
   {
     id: "skill-reactor",
     sceneId: "systems",
-    src: "/cstd-universe/cstd-skill-reactor-v1.webp",
-    alt: "由五个工程区域汇入中央计算核心的技能反应堆",
+    src: "/cstd-universe/cstd-core-world-v4.webp",
+    alt: "六个工程区域由数据通道连接至中央 CSTD 核心",
     position: "center center",
   },
   {
@@ -42,9 +42,9 @@ export const cstdVisualAssets = [
   {
     id: "data-vault",
     sceneId: "path",
-    src: "/cstd-universe/cstd-knowledge-loom-v2.webp",
-    alt: "将技术档案、数据纤维与证据图谱织合的知识织机",
-    position: "42% center",
+    src: "/cstd-universe/cstd-quiet-archive-v4.webp",
+    alt: "技术笔记、蚀刻玻璃与数据纤维构成的安静知识档案",
+    position: "44% center",
   },
   {
     id: "departure-city",
@@ -60,6 +60,9 @@ export const cstdVisualAssetByScene = Object.fromEntries(
 ) as Record<CstdSceneId, CstdVisualAsset>;
 
 export const cstdEditorialAssets = [
+  { id: "custard-identity-core", src: "/cstd-universe/cstd-custard-core-v4.webp", purpose: "homepage-identity" },
+  { id: "cstd-core-world", src: "/cstd-universe/cstd-core-world-v4.webp", purpose: "homepage-six-act-world" },
+  { id: "quiet-archive", src: "/cstd-universe/cstd-quiet-archive-v4.webp", purpose: "knowledge-reading-mode" },
   { id: "engineering-observatory", src: "/cstd-universe/cstd-observatory-core-v3.webp", purpose: "homepage-observatory" },
   { id: "system-blueprint", src: "/cstd-universe/cstd-case-blueprint-v3.webp", purpose: "flagship-case-dossiers" },
   { id: "knowledge-loom", src: "/cstd-universe/cstd-knowledge-loom-v3.webp", purpose: "homepage-knowledge" },

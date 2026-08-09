@@ -44,8 +44,9 @@ export function HomepageHeader({
     <>
       <header data-cstd-header-theme={activeSceneId} className="fixed inset-x-0 top-0 z-50 flex h-16 items-center border-b border-[#f4d431]/35 bg-[#050709]/88 px-5 backdrop-blur-xl md:px-10 lg:px-12">
         <a href="#top" className="flex items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4c95d]">
-          <span className="flex h-8 w-8 items-center justify-center bg-[#f4d431] font-mono text-[11px] font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">CS</span>
-          <span className="min-w-14 whitespace-nowrap font-mono text-sm font-black tracking-[0]">CSTD://</span>
+          <span className="flex h-8 w-8 items-center justify-center bg-[#f4d431] text-sm font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">奶</span>
+          <span className="min-w-14 whitespace-nowrap text-sm font-black tracking-[0]">奶黄包</span>
+          <span aria-hidden="true" className="hidden h-4 w-px bg-white/15 sm:block" />
           <span className="hidden font-mono text-[10px] font-bold uppercase text-[#7f8b90] sm:inline">{cstdSceneById[activeSceneId].label}</span>
         </a>
 

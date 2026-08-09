@@ -1,6 +1,7 @@
 import { cstdContentHealth, type CstdContentHealthSnapshot } from "./content-health";
 import { createCstdDigest } from "./digest";
 import { cstdStudioSnapshot } from "./studio-status";
+import { cstdPerformanceContract } from "./performance-contract";
 
 type ObservatoryEnvironment = Readonly<Record<string, string | undefined>>;
 
@@ -15,8 +16,8 @@ export type CstdObservatoryCheck = Readonly<{
 }>;
 
 export type CstdEngineeringObservatory = Readonly<{
-  schemaVersion: 1;
-  release: "CSTD-9.0";
+  schemaVersion: 2;
+  release: "CSTD-17.0";
   generatedAt: string;
   freshness: "current" | "aging" | "stale";
   deployment: Readonly<{
@@ -36,8 +37,13 @@ export type CstdEngineeringObservatory = Readonly<{
     contentHealth: number;
   }>;
   content: CstdContentHealthSnapshot;
+  performance: Readonly<{
+    href: "/performance.json";
+    budgets: typeof cstdPerformanceContract.budgets;
+    cacheComponents: typeof cstdPerformanceContract.cacheComponents;
+  }>;
   provenance: Readonly<{
-    contract: "cstd.engineering-observatory/v1";
+    contract: "cstd.engineering-observatory/v2";
     digest: `fnv1a32:${string}`;
     sources: readonly Readonly<{ id: string; href: string; digest?: string }>[];
   }>;
@@ -61,10 +67,10 @@ const repository = "https://github.com/Muguett-DBY/RocoDex";
 const releaseCheckedAt = "2026-08-09";
 
 const verificationProfile = [
-  { id: "unit-tests", label: { zh: "单元与契约测试", en: "Unit and contract tests" }, value: 222, unit: "tests", state: "passed" },
-  { id: "browser-tests", label: { zh: "桌面与移动端验收", en: "Desktop and mobile acceptance" }, value: 27, unit: "tests", state: "passed" },
-  { id: "static-output", label: { zh: "静态生成页面", en: "Statically generated pages" }, value: 826, unit: "pages", state: "passed" },
-  { id: "initial-js", label: { zh: "首页初始 JavaScript", en: "Homepage initial JavaScript" }, value: 143_447, unit: "bytes", state: "within-budget" },
+  { id: "unit-tests", label: { zh: "单元与契约测试", en: "Unit and contract tests" }, value: 237, unit: "tests", state: "passed" },
+  { id: "browser-tests", label: { zh: "桌面与移动端验收", en: "Desktop and mobile acceptance" }, value: 29, unit: "tests", state: "passed" },
+  { id: "static-output", label: { zh: "静态生成页面", en: "Statically generated pages" }, value: 830, unit: "pages", state: "passed" },
+  { id: "initial-js", label: { zh: "首页初始 JavaScript", en: "Homepage initial JavaScript" }, value: 143_551, unit: "bytes", state: "within-budget" },
 ] as const;
 
 function resolveEnvironment(value: string | undefined): CstdEngineeringObservatory["deployment"]["environment"] {
@@ -101,12 +107,13 @@ export function createCstdEngineeringObservatory(
     commit,
     studio: cstdStudioSnapshot.provenance.digest,
     content: cstdContentHealth.provenance.digest,
+    performance: cstdPerformanceContract.budgets,
     verification: verification.map((entry) => [entry.id, entry.value, entry.state, entry.checkedAt]),
   }));
 
   return {
-    schemaVersion: 1,
-    release: "CSTD-9.0",
+    schemaVersion: 2,
+    release: "CSTD-17.0",
     generatedAt: now.toISOString(),
     freshness: getFreshness(now),
     deployment: {
@@ -126,12 +133,19 @@ export function createCstdEngineeringObservatory(
       contentHealth: cstdContentHealth.score,
     },
     content: cstdContentHealth,
+    performance: {
+      href: "/performance.json",
+      budgets: cstdPerformanceContract.budgets,
+      cacheComponents: cstdPerformanceContract.cacheComponents,
+    },
     provenance: {
-      contract: "cstd.engineering-observatory/v1",
+      contract: "cstd.engineering-observatory/v2",
       digest,
       sources: [
         { id: "studio", href: "/studio.json", digest: cstdStudioSnapshot.provenance.digest },
         { id: "content-health", href: "/content-health.json", digest: cstdContentHealth.provenance.digest },
+        { id: "performance", href: "/performance.json" },
+        { id: "experience", href: "/experience.json" },
         { id: "proof", href: "/proof.json" },
         { id: "release-ledger", href: "/releases.json" },
       ],

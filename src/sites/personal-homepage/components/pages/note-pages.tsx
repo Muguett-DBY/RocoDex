@@ -6,6 +6,7 @@ import type { ContentMetric, CstdLocale } from "../../content/content-types";
 import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
 import { loadCstdContentDocument } from "../../content/content-document";
 import { cstdTechnicalNotes, getCstdTechnicalNote, getTechnicalNotePath } from "../../content/technical-notes";
+import { getCstdTopicPath, getCstdTopicsForNote } from "../../content/topics";
 import { CitationButton } from "../site/citation-button";
 import { CstdLink } from "../site/cstd-link";
 import { CstdSiteChrome } from "../site/cstd-site-chrome";
@@ -97,6 +98,7 @@ export async function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLoca
     related: "相关真实系统",
     relatedSummary: "这篇文章来自以下项目中的实际设计与交付工作。",
     next: "继续阅读",
+    paths: "所属主题路径",
   } : {
     back: "All notes",
     read: "Reading time",
@@ -108,6 +110,7 @@ export async function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLoca
     related: "Related shipped systems",
     relatedSummary: "This note comes from design and delivery work in the following systems.",
     next: "Continue reading",
+    paths: "Curated paths",
   };
   const noteMetrics: readonly ContentMetric[] = [
     { value: `${note.readingMinutes} ${copy.min}`, label: { zh: copy.read, en: copy.read } },
@@ -120,13 +123,14 @@ export async function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLoca
     const caseStudy = cstdCaseStudies.find((entry) => entry.slug === caseSlug);
     return caseStudy ? [caseStudy] : [];
   });
+  const relatedTopics = getCstdTopicsForNote(note.slug);
 
   return (
     <CstdSiteChrome locale={locale} page={`note-${note.slug}`}>
       <main id="cstd-main">
         <CstdPageHero locale={locale} eyebrow={`${note.category[locale].toUpperCase()} / ${note.series[locale].toUpperCase()}`} title={note.title[locale]} summary={note.summary[locale]} image={note.image} metrics={noteMetrics} compact transitionName={`cstd-note-${note.slug}`} />
 
-        <article className="bg-[#f1eee5] text-[#111315]">
+        <article data-cstd-reading-document className="bg-[#f1eee5] text-[#111315]">
           <div className="mx-auto grid max-w-[1320px] gap-12 px-5 py-16 md:px-10 lg:grid-cols-[13rem_minmax(0,46rem)] lg:justify-center lg:gap-20 lg:px-16 lg:py-24">
             <aside className="lg:sticky lg:top-28 lg:h-fit">
               <CstdLink href={locale === "en" ? "/en/notes" : "/notes"} className="inline-flex items-center gap-2 font-mono text-[9px] font-black text-[#0b6473] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">
@@ -139,7 +143,17 @@ export async function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLoca
               <CitationButton value={`${note.title[locale]} — ${locale === "zh" ? "奶黄包" : "Custard"}, https://custard.top${getTechnicalNotePath(note, locale)} (${note.updatedAt})`} label={copy.citation.toUpperCase()} />
             </aside>
 
-            <div>{document}</div>
+            <div>
+              {document}
+              {relatedTopics.length > 0 ? (
+                <nav aria-label={copy.paths} className="mt-14 border-t border-black/20 pt-7" data-cstd-note-paths>
+                  <p className="font-mono text-[8px] font-black text-black/55">{copy.paths.toUpperCase()}</p>
+                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                    {relatedTopics.map((topic) => <CstdLink key={topic.slug} href={getCstdTopicPath(topic, locale)} className="group border-l-2 border-[#0b6473] py-1 pl-4 text-sm font-semibold leading-6 text-black/70 transition-colors hover:border-black hover:text-black">{topic.number} / {topic.title[locale]}</CstdLink>)}
+                  </div>
+                </nav>
+              ) : null}
+            </div>
           </div>
         </article>
 

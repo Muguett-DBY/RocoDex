@@ -2,18 +2,18 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { captureBrowserIssues, expectNoHorizontalOverflow } from "./support/browser";
 
-test("CSTD 9.0 presents a concise evidence-driven engineering studio", async ({ page, isMobile }) => {
+test("CSTD 17.0 presents Custard before the engineering universe", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   expect(response?.ok()).toBe(true);
 
-  await expect(page.getByRole("heading", { level: 1, name: "CSTD" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "奶黄包" })).toBeVisible();
   await expect(page.getByText("奶黄包的个人技术工作室", { exact: false })).toBeVisible();
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   await expect(page.locator("[data-cstd-narrative-switcher]").getByRole("radio")).toHaveCount(3);
   await page.locator("[data-cstd-narrative-switcher]").getByRole("radio", { name: "研究" }).click();
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-narrative-mode", "researcher");
-  await expect(page.getByRole("link", { name: "分享当前路径" })).toHaveAttribute("href", "/for/research");
+  await expect(page.getByRole("link", { name: /分享这条观看路径/ })).toHaveAttribute("href", "/for/research");
 
   await expect(page.locator("[data-cstd-scene]")).toHaveCount(6);
   await expect(page.locator("[data-cstd-studio-twin]")).toHaveCount(1);
@@ -94,8 +94,12 @@ test("CSTD runs deterministic worker evidence and graph playback", async ({ page
 
 test("CSTD embeds the matching executable replay in deep cases", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
-  const response = await page.goto("/cstd/work/rocodex-platform", { waitUntil: "domcontentloaded" });
+  const response = await page.goto("/cstd/work/rocodex-platform?act=routing-contract", { waitUntil: "domcontentloaded" });
   expect(response?.ok()).toBe(true);
+  const film = page.locator("[data-cstd-case-film]");
+  await expect(film).toHaveAttribute("data-cstd-case-film-active-beat", "routing-contract");
+  await film.getByRole("button", { name: "下一镜" }).click();
+  await expect(page).toHaveURL(/\?act=tests-as-walls$/);
   const replay = page.locator('[data-cstd-case-replay="host-boundaries"]');
   await replay.scrollIntoViewIfNeeded();
   await expect(replay).toHaveAttribute("data-cstd-worker-ready", "true");
@@ -109,6 +113,9 @@ test("CSTD embeds the matching executable replay in deep cases", async ({ page }
   await expect(dossier.locator('[data-cstd-dossier-panel="decisions"]')).toBeVisible();
   await dossier.getByRole("tab", { name: "故障隔离" }).click();
   await expect(dossier.locator('[data-cstd-dossier-panel="failures"]')).toBeVisible();
+  await dossier.getByRole("button", { name: "执行故障注入" }).click();
+  await expect(dossier.locator("[data-cstd-failure-drill]")).toHaveAttribute("data-cstd-failure-drill-phase", "outcome", { timeout: 4_000 });
+  await expect(dossier.locator('[data-cstd-failure-step="outcome"]')).toHaveAttribute("data-cstd-failure-step-active", "true");
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
@@ -126,6 +133,8 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
     ["/cstd/studio.json", "application/json"],
     ["/cstd/observatory.json", "application/json"],
     ["/cstd/content-health.json", "application/json"],
+    ["/cstd/performance.json", "application/json"],
+    ["/cstd/experience.json", "application/json"],
     ["/cstd/releases.json", "application/json"],
     ["/cstd/topics.json", "application/json"],
     ["/cstd/feed.json", "application/json"],
@@ -145,16 +154,53 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
     expect(body.byteLength).toBeGreaterThan(100);
   }
   const status = await (await request.get("/cstd/status.json")).json();
-  expect(status.release).toBe("CSTD-9.0");
+  expect(status.release).toBe("CSTD-17.0");
   expect(status.provenance.contract).toBe("cstd.studio-snapshot/v3");
   expect(status.districts).toHaveLength(5);
   const graph = await (await request.get("/cstd/graph.json")).json();
   expect(graph.nodes.length).toBeGreaterThanOrEqual(29);
   const observatory = await (await request.get("/cstd/observatory.json")).json();
-  expect(observatory.provenance.contract).toBe("cstd.engineering-observatory/v1");
+  expect(observatory.provenance.contract).toBe("cstd.engineering-observatory/v2");
   expect(observatory.verification).toHaveLength(4);
   const contentHealth = await (await request.get("/cstd/content-health.json")).json();
   expect(contentHealth).toMatchObject({ status: "healthy", score: 100 });
+  const performance = await (await request.get("/cstd/performance.json")).json();
+  expect(performance).toMatchObject({ release: "CSTD-17.0", budgets: { initialJavascriptBytes: 150_000 }, cacheComponents: { status: "evaluated-not-enabled" } });
+  const experience = await (await request.get("/cstd/experience.json")).json();
+  expect(experience.identity.zh).toBe("奶黄包");
+  expect(experience.acts).toHaveLength(6);
+});
+
+test("CSTD visual contracts keep identity, atlas, and quiet reading coherent", async ({ page, isMobile }) => {
+  await page.addInitScript(() => {
+    window.sessionStorage.setItem("cstd:identity-boot-seen", "true");
+    window.localStorage.setItem("cstd-motion-mode", "calm");
+  });
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await expect(page.locator('[data-cstd-world-frame="hero"] img')).toHaveAttribute("src", /cstd-custard-core-v4/);
+  const titleLocator = page.getByRole("heading", { level: 1, name: "奶黄包" });
+  const atlasLocator = page.locator("[data-cstd-atlas]");
+  await expect(titleLocator).toBeVisible();
+  await expect(atlasLocator).toBeVisible();
+  const title = await titleLocator.boundingBox();
+  const atlas = await atlasLocator.boundingBox();
+  expect(title).not.toBeNull();
+  expect(atlas).not.toBeNull();
+  if (!isMobile && title && atlas) expect(title.x + title.width).toBeLessThanOrEqual(atlas.x + 8);
+  const heroCapture = await page.screenshot({ animations: "disabled" });
+  expect(heroCapture.byteLength).toBeGreaterThan(isMobile ? 60_000 : 120_000);
+  await expectNoHorizontalOverflow(page);
+
+  await page.goto("/cstd/notes/host-boundaries-in-one-next-deployment", { waitUntil: "domcontentloaded" });
+  const shell = page.locator("[data-cstd-deep-shell]");
+  await expect(shell).toHaveAttribute("data-cstd-controls-ready", "true");
+  await page.getByRole("button", { name: /安静阅读/ }).click();
+  await expect(shell).toHaveAttribute("data-cstd-reading-mode", "quiet");
+  await expect(page.locator("[data-cstd-signal-field]")).toHaveCSS("opacity", "0");
+  const proseFontSize = await page.locator(".cstd-mdx-prose > p").first().evaluate((element) => Number.parseFloat(getComputedStyle(element).fontSize));
+  expect(proseFontSize).toBeGreaterThanOrEqual(19);
+  await expect(page.locator("[data-cstd-note-paths]")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
 });
 
 test("CSTD reaches its tailored finale without a scroll trap", async ({ page, isMobile }) => {

@@ -6,7 +6,7 @@ export const cstdProofMesh = generatedCstdProofMesh;
 
 export const cstdProofMeshManifest = {
   schemaVersion: 2,
-  release: "CSTD-9.0",
+  release: "CSTD-17.0",
   verifiedAt: cstdProofMesh.map((entry) => entry.verifiedAt).sort().at(-1) ?? "2026-08-09",
   totals: {
     projects: cstdProofMesh.length,
@@ -21,6 +21,8 @@ export const cstdProofMeshManifest = {
     feed: "https://custard.top/feed.json",
     observatory: "https://custard.top/observatory.json",
     contentHealth: "https://custard.top/content-health.json",
+    performance: "https://custard.top/performance.json",
+    experience: "https://custard.top/experience.json",
   },
   entries: cstdProofMesh,
 } as const;

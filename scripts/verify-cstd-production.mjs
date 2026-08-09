@@ -15,7 +15,8 @@ for (const path of ["/", "/topics", "/lab/proof-museum"]) {
   const response = await get(path);
   const body = await response.text();
   if (!response.headers.get("content-type")?.includes("text/html")) throw new Error(`${path} is not HTML`);
-  if (!body.includes("CSTD")) throw new Error(`${path} is missing the CSTD identity`);
+  if (!body.includes("CSTD")) throw new Error(`${path} is missing the CSTD system identity`);
+  if (path === "/" && !body.includes("奶黄包")) throw new Error("Homepage is missing the Custard identity");
 }
 
 const homepage = await get("/");
@@ -32,7 +33,7 @@ for (const [name, marker] of Object.entries(requiredHeaders)) {
   if (!value.includes(marker)) throw new Error(`Missing ${name} marker: ${marker}`);
 }
 
-const jsonEndpoints = ["/proof.json", "/graph.json", "/status.json", "/studio.json", "/observatory.json", "/content-health.json", "/releases.json", "/topics.json"];
+const jsonEndpoints = ["/proof.json", "/graph.json", "/status.json", "/studio.json", "/observatory.json", "/content-health.json", "/performance.json", "/experience.json", "/releases.json", "/topics.json"];
 const payloads = {};
 for (const path of jsonEndpoints) {
   const response = await get(path);
@@ -40,21 +41,25 @@ for (const path of jsonEndpoints) {
   payloads[path] = await response.json();
 }
 
-if (payloads["/proof.json"].release !== "CSTD-9.0") throw new Error("Proof manifest release is not CSTD-9.0");
+if (payloads["/proof.json"].release !== "CSTD-17.0") throw new Error("Proof manifest release is not CSTD-17.0");
 if (payloads["/studio.json"].provenance?.contract !== "cstd.studio-snapshot/v3") throw new Error("Studio provenance contract is missing");
 if (!/^fnv1a32:[a-f0-9]{8}$/.test(payloads["/studio.json"].provenance?.digest ?? "")) throw new Error("Studio digest is invalid");
 if (payloads["/topics.json"].entries?.length !== 5) throw new Error("Topic manifest does not contain five paths");
-if (payloads["/observatory.json"].provenance?.contract !== "cstd.engineering-observatory/v1") throw new Error("Engineering observatory contract is missing");
+if (payloads["/observatory.json"].provenance?.contract !== "cstd.engineering-observatory/v2") throw new Error("Engineering observatory contract is missing");
 if (payloads["/observatory.json"].verification?.length !== 4) throw new Error("Engineering observatory gates are incomplete");
 if (payloads["/content-health.json"].score !== 100) throw new Error("Published content health is not 100");
+if (payloads["/performance.json"].budgets?.initialJavascriptBytes !== 150000) throw new Error("Performance contract initial JS budget is invalid");
+if (payloads["/performance.json"].cacheComponents?.status !== "evaluated-not-enabled") throw new Error("Cache Components decision is missing");
+if (payloads["/experience.json"].acts?.length !== 6) throw new Error("Experience contract does not contain six acts");
+if (payloads["/experience.json"].identity?.zh !== "奶黄包") throw new Error("Experience contract identity is invalid");
 
 const security = await get("/.well-known/security.txt");
 if (!(await security.text()).includes("Contact: mailto:cstd@custard.top")) throw new Error("security.txt is missing the contact method");
 const manifest = await get("/manifest.webmanifest");
 if (!manifest.headers.get("content-type")?.includes("application/manifest+json")) throw new Error("Web manifest content type is invalid");
-if ((await manifest.json()).short_name !== "CSTD") throw new Error("Web manifest identity is invalid");
+if ((await manifest.json()).short_name !== "Custard") throw new Error("Web manifest identity is invalid");
 
 const worker = await get("/cstd-case-worker.js");
 if (!(await worker.text()).includes('"crm-lock"')) throw new Error("Production Worker is missing the CRM lock capsule");
 
-console.log(`CSTD production smoke OK: ${origin}, ${jsonEndpoints.length} evidence endpoints, 5 topics, 4 proof capsules, content health 100.`);
+console.log(`CSTD production smoke OK: ${origin}, ${jsonEndpoints.length} public contracts, 6 experience acts, 5 topics, 4 proof capsules, content health 100.`);

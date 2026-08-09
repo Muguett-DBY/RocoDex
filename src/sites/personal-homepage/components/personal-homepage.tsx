@@ -33,7 +33,7 @@ const LazyNeuralGate = memo(
     {
       loading: () => (
         <section id="top" data-cstd-hero data-cstd-chapter="hero" data-cstd-scene="hero" className="relative z-10 flex min-h-svh items-center border-b border-[#24e0ff]/20 px-5 pt-20 md:px-10 lg:px-16">
-          <div><p className="font-mono text-xs font-black text-[#f4d431]">CSTD / LINKING</p><h1 className="mt-6 text-[6rem] font-black leading-[0.78] text-[#f2efe7] md:text-[9rem]">CSTD</h1><p className="mt-6 max-w-2xl text-2xl font-semibold text-[#24e0ff]">CODE / SHIP / VERIFY / EVOLVE</p></div>
+          <div><p className="font-mono text-xs font-black text-[#f4d431]">CUSTARD / LINKING IDENTITY</p><h1 className="mt-6 text-[5rem] font-black leading-[0.82] text-[#f2efe7] md:text-[8rem]">奶黄包</h1><p className="mt-6 max-w-2xl text-2xl font-semibold text-[#24e0ff]">PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER</p></div>
         </section>
       ),
     },

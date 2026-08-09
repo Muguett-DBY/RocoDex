@@ -1,5 +1,5 @@
 export const cstdBrandSystem = {
-  release: "CSTD-9.0",
+  release: "CSTD-17.0",
   name: "Neural Industrialism",
   thesis: {
     zh: "把代码、研究与交付证据建造成一座温和而精密的工程城市。",
@@ -21,6 +21,9 @@ export const cstdBrandSystem = {
     "Every dramatic surface keeps a static first frame",
   ],
   originalAssets: [
+    "/cstd-universe/cstd-custard-core-v4.webp",
+    "/cstd-universe/cstd-core-world-v4.webp",
+    "/cstd-universe/cstd-quiet-archive-v4.webp",
     "/cstd-universe/cstd-neural-foundry-v2.webp",
     "/cstd-universe/cstd-evidence-foundry-v2.webp",
     "/cstd-universe/cstd-knowledge-loom-v2.webp",
