@@ -114,9 +114,13 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
   ] as const;
   for (const [url, contentType] of endpoints) {
     const response = await request.get(url);
-    expect(response.ok()).toBe(true);
+    const body = await response.body();
+    expect(
+      response.ok(),
+      `${url} returned ${response.status()}: ${body.toString("utf8").slice(0, 240)}`,
+    ).toBe(true);
     expect(response.headers()["content-type"]).toContain(contentType);
-    expect((await response.body()).byteLength).toBeGreaterThan(100);
+    expect(body.byteLength).toBeGreaterThan(100);
   }
   const status = await (await request.get("/cstd/status.json")).json();
   expect(status.release).toBe("CSTD-7.0");
