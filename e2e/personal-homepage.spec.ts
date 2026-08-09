@@ -192,11 +192,23 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
   const summaryLocator = page.locator("[data-cstd-hero-summary]");
   await expect(titleLocator).toBeVisible();
   await expect(summaryLocator).toBeVisible();
-  const title = await titleLocator.boundingBox();
-  const summary = await summaryLocator.boundingBox();
-  expect(title).not.toBeNull();
-  expect(summary).not.toBeNull();
-  if (title && summary) expect(title.y + title.height).toBeLessThan(summary.y);
+  const heroLayout = await page.evaluate(() => {
+    const title = document.querySelector("h1");
+    const summary = document.querySelector("[data-cstd-hero-summary]");
+    if (!(title instanceof HTMLElement) || !(summary instanceof HTMLElement)) return null;
+    const titleRect = title.getBoundingClientRect();
+    const summaryRect = summary.getBoundingClientRect();
+    return {
+      summaryHeight: summaryRect.height,
+      summaryWidth: summaryRect.width,
+      summaryTop: summaryRect.top,
+      titleBottom: titleRect.bottom,
+    };
+  });
+  expect(heroLayout).not.toBeNull();
+  expect(heroLayout?.summaryHeight).toBeGreaterThan(0);
+  expect(heroLayout?.summaryWidth).toBeGreaterThan(0);
+  expect(heroLayout?.titleBottom).toBeLessThan(heroLayout?.summaryTop ?? 0);
   const heroCapture = await page.screenshot({ animations: "disabled" });
   expect(heroCapture.byteLength).toBeGreaterThan(isMobile ? 60_000 : 120_000);
   await expectNoHorizontalOverflow(page);

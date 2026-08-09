@@ -45,13 +45,12 @@ test.describe("CSTD technical archive", () => {
     await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
     const lens = page.locator("[data-cstd-knowledge-lens]");
     await expect(lens).toBeVisible();
-    await lens.getByRole("button", { name: "你的双站架构怎么隔离？" }).click();
-    await expect(lens.getByText("LOCAL INDEX RESPONSE", { exact: true })).toBeVisible();
+    await expect(lens.locator("[data-cstd-knowledge-card]")).toHaveCount(3);
+    await expect(lens.getByRole("heading", { name: "你的双站架构怎么隔离？" })).toBeVisible();
     await expect(lens).toContainText("真正独立");
-    await expect(lens).toContainText("CONFIDENCE");
-    await expect(lens).toContainText("匹配 2 个公开术语");
-    await expect(lens.getByRole("link", { name: "RocoDex 双站平台" })).toBeVisible();
-    await expect(lens.locator("[data-cstd-graph-path-node]")).toHaveCount(3);
+    await expect(lens.getByText("SOURCE LINKED", { exact: true })).toHaveCount(3);
+    await expect(lens.getByRole("link", { name: "阅读来源" }).first()).toHaveAttribute("href", "/work/rocodex-platform");
+    await expect(lens.getByRole("button")).toHaveCount(0);
     await expect(lens.getByRole("textbox")).toHaveCount(0);
   });
 
