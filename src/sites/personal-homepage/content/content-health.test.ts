@@ -5,7 +5,7 @@ describe("CSTD content health", () => {
   test("publishes complete bilingual and relationship coverage", () => {
     const snapshot = createCstdContentHealth(new Date("2026-08-09T12:00:00Z"));
 
-    expect(snapshot.release).toBe("CSTD-9.0");
+    expect(snapshot.release).toBe("CSTD-17.0");
     expect(snapshot.provenance.contract).toBe("cstd.content-health/v1");
     expect(snapshot.provenance.digest).toMatch(/^fnv1a32:[a-f0-9]{8}$/);
     expect(snapshot.status).toBe("healthy");

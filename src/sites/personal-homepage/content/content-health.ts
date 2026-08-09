@@ -9,7 +9,7 @@ export type CstdContentFreshness = "current" | "aging" | "stale";
 
 export type CstdContentHealthSnapshot = Readonly<{
   schemaVersion: 1;
-  release: "CSTD-9.0";
+  release: "CSTD-17.0";
   generatedAt: string;
   status: "healthy" | "attention";
   score: number;
@@ -142,7 +142,7 @@ export function createCstdContentHealth(now = new Date()): CstdContentHealthSnap
 
   return {
     schemaVersion: 1,
-    release: "CSTD-9.0",
+    release: "CSTD-17.0",
     generatedAt: latestUpdate,
     status: score === 100 ? "healthy" : "attention",
     score,

@@ -1,7 +1,7 @@
 "use client";
 
-import { BookOpen, BriefcaseBusiness, FileText, FlaskConical, Gauge, Languages, Layers3, Network, UserRound } from "lucide-react";
-import { useMemo, useSyncExternalStore } from "react";
+import { BookOpen, BookOpenCheck, BriefcaseBusiness, FileText, FlaskConical, Gauge, Languages, Layers3, Network, UserRound } from "lucide-react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import { CstdLink } from "./cstd-link";
 import { CstdTelemetry } from "./cstd-telemetry";
@@ -10,6 +10,10 @@ import { SignalField, type CstdVisualMode } from "./signal-field";
 const visualModeKey = "cstd-visual-budget";
 const visualModeEvent = "cstd-visual-budget-change";
 let volatileVisualMode: CstdVisualMode = "full";
+type CstdReadingMode = "studio" | "quiet";
+const readingModeKey = "cstd-reading-mode";
+const readingModeEvent = "cstd-reading-mode-change";
+let volatileReadingMode: CstdReadingMode = "studio";
 
 function subscribeVisualMode(onStoreChange: () => void) {
   window.addEventListener("storage", onStoreChange);
@@ -33,6 +37,14 @@ function getVisualModeServerSnapshot(): CstdVisualMode {
   return "full";
 }
 
+function getReadingModeSnapshot(): CstdReadingMode {
+  try {
+    return window.localStorage.getItem(readingModeKey) === "quiet" ? "quiet" : "studio";
+  } catch {
+    return volatileReadingMode;
+  }
+}
+
 const navItems = [
   { href: "/work", label: { zh: "作品", en: "Work" }, icon: BriefcaseBusiness },
   { href: "/notes", label: { zh: "札记", en: "Notes" }, icon: BookOpen },
@@ -48,6 +60,9 @@ function localizedHref(href: string, locale: CstdLocale) {
 
 export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale; page: string; children: React.ReactNode }) {
   const visualMode = useSyncExternalStore(subscribeVisualMode, getVisualModeSnapshot, getVisualModeServerSnapshot);
+  const [readingMode, setReadingMode] = useState<CstdReadingMode>("studio");
+  const [controlsReady, setControlsReady] = useState(false);
+  const readingSurface = page.startsWith("note-");
   const copy = useMemo(() => locale === "zh" ? {
     guide: "技术向导",
     mode: "视觉预算",
@@ -55,6 +70,7 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
     resume: "履历",
     statement: "产品 · 数据 · AI · 研究 · 视觉工程",
     back: "返回电影化主页",
+    reading: "安静阅读",
   } : {
     guide: "Technical guide",
     mode: "Visual budget",
@@ -62,7 +78,24 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
     resume: "Resume",
     statement: "Product · Data · AI · Research · Visual engineering",
     back: "Return to cinematic home",
+    reading: "Quiet reading",
   }, [locale]);
+
+  useEffect(() => {
+    const syncReadingMode = () => {
+      setReadingMode(getReadingModeSnapshot());
+      setControlsReady(true);
+    };
+    const frame = window.requestAnimationFrame(syncReadingMode);
+
+    window.addEventListener("storage", syncReadingMode);
+    window.addEventListener(readingModeEvent, syncReadingMode);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("storage", syncReadingMode);
+      window.removeEventListener(readingModeEvent, syncReadingMode);
+    };
+  }, []);
 
   function cycleVisualMode() {
     const next: CstdVisualMode = visualMode === "full" ? "balanced" : visualMode === "balanced" ? "calm" : "full";
@@ -76,8 +109,21 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
     window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: `visual_${next}`, value: 1 } }));
   }
 
+  function toggleReadingMode() {
+    const next: CstdReadingMode = readingMode === "studio" ? "quiet" : "studio";
+    setReadingMode(next);
+    volatileReadingMode = next;
+    try {
+      window.localStorage.setItem(readingModeKey, next);
+    } catch {
+      // Keep the in-session mode available without persistent storage.
+    }
+    window.dispatchEvent(new Event(readingModeEvent));
+    window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: `reading_${next}`, value: 1 } }));
+  }
+
   return (
-    <div data-cstd-deep-shell data-cstd-visual-mode={visualMode} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
+    <div data-cstd-deep-shell data-cstd-controls-ready={controlsReady ? "true" : "false"} data-cstd-visual-mode={visualMode} data-cstd-reading-mode={readingSurface ? readingMode : "studio"} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
       <a href="#cstd-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:bg-white focus:px-4 focus:py-3 focus:text-black">{locale === "zh" ? "跳到主要内容" : "Skip to content"}</a>
       <SignalField mode={visualMode} />
       <div data-cstd-shell-overlay aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(7,9,11,0.18),rgba(7,9,11,0.82)_80%)]" />
@@ -105,10 +151,15 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
           </nav>
 
           <div className="ml-auto flex items-center gap-2 lg:ml-3">
+            {readingSurface ? (
+              <button type="button" disabled={!controlsReady} onClick={toggleReadingMode} aria-pressed={readingMode === "quiet"} aria-label={`${copy.reading}: ${readingMode}`} title={copy.reading} className="flex h-9 w-9 items-center justify-center border border-white/15 text-[#9aa4a8] transition-colors hover:border-[#3dff8f] hover:text-[#3dff8f] aria-pressed:border-[#3dff8f] aria-pressed:bg-[#3dff8f] aria-pressed:text-[#050709] disabled:cursor-wait disabled:opacity-45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3dff8f]">
+                <BookOpenCheck aria-hidden="true" className="h-4 w-4" />
+              </button>
+            ) : null}
             <CstdLink href={locale === "zh" ? "/en" : "/"} aria-label={locale === "zh" ? "Switch to English" : "切换到中文"} title={locale === "zh" ? "English" : "中文"} className="flex h-9 w-9 items-center justify-center border border-white/15 text-[#9aa4a8] transition-colors hover:border-[#24e0ff] hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]">
               <Languages aria-hidden="true" className="h-4 w-4" />
             </CstdLink>
-            <button type="button" onClick={cycleVisualMode} aria-label={`${copy.mode}: ${visualMode}`} title={`${copy.mode}: ${visualMode}`} className="flex h-9 w-9 items-center justify-center border border-white/15 text-[#9aa4a8] transition-colors hover:border-[#f4d431] hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]">
+            <button type="button" disabled={!controlsReady} onClick={cycleVisualMode} aria-label={`${copy.mode}: ${visualMode}`} title={`${copy.mode}: ${visualMode}`} className="flex h-9 w-9 items-center justify-center border border-white/15 text-[#9aa4a8] transition-colors hover:border-[#f4d431] hover:text-[#f4d431] disabled:cursor-wait disabled:opacity-45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]">
               <Gauge aria-hidden="true" className="h-4 w-4" />
             </button>
             <CstdLink href={localizedHref("/map", locale)} aria-label={copy.guide} title={copy.guide} className="flex h-9 w-9 items-center justify-center border border-[#24e0ff]/45 bg-[#24e0ff]/10 text-[#24e0ff] transition-colors hover:bg-[#24e0ff] hover:text-[#050709] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]">

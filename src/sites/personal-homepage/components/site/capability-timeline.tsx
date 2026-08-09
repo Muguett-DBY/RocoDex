@@ -24,7 +24,7 @@ export function CstdCapabilityTimeline({ locale, compact = false }: { locale: Cs
           </>
         );
         const className = "group grid gap-5 border-b border-white/15 py-7 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#24e0ff] md:grid-cols-[8rem_minmax(0,1fr)_8rem]";
-        return entry.evidence[locale].startsWith("/") ? <li key={entry.date}><CstdLink href={entry.evidence[locale]} className={className}>{content}</CstdLink></li> : <li key={entry.date}><a href={entry.evidence[locale]} target="_blank" rel="noreferrer" className={className}>{content}</a></li>;
+        return entry.evidence[locale].startsWith("/") ? <li key={entry.id}><CstdLink href={entry.evidence[locale]} className={className}>{content}</CstdLink></li> : <li key={entry.id}><a href={entry.evidence[locale]} target="_blank" rel="noreferrer" className={className}>{content}</a></li>;
       })}
     </ol>
   );

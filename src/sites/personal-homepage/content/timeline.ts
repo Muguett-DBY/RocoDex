@@ -2,6 +2,7 @@ import type { CstdLocale, LocalizedText } from "./content-types";
 import type { CstdSystem } from "./systems";
 
 export type CstdTimelineEntry = Readonly<{
+  id: string;
   date: string;
   kind: "education" | "project" | "diagnosis" | "release";
   title: LocalizedText;
@@ -12,6 +13,7 @@ export type CstdTimelineEntry = Readonly<{
 
 export const cstdTimeline: readonly CstdTimelineEntry[] = [
   {
+    id: "numerical-foundations",
     date: "2022-02-01",
     kind: "education",
     title: { zh: "从数值计算与面向对象开始", en: "Starting with numerical computing and objects" },
@@ -20,6 +22,7 @@ export const cstdTimeline: readonly CstdTimelineEntry[] = [
     evidence: { zh: "/about", en: "/en/about" },
   },
   {
+    id: "data-interface",
     date: "2024-03-01",
     kind: "education",
     title: { zh: "把数据探索变成可操作界面", en: "Turning data exploration into an interface" },
@@ -28,6 +31,7 @@ export const cstdTimeline: readonly CstdTimelineEntry[] = [
     evidence: { zh: "/notes/data-wrangling-as-product-design", en: "/en/notes/data-wrangling-as-product-design" },
   },
   {
+    id: "service-boundaries",
     date: "2025-03-01",
     kind: "project",
     title: { zh: "服务、数据库与业务边界汇合", en: "Services, databases, and product boundaries converge" },
@@ -36,6 +40,7 @@ export const cstdTimeline: readonly CstdTimelineEntry[] = [
     evidence: { zh: "/work/cfzzs-crm", en: "/en/work/cfzzs-crm" },
   },
   {
+    id: "dual-host-release",
     date: "2026-06-26",
     kind: "release",
     title: { zh: "一个仓库承载两个独立产品", en: "One repository, two independent products" },
@@ -44,6 +49,7 @@ export const cstdTimeline: readonly CstdTimelineEntry[] = [
     evidence: { zh: "/work/rocodex-platform", en: "/en/work/rocodex-platform" },
   },
   {
+    id: "dcf-cache-diagnosis",
     date: "2026-07-15",
     kind: "diagnosis",
     title: { zh: "性能瓶颈不在 DCF 数学", en: "The bottleneck was not DCF mathematics" },
@@ -52,6 +58,7 @@ export const cstdTimeline: readonly CstdTimelineEntry[] = [
     evidence: { zh: "/notes/observable-dcf-pipeline", en: "/en/notes/observable-dcf-pipeline" },
   },
   {
+    id: "adaptive-archive-release",
     date: "2026-08-08",
     kind: "release",
     title: { zh: "CSTD 技术档案与自适应视觉上线", en: "CSTD technical archive and adaptive visuals ship" },
@@ -60,11 +67,21 @@ export const cstdTimeline: readonly CstdTimelineEntry[] = [
     evidence: { zh: "https://github.com/Muguett-DBY/RocoDex/commit/049d2de", en: "https://github.com/Muguett-DBY/RocoDex/commit/049d2de" },
   },
   {
+    id: "cstd-9-observatory",
     date: "2026-08-09",
     kind: "release",
     title: { zh: "CSTD 9.0 工程观测与深度档案上线", en: "CSTD 9.0 engineering observatory and deep dossiers ship" },
     summary: { zh: "个人方法、构建来源、内容健康、旗舰案例故障档案与实时视觉预算进入同一个发布契约。", en: "Personal method, build provenance, content health, flagship failure dossiers, and live visual budgets enter one release contract." },
     capabilityIds: ["product-surfaces", "edge-operations", "ai-creation", "data-systems"],
     evidence: { zh: "/observatory.json", en: "/en/observatory.json" },
+  },
+  {
+    id: "cstd-17-universe",
+    date: "2026-08-09",
+    kind: "release",
+    title: { zh: "CSTD 17.0 个人工程宇宙上线", en: "CSTD 17.0 personal engineering universe ships" },
+    summary: { zh: "身份首屏、统一世界、系统纪录片、可执行实验、连续知识路径、安静阅读、原生转场与公开性能契约完成同一发布闭环。", en: "Identity-first presentation, one coherent world, system documentaries, executable labs, continuous knowledge paths, quiet reading, native transitions, and a public performance contract close one release loop." },
+    capabilityIds: ["product-surfaces", "edge-operations", "ai-creation", "research-models", "data-systems"],
+    evidence: { zh: "/performance.json", en: "/en/performance.json" },
   },
 ];

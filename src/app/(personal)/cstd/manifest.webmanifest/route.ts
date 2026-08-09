@@ -1,7 +1,7 @@
 const manifest = {
-  name: "CSTD // Custard Engineering Studio",
-  short_name: "CSTD",
-  description: "Custard's evidence-driven personal engineering studio.",
+  name: "Custard // Personal Engineering Universe",
+  short_name: "Custard",
+  description: "Custard's identity-first portfolio of shipped systems, executable evidence, and engineering knowledge.",
   start_url: "/",
   scope: "/",
   display: "standalone",

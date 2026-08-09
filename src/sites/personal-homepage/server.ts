@@ -13,6 +13,8 @@ export { cstdProofMeshManifest } from "./content/proof-mesh";
 export { cstdKnowledgeGraph } from "./content/knowledge-graph";
 export { cstdStudioSnapshot } from "./content/studio-status";
 export { cstdEngineeringObservatory, cstdHomepageObservatory } from "./content/observatory";
+export { cstdPerformanceContract } from "./content/performance-contract";
+export { cstdExperienceContract } from "./content/experience-contract";
 export { cstdContentHealth } from "./content/content-health";
 export { createCstdSecurityTxtResponse } from "./infrastructure/security";
 export { cstdReleaseLedger } from "./content/release-ledger";

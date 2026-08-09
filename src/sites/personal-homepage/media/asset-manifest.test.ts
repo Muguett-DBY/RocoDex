@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 import { cstdBroadcasts, cstdEditorialAssets, cstdVisualAssets } from "./asset-manifest";
 
@@ -13,7 +13,12 @@ describe("CSTD media manifest", () => {
         .map((asset) => asset.sceneId),
     ).toEqual(["hero"]);
     expect(cstdVisualAssets.every((asset) => asset.src.startsWith("/cstd-"))).toBe(true);
-    expect(cstdVisualAssets.filter((asset) => asset.src.endsWith("-v2.webp"))).toHaveLength(3);
+    expect(cstdVisualAssets.filter((asset) => asset.src.endsWith("-v4.webp"))).toHaveLength(3);
+    for (const asset of cstdVisualAssets) {
+      const filePath = path.join(process.cwd(), "public", asset.src.slice(1));
+      expect(existsSync(filePath)).toBe(true);
+      expect(statSync(filePath).size).toBeLessThanOrEqual(320_000);
+    }
   });
 
   test("provides modern and compatibility video sources for each primary project", () => {
@@ -24,11 +29,11 @@ describe("CSTD media manifest", () => {
     }
   });
 
-  test("versions every CSTD 9.0 editorial visual and keeps it deployable", () => {
-    expect(cstdEditorialAssets).toHaveLength(4);
-    expect(new Set(cstdEditorialAssets.map((asset) => asset.purpose)).size).toBe(4);
+  test("versions every CSTD 17.0 editorial visual and keeps it deployable", () => {
+    expect(cstdEditorialAssets).toHaveLength(7);
+    expect(new Set(cstdEditorialAssets.map((asset) => asset.purpose)).size).toBe(7);
     for (const asset of cstdEditorialAssets) {
-      expect(asset.src).toMatch(/^\/cstd-universe\/.+-v3\.webp$/);
+      expect(asset.src).toMatch(/^\/cstd-universe\/.+-v[34]\.webp$/);
       expect(existsSync(path.join(process.cwd(), "public", asset.src.slice(1)))).toBe(true);
     }
   });

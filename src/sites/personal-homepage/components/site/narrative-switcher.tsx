@@ -6,7 +6,7 @@ import { cstdNarratives, type CstdNarrativeMode } from "../../content/narratives
 export function NarrativeSwitcher({ locale = "zh", mode, onChange }: { locale?: CstdLocale; mode: CstdNarrativeMode; onChange: (mode: CstdNarrativeMode) => void }) {
   return (
     <div data-cstd-narrative-switcher>
-      <p className="font-mono text-[8px] font-black text-[#68757b]">{locale === "zh" ? "选择观看路径" : "CHOOSE A VIEWING PATH"}</p>
+      <p className="font-mono text-[8px] font-black text-[#9aa4a8]">{locale === "zh" ? "选择观看路径" : "CHOOSE A VIEWING PATH"}</p>
       <div className="mt-3 inline-grid grid-cols-3 border border-white/18 bg-[#050709]/70 p-1 backdrop-blur-md" role="radiogroup" aria-label={locale === "zh" ? "访客叙事模式" : "Visitor narrative mode"}>
         {cstdNarratives.map((entry) => (
           <button

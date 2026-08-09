@@ -3,6 +3,7 @@ import path from "node:path";
 import vm from "node:vm";
 
 const nextRoot = path.resolve(".next");
+const performanceContract = JSON.parse(readFileSync(path.resolve("src/sites/personal-homepage/content/performance-contract.json"), "utf8"));
 const routeKey = "/(personal)/cstd/page";
 const clientManifestPath = path.join(
   nextRoot,
@@ -12,13 +13,13 @@ const loadableManifestPath = path.join(
   nextRoot,
   "server/app/(personal)/cstd/page/react-loadable-manifest.json",
 );
-const initialBudget = 150_000;
-const webglEntryBudget = 1_000_000;
-const liteWebglBudget = 20_000;
-const webglBudget = 1_500_000;
-const webgpuBudget = 24_000;
-const originalVisualBudget = 1_550_000;
-const originalVisualFileBudget = 340_000;
+const initialBudget = performanceContract.budgets.initialJavascriptBytes;
+const webglEntryBudget = performanceContract.budgets.baseWebglBytes;
+const liteWebglBudget = performanceContract.budgets.liteWebglBytes;
+const webglBudget = performanceContract.budgets.fullWebglBytes;
+const webgpuBudget = performanceContract.budgets.webgpuBytes;
+const originalVisualBudget = performanceContract.budgets.universeAssetBytes;
+const originalVisualFileBudget = performanceContract.budgets.sceneAssetBytes;
 
 function assetPath(asset) {
   return path.join(nextRoot, asset.replace(/^\/_next\//, "").replace(/^_next\//, ""));
@@ -73,15 +74,9 @@ const highQualityAssets = readdirSync(path.join(nextRoot, "static/chunks"))
   });
 const highQualityBytes = bytesFor(highQualityAssets);
 const fullWebglBytes = webglBytes + highQualityBytes;
-const originalVisuals = [
-  "public/cstd-universe/cstd-neural-foundry-v2.webp",
-  "public/cstd-universe/cstd-evidence-foundry-v2.webp",
-  "public/cstd-universe/cstd-knowledge-loom-v2.webp",
-  "public/cstd-universe/cstd-observatory-core-v3.webp",
-  "public/cstd-universe/cstd-case-blueprint-v3.webp",
-  "public/cstd-universe/cstd-knowledge-loom-v3.webp",
-  "public/cstd-universe/cstd-method-bench-v3.webp",
-];
+const originalVisuals = readdirSync(path.resolve("public/cstd-universe"))
+  .filter((asset) => asset.endsWith(".webp"))
+  .map((asset) => `public/cstd-universe/${asset}`);
 const originalVisualBytes = originalVisuals.reduce((total, asset) => total + statSync(path.resolve(asset)).size, 0);
 const oversizedOriginalVisual = originalVisuals.find((asset) => statSync(path.resolve(asset)).size > originalVisualFileBudget);
 
@@ -129,10 +124,10 @@ if (fullWebglBytes > webglBudget) {
   throw new Error(`Personal homepage full WebGL JS is ${fullWebglBytes} bytes; budget is ${webglBudget}`);
 }
 if (originalVisualBytes > originalVisualBudget) {
-  throw new Error(`CSTD 9.0 original visuals total ${originalVisualBytes} bytes; budget is ${originalVisualBudget}`);
+  throw new Error(`CSTD 17.0 universe visuals total ${originalVisualBytes} bytes; budget is ${originalVisualBudget}`);
 }
 if (oversizedOriginalVisual) {
-  throw new Error(`CSTD 9.0 original visual ${oversizedOriginalVisual} exceeds ${originalVisualFileBudget} bytes`);
+  throw new Error(`CSTD 17.0 universe visual ${oversizedOriginalVisual} exceeds ${originalVisualFileBudget} bytes`);
 }
 
 console.log(

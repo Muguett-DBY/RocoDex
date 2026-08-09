@@ -19,6 +19,8 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/studio.json",
   "/observatory.json",
   "/content-health.json",
+  "/performance.json",
+  "/experience.json",
   "/releases.json",
   "/feed.json",
   "/topics.json",
@@ -41,6 +43,8 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/en/studio.json",
   "/en/observatory.json",
   "/en/content-health.json",
+  "/en/performance.json",
+  "/en/experience.json",
   "/en/releases.json",
 ]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([

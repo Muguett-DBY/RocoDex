@@ -72,19 +72,32 @@ test.describe("CSTD technical archive", () => {
     await page.goto("/cstd/lab/data-lens");
     const values = page.locator('[data-cstd-lab="data-lens"] dl dd');
     const before = await values.allTextContents();
-    const growthControl = page.getByLabel("现金流增长");
+    const growthControl = page.getByRole("slider", { name: "现金流增长" });
     await growthControl.focus();
     await growthControl.press("ArrowRight");
     await expect(page.locator('[data-cstd-control-value="growth"]')).toHaveText("6.5%");
     const after = await values.allTextContents();
     expect(after).not.toEqual(before);
     await expect(page.getByText("不构成投资建议")).toBeVisible();
+    await expect(page.locator("[data-cstd-dcf-sensitivity] button")).toHaveCount(26);
+    await page.locator("[data-cstd-dcf-sensitivity] button").nth(7).click();
 
     await page.goto("/cstd/lab/agent-replay");
     await page.getByRole("checkbox", { name: "在综合阶段注入一个更新任务" }).check();
     const next = page.getByRole("button", { name: "下一步" });
     for (let index = 0; index < 4; index += 1) await next.click();
     await expect(page.getByText(/发布被拒绝：令牌 042/)).toBeVisible();
+    await page.getByRole("button", { name: "注入并发编辑" }).click();
+    await page.getByRole("button", { name: "提交草稿" }).click();
+    await expect(page.locator("[data-cstd-conflict-forge]")).toHaveAttribute("data-cstd-conflict-state", "conflict");
+    await expect(page.getByText("409 VERSION CONFLICT", { exact: true })).toBeVisible();
+
+    await page.goto("/cstd/lab/system-trace");
+    await page.getByLabel("HOST").fill("rocodex.custard.top");
+    await expect(page.locator("[data-cstd-route-decision]")).toHaveAttribute("data-cstd-route-decision", "next");
+    await page.getByLabel("HOST").fill("custard.top");
+    await page.getByLabel("PATH").fill("/work/rocodex-platform");
+    await expect(page.locator("[data-cstd-route-decision]")).toHaveAttribute("data-cstd-route-decision", "rewrite");
 
     await page.goto("/cstd/lab/proof-museum");
     const museum = page.locator("[data-cstd-proof-museum]");
@@ -104,6 +117,7 @@ test.describe("CSTD technical archive", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText("系统边界");
     await expect(page.getByRole("link", { name: /RocoDex 双站平台/ })).toBeVisible();
     await expect(page.getByRole("link", { name: /Proof Museum/ })).toBeVisible();
+    await expect(page.locator("[data-cstd-topic-path]")).toContainText("01 / 05");
   });
 
   test("renders motion under reduced-motion emulation without horizontal overflow", async ({ page }) => {
@@ -149,7 +163,7 @@ test.describe("CSTD technical archive", () => {
     expect(proofResponse.status()).toBe(200);
     expect(proofResponse.headers()["content-type"]).toContain("application/json");
     const proof = await proofResponse.json();
-    expect(proof.release).toBe("CSTD-9.0");
+    expect(proof.release).toBe("CSTD-17.0");
     expect(proof.entries).toHaveLength(6);
     expect(proof.totals.artifacts).toBeGreaterThanOrEqual(20);
 
@@ -167,11 +181,19 @@ test.describe("CSTD technical archive", () => {
 
     const observatoryResponse = await request.get("/observatory.json", { headers: { host: "custard.top" } });
     expect(observatoryResponse.status()).toBe(200);
-    expect((await observatoryResponse.json()).provenance.contract).toBe("cstd.engineering-observatory/v1");
+    expect((await observatoryResponse.json()).provenance.contract).toBe("cstd.engineering-observatory/v2");
 
     const healthResponse = await request.get("/content-health.json", { headers: { host: "custard.top" } });
     expect(healthResponse.status()).toBe(200);
     expect((await healthResponse.json()).score).toBe(100);
+
+    const performanceResponse = await request.get("/performance.json", { headers: { host: "custard.top" } });
+    expect(performanceResponse.status()).toBe(200);
+    expect((await performanceResponse.json()).budgets.sceneAssetBytes).toBe(320_000);
+
+    const experienceResponse = await request.get("/experience.json", { headers: { host: "custard.top" } });
+    expect(experienceResponse.status()).toBe(200);
+    expect((await experienceResponse.json()).acts).toHaveLength(6);
 
     const securityResponse = await request.get("/.well-known/security.txt", { headers: { host: "custard.top" } });
     expect(securityResponse.status()).toBe(200);

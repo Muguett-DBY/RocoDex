@@ -90,3 +90,19 @@ export function getCstdTopic(slug: string) {
 export function getCstdTopicPath(topic: CstdTopic, locale: CstdLocale) {
   return locale === "en" ? `/en/topics/${topic.slug}` : `/topics/${topic.slug}`;
 }
+
+export function getCstdTopicSequence(slug: string) {
+  const index = cstdTopics.findIndex((topic) => topic.slug === slug);
+  if (index < 0) return undefined;
+  return {
+    index,
+    position: index + 1,
+    total: cstdTopics.length,
+    previous: cstdTopics[(index - 1 + cstdTopics.length) % cstdTopics.length],
+    next: cstdTopics[(index + 1) % cstdTopics.length],
+  } as const;
+}
+
+export function getCstdTopicsForNote(noteSlug: string) {
+  return cstdTopics.filter((topic) => topic.noteSlugs.includes(noteSlug));
+}

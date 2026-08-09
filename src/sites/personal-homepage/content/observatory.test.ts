@@ -9,14 +9,16 @@ describe("CSTD engineering observatory", () => {
       VERCEL_URL: "rocodex.example.vercel.app",
     }, new Date("2026-08-09T12:00:00Z"));
 
-    expect(snapshot.release).toBe("CSTD-9.0");
+    expect(snapshot.release).toBe("CSTD-17.0");
+    expect(snapshot.schemaVersion).toBe(2);
     expect(snapshot.deployment.environment).toBe("production");
     expect(snapshot.deployment.url).toBe("https://custard.top");
     expect(snapshot.deployment.shortCommit).toBe("c024523");
     expect(snapshot.deployment.sourceHref).toContain("/commit/c024523");
     expect(snapshot.verification).toHaveLength(4);
     expect(snapshot.totals.contentHealth).toBe(100);
-    expect(snapshot.provenance.contract).toBe("cstd.engineering-observatory/v1");
+    expect(snapshot.provenance.contract).toBe("cstd.engineering-observatory/v2");
+    expect(snapshot.performance.budgets.initialJavascriptBytes).toBe(150_000);
   });
 
   test("keeps local snapshots honest when no deployment metadata exists", () => {

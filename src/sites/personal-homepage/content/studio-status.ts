@@ -20,7 +20,7 @@ export type CstdDistrictStatus = Readonly<{
 
 export type CstdStudioSnapshot = Readonly<{
   schemaVersion: 3;
-  release: "CSTD-9.0";
+  release: "CSTD-17.0";
   generatedAt: string;
   source: "build-time-public-evidence";
   provenance: Readonly<{
@@ -85,7 +85,7 @@ export function createCstdStudioSnapshot(now = new Date()): CstdStudioSnapshot {
 
   return {
     schemaVersion: 3,
-    release: "CSTD-9.0",
+    release: "CSTD-17.0",
     generatedAt,
     source: "build-time-public-evidence",
     provenance: {

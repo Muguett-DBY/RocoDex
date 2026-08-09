@@ -43,7 +43,11 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/llms.txt")).toEqual({ kind: "rewrite", path: "/cstd/llms.txt" });
     expect(getPersonalSiteRouteDecision("custard.top", "/observatory.json")).toEqual({ kind: "rewrite", path: "/cstd/observatory.json" });
     expect(getPersonalSiteRouteDecision("custard.top", "/content-health.json")).toEqual({ kind: "rewrite", path: "/cstd/content-health.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/performance.json")).toEqual({ kind: "rewrite", path: "/cstd/performance.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/experience.json")).toEqual({ kind: "rewrite", path: "/cstd/experience.json" });
     expect(getPersonalSiteRouteDecision("custard.top", "/en/observatory.json")).toEqual({ kind: "rewrite", path: "/cstd/en/observatory.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/performance.json")).toEqual({ kind: "rewrite", path: "/cstd/en/performance.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/experience.json")).toEqual({ kind: "rewrite", path: "/cstd/en/experience.json" });
     expect(getPersonalSiteRouteDecision("custard.top", "/manifest.webmanifest")).toEqual({ kind: "rewrite", path: "/cstd/manifest.webmanifest" });
     expect(getPersonalSiteRouteDecision("custard.top", "/.well-known/security.txt")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/for/research")).toEqual({ kind: "rewrite", path: "/cstd/for/research" });
