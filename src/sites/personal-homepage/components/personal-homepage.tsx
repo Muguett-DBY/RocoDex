@@ -24,15 +24,12 @@ import {
   type CstdRuntimeProfile,
 } from "../experience/runtime-hooks";
 import { useCstdSceneClock } from "../experience/scene-clock";
+import { HomepageHeader } from "./homepage-header";
 import { MemoizedSceneRuntime } from "./scene-runtime";
 
 const LazyNeuralGate = lazy(() =>
   import("../scenes/neural-gate/neural-gate").then((module) => ({ default: module.MemoizedNeuralGate })),
 );
-const LazyHomepageHeader = lazy(() =>
-  import("./homepage-header").then((module) => ({ default: module.HomepageHeader })),
-);
-
 const LazyLivingStudioTwin = lazy(() =>
   import("./sections/living-studio-twin").then((module) => ({ default: module.MemoizedLivingStudioTwin })),
 );
@@ -215,15 +212,13 @@ export function PersonalHomepage({
         className="fixed inset-x-0 top-0 z-[70] h-0.5 origin-left scale-x-0 bg-[#f4c95d]"
       />
 
-      <Suspense fallback={<div aria-hidden="true" className="fixed inset-x-0 top-0 z-50 h-16 border-b border-white/10 bg-[#050709]" />}>
-        <LazyHomepageHeader
-          activeSceneId={activeSceneId}
-          overdrive={overdrive}
-          reducedMotion={reducedMotion}
-          onToggleOverdrive={toggleOverdrive}
-          onToggleMotion={toggleMotionMode}
-        />
-      </Suspense>
+      <HomepageHeader
+        activeSceneId={activeSceneId}
+        overdrive={overdrive}
+        reducedMotion={reducedMotion}
+        onToggleOverdrive={toggleOverdrive}
+        onToggleMotion={toggleMotionMode}
+      />
 
       <Suspense
         fallback={(
@@ -239,26 +234,34 @@ export function PersonalHomepage({
         <LazyNeuralGate narrativeMode={narrativeMode} />
       </Suspense>
 
-      <Suspense fallback={<div className="relative z-20 min-h-[60svh] bg-[#0a0c0f]" />}>
-        <LazyLivingStudioTwin
-          activeSystemId={activeSystemId}
-          setActiveSystemId={setActiveSystemId}
-          narrativeMode={narrativeMode}
-          observatory={observatory}
-        />
-      </Suspense>
+      <div id="systems" data-cstd-scene-shell="systems" className="relative scroll-mt-16">
+        <Suspense fallback={<section data-cstd-chapter="systems" data-cstd-scene="systems" aria-hidden="true" className="relative z-20 min-h-[140svh] bg-[#0a0c0f]" />}>
+          <LazyLivingStudioTwin
+            activeSystemId={activeSystemId}
+            setActiveSystemId={setActiveSystemId}
+            narrativeMode={narrativeMode}
+            observatory={observatory}
+          />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<div className="relative z-20 min-h-[60svh] bg-[#080a0c]" />}>
-        <LazySelectedWork reducedMotion={reducedMotion} narrativeMode={narrativeMode} />
-      </Suspense>
+      <div id="proof" data-cstd-scene-shell="proof" className="relative scroll-mt-16">
+        <Suspense fallback={<section data-cstd-chapter="proof" data-cstd-scene="proof" aria-hidden="true" className="relative z-20 min-h-[125svh] bg-[#efeee8]" />}>
+          <LazySelectedWork reducedMotion={reducedMotion} narrativeMode={narrativeMode} />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<div className="relative z-20 min-h-[60svh] bg-[#050709]" />}>
-        <LazyExecutableEvidence />
-      </Suspense>
+      <div id="operator" data-cstd-scene-shell="operator" className="relative scroll-mt-16">
+        <Suspense fallback={<section data-cstd-chapter="operator" data-cstd-scene="operator" aria-hidden="true" className="relative z-20 min-h-svh bg-[#050709]" />}>
+          <LazyExecutableEvidence />
+        </Suspense>
+      </div>
 
-      <Suspense fallback={<div className="relative z-20 min-h-[60svh] bg-[#08100d]" />}>
-        <LazyKnowledgeLens observatory={observatory} />
-      </Suspense>
+      <div id="path" data-cstd-scene-shell="path" className="relative scroll-mt-16">
+        <Suspense fallback={<section data-cstd-chapter="path" data-cstd-scene="path" aria-hidden="true" className="relative z-20 min-h-[110svh] bg-[#08100d]" />}>
+          <LazyKnowledgeLens observatory={observatory} />
+        </Suspense>
+      </div>
 
       <Suspense fallback={<div className="relative z-20 min-h-[80svh] bg-[#050709]" />}>
         <LazyFinale narrativeMode={narrativeMode} />

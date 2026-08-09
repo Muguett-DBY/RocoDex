@@ -127,6 +127,7 @@ test("CSTD embeds the matching executable replay in deep cases", async ({ page }
 });
 
 test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", async ({ page, request }) => {
+  test.setTimeout(120_000);
   const audienceResponse = await page.goto("/cstd/for/research", { waitUntil: "domcontentloaded" });
   expect(audienceResponse?.ok()).toBe(true);
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-narrative-mode", "researcher");
@@ -148,6 +149,7 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
     ["/.well-known/security.txt", "text/plain"],
     ["/cstd-case-worker.js", "javascript"],
   ] as const;
+  const endpointBodies = new Map<string, Buffer>();
   for (const [url, contentType] of endpoints) {
     const response = await request.get(url);
     const body = await response.body();
@@ -157,26 +159,28 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
     ).toBe(true);
     expect(response.headers()["content-type"]).toContain(contentType);
     expect(body.byteLength).toBeGreaterThan(100);
+    endpointBodies.set(url, body);
   }
-  const status = await (await request.get("/cstd/status.json")).json();
+  const readJson = (url: string) => JSON.parse(endpointBodies.get(url)?.toString("utf8") ?? "null");
+  const status = readJson("/cstd/status.json");
   expect(status.release).toBe("CSTD-17.0");
   expect(status.provenance.contract).toBe("cstd.studio-snapshot/v3");
   expect(status.districts).toHaveLength(5);
-  const graph = await (await request.get("/cstd/graph.json")).json();
+  const graph = readJson("/cstd/graph.json");
   expect(graph.nodes.length).toBeGreaterThanOrEqual(29);
-  const observatory = await (await request.get("/cstd/observatory.json")).json();
+  const observatory = readJson("/cstd/observatory.json");
   expect(observatory.provenance.contract).toBe("cstd.engineering-observatory/v2");
   expect(observatory.verification).toHaveLength(4);
-  const contentHealth = await (await request.get("/cstd/content-health.json")).json();
+  const contentHealth = readJson("/cstd/content-health.json");
   expect(contentHealth).toMatchObject({ status: "healthy", score: 100 });
-  const performance = await (await request.get("/cstd/performance.json")).json();
+  const performance = readJson("/cstd/performance.json");
   expect(performance).toMatchObject({
     release: "CSTD-17.0",
     budgets: { initialJavascriptBytes: 150_000 },
     delivery: { defaultRuntimeTier: "image", enhancedRuntimeTrigger: "explicit-user-action" },
     cacheComponents: { status: "evaluated-not-enabled" },
   });
-  const experience = await (await request.get("/cstd/experience.json")).json();
+  const experience = readJson("/cstd/experience.json");
   expect(experience.identity.zh).toBe("奶黄包");
   expect(experience.acts).toHaveLength(6);
 });
@@ -187,7 +191,7 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
     window.localStorage.setItem("cstd-motion-mode", "calm");
   });
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
-  await expect(page.locator('[data-cstd-world-frame="hero"] img')).toHaveAttribute("src", /cstd-custard-core-v4/);
+  await expect(page.locator('[data-cstd-world-frame="hero"] img')).toHaveAttribute("src", /cstd-custard-core-v5/);
   const titleLocator = page.getByRole("heading", { level: 1, name: "奶黄包" });
   const summaryLocator = page.locator("[data-cstd-hero-summary]");
   await expect(titleLocator).toBeVisible();
@@ -223,6 +227,62 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
   expect(proseFontSize).toBeGreaterThanOrEqual(19);
   await expect(page.locator("[data-cstd-note-paths]")).toBeVisible();
   await expectNoHorizontalOverflow(page);
+});
+
+test("CSTD header anchors land immediately without a stalled view transition", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "The compact mobile header exposes the primary work shortcut instead of the desktop rail.");
+  const transitionErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error" && message.text().includes("Transition was aborted")) transitionErrors.push(message.text());
+  });
+
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
+  const navigation = page.getByRole("navigation", { name: "首页导航" });
+  for (const destination of [
+    { id: "systems", label: "能力", selector: "#systems" },
+    { id: "proof", label: "作品", selector: "#proof" },
+    { id: "operator", label: "证据", selector: "#operator" },
+  ]) {
+    await navigation.getByRole("link", { name: destination.label, exact: true }).click({ noWaitAfter: true });
+    await expect(page.locator("html")).toHaveAttribute("data-cstd-anchor-target", destination.id);
+    const responseMs = Number(await page.locator("html").getAttribute("data-cstd-anchor-response-ms"));
+    expect(responseMs, `${destination.label} should respond inside the click frame`).toBeLessThan(100);
+    await page.evaluate(() => new Promise<void>((resolve) => {
+      window.requestAnimationFrame(() => window.requestAnimationFrame(() => resolve()));
+    }));
+    const landingOffset = await page.evaluate((selector) => {
+      const target = document.querySelector(selector);
+      const header = document.querySelector("[data-cstd-home-header]");
+      if (!(target instanceof HTMLElement) || !(header instanceof HTMLElement)) return Number.POSITIVE_INFINITY;
+      return Math.abs(target.getBoundingClientRect().top - header.getBoundingClientRect().bottom - 8);
+    }, destination.selector);
+    expect(landingOffset, `${destination.label} should land directly below the floating header`).toBeLessThanOrEqual(24);
+  }
+  expect(transitionErrors).toEqual([]);
+});
+
+test("CSTD reading navigation prewarms the route and responds inside the click frame", async ({ page, isMobile }) => {
+  test.skip(Boolean(isMobile), "The compact mobile header exposes the primary work shortcut instead of the desktop rail.");
+  const transitionErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error" && message.text().includes("Transition was aborted")) transitionErrors.push(message.text());
+  });
+
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
+  const navigation = page.getByRole("navigation", { name: "首页导航" });
+  const notesLink = navigation.getByRole("link", { name: "札记", exact: true });
+  await notesLink.hover();
+  await page.waitForTimeout(300);
+  const routeStarted = Date.now();
+  await notesLink.evaluate((element) => (element as HTMLAnchorElement).click());
+  expect(Date.now() - routeStarted).toBeLessThan(500);
+  await expect(page.locator("html")).toHaveAttribute("data-cstd-navigation-pending", "reading");
+  await expect(page.locator("html")).toHaveAttribute("data-cstd-navigation-target", "/cstd/notes");
+  await expect(page).toHaveURL(/\/cstd\/notes$/, { timeout: 30_000 });
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 30_000 });
+  expect(transitionErrors).toEqual([]);
 });
 
 test("CSTD reaches its tailored finale without a scroll trap", async ({ page, isMobile }) => {

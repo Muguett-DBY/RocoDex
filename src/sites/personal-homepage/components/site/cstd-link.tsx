@@ -2,15 +2,12 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { ComponentProps, MouseEvent } from "react";
+import { useCallback, useEffect, type ComponentProps, type FocusEvent, type MouseEvent } from "react";
 import { createCstdNavigationSnapshot } from "../../domain/route-transition";
 
-type CstdLinkProps = Omit<ComponentProps<typeof Link>, "href"> & {
+type CstdLinkProps = Omit<ComponentProps<typeof Link>, "href" | "prefetch"> & {
   href: string;
-};
-
-type TransitionDocument = Document & {
-  startViewTransition?: (callback: () => void | Promise<void>) => { finished: Promise<void> };
+  eagerPrefetch?: boolean;
 };
 
 const navigationStateKey = "cstd:last-navigation";
@@ -21,8 +18,39 @@ function getLocalDevelopmentHref(href: string) {
   return href === "/" ? "/cstd" : `/cstd${href}`;
 }
 
-export function CstdLink({ href, onClick, ...props }: CstdLinkProps) {
+function resolveCstdHref(href: string) {
+  const host = window.location.hostname.toLowerCase();
+  return host === "custard.top" || host === "www.custard.top" ? href : getLocalDevelopmentHref(href);
+}
+
+export function CstdLink({
+  href,
+  eagerPrefetch = false,
+  onClick,
+  onFocus,
+  onMouseEnter,
+  ...props
+}: CstdLinkProps) {
   const router = useRouter();
+
+  const prefetchRoute = useCallback(() => {
+    if (!href.startsWith("/")) return;
+    router.prefetch(resolveCstdHref(href));
+  }, [href, router]);
+
+  useEffect(() => {
+    if (eagerPrefetch) prefetchRoute();
+  }, [eagerPrefetch, prefetchRoute]);
+
+  function handleFocus(event: FocusEvent<HTMLAnchorElement>) {
+    onFocus?.(event);
+    if (!event.defaultPrevented) prefetchRoute();
+  }
+
+  function handleMouseEnter(event: MouseEvent<HTMLAnchorElement>) {
+    onMouseEnter?.(event);
+    if (!event.defaultPrevented) prefetchRoute();
+  }
 
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
     onClick?.(event);
@@ -37,8 +65,7 @@ export function CstdLink({ href, onClick, ...props }: CstdLinkProps) {
       || !href.startsWith("/")
     ) return;
 
-    const host = window.location.hostname.toLowerCase();
-    const resolvedHref = host === "custard.top" || host === "www.custard.top" ? href : getLocalDevelopmentHref(href);
+    const resolvedHref = resolveCstdHref(href);
     const snapshot = createCstdNavigationSnapshot(`${window.location.pathname}${window.location.search}`, href, window.scrollY);
     try {
       window.sessionStorage.setItem(navigationStateKey, JSON.stringify(snapshot));
@@ -46,29 +73,23 @@ export function CstdLink({ href, onClick, ...props }: CstdLinkProps) {
       // Navigation remains functional when session storage is unavailable.
     }
     window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: "route_transition", value: routeKindMetric[snapshot.kind] } }));
-    const transitionDocument = document as TransitionDocument;
-    if (!transitionDocument.startViewTransition && resolvedHref === href) return;
-
     event.preventDefault();
-    if (transitionDocument.startViewTransition) {
-      document.documentElement.dataset.cstdRouteTransition = snapshot.kind;
-      document.documentElement.dataset.cstdRouteFrom = snapshot.from;
-      document.documentElement.dataset.cstdRouteTo = snapshot.to;
-      const transition = transitionDocument.startViewTransition(async () => {
-        router.push(resolvedHref);
-        await new Promise<void>((resolve) => {
-          window.requestAnimationFrame(() => window.requestAnimationFrame(() => resolve()));
-        });
-      });
-      void transition.finished.finally(() => {
-        delete document.documentElement.dataset.cstdRouteTransition;
-        delete document.documentElement.dataset.cstdRouteFrom;
-        delete document.documentElement.dataset.cstdRouteTo;
-      });
-    } else {
-      router.push(resolvedHref);
-    }
+    document.documentElement.dataset.cstdNavigationPending = snapshot.kind;
+    document.documentElement.dataset.cstdNavigationTarget = resolvedHref;
+    router.push(resolvedHref);
+    window.setTimeout(() => {
+      delete document.documentElement.dataset.cstdNavigationPending;
+    }, 1_200);
   }
 
-  return <Link href={href} prefetch={false} onClick={handleClick} {...props} />;
+  return (
+    <Link
+      href={href}
+      prefetch={false}
+      onClick={handleClick}
+      onFocus={handleFocus}
+      onMouseEnter={handleMouseEnter}
+      {...props}
+    />
+  );
 }

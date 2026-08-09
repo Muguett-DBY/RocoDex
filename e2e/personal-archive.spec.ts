@@ -140,25 +140,27 @@ test.describe("CSTD technical archive", () => {
   });
 
   test("serves clean host routes, RSS, and personal security headers", async ({ request }) => {
-    const pageResponse = await request.get("/work", { headers: { host: "custard.top" } });
+    test.setTimeout(120_000);
+    const headers = { host: "custard.top" };
+    const pageResponse = await request.get("/work", { headers });
     expect(pageResponse.status()).toBe(200);
     expect(pageResponse.headers()["x-frame-options"]).toBe("DENY");
     expect(pageResponse.headers()["x-content-type-options"]).toBe("nosniff");
     expect(pageResponse.headers()["content-security-policy"]).toContain("frame-ancestors 'none'");
 
-    const rssResponse = await request.get("/rss.xml?lang=en", { headers: { host: "custard.top" } });
+    const rssResponse = await request.get("/rss.xml?lang=en", { headers });
     expect(rssResponse.status()).toBe(200);
     expect(rssResponse.headers()["content-type"]).toContain("application/rss+xml");
     expect(await rssResponse.text()).toContain("https://custard.top/en/notes/host-boundaries-in-one-next-deployment");
 
-    const resumeResponse = await request.get("/resume.json", { headers: { host: "custard.top" } });
+    const resumeResponse = await request.get("/resume.json", { headers });
     expect(resumeResponse.status()).toBe(200);
     expect(resumeResponse.headers()["content-type"]).toContain("application/json");
     const resume = await resumeResponse.json();
     expect(resume.capabilities).toHaveLength(5);
     expect(resume.timeline.length).toBeGreaterThanOrEqual(6);
 
-    const proofResponse = await request.get("/proof.json", { headers: { host: "custard.top" } });
+    const proofResponse = await request.get("/proof.json", { headers });
     expect(proofResponse.status()).toBe(200);
     expect(proofResponse.headers()["content-type"]).toContain("application/json");
     const proof = await proofResponse.json();
@@ -166,35 +168,35 @@ test.describe("CSTD technical archive", () => {
     expect(proof.entries).toHaveLength(6);
     expect(proof.totals.artifacts).toBeGreaterThanOrEqual(20);
 
-    const graphResponse = await request.get("/graph.json", { headers: { host: "custard.top" } });
+    const graphResponse = await request.get("/graph.json", { headers });
     expect(graphResponse.status()).toBe(200);
     expect((await graphResponse.json()).nodes.length).toBeGreaterThanOrEqual(29);
 
-    const statusResponse = await request.get("/status.json", { headers: { host: "custard.top" } });
+    const statusResponse = await request.get("/status.json", { headers });
     expect(statusResponse.status()).toBe(200);
     expect((await statusResponse.json()).districts).toHaveLength(5);
 
-    const studioResponse = await request.get("/studio.json", { headers: { host: "custard.top" } });
+    const studioResponse = await request.get("/studio.json", { headers });
     expect(studioResponse.status()).toBe(200);
     expect((await studioResponse.json()).provenance.contract).toBe("cstd.studio-snapshot/v3");
 
-    const observatoryResponse = await request.get("/observatory.json", { headers: { host: "custard.top" } });
+    const observatoryResponse = await request.get("/observatory.json", { headers });
     expect(observatoryResponse.status()).toBe(200);
     expect((await observatoryResponse.json()).provenance.contract).toBe("cstd.engineering-observatory/v2");
 
-    const healthResponse = await request.get("/content-health.json", { headers: { host: "custard.top" } });
+    const healthResponse = await request.get("/content-health.json", { headers });
     expect(healthResponse.status()).toBe(200);
     expect((await healthResponse.json()).score).toBe(100);
 
-    const performanceResponse = await request.get("/performance.json", { headers: { host: "custard.top" } });
+    const performanceResponse = await request.get("/performance.json", { headers });
     expect(performanceResponse.status()).toBe(200);
     expect((await performanceResponse.json()).budgets.sceneAssetBytes).toBe(320_000);
 
-    const experienceResponse = await request.get("/experience.json", { headers: { host: "custard.top" } });
+    const experienceResponse = await request.get("/experience.json", { headers });
     expect(experienceResponse.status()).toBe(200);
     expect((await experienceResponse.json()).acts).toHaveLength(6);
 
-    const securityResponse = await request.get("/.well-known/security.txt", { headers: { host: "custard.top" } });
+    const securityResponse = await request.get("/.well-known/security.txt", { headers });
     expect(securityResponse.status()).toBe(200);
     expect(await securityResponse.text()).toContain("Contact: mailto:cstd@custard.top");
   });

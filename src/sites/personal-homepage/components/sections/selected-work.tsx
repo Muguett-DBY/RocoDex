@@ -18,22 +18,22 @@ function SelectedWork({ narrativeMode }: { reducedMotion: boolean; narrativeMode
 
   return (
     <section
-      id="proof"
       data-cstd-chapter="proof"
       data-cstd-scene="proof"
       data-cstd-proof-reel
+      data-cstd-light-chapter
       aria-labelledby="proof-heading"
-      className="relative z-20 border-b border-[#f4d431]/25 bg-[#080a0c] px-5 py-20 text-[#f2efe7] md:px-10 lg:px-16 lg:py-24"
+      className="relative z-20 border-b border-black/20 bg-[#efeee8] px-5 py-20 text-[#090b0d] md:px-10 lg:px-16 lg:py-28"
     >
       <div className="mx-auto max-w-[1440px]">
         <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_28rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#f4d431]"><RadioTower aria-hidden="true" className="h-4 w-4" /> 03 / SELECTED WORK</p>
+            <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#005f70]"><RadioTower aria-hidden="true" className="h-4 w-4" /> 03 / SELECTED WORK</p>
             <h2 id="proof-heading" className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.96] md:text-6xl lg:text-7xl">
-              三个系统，<span className="text-[#24e0ff]">三条足够清楚的证据链。</span>
+              三个系统，<span className="text-[#007e92]">三条足够清楚的证据链。</span>
             </h2>
           </div>
-          <p className="text-base leading-8 text-[#abb4b7]">
+          <p className="border-l border-black/25 pl-6 text-base leading-8 text-[#3c484d]">
             首页只给出结论、关键决策与运行状态。架构、失败与验证过程留在案例档案中，避免把个人展示页变成项目管理器。
           </p>
         </header>
@@ -46,7 +46,7 @@ function SelectedWork({ narrativeMode }: { reducedMotion: boolean; narrativeMode
               <article
                 key={entry.slug}
                 data-cstd-proof={entry.projectId}
-                className="group relative min-h-[29rem] overflow-hidden border border-white/15 bg-[#050709]"
+                className="group relative min-h-[31rem] overflow-hidden border border-black/20 bg-[#050709] shadow-[0_20px_60px_rgba(5,7,9,0.12)] transition-transform duration-500 ease-out hover:-translate-y-2"
               >
                 <Image src={entry.image.src} alt={entry.image.alt.zh} fill sizes="(min-width: 1280px) 33vw, 100vw" className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" style={{ objectPosition: entry.image.position ?? "50% 50%" }} />
                 <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,9,0.08)_0%,rgba(5,7,9,0.45)_42%,rgba(5,7,9,0.98)_78%)]" />
@@ -74,11 +74,11 @@ function SelectedWork({ narrativeMode }: { reducedMotion: boolean; narrativeMode
           })}
         </div>
 
-        <div className="mt-9 flex flex-wrap items-center justify-between gap-5 border-y border-white/15 py-5 font-mono text-[9px] font-black text-[#7d898e]">
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-5 border-y border-black/20 py-5 font-mono text-[9px] font-black text-[#4d595d]">
           <span>{cstdProofMesh.length} PUBLISHED CASES / {cstdProofMesh.reduce((sum, entry) => sum + entry.artifactCount, 0)} PUBLIC ARTIFACTS</span>
           <div className="flex gap-6">
-            <CstdLink href="/work" className="text-[#f4d431] hover:text-white">全部案例</CstdLink>
-            <CstdLink href="/proof.json" className="text-[#24e0ff] hover:text-white">PROOF.JSON</CstdLink>
+            <CstdLink href="/work" className="text-[#7a6200] hover:text-black">全部案例</CstdLink>
+            <CstdLink href="/proof.json" className="text-[#005f70] hover:text-black">PROOF.JSON</CstdLink>
           </div>
         </div>
       </div>

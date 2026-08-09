@@ -13,7 +13,8 @@ describe("CSTD media manifest", () => {
         .map((asset) => asset.sceneId),
     ).toEqual(["hero"]);
     expect(cstdVisualAssets.every((asset) => asset.src.startsWith("/cstd-"))).toBe(true);
-    expect(cstdVisualAssets.filter((asset) => asset.src.endsWith("-v4.webp"))).toHaveLength(3);
+    expect(cstdVisualAssets.find((asset) => asset.sceneId === "hero")?.src).toBe("/cstd-universe/cstd-custard-core-v5.webp");
+    expect(cstdVisualAssets.filter((asset) => asset.src.endsWith("-v4.webp"))).toHaveLength(2);
     for (const asset of cstdVisualAssets) {
       const filePath = path.join(process.cwd(), "public", asset.src.slice(1));
       expect(existsSync(filePath)).toBe(true);
@@ -33,7 +34,7 @@ describe("CSTD media manifest", () => {
     expect(cstdEditorialAssets).toHaveLength(7);
     expect(new Set(cstdEditorialAssets.map((asset) => asset.purpose)).size).toBe(7);
     for (const asset of cstdEditorialAssets) {
-      expect(asset.src).toMatch(/^\/cstd-universe\/.+-v[34]\.webp$/);
+      expect(asset.src).toMatch(/^\/cstd-universe\/.+-v[345]\.webp$/);
       expect(existsSync(path.join(process.cwd(), "public", asset.src.slice(1)))).toBe(true);
     }
   });

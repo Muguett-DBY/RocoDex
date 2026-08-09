@@ -36,7 +36,7 @@ export default defineConfig({
   webServer: {
     command: `npm run dev -- --webpack --hostname 127.0.0.1 --port ${port}`,
     url: `${baseURL}/api/auth/session`,
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     timeout: 180_000,
     env: {
       ...inheritedEnvironment,

@@ -34,7 +34,7 @@ function KnowledgeLens({ observatory }: { observatory: CstdHomepageObservatory }
   }));
 
   return (
-    <section id="path" data-cstd-chapter="path" data-cstd-scene="path" data-cstd-knowledge-lens aria-labelledby="knowledge-lens-heading" className="relative z-20 overflow-hidden border-b border-[#3dff8f]/20 bg-[#07100d] px-5 py-20 text-[#f2efe7] md:px-10 lg:px-16 lg:py-24">
+    <section data-cstd-chapter="path" data-cstd-scene="path" data-cstd-knowledge-lens aria-labelledby="knowledge-lens-heading" className="relative z-20 overflow-hidden border-b border-[#3dff8f]/20 bg-[#07100d] px-5 py-20 text-[#f2efe7] md:px-10 lg:px-16 lg:py-24">
       <Image src="/cstd-universe/cstd-knowledge-loom-v3.webp" alt="工程札记通过引用关系连接成知识网络" fill sizes="100vw" className="object-cover object-[58%_50%] opacity-22" />
       <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,9,8,0.99),rgba(5,9,8,0.9)_55%,rgba(5,9,8,0.7))]" />
 

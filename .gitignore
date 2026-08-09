@@ -91,6 +91,7 @@ sync_config.py
 
 # codex output & reports
 /output/
+/debug.log
 ccswitch_*
 switch_result*
 post_exit_*
