@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, BriefcaseBusiness, FileText, FlaskConical, Gauge, Languages, Network, UserRound } from "lucide-react";
+import { BookOpen, BriefcaseBusiness, FileText, FlaskConical, Gauge, Languages, Layers3, Network, UserRound } from "lucide-react";
 import { useMemo, useSyncExternalStore } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import { CstdLink } from "./cstd-link";
@@ -37,6 +37,7 @@ const navItems = [
   { href: "/work", label: { zh: "作品", en: "Work" }, icon: BriefcaseBusiness },
   { href: "/notes", label: { zh: "札记", en: "Notes" }, icon: BookOpen },
   { href: "/lab", label: { zh: "实验", en: "Lab" }, icon: FlaskConical },
+  { href: "/topics", label: { zh: "主题", en: "Topics" }, icon: Layers3 },
   { href: "/map", label: { zh: "图谱", en: "Map" }, icon: Network },
   { href: "/about", label: { zh: "关于", en: "About" }, icon: UserRound },
 ] as const;

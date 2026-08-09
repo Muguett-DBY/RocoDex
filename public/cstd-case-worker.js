@@ -52,6 +52,22 @@ const handlers = {
       ],
     };
   },
+  "crm-lock": (input) => {
+    const editors = Math.max(2, Math.min(10, Number(input) || 5));
+    return {
+      verdict: "CONFLICT RETURNED EXPLICITLY",
+      metric: `${editors - 1}/${editors} stale writes blocked`,
+      before: { editors, overwrites: editors - 1, conflicts: 0 },
+      after: { editors, accepted: 1, conflicts: editors - 1 },
+      steps: [
+        ["READ", `All ${editors} editors receive record revision 18.`],
+        ["DECIDE", "The first confirmed operation advances the record to revision 19."],
+        ["COMPARE", "Each later mutation includes its expected revision."],
+        ["REJECT", `${editors - 1} stale mutations receive an explicit conflict.`],
+        ["REFRESH", "The interface reloads current truth before another decision."],
+      ],
+    };
+  },
 };
 
 self.addEventListener("message", (event) => {

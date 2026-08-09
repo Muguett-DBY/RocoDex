@@ -28,6 +28,11 @@ describe("CSTD scene experience", () => {
     expect(getCstdSceneWindow("finale").map((scene) => scene.id)).toEqual(["path", "finale"]);
   });
 
+  test("gives every scene a shareable anchor and a directed transition", () => {
+    expect(cstdSceneManifest.every((scene) => scene.shareHref === `#${scene.elementId}`)).toBe(true);
+    expect(new Set(cstdSceneManifest.map((scene) => scene.transition.aperture))).toEqual(new Set(["iris", "split", "shutter"]));
+  });
+
   test("degrades only after two consecutive low-frame windows", () => {
     const controller = new CstdFrameBudgetController();
     for (let frame = 0; frame < 65; frame += 1) expect(controller.sample(1 / 60)).toBe(false);

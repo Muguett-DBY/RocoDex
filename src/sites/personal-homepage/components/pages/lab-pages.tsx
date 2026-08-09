@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, Cpu, FlaskConical, GitBranch, ShieldCheck } from "lucide-react";
+import type { CSSProperties } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import { cstdLabs, getCstdLab, getLabPath } from "../../content/labs";
 import { InteractiveLab } from "../labs/interactive-lab";
@@ -10,8 +11,8 @@ import { StructuredData } from "../site/structured-data";
 import { CstdPageHero } from "./page-hero";
 
 const labHero = {
-  src: "/cstd-universe/cstd-skill-reactor-v1.webp",
-  alt: { zh: "可操作的技术实验反应堆", en: "An interactive technical experiment reactor" },
+  src: "/cstd-universe/cstd-evidence-foundry-v2.webp",
+  alt: { zh: "可操作的技术实验与证据铸造厂", en: "An interactive technical experiment and evidence foundry" },
   position: "50% 48%",
 } as const;
 
@@ -21,12 +22,12 @@ export function CstdLabIndexPage({ locale }: { locale: CstdLocale }) {
   const copy = locale === "zh" ? {
     eyebrow: "03 / INTERACTIVE LAB",
     title: "不要只读结论。亲手改变系统状态。",
-    summary: "四个轻量实验把架构、异步任务、确定性估值和渲染预算变成可操作界面。所有逻辑都在浏览器本地运行。",
+    summary: "五个浏览器实验把架构、异步任务、确定性估值、渲染预算和工程证据变成可操作界面。所有逻辑都在本地运行。",
     open: "进入实验",
   } : {
     eyebrow: "03 / INTERACTIVE LAB",
     title: "Do not just read the conclusion. Change the system state.",
-    summary: "Four lightweight experiments turn architecture, background jobs, deterministic valuation, and render budgets into interfaces you can operate. Everything runs locally in the browser.",
+    summary: "Five browser experiments turn architecture, background jobs, deterministic valuation, render budgets, and engineering evidence into interfaces you can operate. Everything runs locally.",
     open: "Open lab",
   };
 
@@ -37,7 +38,7 @@ export function CstdLabIndexPage({ locale }: { locale: CstdLocale }) {
         <section className="bg-[#080a0c]/92 px-5 py-16 md:px-10 lg:px-16 lg:py-24">
           <div className="mx-auto grid max-w-[1320px] gap-px bg-white/15 md:grid-cols-2">
             {cstdLabs.map((lab) => (
-              <CstdLink key={lab.slug} href={getLabPath(lab, locale)} className="group relative min-h-[31rem] overflow-hidden bg-[#080a0c] p-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff] md:p-8">
+              <CstdLink key={lab.slug} href={getLabPath(lab, locale)} className="group relative min-h-[31rem] overflow-hidden bg-[#080a0c] p-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff] md:p-8" style={{ viewTransitionName: `cstd-lab-${lab.slug}` } as CSSProperties}>
                 <Image src={lab.image.src} alt={lab.image.alt[locale]} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover opacity-28 transition-[transform,opacity] duration-700 group-hover:scale-105 group-hover:opacity-48" />
                 <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,9,0.15),rgba(5,7,9,0.98)_80%)]" />
                 <div className="relative flex h-full flex-col">
@@ -89,7 +90,7 @@ export function CstdLabDetailPage({ locale, slug }: { locale: CstdLocale; slug: 
   return (
     <CstdSiteChrome locale={locale} page={`lab-${lab.slug}`}>
       <main id="cstd-main">
-        <CstdPageHero locale={locale} eyebrow={`LAB ${lab.number} / ${lab.tags.join(" · ").toUpperCase()}`} title={lab.title[locale]} summary={lab.summary[locale]} image={lab.image} compact />
+        <CstdPageHero locale={locale} eyebrow={`LAB ${lab.number} / ${lab.tags.join(" · ").toUpperCase()}`} title={lab.title[locale]} summary={lab.summary[locale]} image={lab.image} compact transitionName={`cstd-lab-${lab.slug}`} />
         <section className="border-b border-white/12 bg-[#080a0c] px-5 py-16 md:px-10 lg:px-16 lg:py-24">
           <div className="mx-auto max-w-[1320px]">
             <div className="flex flex-wrap items-center justify-between gap-5 border-b border-white/15 pb-6">

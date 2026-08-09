@@ -13,9 +13,9 @@ export const cstdVisualAssets = [
   {
     id: "neural-gate",
     sceneId: "hero",
-    src: "/cstd-universe/cstd-neural-gate-v1.webp",
-    alt: "雨夜神经城市入口与延伸至天际线的中央通道",
-    position: "center center",
+    src: "/cstd-universe/cstd-neural-foundry-v2.webp",
+    alt: "由工程图、树脂电路与光纤汇入的神经工业入口",
+    position: "58% center",
     priority: true,
   },
   {
@@ -28,9 +28,9 @@ export const cstdVisualAssets = [
   {
     id: "broadcast-nexus",
     sceneId: "proof",
-    src: "/cstd-universe/cstd-broadcast-nexus-v1.webp",
-    alt: "连接真实项目影像的黑金属广播中枢",
-    position: "center center",
+    src: "/cstd-universe/cstd-evidence-foundry-v2.webp",
+    alt: "四座可执行证据舱围绕验证核心运行的证据铸造厂",
+    position: "58% center",
   },
   {
     id: "operator-workstation",
@@ -42,9 +42,9 @@ export const cstdVisualAssets = [
   {
     id: "data-vault",
     sceneId: "path",
-    src: "/cstd-universe/cstd-data-vault-v1.webp",
-    alt: "保存研究笔记与数据结构的实体档案室",
-    position: "center center",
+    src: "/cstd-universe/cstd-knowledge-loom-v2.webp",
+    alt: "将技术档案、数据纤维与证据图谱织合的知识织机",
+    position: "42% center",
   },
   {
     id: "departure-city",

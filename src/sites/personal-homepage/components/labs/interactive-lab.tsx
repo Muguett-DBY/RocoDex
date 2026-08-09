@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState, type ComponentType } from "react"
 import type { CstdLocale } from "../../content/content-types";
 import type { CstdLab } from "../../content/labs";
 import { detectCstdRuntimeCapabilities, type CstdRuntimeCapabilities } from "../../experience/runtime-capabilities";
+import { ProofMuseumLab } from "./proof-museum";
 
 type TraceStep = {
   label: string;
@@ -320,6 +321,7 @@ const labRenderers: Record<CstdLab["renderer"], ComponentType<{ locale: CstdLoca
   "agent-replay": AgentReplayLab,
   "data-lens": DataLensLab,
   "render-lab": RenderLab,
+  "proof-museum": ProofMuseumLab,
 };
 
 export function InteractiveLab({ lab, locale }: { lab: CstdLab; locale: CstdLocale }) {

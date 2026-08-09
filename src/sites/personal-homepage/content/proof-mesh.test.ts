@@ -6,7 +6,7 @@ describe("CSTD proof mesh", () => {
   test("publishes one build-time proof node for every case", () => {
     expect(cstdProofMesh.map((entry) => entry.caseSlug).sort()).toEqual(cstdCaseStudies.map((entry) => entry.slug).sort());
     expect(cstdProofMeshManifest.schemaVersion).toBe(2);
-    expect(cstdProofMeshManifest.release).toBe("CSTD-7.0");
+    expect(cstdProofMeshManifest.release).toBe("CSTD-8.0");
     expect(cstdProofMeshManifest.totals.artifacts).toBeGreaterThanOrEqual(20);
     expect(cstdProofMeshManifest.related.graph).toBe("https://custard.top/graph.json");
   });

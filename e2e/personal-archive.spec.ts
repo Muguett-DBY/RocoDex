@@ -84,11 +84,30 @@ test.describe("CSTD technical archive", () => {
     const next = page.getByRole("button", { name: "下一步" });
     for (let index = 0; index < 4; index += 1) await next.click();
     await expect(page.getByText(/发布被拒绝：令牌 042/)).toBeVisible();
+
+    await page.goto("/cstd/lab/proof-museum");
+    const museum = page.locator("[data-cstd-proof-museum]");
+    await expect(museum).toHaveAttribute("data-cstd-capsules", "4");
+    await museum.getByRole("tab", { name: /业务记录乐观锁/ }).click();
+    const crmReplay = museum.locator('[data-cstd-case-replay="crm-lock"]');
+    await expect(crmReplay).toHaveAttribute("data-cstd-worker-ready", "true");
+    await crmReplay.getByRole("button", { name: "运行重放" }).click();
+    await expect(crmReplay.getByText("CONFLICT RETURNED EXPLICITLY", { exact: true })).toBeVisible();
+  });
+
+  test("connects curated topics to cases, notes, and executable labs", async ({ page }) => {
+    await page.goto("/cstd/topics");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("工程判断");
+    await expect(page.locator('a[href="/topics/system-boundaries"]')).toBeVisible();
+    await page.goto("/cstd/topics/system-boundaries");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("系统边界");
+    await expect(page.getByRole("link", { name: /RocoDex 双站平台/ })).toBeVisible();
+    await expect(page.getByRole("link", { name: /Proof Museum/ })).toBeVisible();
   });
 
   test("renders motion under reduced-motion emulation without horizontal overflow", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
-    for (const path of ["/cstd/work", "/cstd/notes", "/cstd/lab", "/cstd/map", "/cstd/about", "/cstd/resume"]) {
+    for (const path of ["/cstd/work", "/cstd/notes", "/cstd/lab", "/cstd/topics", "/cstd/map", "/cstd/about", "/cstd/resume"]) {
       await page.goto(path);
       await expect(page.locator("[data-cstd-signal-field]")).toBeVisible();
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -129,7 +148,7 @@ test.describe("CSTD technical archive", () => {
     expect(proofResponse.status()).toBe(200);
     expect(proofResponse.headers()["content-type"]).toContain("application/json");
     const proof = await proofResponse.json();
-    expect(proof.release).toBe("CSTD-7.0");
+    expect(proof.release).toBe("CSTD-8.0");
     expect(proof.entries).toHaveLength(6);
     expect(proof.totals.artifacts).toBeGreaterThanOrEqual(20);
 
@@ -140,5 +159,9 @@ test.describe("CSTD technical archive", () => {
     const statusResponse = await request.get("/status.json", { headers: { host: "custard.top" } });
     expect(statusResponse.status()).toBe(200);
     expect((await statusResponse.json()).districts).toHaveLength(5);
+
+    const studioResponse = await request.get("/studio.json", { headers: { host: "custard.top" } });
+    expect(studioResponse.status()).toBe(200);
+    expect((await studioResponse.json()).provenance.contract).toBe("cstd.studio-snapshot/v3");
   });
 });

@@ -5,6 +5,7 @@ import matter from "gray-matter";
 import { caseDocumentSchema, noteDocumentSchema } from "../src/sites/personal-homepage/content/content-schema";
 import { cstdLabs } from "../src/sites/personal-homepage/content/labs";
 import { createCstdStudioSnapshot } from "../src/sites/personal-homepage/content/studio-status";
+import { cstdTopics } from "../src/sites/personal-homepage/content/topics";
 
 const contentRoot = path.join(process.cwd(), "src", "sites", "personal-homepage", "content", "documents");
 const publicRoot = path.join(process.cwd(), "public");
@@ -154,10 +155,11 @@ export async function verifyCstdContent(now = new Date()) {
   const cases = caseDocuments.map((document) => caseDocumentSchema.parse(document.data));
   const notes = noteDocuments.map((document) => noteDocumentSchema.parse(document.data));
   const knownPaths = new Set([
-    "/", "/about", "/now", "/resume", "/map", "/work", "/notes", "/lab",
+    "/", "/about", "/now", "/resume", "/map", "/work", "/notes", "/lab", "/topics",
     ...cases.map((entry) => `/work/${entry.slug}`),
     ...notes.map((entry) => `/notes/${entry.slug}`),
     ...cstdLabs.map((entry) => `/lab/${entry.slug}`),
+    ...cstdTopics.map((entry) => `/topics/${entry.slug}`),
   ]);
   const issues: string[] = [];
   let artifacts = 0;
@@ -207,7 +209,17 @@ async function main() {
   if (command === "new-note" && slug) return console.log(await createDraft("note", slug));
   if (command === "verify-proof") return console.log(JSON.stringify(await verifyCstdContent(), null, 2));
   if (command === "snapshot") return console.log(JSON.stringify(createCstdStudioSnapshot(), null, 2));
-  throw new Error("Usage: cstd-content-cli.mts <new-case|new-note|verify-proof|snapshot> [slug]");
+  if (command === "release-brief") {
+    const snapshot = createCstdStudioSnapshot();
+    return console.log(JSON.stringify({
+      release: snapshot.release,
+      generatedAt: snapshot.generatedAt,
+      digest: snapshot.provenance.digest,
+      totals: { ...snapshot.totals, topics: cstdTopics.length, labs: cstdLabs.length },
+      refresh: snapshot.districts.filter((district) => district.state !== "online").map((district) => district.id),
+    }, null, 2));
+  }
+  throw new Error("Usage: cstd-content-cli.mts <new-case|new-note|verify-proof|snapshot|release-brief> [slug]");
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) void main();

@@ -4,6 +4,7 @@ import { describe, expect, test } from "vitest";
 import { cstdCaseStudies } from "./case-studies";
 import { cstdLabs } from "./labs";
 import { cstdTechnicalNotes } from "./technical-notes";
+import { cstdTopics } from "./topics";
 
 function unique(values: readonly string[]) {
   return new Set(values).size === values.length;
@@ -14,6 +15,16 @@ describe("CSTD content registry", () => {
     expect(unique(cstdCaseStudies.map((entry) => entry.slug))).toBe(true);
     expect(unique(cstdTechnicalNotes.map((entry) => entry.slug))).toBe(true);
     expect(unique(cstdLabs.map((entry) => entry.slug))).toBe(true);
+    expect(unique(cstdTopics.map((entry) => entry.slug))).toBe(true);
+  });
+
+  test("keeps every curated topic grounded in cases, notes, and executable labs", () => {
+    expect(cstdTopics).toHaveLength(5);
+    for (const topic of cstdTopics) {
+      expect(topic.caseSlugs.every((slug) => cstdCaseStudies.some((entry) => entry.slug === slug))).toBe(true);
+      expect(topic.noteSlugs.every((slug) => cstdTechnicalNotes.some((entry) => entry.slug === slug))).toBe(true);
+      expect(topic.labSlugs.every((slug) => cstdLabs.some((entry) => entry.slug === slug))).toBe(true);
+    }
   });
 
   test("ships deep, bilingual case studies with evidence", () => {
@@ -53,12 +64,13 @@ describe("CSTD content registry", () => {
     }
   });
 
-  test("offers all four interactive laboratories", () => {
+  test("offers five interactive laboratories including the proof museum", () => {
     expect(cstdLabs.map((entry) => entry.slug)).toEqual([
       "system-trace",
       "agent-replay",
       "data-lens",
       "render-lab",
+      "proof-museum",
     ]);
     expect(new Set(cstdLabs.map((entry) => entry.renderer)).size).toBe(cstdLabs.length);
     expect(cstdLabs.every((entry) => /^\d+\.\d+\.\d+$/.test(entry.version))).toBe(true);

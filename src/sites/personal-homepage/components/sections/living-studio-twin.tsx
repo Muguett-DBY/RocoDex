@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Activity, ArrowUpRight, CheckCircle2, Pause, Play, RadioTower } from "lucide-react";
+import { Activity, ArrowUpRight, CheckCircle2, Fingerprint, Pause, Play, RadioTower } from "lucide-react";
 import { clsx } from "clsx";
 import { memo, useEffect, useMemo, useState } from "react";
 import { cstdArtBible } from "../../content/art-bible";
@@ -162,6 +162,7 @@ function LivingStudioTwin({
 
             <div className="mt-7 flex flex-wrap gap-6 font-mono text-[10px] font-black">
               <CstdLink href="/status.json" className="inline-flex items-center gap-2 text-[#24e0ff] hover:text-white">STATUS.JSON <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" /></CstdLink>
+              <CstdLink href="/studio.json" className="inline-flex items-center gap-2 text-[#3dff8f] hover:text-white"><Fingerprint aria-hidden="true" className="h-3.5 w-3.5" /> {cstdStudioSnapshot.provenance.digest.toUpperCase()}</CstdLink>
               <CstdLink href="/map" className="inline-flex items-center gap-2 text-[#f4d431] hover:text-white">OPEN KNOWLEDGE MAP <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" /></CstdLink>
             </div>
           </div>

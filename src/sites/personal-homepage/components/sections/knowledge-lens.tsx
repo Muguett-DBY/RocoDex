@@ -67,6 +67,7 @@ function KnowledgeLens() {
             ))}
             <div className="mt-7 flex flex-wrap gap-5 font-mono text-[9px] font-black">
               <CstdLink href="/map" className="text-[#3dff8f] hover:text-white">完整知识图</CstdLink>
+              <CstdLink href="/topics" className="text-[#f4d431] hover:text-white">主题路径</CstdLink>
               <CstdLink href="/graph.json" className="text-[#24e0ff] hover:text-white">GRAPH.JSON</CstdLink>
             </div>
           </div>

@@ -3,4 +3,5 @@ export { CstdNotesIndexPage, CstdTechnicalNotePage, cstdTechnicalNoteStaticParam
 export { CstdAboutPage, CstdEnglishHubPage, CstdNowPage, CstdResumePage } from "./components/pages/profile-pages";
 export { CstdMapPage } from "./components/pages/map-pages";
 export { CstdCaseStudyPage, CstdWorkIndexPage, cstdCaseStudyStaticParams } from "./components/pages/work-pages";
+export { CstdTopicPage, CstdTopicsIndexPage, cstdTopicStaticParams } from "./components/pages/topic-pages";
 export { CstdAudienceHomepagePage, cstdAudienceStaticParams } from "./components/pages/audience-page";

@@ -5,6 +5,7 @@ import { getCstdCaseStudy } from "./content/case-studies";
 import { getCstdLab } from "./content/labs";
 import { getCstdTechnicalNote } from "./content/technical-notes";
 import { getCstdNarrative, parseCstdNarrativeShareSlug } from "./content/narratives";
+import { getCstdTopic } from "./content/topics";
 
 const CSTD_ORIGIN = "https://custard.top";
 
@@ -183,6 +184,19 @@ export function getCstdLabMetadata(slug: string | undefined, locale: CstdLocale)
     path,
     locale,
     image: lab?.image.src ?? "/cstd-universe/cstd-skill-reactor-v1.webp",
+  });
+}
+
+export function getCstdTopicMetadata(slug: string | undefined, locale: CstdLocale) {
+  const topic = slug ? getCstdTopic(slug) : undefined;
+  if (slug && !topic) return {};
+  const path = locale === "en" ? `/en/topics${slug ? `/${slug}` : ""}` : `/topics${slug ? `/${slug}` : ""}`;
+  return createCstdMetadata({
+    title: topic?.title[locale] ?? (locale === "zh" ? "工程主题路径" : "Engineering topic paths"),
+    description: topic?.summary[locale] ?? (locale === "zh" ? "按工程判断连接真实案例、技术札记与可运行实验。" : "Curated engineering judgments connected to shipped cases, technical notes, and executable labs."),
+    path,
+    locale,
+    image: topic?.image.src ?? "/cstd-universe/cstd-knowledge-loom-v2.webp",
   });
 }
 

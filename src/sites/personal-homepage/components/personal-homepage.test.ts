@@ -15,6 +15,9 @@ const sceneClockSource = read("../experience/scene-clock.ts");
 const sceneManifestSource = read("../experience/scene-manifest.ts");
 const qualitySource = read("../experience/quality-controller.ts");
 const runtimeSource = read("../experience/runtime-capabilities.ts");
+const runtimeHooksSource = read("../experience/runtime-hooks.ts");
+const sceneRuntimeSource = read("./scene-runtime.tsx");
+const webgpuSource = read("./webgpu-signal-field.tsx");
 const narrativeSource = read("../content/narratives.ts");
 const studioSource = read("./sections/living-studio-twin.tsx");
 const proofSource = read("./sections/selected-work.tsx");
@@ -25,7 +28,7 @@ const knowledgeSource = read("./sections/knowledge-lens.tsx");
 const finaleSource = read("./sections/finale.tsx");
 const globalsSource = read("../../../app/globals.css");
 
-describe("CSTD 7.0 living engineering dossier", () => {
+describe("CSTD 8.0 neural industrialism portfolio", () => {
   test("keeps identity first and exposes shareable audience paths", () => {
     expect(gateSource).toContain('id="cstd-hero-title"');
     expect(gateSource).toContain("narrative.thesis.zh");
@@ -63,13 +66,14 @@ describe("CSTD 7.0 living engineering dossier", () => {
     expect(proofSource).not.toContain("lg:min-h-[140svh]");
   });
 
-  test("runs three deterministic technical replays in a dedicated worker", () => {
+  test("runs four deterministic technical replays in a dedicated worker", () => {
     expect(replaySource).toContain("cstdCaseReplays");
     expect(replayRuntimeSource).toContain('new Worker("/cstd-case-worker.js")');
     expect(replayRuntimeSource).toContain('data-cstd-worker="dedicated"');
     expect(workerSource).toContain('"alpha-race"');
     expect(workerSource).toContain('"dcf-cache"');
     expect(workerSource).toContain('"host-boundaries"');
+    expect(workerSource).toContain('"crm-lock"');
     expect(workerSource).toContain("STALE WRITE REJECTED");
   });
 
@@ -82,11 +86,15 @@ describe("CSTD 7.0 living engineering dossier", () => {
   });
 
   test("keeps WebGL progressive, asynchronous, and desktop-only", () => {
-    expect(landingSource).toContain("desktopSceneQuery");
-    expect(landingSource).toContain('import("../experience/runtime-capabilities")');
+    expect(runtimeHooksSource).toContain("desktopSceneQuery");
+    expect(runtimeHooksSource).toContain('import("./runtime-capabilities")');
     expect(runtimeSource).toContain("WEBGL_debug_renderer_info");
     expect(runtimeSource).toContain("runtimeNavigator.gpu");
-    expect(landingSource).toContain("<LitePersonalImmersiveScene");
+    expect(sceneRuntimeSource).toContain("<LiteScene");
+    expect(sceneRuntimeSource).toContain("<FullScene");
+    expect(sceneRuntimeSource).toContain("<WebGpuField");
+    expect(webgpuSource).toContain("navigator.gpu");
+    expect(webgpuSource).toContain("@fragment fn fragmentMain");
     expect(sceneSource).toContain("@react-three/fiber");
     expect(sceneSource).toContain("<Canvas");
     expect(sceneSource).toContain("<ParticleCurrent");
@@ -102,7 +110,8 @@ describe("CSTD 7.0 living engineering dossier", () => {
     expect(landingSource).toContain("useCstdSceneClock");
     expect(sceneClockSource).toContain('window.addEventListener("scroll", requestSync, { passive: true })');
     expect(sceneClockSource).toContain("requestAnimationFrame(sync)");
-    expect(landingSource).toContain("useDocumentVisibility");
+    expect(landingSource).toContain("useCstdDocumentVisibility");
+    expect(runtimeHooksSource).toContain('document.addEventListener("visibilitychange", sync)');
     expect(sceneSource).toContain('frameloop={props.active && quality === "full" ? "always" : "demand"}');
     expect(landingSource).not.toContain('from "framer-motion"');
   });
