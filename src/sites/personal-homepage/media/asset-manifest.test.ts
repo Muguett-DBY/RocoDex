@@ -11,6 +11,7 @@ describe("CSTD media manifest", () => {
         .map((asset) => asset.sceneId),
     ).toEqual(["hero"]);
     expect(cstdVisualAssets.every((asset) => asset.src.startsWith("/cstd-"))).toBe(true);
+    expect(cstdVisualAssets.filter((asset) => asset.src.endsWith("-v2.webp"))).toHaveLength(3);
   });
 
   test("provides modern and compatibility video sources for each primary project", () => {

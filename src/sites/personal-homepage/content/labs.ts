@@ -1,6 +1,6 @@
 import type { ContentImage, CstdLocale, LocalizedText } from "./content-types";
 
-export type CstdLabRenderer = "system-trace" | "agent-replay" | "data-lens" | "render-lab";
+export type CstdLabRenderer = "system-trace" | "agent-replay" | "data-lens" | "render-lab" | "proof-museum";
 
 export type CstdLab = Readonly<{
   slug: CstdLabRenderer;
@@ -68,6 +68,19 @@ export const cstdLabs: readonly CstdLab[] = [
     image: { src: "/cstd-universe/cstd-skill-reactor-v1.webp", alt: { zh: "渲染质量反应堆", en: "A render-quality reactor" } },
     tags: ["Canvas", "Performance", "Motion"],
     evidenceHref: { zh: "/notes/single-canvas-immersive-web", en: "/en/notes/single-canvas-immersive-web" },
+  },
+  {
+    slug: "proof-museum",
+    renderer: "proof-museum",
+    number: "05",
+    version: "1.0.0",
+    updatedAt: "2026-08-09",
+    title: { zh: "Proof Museum", en: "Proof Museum" },
+    summary: { zh: "在四座证据胶囊中重放竞态、缓存、路由和业务锁边界。", en: "Replay race, cache, routing, and operational-lock boundaries across four evidence capsules." },
+    principle: { zh: "展示工程能力最好的方式，是让关键边界可以被重新运行。", en: "The strongest way to present engineering ability is to make its critical boundaries runnable again." },
+    image: { src: "/cstd-universe/cstd-evidence-foundry-v2.webp", alt: { zh: "围绕验证核心运行的四座证据胶囊", en: "Four evidence capsules operating around a verification core" } },
+    tags: ["Evidence", "Workers", "Determinism"],
+    evidenceHref: { zh: "/proof.json", en: "/proof.json" },
   },
 ] as const;
 

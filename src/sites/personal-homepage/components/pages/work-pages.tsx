@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, ExternalLink, ShieldCheck } from "lucide-react";
+import type { CSSProperties } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import { cstdCaseStudies, getCaseStudyPath, getCstdCaseStudy } from "../../content/case-studies";
 import { loadCstdContentDocument } from "../../content/content-document";
@@ -72,7 +73,7 @@ export function CstdWorkIndexPage({ locale }: { locale: CstdLocale }) {
                   </span>
                 </div>
 
-                <figure className="relative mt-10 aspect-[16/10] overflow-hidden border border-white/18 bg-black shadow-[0_32px_80px_rgba(0,0,0,0.48)] lg:mt-0">
+                <figure className="relative mt-10 aspect-[16/10] overflow-hidden border border-white/18 bg-black shadow-[0_32px_80px_rgba(0,0,0,0.48)] lg:mt-0" style={{ viewTransitionName: `cstd-case-${entry.slug}` } as CSSProperties}>
                   <Image src={entry.image.src} alt={entry.image.alt[locale]} fill sizes="(min-width: 1024px) 52vw, 100vw" className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]" style={{ objectPosition: entry.image.position ?? "50% 50%" }} />
                   <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(120deg,transparent_35%,rgba(36,224,255,0.12))] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                   <figcaption className="absolute bottom-3 left-3 bg-[#050709]/90 px-3 py-2 font-mono text-[8px] font-black text-[#24e0ff] backdrop-blur">VERIFIED SURFACE / {entry.projectId.toUpperCase()}</figcaption>
@@ -123,7 +124,7 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
   return (
     <CstdSiteChrome locale={locale} page={`work-${entry.slug}`}>
       <main id="cstd-main">
-        <CstdPageHero locale={locale} eyebrow={`${entry.year} / ${entry.kicker[locale].toUpperCase()}`} title={entry.title[locale]} summary={entry.summary[locale]} image={entry.image} metrics={entry.metrics} />
+        <CstdPageHero locale={locale} eyebrow={`${entry.year} / ${entry.kicker[locale].toUpperCase()}`} title={entry.title[locale]} summary={entry.summary[locale]} image={entry.image} metrics={entry.metrics} transitionName={`cstd-case-${entry.slug}`} />
 
         <section className="border-b border-white/12 bg-[#f1eee5] text-[#090b0d]">
           <div className="mx-auto grid max-w-[1540px] gap-10 px-5 py-14 md:px-10 lg:grid-cols-[minmax(18rem,0.75fr)_minmax(0,1.25fr)] lg:px-16 lg:py-20">

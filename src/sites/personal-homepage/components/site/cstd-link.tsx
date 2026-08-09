@@ -9,7 +9,7 @@ type CstdLinkProps = Omit<ComponentProps<typeof Link>, "href"> & {
 };
 
 type TransitionDocument = Document & {
-  startViewTransition?: (callback: () => void) => { finished: Promise<void> };
+  startViewTransition?: (callback: () => void | Promise<void>) => { finished: Promise<void> };
 };
 
 function getLocalDevelopmentHref(href: string) {
@@ -40,7 +40,16 @@ export function CstdLink({ href, onClick, ...props }: CstdLinkProps) {
 
     event.preventDefault();
     if (transitionDocument.startViewTransition) {
-      transitionDocument.startViewTransition(() => router.push(resolvedHref));
+      document.documentElement.dataset.cstdRouteTransition = "active";
+      const transition = transitionDocument.startViewTransition(async () => {
+        router.push(resolvedHref);
+        await new Promise<void>((resolve) => {
+          window.requestAnimationFrame(() => window.requestAnimationFrame(() => resolve()));
+        });
+      });
+      void transition.finished.finally(() => {
+        delete document.documentElement.dataset.cstdRouteTransition;
+      });
     } else {
       router.push(resolvedHref);
     }

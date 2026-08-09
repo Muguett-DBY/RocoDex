@@ -15,6 +15,8 @@ function SceneDirector({ activeSceneId }: { activeSceneId: CstdSceneId }) {
       aria-hidden="true"
       data-cstd-scene-director
       data-cstd-director-phase={activeSceneId}
+      data-cstd-director-axis={activeScene.transition.axis}
+      data-cstd-director-aperture={activeScene.transition.aperture}
       className="pointer-events-none fixed inset-0 z-[32] hidden overflow-hidden lg:block"
     >
       <span className="cstd-director-aperture cstd-director-aperture-top absolute inset-x-0 top-0 h-20 bg-[#050709]" />

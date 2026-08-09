@@ -62,7 +62,7 @@ jobs:
         run: npm run build
         env:
           AUTH_SECRET: rocodex-ci-build-secret-with-sufficient-length
-      - name: Verify personal homepage bundle boundaries
+      - name: Report personal homepage bundle boundaries
         run: npm run verify:personal-bundle
 
   e2e:

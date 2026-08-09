@@ -18,10 +18,19 @@ export type CstdDistrictStatus = Readonly<{
 }>;
 
 export type CstdStudioSnapshot = Readonly<{
-  schemaVersion: 2;
-  release: "CSTD-7.0";
+  schemaVersion: 3;
+  release: "CSTD-8.0";
   generatedAt: string;
   source: "build-time-public-evidence";
+  provenance: Readonly<{
+    contract: "cstd.studio-snapshot/v3";
+    digest: `fnv1a32:${string}`;
+    sources: readonly Readonly<{
+      id: "proof-mesh" | "knowledge-graph" | "release-ledger";
+      href: string;
+      observedAt: string;
+    }>[];
+  }>;
   totals: Readonly<{
     districts: number;
     projects: number;
@@ -34,6 +43,15 @@ export type CstdStudioSnapshot = Readonly<{
 
 function latestDate(values: readonly string[]) {
   return [...values].sort().at(-1) ?? "1970-01-01";
+}
+
+function digestEvidence(value: string) {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return `fnv1a32:${(hash >>> 0).toString(16).padStart(8, "0")}` as const;
 }
 
 export function createCstdStudioSnapshot(now = new Date()): CstdStudioSnapshot {
@@ -64,15 +82,29 @@ export function createCstdStudioSnapshot(now = new Date()): CstdStudioSnapshot {
   const releases = cstdTimeline
     .filter((entry) => entry.kind === "release" || entry.kind === "diagnosis")
     .slice(-4);
+  const generatedAt = latestDate([
+    ...cstdCaseStudies.map((entry) => entry.updatedAt),
+    ...cstdProofMesh.map((entry) => entry.verifiedAt),
+  ]);
+  const digest = digestEvidence(cstdProofMesh
+    .map((entry) => [entry.projectId, entry.status, entry.verifiedAt, entry.artifactCount, entry.coverageScore].join(":"))
+    .sort()
+    .join("|"));
 
   return {
-    schemaVersion: 2,
-    release: "CSTD-7.0",
-    generatedAt: latestDate([
-      ...cstdCaseStudies.map((entry) => entry.updatedAt),
-      ...cstdProofMesh.map((entry) => entry.verifiedAt),
-    ]),
+    schemaVersion: 3,
+    release: "CSTD-8.0",
+    generatedAt,
     source: "build-time-public-evidence",
+    provenance: {
+      contract: "cstd.studio-snapshot/v3",
+      digest,
+      sources: [
+        { id: "proof-mesh", href: "/proof.json", observedAt: generatedAt },
+        { id: "knowledge-graph", href: "/graph.json", observedAt: generatedAt },
+        { id: "release-ledger", href: "/releases.json", observedAt: latestDate(releases.map((entry) => entry.date)) },
+      ],
+    },
     totals: {
       districts: districts.length,
       projects: cstdProofMesh.length,

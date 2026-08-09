@@ -12,6 +12,25 @@
   animation: cstd-route-in 420ms cubic-bezier(0.2, 0.75, 0.2, 1) both;
 }
 
+::view-transition-group(cstd-page-hero),
+::view-transition-group(cstd-case-rocodex-platform),
+::view-transition-group(cstd-case-alpha-research-system),
+::view-transition-group(cstd-case-cfzzs-crm),
+::view-transition-group(cstd-case-dcf-quantum),
+::view-transition-group(cstd-case-portrait-booking),
+::view-transition-group(cstd-case-creative-workbench) {
+  animation-duration: 720ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+::view-transition-old(cstd-page-hero) {
+  animation: cstd-portal-old 520ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+::view-transition-new(cstd-page-hero) {
+  animation: cstd-portal-new 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
 @keyframes cstd-route-out {
   to { opacity: 0; filter: blur(5px); transform: scale(0.995); }
 }
@@ -19,6 +38,19 @@
 @keyframes cstd-route-in {
   from { opacity: 0; filter: blur(7px); transform: translateY(12px); }
   to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+
+@keyframes cstd-portal-old {
+  to { opacity: 0; filter: contrast(1.2) brightness(1.35) blur(3px); transform: scale(1.045); }
+}
+
+@keyframes cstd-portal-new {
+  from { opacity: 0; clip-path: inset(48% 0 48% 0); filter: saturate(0.45) brightness(1.5); transform: scale(1.08); }
+  to { opacity: 1; clip-path: inset(0); filter: saturate(1) brightness(1); transform: scale(1); }
+}
+
+[data-cstd-route-transition="active"] body {
+  cursor: progress;
 }
 
 @keyframes cstd-narrative-enter {
@@ -727,6 +759,21 @@
     scale(calc(1.055 + var(--cstd-scene-progress) * 0.025));
   transition: filter 650ms ease;
   will-change: transform;
+}
+
+[data-cstd-world-frame="hero"] .cstd-world-frame-image,
+[data-cstd-world-frame="proof"] .cstd-world-frame-image,
+[data-cstd-world-frame="path"] .cstd-world-frame-image {
+  filter: saturate(0.9) contrast(1.12) brightness(0.76);
+}
+
+[data-cstd-webgpu-state="ready"] {
+  animation: cstd-webgpu-ignite 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cstd-webgpu-ignite {
+  from { opacity: 0; filter: brightness(2.2) contrast(1.4); }
+  to { opacity: 0.55; filter: brightness(1) contrast(1); }
 }
 
 .cstd-world-vignette {

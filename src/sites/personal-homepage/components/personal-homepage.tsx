@@ -10,14 +10,21 @@ import {
   useMemo,
   useRef,
   useState,
-  useSyncExternalStore,
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import type { CstdSystem } from "../content/systems";
 import { getCstdNarrative, type CstdNarrativeMode } from "../content/narratives";
-import type { CstdRuntimeTier } from "../experience/runtime-capabilities";
+import { setCstdMotionMode, useCstdMotionMode } from "../experience/motion-store";
 import { setCstdNarrativeMode, useCstdNarrativeMode } from "../experience/narrative-store";
+import {
+  useCstdChapterReveal,
+  useCstdDeferredEnhancements,
+  useCstdDesktopScene,
+  useCstdDocumentVisibility,
+  useCstdRuntimeProfile,
+} from "../experience/runtime-hooks";
 import { useCstdSceneClock } from "../experience/scene-clock";
+import { MemoizedSceneRuntime } from "./scene-runtime";
 
 const LazyNeuralGate = memo(
   dynamic(
@@ -66,26 +73,6 @@ const LazyWorldBackdrop = lazy(() =>
   import("./world-backdrop").then((module) => ({ default: module.MemoizedWorldBackdrop })),
 );
 
-const PersonalImmersiveScene = memo(
-  dynamic(
-    () => import("./immersive-scene").then((module) => module.PersonalImmersiveScene),
-    { ssr: false },
-  ),
-);
-const LitePersonalImmersiveScene = memo(
-  dynamic(
-    () => import("./lite-immersive-scene").then((module) => module.LitePersonalImmersiveScene),
-    { ssr: false },
-  ),
-);
-
-type MotionMode = "full" | "calm";
-type ImmersiveRuntime = "pending" | CstdRuntimeTier;
-
-const motionModeStorageKey = "cstd-motion-mode";
-const motionModeChangeEvent = "cstd-motion-mode-change";
-const desktopSceneQuery = "(min-width: 769px) and (pointer: fine)";
-let volatileMotionMode: MotionMode = "full";
 type AmbientSound = (typeof import("./ambient-sound"))["ambientSound"];
 let loadedAmbientSound: AmbientSound | null = null;
 let ambientSoundPromise: Promise<AmbientSound> | null = null;
@@ -98,87 +85,16 @@ function loadAmbientSound() {
   return ambientSoundPromise;
 }
 
-function subscribeMotionMode(onStoreChange: () => void) {
-  window.addEventListener("storage", onStoreChange);
-  window.addEventListener(motionModeChangeEvent, onStoreChange);
-  return () => {
-    window.removeEventListener("storage", onStoreChange);
-    window.removeEventListener(motionModeChangeEvent, onStoreChange);
-  };
-}
-
-function getMotionModeSnapshot(): MotionMode {
-  try {
-    return window.localStorage.getItem(motionModeStorageKey) === "calm" ? "calm" : "full";
-  } catch {
-    return volatileMotionMode;
-  }
-}
-
-function getMotionModeServerSnapshot(): MotionMode {
-  return "full";
-}
-
-function subscribeDesktopScene(onStoreChange: () => void) {
-  const query = window.matchMedia(desktopSceneQuery);
-  query.addEventListener("change", onStoreChange);
-  return () => query.removeEventListener("change", onStoreChange);
-}
-
-function getDesktopSceneSnapshot() {
-  return window.matchMedia(desktopSceneQuery).matches;
-}
-
-function getDesktopSceneServerSnapshot() {
-  return false;
-}
-
-function useDeferredEnhancements() {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    if ("requestIdleCallback" in window) {
-      const idleId = window.requestIdleCallback(() => setReady(true), { timeout: 1200 });
-      return () => window.cancelIdleCallback(idleId);
-    }
-
-    const timeoutId = setTimeout(() => setReady(true), 240);
-    return () => clearTimeout(timeoutId);
-  }, []);
-
-  return ready;
-}
-
-function useDocumentVisibility() {
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    const sync = () => setVisible(document.visibilityState !== "hidden");
-    sync();
-    document.addEventListener("visibilitychange", sync);
-    return () => document.removeEventListener("visibilitychange", sync);
-  }, []);
-
-  return visible;
-}
-
 export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMode?: CstdNarrativeMode } = {}) {
-  const motionMode = useSyncExternalStore(
-    subscribeMotionMode,
-    getMotionModeSnapshot,
-    getMotionModeServerSnapshot,
-  );
-  const desktopScene = useSyncExternalStore(
-    subscribeDesktopScene,
-    getDesktopSceneSnapshot,
-    getDesktopSceneServerSnapshot,
-  );
+  const motionMode = useCstdMotionMode();
+  const desktopScene = useCstdDesktopScene();
   const reducedMotion = motionMode === "calm";
   const persistedNarrativeMode = useCstdNarrativeMode();
   const [routeNarrativeMode, setRouteNarrativeMode] = useState<CstdNarrativeMode | null>(initialNarrativeMode ?? null);
   const narrativeMode = routeNarrativeMode ?? persistedNarrativeMode;
-  const enhancementsReady = useDeferredEnhancements();
-  const documentVisible = useDocumentVisibility();
+  const enhancementsReady = useCstdDeferredEnhancements();
+  const documentVisible = useCstdDocumentVisibility();
+  const runtimeProfile = useCstdRuntimeProfile(enhancementsReady, desktopScene);
   const rootRef = useRef<HTMLElement>(null);
   const coordinateRef = useRef<HTMLSpanElement>(null);
   const diveDepthRef = useRef<HTMLSpanElement>(null);
@@ -203,10 +119,6 @@ export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMod
   const [activeSystemId, setActiveSystemId] = useState<CstdSystem["id"]>("product-surfaces");
   const [overdrive, setOverdrive] = useState(false);
   const [ambienceOn, setAmbienceOn] = useState(false);
-  const [immersiveRuntime, setImmersiveRuntime] = useState<ImmersiveRuntime>("pending");
-  const [renderBackend, setRenderBackend] = useState("pending");
-  const [webgpuAvailable, setWebgpuAvailable] = useState(false);
-  const [runtimeReason, setRuntimeReason] = useState("pending");
   const toggleOverdrive = useCallback(() => {
     setOverdrive((current) => !current);
   }, []);
@@ -224,20 +136,6 @@ export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMod
   }, [activeSceneId, ambienceOn, overdrive]);
 
   useEffect(() => () => loadedAmbientSound?.stop(), []);
-
-  useEffect(() => {
-    if (!enhancementsReady || !desktopScene) return;
-    const frame = window.requestAnimationFrame(() => {
-      void import("../experience/runtime-capabilities").then(({ detectCstdRuntimeCapabilities }) => {
-        const profile = detectCstdRuntimeCapabilities();
-        setImmersiveRuntime(profile.tier);
-        setRenderBackend(profile.backend);
-        setWebgpuAvailable(profile.webgpu);
-        setRuntimeReason(profile.reason);
-      });
-    });
-    return () => window.cancelAnimationFrame(frame);
-  }, [desktopScene, enhancementsReady]);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -259,36 +157,7 @@ export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMod
     loadedAmbientSound?.setScene(activeSceneId);
   }, [activeSceneId]);
 
-  useEffect(() => {
-    if (!enhancementsReady) return;
-    const root = rootRef.current;
-    if (!root) return;
-    const observed = new WeakSet<Element>();
-    const revealObserver = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          entry.target.setAttribute("data-cstd-revealed", "true");
-          revealObserver.unobserve(entry.target);
-        }
-      },
-      { rootMargin: "0px 0px -12%", threshold: 0.08 },
-    );
-    const scan = () => {
-      root.querySelectorAll("[data-cstd-chapter], [data-cstd-finale]").forEach((chapter) => {
-        if (observed.has(chapter)) return;
-        observed.add(chapter);
-        revealObserver.observe(chapter);
-      });
-    };
-    scan();
-    const mutationObserver = new MutationObserver(scan);
-    mutationObserver.observe(root, { childList: true, subtree: true });
-    return () => {
-      mutationObserver.disconnect();
-      revealObserver.disconnect();
-    };
-  }, [enhancementsReady]);
+  useCstdChapterReveal(rootRef, enhancementsReady);
 
   const sceneProps = useMemo(
     () => ({
@@ -351,13 +220,7 @@ export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMod
 
   function toggleMotionMode() {
     const next = motionMode === "full" ? "calm" : "full";
-    volatileMotionMode = next;
-    try {
-      window.localStorage.setItem(motionModeStorageKey, next);
-    } catch {
-      // The in-session switch remains usable when storage is unavailable.
-    }
-    window.dispatchEvent(new Event(motionModeChangeEvent));
+    setCstdMotionMode(next);
   }
 
   function handleNarrativeChange(mode: CstdNarrativeMode) {
@@ -372,10 +235,10 @@ export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMod
       data-cstd-kinetic-world
       data-cstd-enhancements-ready={enhancementsReady ? "true" : "false"}
       data-cstd-scene-mode={desktopScene ? "webgl" : "image"}
-      data-cstd-immersive-runtime={desktopScene ? immersiveRuntime : "image"}
-      data-cstd-render-backend={desktopScene ? renderBackend : "image"}
-      data-cstd-webgpu={webgpuAvailable ? "available" : "unavailable"}
-      data-cstd-runtime-reason={desktopScene ? runtimeReason : "responsive-image"}
+      data-cstd-immersive-runtime={runtimeProfile.tier}
+      data-cstd-render-backend={runtimeProfile.webgpu && runtimeProfile.tier === "full" ? `${runtimeProfile.backend}+webgpu` : runtimeProfile.backend}
+      data-cstd-webgpu={runtimeProfile.webgpu ? "active" : "unavailable"}
+      data-cstd-runtime-reason={runtimeProfile.reason}
       data-cstd-narrative-mode={narrativeMode}
       data-cstd-motion={reducedMotion ? "calm" : "full"}
       data-cstd-overdrive={overdrive ? "true" : "false"}
@@ -400,8 +263,11 @@ export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMod
         <LazyWorldBackdrop activeSceneId={activeSceneId} />
       </Suspense>
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
-        {enhancementsReady && desktopScene && immersiveRuntime === "full" ? <PersonalImmersiveScene {...sceneProps} /> : null}
-        {enhancementsReady && desktopScene && immersiveRuntime === "lite" ? <LitePersonalImmersiveScene {...sceneProps} /> : null}
+        <MemoizedSceneRuntime
+          {...sceneProps}
+          profile={runtimeProfile}
+          enabled={enhancementsReady && desktopScene}
+        />
       </div>
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[2] overflow-hidden">
         <div className="cstd-world-copy-shade absolute inset-0" />

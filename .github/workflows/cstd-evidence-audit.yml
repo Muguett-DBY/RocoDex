@@ -33,9 +33,13 @@ jobs:
         run: npm run cstd:verify-proof
       - name: Capture build-time studio snapshot
         run: npm run cstd:snapshot > cstd-status-snapshot.json
-      - name: Upload snapshot
+      - name: Capture release brief
+        run: npm run cstd:release-brief > cstd-release-brief.json
+      - name: Upload evidence artifacts
         uses: actions/upload-artifact@v7
         with:
-          name: cstd-status-snapshot
-          path: cstd-status-snapshot.json
+          name: cstd-evidence-artifacts
+          path: |
+            cstd-status-snapshot.json
+            cstd-release-brief.json
           retention-days: 30

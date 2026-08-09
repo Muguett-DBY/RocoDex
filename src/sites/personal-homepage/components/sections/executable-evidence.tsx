@@ -16,7 +16,7 @@ function ExecutableEvidence() {
         <div className="xl:sticky xl:top-28">
           <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#ff5a50]"><FlaskConical aria-hidden="true" className="h-4 w-4" /> 03 / EXECUTABLE EVIDENCE</p>
           <h2 id="executable-evidence-heading" className="mt-6 text-5xl font-semibold leading-[0.92] md:text-7xl">案例不只可读，<span className="text-[#f4d431]">还可以运行。</span></h2>
-          <p className="mt-6 max-w-xl text-base leading-8 text-[#aeb7ba]">三个重放只演示真实的核心边界：异步版本、缓存编解码与双域名所有权。计算在独立 Worker 中进行，结果可重复，不伪造日志。</p>
+          <p className="mt-6 max-w-xl text-base leading-8 text-[#aeb7ba]">四个重放只演示真实的核心边界：异步版本、缓存编解码、双域名所有权与业务乐观锁。计算在独立 Worker 中进行，结果可重复，不伪造日志。</p>
           <div className="mt-8 border-t border-white/15">
             {cstdCaseReplays.map((entry, index) => (
               <button key={entry.id} type="button" data-cstd-replay-option={entry.id} aria-pressed={entry.id === replay.id} onClick={() => setSelected(entry.id)} className="grid w-full grid-cols-[2rem_1fr_auto] items-center gap-3 border-b border-white/15 py-4 text-left text-[#9da8ac] transition-colors hover:text-white aria-pressed:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#f4d431]">
@@ -26,7 +26,10 @@ function ExecutableEvidence() {
               </button>
             ))}
           </div>
-          <CstdLink href={replay.sourceHref.zh} className="mt-6 inline-flex items-center gap-2 font-mono text-[9px] font-black text-[#24e0ff] hover:text-white">查看完整技术案例 <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
+          <div className="mt-6 flex flex-wrap gap-6">
+            <CstdLink href={replay.sourceHref.zh} className="inline-flex items-center gap-2 font-mono text-[9px] font-black text-[#24e0ff] hover:text-white">查看完整技术案例 <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
+            <CstdLink href="/lab/proof-museum" className="inline-flex items-center gap-2 font-mono text-[9px] font-black text-[#f4d431] hover:text-white">进入证据博物馆 <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
+          </div>
         </div>
 
         <ExecutableCaseReplay key={replay.id} replay={replay} locale="zh" />

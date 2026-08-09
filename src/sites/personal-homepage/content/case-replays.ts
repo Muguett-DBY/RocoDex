@@ -1,10 +1,10 @@
 import type { CstdLocale, LocalizedText } from "./content-types";
 
-export type CstdCaseReplayId = "alpha-race" | "dcf-cache" | "host-boundaries";
+export type CstdCaseReplayId = "alpha-race" | "dcf-cache" | "host-boundaries" | "crm-lock";
 
 export type CstdCaseReplay = Readonly<{
   id: CstdCaseReplayId;
-  caseSlug: "alpha-research-system" | "dcf-quantum" | "rocodex-platform";
+  caseSlug: "alpha-research-system" | "dcf-quantum" | "rocodex-platform" | "cfzzs-crm";
   title: LocalizedText;
   thesis: LocalizedText;
   inputLabel: LocalizedText;
@@ -55,6 +55,19 @@ export const cstdCaseReplays: readonly CstdCaseReplay[] = [
     inputDefault: 6,
     unit: { zh: "个", en: " requests" },
     sourceHref: { zh: "/work/rocodex-platform", en: "/en/work/rocodex-platform" },
+  },
+  {
+    id: "crm-lock",
+    caseSlug: "cfzzs-crm",
+    title: { zh: "业务记录乐观锁", en: "Operational optimistic lock" },
+    thesis: { zh: "冲突必须显式返回，而不是静默覆盖客服刚刚确认的事实。", en: "A conflict must return explicitly instead of silently overwriting a newly confirmed operational fact." },
+    inputLabel: { zh: "并发编辑者", en: "Concurrent editors" },
+    inputMin: 2,
+    inputMax: 10,
+    inputStep: 1,
+    inputDefault: 5,
+    unit: { zh: "人", en: " editors" },
+    sourceHref: { zh: "/work/cfzzs-crm", en: "/en/work/cfzzs-crm" },
   },
 ] as const;
 

@@ -112,10 +112,10 @@ describe("site architecture boundaries", () => {
 
     expect(violations).toEqual([]);
 
-    const landingSource = readSource("sites/personal-homepage/components/personal-homepage.tsx");
     const sceneSource = readFileSync(scenePath, "utf8");
-    expect(landingSource).toContain('import("./immersive-scene")');
-    expect(landingSource).toContain("{ ssr: false }");
+    const runtimeSource = readSource("sites/personal-homepage/components/scene-runtime.tsx");
+    expect(runtimeSource).toContain('import("./immersive-scene")');
+    expect(runtimeSource).toContain("{ ssr: false }");
     expect(sceneSource).toContain('import("./immersive-postprocessing")');
   });
 

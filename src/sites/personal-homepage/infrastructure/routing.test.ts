@@ -77,6 +77,10 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/sitemap.xml")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/rss.xml")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/api/cstd-vitals")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/topics/system-boundaries")).toEqual({ kind: "rewrite", path: "/cstd/topics/system-boundaries" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/topics/visual-computing")).toEqual({ kind: "rewrite", path: "/cstd/en/topics/visual-computing" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/studio.json")).toEqual({ kind: "rewrite", path: "/cstd/studio.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/releases.json")).toEqual({ kind: "rewrite", path: "/cstd/releases.json" });
   });
 
   test("leaves RocoDex subdomain routes untouched", () => {

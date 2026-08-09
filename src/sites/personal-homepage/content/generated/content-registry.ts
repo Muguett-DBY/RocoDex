@@ -1692,7 +1692,8 @@ export const generatedCstdCaseStudies = [
     ],
     "relatedLabSlugs": [
       "system-trace",
-      "render-lab"
+      "render-lab",
+      "proof-museum"
     ],
     "artifacts": [
       {

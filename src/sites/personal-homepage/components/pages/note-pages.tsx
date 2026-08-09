@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, Clock3, Link2 } from "lucide-react";
+import type { CSSProperties } from "react";
 import type { ContentMetric, CstdLocale } from "../../content/content-types";
 import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
 import { loadCstdContentDocument } from "../../content/content-document";
@@ -60,7 +61,7 @@ export function CstdNotesIndexPage({ locale }: { locale: CstdLocale }) {
                       {note.tags.map((tag) => <span key={tag} className="border-l border-white/15 pl-3">{tag}</span>)}
                     </div>
                   </div>
-                  <figure className="relative aspect-[4/3] overflow-hidden border border-white/15 bg-black md:order-none">
+                  <figure className="relative aspect-[4/3] overflow-hidden border border-white/15 bg-black md:order-none" style={{ viewTransitionName: `cstd-note-${note.slug}` } as CSSProperties}>
                     <Image src={note.image.src} alt={note.image.alt[locale]} fill sizes="(min-width: 768px) 240px, 100vw" className="object-cover opacity-75 transition-[transform,opacity] duration-500 group-hover:scale-105 group-hover:opacity-100" />
                     <span className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center bg-[#f4d431] text-black"><ArrowUpRight aria-hidden="true" className="h-4 w-4" /></span>
                   </figure>
@@ -123,7 +124,7 @@ export async function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLoca
   return (
     <CstdSiteChrome locale={locale} page={`note-${note.slug}`}>
       <main id="cstd-main">
-        <CstdPageHero locale={locale} eyebrow={`${note.category[locale].toUpperCase()} / ${note.series[locale].toUpperCase()}`} title={note.title[locale]} summary={note.summary[locale]} image={note.image} metrics={noteMetrics} compact />
+        <CstdPageHero locale={locale} eyebrow={`${note.category[locale].toUpperCase()} / ${note.series[locale].toUpperCase()}`} title={note.title[locale]} summary={note.summary[locale]} image={note.image} metrics={noteMetrics} compact transitionName={`cstd-note-${note.slug}`} />
 
         <article className="bg-[#f1eee5] text-[#111315]">
           <div className="mx-auto grid max-w-[1320px] gap-12 px-5 py-16 md:px-10 lg:grid-cols-[13rem_minmax(0,46rem)] lg:justify-center lg:gap-20 lg:px-16 lg:py-24">

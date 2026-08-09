@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { captureBrowserIssues, expectNoHorizontalOverflow } from "./support/browser";
 
-test("CSTD 7.0 presents a concise living engineering dossier", async ({ page, isMobile }) => {
+test("CSTD 8.0 presents a concise neural industrialism portfolio", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   expect(response?.ok()).toBe(true);
@@ -21,6 +21,7 @@ test("CSTD 7.0 presents a concise living engineering dossier", async ({ page, is
   await expect(page.locator("[data-cstd-release-replay]")).toHaveCount(1);
   await expect(page.locator("[data-cstd-proof]")).toHaveCount(3);
   await expect(page.locator("[data-cstd-executable-evidence]")).toHaveCount(1);
+  await expect(page.locator("[data-cstd-replay-option]")).toHaveCount(4);
   await expect(page.locator("[data-cstd-knowledge-lens]")).toHaveCount(1);
   await expect(page.locator("[data-cstd-scene-director]")).toHaveCount(1);
   await expect(page.getByRole("searchbox")).toHaveCount(0);
@@ -108,6 +109,9 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
     ["/cstd/proof.json", "application/json"],
     ["/cstd/graph.json", "application/json"],
     ["/cstd/status.json", "application/json"],
+    ["/cstd/studio.json", "application/json"],
+    ["/cstd/releases.json", "application/json"],
+    ["/cstd/topics.json", "application/json"],
     ["/cstd/feed.json", "application/json"],
     ["/cstd/llms.txt", "text/plain"],
     ["/cstd-case-worker.js", "javascript"],
@@ -123,7 +127,8 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
     expect(body.byteLength).toBeGreaterThan(100);
   }
   const status = await (await request.get("/cstd/status.json")).json();
-  expect(status.release).toBe("CSTD-7.0");
+  expect(status.release).toBe("CSTD-8.0");
+  expect(status.provenance.contract).toBe("cstd.studio-snapshot/v3");
   expect(status.districts).toHaveLength(5);
   const graph = await (await request.get("/cstd/graph.json")).json();
   expect(graph.nodes.length).toBeGreaterThanOrEqual(29);

@@ -7,6 +7,7 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/work",
   "/notes",
   "/lab",
+  "/topics",
   "/now",
   "/about",
   "/resume",
@@ -15,12 +16,16 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/proof.json",
   "/graph.json",
   "/status.json",
+  "/studio.json",
+  "/releases.json",
   "/feed.json",
+  "/topics.json",
   "/llms.txt",
   "/en",
   "/en/work",
   "/en/notes",
   "/en/lab",
+  "/en/topics",
   "/en/now",
   "/en/about",
   "/en/resume",
@@ -29,6 +34,9 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/en/proof.json",
   "/en/graph.json",
   "/en/status.json",
+  "/en/topics.json",
+  "/en/studio.json",
+  "/en/releases.json",
 ]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",
@@ -50,11 +58,13 @@ export const PERSONAL_SITE_SECURITY_HEADERS = {
   "content-security-policy": "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self' data:; connect-src 'self' https://*.vercel-insights.com https://cloudflareinsights.com; worker-src 'self'; manifest-src 'self'; frame-src 'none'; upgrade-insecure-requests",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
-  "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
+  "permissions-policy": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), xr-spatial-tracking=(), browsing-topics=()",
   "referrer-policy": "strict-origin-when-cross-origin",
+  "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
   "x-content-type-options": "nosniff",
   "x-dns-prefetch-control": "off",
   "x-frame-options": "DENY",
+  "x-permitted-cross-domain-policies": "none",
 } as const;
 
 export type PersonalSiteRouteDecision =
@@ -86,9 +96,11 @@ function isPublicPersonalPagePath(path: string) {
     || path.startsWith("/for/")
     || path.startsWith("/notes/")
     || path.startsWith("/lab/")
+    || path.startsWith("/topics/")
     || path.startsWith("/en/work/")
     || path.startsWith("/en/notes/")
     || path.startsWith("/en/lab/")
+    || path.startsWith("/en/topics/")
     || path === "/en/now"
     || path === "/en/about"
     || path === "/en/resume"

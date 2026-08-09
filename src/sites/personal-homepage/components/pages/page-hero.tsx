@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
+import type { CSSProperties } from "react";
 import type { ContentImage, ContentMetric, CstdLocale } from "../../content/content-types";
 
 export function CstdPageHero({
@@ -10,6 +11,7 @@ export function CstdPageHero({
   image,
   metrics = [],
   compact = false,
+  transitionName = "cstd-page-hero",
 }: {
   locale: CstdLocale;
   eyebrow: string;
@@ -18,9 +20,14 @@ export function CstdPageHero({
   image: ContentImage;
   metrics?: readonly ContentMetric[];
   compact?: boolean;
+  transitionName?: string;
 }) {
   return (
-    <header className={`relative flex overflow-hidden border-b border-white/15 ${compact ? "min-h-[68svh]" : "min-h-[82svh]"}`}>
+    <header
+      data-cstd-page-hero
+      className={`relative flex overflow-hidden border-b border-white/15 ${compact ? "min-h-[68svh]" : "min-h-[82svh]"}`}
+      style={{ viewTransitionName: transitionName } as CSSProperties}
+    >
       <Image
         src={image.src}
         alt={image.alt[locale]}

@@ -1,0 +1,29 @@
+name: CSTD Production Smoke
+
+on:
+  schedule:
+    - cron: "23 2 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cstd-production-smoke
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: Live routes, evidence, and security headers
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - name: Verify custard.top
+        run: npm run verify:live:cstd

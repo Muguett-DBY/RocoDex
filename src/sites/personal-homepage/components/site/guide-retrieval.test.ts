@@ -7,6 +7,7 @@ describe("Ask CSTD source-constrained retrieval", () => {
     ["AI 研究如何避免过期证据覆盖结果？", "case:alpha-research-system"],
     ["DCF 为什么让公式拥有最终决定权？", "case:dcf-quantum"],
     ["How do render budgets protect an immersive canvas?", "lab:render-lab"],
+    ["How do system boundaries connect routing and optimistic locks?", "topic:system-boundaries"],
   ])("grounds %s in the expected archive area", (question, expectedId) => {
     const result = answerGuideQuestion(question, question.startsWith("How") ? "en" : "zh");
     expect(result.refused).toBe(false);

@@ -13,10 +13,12 @@
     "cstd:new-note": "tsx scripts/cstd-content-cli.mts new-note",
     "cstd:verify-proof": "tsx scripts/cstd-content-cli.mts verify-proof",
     "cstd:snapshot": "tsx scripts/cstd-content-cli.mts snapshot",
+    "cstd:release-brief": "tsx scripts/cstd-content-cli.mts release-brief",
     "predev": "npm run content:generate",
     "dev": "next dev",
     "prebuild": "npm run content:generate",
     "build": "next build",
+    "postbuild": "npm run verify:personal-bundle",
     "start": "next start",
     "start:local": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/start-local-production.ps1",
     "stop:local": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/stop-local-next.ps1",
@@ -33,6 +35,7 @@
     "verify:personal-bundle": "node scripts/verify-personal-bundle.mjs",
     "verify": "npm run content:check && npm run cstd:verify-proof && npm run lint && npm run typecheck && npm test && npm run build && npm run verify:personal-bundle",
     "verify:live-registration": "node --experimental-strip-types scripts/verify-live-registration.mts",
+    "verify:live:cstd": "node scripts/verify-cstd-production.mjs",
     "ci:local": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& './scripts/stop-local-next.ps1'; npm ci\""
   },
   "dependencies": {

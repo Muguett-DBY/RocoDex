@@ -4,8 +4,9 @@ import { cstdLabs, getLabPath } from "../../content/labs";
 import { cstdSystems } from "../../content/systems";
 import { cstdTechnicalNotes, getTechnicalNotePath } from "../../content/technical-notes";
 import { cstdTimeline } from "../../content/timeline";
+import { cstdTopics, getCstdTopicPath } from "../../content/topics";
 
-export type GuideSourceType = "case" | "note" | "capability" | "lab" | "moment";
+export type GuideSourceType = "case" | "note" | "capability" | "lab" | "topic" | "moment";
 
 export type GuideKnowledgeEntry = Readonly<{
   id: string;
@@ -66,6 +67,21 @@ const labEntries: readonly GuideKnowledgeEntry[] = cstdLabs.map((entry) => ({
   relatedIds: cstdCaseStudies.filter((candidate) => candidate.relatedLabSlugs.includes(entry.slug)).map((candidate) => `case:${candidate.slug}`),
 }));
 
+const topicEntries: readonly GuideKnowledgeEntry[] = cstdTopics.map((entry) => ({
+  id: `topic:${entry.slug}`,
+  type: "topic",
+  title: entry.title,
+  summary: { zh: `${entry.thesis.zh}${entry.summary.zh}`, en: `${entry.thesis.en} ${entry.summary.en}` },
+  href: { zh: getCstdTopicPath(entry, "zh"), en: getCstdTopicPath(entry, "en") },
+  keywords: [entry.slug, entry.title.zh, entry.title.en, ...entry.caseSlugs, ...entry.noteSlugs, ...entry.labSlugs],
+  updatedAt: "2026-08-09",
+  relatedIds: [
+    ...entry.caseSlugs.map((slug) => `case:${slug}`),
+    ...entry.noteSlugs.map((slug) => `note:${slug}`),
+    ...entry.labSlugs.map((slug) => `lab:${slug}`),
+  ],
+}));
+
 const momentEntries: readonly GuideKnowledgeEntry[] = cstdTimeline.map((entry, index) => ({
   id: `moment:${entry.date}:${index}`,
   type: "moment",
@@ -82,5 +98,6 @@ export const guideKnowledge: readonly GuideKnowledgeEntry[] = [
   ...noteEntries,
   ...capabilityEntries,
   ...labEntries,
+  ...topicEntries,
   ...momentEntries,
 ];

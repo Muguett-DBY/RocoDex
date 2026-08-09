@@ -16,6 +16,8 @@ const initialBudget = 150_000;
 const webglEntryBudget = 1_000_000;
 const liteWebglBudget = 20_000;
 const webglBudget = 1_500_000;
+const webgpuBudget = 24_000;
+const originalVisualBudget = 820_000;
 
 function assetPath(asset) {
   return path.join(nextRoot, asset.replace(/^\/_next\//, "").replace(/^_next\//, ""));
@@ -54,10 +56,13 @@ const entryIncludes = (entry, marker) =>
   (entry.files ?? []).some((asset) => readFileSync(assetPath(asset), "utf8").includes(marker));
 const webglEntry = loadableEntries.find((entry) => entryIncludes(entry, "THREE.WebGLRenderer"));
 const liteWebglEntry = loadableEntries.find((entry) => entryIncludes(entry, "data-cstd-lite-immersive"));
+const webgpuEntry = loadableEntries.find((entry) => entryIncludes(entry, "data-cstd-webgpu-field"));
 const webglAssets = unique(webglEntry?.files ?? []);
 const liteWebglAssets = unique(liteWebglEntry?.files ?? []);
 const webglBytes = bytesFor(webglAssets);
 const liteWebglBytes = bytesFor(liteWebglAssets);
+const webgpuAssets = unique(webgpuEntry?.files ?? []);
+const webgpuBytes = bytesFor(webgpuAssets);
 const highQualityAssets = readdirSync(path.join(nextRoot, "static/chunks"))
   .filter((asset) => asset.endsWith(".js"))
   .map((asset) => `static/chunks/${asset}`)
@@ -67,6 +72,12 @@ const highQualityAssets = readdirSync(path.join(nextRoot, "static/chunks"))
   });
 const highQualityBytes = bytesFor(highQualityAssets);
 const fullWebglBytes = webglBytes + highQualityBytes;
+const originalVisuals = [
+  "public/cstd-universe/cstd-neural-foundry-v2.webp",
+  "public/cstd-universe/cstd-evidence-foundry-v2.webp",
+  "public/cstd-universe/cstd-knowledge-loom-v2.webp",
+];
+const originalVisualBytes = originalVisuals.reduce((total, asset) => total + statSync(path.resolve(asset)).size, 0);
 
 if (initialContainsThree) {
   throw new Error("Three.js code is present in the personal homepage initial entry");
@@ -93,6 +104,15 @@ if (liteWebglAssets.some((asset) => initialAssets.includes(asset) || webglAssets
 if (liteWebglBytes > liteWebglBudget) {
   throw new Error(`Personal homepage lite WebGL JS is ${liteWebglBytes} bytes; budget is ${liteWebglBudget}`);
 }
+if (webgpuAssets.length === 0) {
+  throw new Error("Could not find the optional WebGPU signal-field chunk");
+}
+if (webgpuAssets.some((asset) => initialAssets.includes(asset) || webglAssets.includes(asset))) {
+  throw new Error("The WebGPU signal field is not isolated from initial or WebGL code");
+}
+if (webgpuBytes > webgpuBudget) {
+  throw new Error(`Personal homepage WebGPU JS is ${webgpuBytes} bytes; budget is ${webgpuBudget}`);
+}
 if (highQualityAssets.length === 0) {
   throw new Error("Could not find the high-quality WebGL postprocessing chunk");
 }
@@ -102,7 +122,10 @@ if (highQualityAssets.some((asset) => initialAssets.includes(asset) || webglAsse
 if (fullWebglBytes > webglBudget) {
   throw new Error(`Personal homepage full WebGL JS is ${fullWebglBytes} bytes; budget is ${webglBudget}`);
 }
+if (originalVisualBytes > originalVisualBudget) {
+  throw new Error(`CSTD 8.0 original visuals total ${originalVisualBytes} bytes; budget is ${originalVisualBudget}`);
+}
 
 console.log(
-  `Personal homepage bundle OK: ${initialBytes} initial bytes, ${liteWebglBytes} lite WebGL bytes, ${webglBytes} base WebGL bytes, ${highQualityBytes} conditional postprocessing bytes, ${fullWebglBytes} full WebGL bytes.`,
+  `Personal homepage bundle OK: ${initialBytes} initial bytes, ${liteWebglBytes} lite WebGL bytes, ${webgpuBytes} WebGPU bytes, ${webglBytes} base WebGL bytes, ${highQualityBytes} conditional postprocessing bytes, ${fullWebglBytes} full WebGL bytes, ${originalVisualBytes} original visual bytes.`,
 );
