@@ -95,6 +95,8 @@ describe("CSTD host routing", () => {
   test("locks the personal host to self-owned scripts, media, workers, and frames", () => {
     const policy = PERSONAL_SITE_SECURITY_HEADERS["content-security-policy"];
     expect(policy).toContain("default-src 'self'");
+    expect(policy).toContain("script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com");
+    expect(policy).toContain("connect-src 'self' https://*.vercel-insights.com https://cloudflareinsights.com");
     expect(policy).toContain("worker-src 'self'");
     expect(policy).toContain("frame-ancestors 'none'");
     expect(policy).toContain("frame-src 'none'");
