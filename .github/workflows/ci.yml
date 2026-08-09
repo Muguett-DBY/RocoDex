@@ -27,6 +27,8 @@ jobs:
         run: npm ci
       - name: Verify generated content
         run: npm run content:check
+      - name: Verify CSTD proof and publishing contracts
+        run: npm run cstd:verify-proof
       - name: Test host and import ownership
         run: npm run test:host
 
@@ -48,6 +50,8 @@ jobs:
         run: npm run audit:dependencies
       - name: Verify generated content
         run: npm run content:check
+      - name: Verify CSTD proof and publishing contracts
+        run: npm run cstd:verify-proof
       - name: Lint
         run: npm run lint
       - name: Type check

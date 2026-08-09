@@ -120,3 +120,31 @@ export const cstdKnowledgeGraphStats = {
 export function getCstdKnowledgeNode(id: string) {
   return cstdKnowledgeGraph.nodes.find((node) => node.id === id);
 }
+
+export function findCstdKnowledgePath(sourceId: string, targetId: string) {
+  if (sourceId === targetId) return getCstdKnowledgeNode(sourceId) ? [sourceId] : [];
+  if (!getCstdKnowledgeNode(sourceId) || !getCstdKnowledgeNode(targetId)) return [];
+
+  const neighbors = new Map<string, string[]>();
+  for (const edge of cstdKnowledgeGraph.edges) {
+    neighbors.set(edge.source, [...(neighbors.get(edge.source) ?? []), edge.target]);
+    neighbors.set(edge.target, [...(neighbors.get(edge.target) ?? []), edge.source]);
+  }
+
+  const queue: string[][] = [[sourceId]];
+  const visited = new Set([sourceId]);
+  while (queue.length > 0) {
+    const path = queue.shift();
+    if (!path) break;
+    const current = path.at(-1);
+    if (!current) continue;
+    for (const neighbor of neighbors.get(current) ?? []) {
+      if (visited.has(neighbor)) continue;
+      const nextPath = [...path, neighbor];
+      if (neighbor === targetId) return nextPath;
+      visited.add(neighbor);
+      queue.push(nextPath);
+    }
+  }
+  return [];
+}

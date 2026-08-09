@@ -1,244 +1,133 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, test } from "vitest";
 
-const landingSource = readFileSync(new URL("./personal-homepage.tsx", import.meta.url), "utf8");
-const sceneSource = readFileSync(new URL("./immersive-scene.tsx", import.meta.url), "utf8");
-const liteSceneSource = readFileSync(new URL("./lite-immersive-scene.tsx", import.meta.url), "utf8");
-const postprocessingSource = readFileSync(new URL("./immersive-postprocessing.tsx", import.meta.url), "utf8");
-const commandSource = readFileSync(new URL("./command-drawer.tsx", import.meta.url), "utf8");
-const directorSource = readFileSync(new URL("./scene-director.tsx", import.meta.url), "utf8");
-const broadcastSource = readFileSync(new URL("./project-broadcast.tsx", import.meta.url), "utf8");
-const ambienceSource = readFileSync(new URL("./ambient-sound.ts", import.meta.url), "utf8");
-const worldSource = readFileSync(new URL("./world-backdrop.tsx", import.meta.url), "utf8");
-const gateSource = readFileSync(new URL("../scenes/neural-gate/neural-gate.tsx", import.meta.url), "utf8");
-const sceneClockSource = readFileSync(new URL("../experience/scene-clock.ts", import.meta.url), "utf8");
-const sceneManifestSource = readFileSync(new URL("../experience/scene-manifest.ts", import.meta.url), "utf8");
-const qualitySource = readFileSync(new URL("../experience/quality-controller.ts", import.meta.url), "utf8");
-const runtimeSource = readFileSync(new URL("../experience/runtime-capabilities.ts", import.meta.url), "utf8");
-const narrativeSource = readFileSync(new URL("../content/narratives.ts", import.meta.url), "utf8");
-const assetManifestSource = readFileSync(new URL("../media/asset-manifest.ts", import.meta.url), "utf8");
-const globalsSource = readFileSync(new URL("../../../app/globals.css", import.meta.url), "utf8");
-const sectionSources = {
-  signal: readFileSync(new URL("./sections/signal-strip.tsx", import.meta.url), "utf8"),
-  systems: readFileSync(new URL("./sections/systems-chapter.tsx", import.meta.url), "utf8"),
-  proof: readFileSync(new URL("./sections/selected-work.tsx", import.meta.url), "utf8"),
-  operator: readFileSync(new URL("./sections/operator-profile.tsx", import.meta.url), "utf8"),
-  path: readFileSync(new URL("./sections/research-path.tsx", import.meta.url), "utf8"),
-  finale: readFileSync(new URL("./sections/finale.tsx", import.meta.url), "utf8"),
-};
-const chapterSource = Object.values(sectionSources).join("\n");
+const read = (path: string) => readFileSync(new URL(path, import.meta.url), "utf8");
+const landingSource = read("./personal-homepage.tsx");
+const controlsSource = read("./homepage-controls.tsx");
+const sceneSource = read("./immersive-scene.tsx");
+const liteSceneSource = read("./lite-immersive-scene.tsx");
+const postprocessingSource = read("./immersive-postprocessing.tsx");
+const directorSource = read("./scene-director.tsx");
+const ambienceSource = read("./ambient-sound.ts");
+const worldSource = read("./world-backdrop.tsx");
+const gateSource = read("../scenes/neural-gate/neural-gate.tsx");
+const sceneClockSource = read("../experience/scene-clock.ts");
+const sceneManifestSource = read("../experience/scene-manifest.ts");
+const qualitySource = read("../experience/quality-controller.ts");
+const runtimeSource = read("../experience/runtime-capabilities.ts");
+const narrativeSource = read("../content/narratives.ts");
+const studioSource = read("./sections/living-studio-twin.tsx");
+const proofSource = read("./sections/selected-work.tsx");
+const replaySource = read("./sections/executable-evidence.tsx");
+const replayRuntimeSource = read("./site/executable-case-replay.tsx");
+const workerSource = read("../../../../public/cstd-case-worker.js");
+const knowledgeSource = read("./sections/knowledge-lens.tsx");
+const finaleSource = read("./sections/finale.tsx");
+const globalsSource = read("../../../app/globals.css");
 
-describe("CSTD personal systems studio", () => {
-  test("puts the personal identity and representative proof ahead of tooling", () => {
+describe("CSTD 7.0 living engineering dossier", () => {
+  test("keeps identity first and exposes shareable audience paths", () => {
     expect(gateSource).toContain('id="cstd-hero-title"');
-    expect(gateSource).toContain('aria-label="CSTD"');
     expect(gateSource).toContain("narrative.thesis.zh");
-    expect(gateSource).toContain("LazyNarrativeSwitcher");
-    expect(narrativeSource).toContain("奶黄包的个人技术工作室");
-    expect(gateSource).toContain('href="#systems"');
-    expect(landingSource).toContain("<MemoizedNeuralGate");
-    expect(landingSource).not.toContain("ProjectShowcase");
+    expect(gateSource).toContain("getCstdNarrativeSharePath");
+    expect(narrativeSource).toContain('return "/for/research"');
+    expect(landingSource).toContain("initialNarrativeMode");
     expect(landingSource).not.toContain("project-comparison");
-    expect(landingSource).not.toContain("project-directory");
+    expect(landingSource).not.toContain("ProjectShowcase");
   });
 
-  test("keeps the WebGL identity progressive and desktop-only", () => {
-    expect(assetManifestSource).toContain("cstd-neural-gate-v1.webp");
+  test("uses a six-scene three-act dossier without old utility chapters", () => {
+    expect(landingSource).toContain("LazyLivingStudioTwin");
+    expect(landingSource).toContain("LazySelectedWork");
+    expect(landingSource).toContain("LazyExecutableEvidence");
+    expect(landingSource).toContain("LazyKnowledgeLens");
+    expect(landingSource).toContain("narrativeMode={narrativeMode}");
+    expect(landingSource).not.toContain("command-drawer");
+    expect(landingSource).not.toContain("LazyOperatorProfile");
+    expect(landingSource).not.toContain("LazyResearchPath");
+  });
+
+  test("derives the living studio from build-time proof", () => {
+    expect(studioSource).toContain("cstdStudioSnapshot.districts");
+    expect(studioSource).toContain("data-cstd-studio-twin");
+    expect(studioSource).toContain("data-cstd-release-replay");
+    expect(studioSource).toContain('href="/status.json"');
+    expect(studioSource).toContain("setInterval");
+  });
+
+  test("keeps representative work concise and sends depth to case pages", () => {
+    expect(proofSource).toContain("cstdProofMesh");
+    expect(proofSource).toContain("getCaseStudyPath");
+    expect(proofSource).toContain("首页只给出结论");
+    expect(proofSource).not.toContain("ProjectBroadcast");
+    expect(proofSource).not.toContain("lg:min-h-[140svh]");
+  });
+
+  test("runs three deterministic technical replays in a dedicated worker", () => {
+    expect(replaySource).toContain("cstdCaseReplays");
+    expect(replayRuntimeSource).toContain('new Worker("/cstd-case-worker.js")');
+    expect(replayRuntimeSource).toContain('data-cstd-worker="dedicated"');
+    expect(workerSource).toContain('"alpha-race"');
+    expect(workerSource).toContain('"dcf-cache"');
+    expect(workerSource).toContain('"host-boundaries"');
+    expect(workerSource).toContain("STALE WRITE REJECTED");
+  });
+
+  test("places source-constrained answers inside a knowledge path", () => {
+    expect(knowledgeSource).toContain("answerGuideQuestion");
+    expect(knowledgeSource).toContain("findCstdKnowledgePath");
+    expect(knowledgeSource).toContain("data-cstd-graph-path");
+    expect(knowledgeSource).toContain('href="/graph.json"');
+    expect(knowledgeSource).not.toContain("<input");
+  });
+
+  test("keeps WebGL progressive, asynchronous, and desktop-only", () => {
     expect(landingSource).toContain("desktopSceneQuery");
     expect(landingSource).toContain('import("../experience/runtime-capabilities")');
     expect(runtimeSource).toContain("WEBGL_debug_renderer_info");
     expect(runtimeSource).toContain("runtimeNavigator.gpu");
-    expect(landingSource).toContain('<LitePersonalImmersiveScene {...sceneProps} />');
+    expect(landingSource).toContain("<LitePersonalImmersiveScene");
     expect(sceneSource).toContain("@react-three/fiber");
     expect(sceneSource).toContain("<Canvas");
-    expect(sceneSource).toContain("<shaderMaterial");
     expect(sceneSource).toContain("<ParticleCurrent");
     expect(sceneSource).toContain("<NeuralCity");
-    expect(sceneSource).toContain("<NeuralBeacon");
-    expect(sceneSource).toContain("<TransitLanes");
-    expect(sceneSource).toContain("<CityWindowField");
-    expect(sceneSource).toContain("data-cstd-neural-city");
-    expect(sceneSource).toContain("<ArchiveSpine");
-    expect(qualitySource).toContain("CstdFrameBudgetController");
-    expect(qualitySource).toContain("MAX_TEXTURE_SIZE");
-    expect(sceneSource).toContain("<QualityProbe");
-    expect(sceneSource).toContain('dpr={quality === "full" ? [1, 1.25] : 1}');
     expect(sceneSource).toContain("const LazyImmersivePostprocessing = lazy(");
     expect(sceneSource).not.toContain('from "@react-three/postprocessing"');
     expect(postprocessingSource).toContain('from "@react-three/postprocessing"');
     expect(liteSceneSource).toContain("data-cstd-lite-immersive");
-    expect(liteSceneSource).toContain('canvas.getContext("webgl"');
+    expect(qualitySource).toContain("CstdFrameBudgetController");
   });
 
-  test("does not download archive textures until the systems chapter is active", () => {
-    expect(landingSource).toContain('activeSceneId === "systems" || activeSceneId === "path"');
-    expect(sceneSource).toContain("props.showArchive ? (");
-    expect(sceneSource).toContain("<ProgressiveArchiveLayer");
-    expect(sceneSource).toContain("<SceneReady onReady={props.onReady}");
-  });
-
-  test("uses one native scroll loop instead of a motion runtime on first paint", () => {
+  test("uses one native scroll clock and pauses heavy work offscreen", () => {
     expect(landingSource).toContain("useCstdSceneClock");
     expect(sceneClockSource).toContain('window.addEventListener("scroll", requestSync, { passive: true })');
     expect(sceneClockSource).toContain("requestAnimationFrame(sync)");
-    expect(sceneClockSource).toContain("progressBarRef.current.style.transform");
-    expect(sceneClockSource).toContain('root.dataset.cstdSceneCurrent = nextSceneId');
-    expect(landingSource).not.toContain('from "framer-motion"');
-    expect(landingSource).not.toContain("<LazyMotion");
-    expect(landingSource).not.toContain("useMotionValue");
-  });
-
-  test("loads the command console only after deliberate input", () => {
-    expect(landingSource).toContain('import("./command-drawer")');
-    expect(landingSource).toContain("consoleOpen ? (");
-    expect(landingSource).not.toContain('from "./terminal-command"');
-    expect(commandSource).toContain("<TerminalCommand");
-    expect(commandSource).toContain('aria-label="关闭控制台"');
-    expect(commandSource).toContain('event.key === "Escape"');
-    expect(commandSource).toContain('case "breach"');
-    expect(commandSource).toContain('case "scan"');
-    expect(commandSource).toContain('case "jack"');
-    expect(commandSource).toContain("proof-${project.id}");
-    expect(commandSource).toContain("onOverdrive();");
-    expect(landingSource).toContain("const closeConsole = useCallback");
-    expect(landingSource).toContain("onClose={closeConsole}");
-    expect(landingSource).toContain("onOverdrive={enableOverdrive}");
-  });
-
-  test("keeps high-intensity cyber effects behind a deliberate overdrive state", () => {
-    expect(landingSource).toContain("data-cstd-overdrive-toggle");
-    expect(landingSource).toContain('data-cstd-overdrive={overdrive ? "true" : "false"}');
-    expect(landingSource).toContain("setOverdrive((current) => !current)");
-    expect(landingSource).toContain("data-cstd-crosshair");
-    expect(globalsSource).toContain('[data-cstd-overdrive="true"] .cstd-glitch-title::before');
-    expect(globalsSource).toContain('[data-cstd-motion="calm"] .cstd-hud-scan');
-    expect(globalsSource).toContain('transform: translate3d(-2%, 6%, 0)');
-    expect(globalsSource).toContain('[data-cstd-scene-current="path"] .cstd-memory-loader-scan');
-    expect(globalsSource).toContain('[data-cstd-kinetic-world]:has([data-cstd-render-quality="lite"]) .cstd-world-rain');
-  });
-
-  test("removes continuous decorative loops from the DOM chapters", () => {
-    expect(sectionSources.signal).not.toContain("repeat: Infinity");
-    expect(sectionSources.signal).not.toContain("data-cstd-signal-track");
-    expect(sectionSources.systems).not.toContain("Meteors");
-    expect(sectionSources.systems).not.toContain("Gauge");
-    expect(sectionSources.proof).not.toContain("LazyOrb");
-    expect(sectionSources.proof).not.toContain("cstd-spin");
-    expect(sectionSources.path).not.toContain("CountUp");
-    expect(sectionSources.path).not.toContain("TracingProgress");
-  });
-
-  test("composes systems, proof, and research as concise interactive chapters", () => {
-    expect(chapterSource).toContain('data-cstd-chapter="systems"');
-    expect(chapterSource).toContain('data-cstd-chapter="proof"');
-    expect(chapterSource).toContain('data-cstd-chapter="operator"');
-    expect(chapterSource).toContain('data-cstd-chapter="path"');
-    expect(chapterSource).toContain("data-cstd-system={system.id}");
-    expect(chapterSource).toContain("data-cstd-proof={proof.projectId}");
-    expect(chapterSource).toContain("data-cstd-project-plane={proof.projectId}");
-    expect(chapterSource).toContain("data-cstd-live-feed={proof.projectId}");
-    expect(sectionSources.operator).toContain("cstd-night-runner-v1.webp");
-    expect(sectionSources.operator).toContain("unoptimized");
-    expect(sectionSources.operator).toContain('data-cstd-generated-visual="night-runner-v1"');
-    expect(chapterSource).toContain("data-cstd-learning-step={entry.year}");
-    expect(sectionSources.path).toContain("setImageLoaded(true)");
-    expect(sectionSources.path).toContain("cstd-memory-loader-scan");
-    expect(sectionSources.systems).toContain("data-cstd-skill-reactor");
-    expect(sectionSources.systems).toContain("cstdTechnicalNotes");
-    expect(sectionSources.systems).toContain("data-cstd-reactor-map");
-    expect(sectionSources.path).not.toContain("min-h-svh");
-  });
-
-  test("queues typed terminal output without replacing the previous line", () => {
-    const terminalSource = readFileSync(new URL("./terminal-command.tsx", import.meta.url), "utf8");
-    expect(terminalSource).toContain('setLines((current) => [...current, { ...line, text: "" }])');
-    expect(terminalSource).toContain("next[next.length - 1]");
-    expect(commandSource).toContain("BREACH PROTOCOL ACCEPTED");
-  });
-
-  test("keeps live links behind the shared external-link policy", () => {
-    expect(sectionSources.proof).toContain("const targetProps = getCstdLinkTargetProps(project.href);");
-    expect(sectionSources.proof).toContain("{...targetProps}");
-    expect(sceneSource).toContain('data-cstd-render-fallback={contextLost ? "true" : "false"}');
-    expect(sceneSource).toContain("preserveDrawingBuffer: true");
-    expect(sceneSource).toContain('addEventListener("webglcontextlost"');
-  });
-
-  test("keeps explicit calm mode without inheriting operating-system motion settings", () => {
-    expect(landingSource).toContain("useSyncExternalStore(");
-    expect(landingSource).toContain('return "full";');
-    expect(landingSource).toContain("data-cstd-motion-toggle");
-    expect(landingSource).not.toContain("prefers-reduced-motion: reduce");
-    expect(landingSource).toContain("reducedMotion={reducedMotion}");
+    expect(landingSource).toContain("useDocumentVisibility");
     expect(sceneSource).toContain('frameloop={props.active && quality === "full" ? "always" : "demand"}');
+    expect(landingSource).not.toContain('from "framer-motion"');
   });
 
-  test("ships the black-label boot, dive HUD, generated persona, and live project telemetry", () => {
-    expect(landingSource).toContain("cstd-boot-sequence");
-    expect(landingSource).toContain("data-cstd-neural-dive");
-    expect(landingSource).toContain("diveDepthRef");
-    expect(sectionSources.proof).toContain("ENGINEERING DECISION");
-    expect(sectionSources.proof).toContain("WEBM + H264");
-    expect(globalsSource).toContain(".cstd-live-feed-image");
-    expect(globalsSource).toContain("@keyframes cstd-persona-scan");
-  });
-
-  test("directs every chapter through one scroll-native cinematic controller", () => {
-    expect(landingSource).toContain("const LazySceneDirector = lazy(");
-    expect(landingSource).toContain("<LazySceneDirector activeSceneId={activeSceneId}");
-    expect(landingSource).not.toContain('import { MemoizedSceneDirector');
-    expect(sceneClockSource).toContain('style.setProperty("--cstd-scroll-velocity"');
-    expect(sceneClockSource).toContain('style.setProperty("--cstd-chapter-shift"');
-    expect(sceneClockSource).toContain("if (window.scrollY > 1)");
-    expect(landingSource).toContain("new IntersectionObserver(");
-    expect(directorSource).toContain("data-cstd-scene-director");
-    expect(directorSource).toContain("cstd-director-aperture");
-    expect(sceneManifestSource).toContain('id: "finale"');
-    expect(worldSource).toContain("getCstdSceneWindow");
-    expect(globalsSource).toContain(".cstd-speed-lines");
-  });
-
-  test("plays lightweight project broadcasts only while their chapters are visible", () => {
-    expect(sectionSources.proof).toContain("<ProjectBroadcast");
-    expect(assetManifestSource).toContain("rocodex-broadcast-v1.webm");
-    expect(assetManifestSource).toContain("alpha-broadcast-v1.webm");
-    expect(assetManifestSource).toContain("crm-broadcast-v1.webm");
-    expect(assetManifestSource).toContain("rocodex-broadcast-v1.mp4");
-    expect(broadcastSource).toContain('preload="metadata"');
-    expect(broadcastSource).toContain("video.play()");
-    expect(broadcastSource).toContain("video.pause()");
-    expect(broadcastSource).toContain("rootMargin: \"75% 0px\"");
-    expect(broadcastSource).toContain('type="video/webm"');
-    expect(broadcastSource).toContain('type="video/mp4"');
-  });
-
-  test("uses a coherent original visual universe across entry, archive, and finale", () => {
-    expect(assetManifestSource).toContain("/cstd-universe/cstd-neural-gate-v1.webp");
-    expect(assetManifestSource).toContain("/cstd-universe/cstd-skill-reactor-v1.webp");
-    expect(assetManifestSource).toContain("/cstd-universe/cstd-broadcast-nexus-v1.webp");
-    expect(sectionSources.path).toContain("/cstd-universe/cstd-data-vault-v1.webp");
-    expect(assetManifestSource).toContain("/cstd-universe/cstd-night-workstation-v1.webp");
-    expect(assetManifestSource).toContain("/cstd-universe/cstd-departure-city-v1.webp");
-    expect(sectionSources.finale).toContain('data-cstd-generated-visual="departure-city-v1"');
-  });
-
-  test("keeps the reactive audio atmosphere explicitly user activated", () => {
-    expect(landingSource).toContain("data-cstd-ambience-toggle");
+  test("keeps overdrive and ambience deliberate", () => {
+    expect(controlsSource).toContain("data-cstd-overdrive-toggle");
+    expect(controlsSource).toContain("data-cstd-ambience-toggle");
     expect(landingSource).toContain("ambientSound.start()");
-    expect(landingSource).toContain('data-cstd-ambience={ambienceOn ? "on" : "off"}');
-    expect(ambienceSource).toContain("class AmbientSoundEngine");
-    expect(ambienceSource).toContain("city: GainNode");
-    expect(ambienceSource).toContain("data: GainNode");
-    expect(ambienceSource).toContain("rain: GainNode");
-    expect(ambienceSource).toContain("cue: GainNode");
     expect(ambienceSource).not.toContain("autoplay");
+    expect(globalsSource).toContain('[data-cstd-overdrive="true"] .cstd-glitch-title::before');
+    expect(landingSource).not.toContain("prefers-reduced-motion: reduce");
   });
 
-  test("closes with a full cinematic final transmission instead of a utility footer", () => {
-    expect(landingSource).toContain("<LazyFinale />");
-    expect(sectionSources.finale).toContain("data-cstd-finale");
-    expect(sectionSources.finale).toContain("FINAL TRANSMISSION");
-    expect(sectionSources.finale).toContain("STILL");
-    expect(sectionSources.finale).toContain('href="mailto:cstd@custard.top"');
+  test("directs every chapter through the cinematic controller", () => {
+    expect(landingSource).toContain("LazySceneDirector");
+    expect(directorSource).toContain("data-cstd-scene-director");
+    expect(sceneManifestSource).toContain('label: "Executable evidence"');
+    expect(sceneManifestSource).toContain('label: "Knowledge intelligence"');
+    expect(worldSource).toContain("getCstdSceneWindow");
+  });
+
+  test("ends in a narrative-aware collaboration exit", () => {
+    expect(finaleSource).toContain("collaborationCopy");
+    expect(finaleSource).toContain("getCstdNarrativeSharePath");
+    expect(finaleSource).toContain('href={`mailto:cstd@custard.top');
+    expect(finaleSource).toContain("FINAL TRANSMISSION");
   });
 });

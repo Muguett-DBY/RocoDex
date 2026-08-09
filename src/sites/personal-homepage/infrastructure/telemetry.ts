@@ -1,4 +1,34 @@
-const allowedMetricName = /^(?:LCP|CLS|INP|page_view|client_error|atlas_district|graph_node|case_film_beat|lab_loaded|guide_(?:answer|refusal)|narrative_(?:builder|researcher|collaborator)|visual_(?:full|balanced|calm))$/;
+const allowedMetricName = /^(?:LCP|CLS|INP|page_view|client_error|atlas_district|graph_node|case_film_beat|case_replay|knowledge_path|lab_loaded|guide_(?:answer|refusal)|narrative_(?:builder|researcher|collaborator)|visual_(?:full|balanced|calm))$/;
+
+type QuotaWindow = { startedAt: number; count: number };
+const quotaByIdentity = new Map<string, QuotaWindow>();
+
+export function hashCstdTelemetryIdentity(value: string) {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return (hash >>> 0).toString(36);
+}
+
+export function consumeCstdTelemetryQuota(identity: string, now = Date.now(), limit = 30) {
+  const key = hashCstdTelemetryIdentity(identity || "anonymous");
+  const current = quotaByIdentity.get(key);
+  if (!current || now - current.startedAt >= 60_000) {
+    quotaByIdentity.set(key, { startedAt: now, count: 1 });
+    return { allowed: true, retryAfterSeconds: 0 } as const;
+  }
+  current.count += 1;
+  if (quotaByIdentity.size > 1_000) {
+    for (const [candidate, window] of quotaByIdentity) {
+      if (now - window.startedAt >= 60_000) quotaByIdentity.delete(candidate);
+    }
+  }
+  return current.count <= limit
+    ? { allowed: true, retryAfterSeconds: 0 } as const
+    : { allowed: false, retryAfterSeconds: Math.max(1, Math.ceil((60_000 - (now - current.startedAt)) / 1_000)) } as const;
+}
 
 export type CstdMetric = Readonly<{
   name: string;

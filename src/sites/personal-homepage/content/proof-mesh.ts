@@ -5,9 +5,19 @@ export type CstdProofFreshness = "current" | "aging" | "stale";
 export const cstdProofMesh = generatedCstdProofMesh;
 
 export const cstdProofMeshManifest = {
-  schemaVersion: 1,
-  release: "CSTD-6.0",
+  schemaVersion: 2,
+  release: "CSTD-7.0",
   verifiedAt: cstdProofMesh.map((entry) => entry.verifiedAt).sort().at(-1) ?? "2026-08-09",
+  totals: {
+    projects: cstdProofMesh.length,
+    artifacts: cstdProofMesh.reduce((sum, entry) => sum + entry.artifactCount, 0),
+    verified: cstdProofMesh.filter((entry) => entry.status === "verified").length,
+  },
+  related: {
+    graph: "https://custard.top/graph.json",
+    status: "https://custard.top/status.json",
+    feed: "https://custard.top/feed.json",
+  },
   entries: cstdProofMesh,
 } as const;
 

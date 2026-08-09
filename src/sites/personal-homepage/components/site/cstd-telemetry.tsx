@@ -32,6 +32,7 @@ function ratingFor(name: string, value: number): MetricPayload["rating"] {
 
 function sendMetric(payload: MetricPayload) {
   if (process.env.NODE_ENV !== "production") return;
+  if (window.location.hostname !== "custard.top" && window.location.hostname !== "www.custard.top") return;
   const body = JSON.stringify({
     ...payload,
     value: Math.round(payload.value * 1000) / 1000,

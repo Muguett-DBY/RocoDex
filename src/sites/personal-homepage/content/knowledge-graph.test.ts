@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { cstdKnowledgeGraph } from "./knowledge-graph";
+import { cstdKnowledgeGraph, findCstdKnowledgePath } from "./knowledge-graph";
 
 describe("CSTD knowledge graph", () => {
   test("keeps every node id and edge id unique", () => {
@@ -22,5 +22,17 @@ describe("CSTD knowledge graph", () => {
 
   test("includes all five evidence layers", () => {
     expect(new Set(cstdKnowledgeGraph.nodes.map((node) => node.type))).toEqual(new Set(["system", "case", "note", "lab", "moment"]));
+  });
+
+  test("finds the shortest explainable path across reversed evidence edges", () => {
+    expect(findCstdKnowledgePath(
+      "system:edge-operations",
+      "note:host-boundaries-in-one-next-deployment",
+    )).toEqual([
+      "system:edge-operations",
+      "case:rocodex-platform",
+      "note:host-boundaries-in-one-next-deployment",
+    ]);
+    expect(findCstdKnowledgePath("missing", "system:edge-operations")).toEqual([]);
   });
 });

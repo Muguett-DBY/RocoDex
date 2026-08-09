@@ -646,7 +646,7 @@
 
 [data-cstd-enhancements-ready="true"] [data-cstd-chapter] h2,
 [data-cstd-enhancements-ready="true"] [data-cstd-finale] h2 {
-  opacity: 0.28;
+  opacity: 1;
   filter: blur(8px);
   transform: translate3d(0, 34px, 0);
   transition:

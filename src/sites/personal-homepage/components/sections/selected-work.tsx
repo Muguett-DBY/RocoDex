@@ -1,215 +1,85 @@
 "use client";
 
-import { ArrowRight, ArrowUpRight, Braces, RadioTower } from "lucide-react";
-import { memo, type PointerEvent as ReactPointerEvent } from "react";
-import { cstdProjects } from "../../content/projects";
-import { cstdLiveObjectIds, cstdProofs, getCstdProjectsById, type CstdProof } from "../../content/systems";
-import { getCstdLinkTargetProps } from "../../domain/link-target";
-import { cstdBroadcasts } from "../../media/asset-manifest";
+import Image from "next/image";
+import { ArrowRight, ArrowUpRight, RadioTower, ShieldCheck } from "lucide-react";
+import { memo } from "react";
 import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
-import { cstdArtBible } from "../../content/art-bible";
 import { getCstdNarrative, type CstdNarrativeMode } from "../../content/narratives";
-import { ProjectBroadcast } from "../project-broadcast";
+import { cstdProjects } from "../../content/projects";
+import { cstdProofMesh } from "../../content/proof-mesh";
+import { getCstdLinkTargetProps } from "../../domain/link-target";
 import { CstdLink } from "../site/cstd-link";
-import { LiveProofMesh } from "../site/live-proof-mesh";
 
-const proofProjects = getCstdProjectsById(
-  cstdProjects,
-  cstdProofs.map((proof) => proof.projectId),
-);
-const liveProjects = getCstdProjectsById(cstdProjects, cstdLiveObjectIds);
-function moveLiveFeed(event: ReactPointerEvent<HTMLElement>) {
-  const bounds = event.currentTarget.getBoundingClientRect();
-  const x = (event.clientX - bounds.left) / bounds.width - 0.5;
-  const y = (event.clientY - bounds.top) / bounds.height - 0.5;
-  event.currentTarget.style.setProperty("--feed-x", `${x * -14}px`);
-  event.currentTarget.style.setProperty("--feed-y", `${y * -10}px`);
-  event.currentTarget.style.setProperty("--feed-rx", `${y * -2.2}deg`);
-  event.currentTarget.style.setProperty("--feed-ry", `${x * 3}deg`);
-  event.currentTarget.style.setProperty("--feed-scan-x", `${(x + 0.5) * 100}%`);
-  event.currentTarget.style.setProperty("--feed-scan-y", `${(y + 0.5) * 100}%`);
-}
-
-function resetLiveFeed(event: ReactPointerEvent<HTMLElement>) {
-  event.currentTarget.style.setProperty("--feed-x", "0px");
-  event.currentTarget.style.setProperty("--feed-y", "0px");
-  event.currentTarget.style.setProperty("--feed-rx", "0deg");
-  event.currentTarget.style.setProperty("--feed-ry", "0deg");
-  event.currentTarget.style.setProperty("--feed-scan-x", "50%");
-  event.currentTarget.style.setProperty("--feed-scan-y", "50%");
-}
-
-function ProofChapter({
-  proof,
-  index,
-  reducedMotion,
-}: {
-  proof: CstdProof;
-  index: number;
-  reducedMotion: boolean;
-}) {
-  const project = proofProjects.find((candidate) => candidate.id === proof.projectId);
-  if (!project?.preview) return null;
-  const targetProps = getCstdLinkTargetProps(project.href);
-  const sources = cstdBroadcasts[proof.projectId];
-  const caseStudy = cstdCaseStudies.find((entry) => entry.projectId === proof.projectId);
-  const accent = caseStudy ? cstdArtBible[caseStudy.capabilityIds[0]].accent : "#f4d431";
-
-  return (
-    <article
-      id={`proof-${proof.projectId}`}
-      data-cstd-proof={proof.projectId}
-      data-cstd-broadcast-scene={String(index + 1).padStart(2, "0")}
-      className="relative border-t border-white/15 lg:min-h-[140svh]"
-    >
-      <div className="relative flex min-h-svh items-center overflow-hidden px-5 pb-16 pt-24 md:px-10 lg:sticky lg:top-0 lg:px-16">
-        <div aria-hidden="true" className="absolute inset-0 bg-[#050709]/35 backdrop-blur-[1px]" />
-        <div aria-hidden="true" className="absolute inset-x-0 top-16 h-px" style={{ backgroundColor: `${accent}80` }} />
-        <span aria-hidden="true" className="absolute right-5 top-24 hidden font-mono text-[11rem] font-black leading-none text-white/[0.035] lg:block xl:text-[16rem]">0{index + 1}</span>
-
-        <div className="relative mx-auto grid w-full max-w-[1540px] items-center gap-10 lg:grid-cols-[minmax(19rem,0.7fr)_minmax(0,1.3fr)] lg:gap-14 xl:gap-20">
-          <div className="max-w-xl">
-            <div className="flex items-center gap-3 font-mono text-[9px] font-black text-[#8f9ba0]">
-              <RadioTower aria-hidden="true" className="h-4 w-4" style={{ color: accent }} />
-              BROADCAST {String(index + 1).padStart(2, "0")} / {proof.lens.toUpperCase()}
-              <span className="h-px flex-1 bg-white/15" />
-            </div>
-            <p className="mt-9 font-mono text-[10px] font-black" style={{ color: accent }}>{project.kicker.toUpperCase()} / LIVE SYSTEM</p>
-            <h3 className="mt-4 text-5xl font-semibold leading-[0.9] tracking-[0] text-[#f2efe7] md:text-7xl">{project.title}</h3>
-            <p className="mt-7 text-2xl font-semibold leading-tight text-[#e4e8e9] md:text-3xl">{proof.statement}</p>
-            <p className="mt-5 text-base leading-8 text-[#9aa4a8]">{proof.detail}</p>
-
-            <div className="mt-8 border-y border-white/15 py-5">
-              <p className="font-mono text-[8px] font-black text-[#68757b]">ENGINEERING DECISION</p>
-              <p className="mt-3 text-sm leading-7 text-[#c9d0d2]">{proof.decision}</p>
-              <p className="mt-4 font-mono text-[9px] font-black" style={{ color: accent }}>SIGNAL / {proof.signal}</p>
-            </div>
-
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-4">
-              {caseStudy ? (
-                <CstdLink
-                  href={getCaseStudyPath(caseStudy, "zh")}
-                  className="inline-flex items-center gap-3 border-b-2 pb-2 font-mono text-sm font-black text-[#f2efe7] transition-[gap,color] hover:gap-5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
-                  style={{ borderColor: accent }}
-                >
-                  查看案例
-                  <ArrowRight aria-hidden="true" className="h-4 w-4" />
-                </CstdLink>
-              ) : null}
-              <a
-                href={project.href}
-                {...targetProps}
-                className="inline-flex items-center gap-3 border-b border-white/30 pb-2 font-mono text-[11px] font-black text-[#9fa9ac] transition-[gap,color] hover:gap-5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
-              >
-                {project.action}
-                <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
-              </a>
-            </div>
-          </div>
-
-          <figure
-            data-cstd-project-plane={proof.projectId}
-            data-cstd-live-feed={proof.projectId}
-            onPointerMove={reducedMotion ? undefined : moveLiveFeed}
-            onPointerLeave={reducedMotion ? undefined : resetLiveFeed}
-            className="cstd-live-feed cstd-broadcast-aperture group relative aspect-[16/10] min-h-0 overflow-hidden border border-white/20 bg-[#050709] shadow-[0_32px_90px_rgba(0,0,0,0.58)] [clip-path:polygon(0_0,100%_0,100%_calc(100%-20px),calc(100%-20px)_100%,0_100%)]"
-          >
-            <ProjectBroadcast
-              sources={sources}
-              poster={project.preview.src}
-              alt={project.preview.alt}
-              position={project.preview.position}
-              reducedMotion={reducedMotion}
-            />
-            <div aria-hidden="true" className="absolute inset-0 bg-black/5 transition-colors group-hover:bg-transparent" />
-            <div aria-hidden="true" className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.14)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:48px_48px]" />
-            <div aria-hidden="true" className="cstd-feed-scan absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-            <span aria-hidden="true" className="absolute left-[var(--feed-scan-x,50%)] top-[var(--feed-scan-y,50%)] h-12 w-12 -translate-x-1/2 -translate-y-1/2 border border-white/55 opacity-0 transition-opacity group-hover:opacity-100">
-              <span className="absolute -left-1 -top-1 h-2 w-2 bg-white" />
-            </span>
-            <figcaption className="absolute left-4 top-4 border-l-2 bg-[#050709]/90 px-3 py-2 font-mono text-[9px] font-black text-white backdrop-blur-md" style={{ borderColor: accent }}>
-              VERIFIED UI FEED / {project.id.toUpperCase()}
-            </figcaption>
-            <div className="absolute right-3 top-3 hidden min-w-32 border-r-2 bg-[#050709]/86 px-3 py-2 text-right font-mono text-[8px] font-black text-[#8f9ba0] backdrop-blur-md sm:block" style={{ borderColor: accent }}>
-              <p className="text-[#3dff8f]">LIVE / BUFFERED</p>
-              <p className="mt-1">WEBM + H264</p>
-              <p>VIEWPORT SYNC</p>
-            </div>
-          </figure>
-        </div>
-      </div>
-    </article>
-  );
-}
-
-function SelectedWork({ reducedMotion, narrativeMode }: { reducedMotion: boolean; narrativeMode: CstdNarrativeMode }) {
+function SelectedWork({ narrativeMode }: { reducedMotion: boolean; narrativeMode: CstdNarrativeMode }) {
   const projectOrder = getCstdNarrative(narrativeMode).projectOrder;
-  const orderedProofs: CstdProof[] = [];
-  for (const projectId of projectOrder) {
-    const proof = cstdProofs.find((candidate) => candidate.projectId === projectId);
-    if (proof) orderedProofs.push(proof);
-  }
+  const cases = projectOrder
+    .map((projectId) => cstdCaseStudies.find((entry) => entry.projectId === projectId))
+    .filter((entry) => entry !== undefined);
+
   return (
     <section
       id="proof"
       data-cstd-chapter="proof"
       data-cstd-scene="proof"
+      data-cstd-proof-reel
       aria-labelledby="proof-heading"
-      className="relative z-20 text-[#f2efe7] contain-paint [content-visibility:auto] [contain-intrinsic-size:auto_3600px]"
+      className="relative z-20 border-b border-[#f4d431]/35 bg-[#080a0c]/84 px-5 py-24 text-[#f2efe7] backdrop-blur-sm md:px-10 lg:px-16 lg:py-32"
     >
-      <header className="relative flex min-h-[78svh] items-end overflow-hidden border-y border-[#f4d431]/35 bg-[#050709]/38 px-5 pb-16 pt-28 backdrop-blur-[2px] md:px-10 lg:px-16 lg:pb-20">
-        <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,9,0.94)_0%,rgba(5,7,9,0.55)_48%,rgba(5,7,9,0.14)_100%)]" />
-        <span aria-hidden="true" className="absolute -right-8 bottom-[-3rem] font-mono text-[14rem] font-black leading-none text-[#f4d431]/[0.08] md:text-[23rem]">02</span>
-        <div className="relative mx-auto grid w-full max-w-[1540px] gap-8 lg:grid-cols-[1fr_28rem] lg:items-end">
+      <div className="mx-auto max-w-[1540px]">
+        <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_28rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#f4d431]">
-              <Braces aria-hidden="true" className="h-4 w-4" /> 02 // PROJECT BROADCAST NEXUS
-            </p>
-            <h2 id="proof-heading" className="mt-6 max-w-5xl text-5xl font-semibold leading-[0.9] tracking-[0] md:text-7xl xl:text-8xl">
-              不展示目录。
-              <span className="block text-[#24e0ff]">直接接入正在运行的系统。</span>
+            <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#f4d431]"><RadioTower aria-hidden="true" className="h-4 w-4" /> 02 / SHIPPED SIGNALS</p>
+            <h2 id="proof-heading" className="mt-6 max-w-5xl text-5xl font-semibold leading-[0.92] md:text-7xl xl:text-8xl">
+              三个系统，<span className="text-[#24e0ff]">三条足够清楚的证据链。</span>
             </h2>
           </div>
-          <p className="text-base leading-8 text-[#b0b8bb]">
-            三段真实界面广播分别回答价值、工程决策与交付证据。媒体只在当前和相邻镜头挂载，离开窗口即释放。
+          <p className="text-base leading-8 text-[#abb4b7]">
+            首页只给出结论、关键决策与运行状态。架构、失败与验证过程留在案例档案中，避免把个人展示页变成项目管理器。
           </p>
-        </div>
-      </header>
+        </header>
 
-      <LiveProofMesh locale="zh" />
+        <div className="mt-14 grid gap-5 xl:grid-cols-3">
+          {cases.map((entry, index) => {
+            const proof = cstdProofMesh.find((candidate) => candidate.caseSlug === entry.slug);
+            const project = cstdProjects.find((candidate) => candidate.id === entry.projectId);
+            return (
+              <article
+                key={entry.slug}
+                data-cstd-proof={entry.projectId}
+                className="group relative min-h-[34rem] overflow-hidden border border-white/15 bg-[#050709] shadow-[0_28px_80px_rgba(0,0,0,0.38)]"
+              >
+                <Image src={entry.image.src} alt={entry.image.alt.zh} fill sizes="(min-width: 1280px) 33vw, 100vw" className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" style={{ objectPosition: entry.image.position ?? "50% 50%" }} />
+                <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,9,0.08)_0%,rgba(5,7,9,0.45)_42%,rgba(5,7,9,0.98)_78%)]" />
+                <div aria-hidden="true" className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 [background:linear-gradient(115deg,transparent_42%,rgba(36,224,255,0.17)_50%,transparent_58%)]" />
 
-      <div data-cstd-proof-reel>
-        {orderedProofs.map((proof, index) => (
-          <ProofChapter key={proof.projectId} proof={proof} index={index} reducedMotion={reducedMotion} />
-        ))}
-      </div>
-
-      <div className="border-y border-[#24e0ff]/25 bg-[#050709]/92 px-5 py-16 backdrop-blur-xl md:px-10 lg:px-16">
-        <div className="mx-auto grid max-w-[1540px] gap-8 md:grid-cols-[20rem_1fr]">
-          <div>
-            <p className="font-mono text-[9px] font-black text-[#24e0ff]">SECONDARY UPLINKS</p>
-            <p className="mt-3 text-2xl font-semibold">另外两个仍在持续运行的个人表面。</p>
-          </div>
-          <div className="border-t border-white/15">
-            {liveProjects.map((project, index) => {
-              const targetProps = getCstdLinkTargetProps(project.href);
-              return (
-                <div key={project.id} data-cstd-live-object={project.id} className="border-b border-white/15">
-                  <a
-                    href={project.href}
-                    {...targetProps}
-                    className="group grid grid-cols-[2rem_1fr_auto] items-center gap-4 py-5 text-[#d9dfe1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"
-                  >
-                    <span className="font-mono text-[9px] font-black text-[#68757b]">0{index + 1}</span>
-                    <span>
-                      <span className="block text-xl font-semibold md:text-2xl">{project.title}</span>
-                      <span className="mt-1 block font-mono text-[9px] font-black text-[#718087]">{project.kicker.toUpperCase()} / LIVE</span>
-                    </span>
-                    <ArrowUpRight aria-hidden="true" className="h-5 w-5 transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" />
-                  </a>
+                <div className="absolute inset-x-0 bottom-0 p-5 md:p-7">
+                  <div className="flex items-center justify-between gap-4 font-mono text-[8px] font-black">
+                    <span className="text-[#f4d431]">0{index + 1} / {entry.kicker.zh.toUpperCase()}</span>
+                    <span className="flex items-center gap-1.5 text-[#3dff8f]"><ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" /> {proof?.coverageScore ?? 0}% VERIFIED</span>
+                  </div>
+                  <h3 className="mt-4 text-3xl font-semibold leading-tight text-white md:text-4xl">{entry.title.zh}</h3>
+                  <p className="mt-4 line-clamp-3 text-sm leading-7 text-[#b5bdc0]">{entry.summary.zh}</p>
+                  <div className="mt-5 flex items-center justify-between gap-5 border-t border-white/15 pt-5">
+                    <CstdLink href={getCaseStudyPath(entry, "zh")} className="inline-flex items-center gap-2 font-mono text-[10px] font-black text-[#f4d431] transition-[gap,color] hover:gap-4 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f4d431]">
+                      打开案例 <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                    </CstdLink>
+                    {project?.href ? (
+                      <a href={project.href} {...getCstdLinkTargetProps(project.href)} aria-label={`打开 ${project.title}`} title={`打开 ${project.title}`} className="flex h-10 w-10 items-center justify-center border border-white/20 text-[#aab3b6] transition-colors hover:border-[#24e0ff] hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#24e0ff]">
+                        <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
-              );
-            })}
+              </article>
+            );
+          })}
+        </div>
+
+        <div className="mt-9 flex flex-wrap items-center justify-between gap-5 border-y border-white/15 py-5 font-mono text-[9px] font-black text-[#7d898e]">
+          <span>{cstdProofMesh.length} PUBLISHED CASES / {cstdProofMesh.reduce((sum, entry) => sum + entry.artifactCount, 0)} PUBLIC ARTIFACTS</span>
+          <div className="flex gap-6">
+            <CstdLink href="/work" className="text-[#f4d431] hover:text-white">全部案例</CstdLink>
+            <CstdLink href="/proof.json" className="text-[#24e0ff] hover:text-white">PROOF.JSON</CstdLink>
           </div>
         </div>
       </div>

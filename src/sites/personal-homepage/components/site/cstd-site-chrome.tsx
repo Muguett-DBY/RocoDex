@@ -1,13 +1,11 @@
 "use client";
 
-import { BookOpen, BriefcaseBusiness, FileText, FlaskConical, Gauge, Languages, Network, Sparkles, UserRound } from "lucide-react";
-import { lazy, Suspense, useMemo, useState, useSyncExternalStore } from "react";
+import { BookOpen, BriefcaseBusiness, FileText, FlaskConical, Gauge, Languages, Network, UserRound } from "lucide-react";
+import { useMemo, useSyncExternalStore } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import { CstdLink } from "./cstd-link";
 import { CstdTelemetry } from "./cstd-telemetry";
 import { SignalField, type CstdVisualMode } from "./signal-field";
-
-const LazyTechnicalGuide = lazy(() => import("./technical-guide").then((module) => ({ default: module.TechnicalGuide })));
 
 const visualModeKey = "cstd-visual-budget";
 const visualModeEvent = "cstd-visual-budget-change";
@@ -49,7 +47,6 @@ function localizedHref(href: string, locale: CstdLocale) {
 
 export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale; page: string; children: React.ReactNode }) {
   const visualMode = useSyncExternalStore(subscribeVisualMode, getVisualModeSnapshot, getVisualModeServerSnapshot);
-  const [guideOpen, setGuideOpen] = useState(false);
   const copy = useMemo(() => locale === "zh" ? {
     guide: "技术向导",
     mode: "视觉预算",
@@ -113,9 +110,9 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
             <button type="button" onClick={cycleVisualMode} aria-label={`${copy.mode}: ${visualMode}`} title={`${copy.mode}: ${visualMode}`} className="flex h-9 w-9 items-center justify-center border border-white/15 text-[#9aa4a8] transition-colors hover:border-[#f4d431] hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]">
               <Gauge aria-hidden="true" className="h-4 w-4" />
             </button>
-            <button type="button" onClick={() => setGuideOpen(true)} aria-label={copy.guide} title={copy.guide} className="flex h-9 w-9 items-center justify-center border border-[#24e0ff]/45 bg-[#24e0ff]/10 text-[#24e0ff] transition-colors hover:bg-[#24e0ff] hover:text-[#050709] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]">
-              <Sparkles aria-hidden="true" className="h-4 w-4" />
-            </button>
+            <CstdLink href={localizedHref("/map", locale)} aria-label={copy.guide} title={copy.guide} className="flex h-9 w-9 items-center justify-center border border-[#24e0ff]/45 bg-[#24e0ff]/10 text-[#24e0ff] transition-colors hover:bg-[#24e0ff] hover:text-[#050709] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]">
+              <Network aria-hidden="true" className="h-4 w-4" />
+            </CstdLink>
           </div>
         </div>
 
@@ -144,11 +141,6 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
         </div>
       </footer>
 
-      {guideOpen ? (
-        <Suspense fallback={null}>
-          <LazyTechnicalGuide locale={locale} open onClose={() => setGuideOpen(false)} />
-        </Suspense>
-      ) : null}
       <CstdTelemetry page={page} />
     </div>
   );

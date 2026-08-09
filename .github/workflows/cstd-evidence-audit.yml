@@ -1,0 +1,41 @@
+name: CSTD Evidence Audit
+
+on:
+  schedule:
+    - cron: "17 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cstd-evidence-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Proof freshness and static snapshot
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Verify generated registry
+        run: npm run content:check
+      - name: Audit public proof and links
+        run: npm run cstd:verify-proof
+      - name: Capture build-time studio snapshot
+        run: npm run cstd:snapshot > cstd-status-snapshot.json
+      - name: Upload snapshot
+        uses: actions/upload-artifact@v7
+        with:
+          name: cstd-status-snapshot
+          path: cstd-status-snapshot.json
+          retention-days: 30

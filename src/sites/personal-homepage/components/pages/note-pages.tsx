@@ -132,9 +132,9 @@ export async function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLoca
                 <ArrowLeft aria-hidden="true" className="h-4 w-4" /> {copy.back}
               </CstdLink>
               <nav aria-label={locale === "zh" ? "文章目录" : "Article contents"} className="mt-8 hidden border-l border-black/20 pl-4 lg:block">
-                {note.toc.map((section, sectionIndex) => <a key={section.id} href={`#${section.id}`} className="mt-4 block font-mono text-[8px] font-black leading-5 text-black/45 hover:text-black"><span className="mr-2 text-[#0b6473]">0{sectionIndex + 1}</span>{section.title[locale]}</a>)}
+                {note.toc.map((section, sectionIndex) => <a key={section.id} href={`#${section.id}`} className="mt-4 block font-mono text-[8px] font-black leading-5 text-black/75 hover:text-black"><span className="mr-2 text-[#0b6473]">0{sectionIndex + 1}</span>{section.title[locale]}</a>)}
               </nav>
-              <p className="mt-7 font-mono text-[8px] font-black leading-5 text-black/45">{copy.revision.toUpperCase()} {note.revision}<br />UPDATED {note.updatedAt}</p>
+              <p className="mt-7 font-mono text-[8px] font-black leading-5 text-black/75">{copy.revision.toUpperCase()} {note.revision}<br />UPDATED {note.updatedAt}</p>
               <CitationButton value={`${note.title[locale]} — ${locale === "zh" ? "奶黄包" : "Custard"}, https://custard.top${getTechnicalNotePath(note, locale)} (${note.updatedAt})`} label={copy.citation.toUpperCase()} />
             </aside>
 
