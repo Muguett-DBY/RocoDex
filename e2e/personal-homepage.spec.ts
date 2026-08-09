@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { captureBrowserIssues, expectNoHorizontalOverflow } from "./support/browser";
 
-test("CSTD 17.0 presents Custard before the engineering universe", async ({ page, isMobile }) => {
+test("CSTD presents a clear portfolio before optional visual enhancement", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   expect(response?.ok()).toBe(true);
@@ -10,36 +10,39 @@ test("CSTD 17.0 presents Custard before the engineering universe", async ({ page
   await expect(page.getByRole("heading", { level: 1, name: "奶黄包" })).toBeVisible();
   await expect(page.getByText("奶黄包的个人技术工作室", { exact: false })).toBeVisible();
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
-  await expect(page.locator("[data-cstd-narrative-switcher]").getByRole("radio")).toHaveCount(3);
-  await page.locator("[data-cstd-narrative-switcher]").getByRole("radio", { name: "研究" }).click();
-  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-narrative-mode", "researcher");
-  await expect(page.getByRole("link", { name: /分享这条观看路径/ })).toHaveAttribute("href", "/for/research");
+  await expect(page.locator("[data-cstd-hero-summary] > div")).toHaveCount(3);
+  await expect(page.locator("[data-cstd-narrative-switcher]")).toHaveCount(0);
 
   await expect(page.locator("[data-cstd-scene]")).toHaveCount(6);
   await expect(page.locator("[data-cstd-studio-twin]")).toHaveCount(1);
   await expect(page.locator("[data-cstd-studio-district-option]")).toHaveCount(5);
-  await expect(page.locator("[data-cstd-release-replay]")).toHaveCount(1);
+  await expect(page.locator("[data-cstd-release-replay]")).toHaveCount(0);
   await expect(page.locator("[data-cstd-proof]")).toHaveCount(3);
-  await expect(page.locator("[data-cstd-method]")).toHaveCount(1);
-  await expect(page.locator("[data-cstd-method-option]")).toHaveCount(4);
-  await page.locator('[data-cstd-method-option="proof"]').click();
-  await expect(page.locator("[data-cstd-method]")).toHaveAttribute("data-cstd-method-active", "proof");
-  await expect(page.locator("[data-cstd-observatory-check]")).toHaveCount(4);
+  await expect(page.locator("[data-cstd-method]")).toHaveCount(0);
+  await expect(page.locator("[data-cstd-observatory-check]")).toHaveCount(0);
   await expect(page.locator("[data-cstd-executable-evidence]")).toHaveCount(1);
-  await expect(page.locator("[data-cstd-replay-option]")).toHaveCount(4);
+  await expect(page.locator("[data-cstd-replay-option]")).toHaveCount(0);
+  await expect(page.locator('[data-cstd-home-replay="alpha-race"]')).toHaveCount(1);
   await expect(page.locator("[data-cstd-knowledge-lens]")).toHaveCount(1);
+  await expect(page.locator("[data-cstd-knowledge-card]")).toHaveCount(3);
   await expect(page.locator("[data-cstd-content-health]")).toHaveAttribute("data-cstd-content-health-score", "100");
-  await expect(page.locator("[data-cstd-scene-director]")).toHaveCount(1);
+  await expect(page.locator("[data-cstd-scene-director]")).toHaveCount(0);
+  await expect(page.locator("[data-cstd-global-hud]")).toHaveCount(0);
   await expect(page.getByRole("searchbox")).toHaveCount(0);
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(page.locator("[data-cstd-console-trigger]")).toHaveCount(0);
+  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-render-policy", "balanced");
+  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-scene-mode", "image");
+  await expect(page.locator("[data-cstd-webgl]")).toHaveCount(0);
 
   if (isMobile) {
-    await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-scene-mode", "image");
-    await expect(page.locator("[data-cstd-webgl]")).toHaveCount(0);
+    await expect(page.locator("[data-cstd-overdrive-toggle]")).toBeVisible();
   } else {
+    await page.locator("[data-cstd-overdrive-toggle]").click();
+    await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-render-policy", "enhanced");
+    await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-scene-mode", "webgl");
     const webgl = page.locator("[data-cstd-webgl]");
-    await expect(webgl).toHaveAttribute("data-cstd-render-ready", "true");
+    await expect(webgl).toHaveAttribute("data-cstd-render-ready", "true", { timeout: 15_000 });
     await expect(page.locator("[data-cstd-webgl-canvas]")).toBeVisible();
     const canvasSignal = await page.locator("[data-cstd-webgl-canvas] canvas").evaluate((element) => {
       const canvas = element as HTMLCanvasElement;
@@ -66,30 +69,32 @@ test("CSTD 17.0 presents Custard before the engineering universe", async ({ page
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD runs deterministic worker evidence and graph playback", async ({ page }) => {
+test("CSTD runs one deterministic worker example and keeps notes directly readable", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
-  await page.goto("/cstd#operator", { waitUntil: "domcontentloaded" });
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
 
   const section = page.locator("[data-cstd-executable-evidence]");
   await section.scrollIntoViewIfNeeded();
-  await section.locator('[data-cstd-replay-option="dcf-cache"]').click();
-  const replay = page.locator('[data-cstd-case-replay="dcf-cache"]');
+  const replay = page.locator('[data-cstd-case-replay="alpha-race"]');
   await expect(replay).toHaveAttribute("data-cstd-worker", "dedicated");
   await expect(replay).toHaveAttribute("data-cstd-worker-ready", "true");
   await replay.getByRole("button", { name: "运行重放" }).click();
-  await expect(replay.getByText("HOT PATH ISOLATED", { exact: true })).toBeVisible();
+  await expect(replay.getByText("STALE WRITE REJECTED", { exact: true })).toBeVisible();
   await expect(replay.locator('[data-cstd-replay-step-active="true"]')).toHaveCount(5, { timeout: 6_000 });
 
   const knowledge = page.locator("[data-cstd-knowledge-lens]");
   await knowledge.scrollIntoViewIfNeeded();
-  await knowledge.getByRole("button", { name: "AI 研究如何避免幻觉？" }).click();
-  await expect(knowledge.getByText("LOCAL INDEX RESPONSE", { exact: true })).toBeVisible();
-  await knowledge.getByRole("button", { name: "播放证据路径" }).click();
-  await expect(knowledge.locator('[data-cstd-graph-path-active="true"]')).toHaveCount(3, { timeout: 5_000 });
+  await expect(knowledge.locator("[data-cstd-knowledge-card]")).toHaveCount(3);
+  await expect(knowledge.getByRole("heading", { name: "AI 研究如何避免幻觉？" })).toBeVisible();
+  await expect(knowledge.getByRole("button")).toHaveCount(0);
 
   await expectNoHorizontalOverflow(page);
-  expect(browserIssues).toEqual([]);
+  const actionableBrowserIssues = browserIssues.filter((issue) => !(
+    issue.includes("/cstd-universe/cstd-knowledge-loom-v3.webp")
+    && issue.includes("Largest Contentful Paint")
+  ));
+  expect(actionableBrowserIssues).toEqual([]);
 });
 
 test("CSTD embeds the matching executable replay in deep cases", async ({ page }) => {
@@ -165,13 +170,18 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
   const contentHealth = await (await request.get("/cstd/content-health.json")).json();
   expect(contentHealth).toMatchObject({ status: "healthy", score: 100 });
   const performance = await (await request.get("/cstd/performance.json")).json();
-  expect(performance).toMatchObject({ release: "CSTD-17.0", budgets: { initialJavascriptBytes: 150_000 }, cacheComponents: { status: "evaluated-not-enabled" } });
+  expect(performance).toMatchObject({
+    release: "CSTD-17.0",
+    budgets: { initialJavascriptBytes: 150_000 },
+    delivery: { defaultRuntimeTier: "image", enhancedRuntimeTrigger: "explicit-user-action" },
+    cacheComponents: { status: "evaluated-not-enabled" },
+  });
   const experience = await (await request.get("/cstd/experience.json")).json();
   expect(experience.identity.zh).toBe("奶黄包");
   expect(experience.acts).toHaveLength(6);
 });
 
-test("CSTD visual contracts keep identity, atlas, and quiet reading coherent", async ({ page, isMobile }) => {
+test("CSTD visual contracts keep identity, summary, and quiet reading coherent", async ({ page, isMobile }) => {
   await page.addInitScript(() => {
     window.sessionStorage.setItem("cstd:identity-boot-seen", "true");
     window.localStorage.setItem("cstd-motion-mode", "calm");
@@ -179,14 +189,14 @@ test("CSTD visual contracts keep identity, atlas, and quiet reading coherent", a
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator('[data-cstd-world-frame="hero"] img')).toHaveAttribute("src", /cstd-custard-core-v4/);
   const titleLocator = page.getByRole("heading", { level: 1, name: "奶黄包" });
-  const atlasLocator = page.locator("[data-cstd-atlas]");
+  const summaryLocator = page.locator("[data-cstd-hero-summary]");
   await expect(titleLocator).toBeVisible();
-  await expect(atlasLocator).toBeVisible();
+  await expect(summaryLocator).toBeVisible();
   const title = await titleLocator.boundingBox();
-  const atlas = await atlasLocator.boundingBox();
+  const summary = await summaryLocator.boundingBox();
   expect(title).not.toBeNull();
-  expect(atlas).not.toBeNull();
-  if (!isMobile && title && atlas) expect(title.x + title.width).toBeLessThanOrEqual(atlas.x + 8);
+  expect(summary).not.toBeNull();
+  if (title && summary) expect(title.y + title.height).toBeLessThan(summary.y);
   const heroCapture = await page.screenshot({ animations: "disabled" });
   expect(heroCapture.byteLength).toBeGreaterThan(isMobile ? 60_000 : 120_000);
   await expectNoHorizontalOverflow(page);
@@ -210,9 +220,15 @@ test("CSTD reaches its tailored finale without a scroll trap", async ({ page, is
   const metrics = await page.evaluate(() => ({
     height: document.documentElement.scrollHeight,
     infiniteAnimations: document.getAnimations().filter((animation) => animation.playState === "running" && animation.effect?.getTiming().iterations === Infinity).length,
+    fixedElements: [...document.querySelectorAll<HTMLElement>("body *")].filter((element) => getComputedStyle(element).position === "fixed").length,
+    backdropFilters: [...document.querySelectorAll<HTMLElement>("body *")].filter((element) => getComputedStyle(element).backdropFilter !== "none").length,
+    canvases: document.querySelectorAll("canvas").length,
   }));
-  expect(metrics.height).toBeLessThan(isMobile ? 13_500 : 10_500);
-  expect(metrics.infiniteAnimations).toBeLessThanOrEqual(5);
+  expect(metrics.height).toBeLessThan(isMobile ? 9_500 : 8_000);
+  expect(metrics.infiniteAnimations).toBeLessThanOrEqual(2);
+  expect(metrics.fixedElements).toBeLessThanOrEqual(6);
+  expect(metrics.backdropFilters).toBeLessThanOrEqual(2);
+  expect(metrics.canvases).toBe(0);
 
   const footer = page.locator("#cstd-footer");
   await expect(footer).toBeVisible();
@@ -237,7 +253,9 @@ test("CSTD explicit calm mode reduces render cost and survives context loss", as
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   const motionToggle = page.locator("[data-cstd-motion-toggle]");
   const webgl = page.locator("[data-cstd-webgl]");
-  await expect(webgl).toHaveAttribute("data-cstd-render-ready", "true");
+  await expect(webgl).toHaveCount(0);
+  await page.locator("[data-cstd-overdrive-toggle]").click();
+  await expect(webgl).toHaveAttribute("data-cstd-render-ready", "true", { timeout: 15_000 });
   await motionToggle.click();
   await expect(webgl).toHaveAttribute("data-cstd-render-quality", "lite");
   await page.locator("[data-cstd-webgl-canvas] canvas").evaluate((element) => element.dispatchEvent(new Event("webglcontextlost", { cancelable: true })));

@@ -17,6 +17,8 @@
   },
   "delivery": {
     "runtimeFallbackOrder": ["webgpu", "webgl", "image"],
+    "defaultRuntimeTier": "image",
+    "enhancedRuntimeTrigger": "explicit-user-action",
     "immutableAssetRoots": ["cstd-archive", "cstd-broadcasts", "cstd-districts", "cstd-persona", "cstd-universe", "cstd-world"],
     "imageFormats": ["avif", "webp"],
     "imageMinimumCacheTtlSeconds": 2678400
@@ -28,6 +30,7 @@
   "invariants": [
     "three-js-never-enters-initial-homepage-js",
     "gpu-runtimes-remain-async-and-tiered",
+    "homepage-gpu-runtime-requires-explicit-opt-in",
     "versioned-cstd-assets-are-immutable",
     "content-remains-available-without-canvas",
     "document-scroll-is-never-hijacked"
