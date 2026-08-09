@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import type { CstdLocale } from "./content/content-types";
+import { cstdContentHealth } from "./content/content-health";
 import { getCstdCaseStudy } from "./content/case-studies";
 import { getCstdLab } from "./content/labs";
 import { getCstdTechnicalNote } from "./content/technical-notes";
@@ -16,6 +17,7 @@ export const personalHomepageMetadata: Metadata = {
   alternates: {
     canonical: "https://custard.top/",
   },
+  manifest: "/manifest.webmanifest",
   openGraph: {
     type: "website",
     siteName: "CSTD",
@@ -50,7 +52,23 @@ export const personalHomepageStructuredData = [
       alternateName: "奶黄包",
       jobTitle: "Product engineer and creative systems builder",
       knowsAbout: ["Product engineering", "Evidence-first AI", "Data systems", "Quantitative research", "Visual engineering"],
+      sameAs: ["https://github.com/Muguett-DBY"],
     },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Dataset",
+    name: "CSTD engineering observatory",
+    description: "Build-linked verification, public proof, content health, and release provenance for custard.top.",
+    url: `${CSTD_ORIGIN}/observatory.json`,
+    dateModified: cstdContentHealth.generatedAt,
+    version: "CSTD-9.0",
+    isAccessibleForFree: true,
+    creator: { "@type": "Person", name: "Custard", alternateName: "奶黄包" },
+    distribution: [
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}/observatory.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}/content-health.json` },
+    ],
   },
 ] as const;
 

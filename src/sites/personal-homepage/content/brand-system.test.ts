@@ -3,12 +3,12 @@ import path from "node:path";
 import { describe, expect, test } from "vitest";
 import { cstdBrandSystem } from "./brand-system";
 
-describe("CSTD 8.0 brand system", () => {
+describe("CSTD 9.0 brand system", () => {
   test("keeps the original neural industrialism assets versioned and deployable", () => {
-    expect(cstdBrandSystem.release).toBe("CSTD-8.0");
-    expect(cstdBrandSystem.originalAssets).toHaveLength(3);
+    expect(cstdBrandSystem.release).toBe("CSTD-9.0");
+    expect(cstdBrandSystem.originalAssets).toHaveLength(7);
     for (const asset of cstdBrandSystem.originalAssets) {
-      expect(asset).toMatch(/^\/cstd-universe\/.+-v2\.webp$/);
+      expect(asset).toMatch(/^\/cstd-universe\/.+-v[23]\.webp$/);
       expect(existsSync(path.join(process.cwd(), "public", asset.slice(1)))).toBe(true);
     }
   });

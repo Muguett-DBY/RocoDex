@@ -1,4 +1,5 @@
 import { cstdCaseStudies } from "./case-studies";
+import { createCstdDigest } from "./digest";
 import { cstdProofMesh, getCstdProofFreshness, type CstdProofFreshness } from "./proof-mesh";
 import { cstdSystems, type CstdSystem } from "./systems";
 import { cstdTimeline } from "./timeline";
@@ -19,7 +20,7 @@ export type CstdDistrictStatus = Readonly<{
 
 export type CstdStudioSnapshot = Readonly<{
   schemaVersion: 3;
-  release: "CSTD-8.0";
+  release: "CSTD-9.0";
   generatedAt: string;
   source: "build-time-public-evidence";
   provenance: Readonly<{
@@ -43,15 +44,6 @@ export type CstdStudioSnapshot = Readonly<{
 
 function latestDate(values: readonly string[]) {
   return [...values].sort().at(-1) ?? "1970-01-01";
-}
-
-function digestEvidence(value: string) {
-  let hash = 0x811c9dc5;
-  for (let index = 0; index < value.length; index += 1) {
-    hash ^= value.charCodeAt(index);
-    hash = Math.imul(hash, 0x01000193);
-  }
-  return `fnv1a32:${(hash >>> 0).toString(16).padStart(8, "0")}` as const;
 }
 
 export function createCstdStudioSnapshot(now = new Date()): CstdStudioSnapshot {
@@ -86,14 +78,14 @@ export function createCstdStudioSnapshot(now = new Date()): CstdStudioSnapshot {
     ...cstdCaseStudies.map((entry) => entry.updatedAt),
     ...cstdProofMesh.map((entry) => entry.verifiedAt),
   ]);
-  const digest = digestEvidence(cstdProofMesh
+  const digest = createCstdDigest(cstdProofMesh
     .map((entry) => [entry.projectId, entry.status, entry.verifiedAt, entry.artifactCount, entry.coverageScore].join(":"))
     .sort()
     .join("|"));
 
   return {
     schemaVersion: 3,
-    release: "CSTD-8.0",
+    release: "CSTD-9.0",
     generatedAt,
     source: "build-time-public-evidence",
     provenance: {

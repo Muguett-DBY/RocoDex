@@ -1,5 +1,7 @@
 import { describe, expect, test } from "vitest";
-import { cstdBroadcasts, cstdVisualAssets } from "./asset-manifest";
+import { existsSync } from "node:fs";
+import path from "node:path";
+import { cstdBroadcasts, cstdEditorialAssets, cstdVisualAssets } from "./asset-manifest";
 
 describe("CSTD media manifest", () => {
   test("maps one original visual to every directed scene", () => {
@@ -19,6 +21,15 @@ describe("CSTD media manifest", () => {
     for (const broadcast of Object.values(cstdBroadcasts)) {
       expect(broadcast.webm).toMatch(/\.webm$/);
       expect(broadcast.mp4).toMatch(/\.mp4$/);
+    }
+  });
+
+  test("versions every CSTD 9.0 editorial visual and keeps it deployable", () => {
+    expect(cstdEditorialAssets).toHaveLength(4);
+    expect(new Set(cstdEditorialAssets.map((asset) => asset.purpose)).size).toBe(4);
+    for (const asset of cstdEditorialAssets) {
+      expect(asset.src).toMatch(/^\/cstd-universe\/.+-v3\.webp$/);
+      expect(existsSync(path.join(process.cwd(), "public", asset.src.slice(1)))).toBe(true);
     }
   });
 });

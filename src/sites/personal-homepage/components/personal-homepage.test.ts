@@ -25,10 +25,11 @@ const replaySource = read("./sections/executable-evidence.tsx");
 const replayRuntimeSource = read("./site/executable-case-replay.tsx");
 const workerSource = read("../../../../public/cstd-case-worker.js");
 const knowledgeSource = read("./sections/knowledge-lens.tsx");
+const methodSource = read("./sections/engineering-method.tsx");
 const finaleSource = read("./sections/finale.tsx");
 const globalsSource = read("../../../app/globals.css");
 
-describe("CSTD 8.0 neural industrialism portfolio", () => {
+describe("CSTD 9.0 evidence-driven engineering studio", () => {
   test("keeps identity first and exposes shareable audience paths", () => {
     expect(gateSource).toContain('id="cstd-hero-title"');
     expect(gateSource).toContain("narrative.thesis.zh");
@@ -39,11 +40,14 @@ describe("CSTD 8.0 neural industrialism portfolio", () => {
     expect(landingSource).not.toContain("ProjectShowcase");
   });
 
-  test("uses a six-scene three-act dossier without old utility chapters", () => {
+  test("uses a six-scene cinematic world with a focused engineering-method chapter", () => {
     expect(landingSource).toContain("LazyLivingStudioTwin");
     expect(landingSource).toContain("LazySelectedWork");
     expect(landingSource).toContain("LazyExecutableEvidence");
     expect(landingSource).toContain("LazyKnowledgeLens");
+    expect(landingSource).toContain("LazyEngineeringMethod");
+    expect(methodSource).toContain("data-cstd-method");
+    expect(methodSource).toContain("cstd-method-bench-v3.webp");
     expect(landingSource).toContain("narrativeMode={narrativeMode}");
     expect(landingSource).not.toContain("command-drawer");
     expect(landingSource).not.toContain("LazyOperatorProfile");
@@ -54,7 +58,8 @@ describe("CSTD 8.0 neural industrialism portfolio", () => {
     expect(studioSource).toContain("cstdStudioSnapshot.districts");
     expect(studioSource).toContain("data-cstd-studio-twin");
     expect(studioSource).toContain("data-cstd-release-replay");
-    expect(studioSource).toContain('href="/status.json"');
+    expect(studioSource).toContain('href="/observatory.json"');
+    expect(studioSource).toContain("observatory.verification");
     expect(studioSource).toContain("setInterval");
   });
 

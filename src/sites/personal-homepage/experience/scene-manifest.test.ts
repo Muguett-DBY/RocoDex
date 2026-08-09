@@ -35,11 +35,11 @@ describe("CSTD scene experience", () => {
 
   test("degrades only after two consecutive low-frame windows", () => {
     const controller = new CstdFrameBudgetController();
-    for (let frame = 0; frame < 65; frame += 1) expect(controller.sample(1 / 60)).toBe(false);
-    for (let frame = 0; frame < 31; frame += 1) expect(controller.sample(1 / 30)).toBe(false);
+    for (let frame = 0; frame < 65; frame += 1) expect(controller.sample(1 / 60)).toBeNull();
+    for (let frame = 0; frame < 31; frame += 1) expect(controller.sample(1 / 30)).toBeNull();
 
     let declined = false;
-    for (let frame = 0; frame < 32; frame += 1) declined ||= controller.sample(1 / 30);
+    for (let frame = 0; frame < 32; frame += 1) declined ||= Boolean(controller.sample(1 / 30));
     expect(declined).toBe(true);
   });
 });

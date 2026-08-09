@@ -17,7 +17,8 @@ const webglEntryBudget = 1_000_000;
 const liteWebglBudget = 20_000;
 const webglBudget = 1_500_000;
 const webgpuBudget = 24_000;
-const originalVisualBudget = 820_000;
+const originalVisualBudget = 1_550_000;
+const originalVisualFileBudget = 340_000;
 
 function assetPath(asset) {
   return path.join(nextRoot, asset.replace(/^\/_next\//, "").replace(/^_next\//, ""));
@@ -76,8 +77,13 @@ const originalVisuals = [
   "public/cstd-universe/cstd-neural-foundry-v2.webp",
   "public/cstd-universe/cstd-evidence-foundry-v2.webp",
   "public/cstd-universe/cstd-knowledge-loom-v2.webp",
+  "public/cstd-universe/cstd-observatory-core-v3.webp",
+  "public/cstd-universe/cstd-case-blueprint-v3.webp",
+  "public/cstd-universe/cstd-knowledge-loom-v3.webp",
+  "public/cstd-universe/cstd-method-bench-v3.webp",
 ];
 const originalVisualBytes = originalVisuals.reduce((total, asset) => total + statSync(path.resolve(asset)).size, 0);
+const oversizedOriginalVisual = originalVisuals.find((asset) => statSync(path.resolve(asset)).size > originalVisualFileBudget);
 
 if (initialContainsThree) {
   throw new Error("Three.js code is present in the personal homepage initial entry");
@@ -123,7 +129,10 @@ if (fullWebglBytes > webglBudget) {
   throw new Error(`Personal homepage full WebGL JS is ${fullWebglBytes} bytes; budget is ${webglBudget}`);
 }
 if (originalVisualBytes > originalVisualBudget) {
-  throw new Error(`CSTD 8.0 original visuals total ${originalVisualBytes} bytes; budget is ${originalVisualBudget}`);
+  throw new Error(`CSTD 9.0 original visuals total ${originalVisualBytes} bytes; budget is ${originalVisualBudget}`);
+}
+if (oversizedOriginalVisual) {
+  throw new Error(`CSTD 9.0 original visual ${oversizedOriginalVisual} exceeds ${originalVisualFileBudget} bytes`);
 }
 
 console.log(

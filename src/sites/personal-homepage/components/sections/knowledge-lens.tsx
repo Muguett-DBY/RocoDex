@@ -1,8 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { ArrowUpRight, BrainCircuit, GitBranch, Pause, Play, ShieldCheck } from "lucide-react";
 import { memo, useEffect, useMemo, useState } from "react";
 import { findCstdKnowledgePath, getCstdKnowledgeNode } from "../../content/knowledge-graph";
+import type { CstdHomepageObservatory } from "../../content/observatory";
 import { CstdLink } from "../site/cstd-link";
 import { answerGuideQuestion } from "../site/guide-retrieval";
 
@@ -24,7 +26,7 @@ const lenses = [
   },
 ] as const;
 
-function KnowledgeLens() {
+function KnowledgeLens({ observatory }: { observatory: CstdHomepageObservatory }) {
   const [selected, setSelected] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [activeNode, setActiveNode] = useState(0);
@@ -47,11 +49,14 @@ function KnowledgeLens() {
   }, [path.length, playing]);
 
   return (
-    <section id="path" data-cstd-chapter="path" data-cstd-scene="path" data-cstd-knowledge-lens aria-labelledby="knowledge-lens-heading" className="relative z-20 border-b border-[#3dff8f]/25 bg-[#07100d]/84 px-5 py-24 text-[#f2efe7] md:px-10 lg:px-16 lg:py-32">
-      <div className="mx-auto max-w-[1540px]">
+    <section id="path" data-cstd-chapter="path" data-cstd-scene="path" data-cstd-knowledge-lens aria-labelledby="knowledge-lens-heading" className="relative z-20 overflow-hidden border-b border-[#3dff8f]/25 bg-[#07100d]/90 px-5 py-24 text-[#f2efe7] md:px-10 lg:px-16 lg:py-32">
+      <Image src="/cstd-universe/cstd-knowledge-loom-v3.webp" alt="悬浮的工程札记通过引用线编织成知识网络" fill sizes="100vw" className="object-cover object-[58%_50%] opacity-40" />
+      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,9,8,0.99)_0%,rgba(5,9,8,0.9)_48%,rgba(5,9,8,0.42)_100%)]" />
+      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,9,8,0.96),transparent_52%,rgba(5,9,8,0.72))]" />
+      <div className="relative mx-auto max-w-[1540px]">
         <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_30rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#3dff8f]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> 04 / KNOWLEDGE INTELLIGENCE</p>
+            <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#3dff8f]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> 05 / KNOWLEDGE INTELLIGENCE</p>
             <h2 id="knowledge-lens-heading" className="mt-6 max-w-5xl text-5xl font-semibold leading-[0.92] md:text-7xl">不做悬浮聊天框。<span className="block text-[#24e0ff]">让答案直接长在证据路径上。</span></h2>
           </div>
           <p className="text-base leading-8 text-[#aeb9b5]">固定问题触发浏览器本地检索；回答只来自本站公开内容，并解释匹配原因、置信度与知识图中的连接路径。</p>
@@ -106,6 +111,23 @@ function KnowledgeLens() {
               </ol>
             </div>
           </div>
+        </div>
+
+        <div className="mt-10 grid gap-px border-y border-white/15 bg-white/10 sm:grid-cols-4" data-cstd-content-health data-cstd-content-health-score={observatory.content.score}>
+          {[
+            [`${observatory.content.coverage.bilingualPercent}%`, "BILINGUAL PARITY"],
+            [`${observatory.content.coverage.topicPercent}%`, "TOPIC COVERAGE"],
+            [`${observatory.content.coverage.relationPercent}%`, "RELATION INTEGRITY"],
+            [`${observatory.content.score}/100`, "CONTENT HEALTH"],
+          ].map(([value, label]) => (
+            <div key={label} className="bg-[#050908]/88 px-5 py-5">
+              <p className="font-mono text-2xl font-black text-white">{value}</p>
+              <p className="mt-2 font-mono text-[8px] font-black text-[#92a09c]">{label}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-5 flex justify-end">
+          <CstdLink href="/content-health.json" className="inline-flex items-center gap-2 font-mono text-[9px] font-black text-[#3dff8f] hover:text-white">OPEN CONTENT HEALTH CONTRACT <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
         </div>
       </div>
     </section>

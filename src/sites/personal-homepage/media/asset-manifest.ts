@@ -59,6 +59,13 @@ export const cstdVisualAssetByScene = Object.fromEntries(
   cstdVisualAssets.map((asset) => [asset.sceneId, asset]),
 ) as Record<CstdSceneId, CstdVisualAsset>;
 
+export const cstdEditorialAssets = [
+  { id: "engineering-observatory", src: "/cstd-universe/cstd-observatory-core-v3.webp", purpose: "homepage-observatory" },
+  { id: "system-blueprint", src: "/cstd-universe/cstd-case-blueprint-v3.webp", purpose: "flagship-case-dossiers" },
+  { id: "knowledge-loom", src: "/cstd-universe/cstd-knowledge-loom-v3.webp", purpose: "homepage-knowledge" },
+  { id: "method-bench", src: "/cstd-universe/cstd-method-bench-v3.webp", purpose: "homepage-method" },
+] as const;
+
 export type CstdBroadcastId = "rocodex" | "alpha" | "crm";
 
 export const cstdBroadcasts = {

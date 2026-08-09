@@ -3,8 +3,10 @@ import path from "node:path";
 import { pathToFileURL } from "node:url";
 import matter from "gray-matter";
 import { caseDocumentSchema, noteDocumentSchema } from "../src/sites/personal-homepage/content/content-schema";
+import { createCstdContentHealth } from "../src/sites/personal-homepage/content/content-health";
 import { cstdLabs } from "../src/sites/personal-homepage/content/labs";
 import { createCstdStudioSnapshot } from "../src/sites/personal-homepage/content/studio-status";
+import { createCstdEngineeringObservatory } from "../src/sites/personal-homepage/content/observatory";
 import { cstdTopics } from "../src/sites/personal-homepage/content/topics";
 
 const contentRoot = path.join(process.cwd(), "src", "sites", "personal-homepage", "content", "documents");
@@ -173,6 +175,28 @@ export async function verifyCstdContent(now = new Date()) {
     }
   }
 
+  for (const document of caseDocuments) {
+    const entry = caseDocumentSchema.parse(document.data);
+    const tocIds = entry.toc.map((item) => item.id);
+    for (const locale of ["zh", "en"] as const) {
+      const block = document.source.match(new RegExp(`<LocaleBlock locale="${locale}">([\\s\\S]*?)<\\/LocaleBlock>`))?.[1] ?? "";
+      const sectionIds = [...block.matchAll(/<ArchiveSection\s+[^>]*\bid="([^"]+)"/g)].map((match) => match[1]);
+      if (sectionIds.join("|") !== tocIds.join("|")) issues.push(`${document.file}: ${locale} section ids do not match toc order`);
+    }
+  }
+  for (const document of noteDocuments) {
+    const entry = noteDocumentSchema.parse(document.data);
+    const tocIds = entry.toc.map((item) => item.id);
+    for (const locale of ["zh", "en"] as const) {
+      const block = document.source.match(new RegExp(`<LocaleBlock locale="${locale}">([\\s\\S]*?)<\\/LocaleBlock>`))?.[1] ?? "";
+      const sectionIds = [...block.matchAll(/<ArchiveSection\s+[^>]*\bid="([^"]+)"/g)].map((match) => match[1]);
+      if (sectionIds.join("|") !== tocIds.join("|")) issues.push(`${document.file}: ${locale} section ids do not match toc order`);
+    }
+    for (const correction of entry.corrections) {
+      if (correction.date > entry.updatedAt) issues.push(`${document.file}: correction ${correction.date} is newer than updatedAt ${entry.updatedAt}`);
+    }
+  }
+
   for (const entry of cases.filter((candidate) => candidate.publicationStatus === "published")) {
     for (const artifact of entry.artifacts) {
       artifacts += 1;
@@ -186,8 +210,11 @@ export async function verifyCstdContent(now = new Date()) {
     }
   }
 
+  const health = createCstdContentHealth(now);
+  if (health.issues.brokenRelations.length > 0) issues.push(...health.issues.brokenRelations.map((issue) => `broken relation ${issue}`));
+  if (health.issues.orphanedEntries.length > 0) issues.push(...health.issues.orphanedEntries.map((issue) => `orphaned entry ${issue}`));
   if (issues.length > 0) throw new Error(`CSTD proof verification failed:\n${issues.join("\n")}`);
-  return { cases: cases.length, notes: notes.length, artifacts, status: "verified" as const };
+  return { cases: cases.length, notes: notes.length, artifacts, health: health.score, status: "verified" as const };
 }
 
 async function createDraft(kind: "case" | "note", slug: string) {
@@ -208,7 +235,19 @@ async function main() {
   if (command === "new-case" && slug) return console.log(await createDraft("case", slug));
   if (command === "new-note" && slug) return console.log(await createDraft("note", slug));
   if (command === "verify-proof") return console.log(JSON.stringify(await verifyCstdContent(), null, 2));
+  if (command === "content-health") return console.log(JSON.stringify(createCstdContentHealth(), null, 2));
   if (command === "snapshot") return console.log(JSON.stringify(createCstdStudioSnapshot(), null, 2));
+  if (command === "release-candidate") {
+    const verification = await verifyCstdContent();
+    const observatory = createCstdEngineeringObservatory();
+    return console.log(JSON.stringify({
+      release: observatory.release,
+      verification,
+      deployment: observatory.deployment,
+      gates: observatory.verification,
+      provenance: observatory.provenance,
+    }, null, 2));
+  }
   if (command === "release-brief") {
     const snapshot = createCstdStudioSnapshot();
     return console.log(JSON.stringify({
@@ -219,7 +258,7 @@ async function main() {
       refresh: snapshot.districts.filter((district) => district.state !== "online").map((district) => district.id),
     }, null, 2));
   }
-  throw new Error("Usage: cstd-content-cli.mts <new-case|new-note|verify-proof|snapshot|release-brief> [slug]");
+  throw new Error("Usage: cstd-content-cli.mts <new-case|new-note|verify-proof|content-health|snapshot|release-brief|release-candidate> [slug]");
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) void main();
