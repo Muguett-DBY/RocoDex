@@ -1,4 +1,4 @@
-import { createCstdSecurityTxtResponse } from "@/sites/personal-homepage/infrastructure/security";
+import { createCstdSecurityTxtResponse } from "@/sites/personal-homepage/server";
 
 export const dynamic = "force-static";
 
