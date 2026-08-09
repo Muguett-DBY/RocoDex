@@ -24,7 +24,6 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/topics.json",
   "/llms.txt",
   "/manifest.webmanifest",
-  "/.well-known/security.txt",
   "/en",
   "/en/work",
   "/en/notes",
@@ -56,6 +55,7 @@ const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/robots.txt",
   "/rss.xml",
   "/sitemap.xml",
+  "/.well-known/security.txt",
   "/api/cstd-vitals",
   "/cstd-case-worker.js",
 ]);

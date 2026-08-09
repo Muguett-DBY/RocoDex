@@ -1,7 +1,9 @@
 import { describe, expect, test } from "vitest";
+import { GET as getRootSecurityTxt } from "../../../app/.well-known/security.txt/route";
 import { serializeCstdRss } from "./rss";
 import { createCstdJsonFeed } from "./json-feed";
 import { serializeCstdLlms } from "./llms";
+import { CSTD_SECURITY_TXT, createCstdSecurityTxtResponse } from "./security";
 import { getPersonalHomepageSitemapEntries } from "./sitemap";
 import { consumeCstdTelemetryQuota, parseCstdMetric } from "./telemetry";
 
@@ -41,6 +43,15 @@ describe("CSTD publishing infrastructure", () => {
     expect(serializeCstdRss("zh")).toContain("https://custard.top/notes/host-boundaries-in-one-next-deployment");
     expect(serializeCstdRss("en")).toContain("https://custard.top/en/notes/host-boundaries-in-one-next-deployment");
     expect(serializeCstdRss("zh").match(/<item>/g)?.length).toBeGreaterThanOrEqual(8);
+  });
+
+  test("publishes one canonical RFC 9116 security contract", () => {
+    expect(CSTD_SECURITY_TXT).toContain("Contact: mailto:cstd@custard.top");
+    expect(CSTD_SECURITY_TXT).toContain("Canonical: https://custard.top/.well-known/security.txt");
+    const response = createCstdSecurityTxtResponse();
+    expect(response.headers.get("content-type")).toBe("text/plain; charset=utf-8");
+    expect(response.headers.get("cache-control")).toContain("s-maxage=86400");
+    expect(getRootSecurityTxt().status).toBe(200);
   });
 
   test("accepts only bounded anonymous telemetry", () => {
