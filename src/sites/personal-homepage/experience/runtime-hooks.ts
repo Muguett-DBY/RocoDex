@@ -9,7 +9,7 @@ export type CstdRuntimeProfile = Readonly<{
   tier: "pending" | CstdRuntimeTier;
   backend: "pending" | CstdRuntimeCapabilities["backend"];
   webgpu: boolean;
-  reason: "pending" | "responsive-image" | CstdRuntimeCapabilities["reason"];
+  reason: "pending" | "responsive-image" | "balanced-default" | CstdRuntimeCapabilities["reason"];
   saveData: boolean;
   effectiveType: string | null;
   viewportPixels: number;

@@ -7,8 +7,6 @@ const controlsSource = read("./homepage-controls.tsx");
 const sceneSource = read("./immersive-scene.tsx");
 const liteSceneSource = read("./lite-immersive-scene.tsx");
 const postprocessingSource = read("./immersive-postprocessing.tsx");
-const directorSource = read("./scene-director.tsx");
-const ambienceSource = read("./ambient-sound.ts");
 const worldSource = read("./world-backdrop.tsx");
 const gateSource = read("../scenes/neural-gate/neural-gate.tsx");
 const sceneClockSource = read("../experience/scene-clock.ts");
@@ -25,43 +23,44 @@ const replaySource = read("./sections/executable-evidence.tsx");
 const replayRuntimeSource = read("./site/executable-case-replay.tsx");
 const workerSource = read("../../../../public/cstd-case-worker.js");
 const knowledgeSource = read("./sections/knowledge-lens.tsx");
-const methodSource = read("./sections/engineering-method.tsx");
 const finaleSource = read("./sections/finale.tsx");
 const globalsSource = read("../../../app/globals.css");
 
-describe("CSTD 17.0 personal engineering universe", () => {
-  test("keeps Custard identity first and preserves shareable audience paths", () => {
+describe("CSTD personal homepage", () => {
+  test("keeps Custard identity and a direct portfolio promise above the fold", () => {
     expect(gateSource).toContain('id="cstd-hero-title"');
     expect(gateSource).toContain('data-text="奶黄包"');
-    expect(gateSource).toContain('href="/work"');
+    expect(gateSource).toContain('href="#proof"');
+    expect(gateSource).toContain('data-cstd-hero-summary');
     expect(gateSource).toContain("narrative.thesis.zh");
     expect(narrativeSource).toContain('return "/for/research"');
     expect(landingSource).toContain("initialNarrativeMode");
     expect(landingSource).not.toContain("project-comparison");
-    expect(landingSource).not.toContain("ProjectShowcase");
   });
 
-  test("uses a six-scene cinematic world with a focused engineering-method chapter", () => {
+  test("uses six focused scenes without app-like homepage controls", () => {
+    expect(landingSource).toContain("LazyNeuralGate");
+    expect(landingSource).toContain("LazyHomepageHeader");
     expect(landingSource).toContain("LazyLivingStudioTwin");
     expect(landingSource).toContain("LazySelectedWork");
     expect(landingSource).toContain("LazyExecutableEvidence");
     expect(landingSource).toContain("LazyKnowledgeLens");
-    expect(landingSource).toContain("LazyEngineeringMethod");
-    expect(methodSource).toContain("data-cstd-method");
-    expect(methodSource).toContain("cstd-method-bench-v3.webp");
-    expect(landingSource).toContain("narrativeMode={narrativeMode}");
+    expect(landingSource).toContain("LazyFinale");
+    expect(landingSource).not.toContain("LazyEngineeringMethod");
+    expect(landingSource).not.toContain("LazySceneDirector");
+    expect(landingSource).not.toContain("HomepageHud");
     expect(landingSource).not.toContain("command-drawer");
-    expect(landingSource).not.toContain("LazyOperatorProfile");
-    expect(landingSource).not.toContain("LazyResearchPath");
   });
 
-  test("derives the living studio from build-time proof", () => {
+  test("presents five capability directions without release-dashboard churn", () => {
     expect(studioSource).toContain("cstdStudioSnapshot.districts");
     expect(studioSource).toContain("data-cstd-studio-twin");
-    expect(studioSource).toContain("data-cstd-release-replay");
+    expect(studioSource).toContain("data-cstd-studio-district-option");
+    expect(studioSource).toContain('role="tablist"');
     expect(studioSource).toContain('href="/observatory.json"');
-    expect(studioSource).toContain("observatory.verification");
-    expect(studioSource).toContain("setInterval");
+    expect(studioSource).not.toContain("data-cstd-release-replay");
+    expect(studioSource).not.toContain("setInterval");
+    expect(studioSource).not.toContain("observatory.verification");
   });
 
   test("keeps representative work concise and sends depth to case pages", () => {
@@ -69,29 +68,35 @@ describe("CSTD 17.0 personal engineering universe", () => {
     expect(proofSource).toContain("getCaseStudyPath");
     expect(proofSource).toContain("首页只给出结论");
     expect(proofSource).not.toContain("ProjectBroadcast");
-    expect(proofSource).not.toContain("lg:min-h-[140svh]");
+    expect(proofSource).not.toContain("backdrop-blur");
   });
 
-  test("runs four deterministic technical replays in a dedicated worker", () => {
-    expect(replaySource).toContain("cstdCaseReplays");
+  test("offers one representative deterministic replay instead of a tool selector", () => {
+    expect(replaySource).toContain("const replay = cstdCaseReplays[0]");
+    expect(replaySource).toContain("data-cstd-home-replay");
+    expect(replaySource).not.toContain("data-cstd-replay-option");
+    expect(replaySource).not.toContain("useState");
     expect(replayRuntimeSource).toContain('new Worker("/cstd-case-worker.js")');
     expect(replayRuntimeSource).toContain('data-cstd-worker="dedicated"');
     expect(workerSource).toContain('"alpha-race"');
-    expect(workerSource).toContain('"dcf-cache"');
-    expect(workerSource).toContain('"host-boundaries"');
-    expect(workerSource).toContain('"crm-lock"');
     expect(workerSource).toContain("STALE WRITE REJECTED");
   });
 
-  test("places source-constrained answers inside a knowledge path", () => {
+  test("renders source-constrained technical answers as directly readable cards", () => {
     expect(knowledgeSource).toContain("answerGuideQuestion");
     expect(knowledgeSource).toContain("findCstdKnowledgePath");
-    expect(knowledgeSource).toContain("data-cstd-graph-path");
+    expect(knowledgeSource).toContain("data-cstd-knowledge-card");
     expect(knowledgeSource).toContain('href="/graph.json"');
-    expect(knowledgeSource).not.toContain("<input");
+    expect(knowledgeSource).not.toContain("data-cstd-graph-path");
+    expect(knowledgeSource).not.toContain("useState");
+    expect(knowledgeSource).not.toContain("setInterval");
   });
 
-  test("keeps WebGL progressive, asynchronous, and desktop-only", () => {
+  test("requires explicit opt-in before loading the desktop GPU runtime", () => {
+    expect(landingSource).toContain('reason: "balanced-default"');
+    expect(landingSource).toContain("useCstdRuntimeProfile(enhancementsReady && overdrive, desktopScene)");
+    expect(landingSource).toContain('data-cstd-render-policy={overdrive ? "enhanced" : "balanced"}');
+    expect(landingSource).toContain("enabled={enhancementsReady && desktopScene && overdrive}");
     expect(runtimeHooksSource).toContain("desktopSceneQuery");
     expect(runtimeHooksSource).toContain('import("./runtime-capabilities")');
     expect(runtimeSource).toContain("WEBGL_debug_renderer_info");
@@ -100,11 +105,8 @@ describe("CSTD 17.0 personal engineering universe", () => {
     expect(sceneRuntimeSource).toContain("<FullScene");
     expect(sceneRuntimeSource).toContain("<WebGpuField");
     expect(webgpuSource).toContain("navigator.gpu");
-    expect(webgpuSource).toContain("@fragment fn fragmentMain");
     expect(sceneSource).toContain("@react-three/fiber");
     expect(sceneSource).toContain("<Canvas");
-    expect(sceneSource).toContain("<ParticleCurrent");
-    expect(sceneSource).toContain("<NeuralCity");
     expect(sceneSource).toContain("const LazyImmersivePostprocessing = lazy(");
     expect(sceneSource).not.toContain('from "@react-three/postprocessing"');
     expect(postprocessingSource).toContain('from "@react-three/postprocessing"');
@@ -112,37 +114,34 @@ describe("CSTD 17.0 personal engineering universe", () => {
     expect(qualitySource).toContain("CstdFrameBudgetController");
   });
 
-  test("uses one native scroll clock and pauses heavy work offscreen", () => {
+  test("uses one throttled native scroll and pointer clock", () => {
     expect(landingSource).toContain("useCstdSceneClock");
     expect(sceneClockSource).toContain('window.addEventListener("scroll", requestSync, { passive: true })');
     expect(sceneClockSource).toContain("requestAnimationFrame(sync)");
+    expect(landingSource).toContain("pointerFrameRef");
+    expect(landingSource).toContain("window.requestAnimationFrame(flushPointerPosition)");
     expect(landingSource).toContain("useCstdDocumentVisibility");
     expect(runtimeHooksSource).toContain('document.addEventListener("visibilitychange", sync)');
     expect(sceneSource).toContain('frameloop={props.active && quality === "full" ? "always" : "demand"}');
     expect(landingSource).not.toContain('from "framer-motion"');
   });
 
-  test("keeps overdrive and ambience deliberate", () => {
+  test("keeps only deliberate visual and motion controls", () => {
     expect(controlsSource).toContain("data-cstd-overdrive-toggle");
-    expect(controlsSource).toContain("data-cstd-ambience-toggle");
-    expect(landingSource).toContain("ambientSound.start()");
-    expect(ambienceSource).not.toContain("autoplay");
-    expect(globalsSource).toContain('[data-cstd-overdrive="true"] .cstd-glitch-title::before');
-    expect(landingSource).not.toContain("prefers-reduced-motion: reduce");
+    expect(controlsSource).toContain("data-cstd-motion-toggle");
+    expect(controlsSource).not.toContain("data-cstd-ambience-toggle");
+    expect(landingSource).not.toContain("ambientSound");
+    expect(globalsSource).toContain('[data-cstd-render-policy="balanced"] .cstd-world-rain');
+    expect(globalsSource).toContain('[data-cstd-render-policy="enhanced"] .cstd-world-rain');
   });
 
-  test("directs every chapter through the cinematic controller", () => {
-    expect(landingSource).toContain("LazySceneDirector");
-    expect(directorSource).toContain("data-cstd-scene-director");
+  test("keeps scene changes cinematic without hijacking document scroll", () => {
     expect(sceneManifestSource).toContain('label: "Executable evidence"');
     expect(sceneManifestSource).toContain('label: "Knowledge paths"');
     expect(worldSource).toContain("getCstdSceneWindow");
-  });
-
-  test("ends in a narrative-aware collaboration exit", () => {
     expect(finaleSource).toContain("collaborationCopy");
-    expect(finaleSource).toContain("getCstdNarrativeSharePath");
     expect(finaleSource).toContain('href={`mailto:cstd@custard.top');
-    expect(finaleSource).toContain("FINAL TRANSMISSION");
+    expect(finaleSource).not.toContain("lg:sticky");
+    expect(finaleSource).not.toContain("lg:h-[155svh]");
   });
 });

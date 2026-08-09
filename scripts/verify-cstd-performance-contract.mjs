@@ -15,6 +15,12 @@ if (contract.cacheComponents.status !== "evaluated-not-enabled") {
 if (nextConfig.includes("cacheComponents:")) {
   throw new Error("next.config enables Cache Components while the published compatibility decision says otherwise");
 }
+if (contract.delivery.defaultRuntimeTier !== "image" || contract.delivery.enhancedRuntimeTrigger !== "explicit-user-action") {
+  throw new Error("The homepage must default to image rendering and require explicit user action before loading a GPU runtime");
+}
+if (!contract.invariants.includes("homepage-gpu-runtime-requires-explicit-opt-in")) {
+  throw new Error("Missing the explicit GPU opt-in performance invariant");
+}
 for (const root of contract.delivery.immutableAssetRoots) {
   if (!nextConfig.includes(`"${root}"`) || !nextConfig.includes("source: `/${root}/:path*`")) {
     throw new Error(`Missing immutable cache header for /${root}`);

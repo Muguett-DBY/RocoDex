@@ -8,6 +8,9 @@ describe("CSTD performance contract", () => {
     expect(cstdPerformanceContract.budgets.initialJavascriptBytes).toBe(150_000);
     expect(cstdPerformanceContract.budgets.sceneAssetBytes).toBe(320_000);
     expect(cstdPerformanceContract.delivery.runtimeFallbackOrder).toEqual(["webgpu", "webgl", "image"]);
+    expect(cstdPerformanceContract.delivery.defaultRuntimeTier).toBe("image");
+    expect(cstdPerformanceContract.delivery.enhancedRuntimeTrigger).toBe("explicit-user-action");
+    expect(cstdPerformanceContract.invariants).toContain("homepage-gpu-runtime-requires-explicit-opt-in");
   });
 
   it("records the Cache Components decision instead of enabling it across incompatible static contracts", () => {

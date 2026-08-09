@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight, BrainCircuit, GitBranch, Pause, Play, ShieldCheck } from "lucide-react";
-import { memo, useEffect, useMemo, useState } from "react";
-import { findCstdKnowledgePath, getCstdKnowledgeNode } from "../../content/knowledge-graph";
+import { ArrowUpRight, BrainCircuit, GitBranch, Link2 } from "lucide-react";
+import { memo } from "react";
+import { findCstdKnowledgePath } from "../../content/knowledge-graph";
 import type { CstdHomepageObservatory } from "../../content/observatory";
 import { CstdLink } from "../site/cstd-link";
 import { answerGuideQuestion } from "../site/guide-retrieval";
@@ -27,107 +27,63 @@ const lenses = [
 ] as const;
 
 function KnowledgeLens({ observatory }: { observatory: CstdHomepageObservatory }) {
-  const [selected, setSelected] = useState(0);
-  const [playing, setPlaying] = useState(false);
-  const [activeNode, setActiveNode] = useState(0);
-  const lens = lenses[selected];
-  const result = useMemo(() => answerGuideQuestion(lens.question, "zh"), [lens.question]);
-  const path = useMemo(() => findCstdKnowledgePath(lens.source, lens.target), [lens.source, lens.target]);
-
-  useEffect(() => {
-    if (!playing || path.length < 2) return;
-    const timer = window.setInterval(() => {
-      setActiveNode((current) => {
-        if (current >= path.length - 1) {
-          setPlaying(false);
-          return current;
-        }
-        return current + 1;
-      });
-    }, 760);
-    return () => window.clearInterval(timer);
-  }, [path.length, playing]);
+  const answers = lenses.map((lens) => ({
+    ...lens,
+    pathLength: findCstdKnowledgePath(lens.source, lens.target).length,
+    result: answerGuideQuestion(lens.question, "zh"),
+  }));
 
   return (
-    <section id="path" data-cstd-chapter="path" data-cstd-scene="path" data-cstd-knowledge-lens aria-labelledby="knowledge-lens-heading" className="relative z-20 overflow-hidden border-b border-[#3dff8f]/25 bg-[#07100d]/90 px-5 py-24 text-[#f2efe7] md:px-10 lg:px-16 lg:py-32">
-      <Image src="/cstd-universe/cstd-knowledge-loom-v3.webp" alt="悬浮的工程札记通过引用线编织成知识网络" fill sizes="100vw" className="object-cover object-[58%_50%] opacity-40" />
-      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,9,8,0.99)_0%,rgba(5,9,8,0.9)_48%,rgba(5,9,8,0.42)_100%)]" />
-      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,9,8,0.96),transparent_52%,rgba(5,9,8,0.72))]" />
-      <div className="relative mx-auto max-w-[1540px]">
-        <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_30rem] lg:items-end">
+    <section id="path" data-cstd-chapter="path" data-cstd-scene="path" data-cstd-knowledge-lens aria-labelledby="knowledge-lens-heading" className="relative z-20 overflow-hidden border-b border-[#3dff8f]/20 bg-[#07100d] px-5 py-20 text-[#f2efe7] md:px-10 lg:px-16 lg:py-24">
+      <Image src="/cstd-universe/cstd-knowledge-loom-v3.webp" alt="工程札记通过引用关系连接成知识网络" fill sizes="100vw" className="object-cover object-[58%_50%] opacity-22" />
+      <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,9,8,0.99),rgba(5,9,8,0.9)_55%,rgba(5,9,8,0.7))]" />
+
+      <div className="relative mx-auto max-w-[1440px]">
+        <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#3dff8f]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> 05 / KNOWLEDGE INTELLIGENCE</p>
-            <h2 id="knowledge-lens-heading" className="mt-6 max-w-5xl text-5xl font-semibold leading-[0.92] md:text-7xl">不做悬浮聊天框。<span className="block text-[#24e0ff]">让答案直接长在证据路径上。</span></h2>
+            <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#3dff8f]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> 05 / TECH NOTES</p>
+            <h2 id="knowledge-lens-heading" className="mt-5 max-w-5xl text-4xl font-semibold leading-[0.96] md:text-6xl lg:text-7xl">技术分享不堆术语，<span className="block text-[#24e0ff]">只讲做过的判断。</span></h2>
           </div>
-          <p className="text-base leading-8 text-[#aeb9b5]">固定问题触发浏览器本地检索；回答只来自本站公开内容，并解释匹配原因、置信度与知识图中的连接路径。</p>
+          <p className="text-base leading-8 text-[#aeb9b5]">每个答案都来自本站公开案例和札记。问题、结论与来源同屏，读者不需要先学会操作另一套工具。</p>
         </header>
 
-        <div className="mt-14 grid gap-10 xl:grid-cols-[22rem_minmax(0,1fr)] xl:gap-16">
-          <div className="border-t border-white/15">
-            {lenses.map((entry, index) => (
-              <button key={entry.question} type="button" aria-pressed={index === selected} onClick={() => { setSelected(index); setPlaying(false); setActiveNode(0); }} className="grid w-full grid-cols-[2.5rem_1fr] gap-3 border-b border-white/15 py-5 text-left text-[#909da0] transition-colors hover:text-white aria-pressed:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#f4d431]">
-                <span className="font-mono text-[9px] font-black">0{index + 1}</span>
-                <span className="text-sm font-semibold leading-6">{entry.question}</span>
-              </button>
-            ))}
-            <div className="mt-7 flex flex-wrap gap-5 font-mono text-[9px] font-black">
-              <CstdLink href="/map" className="text-[#3dff8f] hover:text-white">完整知识图</CstdLink>
-              <CstdLink href="/topics" className="text-[#f4d431] hover:text-white">主题路径</CstdLink>
-              <CstdLink href="/graph.json" className="text-[#24e0ff] hover:text-white">GRAPH.JSON</CstdLink>
-            </div>
-          </div>
-
-          <div>
-            <div className="border-l-2 border-[#f4d431] bg-[#050709]/74 px-5 py-6 md:px-8 md:py-8">
-              <div className="flex flex-wrap items-center gap-3 font-mono text-[9px] font-black">
-                <span className="flex items-center gap-2 text-[#f4d431]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> LOCAL INDEX RESPONSE</span>
-                <span className="flex items-center gap-2 border-l border-white/15 pl-3 text-[#3dff8f]"><ShieldCheck aria-hidden="true" className="h-4 w-4" /> {result.confidence?.toUpperCase()} CONFIDENCE</span>
-              </div>
-              {result.answer.split("\n\n").map((paragraph) => <p key={paragraph} className="mt-5 text-base leading-8 text-[#d5dcda]">{paragraph}</p>)}
-              <p className="mt-6 flex items-start gap-3 border-t border-white/12 pt-5 text-xs leading-6 text-[#95a29f]"><GitBranch aria-hidden="true" className="mt-1 h-4 w-4 shrink-0 text-[#24e0ff]" /> {result.why}</p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                {result.sources.map((source) => <CstdLink key={source.id} href={source.href.zh} className="inline-flex items-center gap-2 border-b border-[#24e0ff]/55 pb-1 text-xs text-[#24e0ff] hover:text-white">{source.title.zh}<ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" /></CstdLink>)}
-              </div>
-            </div>
-
-            <div className="mt-8 border-y border-white/15 py-6" data-cstd-graph-path data-cstd-graph-active={activeNode}>
-              <div className="flex items-center justify-between gap-5">
-                <p className="font-mono text-[9px] font-black text-[#3dff8f]">EVIDENCE PATH / {path.length} NODES</p>
-                <button type="button" onClick={() => { if (activeNode >= path.length - 1) setActiveNode(0); setPlaying((current) => !current); }} aria-label={playing ? "暂停路径播放" : "播放证据路径"} title={playing ? "暂停路径播放" : "播放证据路径"} className="flex h-9 w-9 items-center justify-center border border-[#3dff8f]/45 text-[#3dff8f] hover:bg-[#3dff8f] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#3dff8f]">
-                  {playing ? <Pause aria-hidden="true" className="h-4 w-4" /> : <Play aria-hidden="true" className="h-4 w-4" />}
-                </button>
-              </div>
-              <ol className="mt-6 grid gap-2 md:grid-cols-3">
-                {path.map((nodeId, index) => {
-                  const node = getCstdKnowledgeNode(nodeId);
-                  if (!node) return null;
-                  return (
-                    <li key={nodeId} data-cstd-graph-path-node={nodeId} data-cstd-graph-path-active={index <= activeNode ? "true" : "false"} className="min-h-28 border border-white/12 bg-[#050709]/55 p-4 transition-[background-color,border-color,transform] data-[cstd-graph-path-active=true]:-translate-y-1 data-[cstd-graph-path-active=true]:border-[#3dff8f]/60 data-[cstd-graph-path-active=true]:bg-[#0a1511]">
-                      <p className="font-mono text-[8px] font-black text-[#a1afab]">0{index + 1} / {node.type.toUpperCase()}</p>
-                      <p className="mt-3 text-sm font-semibold leading-6 text-[#d7dfdc]">{node.title.zh}</p>
-                    </li>
-                  );
-                })}
-              </ol>
-            </div>
-          </div>
+        <div className="mt-12 grid gap-4 xl:grid-cols-3">
+          {answers.map(({ question, pathLength, result }, index) => {
+            const source = result.sources[0];
+            const paragraphs = result.answer.split("\n\n").map((paragraph) => paragraph.trim()).filter(Boolean);
+            const excerpt = (paragraphs.length > 1 ? paragraphs.slice(1) : paragraphs).join(" ");
+            return (
+              <article key={question} data-cstd-knowledge-card className="flex min-h-[23rem] flex-col border border-white/14 bg-[#050908] p-5 md:p-6">
+                <div className="flex items-center justify-between gap-4 font-mono text-[8px] font-black">
+                  <span className="text-[#3dff8f]">0{index + 1} / ENGINEERING NOTE</span>
+                  <span className="flex items-center gap-1.5 text-[#8fa09a]"><GitBranch aria-hidden="true" className="h-3.5 w-3.5" /> {pathLength} NODES</span>
+                </div>
+                <h3 className="mt-5 text-2xl font-semibold leading-tight text-white">{question}</h3>
+                <p className="mt-5 line-clamp-5 text-sm leading-7 text-[#b7c2be]">{excerpt}</p>
+                <div className="mt-auto pt-6">
+                  <div className="mb-4 flex items-center gap-2 font-mono text-[8px] font-black text-[#3dff8f]"><Link2 aria-hidden="true" className="h-3.5 w-3.5" /> SOURCE LINKED</div>
+                  {source ? (
+                    <CstdLink href={source.href.zh} className="inline-flex items-center gap-2 border-b border-[#24e0ff]/55 pb-1 text-xs font-semibold text-[#24e0ff] hover:text-white">
+                      阅读来源 <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+                    </CstdLink>
+                  ) : null}
+                </div>
+              </article>
+            );
+          })}
         </div>
 
-        <div className="mt-10 grid gap-px border-y border-white/15 bg-white/10 sm:grid-cols-4" data-cstd-content-health data-cstd-content-health-score={observatory.content.score}>
-          {[
-            [`${observatory.content.coverage.bilingualPercent}%`, "BILINGUAL PARITY"],
-            [`${observatory.content.coverage.topicPercent}%`, "TOPIC COVERAGE"],
-            [`${observatory.content.coverage.relationPercent}%`, "RELATION INTEGRITY"],
-            [`${observatory.content.score}/100`, "CONTENT HEALTH"],
-          ].map(([value, label]) => (
-            <div key={label} className="bg-[#050908]/88 px-5 py-5">
-              <p className="font-mono text-2xl font-black text-white">{value}</p>
-              <p className="mt-2 font-mono text-[8px] font-black text-[#92a09c]">{label}</p>
-            </div>
-          ))}
-        </div>
-        <div className="mt-5 flex justify-end">
-          <CstdLink href="/content-health.json" className="inline-flex items-center gap-2 font-mono text-[9px] font-black text-[#3dff8f] hover:text-white">OPEN CONTENT HEALTH CONTRACT <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-6 border-y border-white/14 py-5" data-cstd-content-health data-cstd-content-health-score={observatory.content.score}>
+          <div className="flex flex-wrap gap-x-7 gap-y-3 font-mono text-[9px] font-black text-[#8fa09a]">
+            <span className="text-white">CONTENT {observatory.content.score}/100</span>
+            <span>{observatory.content.coverage.bilingualPercent}% BILINGUAL</span>
+            <span>{observatory.content.coverage.relationPercent}% RELATIONS</span>
+          </div>
+          <div className="flex flex-wrap gap-6 font-mono text-[9px] font-black">
+            <CstdLink href="/notes" className="text-[#f4d431] hover:text-white">全部札记</CstdLink>
+            <CstdLink href="/map" className="text-[#3dff8f] hover:text-white">知识图谱</CstdLink>
+            <CstdLink href="/graph.json" className="text-[#24e0ff] hover:text-white">GRAPH.JSON</CstdLink>
+          </div>
         </div>
       </div>
     </section>
