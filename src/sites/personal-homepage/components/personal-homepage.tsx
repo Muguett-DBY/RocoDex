@@ -222,11 +222,11 @@ export function PersonalHomepage({
 
       <Suspense
         fallback={(
-          <section data-cstd-chapter="hero" data-cstd-scene="hero" className="relative z-10 flex min-h-svh items-center border-b border-[#24e0ff]/18 px-5 pb-16 pt-28 md:px-10 lg:px-16">
-            <div className="mx-auto w-full max-w-[1440px]">
-              <p className="font-mono text-[10px] font-black text-[#f4d431]">01 / 奶黄包 / CUSTARD</p>
-              <h1 className="mt-7 text-[4.8rem] font-black leading-[0.82] text-[#f2efe7] md:text-[7.25rem] lg:text-[8.5rem]">奶黄包</h1>
-              <p className="mt-5 max-w-3xl text-2xl font-semibold leading-tight text-[#24e0ff] md:text-4xl">复杂，但必须清楚；炫酷，但必须能跑。</p>
+          <section data-cstd-chapter="hero" data-cstd-scene="hero" className="relative z-10 flex min-h-svh items-center border-b border-white/10 px-5 pb-14 pt-28 md:px-10 lg:px-16">
+            <div className="mx-auto w-full max-w-[1320px]">
+              <p className="font-mono text-[10px] font-black text-[#f4d431]">CSTD / PERSONAL STUDIO</p>
+              <h1 className="mt-7 text-[4.35rem] font-black leading-[0.86] text-[#f2efe7] md:text-[6.5rem] lg:text-[7.75rem]">奶黄包</h1>
+              <p className="mt-8 max-w-3xl text-3xl font-semibold leading-tight text-[#f2efe7] md:text-[2.8rem]">把复杂问题，<span className="text-[#f4d431]">编译成真正运行的系统。</span></p>
             </div>
           </section>
         )}
@@ -235,7 +235,7 @@ export function PersonalHomepage({
       </Suspense>
 
       <div id="systems" data-cstd-scene-shell="systems" className="relative scroll-mt-16">
-        <Suspense fallback={<section data-cstd-chapter="systems" data-cstd-scene="systems" aria-hidden="true" className="relative z-20 min-h-[140svh] bg-[#0a0c0f]" />}>
+        <Suspense fallback={<section data-cstd-chapter="systems" data-cstd-scene="systems" aria-hidden="true" className="relative z-20 min-h-[115svh] bg-[#0a0c0f]" />}>
           <LazyLivingStudioTwin
             activeSystemId={activeSystemId}
             setActiveSystemId={setActiveSystemId}
@@ -246,24 +246,24 @@ export function PersonalHomepage({
       </div>
 
       <div id="proof" data-cstd-scene-shell="proof" className="relative scroll-mt-16">
-        <Suspense fallback={<section data-cstd-chapter="proof" data-cstd-scene="proof" aria-hidden="true" className="relative z-20 min-h-[125svh] bg-[#efeee8]" />}>
+        <Suspense fallback={<section data-cstd-chapter="proof" data-cstd-scene="proof" aria-hidden="true" className="relative z-20 min-h-[110svh] bg-[#efeee8]" />}>
           <LazySelectedWork reducedMotion={reducedMotion} narrativeMode={narrativeMode} />
         </Suspense>
       </div>
 
       <div id="operator" data-cstd-scene-shell="operator" className="relative scroll-mt-16">
-        <Suspense fallback={<section data-cstd-chapter="operator" data-cstd-scene="operator" aria-hidden="true" className="relative z-20 min-h-svh bg-[#050709]" />}>
+        <Suspense fallback={<section data-cstd-chapter="operator" data-cstd-scene="operator" aria-hidden="true" className="relative z-20 min-h-[90svh] bg-[#050709]" />}>
           <LazyExecutableEvidence />
         </Suspense>
       </div>
 
       <div id="path" data-cstd-scene-shell="path" className="relative scroll-mt-16">
-        <Suspense fallback={<section data-cstd-chapter="path" data-cstd-scene="path" aria-hidden="true" className="relative z-20 min-h-[110svh] bg-[#08100d]" />}>
+        <Suspense fallback={<section data-cstd-chapter="path" data-cstd-scene="path" aria-hidden="true" className="relative z-20 min-h-[90svh] bg-[#07090b]" />}>
           <LazyKnowledgeLens observatory={observatory} />
         </Suspense>
       </div>
 
-      <Suspense fallback={<div className="relative z-20 min-h-[80svh] bg-[#050709]" />}>
+      <Suspense fallback={<div className="relative z-20 min-h-[76svh] bg-[#050709]" />}>
         <LazyFinale narrativeMode={narrativeMode} />
       </Suspense>
       <Suspense fallback={null}>

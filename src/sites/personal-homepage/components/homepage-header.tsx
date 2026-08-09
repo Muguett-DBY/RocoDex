@@ -35,23 +35,21 @@ export function HomepageHeader({
     <header
       data-cstd-home-header
       data-cstd-header-theme={activeSceneId}
-      className="pointer-events-none fixed inset-x-3 top-3 z-50 md:inset-x-5 md:top-4"
+      className="pointer-events-none fixed inset-x-3 top-3 z-50 md:inset-x-6 md:top-5"
     >
-      <div className="pointer-events-auto relative mx-auto flex h-14 w-full max-w-[1440px] items-center overflow-hidden rounded-[8px] border border-white/12 bg-[#050709]/98 px-2.5 shadow-[0_18px_60px_rgba(0,0,0,0.34)] md:px-3">
+      <div className="pointer-events-auto relative mx-auto flex h-14 w-full max-w-[1320px] items-center overflow-hidden rounded-[7px] border border-white/10 bg-[#050709]/95 px-2.5 shadow-[0_16px_48px_rgba(0,0,0,0.3)] md:px-3">
         <CstdChapterLink
           href="#top"
-          className="flex items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]"
+          className="flex items-center gap-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]"
         >
           <span className="flex h-9 w-9 items-center justify-center bg-[#f4d431] text-sm font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">
             奶
           </span>
           <span className="whitespace-nowrap text-sm font-black">奶黄包</span>
-          <span aria-hidden="true" className="hidden h-4 w-px bg-white/15 sm:block" />
-          <span className="hidden font-mono text-[9px] font-bold text-[#7f8b90] sm:inline">CSTD / 05</span>
         </CstdChapterLink>
 
-        <div className="ml-auto flex items-center gap-2 md:gap-3">
-          <nav aria-label="首页导航" className="hidden items-center gap-1 font-mono text-[10px] font-bold text-[#a5aaad] md:flex">
+        <div className="ml-auto flex items-center gap-2 md:gap-4">
+          <nav aria-label="首页导航" className="hidden items-center gap-0.5 text-[12px] font-semibold text-[#9ca5a8] md:flex">
             {homepageLinks.map((link) => {
               const active = activeSceneId === link.sceneId;
               return (
@@ -69,12 +67,12 @@ export function HomepageHeader({
                 </CstdChapterLink>
               );
             })}
-            <span aria-hidden="true" className="mx-2 h-4 w-px bg-white/15" />
-            <Suspense fallback={<><a href="/notes" className="px-2 py-2">札记</a><a href="/about" className="px-2 py-2">关于</a></>}>
-              <LazyCstdLink eagerPrefetch href="/notes" className="px-2 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
+            <span aria-hidden="true" className="mx-2 h-4 w-px bg-white/10" />
+            <Suspense fallback={<><a href="/notes" className="px-2.5 py-2">札记</a><a href="/about" className="px-2.5 py-2">关于</a></>}>
+              <LazyCstdLink eagerPrefetch href="/notes" className="px-2.5 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
                 札记
               </LazyCstdLink>
-              <LazyCstdLink eagerPrefetch href="/about" className="px-2 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
+              <LazyCstdLink eagerPrefetch href="/about" className="px-2.5 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
                 关于
               </LazyCstdLink>
             </Suspense>
