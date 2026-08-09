@@ -59,4 +59,12 @@ export const cstdTimeline: readonly CstdTimelineEntry[] = [
     capabilityIds: ["product-surfaces", "ai-creation", "edge-operations"],
     evidence: { zh: "https://github.com/Muguett-DBY/RocoDex/commit/049d2de", en: "https://github.com/Muguett-DBY/RocoDex/commit/049d2de" },
   },
+  {
+    date: "2026-08-09",
+    kind: "release",
+    title: { zh: "CSTD 9.0 工程观测与深度档案上线", en: "CSTD 9.0 engineering observatory and deep dossiers ship" },
+    summary: { zh: "个人方法、构建来源、内容健康、旗舰案例故障档案与实时视觉预算进入同一个发布契约。", en: "Personal method, build provenance, content health, flagship failure dossiers, and live visual budgets enter one release contract." },
+    capabilityIds: ["product-surfaces", "edge-operations", "ai-creation", "data-systems"],
+    evidence: { zh: "/observatory.json", en: "/en/observatory.json" },
+  },
 ];

@@ -13,6 +13,10 @@
 | `labs.ts` | Versioned `LabDefinition` metadata and renderer keys |
 | `systems.ts` | Five Atlas districts and their real evidence links |
 | `timeline.ts` | Education, projects, diagnoses, and verified releases |
+| `case-dossiers.ts` | Architecture, tradeoffs, failure containment, and evidence for flagship cases |
+| `content-health.ts` | Computed bilingual, relation, orphan, and evidence-freshness health |
+| `observatory.ts` | Versioned public engineering-observatory contract and slim homepage projection |
+| `release-ledger.ts` | Verified release gates and replayable publication history |
 
 ## Add content
 
@@ -23,6 +27,15 @@
 5. Run `npm run content:generate`; no route or page component edits are required.
 
 `npm run content:check` fails when the generated index is stale, a relation points to a missing entry, a slug is duplicated, or either language is absent. `npm run build` regenerates the index automatically.
+
+## Release gates
+
+- `npm run cstd:content-health` prints the computed health report and fails on broken relations, missing bilingual bodies, orphaned entries, or stale evidence.
+- `npm run cstd:release-candidate` validates content health together with the release ledger before a production candidate is accepted.
+- `npm run verify:cstd` runs content checks, proof verification, personal-site tests, lint, typecheck, build, and bundle budgets.
+- `npm run verify:cstd:release` adds release-candidate and production-contract verification for deployment closure.
+
+The public `observatory.json` and `content-health.json` routes are projections of these source modules. Never duplicate their metrics in route handlers or UI components.
 
 ## Writing rules
 

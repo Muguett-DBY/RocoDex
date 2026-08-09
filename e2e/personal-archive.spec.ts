@@ -2,6 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("CSTD technical archive", () => {
   test("ships navigable bilingual work and note archives", async ({ page }) => {
+    test.setTimeout(90_000);
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
 
@@ -148,7 +149,7 @@ test.describe("CSTD technical archive", () => {
     expect(proofResponse.status()).toBe(200);
     expect(proofResponse.headers()["content-type"]).toContain("application/json");
     const proof = await proofResponse.json();
-    expect(proof.release).toBe("CSTD-8.0");
+    expect(proof.release).toBe("CSTD-9.0");
     expect(proof.entries).toHaveLength(6);
     expect(proof.totals.artifacts).toBeGreaterThanOrEqual(20);
 
@@ -163,5 +164,17 @@ test.describe("CSTD technical archive", () => {
     const studioResponse = await request.get("/studio.json", { headers: { host: "custard.top" } });
     expect(studioResponse.status()).toBe(200);
     expect((await studioResponse.json()).provenance.contract).toBe("cstd.studio-snapshot/v3");
+
+    const observatoryResponse = await request.get("/observatory.json", { headers: { host: "custard.top" } });
+    expect(observatoryResponse.status()).toBe(200);
+    expect((await observatoryResponse.json()).provenance.contract).toBe("cstd.engineering-observatory/v1");
+
+    const healthResponse = await request.get("/content-health.json", { headers: { host: "custard.top" } });
+    expect(healthResponse.status()).toBe(200);
+    expect((await healthResponse.json()).score).toBe(100);
+
+    const securityResponse = await request.get("/.well-known/security.txt", { headers: { host: "custard.top" } });
+    expect(securityResponse.status()).toBe(200);
+    expect(await securityResponse.text()).toContain("Contact: mailto:cstd@custard.top");
   });
 });

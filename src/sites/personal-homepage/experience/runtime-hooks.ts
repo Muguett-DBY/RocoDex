@@ -10,6 +10,9 @@ export type CstdRuntimeProfile = Readonly<{
   backend: "pending" | CstdRuntimeCapabilities["backend"];
   webgpu: boolean;
   reason: "pending" | "responsive-image" | CstdRuntimeCapabilities["reason"];
+  saveData: boolean;
+  effectiveType: string | null;
+  viewportPixels: number;
 }>;
 
 function subscribeDesktopScene(onStoreChange: () => void) {
@@ -60,6 +63,9 @@ export function useCstdRuntimeProfile(enhancementsReady: boolean, desktopScene: 
     backend: "pending",
     webgpu: false,
     reason: "pending",
+    saveData: false,
+    effectiveType: null,
+    viewportPixels: 0,
   });
 
   useEffect(() => {
@@ -76,6 +82,9 @@ export function useCstdRuntimeProfile(enhancementsReady: boolean, desktopScene: 
           backend: detected.backend,
           webgpu: detected.webgpu,
           reason: detected.reason,
+          saveData: detected.saveData,
+          effectiveType: detected.effectiveType,
+          viewportPixels: detected.viewportPixels,
         });
       });
     });
@@ -87,7 +96,7 @@ export function useCstdRuntimeProfile(enhancementsReady: boolean, desktopScene: 
 
   return desktopScene
     ? profile
-    : { tier: "image", backend: "image", webgpu: false, reason: "responsive-image" } as const;
+    : { tier: "image", backend: "image", webgpu: false, reason: "responsive-image", saveData: false, effectiveType: null, viewportPixels: 0 } as const;
 }
 
 export function useCstdChapterReveal(rootRef: RefObject<HTMLElement | null>, ready: boolean) {

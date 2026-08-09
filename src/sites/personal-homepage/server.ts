@@ -12,6 +12,8 @@ export { serializeCstdLlms } from "./infrastructure/llms";
 export { cstdProofMeshManifest } from "./content/proof-mesh";
 export { cstdKnowledgeGraph } from "./content/knowledge-graph";
 export { cstdStudioSnapshot } from "./content/studio-status";
+export { cstdEngineeringObservatory, cstdHomepageObservatory } from "./content/observatory";
+export { cstdContentHealth } from "./content/content-health";
 export { cstdReleaseLedger } from "./content/release-ledger";
 export { cstdTopics } from "./content/topics";
 export { consumeCstdTelemetryQuota, parseCstdMetric, type CstdMetric } from "./infrastructure/telemetry";

@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { getCstdNarrative, parseCstdNarrativeShareSlug } from "../../content/narratives";
+import { cstdHomepageObservatory } from "../../content/observatory";
 import { PersonalHomepage } from "../personal-homepage";
 import { StructuredData } from "../site/structured-data";
 
@@ -11,7 +12,7 @@ export function CstdAudienceHomepagePage({ audience }: { audience: string }) {
   const narrative = getCstdNarrative(mode);
   return (
     <>
-      <PersonalHomepage initialNarrativeMode={mode} />
+      <PersonalHomepage initialNarrativeMode={mode} observatory={cstdHomepageObservatory} />
       <StructuredData value={{
         "@context": "https://schema.org",
         "@type": "ProfilePage",

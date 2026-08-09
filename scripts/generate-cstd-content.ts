@@ -26,6 +26,23 @@ async function readDocuments<T>(directory: "cases" | "notes", parse: (value: unk
     if (!document.content.includes('<LocaleBlock locale="zh">') || !document.content.includes('<LocaleBlock locale="en">')) {
       throw new Error(`${directory}/${name} must contain both zh and en LocaleBlock sections`);
     }
+    const toc = (metadata as { toc?: readonly { id: string }[] }).toc ?? [];
+    const tocIds = toc.map((entry) => entry.id);
+    if (new Set(tocIds).size !== tocIds.length) throw new Error(`${directory}/${name} has duplicate toc ids`);
+    for (const locale of ["zh", "en"] as const) {
+      const block = document.content.match(new RegExp(`<LocaleBlock locale="${locale}">([\\s\\S]*?)<\\/LocaleBlock>`))?.[1] ?? "";
+      const sectionIds = [...block.matchAll(/<ArchiveSection\s+[^>]*\bid="([^"]+)"/g)].map((match) => match[1]);
+      if (new Set(sectionIds).size !== sectionIds.length) throw new Error(`${directory}/${name} has duplicate ${locale} ArchiveSection ids`);
+      if (sectionIds.length !== tocIds.length || sectionIds.some((id, index) => id !== tocIds[index])) {
+        throw new Error(`${directory}/${name} ${locale} ArchiveSection ids must match toc order: ${tocIds.join(", ")}`);
+      }
+    }
+    if (directory === "notes") {
+      const note = metadata as { updatedAt?: string; corrections?: readonly { date: string }[] };
+      for (const correction of note.corrections ?? []) {
+        if (note.updatedAt && correction.date > note.updatedAt) throw new Error(`${directory}/${name} correction ${correction.date} is newer than updatedAt ${note.updatedAt}`);
+      }
+    }
     return metadata;
   }));
 }

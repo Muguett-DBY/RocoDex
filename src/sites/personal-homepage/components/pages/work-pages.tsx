@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, ExternalLink, ShieldCheck } from "lucide-react";
 import type { CSSProperties } from "react";
 import type { CstdLocale } from "../../content/content-types";
+import { getCstdCaseDossier } from "../../content/case-dossiers";
 import { cstdCaseStudies, getCaseStudyPath, getCstdCaseStudy } from "../../content/case-studies";
 import { loadCstdContentDocument } from "../../content/content-document";
 import { CstdLink } from "../site/cstd-link";
@@ -14,6 +15,7 @@ import { LiveProofMesh } from "../site/live-proof-mesh";
 import { CstdPageHero } from "./page-hero";
 import { getCstdCaseReplayByCaseSlug } from "../../content/case-replays";
 import { ExecutableCaseReplay } from "../site/executable-case-replay";
+import { CstdCaseDossierView } from "../site/case-dossier";
 
 const workHero = {
   src: "/cstd-universe/cstd-broadcast-nexus-v1.webp",
@@ -120,6 +122,7 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
   const index = cstdCaseStudies.findIndex((candidate) => candidate.slug === entry.slug);
   const nextEntry = cstdCaseStudies[(index + 1) % cstdCaseStudies.length];
   const replay = getCstdCaseReplayByCaseSlug(entry.slug);
+  const dossier = getCstdCaseDossier(entry.slug);
 
   return (
     <CstdSiteChrome locale={locale} page={`work-${entry.slug}`}>
@@ -142,6 +145,8 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
         </section>
 
         <CinematicCaseFilm caseStudy={entry} locale={locale} />
+
+        {dossier ? <CstdCaseDossierView dossier={dossier} locale={locale} /> : null}
 
         {replay ? (
           <section className="border-b border-[#24e0ff]/25 bg-[#06080a] px-5 py-16 md:px-10 lg:px-16 lg:py-24" aria-label={locale === "zh" ? "可执行技术重放" : "Executable technical replay"}>
@@ -190,7 +195,7 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
         </CstdLink>
       </main>
       <StructuredData value={[
-        { "@context": "https://schema.org", "@type": ["CreativeWork", "SoftwareSourceCode"], name: entry.title[locale], description: entry.summary[locale], url: `https://custard.top${getCaseStudyPath(entry, locale)}`, image: `https://custard.top${entry.image.src}`, programmingLanguage: entry.technologies, runtimePlatform: entry.status[locale], keywords: entry.capabilityIds, creator: { "@type": "Person", name: locale === "zh" ? "奶黄包" : "Custard" } },
+        { "@context": "https://schema.org", "@type": ["CreativeWork", "SoftwareSourceCode"], name: entry.title[locale], description: entry.summary[locale], url: `https://custard.top${getCaseStudyPath(entry, locale)}`, image: `https://custard.top${entry.image.src}`, programmingLanguage: entry.technologies, runtimePlatform: entry.status[locale], keywords: entry.capabilityIds, creator: { "@type": "Person", name: locale === "zh" ? "奶黄包" : "Custard" }, ...(dossier ? { about: dossier.architecture.map((node) => ({ "@type": "Thing", name: node.title[locale], description: node.detail[locale] })) } : {}) },
         { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: [
           { "@type": "ListItem", position: 1, name: locale === "zh" ? "作品" : "Work", item: `https://custard.top${locale === "en" ? "/en/work" : "/work"}` },
           { "@type": "ListItem", position: 2, name: entry.title[locale], item: `https://custard.top${getCaseStudyPath(entry, locale)}` },

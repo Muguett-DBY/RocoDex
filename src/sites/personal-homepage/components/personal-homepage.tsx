@@ -13,7 +13,8 @@ import {
   type PointerEvent as ReactPointerEvent,
 } from "react";
 import type { CstdSystem } from "../content/systems";
-import { getCstdNarrative, type CstdNarrativeMode } from "../content/narratives";
+import type { CstdHomepageObservatory } from "../content/observatory";
+import type { CstdNarrativeMode } from "../content/narratives";
 import { setCstdMotionMode, useCstdMotionMode } from "../experience/motion-store";
 import { setCstdNarrativeMode, useCstdNarrativeMode } from "../experience/narrative-store";
 import {
@@ -54,6 +55,9 @@ const LazyLivingStudioTwin = lazy(() =>
 const LazySelectedWork = lazy(() =>
   import("./sections/selected-work").then((module) => ({ default: module.MemoizedSelectedWork })),
 );
+const LazyEngineeringMethod = lazy(() =>
+  import("./sections/engineering-method").then((module) => ({ default: module.MemoizedEngineeringMethod })),
+);
 const LazyExecutableEvidence = lazy(() =>
   import("./sections/executable-evidence").then((module) => ({ default: module.MemoizedExecutableEvidence })),
 );
@@ -77,6 +81,12 @@ type AmbientSound = (typeof import("./ambient-sound"))["ambientSound"];
 let loadedAmbientSound: AmbientSound | null = null;
 let ambientSoundPromise: Promise<AmbientSound> | null = null;
 
+const firstSystemByNarrative = {
+  builder: "product-surfaces",
+  researcher: "research-models",
+  collaborator: "product-surfaces",
+} as const satisfies Record<CstdNarrativeMode, CstdSystem["id"]>;
+
 function loadAmbientSound() {
   ambientSoundPromise ??= import("./ambient-sound").then((module) => {
     loadedAmbientSound = module.ambientSound;
@@ -85,7 +95,13 @@ function loadAmbientSound() {
   return ambientSoundPromise;
 }
 
-export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMode?: CstdNarrativeMode } = {}) {
+export function PersonalHomepage({
+  initialNarrativeMode,
+  observatory,
+}: {
+  initialNarrativeMode?: CstdNarrativeMode;
+  observatory: CstdHomepageObservatory;
+}) {
   const motionMode = useCstdMotionMode();
   const desktopScene = useCstdDesktopScene();
   const reducedMotion = motionMode === "calm";
@@ -226,7 +242,7 @@ export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMod
   function handleNarrativeChange(mode: CstdNarrativeMode) {
     setRouteNarrativeMode(mode);
     setCstdNarrativeMode(mode);
-    setActiveSystemId(getCstdNarrative(mode).systemOrder[0]);
+    setActiveSystemId(firstSystemByNarrative[mode]);
   }
 
   return (
@@ -239,6 +255,8 @@ export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMod
       data-cstd-render-backend={runtimeProfile.webgpu && runtimeProfile.tier === "full" ? `${runtimeProfile.backend}+webgpu` : runtimeProfile.backend}
       data-cstd-webgpu={runtimeProfile.webgpu ? "active" : "unavailable"}
       data-cstd-runtime-reason={runtimeProfile.reason}
+      data-cstd-network={runtimeProfile.effectiveType ?? "unknown"}
+      data-cstd-data-saver={runtimeProfile.saveData ? "true" : "false"}
       data-cstd-narrative-mode={narrativeMode}
       data-cstd-motion={reducedMotion ? "calm" : "full"}
       data-cstd-overdrive={overdrive ? "true" : "false"}
@@ -323,6 +341,7 @@ export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMod
           setActiveSystemId={setActiveSystemId}
           reducedMotion={reducedMotion}
           narrativeMode={narrativeMode}
+          observatory={observatory}
         />
       </Suspense>
 
@@ -330,12 +349,16 @@ export function PersonalHomepage({ initialNarrativeMode }: { initialNarrativeMod
         <LazySelectedWork reducedMotion={reducedMotion} narrativeMode={narrativeMode} />
       </Suspense>
 
+      <Suspense fallback={<div className="relative z-20 min-h-[70svh] bg-[#080b0e]" />}>
+        <LazyEngineeringMethod />
+      </Suspense>
+
       <Suspense fallback={<div className="relative z-20 min-h-[80svh] bg-[#050709]" />}>
         <LazyExecutableEvidence />
       </Suspense>
 
       <Suspense fallback={<div className="relative z-10 min-h-[70svh] bg-[#0a0b0d]" />}>
-        <LazyKnowledgeLens />
+        <LazyKnowledgeLens observatory={observatory} />
       </Suspense>
 
       <Suspense fallback={<div className="relative z-20 min-h-[70svh] bg-[#050709]" />}>

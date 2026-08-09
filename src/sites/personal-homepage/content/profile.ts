@@ -10,10 +10,10 @@ export const cstdProfile = {
     en: "I compile product, data, AI, research, and visual engineering into systems that actually run. Technologies are not badges here; architecture decisions, failure boundaries, and release evidence stay attached to the work.",
   },
   now: {
-    updatedAt: "2026-08-08",
+    updatedAt: "2026-08-09",
     focus: {
-      zh: "把 CSTD 从一张高冲击主页扩展为可阅读、可验证、可持续维护的个人技术世界。",
-      en: "Expanding CSTD from a high-impact homepage into a readable, verifiable, and maintainable technical world.",
+      zh: "把 CSTD 9.0 建成一座能解释方法、展示系统、公开证据并自我观测的个人技术工作室。",
+      en: "Building CSTD 9.0 into a personal engineering studio that explains method, presents systems, publishes proof, and observes itself.",
     },
     building: [
       { zh: "证据优先的公司研究与确定性估值工具。", en: "Evidence-first company research and deterministic valuation tools." },

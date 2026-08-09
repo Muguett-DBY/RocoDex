@@ -14,7 +14,7 @@ function ExecutableEvidence() {
     <section id="operator" data-cstd-chapter="operator" data-cstd-scene="operator" data-cstd-executable-evidence aria-labelledby="executable-evidence-heading" className="relative z-20 border-b border-[#ff3b30]/30 bg-[#050709]/88 px-5 py-24 text-[#f2efe7] md:px-10 lg:px-16 lg:py-32">
       <div className="mx-auto grid max-w-[1540px] gap-12 xl:grid-cols-[minmax(20rem,0.68fr)_minmax(0,1.32fr)] xl:items-start xl:gap-20">
         <div className="xl:sticky xl:top-28">
-          <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#ff5a50]"><FlaskConical aria-hidden="true" className="h-4 w-4" /> 03 / EXECUTABLE EVIDENCE</p>
+          <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#ff5a50]"><FlaskConical aria-hidden="true" className="h-4 w-4" /> 04 / EXECUTABLE EVIDENCE</p>
           <h2 id="executable-evidence-heading" className="mt-6 text-5xl font-semibold leading-[0.92] md:text-7xl">案例不只可读，<span className="text-[#f4d431]">还可以运行。</span></h2>
           <p className="mt-6 max-w-xl text-base leading-8 text-[#aeb7ba]">四个重放只演示真实的核心边界：异步版本、缓存编解码、双域名所有权与业务乐观锁。计算在独立 Worker 中进行，结果可重复，不伪造日志。</p>
           <div className="mt-8 border-t border-white/15">

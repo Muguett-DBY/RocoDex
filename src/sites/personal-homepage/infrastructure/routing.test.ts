@@ -41,6 +41,11 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/status.json")).toEqual({ kind: "rewrite", path: "/cstd/status.json" });
     expect(getPersonalSiteRouteDecision("custard.top", "/feed.json")).toEqual({ kind: "rewrite", path: "/cstd/feed.json" });
     expect(getPersonalSiteRouteDecision("custard.top", "/llms.txt")).toEqual({ kind: "rewrite", path: "/cstd/llms.txt" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/observatory.json")).toEqual({ kind: "rewrite", path: "/cstd/observatory.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/content-health.json")).toEqual({ kind: "rewrite", path: "/cstd/content-health.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/observatory.json")).toEqual({ kind: "rewrite", path: "/cstd/en/observatory.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/manifest.webmanifest")).toEqual({ kind: "rewrite", path: "/cstd/manifest.webmanifest" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/.well-known/security.txt")).toEqual({ kind: "rewrite", path: "/cstd/.well-known/security.txt" });
     expect(getPersonalSiteRouteDecision("custard.top", "/for/research")).toEqual({ kind: "rewrite", path: "/cstd/for/research" });
   });
 
@@ -81,6 +86,7 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/en/topics/visual-computing")).toEqual({ kind: "rewrite", path: "/cstd/en/topics/visual-computing" });
     expect(getPersonalSiteRouteDecision("custard.top", "/studio.json")).toEqual({ kind: "rewrite", path: "/cstd/studio.json" });
     expect(getPersonalSiteRouteDecision("custard.top", "/releases.json")).toEqual({ kind: "rewrite", path: "/cstd/releases.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-universe/cstd-observatory-core-v3.webp")).toEqual({ kind: "next" });
   });
 
   test("leaves RocoDex subdomain routes untouched", () => {
@@ -106,5 +112,7 @@ describe("CSTD host routing", () => {
     expect(policy).toContain("frame-src 'none'");
     expect(PERSONAL_SITE_SECURITY_HEADERS["cross-origin-resource-policy"]).toBe("same-origin");
     expect(PERSONAL_SITE_SECURITY_HEADERS["permissions-policy"]).toContain("usb=()");
+    expect(PERSONAL_SITE_SECURITY_HEADERS["origin-agent-cluster"]).toBe("?1");
+    expect(PERSONAL_SITE_SECURITY_HEADERS["x-download-options"]).toBe("noopen");
   });
 });

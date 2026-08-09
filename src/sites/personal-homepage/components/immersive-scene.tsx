@@ -823,12 +823,14 @@ function QualityProbe({
   onDecline,
 }: {
   quality: SceneQuality;
-  onDecline: () => void;
+  onDecline: (fps: number) => void;
 }) {
   const [controller] = useState(() => new CstdFrameBudgetController());
 
   useFrame((_, delta) => {
-    if (quality === "full" && controller.sample(delta)) onDecline();
+    if (quality !== "full") return;
+    const decision = controller.sample(delta);
+    if (decision) onDecline(decision.fps);
   });
 
   return null;
@@ -837,7 +839,7 @@ function QualityProbe({
 function World(
   props: PersonalImmersiveSceneProps & {
     onReady: (quality: SceneQuality) => void;
-    onQualityDecline: () => void;
+    onQualityDecline: (fps: number) => void;
     quality: SceneQuality;
   },
 ) {
@@ -897,10 +899,20 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
   const [readyQuality, setReadyQuality] = useState<SceneQuality | null>(null);
   const [contextLost, setContextLost] = useState(false);
   const [autoLite, setAutoLite] = useState(false);
+  const [qualityFps, setQualityFps] = useState<number | null>(null);
+  const autoLiteRef = useRef(false);
   const quality: SceneQuality =
     props.reducedMotion || autoLite ? "lite" : detectedQuality;
   const markSceneReady = useCallback((renderedQuality: SceneQuality) => setReadyQuality(renderedQuality), []);
-  const lowerQuality = useCallback(() => setAutoLite(true), []);
+  const lowerQuality = useCallback((fps: number) => {
+    if (autoLiteRef.current) return;
+    autoLiteRef.current = true;
+    setQualityFps(fps);
+    setAutoLite(true);
+    window.dispatchEvent(new CustomEvent("cstd:metric", {
+      detail: { name: "visual_balanced", value: fps },
+    }));
+  }, []);
   const renderReady = contextLost ? "fallback" : readyQuality === quality ? "true" : "false";
 
   return (
@@ -910,6 +922,8 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
       data-cstd-render-ready={renderReady}
       data-cstd-render-fallback={contextLost ? "true" : "false"}
       data-cstd-render-active={props.active ? "true" : "false"}
+      data-cstd-quality-governor={autoLite ? "balanced" : "nominal"}
+      data-cstd-quality-fps={qualityFps ?? "pending"}
       data-cstd-neural-city
       className="absolute inset-0 opacity-[0.72] mix-blend-screen"
     >

@@ -29,6 +29,8 @@ export function serializeCstdLlms() {
 - [Knowledge graph](https://custard.top/graph.json)
 - [Studio status](https://custard.top/status.json)
 - [Studio snapshot with provenance](https://custard.top/studio.json)
+- [Engineering observatory](https://custard.top/observatory.json)
+- [Content health](https://custard.top/content-health.json)
 - [Release ledger](https://custard.top/releases.json)
 - [Topic manifest](https://custard.top/topics.json)
 - [JSON Feed](https://custard.top/feed.json?lang=en)

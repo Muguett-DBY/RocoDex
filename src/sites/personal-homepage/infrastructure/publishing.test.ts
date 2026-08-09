@@ -31,6 +31,8 @@ describe("CSTD publishing infrastructure", () => {
     const llms = serializeCstdLlms();
     expect(llms).toContain("https://custard.top/graph.json");
     expect(llms).toContain("https://custard.top/studio.json");
+    expect(llms).toContain("https://custard.top/observatory.json");
+    expect(llms).toContain("https://custard.top/content-health.json");
     expect(llms).toContain("https://custard.top/en/topics");
     expect(llms).toContain("RocoDex dual-site platform");
   });

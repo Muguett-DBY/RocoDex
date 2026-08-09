@@ -17,10 +17,14 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/graph.json",
   "/status.json",
   "/studio.json",
+  "/observatory.json",
+  "/content-health.json",
   "/releases.json",
   "/feed.json",
   "/topics.json",
   "/llms.txt",
+  "/manifest.webmanifest",
+  "/.well-known/security.txt",
   "/en",
   "/en/work",
   "/en/notes",
@@ -36,6 +40,8 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/en/status.json",
   "/en/topics.json",
   "/en/studio.json",
+  "/en/observatory.json",
+  "/en/content-health.json",
   "/en/releases.json",
 ]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([
@@ -63,7 +69,9 @@ export const PERSONAL_SITE_SECURITY_HEADERS = {
   "strict-transport-security": "max-age=63072000; includeSubDomains; preload",
   "x-content-type-options": "nosniff",
   "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
   "x-frame-options": "DENY",
+  "origin-agent-cluster": "?1",
   "x-permitted-cross-domain-policies": "none",
 } as const;
 
