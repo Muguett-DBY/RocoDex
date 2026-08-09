@@ -63,7 +63,7 @@ export function CstdNotesIndexPage({ locale }: { locale: CstdLocale }) {
                     </div>
                   </div>
                   <figure className="relative aspect-[4/3] overflow-hidden border border-white/15 bg-black md:order-none" style={{ viewTransitionName: `cstd-note-${note.slug}` } as CSSProperties}>
-                    <Image src={note.image.src} alt={note.image.alt[locale]} fill sizes="(min-width: 768px) 240px, 100vw" className="object-cover opacity-75 transition-[transform,opacity] duration-500 group-hover:scale-105 group-hover:opacity-100" />
+                    <Image src={note.image.src} alt={note.image.alt[locale]} fill loading={index === 0 ? "eager" : "lazy"} sizes="(min-width: 768px) 240px, 100vw" className="object-cover opacity-75 transition-[transform,opacity] duration-500 group-hover:scale-105 group-hover:opacity-100" />
                     <span className="absolute bottom-3 right-3 flex h-8 w-8 items-center justify-center bg-[#f4d431] text-black"><ArrowUpRight aria-hidden="true" className="h-4 w-4" /></span>
                   </figure>
                 </CstdLink>

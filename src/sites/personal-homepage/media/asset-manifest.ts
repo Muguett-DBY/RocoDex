@@ -13,9 +13,9 @@ export const cstdVisualAssets = [
   {
     id: "neural-gate",
     sceneId: "hero",
-    src: "/cstd-universe/cstd-custard-core-v4.webp",
-    alt: "奶油白陶瓷计算核心置于雨夜工程工作室中",
-    position: "62% center",
+    src: "/cstd-universe/cstd-custard-core-v5.webp",
+    alt: "奶油白陶瓷计算核心悬浮于深色工程观测舱中",
+    position: "68% center",
     priority: true,
   },
   {
@@ -60,7 +60,7 @@ export const cstdVisualAssetByScene = Object.fromEntries(
 ) as Record<CstdSceneId, CstdVisualAsset>;
 
 export const cstdEditorialAssets = [
-  { id: "custard-identity-core", src: "/cstd-universe/cstd-custard-core-v4.webp", purpose: "homepage-identity" },
+  { id: "custard-identity-core", src: "/cstd-universe/cstd-custard-core-v5.webp", purpose: "homepage-identity" },
   { id: "cstd-core-world", src: "/cstd-universe/cstd-core-world-v4.webp", purpose: "homepage-six-act-world" },
   { id: "quiet-archive", src: "/cstd-universe/cstd-quiet-archive-v4.webp", purpose: "knowledge-reading-mode" },
   { id: "engineering-observatory", src: "/cstd-universe/cstd-observatory-core-v3.webp", purpose: "homepage-observatory" },

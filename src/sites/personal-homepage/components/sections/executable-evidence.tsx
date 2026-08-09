@@ -10,7 +10,7 @@ function ExecutableEvidence() {
   const replay = cstdCaseReplays[0];
 
   return (
-    <section id="operator" data-cstd-chapter="operator" data-cstd-scene="operator" data-cstd-executable-evidence data-cstd-home-replay={replay.id} aria-labelledby="executable-evidence-heading" className="relative z-20 border-b border-[#ff3b30]/25 bg-[#050709] px-5 py-20 text-[#f2efe7] md:px-10 lg:px-16 lg:py-24">
+    <section data-cstd-chapter="operator" data-cstd-scene="operator" data-cstd-executable-evidence data-cstd-home-replay={replay.id} aria-labelledby="executable-evidence-heading" className="relative z-20 border-b border-[#ff3b30]/25 bg-[#050709] px-5 py-20 text-[#f2efe7] md:px-10 lg:px-16 lg:py-24">
       <div className="mx-auto grid max-w-[1440px] gap-10 xl:grid-cols-[minmax(20rem,0.72fr)_minmax(0,1.28fr)] xl:items-start xl:gap-16">
         <div>
           <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#ff5a50]"><FlaskConical aria-hidden="true" className="h-4 w-4" /> 04 / EXECUTABLE EVIDENCE</p>

@@ -4,6 +4,9 @@ import { describe, expect, test } from "vitest";
 const read = (path: string) => readFileSync(new URL(path, import.meta.url), "utf8");
 const landingSource = read("./personal-homepage.tsx");
 const controlsSource = read("./homepage-controls.tsx");
+const headerSource = read("./homepage-header.tsx");
+const linkSource = read("./site/cstd-link.tsx");
+const chapterLinkSource = read("./site/cstd-chapter-link.tsx");
 const sceneSource = read("./immersive-scene.tsx");
 const liteSceneSource = read("./lite-immersive-scene.tsx");
 const postprocessingSource = read("./immersive-postprocessing.tsx");
@@ -40,7 +43,8 @@ describe("CSTD personal homepage", () => {
 
   test("uses six focused scenes without app-like homepage controls", () => {
     expect(landingSource).toContain("LazyNeuralGate");
-    expect(landingSource).toContain("LazyHomepageHeader");
+    expect(landingSource).toContain('import { HomepageHeader } from "./homepage-header"');
+    expect(landingSource).not.toContain("LazyHomepageHeader");
     expect(landingSource).toContain("LazyLivingStudioTwin");
     expect(landingSource).toContain("LazySelectedWork");
     expect(landingSource).toContain("LazyExecutableEvidence");
@@ -133,6 +137,21 @@ describe("CSTD personal homepage", () => {
     expect(landingSource).not.toContain("ambientSound");
     expect(globalsSource).toContain('[data-cstd-render-policy="balanced"] .cstd-world-rain');
     expect(globalsSource).toContain('[data-cstd-render-policy="enhanced"] .cstd-world-rain');
+  });
+
+  test("keeps primary navigation immediate and prewarmed", () => {
+    expect(linkSource).toContain("router.prefetch");
+    expect(linkSource).toContain("eagerPrefetch");
+    expect(linkSource).not.toContain("startViewTransition");
+    expect(headerSource).toContain("CstdChapterLink");
+    expect(headerSource).toContain("eagerPrefetch");
+    expect(chapterLinkSource).toContain("const alignTarget = () =>");
+    expect(chapterLinkSource).toContain('window.scrollTo({ top: Math.max(0, Math.round(targetTop)), behavior: "instant" })');
+    expect(chapterLinkSource).toContain("data-cstd-anchor-jump");
+    expect(landingSource).toContain('id="systems"');
+    expect(landingSource).toContain('id="proof"');
+    expect(landingSource).toContain('id="operator"');
+    expect(globalsSource).not.toContain("content-visibility: auto");
   });
 
   test("keeps scene changes cinematic without hijacking document scroll", () => {

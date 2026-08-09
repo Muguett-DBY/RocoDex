@@ -30,7 +30,6 @@ function LivingStudioTwin({
 
   return (
     <section
-      id="systems"
       data-cstd-chapter="systems"
       data-cstd-scene="systems"
       data-cstd-studio-twin
