@@ -131,7 +131,7 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
     ["/cstd/feed.json", "application/json"],
     ["/cstd/llms.txt", "text/plain"],
     ["/cstd/manifest.webmanifest", "application/manifest+json"],
-    ["/cstd/.well-known/security.txt", "text/plain"],
+    ["/.well-known/security.txt", "text/plain"],
     ["/cstd-case-worker.js", "javascript"],
   ] as const;
   for (const [url, contentType] of endpoints) {
