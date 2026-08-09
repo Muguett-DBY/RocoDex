@@ -84,6 +84,8 @@ sync_config.py
 !LICENSE.txt
 !src/app/robots.txt/
 !src/app/robots.txt/*.ts
+!src/app/(personal)/cstd/llms.txt/
+!src/app/(personal)/cstd/llms.txt/route.ts
 
 # codex output & reports
 /output/
