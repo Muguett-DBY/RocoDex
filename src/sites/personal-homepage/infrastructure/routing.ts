@@ -13,6 +13,10 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/resume.json",
   "/map",
   "/proof.json",
+  "/graph.json",
+  "/status.json",
+  "/feed.json",
+  "/llms.txt",
   "/en",
   "/en/work",
   "/en/notes",
@@ -23,6 +27,8 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/en/resume.json",
   "/en/map",
   "/en/proof.json",
+  "/en/graph.json",
+  "/en/status.json",
 ]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",
@@ -37,14 +43,17 @@ const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/rss.xml",
   "/sitemap.xml",
   "/api/cstd-vitals",
+  "/cstd-case-worker.js",
 ]);
 
 export const PERSONAL_SITE_SECURITY_HEADERS = {
-  "content-security-policy": "base-uri 'self'; frame-ancestors 'none'; object-src 'none'; form-action 'self'; upgrade-insecure-requests",
+  "content-security-policy": "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; form-action 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self' data:; connect-src 'self' https://*.vercel-insights.com; worker-src 'self'; manifest-src 'self'; frame-src 'none'; upgrade-insecure-requests",
   "cross-origin-opener-policy": "same-origin",
-  "permissions-policy": "camera=(), microphone=(), geolocation=(), browsing-topics=()",
+  "cross-origin-resource-policy": "same-origin",
+  "permissions-policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()",
   "referrer-policy": "strict-origin-when-cross-origin",
   "x-content-type-options": "nosniff",
+  "x-dns-prefetch-control": "off",
   "x-frame-options": "DENY",
 } as const;
 
@@ -74,6 +83,7 @@ export function getPersonalSiteRouteDecision(host: string, path: string): Person
 function isPublicPersonalPagePath(path: string) {
   if (PERSONAL_SITE_PUBLIC_PAGE_ROOTS.has(path)) return true;
   return path.startsWith("/work/")
+    || path.startsWith("/for/")
     || path.startsWith("/notes/")
     || path.startsWith("/lab/")
     || path.startsWith("/en/work/")

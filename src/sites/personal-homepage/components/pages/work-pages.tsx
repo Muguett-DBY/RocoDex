@@ -11,6 +11,8 @@ import { StructuredData } from "../site/structured-data";
 import { CinematicCaseFilm } from "../site/cinematic-case-film";
 import { LiveProofMesh } from "../site/live-proof-mesh";
 import { CstdPageHero } from "./page-hero";
+import { getCstdCaseReplayByCaseSlug } from "../../content/case-replays";
+import { ExecutableCaseReplay } from "../site/executable-case-replay";
 
 const workHero = {
   src: "/cstd-universe/cstd-broadcast-nexus-v1.webp",
@@ -116,6 +118,7 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
   };
   const index = cstdCaseStudies.findIndex((candidate) => candidate.slug === entry.slug);
   const nextEntry = cstdCaseStudies[(index + 1) % cstdCaseStudies.length];
+  const replay = getCstdCaseReplayByCaseSlug(entry.slug);
 
   return (
     <CstdSiteChrome locale={locale} page={`work-${entry.slug}`}>
@@ -130,14 +133,22 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
               </CstdLink>
             </div>
             <dl className="grid gap-6 sm:grid-cols-3">
-              <div><dt className="font-mono text-[8px] font-black text-black/50">{copy.role.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.role[locale]}</dd></div>
-              <div><dt className="font-mono text-[8px] font-black text-black/50">{copy.status.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.status[locale]}</dd></div>
-              <div><dt className="font-mono text-[8px] font-black text-black/50">{copy.stack.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.technologies.join(" · ")}</dd></div>
+              <div><dt className="font-mono text-[8px] font-black text-black/75">{copy.role.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.role[locale]}</dd></div>
+              <div><dt className="font-mono text-[8px] font-black text-black/75">{copy.status.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.status[locale]}</dd></div>
+              <div><dt className="font-mono text-[8px] font-black text-black/75">{copy.stack.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.technologies.join(" · ")}</dd></div>
             </dl>
           </div>
         </section>
 
         <CinematicCaseFilm caseStudy={entry} locale={locale} />
+
+        {replay ? (
+          <section className="border-b border-[#24e0ff]/25 bg-[#06080a] px-5 py-16 md:px-10 lg:px-16 lg:py-24" aria-label={locale === "zh" ? "可执行技术重放" : "Executable technical replay"}>
+            <div className="mx-auto max-w-[1320px]">
+              <ExecutableCaseReplay replay={replay} locale={locale} compact />
+            </div>
+          </section>
+        ) : null}
 
         <LiveProofMesh locale={locale} caseSlug={entry.slug} />
 
@@ -155,7 +166,7 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
               <div className="border-t border-black/30">
                 {entry.evidence.map((evidence, evidenceIndex) => (
                   <div key={evidence.label[locale]} className="grid gap-3 border-b border-black/30 py-5 sm:grid-cols-[3rem_10rem_1fr] sm:items-start">
-                    <span className="font-mono text-[9px] font-black text-black/45">0{evidenceIndex + 1}</span>
+                    <span className="font-mono text-[9px] font-black text-black/75">0{evidenceIndex + 1}</span>
                     <strong className="font-mono text-xs">{evidence.label[locale]}</strong>
                     <p className="text-sm leading-7 text-black/70">{evidence.detail[locale]}</p>
                   </div>

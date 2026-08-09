@@ -5,8 +5,10 @@ import { cstdProofMesh, cstdProofMeshManifest, getCstdProofFreshness } from "./p
 describe("CSTD proof mesh", () => {
   test("publishes one build-time proof node for every case", () => {
     expect(cstdProofMesh.map((entry) => entry.caseSlug).sort()).toEqual(cstdCaseStudies.map((entry) => entry.slug).sort());
-    expect(cstdProofMeshManifest.schemaVersion).toBe(1);
-    expect(cstdProofMeshManifest.release).toBe("CSTD-6.0");
+    expect(cstdProofMeshManifest.schemaVersion).toBe(2);
+    expect(cstdProofMeshManifest.release).toBe("CSTD-7.0");
+    expect(cstdProofMeshManifest.totals.artifacts).toBeGreaterThanOrEqual(20);
+    expect(cstdProofMeshManifest.related.graph).toBe("https://custard.top/graph.json");
   });
 
   test("requires multi-lane evidence and bounded scores", () => {

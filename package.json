@@ -9,6 +9,10 @@
   "scripts": {
     "content:generate": "tsx scripts/generate-cstd-content.ts",
     "content:check": "tsx scripts/generate-cstd-content.ts --check",
+    "cstd:new-case": "tsx scripts/cstd-content-cli.mts new-case",
+    "cstd:new-note": "tsx scripts/cstd-content-cli.mts new-note",
+    "cstd:verify-proof": "tsx scripts/cstd-content-cli.mts verify-proof",
+    "cstd:snapshot": "tsx scripts/cstd-content-cli.mts snapshot",
     "predev": "npm run content:generate",
     "dev": "next dev",
     "prebuild": "npm run content:generate",
@@ -27,7 +31,7 @@
     "test:e2e:rocodex": "playwright test e2e/rocodex.spec.ts",
     "audit:dependencies": "npm audit --audit-level=high",
     "verify:personal-bundle": "node scripts/verify-personal-bundle.mjs",
-    "verify": "npm run content:check && npm run lint && npm run typecheck && npm test && npm run build && npm run verify:personal-bundle",
+    "verify": "npm run content:check && npm run cstd:verify-proof && npm run lint && npm run typecheck && npm test && npm run build && npm run verify:personal-bundle",
     "verify:live-registration": "node --experimental-strip-types scripts/verify-live-registration.mts",
     "ci:local": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& './scripts/stop-local-next.ps1'; npm ci\""
   },
@@ -59,6 +63,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@eslint/js": "10.0.1",
     "@next/eslint-plugin-next": "16.2.12",
     "@playwright/test": "1.62.1",

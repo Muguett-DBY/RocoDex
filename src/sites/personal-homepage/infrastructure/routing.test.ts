@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { getPersonalSiteRouteDecision, isPersonalSiteHost } from "./routing";
+import { getPersonalSiteRouteDecision, isPersonalSiteHost, PERSONAL_SITE_SECURITY_HEADERS } from "./routing";
 
 describe("CSTD host routing", () => {
   test("detects only the apex CSTD domain", () => {
@@ -37,6 +37,11 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/en/map")).toEqual({ kind: "rewrite", path: "/cstd/en/map" });
     expect(getPersonalSiteRouteDecision("custard.top", "/proof.json")).toEqual({ kind: "rewrite", path: "/cstd/proof.json" });
     expect(getPersonalSiteRouteDecision("custard.top", "/en/proof.json")).toEqual({ kind: "rewrite", path: "/cstd/en/proof.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/graph.json")).toEqual({ kind: "rewrite", path: "/cstd/graph.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/status.json")).toEqual({ kind: "rewrite", path: "/cstd/status.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/feed.json")).toEqual({ kind: "rewrite", path: "/cstd/feed.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/llms.txt")).toEqual({ kind: "rewrite", path: "/cstd/llms.txt" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/for/research")).toEqual({ kind: "rewrite", path: "/cstd/for/research" });
   });
 
   test("returns not found for CSTD paths that belong on the RocoDex subdomain", () => {
@@ -66,6 +71,7 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-broadcasts/rocodex-broadcast-v1.mp4")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-districts/ai-creation-v1.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-resume.pdf")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-case-worker.js")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/favicon.ico")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/robots.txt")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/sitemap.xml")).toEqual({ kind: "next" });
@@ -84,5 +90,15 @@ describe("CSTD host routing", () => {
       kind: "redirect",
       host: "custard.top",
     });
+  });
+
+  test("locks the personal host to self-owned scripts, media, workers, and frames", () => {
+    const policy = PERSONAL_SITE_SECURITY_HEADERS["content-security-policy"];
+    expect(policy).toContain("default-src 'self'");
+    expect(policy).toContain("worker-src 'self'");
+    expect(policy).toContain("frame-ancestors 'none'");
+    expect(policy).toContain("frame-src 'none'");
+    expect(PERSONAL_SITE_SECURITY_HEADERS["cross-origin-resource-policy"]).toBe("same-origin");
+    expect(PERSONAL_SITE_SECURITY_HEADERS["permissions-policy"]).toContain("usb=()");
   });
 });

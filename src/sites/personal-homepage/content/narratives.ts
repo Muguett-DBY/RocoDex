@@ -61,3 +61,16 @@ export function getNarrativeSystems(mode: CstdNarrativeMode) {
 export function getNarrativeLabel(mode: CstdNarrativeMode, locale: CstdLocale) {
   return getCstdNarrative(mode).label[locale];
 }
+
+export function getCstdNarrativeSharePath(mode: CstdNarrativeMode) {
+  if (mode === "researcher") return "/for/research";
+  if (mode === "collaborator") return "/for/collaboration";
+  return "/for/builder";
+}
+
+export function parseCstdNarrativeShareSlug(slug: string): CstdNarrativeMode | null {
+  if (slug === "builder") return "builder";
+  if (slug === "research" || slug === "researcher") return "researcher";
+  if (slug === "collaboration" || slug === "collaborator") return "collaborator";
+  return null;
+}

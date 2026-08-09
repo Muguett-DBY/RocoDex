@@ -1,10 +1,11 @@
 "use client";
 
-import { ArrowDown, Command, Zap } from "lucide-react";
+import { ArrowDown, Share2, Zap } from "lucide-react";
 import { clsx } from "clsx";
 import { lazy, memo, Suspense } from "react";
 import type { CstdSystem } from "../../content/systems";
-import { getCstdNarrative, type CstdNarrativeMode } from "../../content/narratives";
+import { getCstdNarrative, getCstdNarrativeSharePath, type CstdNarrativeMode } from "../../content/narratives";
+import { CstdLink } from "../../components/site/cstd-link";
 
 const LazyNarrativeSwitcher = lazy(() => import("../../components/site/narrative-switcher").then((module) => ({ default: module.NarrativeSwitcher })));
 const LazyCstdAtlasPanel = lazy(() => import("../../components/atlas/cstd-atlas-panel").then((module) => ({ default: module.CstdAtlasPanel })));
@@ -17,7 +18,6 @@ const gateSignals = [
 
 function NeuralGate({
   overdrive,
-  onOpenConsole,
   onToggleOverdrive,
   activeSystemId,
   onSelectSystem,
@@ -25,7 +25,6 @@ function NeuralGate({
   onNarrativeChange,
 }: {
   overdrive: boolean;
-  onOpenConsole: () => void;
   onToggleOverdrive: () => void;
   activeSystemId: CstdSystem["id"];
   onSelectSystem: (id: CstdSystem["id"]) => void;
@@ -101,14 +100,13 @@ function NeuralGate({
                 {narrative.action.zh}
                 <ArrowDown aria-hidden="true" className="h-4 w-4" />
               </a>
-              <button
-                type="button"
-                onClick={onOpenConsole}
+              <CstdLink
+                href={getCstdNarrativeSharePath(narrativeMode)}
                 className="inline-flex h-12 items-center gap-3 border border-[#24e0ff]/50 bg-[#061015]/70 px-5 font-mono text-sm font-bold text-[#d8fbff] transition-colors hover:border-[#24e0ff] hover:bg-[#24e0ff] hover:text-[#050709] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"
               >
-                <Command aria-hidden="true" className="h-4 w-4" />
-                CYBERDECK
-              </button>
+                <Share2 aria-hidden="true" className="h-4 w-4" />
+                分享当前路径
+              </CstdLink>
               <button
                 type="button"
                 aria-pressed={overdrive}

@@ -12,7 +12,7 @@ const loadableManifestPath = path.join(
   nextRoot,
   "server/app/(personal)/cstd/page/react-loadable-manifest.json",
 );
-const initialBudget = 180_000;
+const initialBudget = 150_000;
 const webglEntryBudget = 1_000_000;
 const liteWebglBudget = 20_000;
 const webglBudget = 1_500_000;
@@ -42,6 +42,7 @@ if (!routeManifest?.entryJSFiles) {
 
 const initialAssets = unique(Object.values(routeManifest.entryJSFiles).flat());
 const initialBytes = bytesFor(initialAssets);
+const initialAssetReport = initialAssets.map((asset) => ({ asset, bytes: statSync(assetPath(asset)).size }));
 const initialContainsThree = initialAssets.some((asset) => {
   const source = readFileSync(assetPath(asset), "utf8");
   return source.includes("THREE.WebGLRenderer") || source.includes("@react-three/fiber");
@@ -71,6 +72,7 @@ if (initialContainsThree) {
   throw new Error("Three.js code is present in the personal homepage initial entry");
 }
 if (initialBytes > initialBudget) {
+  console.error(JSON.stringify({ initialBytes, initialBudget, initialAssets: initialAssetReport }, null, 2));
   throw new Error(`Personal homepage initial JS is ${initialBytes} bytes; budget is ${initialBudget}`);
 }
 if (webglAssets.length === 0) {

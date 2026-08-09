@@ -5,7 +5,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 const LazyAnalytics = lazy(() => import("@vercel/analytics/next").then((module) => ({ default: module.Analytics })));
 const LazySpeedInsights = lazy(() => import("@vercel/speed-insights/next").then((module) => ({ default: module.SpeedInsights })));
 
-export function VercelObservability() {
+export function VercelObservability({ enabled }: { enabled: boolean }) {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -21,6 +21,6 @@ export function VercelObservability() {
     return () => clearTimeout(timeoutId);
   }, []);
 
-  if (!ready) return null;
+  if (!enabled || !ready) return null;
   return <Suspense fallback={null}><LazyAnalytics /><LazySpeedInsights /></Suspense>;
 }

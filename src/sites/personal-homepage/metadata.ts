@@ -4,6 +4,7 @@ import type { CstdLocale } from "./content/content-types";
 import { getCstdCaseStudy } from "./content/case-studies";
 import { getCstdLab } from "./content/labs";
 import { getCstdTechnicalNote } from "./content/technical-notes";
+import { getCstdNarrative, parseCstdNarrativeShareSlug } from "./content/narratives";
 
 const CSTD_ORIGIN = "https://custard.top";
 
@@ -130,6 +131,12 @@ export function getCstdCaseStudyMetadata(slug: string, locale: CstdLocale) {
   return createCstdMetadata({ title: entry.title[locale], description: entry.summary[locale], path, locale, image: entry.image.src });
 }
 
+export function getCstdCaseStudyOpenGraphData(slug: string) {
+  const entry = getCstdCaseStudy(slug);
+  if (!entry) return null;
+  return { title: entry.title.en, summary: entry.summary.en, technologies: entry.technologies } as const;
+}
+
 export function getCstdNotesMetadata(locale: CstdLocale) {
   return createCstdMetadata({
     locale,
@@ -145,6 +152,25 @@ export function getCstdTechnicalNoteMetadata(slug: string, locale: CstdLocale) {
   if (!note) return {};
   const path = locale === "en" ? `/en/notes/${slug}` : `/notes/${slug}`;
   return createCstdMetadata({ title: note.title[locale], description: note.summary[locale], path, locale, image: note.image.src, type: "article", publishedAt: note.publishedAt });
+}
+
+export function getCstdTechnicalNoteOpenGraphData(slug: string) {
+  const note = getCstdTechnicalNote(slug);
+  if (!note) return null;
+  return { title: note.title.en, summary: note.summary.en, readingMinutes: note.readingMinutes } as const;
+}
+
+export function getCstdAudienceMetadata(audience: string) {
+  const mode = parseCstdNarrativeShareSlug(audience);
+  if (!mode) return {};
+  const narrative = getCstdNarrative(mode);
+  return createCstdMetadata({
+    title: `${narrative.label.zh}观看路径`,
+    description: narrative.description.zh,
+    path: `/for/${audience}`,
+    locale: "zh",
+    image: "/cstd-universe/cstd-neural-gate-v1.webp",
+  });
 }
 
 export function getCstdLabMetadata(slug: string | undefined, locale: CstdLocale) {

@@ -50,19 +50,19 @@ function ensureRelations(cases: readonly CaseDocumentMetadata[], notes: readonly
 }
 
 function serialize(cases: readonly CaseDocumentMetadata[], notes: readonly NoteDocumentMetadata[]) {
-  const caseEntries = cases.map((metadata) => {
+  const caseEntries = cases.filter((metadata) => metadata.publicationStatus === "published").map((metadata) => {
     const { kind, schemaVersion, runtimeStatus, liveHref, ...entry } = metadata;
     void kind;
     void schemaVersion;
     return { ...entry, status: runtimeStatus, ...(liveHref ? { liveHref } : {}) };
   });
-  const noteEntries = notes.map((metadata) => {
+  const noteEntries = notes.filter((metadata) => metadata.publicationStatus === "published").map((metadata) => {
     const { kind, schemaVersion, ...entry } = metadata;
     void kind;
     void schemaVersion;
     return entry;
   });
-  const proofEntries = cases.map((entry) => {
+  const proofEntries = cases.filter((entry) => entry.publicationStatus === "published").map((entry) => {
     const artifactKinds = [...new Set(entry.artifacts.map((artifact) => artifact.kind))].sort();
     const lanes = [
       artifactKinds.some((kind) => kind === "production" || kind === "release"),

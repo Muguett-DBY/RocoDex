@@ -7,6 +7,10 @@ export {
 } from "./infrastructure/routing";
 export { getPersonalHomepageSitemapEntries } from "./infrastructure/sitemap";
 export { serializeCstdRss } from "./infrastructure/rss";
+export { createCstdJsonFeed } from "./infrastructure/json-feed";
+export { serializeCstdLlms } from "./infrastructure/llms";
 export { cstdProofMeshManifest } from "./content/proof-mesh";
-export { parseCstdMetric, type CstdMetric } from "./infrastructure/telemetry";
+export { cstdKnowledgeGraph } from "./content/knowledge-graph";
+export { cstdStudioSnapshot } from "./content/studio-status";
+export { consumeCstdTelemetryQuota, parseCstdMetric, type CstdMetric } from "./infrastructure/telemetry";
 export { serializeCstdResume } from "./infrastructure/resume";

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "CSTD 6.0 Signal City personal engineering studio";
+export const alt = "CSTD 7.0 Living Engineering Dossier";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -17,11 +17,11 @@ export default function OpenGraphImage() {
       <div style={{ position: "relative", display: "flex", flexDirection: "column", justifyContent: "space-between", width: 790, padding: "64px 0 58px 74px" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 20, fontWeight: 700, color: "#24e0ff" }}>
           <span style={{ width: 12, height: 12, display: "flex", background: "#3dff8f" }} />
-          CSTD SIGNAL CITY / RELEASE 6.0
+          CSTD LIVING DOSSIER / RELEASE 7.0
         </div>
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div style={{ display: "flex", fontSize: 138, lineHeight: 0.78, fontWeight: 900, letterSpacing: 0 }}>CSTD</div>
-          <div style={{ marginTop: 34, display: "flex", fontSize: 38, lineHeight: 1.15, fontWeight: 700 }}>Systems that run.<br />Evidence that remains inspectable.</div>
+          <div style={{ marginTop: 34, display: "flex", fontSize: 38, lineHeight: 1.15, fontWeight: 700 }}>Systems that run.<br />Knowledge that can be replayed.</div>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 18, fontSize: 18, fontWeight: 700, color: "#f4d431" }}>
           PRODUCT / AI / DATA / EDGE / RESEARCH

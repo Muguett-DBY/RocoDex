@@ -5,6 +5,7 @@ import { cstdTechnicalNotes } from "../content/technical-notes";
 
 export function getPersonalHomepageSitemapEntries(): SitemapEntry[] {
   const stablePages = ["/work", "/notes", "/lab", "/map", "/about", "/now", "/resume"];
+  const audiencePages = ["/for/builder", "/for/research", "/for/collaboration"];
   const zhPaths = [
     ...stablePages,
     ...cstdCaseStudies.map((entry) => `/work/${entry.slug}`),
@@ -24,6 +25,12 @@ export function getPersonalHomepageSitemapEntries(): SitemapEntry[] {
       priority: 1,
     },
     { url: "https://custard.top/en", lastModified: "2026-08-09", changeFrequency: "weekly", priority: 0.9 },
+    ...audiencePages.map((path): SitemapEntry => ({
+      url: `https://custard.top${path}`,
+      lastModified: "2026-08-09",
+      changeFrequency: "monthly",
+      priority: 0.85,
+    })),
     ...contentEntries,
   ];
 }
