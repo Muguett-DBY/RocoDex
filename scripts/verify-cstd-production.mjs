@@ -1,5 +1,11 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
+
 const origin = (process.env.CSTD_ORIGIN ?? "https://custard.top").replace(/\/$/, "");
 const timeoutMs = 15_000;
+const performanceContract = JSON.parse(
+  readFileSync(path.resolve("src/sites/personal-homepage/content/performance-contract.json"), "utf8"),
+);
 
 async function get(path) {
   const response = await fetch(`${origin}${path}`, {
@@ -48,7 +54,10 @@ if (payloads["/topics.json"].entries?.length !== 5) throw new Error("Topic manif
 if (payloads["/observatory.json"].provenance?.contract !== "cstd.engineering-observatory/v2") throw new Error("Engineering observatory contract is missing");
 if (payloads["/observatory.json"].verification?.length !== 4) throw new Error("Engineering observatory gates are incomplete");
 if (payloads["/content-health.json"].score !== 100) throw new Error("Published content health is not 100");
-if (payloads["/performance.json"].budgets?.initialJavascriptBytes !== 150000) throw new Error("Performance contract initial JS budget is invalid");
+for (const [name, expected] of Object.entries(performanceContract.budgets)) {
+  const actual = payloads["/performance.json"].budgets?.[name];
+  if (actual !== expected) throw new Error(`Performance budget ${name} is ${actual}; expected ${expected}`);
+}
 if (payloads["/performance.json"].cacheComponents?.status !== "evaluated-not-enabled") throw new Error("Cache Components decision is missing");
 if (payloads["/experience.json"].acts?.length !== 6) throw new Error("Experience contract does not contain six acts");
 if (payloads["/experience.json"].identity?.zh !== "奶黄包") throw new Error("Experience contract identity is invalid");
