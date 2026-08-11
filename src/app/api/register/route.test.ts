@@ -1,10 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createUser, findUserByUsername } from "@/lib/db";
+import { consumeRegistrationQuota, createUser, UserAlreadyExistsError } from "@/lib/db";
 import { POST } from "./route";
 
 vi.mock("@/lib/db", () => ({
+  consumeRegistrationQuota: vi.fn(),
   createUser: vi.fn(),
-  findUserByUsername: vi.fn(),
+  UserAlreadyExistsError: class UserAlreadyExistsError extends Error {
+    constructor(username: string) {
+      super(`User already exists: ${username}`);
+      this.name = "UserAlreadyExistsError";
+    }
+  },
 }));
 
 const originalAuthSecret = process.env.AUTH_SECRET;
@@ -18,11 +24,11 @@ function registerRequest(body: Record<string, unknown>) {
   });
 }
 
-function rawRegisterRequest(body: string) {
+function rawRegisterRequest(body: string, headers: Record<string, string> = {}) {
   return new Request("http://localhost/api/register", {
     method: "POST",
     body,
-    headers: { "content-type": "application/json" },
+    headers: { "content-type": "application/json", ...headers },
   });
 }
 
@@ -30,7 +36,7 @@ describe("register API route", () => {
   beforeEach(() => {
     delete process.env.AUTH_SECRET;
     delete process.env.NEXTAUTH_SECRET;
-    vi.mocked(findUserByUsername).mockResolvedValue(undefined);
+    vi.mocked(consumeRegistrationQuota).mockResolvedValue({ allowed: true, retryAfterSeconds: 0 });
     vi.mocked(createUser).mockResolvedValue({
       id: "user-1",
       username: "tester",
@@ -50,7 +56,7 @@ describe("register API route", () => {
 
     await expect(response.json()).resolves.toEqual({ error: "账号功能暂未启用" });
     expect(response.status).toBe(503);
-    expect(findUserByUsername).not.toHaveBeenCalled();
+    expect(consumeRegistrationQuota).not.toHaveBeenCalled();
     expect(createUser).not.toHaveBeenCalled();
   });
 
@@ -64,7 +70,7 @@ describe("register API route", () => {
       user: { id: "user-1", username: "tester" },
     });
     expect(response.status).toBe(200);
-    expect(findUserByUsername).toHaveBeenCalledWith("tester");
+    expect(consumeRegistrationQuota).toHaveBeenCalledWith("local");
     expect(createUser).toHaveBeenCalledWith("tester", expect.any(String));
   });
 
@@ -75,7 +81,21 @@ describe("register API route", () => {
 
     await expect(response.json()).resolves.toEqual({ error: "用户名和密码不能为空" });
     expect(response.status).toBe(400);
-    expect(findUserByUsername).not.toHaveBeenCalled();
+    expect(createUser).not.toHaveBeenCalled();
+  });
+
+  it("stops oversized streamed bodies even when the declared length is forged", async () => {
+    process.env.AUTH_SECRET = "test-secret";
+    const request = rawRegisterRequest(
+      JSON.stringify({ username: "tester", password: "x".repeat(3_000) }),
+      { "content-length": "32" },
+    );
+
+    const response = await POST(request);
+
+    await expect(response.json()).resolves.toEqual({ error: "请求内容过大" });
+    expect(response.status).toBe(413);
+    expect(response.headers.get("cache-control")).toBe("no-store");
     expect(createUser).not.toHaveBeenCalled();
   });
 
@@ -86,8 +106,39 @@ describe("register API route", () => {
 
     await expect(response.json()).resolves.toEqual({ error: "用户名和密码不能为空" });
     expect(response.status).toBe(400);
-    expect(findUserByUsername).not.toHaveBeenCalled();
     expect(createUser).not.toHaveBeenCalled();
+  });
+
+  it("rejects non-object JSON as a client input error", async () => {
+    process.env.AUTH_SECRET = "test-secret";
+
+    const response = await POST(rawRegisterRequest("null"));
+
+    await expect(response.json()).resolves.toEqual({ error: "用户名和密码不能为空" });
+    expect(response.status).toBe(400);
+    expect(createUser).not.toHaveBeenCalled();
+  });
+
+  it("rate limits repeated registration attempts before password hashing or storage writes", async () => {
+    process.env.AUTH_SECRET = "test-secret";
+    vi.mocked(consumeRegistrationQuota).mockResolvedValue({ allowed: false, retryAfterSeconds: 420 });
+
+    const response = await POST(registerRequest({ username: "tester", password: "secret123" }));
+
+    await expect(response.json()).resolves.toEqual({ error: "注册请求过于频繁，请稍后再试" });
+    expect(response.status).toBe(429);
+    expect(response.headers.get("retry-after")).toBe("420");
+    expect(createUser).not.toHaveBeenCalled();
+  });
+
+  it("returns a conflict when another request atomically claims the username", async () => {
+    process.env.AUTH_SECRET = "test-secret";
+    vi.mocked(createUser).mockRejectedValue(new UserAlreadyExistsError("tester"));
+
+    const response = await POST(registerRequest({ username: "tester", password: "secret123" }));
+
+    await expect(response.json()).resolves.toEqual({ error: "该用户名已被注册" });
+    expect(response.status).toBe(409);
   });
 
   it("reports account storage as unavailable when user creation cannot reach Redis", async () => {

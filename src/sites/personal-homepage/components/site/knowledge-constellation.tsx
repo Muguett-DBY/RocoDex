@@ -63,10 +63,10 @@ export function KnowledgeConstellation({ locale }: { locale: CstdLocale }) {
   return (
     <div data-cstd-knowledge-constellation data-cstd-graph-filter={filter} className="relative overflow-hidden border-y border-white/12 bg-[#050709]">
       <div className="flex flex-wrap items-center justify-between gap-5 border-b border-white/12 px-5 py-5 md:px-8">
-        <p className="flex items-center gap-3 font-mono text-[9px] font-black text-[#24e0ff]"><Waypoints aria-hidden="true" className="h-4 w-4" /> GLOBAL KNOWLEDGE GRAPH / {cstdKnowledgeGraph.nodes.length} NODES / {cstdKnowledgeGraph.edges.length} EDGES</p>
+        <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><Waypoints aria-hidden="true" className="h-4 w-4" /> GLOBAL KNOWLEDGE GRAPH / {cstdKnowledgeGraph.nodes.length} NODES / {cstdKnowledgeGraph.edges.length} EDGES</p>
         <div className="flex max-w-full overflow-x-auto border border-white/15" role="group" aria-label={locale === "zh" ? "图谱筛选" : "Graph filter"}>
-          <button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")} className="h-9 shrink-0 border-r border-white/15 px-3 font-mono text-[8px] font-black text-[#8f9ba0] last:border-r-0 hover:text-white aria-pressed:bg-white aria-pressed:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff]">ALL</button>
-          {(Object.keys(typeMeta) as CstdKnowledgeNodeType[]).map((type) => <button key={type} type="button" aria-pressed={filter === type} onClick={() => setFilter(type)} className="h-9 shrink-0 border-r border-white/15 px-3 font-mono text-[8px] font-black text-[#8f9ba0] last:border-r-0 hover:text-white aria-pressed:bg-white aria-pressed:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff]">{typeMeta[type].label[locale].toUpperCase()}</button>)}
+          <button type="button" aria-pressed={filter === "all"} onClick={() => setFilter("all")} className="h-9 shrink-0 border-r border-white/15 px-3 font-mono text-[11px] font-black text-[#8f9ba0] last:border-r-0 hover:text-white aria-pressed:bg-white aria-pressed:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff]">ALL</button>
+          {(Object.keys(typeMeta) as CstdKnowledgeNodeType[]).map((type) => <button key={type} type="button" aria-pressed={filter === type} onClick={() => setFilter(type)} className="h-9 shrink-0 border-r border-white/15 px-3 font-mono text-[11px] font-black text-[#8f9ba0] last:border-r-0 hover:text-white aria-pressed:bg-white aria-pressed:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff]">{typeMeta[type].label[locale].toUpperCase()}</button>)}
         </div>
       </div>
 
@@ -75,11 +75,11 @@ export function KnowledgeConstellation({ locale }: { locale: CstdLocale }) {
           <Image key={art.image} src={art.image} alt="" fill sizes="(max-width: 1024px) 100vw, 28vw" className="object-cover opacity-36" />
           <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,9,0.18),rgba(5,7,9,0.98)_78%)]" />
           <div className="relative flex h-full min-h-[22rem] flex-col justify-end">
-            <p className="font-mono text-[9px] font-black" style={{ color: typeMeta[selected.type].color }}>{selected.type.toUpperCase()} / {selected.updatedAt}</p>
+            <p className="font-mono text-[11px] font-black" style={{ color: typeMeta[selected.type].color }}>{selected.type.toUpperCase()} / {selected.updatedAt}</p>
             <h3 className="mt-4 text-3xl font-semibold leading-tight md:text-4xl">{selected.title[locale]}</h3>
             <p className="mt-5 text-sm leading-7 text-[#aeb7ba]">{selected.summary[locale]}</p>
-            <div className="mt-6 flex flex-wrap gap-2 font-mono text-[8px] font-black text-[#7f8b90]">{selected.capabilityIds.map((id) => <span key={id} className="border border-white/12 px-2 py-1">{id.toUpperCase()}</span>)}</div>
-            <CstdLink href={selected.href[locale]} className="mt-7 inline-flex w-fit items-center gap-3 border-b pb-2 font-mono text-[10px] font-black text-white transition-[gap,color] hover:gap-5" style={{ borderColor: art.accent }}>OPEN NODE <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
+            <div className="mt-6 flex flex-wrap gap-2 font-mono text-[11px] font-black text-[#7f8b90]">{selected.capabilityIds.map((id) => <span key={id} className="border border-white/12 px-2 py-1">{id.toUpperCase()}</span>)}</div>
+            <CstdLink href={selected.href[locale]} className="mt-7 inline-flex w-fit items-center gap-3 border-b pb-2 font-mono text-[11px] font-black text-white transition-[gap,color] hover:gap-5" style={{ borderColor: art.accent }}>OPEN NODE <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
           </div>
         </aside>
 
@@ -106,7 +106,7 @@ export function KnowledgeConstellation({ locale }: { locale: CstdLocale }) {
             return (
               <button key={node.id} type="button" data-cstd-graph-node={node.id} data-cstd-graph-node-active={active ? "true" : "false"} aria-label={`${meta.label[locale]}: ${node.title[locale]}`} aria-pressed={active} onClick={() => selectNode(node)} className="group absolute flex h-7 w-7 -translate-x-1/2 -translate-y-1/2 items-center justify-center border bg-[#050709] transition-[opacity,transform,background-color,border-color] hover:z-20 hover:scale-125 focus-visible:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f4d431] md:h-9 md:w-9" style={{ left: `${coordinate.x / 10}%`, top: `${coordinate.y / 6.5}%`, opacity: visible ? 1 : 0.08, borderColor: active ? art.accent : `${meta.color}88`, backgroundColor: active ? art.accent : undefined, color: active ? "#050709" : meta.color }}>
                 <Icon aria-hidden="true" className="h-3 w-3 md:h-4 md:w-4" />
-                {(node.type === "system" || active) ? <span className="pointer-events-none absolute left-1/2 top-full mt-2 w-28 -translate-x-1/2 text-center font-mono text-[7px] font-black text-white opacity-75 group-hover:opacity-100 md:w-36 md:text-[8px]">{node.title[locale]}</span> : null}
+                {(node.type === "system" || active) ? <span className="pointer-events-none absolute left-1/2 top-full mt-2 w-28 -translate-x-1/2 text-center font-mono text-[11px] font-black text-white opacity-75 group-hover:opacity-100 md:w-36 md:text-[11px]">{node.title[locale]}</span> : null}
               </button>
             );
           })}

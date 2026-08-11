@@ -16,8 +16,12 @@ export type CstdSceneClock = {
 type SceneClockOptions = {
   rootRef: RefObject<HTMLElement | null>;
   progressBarRef?: RefObject<HTMLElement | null>;
-  depthRef?: RefObject<HTMLElement | null>;
-  chapterRef?: RefObject<HTMLElement | null>;
+};
+
+type SceneMetric = {
+  id: CstdSceneId;
+  top: number;
+  height: number;
 };
 
 function clamp(value: number) {
@@ -27,8 +31,6 @@ function clamp(value: number) {
 export function useCstdSceneClock({
   rootRef,
   progressBarRef,
-  depthRef,
-  chapterRef,
 }: SceneClockOptions): CstdSceneClock {
   const progressRef = useRef(0);
   const sceneProgressRef = useRef(0);
@@ -42,6 +44,39 @@ export function useCstdSceneClock({
     let velocityTimeout = 0;
     let lastScrollY = window.scrollY;
     let lastTimestamp = performance.now();
+    let sceneMetrics: SceneMetric[] = [];
+    let maxScroll = 1;
+    let viewportHeight = window.innerHeight;
+
+    const commitActiveScene = (nextSceneId: CstdSceneId) => {
+      if (nextSceneId === activeSceneRef.current) return;
+      activeSceneRef.current = nextSceneId;
+      const root = rootRef.current;
+      if (root) root.dataset.cstdSceneCurrent = nextSceneId;
+      setActiveSceneId(nextSceneId);
+    };
+
+    const resolveActiveScene = (scrollY: number) => {
+      const activationPoint = scrollY + viewportHeight * 0.52;
+      let nextSceneId: CstdSceneId = "hero";
+      for (const metric of sceneMetrics) {
+        if (metric.top > activationPoint) break;
+        nextSceneId = metric.id;
+      }
+      return nextSceneId;
+    };
+
+    const refreshMetrics = () => {
+      viewportHeight = window.innerHeight;
+      sceneMetrics = cstdSceneManifest.flatMap((scene) => {
+        const element = document.getElementById(scene.elementId);
+        if (!element) return [];
+        const bounds = element.getBoundingClientRect();
+        return [{ id: scene.id, top: bounds.top + window.scrollY, height: element.offsetHeight }];
+      });
+      maxScroll = Math.max(1, document.documentElement.scrollHeight - viewportHeight);
+      commitActiveScene(resolveActiveScene(window.scrollY));
+    };
 
     const sync = () => {
       frame = 0;
@@ -49,70 +84,50 @@ export function useCstdSceneClock({
       if (!root) return;
 
       const timestamp = performance.now();
-      const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-      const globalProgress = clamp(window.scrollY / maxScroll);
+      const scrollY = window.scrollY;
+      const globalProgress = clamp(scrollY / maxScroll);
       const elapsed = Math.max(16, timestamp - lastTimestamp);
-      const deltaY = window.scrollY - lastScrollY;
+      const deltaY = scrollY - lastScrollY;
       const velocity = Math.min(1, Math.abs(deltaY) / elapsed / 1.35);
-      lastScrollY = window.scrollY;
+      lastScrollY = scrollY;
       lastTimestamp = timestamp;
 
-      let nextSceneId: CstdSceneId = "hero";
-      const activationLine = window.innerHeight * 0.52;
-      if (window.scrollY > 1) {
-        for (const scene of cstdSceneManifest) {
-          const element = document.getElementById(scene.elementId);
-          if (element && element.getBoundingClientRect().top <= activationLine) nextSceneId = scene.id;
-        }
-      }
-
+      const nextSceneId = resolveActiveScene(scrollY);
+      commitActiveScene(nextSceneId);
       const scene = cstdSceneById[nextSceneId];
-      const sceneElement = document.getElementById(scene.elementId);
-      let sceneProgress = 0;
-      if (sceneElement) {
-        const scrollableDistance = Math.max(1, sceneElement.offsetHeight - window.innerHeight);
-        const sceneStart = sceneElement.getBoundingClientRect().top + window.scrollY;
-        sceneProgress = clamp((window.scrollY - sceneStart) / scrollableDistance);
-      }
+      const metric = sceneMetrics.find((candidate) => candidate.id === nextSceneId);
+      const scrollableDistance = Math.max(1, (metric?.height ?? viewportHeight) - viewportHeight);
+      const sceneProgress = metric ? clamp((scrollY - metric.top) / scrollableDistance) : 0;
 
       progressRef.current = globalProgress;
       sceneProgressRef.current = sceneProgress;
       sceneIndexRef.current = scene.index;
       velocityRef.current = velocity;
 
-      root.dataset.cstdSceneCurrent = nextSceneId;
-      root.style.setProperty("--cstd-progress", globalProgress.toFixed(4));
       root.style.setProperty("--cstd-scene-progress", sceneProgress.toFixed(4));
-      root.style.setProperty("--cstd-scene-index", String(scene.index));
-      root.style.setProperty("--cstd-scroll-direction", deltaY < 0 ? "-1" : "1");
       root.style.setProperty("--cstd-scroll-velocity", velocity.toFixed(3));
-      root.style.setProperty("--cstd-scroll-velocity-percent", `${Math.round(velocity * 100)}%`);
-      root.style.setProperty("--cstd-speed-offset", `${Math.round(window.scrollY % 72)}px`);
-      root.style.setProperty("--cstd-chapter-progress", sceneProgress.toFixed(4));
-      root.style.setProperty("--cstd-chapter-shift", `${Math.round(sceneProgress * 100)}%`);
-
       if (progressBarRef?.current) progressBarRef.current.style.transform = `scaleX(${globalProgress})`;
-      if (depthRef?.current) depthRef.current.textContent = `${String(Math.round(globalProgress * 8192)).padStart(4, "0")}M`;
-      if (chapterRef?.current) chapterRef.current.textContent = scene.label.toUpperCase();
-
-      window.clearTimeout(velocityTimeout);
-      velocityTimeout = window.setTimeout(() => {
-        velocityRef.current = 0;
-        root.style.setProperty("--cstd-scroll-velocity", "0");
-      }, 140);
-
-      if (nextSceneId !== activeSceneRef.current) {
-        activeSceneRef.current = nextSceneId;
-        setActiveSceneId(nextSceneId);
-      }
     };
 
     const requestSync = () => {
+      if (viewportHeight !== window.innerHeight) refreshMetrics();
       if (!frame) frame = window.requestAnimationFrame(sync);
+      window.clearTimeout(velocityTimeout);
+      velocityTimeout = window.setTimeout(() => {
+        velocityRef.current = 0;
+        rootRef.current?.style.setProperty("--cstd-scroll-velocity", "0");
+      }, 140);
     };
 
+    const root = rootRef.current;
+    if (root) root.dataset.cstdSceneCurrent = activeSceneRef.current;
+    refreshMetrics();
     sync();
-    const resizeObserver = new ResizeObserver(requestSync);
+
+    const resizeObserver = new ResizeObserver(() => {
+      refreshMetrics();
+      requestSync();
+    });
     resizeObserver.observe(document.documentElement);
     window.addEventListener("scroll", requestSync, { passive: true });
     window.addEventListener("resize", requestSync);
@@ -123,7 +138,7 @@ export function useCstdSceneClock({
       window.clearTimeout(velocityTimeout);
       if (frame) window.cancelAnimationFrame(frame);
     };
-  }, [chapterRef, depthRef, progressBarRef, rootRef]);
+  }, [progressBarRef, rootRef]);
 
   return { activeSceneId, progressRef, sceneProgressRef, sceneIndexRef, velocityRef };
 }

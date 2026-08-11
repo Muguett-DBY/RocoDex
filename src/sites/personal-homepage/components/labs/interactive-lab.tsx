@@ -54,10 +54,10 @@ function TraceTimeline({ locale, steps, active, staleFrom }: { locale: CstdLocal
         const stale = typeof staleFrom === "number" && index >= staleFrom && index <= active;
         return (
           <div key={step.label} data-active={current ? "true" : "false"} className={`relative min-h-40 border p-4 transition-[border-color,background-color,transform] duration-500 ${current ? "-translate-y-2 border-[#f4d431] bg-[#f4d431]/10" : complete ? "border-[#24e0ff]/45 bg-[#24e0ff]/5" : "border-white/12 bg-black/15"}`}>
-            <p className="font-mono text-[8px] font-black text-[#6f7b80]">{String(index + 1).padStart(2, "0")} / {step.signal}</p>
+            <p className="font-mono text-[11px] font-black text-[#6f7b80]">{String(index + 1).padStart(2, "0")} / {step.signal}</p>
             <p className={`mt-4 text-base font-semibold ${stale ? "text-[#ff6b63]" : current ? "text-[#f4d431]" : complete ? "text-[#24e0ff]" : "text-[#aab3b6]"}`}>{step.label}</p>
             <p className="mt-3 text-xs leading-6 text-[#7f8a8f]">{step.detail}</p>
-            {stale ? <p className="mt-4 font-mono text-[8px] font-black text-[#ff6b63]">{locale === "zh" ? "STALE / 写权限撤销" : "STALE / WRITE REVOKED"}</p> : null}
+            {stale ? <p className="mt-4 font-mono text-[11px] font-black text-[#ff6b63]">{locale === "zh" ? "STALE / 写权限撤销" : "STALE / WRITE REVOKED"}</p> : null}
           </div>
         );
       })}
@@ -107,16 +107,16 @@ function SystemTraceLab({ locale }: { locale: CstdLocale }) {
   return (
     <div data-cstd-lab="system-trace">
       <div className="flex flex-wrap items-center justify-between gap-5">
-        <div><p className="font-mono text-[9px] font-black text-[#24e0ff]">LIVE REQUEST / ROUTING CONTRACT</p><p className="mt-2 text-sm text-[#8f9ba0]">{locale === "zh" ? "修改 Host 与路径，执行真实边界函数。" : "Change host and path, then execute the real boundary function."}</p></div>
+        <div><p className="font-mono text-[11px] font-black text-[#24e0ff]">LIVE REQUEST / ROUTING CONTRACT</p><p className="mt-2 text-sm text-[#8f9ba0]">{locale === "zh" ? "修改 Host 与路径，执行真实边界函数。" : "Change host and path, then execute the real boundary function."}</p></div>
         <PlaybackControls locale={locale} playing={playing} canAdvance={active < steps.length - 1} onToggle={() => setPlaying((value) => !value)} onReset={() => { setPlaying(false); setActive(0); }} onAdvance={() => setActive((value) => Math.min(steps.length - 1, value + 1))} />
       </div>
       <div className="mt-7 grid gap-px bg-white/12 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_12rem]">
-        <label className="bg-[#07090b] p-4 font-mono text-[8px] font-black text-[#78858a]">HOST<input value={host} onChange={(event) => updateRequest(setHost, event.target.value)} className="mt-2 h-11 w-full border border-white/15 bg-black/25 px-3 font-mono text-sm text-white outline-none focus:border-[#24e0ff]" /></label>
-        <label className="bg-[#07090b] p-4 font-mono text-[8px] font-black text-[#78858a]">PATH<input value={path} onChange={(event) => updateRequest(setPath, event.target.value)} className="mt-2 h-11 w-full border border-white/15 bg-black/25 px-3 font-mono text-sm text-white outline-none focus:border-[#24e0ff]" /></label>
-        <div data-cstd-route-decision={decision.kind} className="flex min-h-20 flex-col justify-center bg-[#071012] p-4"><p className="font-mono text-[8px] font-black text-[#78858a]">DECISION</p><p className="mt-2 break-all font-mono text-sm font-black text-[#f4d431]">{decision.kind.toUpperCase()}<span className="mt-1 block text-[8px] text-[#24e0ff]">{decisionTarget}</span></p></div>
+        <label className="bg-[#07090b] p-4 font-mono text-[11px] font-black text-[#78858a]">HOST<input value={host} onChange={(event) => updateRequest(setHost, event.target.value)} className="mt-2 h-11 w-full border border-white/15 bg-black/25 px-3 font-mono text-sm text-white outline-none focus:border-[#24e0ff]" /></label>
+        <label className="bg-[#07090b] p-4 font-mono text-[11px] font-black text-[#78858a]">PATH<input value={path} onChange={(event) => updateRequest(setPath, event.target.value)} className="mt-2 h-11 w-full border border-white/15 bg-black/25 px-3 font-mono text-sm text-white outline-none focus:border-[#24e0ff]" /></label>
+        <div data-cstd-route-decision={decision.kind} className="flex min-h-20 flex-col justify-center bg-[#071012] p-4"><p className="font-mono text-[11px] font-black text-[#78858a]">DECISION</p><p className="mt-2 break-all font-mono text-sm font-black text-[#f4d431]">{decision.kind.toUpperCase()}<span className="mt-1 block text-[11px] text-[#24e0ff]">{decisionTarget}</span></p></div>
       </div>
       <TraceTimeline locale={locale} steps={steps} active={active} />
-      <div className="mt-6 border-l-2 border-[#f4d431] bg-black/25 p-5 font-mono text-[10px] leading-6 text-[#b9c2c4]" aria-live="polite">
+      <div className="mt-6 border-l-2 border-[#f4d431] bg-black/25 p-5 font-mono text-[11px] leading-6 text-[#b9c2c4]" aria-live="polite">
         <span className="text-[#f4d431]">TRACE {String(active + 1).padStart(2, "0")}</span> / {steps[active].detail}
       </div>
     </div>
@@ -177,7 +177,7 @@ function AgentReplayLab({ locale }: { locale: CstdLocale }) {
     <div data-cstd-lab="agent-replay">
       <div className="flex flex-wrap items-center justify-between gap-5">
         <div>
-          <p className="font-mono text-[9px] font-black text-[#24e0ff]">RUN TOKEN / alpha:research:042</p>
+          <p className="font-mono text-[11px] font-black text-[#24e0ff]">RUN TOKEN / alpha:research:042</p>
           <label className="mt-4 flex cursor-pointer items-center gap-3 text-sm text-[#aab3b6]"><input type="checkbox" checked={injectStale} onChange={(event) => setInjectStale(event.target.checked)} className="h-4 w-4 accent-[#ff5a50]" />{locale === "zh" ? "在综合阶段注入一个更新任务" : "Inject a newer run during synthesis"}</label>
         </div>
         <PlaybackControls locale={locale} playing={playing} canAdvance={active < steps.length - 1} onToggle={() => setPlaying((value) => !value)} onReset={() => { setPlaying(false); setActive(0); }} onAdvance={() => setActive((value) => Math.min(steps.length - 1, value + 1))} />
@@ -190,18 +190,18 @@ function AgentReplayLab({ locale }: { locale: CstdLocale }) {
       </div>
       <div data-cstd-conflict-forge data-cstd-conflict-state={commitState} className="mt-8 border-y border-white/15 bg-black/20 p-5 md:p-6">
         <div className="flex flex-wrap items-start justify-between gap-5">
-          <div><p className="font-mono text-[9px] font-black text-[#f4d431]">OPTIMISTIC LOCK / CRM VERSION FORGE</p><p className="mt-2 text-sm leading-6 text-[#8f9ba0]">{locale === "zh" ? "让另一位操作者先写入，再提交当前草稿，观察版本锁如何拒绝覆盖。" : "Let another operator write first, then submit this draft to see the version lock reject overwrite."}</p></div>
+          <div><p className="font-mono text-[11px] font-black text-[#f4d431]">OPTIMISTIC LOCK / CRM VERSION FORGE</p><p className="mt-2 text-sm leading-6 text-[#8f9ba0]">{locale === "zh" ? "让另一位操作者先写入，再提交当前草稿，观察版本锁如何拒绝覆盖。" : "Let another operator write first, then submit this draft to see the version lock reject overwrite."}</p></div>
           <div className="flex gap-2">
-            <button type="button" onClick={injectConcurrentEdit} className="h-10 border border-[#24e0ff]/45 px-3 font-mono text-[8px] font-black text-[#24e0ff] hover:bg-[#24e0ff] hover:text-black">{locale === "zh" ? "注入并发编辑" : "Concurrent edit"}</button>
-            <button type="button" onClick={commitDraft} className="inline-flex h-10 items-center gap-2 bg-[#f4d431] px-3 font-mono text-[8px] font-black text-black hover:bg-white"><GitCommitHorizontal aria-hidden="true" className="h-3.5 w-3.5" />{locale === "zh" ? "提交草稿" : "Commit draft"}</button>
+            <button type="button" onClick={injectConcurrentEdit} className="h-10 border border-[#24e0ff]/45 px-3 font-mono text-[11px] font-black text-[#24e0ff] hover:bg-[#24e0ff] hover:text-black">{locale === "zh" ? "注入并发编辑" : "Concurrent edit"}</button>
+            <button type="button" onClick={commitDraft} className="inline-flex h-10 items-center gap-2 bg-[#f4d431] px-3 font-mono text-[11px] font-black text-black hover:bg-white"><GitCommitHorizontal aria-hidden="true" className="h-3.5 w-3.5" />{locale === "zh" ? "提交草稿" : "Commit draft"}</button>
           </div>
         </div>
         <div className="mt-6 grid gap-px bg-white/12 sm:grid-cols-3">
-          <div className="bg-[#07090b] p-4"><p className="font-mono text-[8px] font-black text-[#78858a]">CLIENT VERSION</p><p className="mt-2 font-mono text-3xl font-black text-[#24e0ff]">v{clientVersion}</p></div>
-          <div className="bg-[#07090b] p-4"><p className="font-mono text-[8px] font-black text-[#78858a]">SERVER VERSION</p><p className="mt-2 font-mono text-3xl font-black text-[#f4d431]">v{serverVersion}</p></div>
-          <div aria-live="polite" className="bg-[#07090b] p-4"><p className="font-mono text-[8px] font-black text-[#78858a]">COMMIT RESULT</p><p className={`mt-2 flex items-center gap-2 font-mono text-sm font-black ${commitState === "conflict" ? "text-[#ff5a50]" : "text-[#3dff8f]"}`}>{commitState === "conflict" ? <ShieldX aria-hidden="true" className="h-4 w-4" /> : <CheckCircle2 aria-hidden="true" className="h-4 w-4" />}{commitState === "conflict" ? "409 VERSION CONFLICT" : commitState === "committed" ? "200 COMMITTED" : "READY"}</p></div>
+          <div className="bg-[#07090b] p-4"><p className="font-mono text-[11px] font-black text-[#78858a]">CLIENT VERSION</p><p className="mt-2 font-mono text-3xl font-black text-[#24e0ff]">v{clientVersion}</p></div>
+          <div className="bg-[#07090b] p-4"><p className="font-mono text-[11px] font-black text-[#78858a]">SERVER VERSION</p><p className="mt-2 font-mono text-3xl font-black text-[#f4d431]">v{serverVersion}</p></div>
+          <div aria-live="polite" className="bg-[#07090b] p-4"><p className="font-mono text-[11px] font-black text-[#78858a]">COMMIT RESULT</p><p className={`mt-2 flex items-center gap-2 font-mono text-sm font-black ${commitState === "conflict" ? "text-[#ff5a50]" : "text-[#3dff8f]"}`}>{commitState === "conflict" ? <ShieldX aria-hidden="true" className="h-4 w-4" /> : <CheckCircle2 aria-hidden="true" className="h-4 w-4" />}{commitState === "conflict" ? "409 VERSION CONFLICT" : commitState === "committed" ? "200 COMMITTED" : "READY"}</p></div>
         </div>
-        <button type="button" onClick={() => { setServerVersion(7); setClientVersion(7); setCommitState("clean"); }} className="mt-5 inline-flex items-center gap-2 font-mono text-[8px] font-black text-[#8f9ba0] hover:text-white"><RotateCcw aria-hidden="true" className="h-3.5 w-3.5" />RESET VERSIONS</button>
+        <button type="button" onClick={() => { setServerVersion(7); setClientVersion(7); setCommitState("clean"); }} className="mt-5 inline-flex items-center gap-2 font-mono text-[11px] font-black text-[#8f9ba0] hover:text-white"><RotateCcw aria-hidden="true" className="h-3.5 w-3.5" />RESET VERSIONS</button>
       </div>
     </div>
   );
@@ -232,11 +232,11 @@ function DataLensLab({ locale }: { locale: CstdLocale }) {
           { id: "margin", label: copy.margin, value: margin, min: 0, max: 50, set: setMargin },
         ].map((control) => (
           <div key={control.id}>
-            <div className="flex items-center justify-between gap-5"><label htmlFor={`lens-${control.id}`} className="font-mono text-[9px] font-black text-[#aab3b6]">{control.label.toUpperCase()}</label><output htmlFor={`lens-${control.id}`} data-cstd-control-value={control.id} className="w-16 text-right font-mono text-lg font-black text-[#f4d431]">{control.value}%</output></div>
+            <div className="flex items-center justify-between gap-5"><label htmlFor={`lens-${control.id}`} className="font-mono text-[11px] font-black text-[#aab3b6]">{control.label.toUpperCase()}</label><output htmlFor={`lens-${control.id}`} data-cstd-control-value={control.id} className="w-16 text-right font-mono text-lg font-black text-[#f4d431]">{control.value}%</output></div>
             <input id={`lens-${control.id}`} type="range" min={control.min} max={control.max} step="0.5" value={control.value} onChange={(event) => control.set(Number(event.target.value))} className="mt-3 w-full accent-[#24e0ff]" />
           </div>
         ))}
-        <button type="button" onClick={() => { setGrowth(6); setDiscount(10); setMargin(25); }} className="inline-flex items-center gap-2 border-b border-white/30 pb-1 font-mono text-[9px] font-black text-[#8f9ba0] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"><RotateCcw aria-hidden="true" className="h-3.5 w-3.5" /> RESET BASELINE</button>
+        <button type="button" onClick={() => { setGrowth(6); setDiscount(10); setMargin(25); }} className="inline-flex items-center gap-2 border-b border-white/30 pb-1 font-mono text-[11px] font-black text-[#8f9ba0] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"><RotateCcw aria-hidden="true" className="h-3.5 w-3.5" /> RESET BASELINE</button>
       </div>
 
       <div>
@@ -252,20 +252,20 @@ function DataLensLab({ locale }: { locale: CstdLocale }) {
             { label: copy.base, value: base.value, color: "text-[#24e0ff]" },
             { label: copy.bull, value: bull, color: "text-[#3dff8f]" },
             { label: copy.buy, value: buyLine, color: "text-[#f4d431]" },
-          ].map((metric) => <div key={metric.label} className="border-white/12 p-4 odd:border-r md:border-r md:last:border-r-0"><dt className="font-mono text-[8px] font-black text-[#68757b]">{metric.label.toUpperCase()}</dt><dd className={`mt-2 text-xl font-semibold ${metric.color}`}>{metric.value.toFixed(0)}</dd></div>)}
+          ].map((metric) => <div key={metric.label} className="border-white/12 p-4 odd:border-r md:border-r md:last:border-r-0"><dt className="font-mono text-[11px] font-black text-[#68757b]">{metric.label.toUpperCase()}</dt><dd className={`mt-2 text-xl font-semibold ${metric.color}`}>{metric.value.toFixed(0)}</dd></div>)}
         </dl>
         <p className="mt-5 text-xs leading-6 text-[#78858a]">{copy.note}</p>
         <div data-cstd-dcf-sensitivity className="mt-8 overflow-x-auto border-y border-white/15 py-5">
-          <div className="mb-4 flex items-center justify-between gap-5"><p className="font-mono text-[9px] font-black text-[#24e0ff]">5 × 5 SENSITIVITY SURFACE</p><button type="button" onClick={() => void navigator.clipboard?.writeText(JSON.stringify({ growth, discount, margin, value: Number(base.value.toFixed(2)) }))} aria-label={locale === "zh" ? "复制当前估值场景" : "Copy valuation scenario"} title={locale === "zh" ? "复制当前估值场景" : "Copy valuation scenario"} className="flex h-9 w-9 items-center justify-center border border-white/18 text-[#8f9ba0] hover:border-[#f4d431] hover:text-[#f4d431]"><Copy aria-hidden="true" className="h-4 w-4" /></button></div>
+          <div className="mb-4 flex items-center justify-between gap-5"><p className="font-mono text-[11px] font-black text-[#24e0ff]">5 × 5 SENSITIVITY SURFACE</p><button type="button" onClick={() => void navigator.clipboard?.writeText(JSON.stringify({ growth, discount, margin, value: Number(base.value.toFixed(2)) }))} aria-label={locale === "zh" ? "复制当前估值场景" : "Copy valuation scenario"} title={locale === "zh" ? "复制当前估值场景" : "Copy valuation scenario"} className="flex h-9 w-9 items-center justify-center border border-white/18 text-[#8f9ba0] hover:border-[#f4d431] hover:text-[#f4d431]"><Copy aria-hidden="true" className="h-4 w-4" /></button></div>
           <div className="grid min-w-[34rem] grid-cols-[4.5rem_repeat(5,minmax(0,1fr))] gap-px bg-white/12">
-            <div className="bg-[#07090b] p-2 font-mono text-[7px] font-black text-[#68757b]">WACC \ G</div>
-            {sensitivity[0].map((cell) => <div key={`g-${cell.growth}`} className="bg-[#07090b] p-2 text-center font-mono text-[8px] font-black text-[#24e0ff]">{cell.growth.toFixed(1)}%</div>)}
+            <div className="bg-[#07090b] p-2 font-mono text-[11px] font-black text-[#68757b]">WACC \ G</div>
+            {sensitivity[0].map((cell) => <div key={`g-${cell.growth}`} className="bg-[#07090b] p-2 text-center font-mono text-[11px] font-black text-[#24e0ff]">{cell.growth.toFixed(1)}%</div>)}
             {sensitivity.map((row) => [
-              <div key={`d-${row[0].discount}`} className="bg-[#07090b] p-3 text-center font-mono text-[8px] font-black text-[#f4d431]">{row[0].discount.toFixed(1)}%</div>,
+              <div key={`d-${row[0].discount}`} className="bg-[#07090b] p-3 text-center font-mono text-[11px] font-black text-[#f4d431]">{row[0].discount.toFixed(1)}%</div>,
               ...row.map((cell) => {
                 const intensity = (cell.value - sensitivityMin) / sensitivityRange;
                 const activeCell = cell.growth === growth && cell.discount === discount;
-                return <button key={`${cell.discount}-${cell.growth}`} type="button" onClick={() => { setGrowth(cell.growth); setDiscount(cell.discount); }} aria-label={locale === "zh" ? `估值场景：增长 ${cell.growth}%，折现 ${cell.discount}%，价值 ${cell.value.toFixed(0)}` : `Valuation scenario: growth ${cell.growth}%, discount ${cell.discount}%, value ${cell.value.toFixed(0)}`} className={`min-h-12 p-2 font-mono text-[9px] font-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#f4d431] ${activeCell ? "ring-2 ring-inset ring-[#f4d431]" : ""}`} style={{ backgroundColor: `rgba(36,224,255,${(0.08 + intensity * 0.42).toFixed(3)})` }}>{cell.value.toFixed(0)}</button>;
+                return <button key={`${cell.discount}-${cell.growth}`} type="button" onClick={() => { setGrowth(cell.growth); setDiscount(cell.discount); }} aria-label={locale === "zh" ? `估值场景：增长 ${cell.growth}%，折现 ${cell.discount}%，价值 ${cell.value.toFixed(0)}` : `Valuation scenario: growth ${cell.growth}%, discount ${cell.discount}%, value ${cell.value.toFixed(0)}`} className={`min-h-12 p-2 font-mono text-[11px] font-black text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#f4d431] ${activeCell ? "ring-2 ring-inset ring-[#f4d431]" : ""}`} style={{ backgroundColor: `rgba(36,224,255,${(0.08 + intensity * 0.42).toFixed(3)})` }}>{cell.value.toFixed(0)}</button>;
               }),
             ])}
           </div>
@@ -358,21 +358,21 @@ function RenderLab({ locale }: { locale: CstdLocale }) {
     <div data-cstd-lab="render-lab">
       <div className="flex flex-wrap items-center justify-between gap-5">
         <div className="flex border border-white/15" role="group" aria-label={locale === "zh" ? "渲染预算" : "Render budget"}>
-          {(["full", "balanced", "calm"] as const).map((mode) => <button key={mode} type="button" aria-pressed={budget === mode} onClick={() => setBudget(mode)} className="h-10 border-r border-white/15 px-4 font-mono text-[9px] font-black uppercase text-[#8f9ba0] last:border-r-0 hover:text-white aria-pressed:bg-[#f4d431] aria-pressed:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff]">{mode}</button>)}
+          {(["full", "balanced", "calm"] as const).map((mode) => <button key={mode} type="button" aria-pressed={budget === mode} onClick={() => setBudget(mode)} className="h-10 border-r border-white/15 px-4 font-mono text-[11px] font-black uppercase text-[#8f9ba0] last:border-r-0 hover:text-white aria-pressed:bg-[#f4d431] aria-pressed:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff]">{mode}</button>)}
         </div>
-        <div className="font-mono text-[9px] font-black text-[#718087]">LIVE FPS <span data-cstd-render-fps aria-live="polite" className="ml-2 inline-block w-12 text-right text-xl text-[#3dff8f]">{fps || "--"}</span></div>
+        <div className="font-mono text-[11px] font-black text-[#718087]">LIVE FPS <span data-cstd-render-fps aria-live="polite" className="ml-2 inline-block w-12 text-right text-xl text-[#3dff8f]">{fps || "--"}</span></div>
       </div>
       <div className="mt-6 overflow-hidden border border-white/15"><RenderProbe budget={budget} onFps={onFps} /></div>
       <dl className="grid grid-cols-3 border-x border-b border-white/15">
-        <div className="border-r border-white/15 p-4"><dt className="font-mono text-[8px] font-black text-[#68757b]">PARTICLES</dt><dd className="mt-2 text-lg font-semibold text-[#24e0ff]">{config.particles}</dd></div>
-        <div className="border-r border-white/15 p-4"><dt className="font-mono text-[8px] font-black text-[#68757b]">DPR CAP</dt><dd className="mt-2 text-lg font-semibold text-[#f4d431]">{config.dpr}</dd></div>
-        <div className="p-4"><dt className="font-mono text-[8px] font-black text-[#68757b]">GLOW</dt><dd className="mt-2 text-lg font-semibold text-white">{config.glow}</dd></div>
+        <div className="border-r border-white/15 p-4"><dt className="font-mono text-[11px] font-black text-[#68757b]">PARTICLES</dt><dd className="mt-2 text-lg font-semibold text-[#24e0ff]">{config.particles}</dd></div>
+        <div className="border-r border-white/15 p-4"><dt className="font-mono text-[11px] font-black text-[#68757b]">DPR CAP</dt><dd className="mt-2 text-lg font-semibold text-[#f4d431]">{config.dpr}</dd></div>
+        <div className="p-4"><dt className="font-mono text-[11px] font-black text-[#68757b]">GLOW</dt><dd className="mt-2 text-lg font-semibold text-white">{config.glow}</dd></div>
       </dl>
       <dl data-cstd-runtime-diagnostics className="grid border-x border-b border-white/15 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="border-b border-white/15 p-4 sm:border-r lg:border-b-0"><dt className="font-mono text-[8px] font-black text-[#68757b]">AUTO TIER</dt><dd className="mt-2 font-mono text-sm font-black text-[#3dff8f]">{runtime?.tier.toUpperCase() ?? "PROBING"}</dd></div>
-        <div className="border-b border-white/15 p-4 lg:border-b-0 lg:border-r"><dt className="font-mono text-[8px] font-black text-[#68757b]">BACKEND</dt><dd className="mt-2 font-mono text-sm font-black text-[#24e0ff]">{runtime?.backend.toUpperCase() ?? "--"}</dd></div>
-        <div className="border-b border-white/15 p-4 sm:border-r lg:border-b-0"><dt className="font-mono text-[8px] font-black text-[#68757b]">WEBGPU READY</dt><dd className="mt-2 font-mono text-sm font-black text-[#f4d431]">{runtime ? (runtime.webgpu ? "YES" : "NO / FALLBACK") : "--"}</dd></div>
-        <div className="p-4"><dt className="font-mono text-[8px] font-black text-[#68757b]">DEVICE SIGNAL</dt><dd className="mt-2 font-mono text-sm font-black text-white">{runtime ? `${runtime.hardwareConcurrency}C / ${runtime.deviceMemory ?? "?"}GB / ${runtime.dpr}DPR` : "--"}</dd></div>
+        <div className="border-b border-white/15 p-4 sm:border-r lg:border-b-0"><dt className="font-mono text-[11px] font-black text-[#68757b]">AUTO TIER</dt><dd className="mt-2 font-mono text-sm font-black text-[#3dff8f]">{runtime?.tier.toUpperCase() ?? "PROBING"}</dd></div>
+        <div className="border-b border-white/15 p-4 lg:border-b-0 lg:border-r"><dt className="font-mono text-[11px] font-black text-[#68757b]">BACKEND</dt><dd className="mt-2 font-mono text-sm font-black text-[#24e0ff]">{runtime?.backend.toUpperCase() ?? "--"}</dd></div>
+        <div className="border-b border-white/15 p-4 sm:border-r lg:border-b-0"><dt className="font-mono text-[11px] font-black text-[#68757b]">WEBGPU READY</dt><dd className="mt-2 font-mono text-sm font-black text-[#f4d431]">{runtime ? (runtime.webgpu ? "YES" : "NO / FALLBACK") : "--"}</dd></div>
+        <div className="p-4"><dt className="font-mono text-[11px] font-black text-[#68757b]">DEVICE SIGNAL</dt><dd className="mt-2 font-mono text-sm font-black text-white">{runtime ? `${runtime.hardwareConcurrency}C / ${runtime.deviceMemory ?? "?"}GB / ${runtime.dpr}DPR` : "--"}</dd></div>
       </dl>
     </div>
   );

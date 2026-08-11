@@ -24,7 +24,7 @@ export function ProofMuseumLab({ locale }: { locale: CstdLocale }) {
     <div data-cstd-proof-museum data-cstd-capsules={cstdCaseReplays.length}>
       <div className="grid gap-8 border-b border-white/15 pb-8 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,0.6fr)] lg:items-end">
         <div>
-          <p className="flex items-center gap-3 font-mono text-[9px] font-black text-[#24e0ff]"><Boxes aria-hidden="true" className="h-4 w-4" /> PROOF CAPSULES / 04</p>
+          <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><Boxes aria-hidden="true" className="h-4 w-4" /> PROOF CAPSULES / 04</p>
           <h2 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight text-white md:text-5xl">{copy.title}</h2>
         </div>
         <p className="text-sm leading-7 text-[#9da8ac]">{copy.summary}</p>
@@ -40,7 +40,7 @@ export function ProofMuseumLab({ locale }: { locale: CstdLocale }) {
             onClick={() => setSelectedId(replay.id)}
             className="min-h-32 bg-[#07090b] p-4 text-left text-[#9aa5a9] transition-colors hover:bg-white/5 hover:text-white aria-selected:bg-[#f4d431] aria-selected:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff]"
           >
-            <span className="flex items-center justify-between font-mono text-[8px] font-black"><span>CAPSULE {String(index + 1).padStart(2, "0")}</span><ShieldCheck aria-hidden="true" className="h-4 w-4" /></span>
+            <span className="flex items-center justify-between font-mono text-[11px] font-black"><span>CAPSULE {String(index + 1).padStart(2, "0")}</span><ShieldCheck aria-hidden="true" className="h-4 w-4" /></span>
             <span className="mt-5 block text-base font-semibold">{replay.title[locale]}</span>
           </button>
         ))}
@@ -49,7 +49,7 @@ export function ProofMuseumLab({ locale }: { locale: CstdLocale }) {
       <div className="mt-8" role="tabpanel">
         <ExecutableCaseReplay key={selected.id} replay={selected} locale={locale} compact />
       </div>
-      <CstdLink href={selected.sourceHref[locale]} className="mt-7 inline-flex items-center gap-3 border-b border-[#f4d431] pb-2 font-mono text-[9px] font-black text-[#f4d431] hover:text-white">
+      <CstdLink href={selected.sourceHref[locale]} className="mt-7 inline-flex items-center gap-3 border-b border-[#f4d431] pb-2 font-mono text-[11px] font-black text-[#f4d431] hover:text-white">
         {copy.source} <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
       </CstdLink>
     </div>

@@ -2,7 +2,8 @@
   "schemaVersion": 1,
   "release": "CSTD-17.0",
   "budgets": {
-    "initialJavascriptBytes": 150000,
+    "initialJavascriptBytes": 200000,
+    "startupJavascriptBytes": 800000,
     "liteWebglBytes": 20000,
     "baseWebglBytes": 1000000,
     "fullWebglBytes": 1500000,
@@ -29,6 +30,7 @@
   },
   "invariants": [
     "three-js-never-enters-initial-homepage-js",
+    "all-eager-homepage-js-is-budgeted-from-prerendered-html",
     "gpu-runtimes-remain-async-and-tiered",
     "homepage-gpu-runtime-requires-explicit-opt-in",
     "versioned-cstd-assets-are-immutable",

@@ -1,9 +1,6 @@
-"use client";
-
 import Image from "next/image";
 import { clsx } from "clsx";
 import { ArrowRight, ArrowUpRight, RadioTower, ShieldCheck } from "lucide-react";
-import { memo } from "react";
 import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
 import { getCstdNarrative, type CstdNarrativeMode } from "../../content/narratives";
 import { cstdProjects } from "../../content/projects";
@@ -11,7 +8,7 @@ import { cstdProofMesh } from "../../content/proof-mesh";
 import { getCstdLinkTargetProps } from "../../domain/link-target";
 import { CstdLink } from "../site/cstd-link";
 
-function SelectedWork({ narrativeMode }: { reducedMotion: boolean; narrativeMode: CstdNarrativeMode }) {
+export function SelectedWork({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
   const projectOrder = getCstdNarrative(narrativeMode).projectOrder;
   const cases = projectOrder
     .map((projectId) => cstdCaseStudies.find((entry) => entry.projectId === projectId))
@@ -29,7 +26,7 @@ function SelectedWork({ narrativeMode }: { reducedMotion: boolean; narrativeMode
       <div className="mx-auto max-w-[1320px]">
         <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#005f70]"><RadioTower aria-hidden="true" className="h-4 w-4" /> 03 / SELECTED WORK</p>
+            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#005f70]"><RadioTower aria-hidden="true" className="h-4 w-4" /> 03 / SELECTED WORK</p>
             <h2 id="proof-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
               三个系统，<span className="block text-[#007e92]">三条足够清楚的证据链。</span>
             </h2>
@@ -57,14 +54,14 @@ function SelectedWork({ narrativeMode }: { reducedMotion: boolean; narrativeMode
                 <div aria-hidden="true" className={clsx("absolute inset-0", featured ? "bg-[linear-gradient(180deg,rgba(5,7,9,0.03)_0%,rgba(5,7,9,0.3)_46%,rgba(5,7,9,0.98)_82%)]" : "bg-[linear-gradient(90deg,rgba(5,7,9,0.98)_0%,rgba(5,7,9,0.72)_56%,rgba(5,7,9,0.12)_100%)]")} />
 
                 <div className={clsx("absolute inset-x-0 bottom-0 p-5 md:p-7", !featured && "lg:right-auto lg:max-w-[75%]")}>
-                  <div className="flex items-center justify-between gap-4 font-mono text-[8px] font-black">
+                  <div className="flex items-center justify-between gap-4 font-mono text-[11px] font-black">
                     <span className="text-[#f4d431]">0{index + 1} / {entry.kicker.zh.toUpperCase()}</span>
                     <span className={clsx("items-center gap-1.5 text-[#24e0ff]", featured ? "flex" : "hidden lg:flex")}><ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" /> {proof?.coverageScore ?? 0}%</span>
                   </div>
                   <h3 className={clsx("mt-4 font-semibold leading-tight text-white", featured ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl")}>{entry.title.zh}</h3>
                   <p className={clsx("mt-3 line-clamp-2 text-sm leading-6 text-[#b5bdc0]", !featured && "lg:hidden")}>{entry.summary.zh}</p>
                   <div className={clsx("flex items-center justify-between gap-5 border-t border-white/15 pt-4", featured ? "mt-5" : "mt-4")}>
-                    <CstdLink href={getCaseStudyPath(entry, "zh")} className="inline-flex items-center gap-2 font-mono text-[10px] font-black text-[#f4d431] transition-[gap,color] hover:gap-4 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f4d431]">
+                    <CstdLink href={getCaseStudyPath(entry, "zh")} className="inline-flex items-center gap-2 font-mono text-xs font-black text-[#f4d431] transition-[gap,color] hover:gap-4 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f4d431]">
                       打开案例 <ArrowRight aria-hidden="true" className="h-4 w-4" />
                     </CstdLink>
                     {project?.href ? (
@@ -79,7 +76,7 @@ function SelectedWork({ narrativeMode }: { reducedMotion: boolean; narrativeMode
           })}
         </div>
 
-        <div className="mt-9 flex flex-wrap items-center justify-between gap-5 border-t border-black/15 pt-5 font-mono text-[9px] font-black text-[#596368]">
+        <div className="mt-9 flex flex-wrap items-center justify-between gap-5 border-t border-black/15 pt-5 font-mono text-[11px] font-black text-[#596368]">
           <span>{cstdProofMesh.length} PUBLISHED CASES / {cstdProofMesh.reduce((sum, entry) => sum + entry.artifactCount, 0)} PUBLIC ARTIFACTS</span>
           <div className="flex gap-6">
             <CstdLink href="/work" className="text-[#7a6200] hover:text-black">全部案例</CstdLink>
@@ -90,5 +87,3 @@ function SelectedWork({ narrativeMode }: { reducedMotion: boolean; narrativeMode
     </section>
   );
 }
-
-export const MemoizedSelectedWork = memo(SelectedWork);

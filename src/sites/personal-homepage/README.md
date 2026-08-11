@@ -4,7 +4,7 @@
 
 ## 目录
 
-- `components/`：个人主站页面、场景外壳与按能力延迟加载的 GPU 渲染器。
+- `components/`：服务端页面章节、最小客户端交互岛、场景外壳与按能力延迟加载的 GPU 渲染器。
 - `content/documents/`：案例与文章的单文件双语 MDX 真源。
 - `content/`：schema、生成索引、能力证据图谱、主题路径、Lab 协议、发布账本、时间线与个人资料。
 - `experience/`：Scene OS、动效偏好、滚动时钟、设备能力和帧预算。
@@ -27,6 +27,7 @@ Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器�
 - `domain/dcf-model.ts`、`failure-drill.ts` 与 `route-transition.ts` 保存可独立测试的实验、纪录片和导航状态机，交互组件不得复制核心判断。
 - `experience/runtime-capabilities.ts` 依据数据节省、网络、视口像素与设备密度选择增强视觉的 `full / lite / image` 档位；`quality-controller.ts` 在持续低帧率后可解释地降级。
 - 首页保持六段普通文档流：身份、能力、作品、可执行证据、技术札记与联系。能力区只展示当前方向，证据区只保留一个代表性互动，复杂检索和完整档案进入深层页面。
+- 首页根编排和纯展示章节必须保持服务端组件；`homepage-runtime.tsx` 只负责导航、滚动、指针、遥测与可选 GPU，能力切换和案例 Worker 是独立客户端岛。不要用立即挂载的 `React.lazy` 伪装视口延迟。
 - 首页不得恢复常驻 HUD、场景导演、自动音频、发布重放或知识路径播放器；这些交互会把个人展示页重新推向应用控制台，并增加固定层和持续动画成本。
 
 公开机器契约包括 `observatory.json`、`performance.json`、`experience.json`、`content-health.json`、`studio.json`、`proof.json`、`graph.json`、`releases.json`、`topics.json`、`manifest.webmanifest` 与 `.well-known/security.txt`。中英文入口应保持同一 schema 和发布版本。

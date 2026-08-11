@@ -1,4 +1,4 @@
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 
@@ -14,6 +14,7 @@ const loadableManifestPath = path.join(
   "server/app/(personal)/cstd/page/react-loadable-manifest.json",
 );
 const initialBudget = performanceContract.budgets.initialJavascriptBytes;
+const startupBudget = performanceContract.budgets.startupJavascriptBytes;
 const webglEntryBudget = performanceContract.budgets.baseWebglBytes;
 const liteWebglBudget = performanceContract.budgets.liteWebglBytes;
 const webglBudget = performanceContract.budgets.fullWebglBytes;
@@ -47,6 +48,16 @@ if (!routeManifest?.entryJSFiles) {
 const initialAssets = unique(Object.values(routeManifest.entryJSFiles).flat());
 const initialBytes = bytesFor(initialAssets);
 const initialAssetReport = initialAssets.map((asset) => ({ asset, bytes: statSync(assetPath(asset)).size }));
+const prerenderedHtmlPath = path.join(nextRoot, "server/app/cstd.html");
+if (!existsSync(prerenderedHtmlPath)) {
+  throw new Error(`Missing prerendered personal homepage HTML at ${prerenderedHtmlPath}`);
+}
+const prerenderedHtml = readFileSync(prerenderedHtmlPath, "utf8");
+const htmlJavascriptAssets = [...prerenderedHtml.matchAll(/(?:src|href)=["']\/_next\/([^"']+?\.js)(?:\?[^"']*)?["']/g)]
+  .map((match) => match[1]);
+const startupAssets = unique([...initialAssets, ...htmlJavascriptAssets]);
+const startupBytes = bytesFor(startupAssets);
+const startupAssetReport = startupAssets.map((asset) => ({ asset, bytes: statSync(assetPath(asset)).size }));
 const initialContainsThree = initialAssets.some((asset) => {
   const source = readFileSync(assetPath(asset), "utf8");
   return source.includes("THREE.WebGLRenderer") || source.includes("@react-three/fiber");
@@ -86,6 +97,10 @@ if (initialContainsThree) {
 if (initialBytes > initialBudget) {
   console.error(JSON.stringify({ initialBytes, initialBudget, initialAssets: initialAssetReport }, null, 2));
   throw new Error(`Personal homepage initial JS is ${initialBytes} bytes; budget is ${initialBudget}`);
+}
+if (startupBytes > startupBudget) {
+  console.error(JSON.stringify({ startupBytes, startupBudget, startupAssets: startupAssetReport }, null, 2));
+  throw new Error(`Personal homepage eager startup JS is ${startupBytes} bytes; budget is ${startupBudget}`);
 }
 if (webglAssets.length === 0) {
   throw new Error("Could not find the personal homepage WebGL async chunk");
@@ -131,5 +146,5 @@ if (oversizedOriginalVisual) {
 }
 
 console.log(
-  `Personal homepage bundle OK: ${initialBytes} initial bytes, ${liteWebglBytes} lite WebGL bytes, ${webgpuBytes} WebGPU bytes, ${webglBytes} base WebGL bytes, ${highQualityBytes} conditional postprocessing bytes, ${fullWebglBytes} full WebGL bytes, ${originalVisualBytes} original visual bytes.`,
+  `Personal homepage bundle OK: ${initialBytes} entry bytes, ${startupBytes} eager startup bytes, ${liteWebglBytes} lite WebGL bytes, ${webgpuBytes} WebGPU bytes, ${webglBytes} base WebGL bytes, ${highQualityBytes} conditional postprocessing bytes, ${fullWebglBytes} full WebGL bytes, ${originalVisualBytes} original visual bytes.`,
 );

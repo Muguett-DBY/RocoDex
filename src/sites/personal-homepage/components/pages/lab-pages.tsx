@@ -42,12 +42,12 @@ export function CstdLabIndexPage({ locale }: { locale: CstdLocale }) {
                 <Image src={lab.image.src} alt={lab.image.alt[locale]} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover opacity-28 transition-[transform,opacity] duration-700 group-hover:scale-105 group-hover:opacity-48" />
                 <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,9,0.15),rgba(5,7,9,0.98)_80%)]" />
                 <div className="relative flex h-full flex-col">
-                  <div className="flex items-center justify-between font-mono text-[9px] font-black"><span className="text-[#f4d431]">LAB / {lab.number}</span><FlaskConical aria-hidden="true" className="h-4 w-4 text-[#24e0ff]" /></div>
+                  <div className="flex items-center justify-between font-mono text-[11px] font-black"><span className="text-[#f4d431]">LAB / {lab.number}</span><FlaskConical aria-hidden="true" className="h-4 w-4 text-[#24e0ff]" /></div>
                   <div className="mt-auto pt-32">
                     <h2 className="text-4xl font-semibold text-white md:text-5xl">{lab.title[locale]}</h2>
                     <p className="mt-5 max-w-xl text-sm leading-7 text-[#a6b0b3]">{lab.summary[locale]}</p>
                     <p className="mt-5 border-l-2 border-[#24e0ff] pl-4 text-xs leading-6 text-[#d5dbdd]">{lab.principle[locale]}</p>
-                    <span className="mt-7 inline-flex items-center gap-3 border-b border-[#f4d431] pb-2 font-mono text-[9px] font-black text-white transition-[gap,color] group-hover:gap-5 group-hover:text-[#f4d431]">{copy.open} <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></span>
+                    <span className="mt-7 inline-flex items-center gap-3 border-b border-[#f4d431] pb-2 font-mono text-[11px] font-black text-white transition-[gap,color] group-hover:gap-5 group-hover:text-[#f4d431]">{copy.open} <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></span>
                   </div>
                 </div>
               </CstdLink>
@@ -94,10 +94,10 @@ export function CstdLabDetailPage({ locale, slug }: { locale: CstdLocale; slug: 
         <section className="border-b border-white/12 bg-[#080a0c] px-5 py-16 md:px-10 lg:px-16 lg:py-24">
           <div className="mx-auto max-w-[1320px]">
             <div className="flex flex-wrap items-center justify-between gap-5 border-b border-white/15 pb-6">
-              <CstdLink href={locale === "en" ? "/en/lab" : "/lab"} className="inline-flex items-center gap-2 font-mono text-[9px] font-black text-[#24e0ff] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"><ArrowLeft aria-hidden="true" className="h-4 w-4" />{copy.back}</CstdLink>
+              <CstdLink href={locale === "en" ? "/en/lab" : "/lab"} className="inline-flex items-center gap-2 font-mono text-[11px] font-black text-[#24e0ff] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"><ArrowLeft aria-hidden="true" className="h-4 w-4" />{copy.back}</CstdLink>
               <div className="flex flex-wrap items-center gap-5">
-                <p className="flex items-center gap-3 font-mono text-[8px] font-black text-[#3dff8f]"><span className="h-2 w-2 animate-pulse bg-[#3dff8f]" />{copy.live}</p>
-                <p className="font-mono text-[8px] font-black text-[#718087]">PROTOCOL {lab.version} / UPDATED {lab.updatedAt}</p>
+                <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#3dff8f]"><span className="h-2 w-2 animate-pulse bg-[#3dff8f]" />{copy.live}</p>
+                <p className="font-mono text-[11px] font-black text-[#718087]">PROTOCOL {lab.version} / UPDATED {lab.updatedAt}</p>
               </div>
             </div>
 
@@ -110,12 +110,12 @@ export function CstdLabDetailPage({ locale, slug }: { locale: CstdLocale; slug: 
               <div className="bg-[#0a0c0e] p-6"><ShieldCheck aria-hidden="true" className="h-5 w-5 text-[#24e0ff]" /><h2 className="mt-5 text-xl font-semibold">LOCAL / PRIVATE</h2><p className="mt-3 text-sm leading-7 text-[#8f9ba0]">{copy.noData}</p></div>
               <div className="bg-[#0a0c0e] p-6"><FlaskConical aria-hidden="true" className="h-5 w-5 text-[#3dff8f]" /><h2 className="mt-5 text-xl font-semibold">{copy.fallback}</h2><p className="mt-3 text-sm leading-7 text-[#8f9ba0]">{copy.fallbackBody}</p></div>
             </div>
-            <CstdLink href={lab.evidenceHref[locale]} className="mt-8 inline-flex items-center gap-3 border-b border-[#24e0ff] pb-2 font-mono text-[9px] font-black text-[#24e0ff] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"><GitBranch aria-hidden="true" className="h-4 w-4" />{copy.source}<ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
+            <CstdLink href={lab.evidenceHref[locale]} className="mt-8 inline-flex items-center gap-3 border-b border-[#24e0ff] pb-2 font-mono text-[11px] font-black text-[#24e0ff] hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]"><GitBranch aria-hidden="true" className="h-4 w-4" />{copy.source}<ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
           </div>
         </section>
 
         <CstdLink href={getLabPath(nextLab, locale)} className="group block bg-[#f4d431] px-5 py-16 text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-black md:px-10 lg:px-16">
-          <div className="mx-auto flex max-w-[1320px] items-end justify-between gap-8"><div><p className="font-mono text-[9px] font-black">{copy.next.toUpperCase()}</p><p className="mt-4 text-3xl font-semibold md:text-5xl">{nextLab.title[locale]}</p></div><ArrowUpRight aria-hidden="true" className="h-8 w-8 transition-transform group-hover:-translate-y-2 group-hover:translate-x-2" /></div>
+          <div className="mx-auto flex max-w-[1320px] items-end justify-between gap-8"><div><p className="font-mono text-[11px] font-black">{copy.next.toUpperCase()}</p><p className="mt-4 text-3xl font-semibold md:text-5xl">{nextLab.title[locale]}</p></div><ArrowUpRight aria-hidden="true" className="h-8 w-8 transition-transform group-hover:-translate-y-2 group-hover:translate-x-2" /></div>
         </CstdLink>
       </main>
       <StructuredData value={{ "@context": "https://schema.org", "@type": "SoftwareApplication", name: lab.title[locale], description: lab.summary[locale], applicationCategory: "EducationalApplication", operatingSystem: "Web", url: `https://custard.top${getLabPath(lab, locale)}` }} />

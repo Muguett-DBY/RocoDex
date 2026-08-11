@@ -41,6 +41,30 @@ describe("local user storage", () => {
     await expect(deleteUserByUsername("missing")).resolves.toBe(false);
   });
 
+  test("claims a local username atomically", async () => {
+    const { createUser } = await import("./db");
+
+    await createUser("same-name", "first-hash");
+    await expect(createUser("same-name", "second-hash")).rejects.toMatchObject({
+      name: "UserAlreadyExistsError",
+    });
+  });
+
+  test("limits repeated local registration attempts without retaining the raw identity", async () => {
+    const { consumeRegistrationQuota } = await import("./db");
+
+    for (let attempt = 0; attempt < 5; attempt += 1) {
+      await expect(consumeRegistrationQuota("203.0.113.8", 1_000)).resolves.toEqual({
+        allowed: true,
+        retryAfterSeconds: 0,
+      });
+    }
+    await expect(consumeRegistrationQuota("203.0.113.8", 1_000)).resolves.toMatchObject({
+      allowed: false,
+      retryAfterSeconds: 600,
+    });
+  });
+
   test("rejects Redis socket URLs instead of falling back to local storage", async () => {
     process.env.UPSTASH_REDIS_URL = "rediss://default:secret@example.upstash.io:6379";
     process.env.UPSTASH_REDIS_TOKEN = "token";

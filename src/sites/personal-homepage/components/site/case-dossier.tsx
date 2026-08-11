@@ -109,7 +109,7 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
       <div className="relative mx-auto max-w-[1320px]">
         <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_26rem] lg:items-end">
           <div>
-            <p className="font-mono text-[9px] font-black" style={{ color: dossier.accent }}>{copy.eyebrow}</p>
+            <p className="font-mono text-[11px] font-black" style={{ color: dossier.accent }}>{copy.eyebrow}</p>
             <h2 id={`case-dossier-${dossier.caseSlug}`} className="mt-5 max-w-4xl text-4xl font-semibold leading-[0.95] md:text-6xl">{copy.title}</h2>
           </div>
           <p className="border-l border-white/20 pl-5 text-base leading-8 text-[#b5bec1]">{dossier.thesis[locale]}</p>
@@ -128,7 +128,7 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
                   aria-selected={view === value}
                   data-cstd-dossier-tab={value}
                   onClick={() => setView(value)}
-                  className="flex min-h-14 items-center justify-between gap-4 border-b border-white/15 px-4 font-mono text-[9px] font-black text-[#8f9a9e] transition-[background-color,color] last:border-b-0 hover:text-white aria-selected:bg-[#f4d431] aria-selected:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff] sm:border-b-0 sm:border-r sm:last:border-r-0"
+                  className="flex min-h-14 items-center justify-between gap-4 border-b border-white/15 px-4 font-mono text-[11px] font-black text-[#8f9a9e] transition-[background-color,color] last:border-b-0 hover:text-white aria-selected:bg-[#f4d431] aria-selected:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff] sm:border-b-0 sm:border-r sm:last:border-r-0"
                 >
                   <span>{locale === "zh" ? meta.zh : meta.en}</span><Icon aria-hidden="true" className="h-4 w-4" />
                 </button>
@@ -147,13 +147,13 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
                     onClick={() => setSelectedNode(entry.id)}
                     className="grid min-h-20 w-full grid-cols-[2.25rem_1fr] gap-3 border-b border-white/15 px-4 py-4 text-left text-[#929da1] hover:bg-white/7 hover:text-white aria-pressed:bg-[#0b171b] aria-pressed:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff]"
                   >
-                    <span className="font-mono text-[8px] font-black">0{index + 1}</span>
-                    <span><span className="block font-mono text-[7px] font-black opacity-60">{entry.type.toUpperCase()}</span><span className="mt-2 block text-sm font-semibold">{entry.title[locale]}</span></span>
+                    <span className="font-mono text-[11px] font-black">0{index + 1}</span>
+                    <span><span className="block font-mono text-[11px] font-black opacity-60">{entry.type.toUpperCase()}</span><span className="mt-2 block text-sm font-semibold">{entry.title[locale]}</span></span>
                   </button>
                 ))}
               </div>
               <div className="p-5 md:p-8 lg:p-10">
-                <p className="font-mono text-[9px] font-black" style={{ color: dossier.accent }}>{copy.selected.toUpperCase()} / {node.type.toUpperCase()}</p>
+                <p className="font-mono text-[11px] font-black" style={{ color: dossier.accent }}>{copy.selected.toUpperCase()} / {node.type.toUpperCase()}</p>
                 <h3 className="mt-5 text-3xl font-semibold text-white md:text-5xl">{node.title[locale]}</h3>
                 <p className="mt-5 max-w-3xl text-base leading-8 text-[#c0c8cb]">{node.detail[locale]}</p>
                 <ol className="mt-10 grid gap-2 sm:grid-cols-2 lg:grid-cols-4" aria-label={locale === "zh" ? "架构节点路径" : "Architecture node path"}>
@@ -161,13 +161,13 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
                     <li key={entry.id} className="relative min-h-24 border-t border-white/15 pt-4">
                       <span className={clsx("absolute left-0 top-[-2px] h-[3px] transition-[width,background-color]", index <= architectureIndex ? "w-full bg-[#24e0ff]" : "w-0 bg-white/20")} />
                       <button type="button" onClick={() => setSelectedNode(entry.id)} className="w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#24e0ff]">
-                        <span className="font-mono text-[7px] font-black text-[#708086]">0{index + 1} / {entry.type.toUpperCase()}</span>
+                        <span className="font-mono text-[11px] font-black text-[#708086]">0{index + 1} / {entry.type.toUpperCase()}</span>
                         <span className="mt-3 block text-sm font-semibold text-[#d9dfe1]">{entry.title[locale]}</span>
                       </button>
                     </li>
                   ))}
                 </ol>
-                <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[8px] font-black text-[#7f8c90]">
+                <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[11px] font-black text-[#7f8c90]">
                   {dossier.flows.map((flow) => <span key={`${flow.from}-${flow.to}`} className="inline-flex items-center gap-2">{flow.label[locale]} <ArrowRight aria-hidden="true" className="h-3 w-3 text-[#f4d431]" /></span>)}
                 </div>
               </div>
@@ -179,20 +179,20 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
               <div className="border-b border-white/15 xl:border-b-0 xl:border-r">
                 {dossier.decisions.map((entry, index) => (
                   <button key={entry.id} type="button" aria-pressed={entry.id === decision.id} onClick={() => setSelectedDecision(entry.id)} className="grid min-h-24 w-full grid-cols-[2.25rem_1fr] gap-3 border-b border-white/15 px-4 py-5 text-left text-[#929da1] hover:bg-white/7 hover:text-white aria-pressed:bg-[#17150a] aria-pressed:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#f4d431]">
-                    <span className="font-mono text-[8px] font-black">0{index + 1}</span><span className="text-sm font-semibold leading-6">{entry.question[locale]}</span>
+                    <span className="font-mono text-[11px] font-black">0{index + 1}</span><span className="text-sm font-semibold leading-6">{entry.question[locale]}</span>
                   </button>
                 ))}
               </div>
               <div className="p-5 md:p-8 lg:p-10">
-                <p className="font-mono text-[9px] font-black text-[#f4d431]">DECISION RECORD / {decision.id.toUpperCase()}</p>
+                <p className="font-mono text-[11px] font-black text-[#f4d431]">DECISION RECORD / {decision.id.toUpperCase()}</p>
                 <h3 className="mt-5 max-w-3xl text-3xl font-semibold leading-tight text-white md:text-5xl">{decision.question[locale]}</h3>
                 <div className="mt-8 grid gap-px bg-white/12 md:grid-cols-2">
-                  <div className="bg-[#08100d] p-5"><p className="flex items-center gap-2 font-mono text-[8px] font-black text-[#3dff8f]"><CheckCircle2 aria-hidden="true" className="h-4 w-4" /> {copy.chosen.toUpperCase()}</p><p className="mt-4 text-lg font-semibold leading-7 text-white">{decision.chosen[locale]}</p></div>
-                  <div className="bg-[#11090a] p-5"><p className="flex items-center gap-2 font-mono text-[8px] font-black text-[#ff5a50]"><XCircle aria-hidden="true" className="h-4 w-4" /> {copy.rejected.toUpperCase()}</p><p className="mt-4 text-lg font-semibold leading-7 text-white">{decision.rejected[locale]}</p></div>
+                  <div className="bg-[#08100d] p-5"><p className="flex items-center gap-2 font-mono text-[11px] font-black text-[#3dff8f]"><CheckCircle2 aria-hidden="true" className="h-4 w-4" /> {copy.chosen.toUpperCase()}</p><p className="mt-4 text-lg font-semibold leading-7 text-white">{decision.chosen[locale]}</p></div>
+                  <div className="bg-[#11090a] p-5"><p className="flex items-center gap-2 font-mono text-[11px] font-black text-[#ff5a50]"><XCircle aria-hidden="true" className="h-4 w-4" /> {copy.rejected.toUpperCase()}</p><p className="mt-4 text-lg font-semibold leading-7 text-white">{decision.rejected[locale]}</p></div>
                 </div>
-                <p className="mt-8 font-mono text-[8px] font-black text-[#829095]">{copy.rationale.toUpperCase()}</p>
+                <p className="mt-8 font-mono text-[11px] font-black text-[#829095]">{copy.rationale.toUpperCase()}</p>
                 <p className="mt-3 max-w-3xl text-base leading-8 text-[#c0c8cb]">{decision.rationale[locale]}</p>
-                <CstdLink href={decision.proofHref[locale]} className="mt-7 inline-flex items-center gap-2 border-b border-[#24e0ff]/55 pb-1 font-mono text-[9px] font-black text-[#24e0ff] hover:text-white">{copy.proof} <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
+                <CstdLink href={decision.proofHref[locale]} className="mt-7 inline-flex items-center gap-2 border-b border-[#24e0ff]/55 pb-1 font-mono text-[11px] font-black text-[#24e0ff] hover:text-white">{copy.proof} <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
               </div>
             </div>
           ) : null}
@@ -202,19 +202,19 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
               <div className="border-b border-white/15 xl:border-b-0 xl:border-r">
                 {dossier.failureModes.map((entry, index) => (
                   <button key={entry.id} type="button" aria-pressed={entry.id === failure.id} onClick={() => selectFailure(entry.id)} className="grid min-h-24 w-full grid-cols-[2.25rem_1fr] gap-3 border-b border-white/15 px-4 py-5 text-left text-[#929da1] hover:bg-white/7 hover:text-white aria-pressed:bg-[#17090a] aria-pressed:text-[#ff5a50] focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#ff5a50]">
-                    <span className="font-mono text-[8px] font-black">0{index + 1}</span><span className="text-sm font-semibold leading-6">{entry.trigger[locale]}</span>
+                    <span className="font-mono text-[11px] font-black">0{index + 1}</span><span className="text-sm font-semibold leading-6">{entry.trigger[locale]}</span>
                   </button>
                 ))}
               </div>
               <div className="p-5 md:p-8 lg:p-10" data-cstd-failure-drill data-cstd-failure-drill-phase={drillPhase}>
                 <div className="flex flex-wrap items-start justify-between gap-5">
                   <div>
-                    <p className="font-mono text-[9px] font-black text-[#ff5a50]">FAILURE ENVELOPE / {failure.id.toUpperCase()}</p>
+                    <p className="font-mono text-[11px] font-black text-[#ff5a50]">FAILURE ENVELOPE / {failure.id.toUpperCase()}</p>
                     <p aria-live="polite" className="mt-3 max-w-xl text-sm leading-6 text-[#9da8ac]">
                       {drillPhase === "idle" ? copy.drillIdle : drillPhase === "outcome" ? copy.drillComplete : copy.drillRunning}
                     </p>
                   </div>
-                  <button type="button" onClick={runFailureDrill} className="inline-flex h-11 items-center gap-3 border border-[#ff5a50]/60 bg-[#18090a] px-4 font-mono text-[9px] font-black text-[#ff6a60] transition-colors hover:bg-[#ff5a50] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#ff5a50]">
+                  <button type="button" onClick={runFailureDrill} className="inline-flex h-11 items-center gap-3 border border-[#ff5a50]/60 bg-[#18090a] px-4 font-mono text-[11px] font-black text-[#ff6a60] transition-colors hover:bg-[#ff5a50] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#ff5a50]">
                     {drillPhase === "idle" ? <Play aria-hidden="true" className="h-4 w-4" /> : <RotateCcw aria-hidden="true" className="h-4 w-4" />}
                     {drillPhase === "idle" ? copy.drill : copy.rerun}
                   </button>
@@ -229,13 +229,13 @@ export function CstdCaseDossierView({ dossier, locale }: { dossier: CstdCaseDoss
                     const visible = getFailureDrillProgress(drillPhase) >= (index + 1) / 3;
                     return (
                       <div key={label} data-cstd-failure-step={phase} data-cstd-failure-step-active={visible ? "true" : "false"} className={clsx("relative min-h-44 bg-[#07090b] p-5 transition-[background-color,opacity] duration-500", visible ? "opacity-100" : "opacity-45")}>
-                        <p className={clsx("flex items-center gap-2 font-mono text-[8px] font-black", color)}>{visible && phase === "outcome" ? <ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" /> : null}{label.toUpperCase()}</p>
+                        <p className={clsx("flex items-center gap-2 font-mono text-[11px] font-black", color)}>{visible && phase === "outcome" ? <ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" /> : null}{label.toUpperCase()}</p>
                         <p className="mt-5 text-base font-semibold leading-8 text-white">{value}</p>
                       </div>
                     );
                   })}
                 </div>
-                <CstdLink href={failure.proofHref[locale]} className="mt-7 inline-flex items-center gap-2 border-b border-[#24e0ff]/55 pb-1 font-mono text-[9px] font-black text-[#24e0ff] hover:text-white">{copy.proof} <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
+                <CstdLink href={failure.proofHref[locale]} className="mt-7 inline-flex items-center gap-2 border-b border-[#24e0ff]/55 pb-1 font-mono text-[11px] font-black text-[#24e0ff] hover:text-white">{copy.proof} <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
               </div>
             </div>
           ) : null}

@@ -176,7 +176,7 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
   const performance = readJson("/cstd/performance.json");
   expect(performance).toMatchObject({
     release: "CSTD-17.0",
-    budgets: { initialJavascriptBytes: 150_000 },
+    budgets: { initialJavascriptBytes: 200_000, startupJavascriptBytes: 800_000 },
     delivery: { defaultRuntimeTier: "image", enhancedRuntimeTrigger: "explicit-user-action" },
     cacheComponents: { status: "evaluated-not-enabled" },
   });

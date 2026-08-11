@@ -103,7 +103,6 @@ export function useCstdChapterReveal(rootRef: RefObject<HTMLElement | null>, rea
   useEffect(() => {
     const root = rootRef.current;
     if (!ready || !root) return;
-    const observed = new WeakSet<Element>();
     const revealObserver = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -114,18 +113,10 @@ export function useCstdChapterReveal(rootRef: RefObject<HTMLElement | null>, rea
       },
       { rootMargin: "0px 0px -12%", threshold: 0.08 },
     );
-    const scan = () => {
-      root.querySelectorAll("[data-cstd-chapter], [data-cstd-finale]").forEach((chapter) => {
-        if (observed.has(chapter)) return;
-        observed.add(chapter);
-        revealObserver.observe(chapter);
-      });
-    };
-    scan();
-    const mutationObserver = new MutationObserver(scan);
-    mutationObserver.observe(root, { childList: true, subtree: true });
+    root.querySelectorAll("[data-cstd-chapter], [data-cstd-finale]").forEach((chapter) => {
+      revealObserver.observe(chapter);
+    });
     return () => {
-      mutationObserver.disconnect();
       revealObserver.disconnect();
     };
   }, [ready, rootRef]);

@@ -52,21 +52,21 @@ export function CstdWorkIndexPage({ locale }: { locale: CstdLocale }) {
             <article key={entry.slug} className="group relative border-t border-white/12 first:border-t-0">
               <CstdLink href={getCaseStudyPath(entry, locale)} className="relative mx-auto grid min-h-[34rem] max-w-[1540px] overflow-hidden px-5 py-16 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff] md:px-10 lg:grid-cols-[minmax(0,0.88fr)_minmax(28rem,1.12fr)] lg:items-center lg:gap-16 lg:px-16">
                 <div className="relative z-10 max-w-2xl">
-                  <div className="flex items-center gap-4 font-mono text-[9px] font-black text-[#778286]">
+                  <div className="flex items-center gap-4 font-mono text-[11px] font-black text-[#778286]">
                     <span className="text-[#f4d431]">{String(index + 1).padStart(2, "0")}</span>
                     <span>{entry.year}</span>
                     <span className="h-px flex-1 bg-white/15" />
                   </div>
-                  <p className="mt-8 font-mono text-[9px] font-black uppercase text-[#24e0ff]">{entry.kicker[locale]}</p>
+                  <p className="mt-8 font-mono text-[11px] font-black uppercase text-[#24e0ff]">{entry.kicker[locale]}</p>
                   <h2 className="mt-4 text-4xl font-semibold leading-[0.95] text-white md:text-6xl">{entry.title[locale]}</h2>
                   <p className="mt-6 text-base leading-8 text-[#aab3b6]">{entry.summary[locale]}</p>
                   <dl className="mt-8 grid gap-4 border-y border-white/12 py-5 sm:grid-cols-2">
                     <div>
-                      <dt className="font-mono text-[8px] font-black text-[#677379]">{copy.role.toUpperCase()}</dt>
+                      <dt className="font-mono text-[11px] font-black text-[#677379]">{copy.role.toUpperCase()}</dt>
                       <dd className="mt-2 text-sm text-[#d9dfe1]">{entry.role[locale]}</dd>
                     </div>
                     <div>
-                      <dt className="font-mono text-[8px] font-black text-[#677379]">{copy.status.toUpperCase()}</dt>
+                      <dt className="font-mono text-[11px] font-black text-[#677379]">{copy.status.toUpperCase()}</dt>
                       <dd className="mt-2 text-sm text-[#d9dfe1]">{entry.status[locale]} · {entry.film.durationSeconds}s film</dd>
                     </div>
                   </dl>
@@ -78,7 +78,7 @@ export function CstdWorkIndexPage({ locale }: { locale: CstdLocale }) {
                 <figure className="relative mt-10 aspect-[16/10] overflow-hidden border border-white/18 bg-black shadow-[0_32px_80px_rgba(0,0,0,0.48)] lg:mt-0" style={{ viewTransitionName: `cstd-case-${entry.slug}` } as CSSProperties}>
                   <Image src={entry.image.src} alt={entry.image.alt[locale]} fill sizes="(min-width: 1024px) 52vw, 100vw" className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]" style={{ objectPosition: entry.image.position ?? "50% 50%" }} />
                   <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(120deg,transparent_35%,rgba(36,224,255,0.12))] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-                  <figcaption className="absolute bottom-3 left-3 bg-[#050709]/90 px-3 py-2 font-mono text-[8px] font-black text-[#24e0ff] backdrop-blur">VERIFIED SURFACE / {entry.projectId.toUpperCase()}</figcaption>
+                  <figcaption className="absolute bottom-3 left-3 bg-[#050709]/90 px-3 py-2 font-mono text-[11px] font-black text-[#24e0ff] backdrop-blur">VERIFIED SURFACE / {entry.projectId.toUpperCase()}</figcaption>
                 </figure>
               </CstdLink>
             </article>
@@ -132,14 +132,14 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
         <section className="border-b border-white/12 bg-[#f1eee5] text-[#090b0d]">
           <div className="mx-auto grid max-w-[1540px] gap-10 px-5 py-14 md:px-10 lg:grid-cols-[minmax(18rem,0.75fr)_minmax(0,1.25fr)] lg:px-16 lg:py-20">
             <div>
-              <CstdLink href={locale === "en" ? "/en/work" : "/work"} className="inline-flex items-center gap-2 font-mono text-[10px] font-black text-[#0b5f6d] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">
+              <CstdLink href={locale === "en" ? "/en/work" : "/work"} className="inline-flex items-center gap-2 font-mono text-[11px] font-black text-[#0b5f6d] hover:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black">
                 <ArrowLeft aria-hidden="true" className="h-4 w-4" /> {copy.back}
               </CstdLink>
             </div>
             <dl className="grid gap-6 sm:grid-cols-3">
-              <div><dt className="font-mono text-[8px] font-black text-black/75">{copy.role.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.role[locale]}</dd></div>
-              <div><dt className="font-mono text-[8px] font-black text-black/75">{copy.status.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.status[locale]}</dd></div>
-              <div><dt className="font-mono text-[8px] font-black text-black/75">{copy.stack.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.technologies.join(" · ")}</dd></div>
+              <div><dt className="font-mono text-[11px] font-black text-black/75">{copy.role.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.role[locale]}</dd></div>
+              <div><dt className="font-mono text-[11px] font-black text-black/75">{copy.status.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.status[locale]}</dd></div>
+              <div><dt className="font-mono text-[11px] font-black text-black/75">{copy.stack.toUpperCase()}</dt><dd className="mt-2 text-sm leading-6">{entry.technologies.join(" · ")}</dd></div>
             </dl>
           </div>
         </section>
@@ -166,13 +166,13 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
           <div className="mx-auto max-w-[1320px]">
             <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr]">
               <div>
-                <div className="flex items-center gap-3 font-mono text-[9px] font-black"><ShieldCheck aria-hidden="true" className="h-5 w-5" /> {copy.evidence}</div>
+                <div className="flex items-center gap-3 font-mono text-[11px] font-black"><ShieldCheck aria-hidden="true" className="h-5 w-5" /> {copy.evidence}</div>
                 <h2 className="mt-5 max-w-xl text-4xl font-semibold leading-tight md:text-5xl">{copy.evidenceSummary}</h2>
               </div>
               <div className="border-t border-black/30">
                 {entry.evidence.map((evidence, evidenceIndex) => (
                   <div key={evidence.label[locale]} className="grid gap-3 border-b border-black/30 py-5 sm:grid-cols-[3rem_10rem_1fr] sm:items-start">
-                    <span className="font-mono text-[9px] font-black text-black/75">0{evidenceIndex + 1}</span>
+                    <span className="font-mono text-[11px] font-black text-black/75">0{evidenceIndex + 1}</span>
                     <strong className="font-mono text-xs">{evidence.label[locale]}</strong>
                     <p className="text-sm leading-7 text-black/70">{evidence.detail[locale]}</p>
                   </div>
@@ -189,7 +189,7 @@ export async function CstdCaseStudyPage({ locale, slug }: { locale: CstdLocale; 
 
         <CstdLink href={getCaseStudyPath(nextEntry, locale)} className="group block bg-[#050709] px-5 py-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-[#24e0ff] md:px-10 lg:px-16">
           <div className="mx-auto flex max-w-[1320px] items-end justify-between gap-8">
-            <div><p className="font-mono text-[9px] font-black text-[#24e0ff]">{copy.next.toUpperCase()}</p><p className="mt-4 text-3xl font-semibold text-white md:text-5xl">{nextEntry.title[locale]}</p></div>
+            <div><p className="font-mono text-[11px] font-black text-[#24e0ff]">{copy.next.toUpperCase()}</p><p className="mt-4 text-3xl font-semibold text-white md:text-5xl">{nextEntry.title[locale]}</p></div>
             <ArrowUpRight aria-hidden="true" className="h-8 w-8 shrink-0 text-[#f4d431] transition-transform group-hover:-translate-y-2 group-hover:translate-x-2" />
           </div>
         </CstdLink>
