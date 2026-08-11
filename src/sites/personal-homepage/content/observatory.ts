@@ -64,13 +64,13 @@ export type CstdHomepageObservatory = Readonly<{
 }>;
 
 const repository = "https://github.com/Muguett-DBY/RocoDex";
-const releaseCheckedAt = "2026-08-09";
+const releaseCheckedAt = "2026-08-12";
 
 const verificationProfile = [
-  { id: "unit-tests", label: { zh: "单元与契约测试", en: "Unit and contract tests" }, value: 237, unit: "tests", state: "passed" },
-  { id: "browser-tests", label: { zh: "桌面与移动端验收", en: "Desktop and mobile acceptance" }, value: 29, unit: "tests", state: "passed" },
+  { id: "unit-tests", label: { zh: "单元与契约测试", en: "Unit and contract tests" }, value: 245, unit: "tests", state: "passed" },
+  { id: "browser-tests", label: { zh: "桌面与移动端验收", en: "Desktop and mobile acceptance" }, value: 31, unit: "tests", state: "passed" },
   { id: "static-output", label: { zh: "静态生成页面", en: "Statically generated pages" }, value: 830, unit: "pages", state: "passed" },
-  { id: "initial-js", label: { zh: "首页初始 JavaScript", en: "Homepage initial JavaScript" }, value: 143_551, unit: "bytes", state: "within-budget" },
+  { id: "initial-js", label: { zh: "首页初始 JavaScript", en: "Homepage initial JavaScript" }, value: 180_551, unit: "bytes", state: "within-budget" },
 ] as const;
 
 function resolveEnvironment(value: string | undefined): CstdEngineeringObservatory["deployment"]["environment"] {
