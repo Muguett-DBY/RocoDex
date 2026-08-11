@@ -21,6 +21,7 @@ export const cstdExperienceContract = {
   runtime: {
     progressiveOrder: cstdPerformanceContract.delivery.runtimeFallbackOrder,
     initialJavaScriptBytes: cstdPerformanceContract.budgets.initialJavascriptBytes,
+    startupJavaScriptBytes: cstdPerformanceContract.budgets.startupJavascriptBytes,
     sceneAssetBytes: cstdPerformanceContract.budgets.sceneAssetBytes,
     desktopLcpMilliseconds: cstdPerformanceContract.budgets.desktopLcpMilliseconds,
     mobileLcpMilliseconds: cstdPerformanceContract.budgets.mobileLcpMilliseconds,

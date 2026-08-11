@@ -5,7 +5,7 @@
 | 产品 | 生产域名 | Next 路由 | 主要代码 | 浏览器回归 |
 | --- | --- | --- | --- | --- |
 | 奶黄包个人主站 / CSTD | `https://custard.top` | 内部重写到 `/cstd` | `src/sites/personal-homepage` | `e2e/personal-homepage.spec.ts` |
-| 洛克图鉴 / RocoDex | `https://rocodex.custard.top` | `/` 及图鉴路由 | `src/app/(rocodex)` 与现有 RocoDex 模块 | `e2e/rocodex.spec.ts` |
+| 洛克图鉴 / RocoDex（核心项目，稳定维护） | `https://rocodex.custard.top` | `/` 及图鉴路由 | `src/app/(rocodex)` 与现有 RocoDex 模块 | `e2e/rocodex.spec.ts` |
 
 ## 架构
 
@@ -81,7 +81,7 @@ npm run test:e2e
 - 数据缺口：`docs/data_gaps.md`
 - PVP 与攻略来源：`docs/pvp_sources.md`、`docs/guide_sources.md`
 
-账号能力依赖 `AUTH_SECRET` 或 `NEXTAUTH_SECRET`。认证上下文只存在于 `(rocodex)` 路由组，访问个人主站不会初始化 NextAuth 会话。
+RocoDex 当前处于稳定维护期：继续作为核心项目在线运行并接受安全、兼容性和故障修复，但不把常规功能迭代与个人主站发布绑定。账号能力依赖 `AUTH_SECRET` 或 `NEXTAUTH_SECRET`；认证上下文只存在于 `(rocodex)` 路由组，访问个人主站不会初始化 NextAuth 会话。
 
 ## 部署
 

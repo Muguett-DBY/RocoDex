@@ -135,7 +135,7 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
             <span className="flex h-9 w-9 items-center justify-center bg-[#f4d431] font-mono text-[11px] font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">CS</span>
             <span className="hidden sm:block">
               <span className="block font-mono text-xs font-black text-white">CSTD://ARCHIVE</span>
-              <span className="mt-0.5 block font-mono text-[7px] font-bold text-[#68757b]">{copy.statement}</span>
+              <span className="mt-0.5 block font-mono text-[11px] font-bold text-[#68757b]">{copy.statement}</span>
             </span>
           </CstdLink>
 
@@ -143,7 +143,7 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
-                <CstdLink key={item.href} href={localizedHref(item.href, locale)} className="flex h-9 items-center gap-2 px-3 font-mono text-[10px] font-black text-[#9aa4a8] transition-colors hover:bg-white/5 hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]">
+                <CstdLink key={item.href} href={localizedHref(item.href, locale)} className="flex h-9 items-center gap-2 px-3 font-mono text-[11px] font-black text-[#9aa4a8] transition-colors hover:bg-white/5 hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]">
                   <Icon aria-hidden="true" className="h-3.5 w-3.5" /> {item.label[locale]}
                 </CstdLink>
               );
@@ -170,9 +170,9 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
 
         <nav aria-label={locale === "zh" ? "移动导航" : "Mobile navigation"} className="flex h-11 items-center gap-1 overflow-x-auto border-t border-white/8 px-3 lg:hidden">
           {navItems.map((item) => (
-            <CstdLink key={item.href} href={localizedHref(item.href, locale)} className="shrink-0 px-3 py-2 font-mono text-[9px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{item.label[locale]}</CstdLink>
+            <CstdLink key={item.href} href={localizedHref(item.href, locale)} className="shrink-0 px-3 py-2 font-mono text-[11px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{item.label[locale]}</CstdLink>
           ))}
-          <CstdLink href={localizedHref("/now", locale)} className="shrink-0 px-3 py-2 font-mono text-[9px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{copy.now}</CstdLink>
+          <CstdLink href={localizedHref("/now", locale)} className="shrink-0 px-3 py-2 font-mono text-[11px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{copy.now}</CstdLink>
         </nav>
       </header>
 
@@ -181,10 +181,10 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
       <footer className="relative z-10 border-t border-white/12 bg-[#050709]/90 px-5 py-12 md:px-10 lg:px-16">
         <div className="mx-auto grid max-w-[1540px] gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
-            <p className="font-mono text-[9px] font-black text-[#24e0ff]">CSTD / SYDNEY NODE / 2026</p>
+            <p className="font-mono text-[11px] font-black text-[#24e0ff]">CSTD / SYDNEY NODE / 2026</p>
             <p className="mt-3 max-w-2xl text-xl font-semibold text-[#dce1e2]">{copy.statement}</p>
           </div>
-          <div className="flex flex-wrap gap-x-5 gap-y-3 font-mono text-[10px] font-black text-[#8f9ba0]">
+          <div className="flex flex-wrap gap-x-5 gap-y-3 font-mono text-[11px] font-black text-[#8f9ba0]">
             <CstdLink href={localizedHref("/now", locale)} className="hover:text-[#f4d431]">{copy.now}</CstdLink>
             <CstdLink href={localizedHref("/resume", locale)} className="inline-flex items-center gap-2 hover:text-[#f4d431]"><FileText aria-hidden="true" className="h-3.5 w-3.5" /> {copy.resume}</CstdLink>
             <CstdLink href={localizedHref("/map", locale)} className="hover:text-[#24e0ff]">MAP</CstdLink>

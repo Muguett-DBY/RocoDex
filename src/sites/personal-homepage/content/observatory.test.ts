@@ -18,7 +18,8 @@ describe("CSTD engineering observatory", () => {
     expect(snapshot.verification).toHaveLength(4);
     expect(snapshot.totals.contentHealth).toBe(100);
     expect(snapshot.provenance.contract).toBe("cstd.engineering-observatory/v2");
-    expect(snapshot.performance.budgets.initialJavascriptBytes).toBe(150_000);
+    expect(snapshot.performance.budgets.initialJavascriptBytes).toBe(200_000);
+    expect(snapshot.performance.budgets.startupJavascriptBytes).toBe(800_000);
   });
 
   test("keeps local snapshots honest when no deployment metadata exists", () => {

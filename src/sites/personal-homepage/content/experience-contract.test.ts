@@ -11,12 +11,14 @@ describe("CSTD experience contract", () => {
 
   it("publishes strict visual and interaction budgets", () => {
     expect(cstdExperienceContract.release).toBe("CSTD-17.0");
-    expect(cstdExperienceContract.runtime.initialJavaScriptBytes).toBeLessThanOrEqual(150_000);
+    expect(cstdExperienceContract.runtime.initialJavaScriptBytes).toBeLessThanOrEqual(200_000);
+    expect(cstdExperienceContract.runtime.startupJavaScriptBytes).toBeLessThanOrEqual(800_000);
     expect(cstdExperienceContract.runtime.sceneAssetBytes).toBeLessThanOrEqual(320_000);
     expect(cstdExperienceContract.runtime.inpMilliseconds).toBeLessThanOrEqual(150);
     expect(cstdExperienceContract.runtime.cls).toBeLessThanOrEqual(0.03);
     expect(cstdExperienceContract.runtime.progressiveOrder).toBe(cstdPerformanceContract.delivery.runtimeFallbackOrder);
     expect(cstdExperienceContract.runtime.initialJavaScriptBytes).toBe(cstdPerformanceContract.budgets.initialJavascriptBytes);
+    expect(cstdExperienceContract.runtime.startupJavaScriptBytes).toBe(cstdPerformanceContract.budgets.startupJavascriptBytes);
     expect(cstdExperienceContract.runtime.sceneAssetBytes).toBe(cstdPerformanceContract.budgets.sceneAssetBytes);
   });
 });

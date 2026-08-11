@@ -1,7 +1,4 @@
-"use client";
-
 import { ArrowUp, ArrowUpRight, RadioTower } from "lucide-react";
-import { memo } from "react";
 import { getCstdNarrative, getCstdNarrativeSharePath, type CstdNarrativeMode } from "../../content/narratives";
 import { CstdLink } from "../site/cstd-link";
 
@@ -28,7 +25,7 @@ const collaborationCopy = {
   },
 } as const;
 
-function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
+export function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
   const narrative = getCstdNarrative(narrativeMode);
   const collaboration = collaborationCopy[narrativeMode];
   return (
@@ -46,7 +43,7 @@ function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
 
         <div className="relative mx-auto grid w-full max-w-[1320px] gap-12 lg:grid-cols-[minmax(0,1fr)_21rem] lg:items-end lg:gap-20">
           <div className="max-w-6xl">
-            <p className="flex items-center gap-3 font-mono text-[10px] font-black uppercase text-[#24e0ff]">
+            <p className="flex items-center gap-3 font-mono text-[11px] font-black uppercase text-[#24e0ff]">
               <RadioTower aria-hidden="true" className="h-4 w-4" />
               06 / FINAL TRANSMISSION
             </p>
@@ -57,7 +54,7 @@ function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
             <p className="mt-7 max-w-2xl text-lg font-semibold leading-8 text-[#cbd3d5] md:text-xl md:leading-9">
               {collaboration.brief} 每条能力仍在继续向前连接。
             </p>
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 font-mono text-[8px] font-black">
+            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 font-mono text-[11px] font-black">
               {finalNodes.map((node) => (
                 <span key={node.code} className="flex items-center gap-2" style={{ color: node.color }}>
                   <span className="cstd-final-node h-1 w-1 bg-current" />
@@ -68,7 +65,7 @@ function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
           </div>
 
           <div className="border-l border-white/15 pl-6 font-mono md:pl-8">
-            <p className="text-[9px] font-black text-[#24e0ff]">{collaboration.signal}</p>
+            <p className="text-[11px] font-black text-[#24e0ff]">{collaboration.signal}</p>
             <p className="mt-4 text-xs leading-6 text-[#929da1]">当前观看路径：<span className="text-[#f4d431]">{narrative.label.zh}</span></p>
             <a
               href={`mailto:cstd@custard.top?subject=${encodeURIComponent(`CSTD / ${collaboration.signal}`)}`}
@@ -76,7 +73,7 @@ function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
             >
               cstd@custard.top
             </a>
-            <p className="mt-3 text-[9px] leading-5 text-[#717c80]">奶黄包个人技术工作室 / SYDNEY</p>
+            <p className="mt-3 text-[11px] leading-5 text-[#717c80]">奶黄包个人技术工作室 / SYDNEY</p>
             <div className="mt-7 flex items-center gap-5">
               <CstdLink href={getCstdNarrativeSharePath(narrativeMode)} aria-label="分享这条观看路径" className="inline-flex h-10 w-10 items-center justify-center border border-[#24e0ff]/35 text-[#24e0ff] hover:bg-[#24e0ff] hover:text-[#050709]">
                 <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
@@ -95,5 +92,3 @@ function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
     </footer>
   );
 }
-
-export const MemoizedFinale = memo(Finale);

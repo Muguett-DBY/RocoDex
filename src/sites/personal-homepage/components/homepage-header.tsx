@@ -1,16 +1,10 @@
 "use client";
 
 import { clsx } from "clsx";
-import { lazy, Suspense } from "react";
 import type { CstdSceneId } from "../experience/scene-manifest";
+import { HomepageControls } from "./homepage-controls";
 import { CstdChapterLink } from "./site/cstd-chapter-link";
-
-const LazyCstdLink = lazy(() =>
-  import("./site/cstd-link").then((module) => ({ default: module.CstdLink })),
-);
-const LazyHomepageControls = lazy(() =>
-  import("./homepage-controls").then((module) => ({ default: module.HomepageControls })),
-);
+import { CstdLink } from "./site/cstd-link";
 
 const homepageLinks = [
   { href: "#systems", label: "能力", sceneId: "systems" },
@@ -68,26 +62,22 @@ export function HomepageHeader({
               );
             })}
             <span aria-hidden="true" className="mx-2 h-4 w-px bg-white/10" />
-            <Suspense fallback={<><a href="/notes" className="px-2.5 py-2">札记</a><a href="/about" className="px-2.5 py-2">关于</a></>}>
-              <LazyCstdLink eagerPrefetch href="/notes" className="px-2.5 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
-                札记
-              </LazyCstdLink>
-              <LazyCstdLink eagerPrefetch href="/about" className="px-2.5 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
-                关于
-              </LazyCstdLink>
-            </Suspense>
+            <CstdLink eagerPrefetch href="/notes" className="px-2.5 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
+              札记
+            </CstdLink>
+            <CstdLink eagerPrefetch href="/about" className="px-2.5 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
+              关于
+            </CstdLink>
           </nav>
           <CstdChapterLink href="#proof" className="mr-1 font-mono text-xs font-semibold text-[#f4d431] md:hidden">
             作品
           </CstdChapterLink>
-          <Suspense fallback={<span aria-hidden="true" className="h-9 w-[4.75rem] border border-white/10" />}>
-            <LazyHomepageControls
-              overdrive={overdrive}
-              reducedMotion={reducedMotion}
-              onToggleOverdrive={onToggleOverdrive}
-              onToggleMotion={onToggleMotion}
-            />
-          </Suspense>
+          <HomepageControls
+            overdrive={overdrive}
+            reducedMotion={reducedMotion}
+            onToggleOverdrive={onToggleOverdrive}
+            onToggleMotion={onToggleMotion}
+          />
         </div>
       </div>
     </header>

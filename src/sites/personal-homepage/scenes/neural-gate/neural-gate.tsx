@@ -1,7 +1,4 @@
-"use client";
-
 import { ArrowDown, ArrowUpRight } from "lucide-react";
-import { memo } from "react";
 import { getCstdNarrative, type CstdNarrativeMode } from "../../content/narratives";
 import { CstdChapterLink } from "../../components/site/cstd-chapter-link";
 import { CstdLink } from "../../components/site/cstd-link";
@@ -12,7 +9,7 @@ const signatureSignals = [
   { value: "03", label: "发布与验证" },
 ] as const;
 
-function NeuralGate({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
+export function NeuralGate({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
   const narrative = getCstdNarrative(narrativeMode);
 
   return (
@@ -30,7 +27,7 @@ function NeuralGate({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
 
       <div className="relative mx-auto w-full max-w-[1320px]">
         <div className="cstd-hero-copy max-w-[50rem]">
-          <p className="flex items-center gap-3 font-mono text-[10px] font-black text-[#f4d431] md:text-xs">
+          <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#f4d431] md:text-xs">
             <span aria-hidden="true" className="h-px w-10 bg-[#f4d431]" />
             <span>CSTD / PERSONAL STUDIO</span>
           </p>
@@ -81,19 +78,17 @@ function NeuralGate({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
         <dl data-cstd-hero-summary className="mt-12 grid max-w-[46rem] border-t border-white/14 sm:grid-cols-3">
           {signatureSignals.map((signal) => (
             <div key={signal.value} className="flex items-baseline gap-3 border-b border-white/10 py-3.5 last:border-b-0 sm:border-b-0 sm:border-r sm:px-5 sm:first:pl-0 sm:last:border-r-0">
-              <dt className="font-mono text-[9px] font-black text-[#f4d431]">{signal.value}</dt>
+              <dt className="font-mono text-[11px] font-black text-[#f4d431]">{signal.value}</dt>
               <dd className="text-xs font-semibold text-[#aeb8bb]">{signal.label}</dd>
             </div>
           ))}
         </dl>
       </div>
 
-      <div aria-hidden="true" className="absolute bottom-5 right-5 hidden items-center gap-3 font-mono text-[8px] font-black text-[#697478] md:flex lg:right-16">
+      <div aria-hidden="true" className="absolute bottom-5 right-5 hidden items-center gap-3 font-mono text-[11px] font-black text-[#697478] md:flex lg:right-16">
         <span className="h-px w-14 bg-[#24e0ff]/55" />
         NEXT / 02 CAPABILITY SYSTEM
       </div>
     </section>
   );
 }
-
-export const MemoizedNeuralGate = memo(NeuralGate);

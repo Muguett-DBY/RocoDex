@@ -34,10 +34,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npm run dev -- --webpack --hostname 127.0.0.1 --port ${port}`,
-    url: `${baseURL}/api/auth/session`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 180_000,
+    command: `npm run build && npm run start -- --hostname 127.0.0.1 --port ${port}`,
+    url: `${baseURL}/cstd/status.json`,
+    reuseExistingServer: false,
+    timeout: 300_000,
     env: {
       ...inheritedEnvironment,
       AUTH_SECRET: "rocodex-e2e-only-secret-with-sufficient-length",

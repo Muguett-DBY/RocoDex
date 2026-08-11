@@ -39,8 +39,8 @@ export function CstdMapPage({ locale }: { locale: CstdLocale }) {
         <CstdPageHero locale={locale} eyebrow={copy.eyebrow} title={copy.title} summary={copy.summary} image={mapHero} />
         <section className="border-b border-white/12 bg-[#080a0c] px-5 py-16 md:px-10 lg:px-16">
           <div className="mx-auto grid max-w-[1540px] gap-10 lg:grid-cols-[0.65fr_1.35fr] lg:items-end">
-            <div><p className="font-mono text-[9px] font-black text-[#f4d431]">CSTD / GRAPH SCHEMA 01</p><h2 className="mt-5 text-3xl font-semibold leading-tight md:text-5xl">{copy.title2}</h2><p className="mt-5 max-w-xl text-sm leading-7 text-[#9aa4a8]">{copy.body}</p></div>
-            <dl className="grid grid-cols-2 border-l border-t border-white/12 md:grid-cols-4">{metrics.map(({ value, label, icon: Icon }) => <div key={label} className="border-b border-r border-white/12 p-5"><dt className="flex items-center gap-2 font-mono text-[8px] font-black text-[#68757b]"><Icon aria-hidden="true" className="h-3.5 w-3.5" />{label.toUpperCase()}</dt><dd className="mt-4 text-3xl font-semibold text-[#24e0ff]">{value}</dd></div>)}</dl>
+            <div><p className="font-mono text-[11px] font-black text-[#f4d431]">CSTD / GRAPH SCHEMA 01</p><h2 className="mt-5 text-3xl font-semibold leading-tight md:text-5xl">{copy.title2}</h2><p className="mt-5 max-w-xl text-sm leading-7 text-[#9aa4a8]">{copy.body}</p></div>
+            <dl className="grid grid-cols-2 border-l border-t border-white/12 md:grid-cols-4">{metrics.map(({ value, label, icon: Icon }) => <div key={label} className="border-b border-r border-white/12 p-5"><dt className="flex items-center gap-2 font-mono text-[11px] font-black text-[#68757b]"><Icon aria-hidden="true" className="h-3.5 w-3.5" />{label.toUpperCase()}</dt><dd className="mt-4 text-3xl font-semibold text-[#24e0ff]">{value}</dd></div>)}</dl>
           </div>
         </section>
         <KnowledgeConstellation locale={locale} />

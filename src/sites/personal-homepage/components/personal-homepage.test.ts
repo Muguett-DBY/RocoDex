@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 
 const read = (path: string) => readFileSync(new URL(path, import.meta.url), "utf8");
 const landingSource = read("./personal-homepage.tsx");
+const homepageRuntimeSource = read("./homepage-runtime.tsx");
 const controlsSource = read("./homepage-controls.tsx");
 const headerSource = read("./homepage-header.tsx");
 const linkSource = read("./site/cstd-link.tsx");
@@ -21,6 +22,7 @@ const sceneRuntimeSource = read("./scene-runtime.tsx");
 const webgpuSource = read("./webgpu-signal-field.tsx");
 const narrativeSource = read("../content/narratives.ts");
 const studioSource = read("./sections/living-studio-twin.tsx");
+const studioExplorerSource = read("./sections/studio-system-explorer.tsx");
 const proofSource = read("./sections/selected-work.tsx");
 const replaySource = read("./sections/executable-evidence.tsx");
 const replayRuntimeSource = read("./site/executable-case-replay.tsx");
@@ -42,14 +44,16 @@ describe("CSTD personal homepage", () => {
   });
 
   test("uses six focused scenes without app-like homepage controls", () => {
-    expect(landingSource).toContain("LazyNeuralGate");
-    expect(landingSource).toContain('import { HomepageHeader } from "./homepage-header"');
-    expect(landingSource).not.toContain("LazyHomepageHeader");
-    expect(landingSource).toContain("LazyLivingStudioTwin");
-    expect(landingSource).toContain("LazySelectedWork");
-    expect(landingSource).toContain("LazyExecutableEvidence");
-    expect(landingSource).toContain("LazyKnowledgeLens");
-    expect(landingSource).toContain("LazyFinale");
+    expect(landingSource).not.toContain('"use client"');
+    expect(landingSource).toContain("<HomepageRuntime");
+    expect(landingSource).toContain("<NeuralGate");
+    expect(landingSource).toContain("<LivingStudioTwin");
+    expect(landingSource).toContain("<SelectedWork");
+    expect(landingSource).toContain("<ExecutableEvidence");
+    expect(landingSource).toContain("<KnowledgeLens");
+    expect(landingSource).toContain("<Finale");
+    expect(homepageRuntimeSource).toContain('import { HomepageHeader } from "./homepage-header"');
+    expect(homepageRuntimeSource).not.toContain("LazyHomepageHeader");
     expect(landingSource).not.toContain("LazyEngineeringMethod");
     expect(landingSource).not.toContain("LazySceneDirector");
     expect(landingSource).not.toContain("HomepageHud");
@@ -59,12 +63,15 @@ describe("CSTD personal homepage", () => {
   test("presents five capability directions without release-dashboard churn", () => {
     expect(studioSource).toContain("cstdStudioSnapshot.districts");
     expect(studioSource).toContain("data-cstd-studio-twin");
-    expect(studioSource).toContain("data-cstd-studio-district-option");
-    expect(studioSource).toContain('role="tablist"');
-    expect(studioSource).toContain('href="/observatory.json"');
+    expect(studioSource).toContain("<StudioSystemExplorer");
+    expect(studioExplorerSource).toContain("data-cstd-studio-district-option");
+    expect(studioExplorerSource).toContain('role="tablist"');
+    expect(studioExplorerSource).toContain('href="/observatory.json"');
     expect(studioSource).not.toContain("data-cstd-release-replay");
     expect(studioSource).not.toContain("setInterval");
     expect(studioSource).not.toContain("observatory.verification");
+    expect(studioExplorerSource).not.toContain("cstdStudioSnapshot");
+    expect(studioExplorerSource).not.toContain("cstdCaseStudies");
   });
 
   test("keeps representative work concise and sends depth to case pages", () => {
@@ -81,6 +88,7 @@ describe("CSTD personal homepage", () => {
     expect(replaySource).not.toContain("data-cstd-replay-option");
     expect(replaySource).not.toContain("useState");
     expect(replayRuntimeSource).toContain('new Worker("/cstd-case-worker.js")');
+    expect(replayRuntimeSource).toContain("new IntersectionObserver");
     expect(replayRuntimeSource).toContain('data-cstd-worker="dedicated"');
     expect(workerSource).toContain('"alpha-race"');
     expect(workerSource).toContain("STALE WRITE REJECTED");
@@ -97,10 +105,10 @@ describe("CSTD personal homepage", () => {
   });
 
   test("requires explicit opt-in before loading the desktop GPU runtime", () => {
-    expect(landingSource).toContain('reason: "balanced-default"');
-    expect(landingSource).toContain("useCstdRuntimeProfile(enhancementsReady && overdrive, desktopScene)");
-    expect(landingSource).toContain('data-cstd-render-policy={overdrive ? "enhanced" : "balanced"}');
-    expect(landingSource).toContain("enabled={enhancementsReady && desktopScene && overdrive}");
+    expect(homepageRuntimeSource).toContain('reason: "balanced-default"');
+    expect(homepageRuntimeSource).toContain("useCstdRuntimeProfile(enhancementsReady && overdrive, desktopScene)");
+    expect(homepageRuntimeSource).toContain('data-cstd-render-policy={overdrive ? "enhanced" : "balanced"}');
+    expect(homepageRuntimeSource).toContain("enabled={enhancementsReady && desktopScene && overdrive}");
     expect(runtimeHooksSource).toContain("desktopSceneQuery");
     expect(runtimeHooksSource).toContain('import("./runtime-capabilities")');
     expect(runtimeSource).toContain("WEBGL_debug_renderer_info");
@@ -119,22 +127,28 @@ describe("CSTD personal homepage", () => {
   });
 
   test("uses one throttled native scroll and pointer clock", () => {
-    expect(landingSource).toContain("useCstdSceneClock");
+    expect(homepageRuntimeSource).toContain("useCstdSceneClock");
     expect(sceneClockSource).toContain('window.addEventListener("scroll", requestSync, { passive: true })');
     expect(sceneClockSource).toContain("requestAnimationFrame(sync)");
-    expect(landingSource).toContain("pointerFrameRef");
-    expect(landingSource).toContain("window.requestAnimationFrame(flushPointerPosition)");
-    expect(landingSource).toContain("useCstdDocumentVisibility");
+    expect(sceneClockSource).toContain("sceneMetrics");
+    expect(sceneClockSource).toContain("let maxScroll = 1");
+    expect(sceneClockSource).not.toContain("const maxScroll = Math.max(1, document.documentElement.scrollHeight");
+    expect(sceneClockSource).toContain("if (nextSceneId === activeSceneRef.current) return");
+    expect(sceneClockSource).not.toContain("getBoundingClientRect().top <= activationLine");
+    expect(homepageRuntimeSource).toContain("pointerFrameRef");
+    expect(homepageRuntimeSource).toContain("window.requestAnimationFrame(flushPointerPosition)");
+    expect(homepageRuntimeSource).toContain("useCstdDocumentVisibility");
     expect(runtimeHooksSource).toContain('document.addEventListener("visibilitychange", sync)');
+    expect(runtimeHooksSource).not.toContain("new MutationObserver");
     expect(sceneSource).toContain('frameloop={props.active && quality === "full" ? "always" : "demand"}');
-    expect(landingSource).not.toContain('from "framer-motion"');
+    expect(homepageRuntimeSource).not.toContain('from "framer-motion"');
   });
 
   test("keeps only deliberate visual and motion controls", () => {
     expect(controlsSource).toContain("data-cstd-overdrive-toggle");
     expect(controlsSource).toContain("data-cstd-motion-toggle");
     expect(controlsSource).not.toContain("data-cstd-ambience-toggle");
-    expect(landingSource).not.toContain("ambientSound");
+    expect(homepageRuntimeSource).not.toContain("ambientSound");
     expect(globalsSource).toContain('[data-cstd-render-policy="balanced"] .cstd-world-rain');
     expect(globalsSource).toContain('[data-cstd-render-policy="enhanced"] .cstd-world-rain');
   });
