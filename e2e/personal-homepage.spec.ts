@@ -338,9 +338,16 @@ test("CSTD explicit calm mode reduces render cost and survives context loss", as
 });
 
 test("CSTD primary and deep surfaces pass automated WCAG A/AA checks", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+
   for (const path of ["/cstd", "/cstd/work/rocodex-platform"]) {
     await page.goto(path, { waitUntil: "domcontentloaded" });
-    if (path === "/cstd") await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
+    if (path === "/cstd") {
+      await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
+      for (const heading of ["#proof-heading", "#executable-evidence-heading"]) {
+        await expect(page.locator(heading)).toHaveCSS("opacity", "1");
+      }
+    }
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
       .analyze();
