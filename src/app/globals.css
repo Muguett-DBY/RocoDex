@@ -703,11 +703,9 @@ html[data-cstd-route-transition="execute"]::view-transition-new(root) {
 
 [data-cstd-enhancements-ready="true"] [data-cstd-chapter] h2,
 [data-cstd-enhancements-ready="true"] [data-cstd-finale] h2 {
-  opacity: 0;
+  opacity: 1;
   transform: translate3d(0, 22px, 0);
-  transition:
-    opacity 480ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 480ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 480ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 [data-cstd-enhancements-ready="true"] [data-cstd-chapter][data-cstd-revealed="true"] h2,
@@ -730,6 +728,7 @@ html[data-cstd-route-transition="execute"]::view-transition-new(root) {
 
 [data-cstd-motion="calm"] [data-cstd-chapter] h2,
 [data-cstd-motion="calm"] [data-cstd-finale] h2 {
+  transform: translate3d(0, 0, 0);
   transition: none;
 }
 
