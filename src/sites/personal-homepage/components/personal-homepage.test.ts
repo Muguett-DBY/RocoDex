@@ -30,6 +30,8 @@ const workerSource = read("../../../../public/cstd-case-worker.js");
 const knowledgeSource = read("./sections/knowledge-lens.tsx");
 const finaleSource = read("./sections/finale.tsx");
 const globalsSource = read("../../../app/globals.css");
+const themeStoreSource = read("../experience/theme-store.ts");
+const themeSwitcherSource = read("./theme-switcher.tsx");
 
 describe("CSTD personal homepage", () => {
   test("keeps Custard identity and a direct portfolio promise above the fold", () => {
@@ -176,5 +178,18 @@ describe("CSTD personal homepage", () => {
     expect(finaleSource).toContain('href={`mailto:cstd@custard.top');
     expect(finaleSource).not.toContain("lg:sticky");
     expect(finaleSource).not.toContain("lg:h-[155svh]");
+  });
+
+  test("offers three persistent visual worlds without changing the content model", () => {
+    expect(themeStoreSource).toContain('export type CstdThemeId = "neon-district" | "solar-lab" | "ink-protocol"');
+    expect(themeStoreSource).toContain('cstdThemeStorageKey = "cstd-world-theme"');
+    expect(themeStoreSource).toContain("setCstdTheme");
+    expect(themeSwitcherSource).toContain("data-cstd-theme-switcher");
+    expect(themeSwitcherSource).toContain("data-cstd-theme-option={candidate.id}");
+    expect(homepageRuntimeSource).toContain("data-cstd-theme={theme}");
+    expect(themeStoreSource).toContain("CUSTARD SOLAR LAB");
+    expect(themeStoreSource).toContain("INK PROTOCOL");
+    expect(globalsSource).toContain('[data-cstd-theme="solar-lab"]');
+    expect(globalsSource).toContain('[data-cstd-theme="ink-protocol"]');
   });
 });

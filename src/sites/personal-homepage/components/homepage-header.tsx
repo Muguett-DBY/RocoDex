@@ -3,6 +3,7 @@
 import { clsx } from "clsx";
 import type { CstdSceneId } from "../experience/scene-manifest";
 import { HomepageControls } from "./homepage-controls";
+import { ThemeSwitcher } from "./theme-switcher";
 import { CstdChapterLink } from "./site/cstd-chapter-link";
 import { CstdLink } from "./site/cstd-link";
 
@@ -72,6 +73,7 @@ export function HomepageHeader({
           <CstdChapterLink href="#proof" className="mr-1 font-mono text-xs font-semibold text-[#f4d431] md:hidden">
             作品
           </CstdChapterLink>
+          <ThemeSwitcher />
           <HomepageControls
             overdrive={overdrive}
             reducedMotion={reducedMotion}
