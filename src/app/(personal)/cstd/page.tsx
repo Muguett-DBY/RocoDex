@@ -1,9 +1,9 @@
 import { PersonalHomepage, StructuredData } from "@/sites/personal-homepage";
-import { personalHomepageMetadata, personalHomepageStructuredData } from "@/sites/personal-homepage/metadata";
+import { getPersonalHomepageMetadata, getPersonalHomepageStructuredData } from "@/sites/personal-homepage/metadata";
 import { cstdHomepageObservatory } from "@/sites/personal-homepage/server";
 
-export const metadata = personalHomepageMetadata;
+export const metadata = getPersonalHomepageMetadata("zh");
 
 export default function PersonalHomepagePage() {
-  return <><PersonalHomepage observatory={cstdHomepageObservatory} /><StructuredData value={personalHomepageStructuredData} /></>;
+  return <><PersonalHomepage locale="zh" observatory={cstdHomepageObservatory} /><StructuredData value={getPersonalHomepageStructuredData("zh")} /></>;
 }

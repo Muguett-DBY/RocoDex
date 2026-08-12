@@ -35,8 +35,9 @@ test.describe("CSTD technical archive", () => {
     await expect(page.getByRole("button", { name: "复制引用" })).toBeVisible();
 
     await page.goto("/cstd/en");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("Systems that run");
-    await expect(page.getByRole("link", { name: "ALL CASE STUDIES" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
+    await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("Compile complex problems");
+    await expect(page.getByRole("link", { name: "View selected work" })).toBeVisible();
     expect(errors).toEqual([]);
   });
 

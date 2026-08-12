@@ -2,13 +2,16 @@
 
 import { Pause, Play, Zap } from "lucide-react";
 import { clsx } from "clsx";
+import type { CstdLocale } from "../content/content-types";
 
 export function HomepageControls({
+  locale,
   overdrive,
   reducedMotion,
   onToggleOverdrive,
   onToggleMotion,
 }: {
+  locale: CstdLocale;
   overdrive: boolean;
   reducedMotion: boolean;
   onToggleOverdrive: () => void;
@@ -20,8 +23,8 @@ export function HomepageControls({
         type="button"
         data-cstd-overdrive-toggle
         aria-pressed={overdrive}
-        aria-label={overdrive ? "切换到平衡视觉" : "开启增强视觉"}
-        title={overdrive ? "切换到平衡视觉" : "开启增强视觉"}
+        aria-label={overdrive ? (locale === "zh" ? "切换到平衡视觉" : "Use balanced visuals") : (locale === "zh" ? "开启增强视觉" : "Enable enhanced visuals")}
+        title={overdrive ? (locale === "zh" ? "切换到平衡视觉" : "Use balanced visuals") : (locale === "zh" ? "开启增强视觉" : "Enable enhanced visuals")}
         onClick={onToggleOverdrive}
         className={clsx(
           "flex h-9 w-9 items-center justify-center border transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff3b30]",
@@ -36,8 +39,8 @@ export function HomepageControls({
         type="button"
         data-cstd-motion-toggle
         aria-pressed={!reducedMotion}
-        aria-label={reducedMotion ? "开启增强动效" : "切换到平静模式"}
-        title={reducedMotion ? "开启增强动效" : "切换到平静模式"}
+        aria-label={reducedMotion ? (locale === "zh" ? "开启增强动效" : "Enable enhanced motion") : (locale === "zh" ? "切换到平静模式" : "Use calm motion")}
+        title={reducedMotion ? (locale === "zh" ? "开启增强动效" : "Enable enhanced motion") : (locale === "zh" ? "切换到平静模式" : "Use calm motion")}
         onClick={onToggleMotion}
         className="flex h-9 w-9 items-center justify-center border border-white/15 text-[#a5aaad] transition-colors hover:border-[#f4d431]/60 hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
       >

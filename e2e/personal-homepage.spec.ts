@@ -2,6 +2,10 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { captureBrowserIssues, expectNoHorizontalOverflow } from "./support/browser";
 
+function stripPermittedEnglishAutonyms(value: string) {
+  return value.replaceAll("奶黄包", "").replace(/^\s*中\s*$/gmu, "");
+}
+
 test("CSTD presents a clear portfolio before optional visual enhancement", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
   const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
@@ -67,6 +71,70 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
 
   await expectNoHorizontalOverflow(page);
   expect(browserIssues).toEqual([]);
+});
+
+test("CSTD keeps the complete experience localized across themes and deep-route switching", async ({ page }) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+
+  await page.goto("/cstd/en?view=compact#proof", { waitUntil: "domcontentloaded" });
+  const root = page.locator("[data-cstd-kinetic-world]");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
+  await expect(page.locator("html")).toHaveAttribute("data-cstd-locale", "en");
+  await expect(root).toHaveAttribute("data-cstd-locale", "en");
+  await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
+  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("Compile complex problems");
+  await expect(page.locator("[data-cstd-scene]")).toHaveCount(6);
+  await expect(page.locator("[data-cstd-knowledge-list]")).not.toContainText("[object Object]");
+  const englishCopy = stripPermittedEnglishAutonyms((await root.innerText()) ?? "");
+  expect(englishCopy).not.toMatch(/[\p{Script=Han}]/u);
+  await expect(page.locator('link[rel="alternate"][hreflang="zh-CN"]')).toHaveAttribute(
+    "href",
+    /^https:\/\/custard\.top\/?$/,
+  );
+  await expect(page.locator('link[rel="alternate"][hreflang="en-AU"]')).toHaveAttribute("href", "https://custard.top/en");
+
+  for (const world of [
+    { id: "press-room", thesis: "Today's lead:" },
+    { id: "ink-protocol", thesis: "Ideas become ink;" },
+    { id: "pixel-quest", thesis: "Main quest:" },
+  ]) {
+    await page.locator("[data-cstd-theme-switcher]").click();
+    await page.locator(`[data-cstd-theme-option="${world.id}"]`).click();
+    await expect(root).toHaveAttribute("data-cstd-theme", world.id);
+    await expect(page.locator("[data-cstd-hero-thesis]")).toContainText(world.thesis);
+  }
+
+  await page.locator("[data-cstd-theme-switcher]").click();
+  await page.locator('[data-cstd-theme-option="press-room"]').click();
+  await page.goto("/cstd/en/notes/host-boundaries-in-one-next-deployment?view=compact#sources", { waitUntil: "domcontentloaded" });
+  const englishShell = page.locator("[data-cstd-deep-shell]");
+  await expect(englishShell).toHaveAttribute("data-cstd-locale", "en");
+  await expect(englishShell).toHaveAttribute("data-cstd-theme", "press-room");
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
+  const englishTitle = (await page.getByRole("heading", { level: 1 }).textContent()) ?? "";
+  expect(englishTitle).toContain("Next.js");
+  expect(englishTitle).not.toMatch(/[\p{Script=Han}]/u);
+  expect(stripPermittedEnglishAutonyms((await englishShell.innerText()) ?? "")).not.toMatch(/[\p{Script=Han}]/u);
+
+  const toChinese = page.locator('[data-cstd-locale-switch][data-cstd-locale-to="zh"]');
+  await expect(toChinese).toHaveAccessibleName("Switch to Chinese");
+  await expect(toChinese).toHaveAttribute("href", "/notes/host-boundaries-in-one-next-deployment?view=compact#sources");
+  await toChinese.click();
+  await expect(page).toHaveURL(/\/cstd\/notes\/host-boundaries-in-one-next-deployment\?view=compact#sources$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
+  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-locale", "zh");
+  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "press-room");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("一个 Next.js 部署");
+
+  const toEnglish = page.locator('[data-cstd-locale-switch][data-cstd-locale-to="en"]');
+  await expect(toEnglish).toHaveAccessibleName("切换到英文");
+  await expect(toEnglish).toHaveAttribute("href", "/en/notes/host-boundaries-in-one-next-deployment?view=compact#sources");
+  await toEnglish.click();
+  await expect(page).toHaveURL(/\/cstd\/en\/notes\/host-boundaries-in-one-next-deployment\?view=compact#sources$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
+  await expectNoHorizontalOverflow(page);
+  expect(pageErrors).toEqual([]);
 });
 
 test("CSTD runs one deterministic worker example and keeps notes directly readable", async ({ page }) => {
@@ -144,8 +212,10 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
     ["/cstd/releases.json", "application/json"],
     ["/cstd/topics.json", "application/json"],
     ["/cstd/feed.json", "application/json"],
+    ["/cstd/en/feed.json", "application/json"],
     ["/cstd/llms.txt", "text/plain"],
     ["/cstd/manifest.webmanifest", "application/manifest+json"],
+    ["/cstd/en/manifest.webmanifest", "application/manifest+json"],
     ["/.well-known/security.txt", "text/plain"],
     ["/cstd-case-worker.js", "javascript"],
   ] as const;
@@ -393,7 +463,7 @@ test("CSTD reaches its tailored finale without a scroll trap", async ({ page, is
   await expect(footer).toBeVisible();
   await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
   await expect(footer).toBeInViewport({ ratio: 0.35 });
-  await expect(footer.getByRole("heading", { name: /STILL BUILDING/ })).toBeVisible();
+  await expect(footer.getByRole("heading", { name: /仍在\s*构建/ })).toBeVisible();
   await expect(footer.getByText("当前观看路径", { exact: false })).toBeVisible();
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-scene-current", "finale");
   const frameDelay = await page.evaluate(() => new Promise<number>((resolve) => {

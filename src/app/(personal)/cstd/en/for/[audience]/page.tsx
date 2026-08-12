@@ -9,10 +9,10 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ audience: string }> }) {
   const { audience } = await params;
-  return getCstdAudienceMetadata(audience);
+  return getCstdAudienceMetadata(audience, "en");
 }
 
-export default async function CstdAudiencePage({ params }: { params: Promise<{ audience: string }> }) {
+export default async function EnglishCstdAudiencePage({ params }: { params: Promise<{ audience: string }> }) {
   const { audience } = await params;
-  return <CstdAudienceHomepagePage audience={audience} locale="zh" />;
+  return <CstdAudienceHomepagePage audience={audience} locale="en" />;
 }

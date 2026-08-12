@@ -14,6 +14,13 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/index.html")).toEqual({ kind: "rewrite", path: "/cstd" });
   });
 
+  test("honors only an explicit saved English preference at the root entry", () => {
+    expect(getPersonalSiteRouteDecision("custard.top", "/", "en")).toEqual({ kind: "redirect-path", path: "/en" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/index.html", "en")).toEqual({ kind: "redirect-path", path: "/en" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/", "zh")).toEqual({ kind: "rewrite", path: "/cstd" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/work", "en")).toEqual({ kind: "rewrite", path: "/cstd/work" });
+  });
+
   test("serves the CSTD landing route on both canonical and explicit CSTD paths", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd/work/rocodex-platform")).toEqual({ kind: "next" });
@@ -33,6 +40,9 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/en/resume")).toEqual({ kind: "rewrite", path: "/cstd/en/resume" });
     expect(getPersonalSiteRouteDecision("custard.top", "/resume.json")).toEqual({ kind: "rewrite", path: "/cstd/resume.json" });
     expect(getPersonalSiteRouteDecision("custard.top", "/en/resume.json")).toEqual({ kind: "rewrite", path: "/cstd/en/resume.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/for/research")).toEqual({ kind: "rewrite", path: "/cstd/en/for/research" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/feed.json")).toEqual({ kind: "rewrite", path: "/cstd/en/feed.json" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/manifest.webmanifest")).toEqual({ kind: "rewrite", path: "/cstd/en/manifest.webmanifest" });
     expect(getPersonalSiteRouteDecision("custard.top", "/map")).toEqual({ kind: "rewrite", path: "/cstd/map" });
     expect(getPersonalSiteRouteDecision("custard.top", "/en/map")).toEqual({ kind: "rewrite", path: "/cstd/en/map" });
     expect(getPersonalSiteRouteDecision("custard.top", "/proof.json")).toEqual({ kind: "rewrite", path: "/cstd/proof.json" });

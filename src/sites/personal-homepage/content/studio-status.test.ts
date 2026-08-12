@@ -28,5 +28,6 @@ describe("CSTD living studio snapshot", () => {
 
     expect(snapshot.districts.some((district) => district.state === "refresh")).toBe(true);
     expect(snapshot.districts.every((district) => district.projectCount > 0)).toBe(true);
+    expect(snapshot.districts.every((district) => district.titleLocalized.zh && district.titleLocalized.en)).toBe(true);
   });
 });

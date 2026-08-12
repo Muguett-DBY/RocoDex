@@ -2,6 +2,7 @@ import { ArrowUp, ArrowUpRight, RadioTower } from "lucide-react";
 import { getCstdNarrative, getCstdNarrativeSharePath, type CstdNarrativeMode } from "../../content/narratives";
 import { CstdLink } from "../site/cstd-link";
 import { ThemeChapterLabel, ThemeCopy } from "../theme-copy";
+import type { CstdLocale, LocalizedText } from "../../content/content-types";
 
 const finalNodes = [
   { code: "PRODUCT", color: "#f4d431" },
@@ -13,20 +14,20 @@ const finalNodes = [
 
 const collaborationCopy = {
   builder: {
-    brief: "适合一起拆边界、写实现、做发布验收。",
+    brief: { zh: "适合一起拆边界、写实现、做发布验收。", en: "A good fit for defining boundaries, implementing systems, and validating releases together." },
     signal: "SYSTEM DELIVERY",
   },
   researcher: {
-    brief: "适合一起把数据、假设、模型与证据链做扎实。",
+    brief: { zh: "适合一起把数据、假设、模型与证据链做扎实。", en: "A good fit for making data, assumptions, models, and evidence chains rigorous together." },
     signal: "RESEARCH SYSTEM",
   },
   collaborator: {
-    brief: "适合从真实目标出发，把产品价值一路交付到线上。",
+    brief: { zh: "适合从真实目标出发，把产品价值一路交付到线上。", en: "A good fit for taking a real objective from product value through to a live release." },
     signal: "PRODUCT COLLABORATION",
   },
-} as const;
+} as const satisfies Record<CstdNarrativeMode, { brief: LocalizedText; signal: string }>;
 
-export function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
+export function Finale({ narrativeMode, locale }: { narrativeMode: CstdNarrativeMode; locale: CstdLocale }) {
   const narrative = getCstdNarrative(narrativeMode);
   const collaboration = collaborationCopy[narrativeMode];
   return (
@@ -46,18 +47,18 @@ export function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) 
           <div className="max-w-6xl">
             <p className="flex items-center gap-3 font-mono text-[11px] font-black uppercase text-[#24e0ff]">
               <RadioTower aria-hidden="true" className="h-4 w-4" />
-              <ThemeChapterLabel neon="06 / FINAL TRANSMISSION" ink="卷尾 / 山高水长" press="BACK PAGE / LATE EDITION" pixel="FINAL STAGE / CONTINUE?" />
+              <ThemeChapterLabel neon="06 / FINAL TRANSMISSION" ink={locale === "zh" ? "卷尾 / 山高水长" : "CLOSING SCROLL / THE PATH CONTINUES"} press="BACK PAGE / LATE EDITION" pixel="FINAL STAGE / CONTINUE?" />
             </p>
             <h2 className="cstd-finale-title mt-8 text-5xl font-black leading-[0.9] tracking-[0] md:text-7xl lg:text-[6.5rem]">
               <ThemeCopy
-                neon={<>STILL<span className="block text-[#f4d431]">BUILDING.</span></>}
-                ink={<>山水未尽<span className="block text-[#f4d431]">工程长流。</span></>}
-                press={<>THE NEXT EDITION<span className="block text-[#f4d431]">IS IN PROGRESS.</span></>}
-                pixel={<>QUEST CLEAR<span className="block text-[#f4d431]">NEW GAME+</span></>}
+                neon={locale === "zh" ? <>仍在<span className="block text-[#f4d431]">构建。</span></> : <>STILL<span className="block text-[#f4d431]">BUILDING.</span></>}
+                ink={locale === "zh" ? <>山水未尽<span className="block text-[#f4d431]">工程长流。</span></> : <>THE SCROLL CONTINUES<span className="block text-[#f4d431]">BEYOND THIS FRAME.</span></>}
+                press={locale === "zh" ? <>下一期<span className="block text-[#f4d431]">正在编辑中。</span></> : <>THE NEXT EDITION<span className="block text-[#f4d431]">IS IN PROGRESS.</span></>}
+                pixel={locale === "zh" ? <>任务完成<span className="block text-[#f4d431]">新游戏+</span></> : <>QUEST CLEAR<span className="block text-[#f4d431]">NEW GAME+</span></>}
               />
             </h2>
             <p className="mt-7 max-w-2xl text-lg font-semibold leading-8 text-[#cbd3d5] md:text-xl md:leading-9">
-              {collaboration.brief} 每条能力仍在继续向前连接。
+              {collaboration.brief[locale]} {locale === "zh" ? "每条能力仍在继续向前连接。" : "Every capability keeps connecting to what comes next."}
             </p>
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 font-mono text-[11px] font-black">
               {finalNodes.map((node) => (
@@ -71,21 +72,21 @@ export function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) 
 
           <div className="border-l border-white/15 pl-6 font-mono md:pl-8">
             <p className="text-[11px] font-black text-[#24e0ff]">{collaboration.signal}</p>
-            <p className="mt-4 text-xs leading-6 text-[#929da1]">当前观看路径：<span className="text-[#f4d431]">{narrative.label.zh}</span></p>
+            <p className="mt-4 text-xs leading-6 text-[#929da1]">{locale === "zh" ? "当前观看路径：" : "Current viewing path: "}<span className="text-[#f4d431]">{narrative.label[locale]}</span></p>
             <a
               href={`mailto:cstd@custard.top?subject=${encodeURIComponent(`CSTD / ${collaboration.signal}`)}`}
               className="mt-5 block text-base font-black text-[#f2efe7] transition-colors hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
             >
               cstd@custard.top
             </a>
-            <p className="mt-3 text-[11px] leading-5 text-[#717c80]">奶黄包个人技术工作室 / SYDNEY</p>
+            <p className="mt-3 text-[11px] leading-5 text-[#717c80]">{locale === "zh" ? "奶黄包个人技术工作室" : "CUSTARD PERSONAL ENGINEERING STUDIO"} / SYDNEY</p>
             <div className="mt-7 flex items-center gap-5">
-              <CstdLink href={getCstdNarrativeSharePath(narrativeMode)} aria-label="分享这条观看路径" className="inline-flex h-10 w-10 items-center justify-center border border-[#24e0ff]/35 text-[#24e0ff] hover:bg-[#24e0ff] hover:text-[#050709]">
+              <CstdLink href={getCstdNarrativeSharePath(narrativeMode, locale)} aria-label={locale === "zh" ? "分享这条观看路径" : "Share this viewing path"} className="inline-flex h-10 w-10 items-center justify-center border border-[#24e0ff]/35 text-[#24e0ff] hover:bg-[#24e0ff] hover:text-[#050709]">
                 <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
               </CstdLink>
               <a
                 href="#top"
-                aria-label="返回页面顶部"
+                aria-label={locale === "zh" ? "返回页面顶部" : "Back to top"}
                 className="inline-flex h-10 w-10 items-center justify-center border border-[#f4d431]/45 text-[#f4d431] transition-colors hover:bg-[#f4d431] hover:text-[#050709] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
               >
                 <ArrowUp aria-hidden="true" className="h-4 w-4" />

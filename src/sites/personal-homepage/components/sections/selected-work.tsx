@@ -8,8 +8,10 @@ import { cstdProofMesh } from "../../content/proof-mesh";
 import { getCstdLinkTargetProps } from "../../domain/link-target";
 import { CstdLink } from "../site/cstd-link";
 import { ThemeChapterLabel, ThemeCopy } from "../theme-copy";
+import type { CstdLocale } from "../../content/content-types";
+import { getLocalizedCstdHref } from "../../infrastructure/i18n";
 
-export function SelectedWork({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
+export function SelectedWork({ narrativeMode, locale }: { narrativeMode: CstdNarrativeMode; locale: CstdLocale }) {
   const projectOrder = getCstdNarrative(narrativeMode).projectOrder;
   const cases = projectOrder
     .map((projectId) => cstdCaseStudies.find((entry) => entry.projectId === projectId))
@@ -27,18 +29,18 @@ export function SelectedWork({ narrativeMode }: { narrativeMode: CstdNarrativeMo
       <div className="mx-auto max-w-[1320px]">
         <header data-cstd-chapter-header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#005f70]"><RadioTower aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="03 / SELECTED WORK" ink="第三卷 / 成器" press="SECTION B / FIELD REPORTS" pixel="LEVEL 03 / QUEST LOG" /></p>
+            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#005f70]"><RadioTower aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="03 / SELECTED WORK" ink={locale === "zh" ? "第三卷 / 成器" : "SCROLL III / WORKS MADE REAL"} press="SECTION B / FIELD REPORTS" pixel="LEVEL 03 / QUEST LOG" /></p>
             <h2 id="proof-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
               <ThemeCopy
-                neon={<>三个系统，<span className="block text-[#007e92]">三条足够清楚的证据链。</span></>}
-                ink={<>器成有痕，<span className="block text-[#007e92]">落款为证。</span></>}
-                press={<>三份现场报道，<span className="block text-[#007e92]">一条证据链。</span></>}
-                pixel={<>三项主线任务，<span className="block text-[#007e92]">战绩可验证。</span></>}
+                neon={locale === "zh" ? <>三个系统，<span className="block text-[#007e92]">三条足够清楚的证据链。</span></> : <>Three systems.<span className="block text-[#007e92]">Three inspectable chains of evidence.</span></>}
+                ink={locale === "zh" ? <>器成有痕，<span className="block text-[#007e92]">落款为证。</span></> : <>Each finished object leaves a trace.<span className="block text-[#007e92]">The signature is evidence.</span></>}
+                press={locale === "zh" ? <>三份现场报道，<span className="block text-[#007e92]">一条证据链。</span></> : <>Three reports from the field.<span className="block text-[#007e92]">One accountable evidence chain.</span></>}
+                pixel={locale === "zh" ? <>三项主线任务，<span className="block text-[#007e92]">战绩可验证。</span></> : <>Three main quests.<span className="block text-[#007e92]">Every clear is verifiable.</span></>}
               />
             </h2>
           </div>
           <p className="border-l border-black/20 pl-6 text-sm leading-7 text-[#465156] md:text-base md:leading-8">
-            首页只给出结论、关键决策与运行状态。架构、失败与验证过程留在案例档案中，避免把个人展示页变成项目管理器。
+            {locale === "zh" ? "首页只给出结论、关键决策与运行状态。架构、失败与验证过程留在案例档案中，避免把个人展示页变成项目管理器。" : "The homepage keeps only outcomes, pivotal decisions, and runtime state. Architecture, failures, and verification stay in the case archive, keeping the portfolio focused rather than turning it into a project manager."}
           </p>
         </header>
 
@@ -56,22 +58,22 @@ export function SelectedWork({ narrativeMode }: { narrativeMode: CstdNarrativeMo
                   featured ? "lg:col-span-7 lg:row-span-2 lg:min-h-0" : "lg:col-span-5 lg:min-h-0",
                 )}
               >
-                <Image src={entry.image.src} alt={entry.image.alt.zh} fill sizes={featured ? "(min-width: 1024px) 58vw, 100vw" : "(min-width: 1024px) 42vw, 100vw"} className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" style={{ objectPosition: entry.image.position ?? "50% 50%" }} />
+                <Image src={entry.image.src} alt={entry.image.alt[locale]} fill sizes={featured ? "(min-width: 1024px) 58vw, 100vw" : "(min-width: 1024px) 42vw, 100vw"} className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]" style={{ objectPosition: entry.image.position ?? "50% 50%" }} />
                 <div aria-hidden="true" className={clsx("absolute inset-0", featured ? "bg-[linear-gradient(180deg,rgba(5,7,9,0.03)_0%,rgba(5,7,9,0.3)_46%,rgba(5,7,9,0.98)_82%)]" : "bg-[linear-gradient(90deg,rgba(5,7,9,0.98)_0%,rgba(5,7,9,0.72)_56%,rgba(5,7,9,0.12)_100%)]")} />
 
                 <div className={clsx("absolute inset-x-0 bottom-0 p-5 md:p-7", !featured && "lg:right-auto lg:max-w-[75%]")}>
                   <div className="flex items-center justify-between gap-4 font-mono text-[11px] font-black">
-                    <span className="text-[#f4d431]">0{index + 1} / {entry.kicker.zh.toUpperCase()}</span>
+                    <span className="text-[#f4d431]">0{index + 1} / {entry.kicker[locale].toUpperCase()}</span>
                     <span className={clsx("items-center gap-1.5 text-[#24e0ff]", featured ? "flex" : "hidden lg:flex")}><ShieldCheck aria-hidden="true" className="h-3.5 w-3.5" /> {proof?.coverageScore ?? 0}%</span>
                   </div>
-                  <h3 className={clsx("mt-4 font-semibold leading-tight text-white", featured ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl")}>{entry.title.zh}</h3>
-                  <p className={clsx("mt-3 line-clamp-2 text-sm leading-6 text-[#b5bdc0]", !featured && "lg:hidden")}>{entry.summary.zh}</p>
+                  <h3 className={clsx("mt-4 font-semibold leading-tight text-white", featured ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl")}>{entry.title[locale]}</h3>
+                  <p className={clsx("mt-3 line-clamp-2 text-sm leading-6 text-[#b5bdc0]", !featured && "lg:hidden")}>{entry.summary[locale]}</p>
                   <div className={clsx("flex items-center justify-between gap-5 border-t border-white/15 pt-4", featured ? "mt-5" : "mt-4")}>
-                    <CstdLink href={getCaseStudyPath(entry, "zh")} className="inline-flex items-center gap-2 font-mono text-xs font-black text-[#f4d431] transition-[gap,color] hover:gap-4 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f4d431]">
-                      打开案例 <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                    <CstdLink href={getCaseStudyPath(entry, locale)} className="inline-flex items-center gap-2 font-mono text-xs font-black text-[#f4d431] transition-[gap,color] hover:gap-4 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f4d431]">
+                      {locale === "zh" ? "打开案例" : "Open case"} <ArrowRight aria-hidden="true" className="h-4 w-4" />
                     </CstdLink>
                     {project?.href ? (
-                      <a href={project.href} {...getCstdLinkTargetProps(project.href)} aria-label={`打开 ${project.title}`} title={`打开 ${project.title}`} className="flex h-10 w-10 items-center justify-center border border-white/20 text-[#aab3b6] transition-colors hover:border-[#24e0ff] hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#24e0ff]">
+                      <a href={project.href} {...getCstdLinkTargetProps(project.href)} aria-label={locale === "zh" ? `打开 ${entry.title.zh}` : `Open ${entry.title.en}`} title={locale === "zh" ? `打开 ${entry.title.zh}` : `Open ${entry.title.en}`} className="flex h-10 w-10 items-center justify-center border border-white/20 text-[#aab3b6] transition-colors hover:border-[#24e0ff] hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#24e0ff]">
                         <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                       </a>
                     ) : null}
@@ -83,10 +85,10 @@ export function SelectedWork({ narrativeMode }: { narrativeMode: CstdNarrativeMo
         </div>
 
         <div className="mt-9 flex flex-wrap items-center justify-between gap-5 border-t border-black/15 pt-5 font-mono text-[11px] font-black text-[#596368]">
-          <span>{cstdProofMesh.length} PUBLISHED CASES / {cstdProofMesh.reduce((sum, entry) => sum + entry.artifactCount, 0)} PUBLIC ARTIFACTS</span>
+          <span>{cstdProofMesh.length} {locale === "zh" ? "个已发布案例" : "PUBLISHED CASES"} / {cstdProofMesh.reduce((sum, entry) => sum + entry.artifactCount, 0)} {locale === "zh" ? "项公开证据" : "PUBLIC ARTIFACTS"}</span>
           <div className="flex gap-6">
-            <CstdLink href="/work" className="text-[#7a6200] hover:text-black">全部案例</CstdLink>
-            <CstdLink href="/proof.json" className="text-[#005f70] hover:text-black">PROOF.JSON</CstdLink>
+            <CstdLink href={getLocalizedCstdHref("/work", locale)} className="text-[#7a6200] hover:text-black">{locale === "zh" ? "全部案例" : "ALL CASES"}</CstdLink>
+            <CstdLink href={getLocalizedCstdHref("/proof.json", locale)} className="text-[#005f70] hover:text-black">PROOF.JSON</CstdLink>
           </div>
         </div>
       </div>

@@ -1,8 +1,9 @@
-import { CstdEnglishHubPage } from "@/sites/personal-homepage/routes";
-import { getCstdProfileMetadata } from "@/sites/personal-homepage/metadata";
+import { PersonalHomepage, StructuredData } from "@/sites/personal-homepage";
+import { getPersonalHomepageMetadata, getPersonalHomepageStructuredData } from "@/sites/personal-homepage/metadata";
+import { cstdHomepageObservatory } from "@/sites/personal-homepage/server";
 
-export const metadata = getCstdProfileMetadata("en", "en");
+export const metadata = getPersonalHomepageMetadata("en");
 
 export default function EnglishHubPage() {
-  return <CstdEnglishHubPage />;
+  return <><PersonalHomepage locale="en" observatory={cstdHomepageObservatory} /><StructuredData value={getPersonalHomepageStructuredData("en")} /></>;
 }

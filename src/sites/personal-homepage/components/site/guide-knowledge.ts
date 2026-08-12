@@ -48,10 +48,13 @@ const noteEntries: readonly GuideKnowledgeEntry[] = cstdTechnicalNotes.map((entr
 const capabilityEntries: readonly GuideKnowledgeEntry[] = cstdSystems.map((entry) => ({
   id: `capability:${entry.id}`,
   type: "capability",
-  title: { zh: entry.title, en: entry.district },
-  summary: { zh: `${entry.summary}${entry.evidence}`, en: `${entry.relation} Evidence: ${entry.evidence}` },
+  title: entry.title,
+  summary: {
+    zh: `${entry.summary.zh} ${entry.evidence.zh}`,
+    en: `${entry.relation.en} Evidence: ${entry.evidence.en}`,
+  },
   href: { zh: entry.evidenceLinks[0].href, en: `/en${entry.evidenceLinks[0].href}` },
-  keywords: [entry.id, entry.code, entry.district, entry.relation, ...entry.stack],
+  keywords: [entry.id, entry.code, entry.district.zh, entry.district.en, entry.relation.zh, entry.relation.en, ...entry.stack],
   updatedAt: "2026-08-09",
   relatedIds: cstdCaseStudies.filter((candidate) => candidate.capabilityIds.includes(entry.id)).map((candidate) => `case:${candidate.slug}`),
 }));

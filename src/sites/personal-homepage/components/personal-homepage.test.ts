@@ -35,6 +35,10 @@ const themeSwitcherSource = read("./theme-switcher.tsx");
 const themeWorldSource = read("./theme-world-layer.tsx");
 const themeCopySource = read("./theme-copy.tsx");
 const themeHeroArtifactSource = read("./theme-hero-artifact.tsx");
+const languageSwitcherSource = read("./site/cstd-language-switcher.tsx");
+const documentLocaleSource = read("./site/cstd-document-locale.tsx");
+const siteChromeSource = read("./site/cstd-site-chrome.tsx");
+const englishHomepageSource = read("../../../app/(personal)/cstd/en/page.tsx");
 const themeCssSource = read("../../../app/cstd-themes.css");
 const themeCompositionSource = read("../../../app/cstd-theme-compositions.css");
 const appLayoutSource = read("../../../app/layout.tsx");
@@ -43,13 +47,34 @@ const assetManifestSource = read("../media/asset-manifest.ts");
 describe("CSTD personal homepage", () => {
   test("keeps Custard identity and a direct portfolio promise above the fold", () => {
     expect(gateSource).toContain('id="cstd-hero-title"');
-    expect(gateSource).toContain('data-text="奶黄包"');
+    expect(gateSource).toContain("data-text={cstdProfile.name[locale]}");
     expect(gateSource).toContain('href="#proof"');
     expect(gateSource).toContain('data-cstd-hero-summary');
-    expect(gateSource).toContain("narrative.thesis.zh");
-    expect(narrativeSource).toContain('return "/for/research"');
+    expect(gateSource).toContain("narrative.thesis[locale]");
+    expect(narrativeSource).toContain('"/for/research"');
     expect(landingSource).toContain("initialNarrativeMode");
     expect(landingSource).not.toContain("project-comparison");
+  });
+
+  test("gives both locales the complete cinematic homepage and preserves deep routes when switching", () => {
+    expect(englishHomepageSource).toContain('<PersonalHomepage locale="en"');
+    expect(englishHomepageSource).not.toContain("CstdEnglishHubPage");
+    expect(landingSource).toContain("locale?: CstdLocale");
+    expect(landingSource).toContain("locale={locale}");
+    expect(homepageRuntimeSource).toContain("<CstdDocumentLocale locale={locale}");
+    expect(homepageRuntimeSource).toContain("data-cstd-locale={locale}");
+    expect(headerSource).toContain("<CstdLanguageSwitcher locale={locale}");
+    expect(siteChromeSource).toContain("<CstdLanguageSwitcher locale={locale}");
+    expect(languageSwitcherSource).toContain("window.location.search");
+    expect(languageSwitcherSource).toContain("window.location.hash");
+    expect(languageSwitcherSource).toContain("getLocalizedCstdHref");
+    expect(documentLocaleSource).toContain("document.documentElement.lang = config.htmlLang");
+    expect(documentLocaleSource).toContain("data-cstd-document-locale={locale}");
+    expect(studioExplorerSource).toContain("activeSystem.title[locale]");
+    expect(proofSource).toContain("entry.title[locale]");
+    expect(replaySource).toContain("locale={locale}");
+    expect(knowledgeSource).toContain("answerGuideQuestion(lens.question[locale], locale)");
+    expect(finaleSource).toContain("narrative.label[locale]");
   });
 
   test("uses six focused scenes without app-like homepage controls", () => {
@@ -75,7 +100,7 @@ describe("CSTD personal homepage", () => {
     expect(studioSource).toContain("<StudioSystemExplorer");
     expect(studioExplorerSource).toContain("data-cstd-studio-district-option");
     expect(studioExplorerSource).toContain('role="tablist"');
-    expect(studioExplorerSource).toContain('href="/observatory.json"');
+    expect(studioExplorerSource).toContain('getLocalizedCstdHref("/observatory.json", locale)');
     expect(studioSource).not.toContain("data-cstd-release-replay");
     expect(studioSource).not.toContain("setInterval");
     expect(studioSource).not.toContain("observatory.verification");
@@ -107,7 +132,7 @@ describe("CSTD personal homepage", () => {
     expect(knowledgeSource).toContain("answerGuideQuestion");
     expect(knowledgeSource).toContain("findCstdKnowledgePath");
     expect(knowledgeSource).toContain("data-cstd-knowledge-card");
-    expect(knowledgeSource).toContain('href="/graph.json"');
+    expect(knowledgeSource).toContain('getLocalizedCstdHref("/graph.json", locale)');
     expect(knowledgeSource).not.toContain("data-cstd-graph-path");
     expect(knowledgeSource).not.toContain("useState");
     expect(knowledgeSource).not.toContain("setInterval");

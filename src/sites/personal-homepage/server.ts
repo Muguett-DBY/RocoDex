@@ -21,3 +21,5 @@ export { cstdReleaseLedger } from "./content/release-ledger";
 export { cstdTopics } from "./content/topics";
 export { consumeCstdTelemetryQuota, parseCstdMetric, type CstdMetric } from "./infrastructure/telemetry";
 export { serializeCstdResume } from "./infrastructure/resume";
+export { createCstdManifest } from "./infrastructure/manifest";
+export { cstdLocaleConfig, getCstdLocaleFromPathname } from "./infrastructure/i18n";

@@ -36,7 +36,7 @@ export default defineConfig({
   webServer: {
     command: `npm run build && npm run start -- --hostname 127.0.0.1 --port ${port}`,
     url: `${baseURL}/cstd/status.json`,
-    reuseExistingServer: false,
+    reuseExistingServer: !process.env.CI,
     timeout: 300_000,
     env: {
       ...inheritedEnvironment,

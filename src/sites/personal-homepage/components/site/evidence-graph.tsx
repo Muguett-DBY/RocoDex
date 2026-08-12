@@ -44,7 +44,7 @@ export function CstdEvidenceGraph({ entry, locale }: { entry: CstdCaseStudy; loc
           <div className="py-7 lg:pr-8">
             <div className="flex items-center gap-3 font-mono text-[11px] font-black text-[#78858a]"><Boxes aria-hidden="true" className="h-4 w-4" /> {copy.capabilities.toUpperCase()}</div>
             <div className="mt-5 border-t border-white/10">
-              {capabilities.map((capability) => <div key={capability.id} className="border-b border-white/10 py-4"><p className="font-mono text-[11px] font-black text-[#f4d431]">{capability.code}</p><p className="mt-2 text-sm font-semibold text-white">{capability.title}</p></div>)}
+              {capabilities.map((capability) => <div key={capability.id} className="border-b border-white/10 py-4"><p className="font-mono text-[11px] font-black text-[#f4d431]">{capability.code}</p><p className="mt-2 text-sm font-semibold text-white">{capability.title[locale]}</p></div>)}
             </div>
           </div>
           <div aria-hidden="true" className="hidden items-center justify-center border-x border-white/10 text-[#24e0ff] lg:flex"><ArrowRight className="h-5 w-5" /></div>

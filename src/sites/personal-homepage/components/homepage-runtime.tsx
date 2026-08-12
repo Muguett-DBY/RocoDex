@@ -12,6 +12,7 @@ import {
   type ReactNode,
 } from "react";
 import type { CstdNarrativeMode } from "../content/narratives";
+import type { CstdLocale } from "../content/content-types";
 import { setCstdMotionMode, useCstdMotionMode } from "../experience/motion-store";
 import {
   useCstdChapterReveal,
@@ -27,6 +28,7 @@ import { HomepageHeader } from "./homepage-header";
 import { MemoizedSceneRuntime } from "./scene-runtime";
 import { ThemeSceneNavigator, ThemeWorldLayer } from "./theme-world-layer";
 import { MemoizedWorldBackdrop } from "./world-backdrop";
+import { CstdDocumentLocale } from "./site/cstd-document-locale";
 
 const LazyCstdTelemetry = lazy(() =>
   import("./site/cstd-telemetry").then((module) => ({ default: module.CstdTelemetry })),
@@ -45,9 +47,11 @@ function getRenderedProfile(profile: CstdRuntimeProfile, enhanced: boolean): Cst
 
 export function HomepageRuntime({
   narrativeMode,
+  locale,
   children,
 }: {
   narrativeMode: CstdNarrativeMode;
+  locale: CstdLocale;
   children: ReactNode;
 }) {
   const motionMode = useCstdMotionMode();
@@ -133,7 +137,8 @@ export function HomepageRuntime({
     setCstdMotionMode(motionMode === "full" ? "calm" : "full");
   }
 
-  return (
+  return <>
+    <CstdDocumentLocale locale={locale} />
     <main
       ref={rootRef}
       data-cstd-kinetic-world
@@ -148,6 +153,7 @@ export function HomepageRuntime({
       data-cstd-network={runtimeProfile.effectiveType ?? "unknown"}
       data-cstd-data-saver={runtimeProfile.saveData ? "true" : "false"}
       data-cstd-narrative-mode={narrativeMode}
+      data-cstd-locale={locale}
       data-cstd-motion={reducedMotion ? "calm" : "full"}
       data-cstd-theme={theme}
       data-cstd-theme-kind={getCstdThemeMeta(theme).kind}
@@ -160,11 +166,11 @@ export function HomepageRuntime({
         href="#systems"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:px-4 focus:py-3 focus:text-black"
       >
-        跳到主要内容
+        {locale === "zh" ? "跳到主要内容" : "Skip to main content"}
       </a>
 
       <MemoizedWorldBackdrop activeSceneId={activeSceneId} />
-      <ThemeWorldLayer theme={theme} activeSceneId={activeSceneId} />
+      <ThemeWorldLayer theme={theme} activeSceneId={activeSceneId} locale={locale} />
       <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" />
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
         <MemoizedSceneRuntime {...sceneProps} profile={renderedProfile} enabled={enhancementsReady && desktopScene && overdrive && immersiveTheme} />
@@ -188,21 +194,22 @@ export function HomepageRuntime({
       />
 
       <HomepageHeader
+        locale={locale}
         activeSceneId={activeSceneId}
         overdrive={overdrive}
         reducedMotion={reducedMotion}
         onToggleOverdrive={toggleOverdrive}
         onToggleMotion={toggleMotionMode}
       />
-      <ThemeSceneNavigator theme={theme} activeSceneId={activeSceneId} />
+      <ThemeSceneNavigator theme={theme} activeSceneId={activeSceneId} locale={locale} />
 
       {children}
 
       {enhancementsReady ? (
         <Suspense fallback={null}>
-          <LazyCstdTelemetry page="home" />
+          <LazyCstdTelemetry page={locale === "zh" ? "home" : "home-en"} />
         </Suspense>
       ) : null}
     </main>
-  );
+  </>;
 }

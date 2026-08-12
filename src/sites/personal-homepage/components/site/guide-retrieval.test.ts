@@ -1,4 +1,5 @@
 import { describe, expect, test } from "vitest";
+import { guideKnowledge } from "./guide-knowledge";
 import { answerGuideQuestion } from "./guide-retrieval";
 
 describe("Ask CSTD source-constrained retrieval", () => {
@@ -22,6 +23,13 @@ describe("Ask CSTD source-constrained retrieval", () => {
     expect(result.refused).toBe(false);
     expect(result.relatedPaths.length).toBeGreaterThan(0);
     expect(result.relatedPaths.every((entry) => entry.href.en.startsWith("/") || entry.href.en.startsWith("https://"))).toBe(true);
+  });
+
+  test("keeps every indexed summary human-readable in both locales", () => {
+    for (const entry of guideKnowledge) {
+      expect(entry.summary.zh, `${entry.id} zh summary`).not.toContain("[object Object]");
+      expect(entry.summary.en, `${entry.id} en summary`).not.toContain("[object Object]");
+    }
   });
 
   test("refuses unsupported questions instead of fabricating", () => {
