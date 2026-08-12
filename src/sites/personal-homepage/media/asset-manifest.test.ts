@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { existsSync, statSync } from "node:fs";
 import path from "node:path";
-import { cstdBroadcasts, cstdEditorialAssets, cstdVisualAssets } from "./asset-manifest";
+import { cstdBroadcasts, cstdEditorialAssets, cstdThemeWorldAssets, cstdVisualAssets } from "./asset-manifest";
 
 describe("CSTD media manifest", () => {
   test("maps one original visual to every directed scene", () => {
@@ -36,6 +36,16 @@ describe("CSTD media manifest", () => {
     for (const asset of cstdEditorialAssets) {
       expect(asset.src).toMatch(/^\/cstd-universe\/.+-v[345]\.webp$/);
       expect(existsSync(path.join(process.cwd(), "public", asset.src.slice(1)))).toBe(true);
+    }
+  });
+
+  test("keeps every visual world asset deployable and inside the scene budget", () => {
+    expect(Object.keys(cstdThemeWorldAssets)).toEqual(["ink-protocol", "press-room", "pixel-quest"]);
+    for (const asset of Object.values(cstdThemeWorldAssets)) {
+      const filePath = path.join(process.cwd(), "public", asset.slice(1));
+      expect(asset).toMatch(/^\/cstd-themes\/.+-v1\.webp$/);
+      expect(existsSync(filePath)).toBe(true);
+      expect(statSync(filePath).size).toBeLessThanOrEqual(320_000);
     }
   });
 });
