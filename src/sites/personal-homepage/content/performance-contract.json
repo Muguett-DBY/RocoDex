@@ -9,6 +9,7 @@
     "fullWebglBytes": 1500000,
     "webgpuBytes": 24000,
     "sceneAssetBytes": 320000,
+    "themeAssetBytes": 700000,
     "universeAssetBytes": 3500000,
     "desktopLcpMilliseconds": 1800,
     "mobileLcpMilliseconds": 2500,
@@ -20,7 +21,7 @@
     "runtimeFallbackOrder": ["webgpu", "webgl", "image"],
     "defaultRuntimeTier": "image",
     "enhancedRuntimeTrigger": "explicit-user-action",
-    "immutableAssetRoots": ["cstd-archive", "cstd-broadcasts", "cstd-districts", "cstd-persona", "cstd-universe", "cstd-world"],
+    "immutableAssetRoots": ["cstd-archive", "cstd-broadcasts", "cstd-districts", "cstd-persona", "cstd-themes", "cstd-universe", "cstd-world"],
     "imageFormats": ["avif", "webp"],
     "imageMinimumCacheTtlSeconds": 2678400
   },

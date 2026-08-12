@@ -38,6 +38,7 @@ Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器�
 
 - `public/cstd-world/`
 - `public/cstd-universe/`
+- `public/cstd-themes/`
 - `public/cstd-districts/`
 - `public/cstd-broadcasts/`
 - `public/cstd-archive/`

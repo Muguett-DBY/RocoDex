@@ -8,6 +8,10 @@ const universeRoot = path.resolve("public/cstd-universe");
 const universeAssets = readdirSync(universeRoot).filter((name) => name.endsWith(".webp"));
 const universeBytes = universeAssets.reduce((total, name) => total + statSync(path.join(universeRoot, name)).size, 0);
 const oversizedAsset = universeAssets.find((name) => statSync(path.join(universeRoot, name)).size > contract.budgets.sceneAssetBytes);
+const themeRoot = path.resolve("public/cstd-themes");
+const themeAssets = readdirSync(themeRoot).filter((name) => name.endsWith(".webp"));
+const themeBytes = themeAssets.reduce((total, name) => total + statSync(path.join(themeRoot, name)).size, 0);
+const oversizedThemeAsset = themeAssets.find((name) => statSync(path.join(themeRoot, name)).size > contract.budgets.sceneAssetBytes);
 
 if (contract.cacheComponents.status !== "evaluated-not-enabled") {
   throw new Error("Cache Components status must be explicitly reviewed before changing the static delivery contract");
@@ -32,5 +36,11 @@ if (universeBytes > contract.budgets.universeAssetBytes) {
 if (oversizedAsset) {
   throw new Error(`CSTD scene asset ${oversizedAsset} exceeds ${contract.budgets.sceneAssetBytes} bytes`);
 }
+if (themeBytes > contract.budgets.themeAssetBytes) {
+  throw new Error(`CSTD theme assets total ${themeBytes} bytes; budget is ${contract.budgets.themeAssetBytes}`);
+}
+if (oversizedThemeAsset) {
+  throw new Error(`CSTD theme asset ${oversizedThemeAsset} exceeds ${contract.budgets.sceneAssetBytes} bytes`);
+}
 
-console.log(`CSTD performance contract OK: ${universeAssets.length} universe assets, ${universeBytes} bytes, ${contract.delivery.immutableAssetRoots.length} immutable roots.`);
+console.log(`CSTD performance contract OK: ${universeAssets.length} universe assets / ${universeBytes} bytes, ${themeAssets.length} theme assets / ${themeBytes} bytes, ${contract.delivery.immutableAssetRoots.length} immutable roots.`);

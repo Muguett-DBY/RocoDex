@@ -148,6 +148,13 @@ test.describe("CSTD technical archive", () => {
     expect(pageResponse.headers()["x-content-type-options"]).toBe("nosniff");
     expect(pageResponse.headers()["content-security-policy"]).toContain("frame-ancestors 'none'");
 
+    for (const asset of ["ink-scroll-v1.webp", "press-room-v1.webp", "pixel-quest-v1.webp"]) {
+      const themeAssetResponse = await request.get(`/cstd-themes/${asset}`, { headers });
+      expect(themeAssetResponse.status()).toBe(200);
+      expect(themeAssetResponse.headers()["content-type"]).toContain("image/webp");
+      expect(themeAssetResponse.headers()["cache-control"]).toContain("immutable");
+    }
+
     const rssResponse = await request.get("/rss.xml?lang=en", { headers });
     expect(rssResponse.status()).toBe(200);
     expect(rssResponse.headers()["content-type"]).toContain("application/rss+xml");

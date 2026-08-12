@@ -124,6 +124,7 @@ function isAllowedPersonalSitePath(path: string) {
     || path.startsWith("/cstd-projects/")
     || path.startsWith("/cstd-archive/")
     || path.startsWith("/cstd-persona/")
+    || path.startsWith("/cstd-themes/")
     || path.startsWith("/cstd-world/")
     || path.startsWith("/cstd-universe/")
     || path.startsWith("/cstd-broadcasts/")

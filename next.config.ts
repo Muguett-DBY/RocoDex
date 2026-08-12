@@ -5,6 +5,7 @@ const cstdImmutableAssetRoots = [
   "cstd-broadcasts",
   "cstd-districts",
   "cstd-persona",
+  "cstd-themes",
   "cstd-universe",
   "cstd-world",
 ] as const;
