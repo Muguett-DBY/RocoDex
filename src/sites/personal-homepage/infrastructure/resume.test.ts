@@ -9,5 +9,6 @@ describe("machine-readable CSTD resume", () => {
     expect(resume.capabilities.every((capability) => capability.evidence.length >= 2)).toBe(true);
     expect(resume.work.length).toBeGreaterThanOrEqual(6);
     expect(resume.timeline.length).toBeGreaterThanOrEqual(6);
+    if (locale === "en") expect(resume.capabilities.every((capability) => !/[\p{Script=Han}]/u.test(capability.title))).toBe(true);
   });
 });

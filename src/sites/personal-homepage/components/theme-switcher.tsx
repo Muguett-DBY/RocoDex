@@ -68,7 +68,7 @@ export function ThemeSwitcher({ locale = "zh" }: { locale?: CstdLocale }) {
       <div className="flex items-center justify-between border-b px-2 pb-2 pt-1">
         <div>
           <p className="cstd-theme-menu-kicker text-[10px] font-black uppercase">{copy.menu}</p>
-          <p className="cstd-theme-menu-current mt-1 text-xs">{current.label}</p>
+          <p className="cstd-theme-menu-current mt-1 text-xs">{visibleLabel}</p>
         </div>
         <button type="button" aria-label={copy.close} onClick={() => setOpen(false)} className="cstd-theme-menu-close flex h-8 w-8 items-center justify-center border">
           <X aria-hidden="true" className="h-3.5 w-3.5" />
@@ -118,8 +118,8 @@ export function ThemeSwitcher({ locale = "zh" }: { locale?: CstdLocale }) {
         data-cstd-theme-active={theme}
         aria-expanded={open}
         aria-haspopup="menu"
-        aria-label={`${copy.trigger}: ${current.label}`}
-        title={`${copy.trigger}: ${current.label}`}
+        aria-label={`${copy.trigger}: ${visibleLabel}`}
+        title={`${copy.trigger}: ${visibleLabel}`}
         onClick={() => setOpen((value) => !value)}
         className="cstd-theme-switcher-trigger flex h-9 min-w-9 items-center justify-center gap-2 border px-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4"
       >

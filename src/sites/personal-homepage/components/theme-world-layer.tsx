@@ -4,26 +4,27 @@ import Image from "next/image";
 import type { CstdSceneId } from "../experience/scene-manifest";
 import { getCstdThemeMeta, type CstdThemeId } from "../experience/theme-store";
 import { cstdThemeWorldAssets } from "../media/asset-manifest";
+import type { CstdLocale, LocalizedText } from "../content/content-types";
 
-const sceneCopy: Record<CstdSceneId, { ink: string; press: string; pixel: string }> = {
-  hero: { ink: "卷首", press: "FRONT PAGE", pixel: "STAGE 01" },
-  systems: { ink: "器", press: "SYSTEMS DESK", pixel: "STAGE 02" },
-  proof: { ink: "证", press: "FIELD REPORTS", pixel: "STAGE 03" },
-  operator: { ink: "验", press: "LIVE LAB", pixel: "BOSS LAB" },
-  path: { ink: "迹", press: "OPINION & NOTES", pixel: "LORE ROOM" },
-  finale: { ink: "未完", press: "LATE EDITION", pixel: "CONTINUE?" },
+const sceneCopy: Record<CstdSceneId, { ink: LocalizedText; press: string; pixel: string }> = {
+  hero: { ink: { zh: "卷首", en: "OPENING" }, press: "FRONT PAGE", pixel: "STAGE 01" },
+  systems: { ink: { zh: "器", en: "CRAFT" }, press: "SYSTEMS DESK", pixel: "STAGE 02" },
+  proof: { ink: { zh: "证", en: "EVIDENCE" }, press: "FIELD REPORTS", pixel: "STAGE 03" },
+  operator: { ink: { zh: "验", en: "TEST" }, press: "LIVE LAB", pixel: "BOSS LAB" },
+  path: { ink: { zh: "迹", en: "TRACE" }, press: "OPINION & NOTES", pixel: "LORE ROOM" },
+  finale: { ink: { zh: "未完", en: "TO BE CONTINUED" }, press: "LATE EDITION", pixel: "CONTINUE?" },
 };
 
 const sceneSequence: CstdSceneId[] = ["hero", "systems", "proof", "operator", "path", "finale"];
 
-function getSceneLabel(theme: CstdThemeId, sceneId: CstdSceneId) {
-  if (theme === "ink-protocol") return sceneCopy[sceneId].ink;
+function getSceneLabel(theme: CstdThemeId, sceneId: CstdSceneId, locale: CstdLocale) {
+  if (theme === "ink-protocol") return sceneCopy[sceneId].ink[locale];
   if (theme === "press-room") return sceneCopy[sceneId].press;
   if (theme === "pixel-quest") return sceneCopy[sceneId].pixel;
   return sceneId.toUpperCase();
 }
 
-export function ThemeWorldLayer({ theme, activeSceneId }: { theme: CstdThemeId; activeSceneId: CstdSceneId }) {
+export function ThemeWorldLayer({ theme, activeSceneId, locale }: { theme: CstdThemeId; activeSceneId: CstdSceneId; locale: CstdLocale }) {
   const meta = getCstdThemeMeta(theme);
 
   return (
@@ -48,14 +49,14 @@ export function ThemeWorldLayer({ theme, activeSceneId }: { theme: CstdThemeId; 
       <div className="cstd-theme-world-texture absolute inset-0" />
       <div className="cstd-theme-world-register absolute inset-0" />
       <div className="cstd-theme-world-scene-label absolute">
-        {getSceneLabel(theme, activeSceneId)}
+        {getSceneLabel(theme, activeSceneId, locale)}
       </div>
       {theme === "neon-district" ? (
         <>
           <div className="cstd-neon-world-grid absolute inset-0" />
           <div className="cstd-neon-world-target absolute"><span /><i /></div>
           <div className="cstd-neon-world-telemetry absolute">
-            <span>SIG / CSTD-017</span><span>SYNC / {activeSceneId.toUpperCase()}</span><span>LAT / -33.8688</span>
+            <span>{locale === "zh" ? "信号" : "SIG"} / CSTD-017</span><span>{locale === "zh" ? "同步" : "SYNC"} / {activeSceneId.toUpperCase()}</span><span>LAT / -33.8688</span>
           </div>
         </>
       ) : null}
@@ -63,7 +64,7 @@ export function ThemeWorldLayer({ theme, activeSceneId }: { theme: CstdThemeId; 
         <>
           <div className="cstd-ink-mist cstd-ink-mist-one absolute" />
           <div className="cstd-ink-mist cstd-ink-mist-two absolute" />
-          <div className="cstd-ink-running-copy absolute"><span>造物</span><span>求真</span><span>知行</span></div>
+          <div className="cstd-ink-running-copy absolute"><span>{locale === "zh" ? "造物" : "CRAFT"}</span><span>{locale === "zh" ? "求真" : "TRUTH"}</span><span>{locale === "zh" ? "知行" : "PRAXIS"}</span></div>
           <div className="cstd-ink-seal absolute">CSTD</div>
         </>
       ) : null}
@@ -82,7 +83,7 @@ export function ThemeWorldLayer({ theme, activeSceneId }: { theme: CstdThemeId; 
           <div className="cstd-pixel-terrain absolute inset-x-0 bottom-0"><i /><i /><i /><i /><i /></div>
           <div className="cstd-pixel-runner absolute"><span /></div>
           <div className="cstd-pixel-hud absolute inset-x-0 top-0 flex items-center justify-between">
-            <span>PLAYER 01</span><span>XP 01700</span><span>BUILD × ∞</span>
+            <span>{locale === "zh" ? "玩家 01" : "PLAYER 01"}</span><span>XP 01700</span><span>{locale === "zh" ? "构建" : "BUILD"} × ∞</span>
           </div>
         </>
       ) : null}
@@ -90,7 +91,7 @@ export function ThemeWorldLayer({ theme, activeSceneId }: { theme: CstdThemeId; 
   );
 }
 
-export function ThemeSceneNavigator({ theme, activeSceneId }: { theme: CstdThemeId; activeSceneId: CstdSceneId }) {
+export function ThemeSceneNavigator({ theme, activeSceneId, locale }: { theme: CstdThemeId; activeSceneId: CstdSceneId; locale: CstdLocale }) {
   return (
     <div
       aria-hidden="true"
@@ -104,7 +105,7 @@ export function ThemeSceneNavigator({ theme, activeSceneId }: { theme: CstdTheme
           data-cstd-theme-scene-active={activeSceneId === sceneId ? "true" : "false"}
         >
           <span>{String(index + 1).padStart(2, "0")}</span>
-          <b>{getSceneLabel(theme, sceneId)}</b>
+          <b>{getSceneLabel(theme, sceneId, locale)}</b>
         </div>
       ))}
     </div>

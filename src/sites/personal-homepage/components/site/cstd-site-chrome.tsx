@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, BookOpenCheck, BriefcaseBusiness, FileText, FlaskConical, Gauge, Languages, Layers3, Network, UserRound } from "lucide-react";
+import { BookOpen, BookOpenCheck, BriefcaseBusiness, FileText, FlaskConical, Gauge, Layers3, Network, UserRound } from "lucide-react";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import { getCstdThemeMeta, useCstdTheme } from "../../experience/theme-store";
@@ -8,6 +8,9 @@ import { CstdLink } from "./cstd-link";
 import { CstdTelemetry } from "./cstd-telemetry";
 import { SignalField, type CstdVisualMode } from "./signal-field";
 import { ThemeSwitcher } from "../theme-switcher";
+import { CstdDocumentLocale } from "./cstd-document-locale";
+import { CstdLanguageSwitcher } from "./cstd-language-switcher";
+import { getLocalizedCstdHref } from "../../infrastructure/i18n";
 
 const visualModeKey = "cstd-visual-budget";
 const visualModeEvent = "cstd-visual-budget-change";
@@ -126,8 +129,9 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
     window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: `reading_${next}`, value: 1 } }));
   }
 
-  return (
-    <div data-cstd-deep-shell data-cstd-theme={theme} data-cstd-theme-kind={themeMeta.kind} data-cstd-controls-ready={controlsReady ? "true" : "false"} data-cstd-visual-mode={visualMode} data-cstd-reading-mode={readingSurface ? readingMode : "studio"} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
+  return <>
+    <CstdDocumentLocale locale={locale} />
+    <div data-cstd-deep-shell data-cstd-locale={locale} data-cstd-theme={theme} data-cstd-theme-kind={themeMeta.kind} data-cstd-controls-ready={controlsReady ? "true" : "false"} data-cstd-visual-mode={visualMode} data-cstd-reading-mode={readingSurface ? readingMode : "studio"} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
       <a href="#cstd-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:bg-white focus:px-4 focus:py-3 focus:text-black">{locale === "zh" ? "跳到主要内容" : "Skip to content"}</a>
       <SignalField mode={visualMode} />
       <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" />
@@ -136,7 +140,7 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
 
       <header className="sticky top-0 z-50 border-b border-white/12 bg-[#07090b]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[1540px] items-center gap-4 px-4 md:px-8 lg:px-12">
-          <CstdLink href="/" className="group flex shrink-0 items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]" title={copy.back}>
+          <CstdLink href={getLocalizedCstdHref("/", locale)} className="group flex shrink-0 items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]" title={copy.back}>
             <span className="flex h-9 w-9 items-center justify-center bg-[#f4d431] font-mono text-[11px] font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">CS</span>
             <span className="hidden sm:block">
               <span data-cstd-deep-brand className="block font-mono text-xs font-black text-white">{themeMeta.brand}</span>
@@ -161,9 +165,7 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
                 <BookOpenCheck aria-hidden="true" className="h-4 w-4" />
               </button>
             ) : null}
-            <CstdLink href={locale === "zh" ? "/en" : "/"} aria-label={locale === "zh" ? "Switch to English" : "切换到中文"} title={locale === "zh" ? "English" : "中文"} className="flex h-9 w-9 items-center justify-center border border-white/15 text-[#9aa4a8] transition-colors hover:border-[#24e0ff] hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]">
-              <Languages aria-hidden="true" className="h-4 w-4" />
-            </CstdLink>
+            <CstdLanguageSwitcher locale={locale} compact />
             <ThemeSwitcher locale={locale} />
             <button type="button" disabled={!controlsReady} onClick={cycleVisualMode} aria-label={`${copy.mode}: ${visualMode}`} title={`${copy.mode}: ${visualMode}`} className="flex h-9 w-9 items-center justify-center border border-white/15 text-[#9aa4a8] transition-colors hover:border-[#f4d431] hover:text-[#f4d431] disabled:cursor-wait disabled:opacity-45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]">
               <Gauge aria-hidden="true" className="h-4 w-4" />
@@ -201,5 +203,5 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
 
       <CstdTelemetry page={page} />
     </div>
-  );
+  </>;
 }

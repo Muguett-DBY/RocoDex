@@ -46,6 +46,8 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/en/performance.json",
   "/en/experience.json",
   "/en/releases.json",
+  "/en/feed.json",
+  "/en/manifest.webmanifest",
 ]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",
@@ -82,6 +84,7 @@ export const PERSONAL_SITE_SECURITY_HEADERS = {
 export type PersonalSiteRouteDecision =
   | { kind: "rewrite"; path: string }
   | { kind: "redirect"; host: typeof PERSONAL_SITE_HOST }
+  | { kind: "redirect-path"; path: "/en" }
   | { kind: "next" }
   | { kind: "not-found" };
 
@@ -89,11 +92,12 @@ export function isPersonalSiteHost(host: string) {
   return PERSONAL_SITE_HOSTS.has(normalizeHost(host));
 }
 
-export function getPersonalSiteRouteDecision(host: string, path: string): PersonalSiteRouteDecision {
+export function getPersonalSiteRouteDecision(host: string, path: string, preferredLocale?: "zh" | "en"): PersonalSiteRouteDecision {
   const normalizedHost = normalizeHost(host);
 
   if (PERSONAL_SITE_REDIRECT_HOSTS.has(normalizedHost)) return { kind: "redirect", host: PERSONAL_SITE_HOST };
   if (!PERSONAL_SITE_HOSTS.has(normalizedHost)) return { kind: "next" };
+  if (PERSONAL_SITE_ENTRY_PATHS.has(path) && preferredLocale === "en") return { kind: "redirect-path", path: "/en" };
   if (PERSONAL_SITE_ENTRY_PATHS.has(path)) return { kind: "rewrite", path: "/cstd" };
   if (PERSONAL_SITE_EXPLICIT_ENTRY_PATHS.has(path) || path.startsWith("/cstd/")) return { kind: "next" };
   if (isPublicPersonalPagePath(path)) return { kind: "rewrite", path: `/cstd${path}` };
@@ -113,6 +117,7 @@ function isPublicPersonalPagePath(path: string) {
     || path.startsWith("/en/notes/")
     || path.startsWith("/en/lab/")
     || path.startsWith("/en/topics/")
+    || path.startsWith("/en/for/")
     || path === "/en/now"
     || path === "/en/about"
     || path === "/en/resume"

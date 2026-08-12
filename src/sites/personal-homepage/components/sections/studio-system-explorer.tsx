@@ -8,6 +8,8 @@ import type { CstdHomepageObservatory } from "../../content/observatory";
 import type { CstdDistrictStatus } from "../../content/studio-status";
 import type { CstdSystem } from "../../content/systems";
 import { CstdLink } from "../site/cstd-link";
+import type { CstdLocale } from "../../content/content-types";
+import { getLocalizedCstdHref } from "../../infrastructure/i18n";
 
 export type StudioSystemArt = Readonly<{
   accent: string;
@@ -20,11 +22,13 @@ export function StudioSystemExplorer({
   statuses,
   artBySystem,
   observatory,
+  locale,
 }: {
   systems: readonly CstdSystem[];
   statuses: readonly CstdDistrictStatus[];
   artBySystem: Record<CstdSystem["id"], StudioSystemArt>;
   observatory: CstdHomepageObservatory;
+  locale: CstdLocale;
 }) {
   const [activeSystemId, setActiveSystemId] = useState<CstdSystem["id"]>(() => systems[0].id);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
@@ -47,7 +51,7 @@ export function StudioSystemExplorer({
 
   return (
     <div data-cstd-system-explorer className="mt-14 grid gap-8 lg:grid-cols-[19rem_minmax(0,1fr)] lg:gap-12">
-      <div data-cstd-system-tabs className="border-t border-white/12" role="tablist" aria-label="能力方向" aria-orientation="vertical">
+      <div data-cstd-system-tabs className="border-t border-white/12" role="tablist" aria-label={locale === "zh" ? "能力方向" : "Capability directions"} aria-orientation="vertical">
         {systems.map((system, index) => {
           const active = system.id === activeSystem.id;
           return (
@@ -72,7 +76,7 @@ export function StudioSystemExplorer({
             >
               <span className={clsx("font-mono text-[11px] font-black", active ? "text-[#f4d431]" : "text-[#5f6a6e]")}>{String(index + 1).padStart(2, "0")}</span>
               <span>
-                <span className="block text-sm font-semibold leading-5">{system.title}</span>
+                <span className="block text-sm font-semibold leading-5">{system.title[locale]}</span>
                 <span className="mt-1 block font-mono text-[11px] font-black opacity-60">{system.code}</span>
               </span>
               <span aria-hidden="true" className={clsx("ml-auto h-px transition-[width,background-color]", active ? "w-8 bg-[#f4d431]" : "w-3 bg-white/15")} />
@@ -85,7 +89,7 @@ export function StudioSystemExplorer({
         id="cstd-system-detail"
         role="tabpanel"
         aria-labelledby={`cstd-system-tab-${activeSystem.id}`}
-        aria-label={`${activeSystem.title} 能力详情`}
+        aria-label={locale === "zh" ? `${activeSystem.title.zh} 能力详情` : `${activeSystem.title.en} capability details`}
         data-cstd-observatory
         data-cstd-observatory-release={observatory.release}
         data-cstd-observatory-environment={observatory.deployment.environment}
@@ -96,32 +100,32 @@ export function StudioSystemExplorer({
           <Image
             key={activeArt.image}
             src={activeArt.image}
-            alt={activeArt.imageAlt.zh}
+            alt={activeArt.imageAlt[locale]}
             fill
             sizes="(min-width: 1024px) 70vw, 100vw"
             className="cstd-district-backdrop object-cover"
           />
           <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(0deg,rgba(5,7,9,0.96),rgba(5,7,9,0.08)_72%)]" />
           <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
-            <p className="font-mono text-[11px] font-black" style={{ color: activeArt.accent }}>{activeSystem.district.toUpperCase()}</p>
-            <h3 className="mt-3 text-3xl font-semibold md:text-5xl">{activeSystem.title}</h3>
+            <p className="font-mono text-[11px] font-black" style={{ color: activeArt.accent }}>{activeSystem.district[locale].toUpperCase()}</p>
+            <h3 className="mt-3 text-3xl font-semibold md:text-5xl">{activeSystem.title[locale]}</h3>
           </div>
         </div>
 
         <div className="grid gap-8 border-b border-white/12 py-7 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
           <div>
             <div className="flex items-center gap-2 font-mono text-[11px] font-black text-[#24e0ff]">
-              <CheckCircle2 aria-hidden="true" className="h-4 w-4" /> EVIDENCE LINKED
+              <CheckCircle2 aria-hidden="true" className="h-4 w-4" /> {locale === "zh" ? "证据已关联" : "EVIDENCE LINKED"}
             </div>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-[#c3cacc]">{activeSystem.relation}</p>
+            <p className="mt-4 max-w-2xl text-base leading-7 text-[#c3cacc]">{activeSystem.relation[locale]}</p>
             <p className="mt-4 font-mono text-[11px] font-bold leading-5 text-[#7f8b90]">{activeSystem.stack.join(" / ")}</p>
           </div>
 
           <dl className="grid grid-cols-3 gap-6 md:min-w-[19rem]">
             {[
-              [`${activeStatus?.coverageScore ?? 0}%`, "COVERAGE"],
-              [String(activeStatus?.evidenceCount ?? 0), "ARTIFACTS"],
-              [String(activeStatus?.projectCount ?? 0), "SYSTEMS"],
+              [`${activeStatus?.coverageScore ?? 0}%`, locale === "zh" ? "覆盖率" : "COVERAGE"],
+              [String(activeStatus?.evidenceCount ?? 0), locale === "zh" ? "证据" : "ARTIFACTS"],
+              [String(activeStatus?.projectCount ?? 0), locale === "zh" ? "系统" : "SYSTEMS"],
             ].map(([value, label]) => (
               <div key={label} className="flex flex-col">
                 <dt className="order-2 mt-1.5 font-mono text-[11px] font-black text-[#697478]">{label}</dt>
@@ -132,11 +136,11 @@ export function StudioSystemExplorer({
         </div>
 
         <div className="mt-5 flex flex-wrap gap-x-7 gap-y-3 font-mono text-[11px] font-black">
-          <CstdLink href="/observatory.json" className="inline-flex items-center gap-2 text-[#24e0ff] hover:text-white">
+          <CstdLink href={getLocalizedCstdHref("/observatory.json", locale)} className="inline-flex items-center gap-2 text-[#24e0ff] hover:text-white">
             RELEASE {observatory.release} <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
           </CstdLink>
-          <CstdLink href="/map" className="inline-flex items-center gap-2 text-[#899499] hover:text-white">
-            KNOWLEDGE MAP <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+          <CstdLink href={getLocalizedCstdHref("/map", locale)} className="inline-flex items-center gap-2 text-[#899499] hover:text-white">
+            {locale === "zh" ? "知识图谱" : "KNOWLEDGE MAP"} <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
           </CstdLink>
         </div>
       </div>

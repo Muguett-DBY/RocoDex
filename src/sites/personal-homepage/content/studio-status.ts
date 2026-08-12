@@ -3,12 +3,15 @@ import { createCstdDigest } from "./digest";
 import { cstdProofMesh, getCstdProofFreshness, type CstdProofFreshness } from "./proof-mesh";
 import { cstdSystems, type CstdSystem } from "./systems";
 import { cstdTimeline } from "./timeline";
+import type { LocalizedText } from "./content-types";
 
 export type CstdDistrictStatus = Readonly<{
   id: CstdSystem["id"];
   code: string;
   title: string;
   district: string;
+  titleLocalized: LocalizedText;
+  districtLocalized: LocalizedText;
   coverageScore: number;
   evidenceCount: number;
   projectCount: number;
@@ -59,8 +62,10 @@ export function createCstdStudioSnapshot(now = new Date()): CstdStudioSnapshot {
     return {
       id: system.id,
       code: system.code,
-      title: system.title,
-      district: system.district,
+      title: system.title.zh,
+      district: system.district.en,
+      titleLocalized: system.title,
+      districtLocalized: system.district,
       coverageScore,
       evidenceCount: proofs.reduce((sum, proof) => sum + proof.artifactCount, 0),
       projectCount: proofs.length,

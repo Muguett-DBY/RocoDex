@@ -14,25 +14,20 @@ export function getPersonalHomepageSitemapEntries(): SitemapEntry[] {
     ...cstdLabs.map((entry) => `/lab/${entry.slug}`),
     ...cstdTopics.map((entry) => `/topics/${entry.slug}`),
   ];
-  const contentEntries = zhPaths.flatMap((path): SitemapEntry[] => [
-    { url: `https://custard.top${path}`, lastModified: "2026-08-09", changeFrequency: path === "/now" ? "weekly" : "monthly", priority: path.split("/").length === 2 ? 0.8 : 0.7 },
-    { url: `https://custard.top/en${path}`, lastModified: "2026-08-09", changeFrequency: path === "/now" ? "weekly" : "monthly", priority: path.split("/").length === 2 ? 0.75 : 0.65 },
-  ]);
+  const createPair = (path: string, changeFrequency: SitemapEntry["changeFrequency"], zhPriority: number, enPriority: number): SitemapEntry[] => {
+    const zhUrl = `https://custard.top${path || "/"}`;
+    const enUrl = `https://custard.top/en${path}`;
+    const alternates = { "zh-CN": zhUrl, "en-AU": enUrl, "x-default": zhUrl };
+    return [
+      { url: zhUrl, alternates, lastModified: "2026-08-12", changeFrequency, priority: zhPriority },
+      { url: enUrl, alternates, lastModified: "2026-08-12", changeFrequency, priority: enPriority },
+    ];
+  };
+  const contentEntries = zhPaths.flatMap((path) => createPair(path, path === "/now" ? "weekly" : "monthly", path.split("/").length === 2 ? 0.8 : 0.7, path.split("/").length === 2 ? 0.75 : 0.65));
 
   return [
-    {
-      url: "https://custard.top/",
-      lastModified: "2026-08-09",
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    { url: "https://custard.top/en", lastModified: "2026-08-09", changeFrequency: "weekly", priority: 0.9 },
-    ...audiencePages.map((path): SitemapEntry => ({
-      url: `https://custard.top${path}`,
-      lastModified: "2026-08-09",
-      changeFrequency: "monthly",
-      priority: 0.85,
-    })),
+    ...createPair("", "weekly", 1, 0.95),
+    ...audiencePages.flatMap((path) => createPair(path, "monthly", 0.85, 0.8)),
     ...contentEntries,
   ];
 }

@@ -62,10 +62,9 @@ export function getNarrativeLabel(mode: CstdNarrativeMode, locale: CstdLocale) {
   return getCstdNarrative(mode).label[locale];
 }
 
-export function getCstdNarrativeSharePath(mode: CstdNarrativeMode) {
-  if (mode === "researcher") return "/for/research";
-  if (mode === "collaborator") return "/for/collaboration";
-  return "/for/builder";
+export function getCstdNarrativeSharePath(mode: CstdNarrativeMode, locale: CstdLocale = "zh") {
+  const path = mode === "researcher" ? "/for/research" : mode === "collaborator" ? "/for/collaboration" : "/for/builder";
+  return locale === "en" ? `/en${path}` : path;
 }
 
 export function parseCstdNarrativeShareSlug(slug: string): CstdNarrativeMode | null {

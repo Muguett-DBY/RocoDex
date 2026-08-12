@@ -18,7 +18,7 @@ export function serializeCstdResume(locale: CstdLocale) {
     },
     capabilities: cstdSystems.map((system) => ({
       id: system.id,
-      title: locale === "zh" ? system.title : system.district,
+      title: system.title[locale],
       stack: system.stack,
       evidence: system.evidenceLinks.map((entry) => locale === "en" ? `/en${entry.href}` : entry.href),
     })),

@@ -14,5 +14,5 @@ export async function generateMetadata({ params }: { params: Promise<{ audience:
 
 export default async function CstdAudiencePage({ params }: { params: Promise<{ audience: string }> }) {
   const { audience } = await params;
-  return <CstdAudienceHomepagePage audience={audience} />;
+  return <CstdAudienceHomepagePage audience={audience} locale="zh" />;
 }

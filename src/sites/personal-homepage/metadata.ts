@@ -7,72 +7,79 @@ import { getCstdLab } from "./content/labs";
 import { getCstdTechnicalNote } from "./content/technical-notes";
 import { getCstdNarrative, parseCstdNarrativeShareSlug } from "./content/narratives";
 import { getCstdTopic } from "./content/topics";
+import { cstdLocaleConfig, getCstdLanguageAlternates } from "./infrastructure/i18n";
 
 const CSTD_ORIGIN = "https://custard.top";
 
-export const personalHomepageMetadata: Metadata = {
-  metadataBase: new URL(CSTD_ORIGIN),
-  title: "奶黄包 / Custard | 产品工程师与创意系统构建者",
-  description: "奶黄包的独立技术工作室：把产品、数据、AI、研究与边缘系统编译成真正运行的作品。",
-  alternates: {
-    canonical: "https://custard.top/",
-  },
-  manifest: "/manifest.webmanifest",
-  openGraph: {
-    type: "website",
-    siteName: "奶黄包 / Custard",
-    title: "奶黄包 / Custard // Personal Engineering Universe",
-    description: "真实作品、工程判断、可执行证据与持续生长的知识路径。",
-    url: "https://custard.top/",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "奶黄包 / Custard // Personal Engineering Universe",
-    description: "真实作品、工程判断、可执行证据与持续生长的知识路径。",
-  },
-};
+export function getPersonalHomepageMetadata(locale: CstdLocale): Metadata {
+  return createCstdMetadata({
+    locale,
+    path: locale === "en" ? "/en" : "/",
+    title: locale === "zh" ? "奶黄包 / Custard | 产品工程师与创意系统构建者" : "Custard | Product engineer and creative systems builder",
+    description: locale === "zh" ? "奶黄包的独立技术工作室：把产品、数据、AI、研究与边缘系统编译成真正运行的作品。" : "Custard's independent engineering studio, compiling product, data, AI, research, and edge systems into work that actually runs.",
+    image: "/cstd-og-v2.webp",
+    type: "profile",
+  });
+}
 
-export const personalHomepageStructuredData = [
+export const personalHomepageMetadata = getPersonalHomepageMetadata("zh");
+
+export function getPersonalHomepageStructuredData(locale: CstdLocale) {
+  const prefix = locale === "en" ? "/en" : "";
+  return [
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Custard / CSTD",
-    url: CSTD_ORIGIN,
-    inLanguage: ["zh-CN", "en-AU"],
-    description: "Custard's personal engineering studio for shipped products, evidence-first AI, data systems, research, and visual engineering.",
+    url: `${CSTD_ORIGIN}${prefix || "/"}`,
+    inLanguage: cstdLocaleConfig[locale].htmlLang,
+    description: locale === "zh" ? "奶黄包的个人工程工作室，展示已交付产品、证据优先 AI、数据系统、研究与视觉工程。" : "Custard's personal engineering studio for shipped products, evidence-first AI, data systems, research, and visual engineering.",
   },
   {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    name: "CSTD / Custard",
-    url: CSTD_ORIGIN,
+    name: locale === "zh" ? "奶黄包 / CSTD" : "Custard / CSTD",
+    url: `${CSTD_ORIGIN}${prefix || "/"}`,
+    inLanguage: cstdLocaleConfig[locale].htmlLang,
     mainEntity: {
       "@type": "Person",
-      name: "Custard",
-      alternateName: "奶黄包",
-      jobTitle: "Product engineer and creative systems builder",
-      knowsAbout: ["Product engineering", "Evidence-first AI", "Data systems", "Quantitative research", "Visual engineering"],
+      name: locale === "zh" ? "奶黄包" : "Custard",
+      alternateName: locale === "zh" ? "Custard" : "奶黄包",
+      jobTitle: locale === "zh" ? "产品工程师与创意系统构建者" : "Product engineer and creative systems builder",
+      knowsAbout: locale === "zh"
+        ? ["产品工程", "证据优先 AI", "数据系统", "量化研究", "浏览器视觉工程"]
+        : ["Product engineering", "Evidence-first AI", "Data systems", "Quantitative research", "Visual engineering"],
       sameAs: ["https://github.com/Muguett-DBY"],
     },
   },
   {
     "@context": "https://schema.org",
     "@type": "Dataset",
-    name: "CSTD engineering observatory",
-    description: "Build-linked verification, public proof, content health, and release provenance for custard.top.",
-    url: `${CSTD_ORIGIN}/observatory.json`,
+    name: locale === "zh" ? "CSTD 工程观测站" : "CSTD engineering observatory",
+    description: locale === "zh"
+      ? "custard.top 的构建关联验证、公开证据、内容健康度与发布来源记录。"
+      : "Build-linked verification, public proof, content health, and release provenance for custard.top.",
+    url: `${CSTD_ORIGIN}${prefix}/observatory.json`,
+    inLanguage: cstdLocaleConfig[locale].htmlLang,
     dateModified: cstdContentHealth.generatedAt,
     version: "CSTD-17.0",
     isAccessibleForFree: true,
-    creator: { "@type": "Person", name: "Custard", alternateName: "奶黄包" },
+    creator: {
+      "@type": "Person",
+      name: locale === "zh" ? "奶黄包" : "Custard",
+      alternateName: locale === "zh" ? "Custard" : "奶黄包",
+    },
     distribution: [
-      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}/observatory.json` },
-      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}/content-health.json` },
-      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}/performance.json` },
-      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}/experience.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}${prefix}/observatory.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}${prefix}/content-health.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}${prefix}/performance.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}${prefix}/experience.json` },
     ],
   },
 ] as const;
+}
+
+export const personalHomepageStructuredData = getPersonalHomepageStructuredData("zh");
 
 type CstdMetadataInput = {
   title: string;
@@ -99,10 +106,10 @@ export function createCstdMetadata({
   publishedAt,
 }: CstdMetadataInput): Metadata {
   const canonicalPath = locale === "en" ? (path.startsWith("/en") ? path : `/en${path}`) : stripEnglishPrefix(path);
-  const zhPath = stripEnglishPrefix(canonicalPath);
-  const enPath = zhPath === "/" ? "/en" : `/en${zhPath}`;
   const canonical = new URL(canonicalPath, CSTD_ORIGIN).toString();
   const imageUrl = new URL(image, CSTD_ORIGIN).toString();
+  const config = cstdLocaleConfig[locale];
+  const alternates = getCstdLanguageAlternates(canonicalPath);
 
   return {
     metadataBase: new URL(CSTD_ORIGIN),
@@ -111,18 +118,21 @@ export function createCstdMetadata({
     alternates: {
       canonical,
       languages: {
-        "zh-CN": new URL(zhPath, CSTD_ORIGIN).toString(),
-        en: new URL(enPath, CSTD_ORIGIN).toString(),
-        "x-default": new URL(zhPath, CSTD_ORIGIN).toString(),
+        "zh-CN": new URL(alternates["zh-CN"], CSTD_ORIGIN).toString(),
+        "en-AU": new URL(alternates["en-AU"], CSTD_ORIGIN).toString(),
+        "x-default": new URL(alternates["x-default"], CSTD_ORIGIN).toString(),
       },
     },
+    manifest: locale === "en" ? "/en/manifest.webmanifest" : "/manifest.webmanifest",
+    other: { "content-language": config.htmlLang },
     openGraph: {
       type,
       siteName: "Custard / CSTD",
       title,
       description,
       url: canonical,
-      locale: locale === "zh" ? "zh_CN" : "en_AU",
+      locale: config.openGraphLocale,
+      alternateLocale: [cstdLocaleConfig[locale === "zh" ? "en" : "zh"].openGraphLocale],
       images: [{ url: imageUrl, width: 1920, height: 1080, alt: title }],
       ...(type === "article" && publishedAt ? { publishedTime: publishedAt } : {}),
     },
@@ -181,15 +191,15 @@ export function getCstdTechnicalNoteOpenGraphData(slug: string) {
   return { title: note.title.en, summary: note.summary.en, readingMinutes: note.readingMinutes } as const;
 }
 
-export function getCstdAudienceMetadata(audience: string) {
+export function getCstdAudienceMetadata(audience: string, locale: CstdLocale = "zh") {
   const mode = parseCstdNarrativeShareSlug(audience);
   if (!mode) return {};
   const narrative = getCstdNarrative(mode);
   return createCstdMetadata({
-    title: `${narrative.label.zh}观看路径`,
-    description: narrative.description.zh,
-    path: `/for/${audience}`,
-    locale: "zh",
+    title: locale === "zh" ? `${narrative.label.zh}观看路径` : `${narrative.label.en} viewing path`,
+    description: narrative.description[locale],
+    path: locale === "en" ? `/en/for/${audience}` : `/for/${audience}`,
+    locale,
     image: "/cstd-universe/cstd-neural-gate-v1.webp",
   });
 }

@@ -1,5 +1,6 @@
 import type { CstdHomepageObservatory } from "../content/observatory";
 import type { CstdNarrativeMode } from "../content/narratives";
+import type { CstdLocale } from "../content/content-types";
 import { NeuralGate } from "../scenes/neural-gate/neural-gate";
 import { HomepageRuntime } from "./homepage-runtime";
 import { ExecutableEvidence } from "./sections/executable-evidence";
@@ -11,31 +12,33 @@ import { SelectedWork } from "./sections/selected-work";
 export function PersonalHomepage({
   initialNarrativeMode = "builder",
   observatory,
+  locale = "zh",
 }: {
   initialNarrativeMode?: CstdNarrativeMode;
   observatory: CstdHomepageObservatory;
+  locale?: CstdLocale;
 }) {
   return (
-    <HomepageRuntime narrativeMode={initialNarrativeMode}>
-      <NeuralGate narrativeMode={initialNarrativeMode} />
+    <HomepageRuntime narrativeMode={initialNarrativeMode} locale={locale}>
+      <NeuralGate narrativeMode={initialNarrativeMode} locale={locale} />
 
       <div id="systems" data-cstd-scene-shell="systems" className="relative scroll-mt-16">
-        <LivingStudioTwin narrativeMode={initialNarrativeMode} observatory={observatory} />
+        <LivingStudioTwin narrativeMode={initialNarrativeMode} observatory={observatory} locale={locale} />
       </div>
 
       <div id="proof" data-cstd-scene-shell="proof" className="relative scroll-mt-16">
-        <SelectedWork narrativeMode={initialNarrativeMode} />
+        <SelectedWork narrativeMode={initialNarrativeMode} locale={locale} />
       </div>
 
       <div id="operator" data-cstd-scene-shell="operator" className="relative scroll-mt-16">
-        <ExecutableEvidence />
+        <ExecutableEvidence locale={locale} />
       </div>
 
       <div id="path" data-cstd-scene-shell="path" className="relative scroll-mt-16">
-        <KnowledgeLens observatory={observatory} />
+        <KnowledgeLens observatory={observatory} locale={locale} />
       </div>
 
-      <Finale narrativeMode={initialNarrativeMode} />
+      <Finale narrativeMode={initialNarrativeMode} locale={locale} />
     </HomepageRuntime>
   );
 }

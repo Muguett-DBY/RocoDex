@@ -8,13 +8,16 @@ import type { CstdSystem } from "../../content/systems";
 import { getCstdLinkTargetProps } from "../../domain/link-target";
 import { StudioSystemExplorer, type StudioSystemArt } from "./studio-system-explorer";
 import { ThemeChapterLabel, ThemeCopy } from "../theme-copy";
+import type { CstdLocale } from "../../content/content-types";
 
 export function LivingStudioTwin({
   narrativeMode,
   observatory,
+  locale,
 }: {
   narrativeMode: CstdNarrativeMode;
   observatory: CstdHomepageObservatory;
+  locale: CstdLocale;
 }) {
   const systems = getNarrativeSystems(narrativeMode);
   const systemIds = new Set<CstdSystem["id"]>(systems.map((system) => system.id));
@@ -33,7 +36,7 @@ export function LivingStudioTwin({
     >
       <Image
         src="/cstd-universe/cstd-core-world-v4.webp"
-        alt="五个能力区域连接到奶黄包个人工作室核心"
+        alt={locale === "zh" ? "五个能力区域连接到奶黄包个人工作室核心" : "Five capability districts connected to the core of Custard's personal studio"}
         fill
         sizes="100vw"
         className="object-cover object-[64%_50%] opacity-15"
@@ -47,21 +50,21 @@ export function LivingStudioTwin({
               <Activity aria-hidden="true" className="h-4 w-4" />
               <ThemeChapterLabel
                 neon="02 / CAPABILITY SYSTEM"
-                ink="第二卷 / 器与术"
+                ink={locale === "zh" ? "第二卷 / 器与术" : "SCROLL II / CRAFT & METHOD"}
                 press="SECTION A / SYSTEMS DESK"
                 pixel="LEVEL 02 / SKILL TREE"
               />
             </p>
             <h2 id="studio-twin-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
               <ThemeCopy
-                neon={<>我不收集技能图标，<span className="block text-[#f4d431]">我构建能上线的系统。</span></>}
-                ink={<>器有形，术有脉，<span className="block text-[#f4d431]">系统自成章。</span></>}
-                press={<>五条能力链，<span className="block text-[#f4d431]">正在共同交付。</span></>}
-                pixel={<>技能树不是收藏，<span className="block text-[#f4d431]">通关才算解锁。</span></>}
+                neon={locale === "zh" ? <>我不收集技能图标，<span className="block text-[#f4d431]">我构建能上线的系统。</span></> : <>I do not collect skill badges.<span className="block text-[#f4d431]">I build systems that ship.</span></>}
+                ink={locale === "zh" ? <>器有形，术有脉，<span className="block text-[#f4d431]">系统自成章。</span></> : <>Form gives craft a body;<span className="block text-[#f4d431]">method gives systems a pulse.</span></>}
+                press={locale === "zh" ? <>五条能力链，<span className="block text-[#f4d431]">正在共同交付。</span></> : <>Five capability chains,<span className="block text-[#f4d431]">shipping as one desk.</span></>}
+                pixel={locale === "zh" ? <>技能树不是收藏，<span className="block text-[#f4d431]">通关才算解锁。</span></> : <>A skill tree is not a collection.<span className="block text-[#f4d431]">It unlocks only when the quest clears.</span></>}
               />
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-8 text-[#aeb8bb]">
-              产品界面、智能能力、数据工程、边缘部署和研究模型共同组成一条完整交付链。选择一个方向，查看它如何落进真实作品。
+              {locale === "zh" ? "产品界面、智能能力、数据工程、边缘部署和研究模型共同组成一条完整交付链。选择一个方向，查看它如何落进真实作品。" : "Product surfaces, intelligent capability, data engineering, edge delivery, and research models form one complete delivery chain. Choose a direction to see where it lands in shipped work."}
             </p>
           </div>
 
@@ -85,6 +88,7 @@ export function LivingStudioTwin({
           statuses={statuses}
           artBySystem={artBySystem}
           observatory={observatory}
+          locale={locale}
         />
       </div>
     </section>

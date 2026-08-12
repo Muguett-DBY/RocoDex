@@ -7,6 +7,8 @@ describe("GET /sitemap.xml", () => {
     const sitemap = await response.text();
 
     expect(sitemap).toContain("<loc>https://custard.top/</loc>");
+    expect(sitemap).toContain('hreflang="en-AU" href="https://custard.top/en"');
+    expect(sitemap).toContain("<loc>https://custard.top/en/for/research</loc>");
     expect(sitemap).not.toContain("rocodex.custard.top/creatures");
   });
 

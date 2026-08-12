@@ -8,7 +8,7 @@ export function createCstdJsonFeed(locale: CstdLocale) {
     version: "https://jsonfeed.org/version/1.1",
     title: isEnglish ? "CSTD Technical Notes" : "CSTD 技术札记",
     home_page_url: homePageUrl,
-    feed_url: `https://custard.top/feed.json${isEnglish ? "?lang=en" : ""}`,
+    feed_url: isEnglish ? "https://custard.top/en/feed.json" : "https://custard.top/feed.json",
     language: isEnglish ? "en-AU" : "zh-CN",
     authors: [{ name: isEnglish ? "Custard" : "奶黄包", url: "https://custard.top" }],
     items: cstdTechnicalNotes.map((note) => {

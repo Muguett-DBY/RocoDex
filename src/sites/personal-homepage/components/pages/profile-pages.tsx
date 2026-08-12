@@ -1,8 +1,7 @@
-import { ArrowUpRight, BookOpen, BriefcaseBusiness, Download, FileJson2, FlaskConical, MapPin, Radio, Sparkles } from "lucide-react";
+import { ArrowUpRight, BookOpen, Download, FileJson2, FlaskConical, MapPin, Radio, Sparkles } from "lucide-react";
 import type { CstdLocale } from "../../content/content-types";
-import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
+import { cstdCaseStudies } from "../../content/case-studies";
 import { cstdProfile } from "../../content/profile";
-import { cstdTechnicalNotes, getTechnicalNotePath } from "../../content/technical-notes";
 import { cstdTimeline } from "../../content/timeline";
 import { CstdCapabilityTimeline } from "../site/capability-timeline";
 import { CstdLink } from "../site/cstd-link";
@@ -10,12 +9,6 @@ import { CstdSiteChrome } from "../site/cstd-site-chrome";
 import { PrintButton } from "../site/print-button";
 import { StructuredData } from "../site/structured-data";
 import { CstdPageHero } from "./page-hero";
-
-const profileHero = {
-  src: "/cstd-universe/cstd-night-workstation-v1.webp",
-  alt: { zh: "奶黄包的夜间技术工作站", en: "Custard's night engineering workstation" },
-  position: "50% 50%",
-} as const;
 
 const aboutHero = {
   src: "/cstd-archive/cstd-archive-studio-v1.webp",
@@ -31,39 +24,6 @@ const nowHero = {
 
 function localePath(path: string, locale: CstdLocale) {
   return locale === "en" ? `/en${path}` : path;
-}
-
-export function CstdEnglishHubPage() {
-  const locale: CstdLocale = "en";
-  const featuredCases = cstdCaseStudies.slice(0, 3);
-  const featuredNotes = cstdTechnicalNotes.slice(0, 3);
-
-  return (
-    <CstdSiteChrome locale={locale} page="english-hub">
-      <main id="cstd-main">
-        <CstdPageHero locale={locale} eyebrow="CSTD / ENGLISH ARCHIVE" title="Systems that run. Decisions that remain inspectable." summary={cstdProfile.intro.en} image={profileHero} />
-        <section className="border-b border-white/12 bg-[#080a0c] px-5 py-20 md:px-10 lg:px-16">
-          <div className="mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-2">
-            <div>
-              <div className="flex items-center gap-3 font-mono text-[11px] font-black text-[#f4d431]"><BriefcaseBusiness aria-hidden="true" className="h-4 w-4" /> FEATURED SYSTEMS</div>
-              <div className="mt-7 border-t border-white/15">
-                {featuredCases.map((entry) => <CstdLink key={entry.slug} href={getCaseStudyPath(entry, locale)} className="group flex items-center justify-between gap-5 border-b border-white/15 py-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]"><div><p className="font-mono text-[11px] font-black text-[#69757a]">{entry.kicker.en.toUpperCase()}</p><p className="mt-2 text-2xl font-semibold text-white">{entry.title.en}</p></div><ArrowUpRight aria-hidden="true" className="h-5 w-5 text-[#f4d431] transition-transform group-hover:-translate-y-1 group-hover:translate-x-1" /></CstdLink>)}
-              </div>
-              <CstdLink href="/en/work" className="mt-7 inline-flex items-center gap-3 border-b border-[#f4d431] pb-2 font-mono text-[11px] font-black">ALL CASE STUDIES <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
-            </div>
-            <div>
-              <div className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><BookOpen aria-hidden="true" className="h-4 w-4" /> LATEST FIELD NOTES</div>
-              <div className="mt-7 border-t border-white/15">
-                {featuredNotes.map((note) => <CstdLink key={note.slug} href={getTechnicalNotePath(note, locale)} className="group block border-b border-white/15 py-6 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]"><p className="font-mono text-[11px] font-black text-[#69757a]">{note.category.en.toUpperCase()} / {note.readingMinutes} MIN</p><p className="mt-2 text-2xl font-semibold leading-tight text-white transition-colors group-hover:text-[#24e0ff]">{note.title.en}</p></CstdLink>)}
-              </div>
-              <CstdLink href="/en/notes" className="mt-7 inline-flex items-center gap-3 border-b border-[#24e0ff] pb-2 font-mono text-[11px] font-black">ALL TECHNICAL NOTES <ArrowUpRight aria-hidden="true" className="h-4 w-4" /></CstdLink>
-            </div>
-          </div>
-        </section>
-      </main>
-      <StructuredData value={{ "@context": "https://schema.org", "@type": "ProfilePage", name: "Custard / CSTD", url: "https://custard.top/en", mainEntity: { "@type": "Person", name: "Custard", jobTitle: cstdProfile.title.en, homeLocation: { "@type": "Place", name: cstdProfile.location.en } } }} />
-    </CstdSiteChrome>
-  );
 }
 
 export function CstdAboutPage({ locale }: { locale: CstdLocale }) {

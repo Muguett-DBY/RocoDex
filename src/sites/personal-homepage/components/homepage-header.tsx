@@ -7,21 +7,26 @@ import { ThemeSwitcher } from "./theme-switcher";
 import { CstdChapterLink } from "./site/cstd-chapter-link";
 import { CstdLink } from "./site/cstd-link";
 import { getCstdThemeMeta, useCstdTheme } from "../experience/theme-store";
+import type { CstdLocale } from "../content/content-types";
+import { getLocalizedCstdHref } from "../infrastructure/i18n";
+import { CstdLanguageSwitcher } from "./site/cstd-language-switcher";
 
 const homepageLinks = [
-  { href: "#systems", label: "能力", sceneId: "systems" },
-  { href: "#proof", label: "作品", sceneId: "proof" },
-  { href: "#operator", label: "证据", sceneId: "operator" },
+  { href: "#systems", label: { zh: "能力", en: "Systems" }, sceneId: "systems" },
+  { href: "#proof", label: { zh: "作品", en: "Work" }, sceneId: "proof" },
+  { href: "#operator", label: { zh: "证据", en: "Proof" }, sceneId: "operator" },
 ] as const;
 
 export function HomepageHeader({
   activeSceneId,
+  locale,
   overdrive,
   reducedMotion,
   onToggleOverdrive,
   onToggleMotion,
 }: {
   activeSceneId: CstdSceneId;
+  locale: CstdLocale;
   overdrive: boolean;
   reducedMotion: boolean;
   onToggleOverdrive: () => void;
@@ -29,7 +34,9 @@ export function HomepageHeader({
 }) {
   const theme = useCstdTheme();
   const themeMeta = getCstdThemeMeta(theme);
-  const mark = theme === "ink-protocol" ? "墨" : theme === "press-room" ? "报" : theme === "pixel-quest" ? "8B" : "奶";
+  const mark = locale === "zh"
+    ? theme === "ink-protocol" ? "墨" : theme === "press-room" ? "报" : theme === "pixel-quest" ? "8B" : "奶"
+    : theme === "ink-protocol" ? "IK" : theme === "press-room" ? "PR" : theme === "pixel-quest" ? "8B" : "CS";
   return (
     <header
       data-cstd-home-header
@@ -52,7 +59,7 @@ export function HomepageHeader({
         </CstdChapterLink>
 
         <div className="ml-auto flex items-center gap-2 md:gap-4">
-          <nav aria-label="首页导航" className="hidden items-center gap-0.5 text-[12px] font-semibold text-[#9ca5a8] md:flex">
+          <nav aria-label={locale === "zh" ? "首页导航" : "Homepage navigation"} className="hidden items-center gap-0.5 text-[12px] font-semibold text-[#9ca5a8] md:flex">
             {homepageLinks.map((link) => {
               const active = activeSceneId === link.sceneId;
               return (
@@ -66,23 +73,25 @@ export function HomepageHeader({
                     active ? "text-[#f4d431]" : "hover:text-white",
                   )}
                 >
-                  {link.label}
+                  {link.label[locale]}
                 </CstdChapterLink>
               );
             })}
             <span aria-hidden="true" className="mx-2 h-4 w-px bg-white/10" />
-            <CstdLink eagerPrefetch href="/notes" className="px-2.5 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
-              札记
+            <CstdLink eagerPrefetch href={getLocalizedCstdHref("/notes", locale)} className="px-2.5 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
+              {locale === "zh" ? "札记" : "Notes"}
             </CstdLink>
-            <CstdLink eagerPrefetch href="/about" className="px-2.5 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
-              关于
+            <CstdLink eagerPrefetch href={getLocalizedCstdHref("/about", locale)} className="px-2.5 py-2 transition-colors hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#24e0ff]">
+              {locale === "zh" ? "关于" : "About"}
             </CstdLink>
           </nav>
           <CstdChapterLink href="#proof" className="mr-1 font-mono text-xs font-semibold text-[#f4d431] md:hidden">
-            作品
+            {locale === "zh" ? "作品" : "Work"}
           </CstdChapterLink>
-          <ThemeSwitcher />
+          <CstdLanguageSwitcher locale={locale} compact />
+          <ThemeSwitcher locale={locale} />
           <HomepageControls
+            locale={locale}
             overdrive={overdrive}
             reducedMotion={reducedMotion}
             onToggleOverdrive={onToggleOverdrive}

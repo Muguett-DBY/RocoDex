@@ -29,8 +29,8 @@ export type CstdKnowledgeEdge = Readonly<{
 const systemNodes: readonly CstdKnowledgeNode[] = cstdSystems.map((entry) => ({
   id: `system:${entry.id}`,
   type: "system",
-  title: { zh: entry.title, en: entry.district },
-  summary: { zh: entry.summary, en: entry.relation },
+  title: entry.title,
+  summary: entry.summary,
   href: { zh: "/map", en: "/en/map" },
   capabilityIds: [entry.id],
   updatedAt: "2026-08-09",
