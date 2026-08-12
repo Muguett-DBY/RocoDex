@@ -25,7 +25,7 @@ import { useCstdSceneClock } from "../experience/scene-clock";
 import { getCstdThemeMeta, useCstdTheme } from "../experience/theme-store";
 import { HomepageHeader } from "./homepage-header";
 import { MemoizedSceneRuntime } from "./scene-runtime";
-import { ThemeWorldLayer } from "./theme-world-layer";
+import { ThemeSceneNavigator, ThemeWorldLayer } from "./theme-world-layer";
 import { MemoizedWorldBackdrop } from "./world-backdrop";
 
 const LazyCstdTelemetry = lazy(() =>
@@ -194,6 +194,7 @@ export function HomepageRuntime({
         onToggleOverdrive={toggleOverdrive}
         onToggleMotion={toggleMotionMode}
       />
+      <ThemeSceneNavigator theme={theme} activeSceneId={activeSceneId} />
 
       {children}
 

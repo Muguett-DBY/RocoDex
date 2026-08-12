@@ -4,6 +4,7 @@ import { findCstdKnowledgePath } from "../../content/knowledge-graph";
 import type { CstdHomepageObservatory } from "../../content/observatory";
 import { CstdLink } from "../site/cstd-link";
 import { answerGuideQuestion } from "../site/guide-retrieval";
+import { ThemeChapterLabel, ThemeCopy } from "../theme-copy";
 
 const lenses = [
   {
@@ -36,15 +37,22 @@ export function KnowledgeLens({ observatory }: { observatory: CstdHomepageObserv
       <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,9,0.99),rgba(5,7,9,0.94)_58%,rgba(5,7,9,0.82))]" />
 
       <div className="relative mx-auto max-w-[1320px]">
-        <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
+        <header data-cstd-chapter-header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> 05 / TECH NOTES</p>
-            <h2 id="knowledge-lens-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">技术分享不堆术语，<span className="block text-[#f4d431]">只讲做过的判断。</span></h2>
+            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="05 / TECH NOTES" ink="第五卷 / 心法" press="SECTION D / OPINION & NOTES" pixel="LEVEL 05 / LORE LIBRARY" /></p>
+            <h2 id="knowledge-lens-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
+              <ThemeCopy
+                neon={<>技术分享不堆术语，<span className="block text-[#f4d431]">只讲做过的判断。</span></>}
+                ink={<>行路有迹，<span className="block text-[#f4d431]">判断成章。</span></>}
+                press={<>观点必须有来源，<span className="block text-[#f4d431]">判断必须能追溯。</span></>}
+                pixel={<>解锁 LORE LIBRARY，<span className="block text-[#f4d431]">查看通关思路。</span></>}
+              />
+            </h2>
           </div>
           <p className="text-sm leading-7 text-[#aeb8bb] md:text-base md:leading-8">每个答案都来自本站公开案例和札记。问题、结论与来源同屏，读者不需要先学会操作另一套工具。</p>
         </header>
 
-        <div className="mt-12 border-t border-white/14">
+        <div data-cstd-knowledge-list className="mt-12 border-t border-white/14">
           {answers.map(({ question, pathLength, result }, index) => {
             const source = result.sources[0];
             const paragraphs = result.answer.split("\n\n").map((paragraph) => paragraph.trim()).filter(Boolean);

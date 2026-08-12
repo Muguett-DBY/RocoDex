@@ -2,6 +2,8 @@ import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { getCstdNarrative, type CstdNarrativeMode } from "../../content/narratives";
 import { CstdChapterLink } from "../../components/site/cstd-chapter-link";
 import { CstdLink } from "../../components/site/cstd-link";
+import { ThemeChapterLabel, ThemeCopy } from "../../components/theme-copy";
+import { ThemeHeroArtifact } from "../../components/theme-hero-artifact";
 
 const signatureSignals = [
   { value: "01", label: "产品工程" },
@@ -25,11 +27,16 @@ export function NeuralGate({ narrativeMode }: { narrativeMode: CstdNarrativeMode
       <div aria-hidden="true" className="absolute inset-x-0 bottom-0 h-40 bg-[linear-gradient(0deg,#050709,transparent)]" />
       <div aria-hidden="true" className="cstd-hero-scanline absolute inset-x-0 top-[24%] h-px bg-[#24e0ff]/35" />
 
-      <div className="relative mx-auto w-full max-w-[1320px]">
+      <div data-cstd-hero-layout className="relative mx-auto w-full max-w-[1320px]">
         <div className="cstd-hero-copy max-w-[50rem]">
           <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#f4d431] md:text-xs">
             <span aria-hidden="true" className="h-px w-10 bg-[#f4d431]" />
-            <span>CSTD / PERSONAL STUDIO</span>
+            <ThemeChapterLabel
+              neon="CSTD / PERSONAL STUDIO"
+              ink="奶黄包 · 工程手卷"
+              press="THE LEAD / PROFILE"
+              pixel="NEW GAME / PLAYER 01"
+            />
           </p>
 
           <h1
@@ -41,7 +48,12 @@ export function NeuralGate({ narrativeMode }: { narrativeMode: CstdNarrativeMode
             奶黄包
           </h1>
           <p data-cstd-hero-role className="mt-4 font-mono text-sm font-black leading-tight text-[#24e0ff] md:text-lg">
-            PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER
+            <ThemeCopy
+              neon="PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER"
+              ink="产品工程 · 智能系统 · 造物求真"
+              press="INDEPENDENT PRODUCT ENGINEER / SYSTEMS DESK"
+              pixel="CLASS / PRODUCT ENGINEER + SYSTEM BUILDER"
+            />
           </p>
 
           <p
@@ -49,11 +61,20 @@ export function NeuralGate({ narrativeMode }: { narrativeMode: CstdNarrativeMode
             aria-label={narrative.thesis.zh}
             className="mt-10 max-w-3xl text-3xl font-semibold leading-[1.08] text-[#f2efe7] md:text-[2.8rem] lg:text-[3.1rem]"
           >
-            把复杂问题，
-            <span className="block text-[#f4d431]">编译成真正运行的系统。</span>
+            <ThemeCopy
+              neon={<>把复杂问题，<span className="block text-[#f4d431]">编译成真正运行的系统。</span></>}
+              ink={<>万象入墨，<span className="block text-[#f4d431]">工程成卷。</span></>}
+              press={<>今日头条：<span className="block text-[#f4d431]">复杂系统如期上线。</span></>}
+              pixel={<>主线任务：<span className="block text-[#f4d431]">编译现实世界。</span></>}
+            />
           </p>
           <p data-cstd-hero-description className="mt-5 max-w-xl text-base leading-7 text-[#aeb8bb] md:text-lg md:leading-8">
-            奶黄包的个人技术工作室。用产品、AI、数据和工程判断，把想法做成真实上线、可以验证的系统。
+            <ThemeCopy
+              neon="奶黄包的个人技术工作室。用产品、AI、数据和工程判断，把想法做成真实上线、可以验证的系统。"
+              ink="以产品为骨、数据为墨、工程为法，让每一个想法都落成可运行、可验证的真实器物。"
+              press="本期人物奶黄包：横跨产品、AI、数据与工程，把复杂命题报道成已经运行的事实。"
+              pixel="装备产品、AI、数据与工程技能，完成从想法到上线验证的整条主线任务。"
+            />
           </p>
 
           <div data-cstd-hero-actions className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
@@ -74,6 +95,8 @@ export function NeuralGate({ narrativeMode }: { narrativeMode: CstdNarrativeMode
             </CstdLink>
           </div>
         </div>
+
+        <ThemeHeroArtifact />
 
         <dl data-cstd-hero-summary className="mt-12 grid max-w-[46rem] border-t border-white/14 sm:grid-cols-3">
           {signatureSignals.map((signal) => (

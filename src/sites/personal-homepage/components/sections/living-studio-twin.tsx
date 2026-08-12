@@ -7,6 +7,7 @@ import { cstdStudioSnapshot } from "../../content/studio-status";
 import type { CstdSystem } from "../../content/systems";
 import { getCstdLinkTargetProps } from "../../domain/link-target";
 import { StudioSystemExplorer, type StudioSystemArt } from "./studio-system-explorer";
+import { ThemeChapterLabel, ThemeCopy } from "../theme-copy";
 
 export function LivingStudioTwin({
   narrativeMode,
@@ -40,13 +41,24 @@ export function LivingStudioTwin({
       <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,9,0.99),rgba(5,7,9,0.93)_56%,rgba(5,7,9,0.8))]" />
 
       <div className="relative mx-auto max-w-[1320px]">
-        <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+        <header data-cstd-chapter-header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
             <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]">
-              <Activity aria-hidden="true" className="h-4 w-4" /> 02 / CAPABILITY SYSTEM
+              <Activity aria-hidden="true" className="h-4 w-4" />
+              <ThemeChapterLabel
+                neon="02 / CAPABILITY SYSTEM"
+                ink="第二卷 / 器与术"
+                press="SECTION A / SYSTEMS DESK"
+                pixel="LEVEL 02 / SKILL TREE"
+              />
             </p>
             <h2 id="studio-twin-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
-              我不收集技能图标，<span className="block text-[#f4d431]">我构建能上线的系统。</span>
+              <ThemeCopy
+                neon={<>我不收集技能图标，<span className="block text-[#f4d431]">我构建能上线的系统。</span></>}
+                ink={<>器有形，术有脉，<span className="block text-[#f4d431]">系统自成章。</span></>}
+                press={<>五条能力链，<span className="block text-[#f4d431]">正在共同交付。</span></>}
+                pixel={<>技能树不是收藏，<span className="block text-[#f4d431]">通关才算解锁。</span></>}
+              />
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-8 text-[#aeb8bb]">
               产品界面、智能能力、数据工程、边缘部署和研究模型共同组成一条完整交付链。选择一个方向，查看它如何落进真实作品。

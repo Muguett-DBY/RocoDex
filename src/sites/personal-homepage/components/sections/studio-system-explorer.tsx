@@ -46,8 +46,8 @@ export function StudioSystemExplorer({
   }
 
   return (
-    <div className="mt-14 grid gap-8 lg:grid-cols-[19rem_minmax(0,1fr)] lg:gap-12">
-      <div className="border-t border-white/12" role="tablist" aria-label="能力方向" aria-orientation="vertical">
+    <div data-cstd-system-explorer className="mt-14 grid gap-8 lg:grid-cols-[19rem_minmax(0,1fr)] lg:gap-12">
+      <div data-cstd-system-tabs className="border-t border-white/12" role="tablist" aria-label="能力方向" aria-orientation="vertical">
         {systems.map((system, index) => {
           const active = system.id === activeSystem.id;
           return (

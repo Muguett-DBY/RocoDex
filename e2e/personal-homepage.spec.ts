@@ -229,13 +229,20 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
   await expectNoHorizontalOverflow(page);
 });
 
-test("CSTD switches and persists four structurally distinct visual worlds", async ({ page }) => {
+test("CSTD switches and persists four structurally distinct visual worlds", async ({ page, isMobile }) => {
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
   const switcher = page.locator("[data-cstd-theme-switcher]");
 
   await expect(root).toHaveAttribute("data-cstd-theme", "neon-district");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "cyberpunk");
+  if (isMobile) {
+    await expect(page.locator('[data-cstd-hero-artifact="neon"]')).toBeHidden();
+  } else {
+    await expect(page.locator('[data-cstd-hero-artifact="neon"]')).toBeVisible();
+  }
+  await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeHidden();
+  if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="neon-district"]')).toBeVisible();
   await switcher.click();
   await expect(page.locator("[data-cstd-theme-menu]")).toBeVisible();
   await expect(page.locator("[data-cstd-theme-option]")).toHaveCount(4);
@@ -253,6 +260,14 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(switcher).toHaveAttribute("data-cstd-theme-active", "press-room");
   await expect(switcher.locator("[data-cstd-theme-label]")).toContainText("工程日报");
   await expect(page.locator('[data-cstd-theme-world-kind="broadsheet"] img')).toHaveAttribute("src", /press-room-v1/);
+  if (isMobile) {
+    await expect(page.locator('[data-cstd-hero-artifact="press"]')).toBeHidden();
+  } else {
+    await expect(page.locator('[data-cstd-hero-artifact="press"]')).toBeVisible();
+  }
+  await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeHidden();
+  if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="press-room"]')).toBeVisible();
+  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("今日头条：");
   await expectNoHorizontalOverflow(page);
 
   await page.reload({ waitUntil: "domcontentloaded" });
@@ -267,6 +282,14 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(root).toHaveAttribute("data-cstd-theme", "ink-protocol");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "ink-scroll");
   await expect(page.locator('[data-cstd-theme-world-kind="ink-scroll"] img')).toHaveAttribute("src", /ink-scroll-v1/);
+  if (isMobile) {
+    await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeHidden();
+  } else {
+    await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeVisible();
+  }
+  await expect(page.locator('[data-cstd-hero-artifact="press"]')).toBeHidden();
+  if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="ink-protocol"]')).toBeVisible();
+  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("万象入墨，");
   await expectNoHorizontalOverflow(page);
 
   await page.locator("[data-cstd-theme-switcher]").click();
@@ -276,6 +299,14 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(root).toHaveAttribute("data-cstd-render-policy", "balanced");
   await expect(page.locator("[data-cstd-webgl]")).toHaveCount(0);
   await expect(page.locator('[data-cstd-theme-world-kind="pixel-game"] img')).toHaveAttribute("src", /pixel-quest-v1/);
+  if (isMobile) {
+    await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeHidden();
+  } else {
+    await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeVisible();
+  }
+  await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeHidden();
+  if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="pixel-quest"]')).toBeVisible();
+  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("主线任务：");
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(root).toHaveAttribute("data-cstd-theme", "pixel-quest");
   await expectNoHorizontalOverflow(page);
