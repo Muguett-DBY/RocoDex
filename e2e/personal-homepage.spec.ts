@@ -229,6 +229,33 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
   await expectNoHorizontalOverflow(page);
 });
 
+test("CSTD lets visitors switch and persist the three visual worlds", async ({ page }) => {
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  const root = page.locator("[data-cstd-kinetic-world]");
+  const switcher = page.locator("[data-cstd-theme-switcher]");
+
+  await expect(root).toHaveAttribute("data-cstd-theme", "neon-district");
+  await switcher.click();
+  await expect(page.locator("[data-cstd-theme-menu]")).toBeVisible();
+  await expect(page.locator("[data-cstd-theme-option]")).toHaveCount(3);
+  await page.locator('[data-cstd-theme-option="solar-lab"]').click();
+  await expect(root).toHaveAttribute("data-cstd-theme", "solar-lab");
+  await expect(switcher).toHaveAttribute("data-cstd-theme-active", "solar-lab");
+  await expect(switcher.locator("[data-cstd-theme-label]")).toContainText("CUSTARD SOLAR LAB");
+
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(root).toHaveAttribute("data-cstd-theme", "solar-lab");
+  await page.goto("/cstd/notes/host-boundaries-in-one-next-deployment", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "solar-lab");
+
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.locator("[data-cstd-theme-switcher]").click();
+  await page.locator('[data-cstd-theme-option="ink-protocol"]').click();
+  await expect(root).toHaveAttribute("data-cstd-theme", "ink-protocol");
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(root).toHaveAttribute("data-cstd-theme", "ink-protocol");
+});
+
 test("CSTD header anchors land immediately without a stalled view transition", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "The compact mobile header exposes the primary work shortcut instead of the desktop rail.");
   const transitionErrors: string[] = [];

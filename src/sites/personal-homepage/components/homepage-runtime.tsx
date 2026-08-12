@@ -22,6 +22,7 @@ import {
   type CstdRuntimeProfile,
 } from "../experience/runtime-hooks";
 import { useCstdSceneClock } from "../experience/scene-clock";
+import { useCstdTheme } from "../experience/theme-store";
 import { HomepageHeader } from "./homepage-header";
 import { MemoizedSceneRuntime } from "./scene-runtime";
 import { MemoizedWorldBackdrop } from "./world-backdrop";
@@ -49,6 +50,7 @@ export function HomepageRuntime({
   children: ReactNode;
 }) {
   const motionMode = useCstdMotionMode();
+  const theme = useCstdTheme();
   const desktopScene = useCstdDesktopScene();
   const reducedMotion = motionMode === "calm";
   const [overdrive, setOverdrive] = useState(false);
@@ -145,6 +147,7 @@ export function HomepageRuntime({
       data-cstd-data-saver={runtimeProfile.saveData ? "true" : "false"}
       data-cstd-narrative-mode={narrativeMode}
       data-cstd-motion={reducedMotion ? "calm" : "full"}
+      data-cstd-theme={theme}
       data-cstd-overdrive={overdrive ? "true" : "false"}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
@@ -158,6 +161,7 @@ export function HomepageRuntime({
       </a>
 
       <MemoizedWorldBackdrop activeSceneId={activeSceneId} />
+      <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" />
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
         <MemoizedSceneRuntime {...sceneProps} profile={renderedProfile} enabled={enhancementsReady && desktopScene && overdrive} />
       </div>

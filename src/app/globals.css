@@ -1216,3 +1216,288 @@ a {
     line-height: 2.25rem;
   }
 }
+
+/* Personal-site visual worlds: the information architecture stays shared while the atmosphere changes at the root. */
+[data-cstd-theme] {
+  --cstd-theme-bg: #07090b;
+  --cstd-theme-surface: #050709;
+  --cstd-theme-surface-raised: #0b1013;
+  --cstd-theme-ink: #f2efe7;
+  --cstd-theme-muted: #aeb8bb;
+  --cstd-theme-line: rgb(255 255 255 / 14%);
+  --cstd-theme-accent: #f4d431;
+  --cstd-theme-signal: #24e0ff;
+  --cstd-theme-danger: #ff3b30;
+  transition: background-color 620ms ease, color 620ms ease;
+}
+
+[data-cstd-theme="solar-lab"] {
+  --cstd-theme-bg: #eee8d9;
+  --cstd-theme-surface: #e2dac7;
+  --cstd-theme-surface-raised: #f7f2e7;
+  --cstd-theme-ink: #26372f;
+  --cstd-theme-muted: #5f6f64;
+  --cstd-theme-line: rgb(38 55 47 / 20%);
+  --cstd-theme-accent: #b8652b;
+  --cstd-theme-signal: #1d7c76;
+  --cstd-theme-danger: #a54b3f;
+  color-scheme: light;
+}
+
+[data-cstd-theme="ink-protocol"] {
+  --cstd-theme-bg: #e7dfd1;
+  --cstd-theme-surface: #d9cfbd;
+  --cstd-theme-surface-raised: #f2ecdf;
+  --cstd-theme-ink: #1d211e;
+  --cstd-theme-muted: #63665e;
+  --cstd-theme-line: rgb(29 33 30 / 22%);
+  --cstd-theme-accent: #a7382f;
+  --cstd-theme-signal: #315d66;
+  --cstd-theme-danger: #8c2926;
+  color-scheme: light;
+}
+
+[data-cstd-theme="solar-lab"],
+[data-cstd-theme="ink-protocol"] {
+  background-color: var(--cstd-theme-bg) !important;
+  color: var(--cstd-theme-ink) !important;
+}
+
+[data-cstd-theme="solar-lab"] [class~="bg-[#050709]"],
+[data-cstd-theme="solar-lab"] [class~="bg-[#07090b]"],
+[data-cstd-theme="ink-protocol"] [class~="bg-[#050709]"],
+[data-cstd-theme="ink-protocol"] [class~="bg-[#07090b]"] {
+  background-color: var(--cstd-theme-surface) !important;
+}
+
+[data-cstd-theme="solar-lab"] [class~="bg-[#0b1013]"],
+[data-cstd-theme="ink-protocol"] [class~="bg-[#0b1013]"] {
+  background-color: var(--cstd-theme-surface-raised) !important;
+}
+
+[data-cstd-theme="solar-lab"] [class~="text-white"],
+[data-cstd-theme="solar-lab"] [class~="text-[#f2efe7]"],
+[data-cstd-theme="solar-lab"] [class~="text-[#dce1e2]"],
+[data-cstd-theme="solar-lab"] [class~="text-[#cbd3d5]"],
+[data-cstd-theme="ink-protocol"] [class~="text-white"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#f2efe7]"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#dce1e2]"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#cbd3d5]"] {
+  color: var(--cstd-theme-ink) !important;
+}
+
+[data-cstd-theme="solar-lab"] [class~="text-[#aeb8bb]"],
+[data-cstd-theme="solar-lab"] [class~="text-[#9aa4a8]"],
+[data-cstd-theme="solar-lab"] [class~="text-[#8f9ba0]"],
+[data-cstd-theme="solar-lab"] [class~="text-[#68757b]"],
+[data-cstd-theme="solar-lab"] [class~="text-[#a5aaad]"],
+[data-cstd-theme="solar-lab"] [class~="text-[#aab3b6]"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#aeb8bb]"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#9aa4a8]"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#8f9ba0]"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#68757b]"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#a5aaad]"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#aab3b6]"] {
+  color: var(--cstd-theme-muted) !important;
+}
+
+[data-cstd-theme="solar-lab"] [class~="text-[#f4d431]"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#f4d431]"] {
+  color: var(--cstd-theme-accent) !important;
+}
+
+[data-cstd-theme="solar-lab"] [class~="bg-[#f4d431]"],
+[data-cstd-theme="ink-protocol"] [class~="bg-[#f4d431]"] {
+  background-color: var(--cstd-theme-accent) !important;
+}
+
+[data-cstd-theme="solar-lab"] [class~="text-[#24e0ff]"],
+[data-cstd-theme="ink-protocol"] [class~="text-[#24e0ff]"] {
+  color: var(--cstd-theme-signal) !important;
+}
+
+[data-cstd-theme="solar-lab"] [class~="border-white/10"],
+[data-cstd-theme="solar-lab"] [class~="border-white/12"],
+[data-cstd-theme="solar-lab"] [class~="border-white/15"],
+[data-cstd-theme="solar-lab"] [class~="border-white/18"],
+[data-cstd-theme="solar-lab"] [class~="border-white/8"],
+[data-cstd-theme="ink-protocol"] [class~="border-white/10"],
+[data-cstd-theme="ink-protocol"] [class~="border-white/12"],
+[data-cstd-theme="ink-protocol"] [class~="border-white/15"],
+[data-cstd-theme="ink-protocol"] [class~="border-white/18"],
+[data-cstd-theme="ink-protocol"] [class~="border-white/8"] {
+  border-color: var(--cstd-theme-line) !important;
+}
+
+[data-cstd-theme="solar-lab"] [data-cstd-home-header] > div,
+[data-cstd-theme="ink-protocol"] [data-cstd-home-header] > div,
+[data-cstd-deep-shell][data-cstd-theme="solar-lab"] > header,
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] > header {
+  background-color: color-mix(in srgb, var(--cstd-theme-surface-raised) 88%, transparent) !important;
+  border-color: var(--cstd-theme-line) !important;
+  box-shadow: 0 16px 48px rgb(28 39 31 / 12%);
+}
+
+.cstd-theme-atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 700ms ease, background 700ms ease;
+}
+
+[data-cstd-theme="solar-lab"] .cstd-theme-atmosphere {
+  opacity: 0.72;
+  background:
+    linear-gradient(116deg, rgb(255 251 233 / 56%) 0%, transparent 42%),
+    repeating-linear-gradient(118deg, transparent 0 9rem, rgb(29 124 118 / 7%) 9.1rem 9.2rem, transparent 9.3rem 18rem);
+  mix-blend-mode: multiply;
+}
+
+[data-cstd-theme="ink-protocol"] .cstd-theme-atmosphere {
+  opacity: 0.58;
+  background:
+    repeating-linear-gradient(172deg, transparent 0 5rem, rgb(49 93 102 / 8%) 5.05rem 5.12rem, transparent 5.18rem 11rem),
+    linear-gradient(135deg, rgb(255 250 238 / 34%), transparent 58%);
+  mix-blend-mode: multiply;
+}
+
+[data-cstd-theme="solar-lab"] [data-cstd-shell-overlay] {
+  background: linear-gradient(180deg, rgb(247 242 231 / 18%), rgb(226 218 199 / 72%) 80%) !important;
+}
+
+[data-cstd-theme="ink-protocol"] [data-cstd-shell-overlay] {
+  background: linear-gradient(180deg, rgb(242 236 223 / 12%), rgb(217 207 189 / 72%) 82%) !important;
+}
+
+[data-cstd-theme="solar-lab"] [data-cstd-signal-field] {
+  opacity: 0.42;
+  filter: sepia(0.32) saturate(0.72) hue-rotate(112deg);
+}
+
+[data-cstd-theme="ink-protocol"] [data-cstd-signal-field] {
+  opacity: 0.28;
+  filter: grayscale(1) sepia(0.32) contrast(1.08);
+}
+
+[data-cstd-theme="solar-lab"] .cstd-world-frame-image {
+  opacity: 0.62;
+  filter: sepia(0.3) saturate(0.72) hue-rotate(318deg) brightness(1.08) contrast(0.96);
+}
+
+[data-cstd-theme="ink-protocol"] .cstd-world-frame-image {
+  opacity: 0.48;
+  filter: grayscale(1) sepia(0.32) brightness(1.12) contrast(1.06);
+  mix-blend-mode: multiply;
+}
+
+[data-cstd-theme="solar-lab"] .cstd-world-vignette {
+  background:
+    linear-gradient(90deg, rgb(238 232 217 / 90%) 0%, rgb(238 232 217 / 56%) 38%, rgb(238 232 217 / 10%) 84%),
+    linear-gradient(0deg, rgb(226 218 199 / 76%), transparent 48%);
+}
+
+[data-cstd-theme="ink-protocol"] .cstd-world-vignette {
+  background:
+    linear-gradient(90deg, rgb(231 223 209 / 94%) 0%, rgb(231 223 209 / 62%) 42%, rgb(231 223 209 / 8%) 86%),
+    linear-gradient(0deg, rgb(217 207 189 / 72%), transparent 46%);
+}
+
+[data-cstd-theme="solar-lab"] .cstd-world-depth {
+  background: radial-gradient(ellipse at 68% 44%, transparent 0 26%, rgb(65 87 68 / 8%) 74%, rgb(42 61 47 / 24%) 100%);
+}
+
+[data-cstd-theme="ink-protocol"] .cstd-world-depth {
+  background: radial-gradient(ellipse at 68% 44%, transparent 0 24%, rgb(44 61 57 / 7%) 72%, rgb(31 37 33 / 20%) 100%);
+}
+
+[data-cstd-theme="solar-lab"] .cstd-world-grid {
+  opacity: 0.14;
+  background-image:
+    linear-gradient(rgb(29 124 118 / 14%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(29 124 118 / 14%) 1px, transparent 1px);
+}
+
+[data-cstd-theme="ink-protocol"] .cstd-world-grid {
+  opacity: 0.12;
+  background-image:
+    linear-gradient(rgb(49 93 102 / 14%) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(49 93 102 / 14%) 1px, transparent 1px);
+  transform: perspective(900px) rotateX(64deg) translateY(46%) rotateZ(-2deg);
+}
+
+[data-cstd-theme="solar-lab"] .cstd-world-rain,
+[data-cstd-theme="ink-protocol"] .cstd-world-rain {
+  opacity: 0.14;
+  background-image: repeating-linear-gradient(104deg, transparent 0 52px, rgb(29 124 118 / 18%) 53px, transparent 54px 98px);
+  mix-blend-mode: multiply;
+}
+
+[data-cstd-theme="ink-protocol"] .cstd-world-rain {
+  background-image: repeating-linear-gradient(104deg, transparent 0 62px, rgb(167 56 47 / 18%) 63px 64px, transparent 65px 116px);
+}
+
+[data-cstd-theme="solar-lab"] .cstd-world-transition,
+[data-cstd-theme="ink-protocol"] .cstd-world-transition {
+  background-image: repeating-linear-gradient(90deg, transparent 0 7%, rgb(184 101 43 / 14%) 7.1% 7.25%, transparent 7.35% 14%);
+}
+
+[data-cstd-theme="ink-protocol"] .cstd-world-transition {
+  background-image: repeating-linear-gradient(90deg, transparent 0 8%, rgb(167 56 47 / 16%) 8.1% 8.25%, transparent 8.35% 16%);
+}
+
+[data-cstd-theme="solar-lab"] .cstd-world-copy-shade,
+[data-cstd-theme="ink-protocol"] .cstd-world-copy-shade {
+  background: linear-gradient(90deg, rgb(238 232 217 / 46%) 0%, rgb(238 232 217 / 14%) 54%, transparent 84%);
+}
+
+[data-cstd-theme="ink-protocol"] .cstd-world-copy-shade {
+  background: linear-gradient(90deg, rgb(231 223 209 / 52%) 0%, rgb(231 223 209 / 16%) 54%, transparent 84%);
+}
+
+[data-cstd-theme="solar-lab"] .cstd-theme-switcher-trigger,
+[data-cstd-theme="ink-protocol"] .cstd-theme-switcher-trigger {
+  border-color: var(--cstd-theme-line);
+  color: var(--cstd-theme-muted);
+}
+
+.cstd-theme-menu {
+  border-color: var(--cstd-theme-line);
+  background-color: color-mix(in srgb, var(--cstd-theme-surface-raised) 96%, transparent);
+  color: var(--cstd-theme-ink);
+}
+
+[data-cstd-theme="solar-lab"] .cstd-theme-option:hover,
+[data-cstd-theme="ink-protocol"] .cstd-theme-option:hover {
+  background-color: rgb(255 255 255 / 45%);
+}
+
+html[data-cstd-theme-transition]::after {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  pointer-events: none;
+  content: "";
+  background: #101517;
+  opacity: 0;
+  animation: cstd-theme-wash 720ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cstd-theme-wash {
+  0% { opacity: 0; transform: scaleX(0); transform-origin: left; }
+  28% { opacity: 0.82; }
+  100% { opacity: 0; transform: scaleX(1); transform-origin: right; }
+}
+
+[data-cstd-motion="calm"] .cstd-theme-atmosphere,
+[data-cstd-visual-mode="calm"] .cstd-theme-atmosphere {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-cstd-theme-transition]::after {
+    animation: none;
+    opacity: 0;
+  }
+}
