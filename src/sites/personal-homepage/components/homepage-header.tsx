@@ -6,6 +6,7 @@ import { HomepageControls } from "./homepage-controls";
 import { ThemeSwitcher } from "./theme-switcher";
 import { CstdChapterLink } from "./site/cstd-chapter-link";
 import { CstdLink } from "./site/cstd-link";
+import { getCstdThemeMeta, useCstdTheme } from "../experience/theme-store";
 
 const homepageLinks = [
   { href: "#systems", label: "能力", sceneId: "systems" },
@@ -26,10 +27,14 @@ export function HomepageHeader({
   onToggleOverdrive: () => void;
   onToggleMotion: () => void;
 }) {
+  const theme = useCstdTheme();
+  const themeMeta = getCstdThemeMeta(theme);
+  const mark = theme === "ink-protocol" ? "墨" : theme === "press-room" ? "报" : theme === "pixel-quest" ? "8B" : "奶";
   return (
     <header
       data-cstd-home-header
       data-cstd-header-theme={activeSceneId}
+      data-cstd-header-world={themeMeta.kind}
       className="pointer-events-none fixed inset-x-3 top-3 z-50 md:inset-x-6 md:top-5"
     >
       <div className="pointer-events-auto relative mx-auto flex h-14 w-full max-w-[1320px] items-center overflow-hidden rounded-[7px] border border-white/10 bg-[#050709]/95 px-2.5 shadow-[0_16px_48px_rgba(0,0,0,0.3)] md:px-3">
@@ -37,10 +42,13 @@ export function HomepageHeader({
           href="#top"
           className="flex items-center gap-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]"
         >
-          <span className="flex h-9 w-9 items-center justify-center bg-[#f4d431] text-sm font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">
-            奶
+          <span data-cstd-header-mark className="flex h-9 w-9 items-center justify-center bg-[#f4d431] text-sm font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">
+            {mark}
           </span>
-          <span className="whitespace-nowrap text-sm font-black">奶黄包</span>
+          <span className="min-w-0">
+            <span data-cstd-header-brand className="block whitespace-nowrap text-sm font-black">{themeMeta.brand}</span>
+            <span data-cstd-header-edition className="hidden whitespace-nowrap text-[8px] font-bold uppercase lg:block">{themeMeta.edition}</span>
+          </span>
         </CstdChapterLink>
 
         <div className="ml-auto flex items-center gap-2 md:gap-4">

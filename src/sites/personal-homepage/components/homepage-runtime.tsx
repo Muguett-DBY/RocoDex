@@ -22,9 +22,10 @@ import {
   type CstdRuntimeProfile,
 } from "../experience/runtime-hooks";
 import { useCstdSceneClock } from "../experience/scene-clock";
-import { useCstdTheme } from "../experience/theme-store";
+import { getCstdThemeMeta, useCstdTheme } from "../experience/theme-store";
 import { HomepageHeader } from "./homepage-header";
 import { MemoizedSceneRuntime } from "./scene-runtime";
+import { ThemeWorldLayer } from "./theme-world-layer";
 import { MemoizedWorldBackdrop } from "./world-backdrop";
 
 const LazyCstdTelemetry = lazy(() =>
@@ -51,12 +52,13 @@ export function HomepageRuntime({
 }) {
   const motionMode = useCstdMotionMode();
   const theme = useCstdTheme();
+  const immersiveTheme = theme === "neon-district";
   const desktopScene = useCstdDesktopScene();
   const reducedMotion = motionMode === "calm";
   const [overdrive, setOverdrive] = useState(false);
   const enhancementsReady = useCstdDeferredEnhancements();
   const documentVisible = useCstdDocumentVisibility();
-  const runtimeProfile = useCstdRuntimeProfile(enhancementsReady && overdrive, desktopScene);
+  const runtimeProfile = useCstdRuntimeProfile(enhancementsReady && overdrive && immersiveTheme, desktopScene);
   const rootRef = useRef<HTMLElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
   const pointerRef = useRef({ x: 0, y: 0 });
@@ -68,7 +70,7 @@ export function HomepageRuntime({
     rootRef,
     progressBarRef,
   });
-  const renderedProfile = useMemo(() => getRenderedProfile(runtimeProfile, overdrive), [overdrive, runtimeProfile]);
+  const renderedProfile = useMemo(() => getRenderedProfile(runtimeProfile, overdrive && immersiveTheme), [immersiveTheme, overdrive, runtimeProfile]);
 
   const toggleOverdrive = useCallback(() => {
     setOverdrive((current) => !current);
@@ -140,7 +142,7 @@ export function HomepageRuntime({
       data-cstd-scene-mode={renderedProfile.tier === "image" ? "image" : "webgl"}
       data-cstd-immersive-runtime={renderedProfile.tier}
       data-cstd-render-backend={renderedProfile.backend}
-      data-cstd-render-policy={overdrive ? "enhanced" : "balanced"}
+      data-cstd-render-policy={overdrive && immersiveTheme ? "enhanced" : "balanced"}
       data-cstd-webgpu={renderedProfile.webgpu ? "active" : "unavailable"}
       data-cstd-runtime-reason={renderedProfile.reason}
       data-cstd-network={runtimeProfile.effectiveType ?? "unknown"}
@@ -148,7 +150,8 @@ export function HomepageRuntime({
       data-cstd-narrative-mode={narrativeMode}
       data-cstd-motion={reducedMotion ? "calm" : "full"}
       data-cstd-theme={theme}
-      data-cstd-overdrive={overdrive ? "true" : "false"}
+      data-cstd-theme-kind={getCstdThemeMeta(theme).kind}
+      data-cstd-overdrive={overdrive && immersiveTheme ? "true" : "false"}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
       className="relative isolate overflow-x-clip bg-[#07090b] font-sans text-[#f2efe7]"
@@ -161,9 +164,10 @@ export function HomepageRuntime({
       </a>
 
       <MemoizedWorldBackdrop activeSceneId={activeSceneId} />
+      <ThemeWorldLayer theme={theme} activeSceneId={activeSceneId} />
       <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" />
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
-        <MemoizedSceneRuntime {...sceneProps} profile={renderedProfile} enabled={enhancementsReady && desktopScene && overdrive} />
+        <MemoizedSceneRuntime {...sceneProps} profile={renderedProfile} enabled={enhancementsReady && desktopScene && overdrive && immersiveTheme} />
       </div>
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[2] hidden overflow-hidden md:block">
         <div className="cstd-world-copy-shade absolute inset-0" />

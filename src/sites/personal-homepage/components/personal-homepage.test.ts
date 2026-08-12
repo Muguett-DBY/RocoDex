@@ -32,6 +32,9 @@ const finaleSource = read("./sections/finale.tsx");
 const globalsSource = read("../../../app/globals.css");
 const themeStoreSource = read("../experience/theme-store.ts");
 const themeSwitcherSource = read("./theme-switcher.tsx");
+const themeWorldSource = read("./theme-world-layer.tsx");
+const themeCssSource = read("../../../app/cstd-themes.css");
+const assetManifestSource = read("../media/asset-manifest.ts");
 
 describe("CSTD personal homepage", () => {
   test("keeps Custard identity and a direct portfolio promise above the fold", () => {
@@ -108,9 +111,9 @@ describe("CSTD personal homepage", () => {
 
   test("requires explicit opt-in before loading the desktop GPU runtime", () => {
     expect(homepageRuntimeSource).toContain('reason: "balanced-default"');
-    expect(homepageRuntimeSource).toContain("useCstdRuntimeProfile(enhancementsReady && overdrive, desktopScene)");
-    expect(homepageRuntimeSource).toContain('data-cstd-render-policy={overdrive ? "enhanced" : "balanced"}');
-    expect(homepageRuntimeSource).toContain("enabled={enhancementsReady && desktopScene && overdrive}");
+    expect(homepageRuntimeSource).toContain("useCstdRuntimeProfile(enhancementsReady && overdrive && immersiveTheme, desktopScene)");
+    expect(homepageRuntimeSource).toContain('data-cstd-render-policy={overdrive && immersiveTheme ? "enhanced" : "balanced"}');
+    expect(homepageRuntimeSource).toContain("enabled={enhancementsReady && desktopScene && overdrive && immersiveTheme}");
     expect(runtimeHooksSource).toContain("desktopSceneQuery");
     expect(runtimeHooksSource).toContain('import("./runtime-capabilities")');
     expect(runtimeSource).toContain("WEBGL_debug_renderer_info");
@@ -180,16 +183,29 @@ describe("CSTD personal homepage", () => {
     expect(finaleSource).not.toContain("lg:h-[155svh]");
   });
 
-  test("offers three persistent visual worlds without changing the content model", () => {
-    expect(themeStoreSource).toContain('export type CstdThemeId = "neon-district" | "solar-lab" | "ink-protocol"');
+  test("offers four persistent visual worlds with distinct structural engines", () => {
+    expect(themeStoreSource).toContain('export type CstdThemeId = "neon-district" | "ink-protocol" | "press-room" | "pixel-quest"');
+    expect(themeStoreSource).toContain('export type CstdThemeKind = "cyberpunk" | "ink-scroll" | "broadsheet" | "pixel-game"');
     expect(themeStoreSource).toContain('cstdThemeStorageKey = "cstd-world-theme"');
+    expect(themeStoreSource).toContain('if (value === "solar-lab") return "press-room"');
     expect(themeStoreSource).toContain("setCstdTheme");
     expect(themeSwitcherSource).toContain("data-cstd-theme-switcher");
     expect(themeSwitcherSource).toContain("data-cstd-theme-option={candidate.id}");
+    expect(themeSwitcherSource).toContain("createPortal(menu, document.body)");
     expect(homepageRuntimeSource).toContain("data-cstd-theme={theme}");
-    expect(themeStoreSource).toContain("CUSTARD SOLAR LAB");
+    expect(homepageRuntimeSource).toContain("data-cstd-theme-kind={getCstdThemeMeta(theme).kind}");
+    expect(themeWorldSource).toContain('import { cstdThemeWorldAssets } from "../media/asset-manifest"');
+    expect(themeWorldSource).toContain("src={cstdThemeWorldAssets[theme]}");
+    expect(assetManifestSource).toContain("/cstd-themes/ink-scroll-v1.webp");
+    expect(assetManifestSource).toContain("/cstd-themes/press-room-v1.webp");
+    expect(assetManifestSource).toContain("/cstd-themes/pixel-quest-v1.webp");
     expect(themeStoreSource).toContain("INK PROTOCOL");
-    expect(globalsSource).toContain('[data-cstd-theme="solar-lab"]');
-    expect(globalsSource).toContain('[data-cstd-theme="ink-protocol"]');
+    expect(themeStoreSource).toContain("CSTD PRESS ROOM");
+    expect(themeStoreSource).toContain("PIXEL QUEST");
+    expect(themeCssSource).toContain('[data-cstd-theme="ink-protocol"]');
+    expect(themeCssSource).toContain('[data-cstd-theme="press-room"]');
+    expect(themeCssSource).toContain('[data-cstd-theme="pixel-quest"]');
+    expect(themeCssSource).toContain("grid-template-columns: repeat(3, minmax(0, 1fr))");
+    expect(themeCssSource).toContain("image-rendering: pixelated");
   });
 });
