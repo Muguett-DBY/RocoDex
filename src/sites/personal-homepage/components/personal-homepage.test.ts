@@ -33,7 +33,11 @@ const globalsSource = read("../../../app/globals.css");
 const themeStoreSource = read("../experience/theme-store.ts");
 const themeSwitcherSource = read("./theme-switcher.tsx");
 const themeWorldSource = read("./theme-world-layer.tsx");
+const themeCopySource = read("./theme-copy.tsx");
+const themeHeroArtifactSource = read("./theme-hero-artifact.tsx");
 const themeCssSource = read("../../../app/cstd-themes.css");
+const themeCompositionSource = read("../../../app/cstd-theme-compositions.css");
+const appLayoutSource = read("../../../app/layout.tsx");
 const assetManifestSource = read("../media/asset-manifest.ts");
 
 describe("CSTD personal homepage", () => {
@@ -196,6 +200,8 @@ describe("CSTD personal homepage", () => {
     expect(homepageRuntimeSource).toContain("data-cstd-theme-kind={getCstdThemeMeta(theme).kind}");
     expect(themeWorldSource).toContain('import { cstdThemeWorldAssets } from "../media/asset-manifest"');
     expect(themeWorldSource).toContain("src={cstdThemeWorldAssets[theme]}");
+    expect(themeWorldSource).toContain("ThemeSceneNavigator");
+    expect(themeWorldSource).toContain("data-cstd-theme-scene-node={sceneId}");
     expect(assetManifestSource).toContain("/cstd-themes/ink-scroll-v1.webp");
     expect(assetManifestSource).toContain("/cstd-themes/press-room-v1.webp");
     expect(assetManifestSource).toContain("/cstd-themes/pixel-quest-v1.webp");
@@ -207,5 +213,31 @@ describe("CSTD personal homepage", () => {
     expect(themeCssSource).toContain('[data-cstd-theme="pixel-quest"]');
     expect(themeCssSource).toContain("grid-template-columns: repeat(3, minmax(0, 1fr))");
     expect(themeCssSource).toContain("image-rendering: pixelated");
+  });
+
+  test("isolates each world's language, hero artifact, navigation grammar, and chapter composition", () => {
+    expect(appLayoutSource).toContain('import "./cstd-theme-compositions.css"');
+    expect(themeCopySource).toContain('data-cstd-theme-copy="neon"');
+    expect(themeCopySource).toContain('data-cstd-theme-copy="ink"');
+    expect(themeCopySource).toContain('data-cstd-theme-copy="press"');
+    expect(themeCopySource).toContain('data-cstd-theme-copy="pixel"');
+    expect(gateSource).toContain("万象入墨");
+    expect(gateSource).toContain("今日头条");
+    expect(gateSource).toContain("主线任务");
+    expect(themeHeroArtifactSource).toContain('data-cstd-hero-artifact="neon"');
+    expect(themeHeroArtifactSource).toContain('data-cstd-hero-artifact="ink"');
+    expect(themeHeroArtifactSource).toContain('data-cstd-hero-artifact="press"');
+    expect(themeHeroArtifactSource).toContain('data-cstd-hero-artifact="pixel"');
+    expect(themeCompositionSource).toContain('[data-cstd-theme-scene-rail="neon-district"]');
+    expect(themeCompositionSource).toContain('[data-cstd-theme-scene-rail="ink-protocol"]');
+    expect(themeCompositionSource).toContain('[data-cstd-theme-scene-rail="press-room"]');
+    expect(themeCompositionSource).toContain('[data-cstd-theme-scene-rail="pixel-quest"]');
+    expect(themeCompositionSource).toContain(".cstd-ink-colophon");
+    expect(themeCompositionSource).toContain(".cstd-press-front-index");
+    expect(themeCompositionSource).toContain(".cstd-pixel-player-card");
+    expect(themeCompositionSource).toContain(".cstd-neon-console");
+    expect(themeCompositionSource).toContain('[data-cstd-theme="ink-protocol"] [data-cstd-proof-grid]');
+    expect(themeCompositionSource).toContain('[data-cstd-theme="press-room"] [data-cstd-proof-grid]');
+    expect(themeCompositionSource).toContain('[data-cstd-theme="pixel-quest"] [data-cstd-system-tabs]');
   });
 });

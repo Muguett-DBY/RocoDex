@@ -7,6 +7,7 @@ import { cstdProjects } from "../../content/projects";
 import { cstdProofMesh } from "../../content/proof-mesh";
 import { getCstdLinkTargetProps } from "../../domain/link-target";
 import { CstdLink } from "../site/cstd-link";
+import { ThemeChapterLabel, ThemeCopy } from "../theme-copy";
 
 export function SelectedWork({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) {
   const projectOrder = getCstdNarrative(narrativeMode).projectOrder;
@@ -24,11 +25,16 @@ export function SelectedWork({ narrativeMode }: { narrativeMode: CstdNarrativeMo
       className="relative z-20 border-b border-black/15 bg-[#f0efe9] px-5 py-20 text-[#090b0d] md:px-10 lg:px-16 lg:py-28"
     >
       <div className="mx-auto max-w-[1320px]">
-        <header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
+        <header data-cstd-chapter-header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#005f70]"><RadioTower aria-hidden="true" className="h-4 w-4" /> 03 / SELECTED WORK</p>
+            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#005f70]"><RadioTower aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="03 / SELECTED WORK" ink="第三卷 / 成器" press="SECTION B / FIELD REPORTS" pixel="LEVEL 03 / QUEST LOG" /></p>
             <h2 id="proof-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
-              三个系统，<span className="block text-[#007e92]">三条足够清楚的证据链。</span>
+              <ThemeCopy
+                neon={<>三个系统，<span className="block text-[#007e92]">三条足够清楚的证据链。</span></>}
+                ink={<>器成有痕，<span className="block text-[#007e92]">落款为证。</span></>}
+                press={<>三份现场报道，<span className="block text-[#007e92]">一条证据链。</span></>}
+                pixel={<>三项主线任务，<span className="block text-[#007e92]">战绩可验证。</span></>}
+              />
             </h2>
           </div>
           <p className="border-l border-black/20 pl-6 text-sm leading-7 text-[#465156] md:text-base md:leading-8">
@@ -36,7 +42,7 @@ export function SelectedWork({ narrativeMode }: { narrativeMode: CstdNarrativeMo
           </p>
         </header>
 
-        <div className="mt-12 grid gap-4 lg:grid-cols-12 lg:auto-rows-[15.5rem]">
+        <div data-cstd-proof-grid className="mt-12 grid gap-4 lg:grid-cols-12 lg:auto-rows-[15.5rem]">
           {cases.map((entry, index) => {
             const proof = cstdProofMesh.find((candidate) => candidate.caseSlug === entry.slug);
             const project = cstdProjects.find((candidate) => candidate.id === entry.projectId);

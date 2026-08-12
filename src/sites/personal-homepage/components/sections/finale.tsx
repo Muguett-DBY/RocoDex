@@ -1,6 +1,7 @@
 import { ArrowUp, ArrowUpRight, RadioTower } from "lucide-react";
 import { getCstdNarrative, getCstdNarrativeSharePath, type CstdNarrativeMode } from "../../content/narratives";
 import { CstdLink } from "../site/cstd-link";
+import { ThemeChapterLabel, ThemeCopy } from "../theme-copy";
 
 const finalNodes = [
   { code: "PRODUCT", color: "#f4d431" },
@@ -41,15 +42,19 @@ export function Finale({ narrativeMode }: { narrativeMode: CstdNarrativeMode }) 
         <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(0deg,#050709_0%,rgba(5,7,9,0.28)_38%,transparent_76%)]" />
         <div aria-hidden="true" className="absolute inset-x-0 top-0 h-px bg-[#f4d431]/60" />
 
-        <div className="relative mx-auto grid w-full max-w-[1320px] gap-12 lg:grid-cols-[minmax(0,1fr)_21rem] lg:items-end lg:gap-20">
+        <div data-cstd-finale-layout className="relative mx-auto grid w-full max-w-[1320px] gap-12 lg:grid-cols-[minmax(0,1fr)_21rem] lg:items-end lg:gap-20">
           <div className="max-w-6xl">
             <p className="flex items-center gap-3 font-mono text-[11px] font-black uppercase text-[#24e0ff]">
               <RadioTower aria-hidden="true" className="h-4 w-4" />
-              06 / FINAL TRANSMISSION
+              <ThemeChapterLabel neon="06 / FINAL TRANSMISSION" ink="卷尾 / 山高水长" press="BACK PAGE / LATE EDITION" pixel="FINAL STAGE / CONTINUE?" />
             </p>
             <h2 className="cstd-finale-title mt-8 text-5xl font-black leading-[0.9] tracking-[0] md:text-7xl lg:text-[6.5rem]">
-              STILL
-              <span className="block text-[#f4d431]">BUILDING.</span>
+              <ThemeCopy
+                neon={<>STILL<span className="block text-[#f4d431]">BUILDING.</span></>}
+                ink={<>山水未尽<span className="block text-[#f4d431]">工程长流。</span></>}
+                press={<>THE NEXT EDITION<span className="block text-[#f4d431]">IS IN PROGRESS.</span></>}
+                pixel={<>QUEST CLEAR<span className="block text-[#f4d431]">NEW GAME+</span></>}
+              />
             </h2>
             <p className="mt-7 max-w-2xl text-lg font-semibold leading-8 text-[#cbd3d5] md:text-xl md:leading-9">
               {collaboration.brief} 每条能力仍在继续向前连接。
