@@ -229,31 +229,60 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
   await expectNoHorizontalOverflow(page);
 });
 
-test("CSTD lets visitors switch and persist the three visual worlds", async ({ page }) => {
+test("CSTD switches and persists four structurally distinct visual worlds", async ({ page }) => {
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
   const switcher = page.locator("[data-cstd-theme-switcher]");
 
   await expect(root).toHaveAttribute("data-cstd-theme", "neon-district");
+  await expect(root).toHaveAttribute("data-cstd-theme-kind", "cyberpunk");
   await switcher.click();
   await expect(page.locator("[data-cstd-theme-menu]")).toBeVisible();
-  await expect(page.locator("[data-cstd-theme-option]")).toHaveCount(3);
-  await page.locator('[data-cstd-theme-option="solar-lab"]').click();
-  await expect(root).toHaveAttribute("data-cstd-theme", "solar-lab");
-  await expect(switcher).toHaveAttribute("data-cstd-theme-active", "solar-lab");
-  await expect(switcher.locator("[data-cstd-theme-label]")).toContainText("CUSTARD SOLAR LAB");
+  await expect(page.locator("[data-cstd-theme-option]")).toHaveCount(4);
+  const pressOption = page.locator('[data-cstd-theme-option="press-room"]');
+  await expect(pressOption).toBeVisible();
+  const pressOptionReceivesPointer = await pressOption.evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    const target = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    return Boolean(target?.closest('[data-cstd-theme-option="press-room"]'));
+  });
+  expect(pressOptionReceivesPointer).toBe(true);
+  await pressOption.click();
+  await expect(root).toHaveAttribute("data-cstd-theme", "press-room");
+  await expect(root).toHaveAttribute("data-cstd-theme-kind", "broadsheet");
+  await expect(switcher).toHaveAttribute("data-cstd-theme-active", "press-room");
+  await expect(switcher.locator("[data-cstd-theme-label]")).toContainText("工程日报");
+  await expect(page.locator('[data-cstd-theme-world-kind="broadsheet"] img')).toHaveAttribute("src", /press-room-v1/);
+  await expectNoHorizontalOverflow(page);
 
   await page.reload({ waitUntil: "domcontentloaded" });
-  await expect(root).toHaveAttribute("data-cstd-theme", "solar-lab");
+  await expect(root).toHaveAttribute("data-cstd-theme", "press-room");
   await page.goto("/cstd/notes/host-boundaries-in-one-next-deployment", { waitUntil: "domcontentloaded" });
-  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "solar-lab");
+  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "press-room");
+  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme-kind", "broadsheet");
 
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await page.locator("[data-cstd-theme-switcher]").click();
   await page.locator('[data-cstd-theme-option="ink-protocol"]').click();
   await expect(root).toHaveAttribute("data-cstd-theme", "ink-protocol");
+  await expect(root).toHaveAttribute("data-cstd-theme-kind", "ink-scroll");
+  await expect(page.locator('[data-cstd-theme-world-kind="ink-scroll"] img')).toHaveAttribute("src", /ink-scroll-v1/);
+  await expectNoHorizontalOverflow(page);
+
+  await page.locator("[data-cstd-theme-switcher]").click();
+  await page.locator('[data-cstd-theme-option="pixel-quest"]').click();
+  await expect(root).toHaveAttribute("data-cstd-theme", "pixel-quest");
+  await expect(root).toHaveAttribute("data-cstd-theme-kind", "pixel-game");
+  await expect(root).toHaveAttribute("data-cstd-render-policy", "balanced");
+  await expect(page.locator("[data-cstd-webgl]")).toHaveCount(0);
+  await expect(page.locator('[data-cstd-theme-world-kind="pixel-game"] img')).toHaveAttribute("src", /pixel-quest-v1/);
   await page.reload({ waitUntil: "domcontentloaded" });
-  await expect(root).toHaveAttribute("data-cstd-theme", "ink-protocol");
+  await expect(root).toHaveAttribute("data-cstd-theme", "pixel-quest");
+  await expectNoHorizontalOverflow(page);
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+  await expect(page.locator("[data-cstd-finale]")).toBeVisible();
+  const bottomGap = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight - window.scrollY);
+  expect(bottomGap).toBeLessThanOrEqual(8);
 });
 
 test("CSTD header anchors land immediately without a stalled view transition", async ({ page, isMobile }) => {

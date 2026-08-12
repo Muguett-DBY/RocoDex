@@ -69,6 +69,12 @@ export const cstdEditorialAssets = [
   { id: "method-bench", src: "/cstd-universe/cstd-method-bench-v3.webp", purpose: "homepage-method" },
 ] as const;
 
+export const cstdThemeWorldAssets = {
+  "ink-protocol": "/cstd-themes/ink-scroll-v1.webp",
+  "press-room": "/cstd-themes/press-room-v1.webp",
+  "pixel-quest": "/cstd-themes/pixel-quest-v1.webp",
+} as const;
+
 export type CstdBroadcastId = "rocodex" | "alpha" | "crm";
 
 export const cstdBroadcasts = {
