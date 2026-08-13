@@ -40,6 +40,31 @@ export function CstdPageHero({
       />
       <div data-cstd-page-hero-overlay aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,9,0.96)_0%,rgba(5,7,9,0.78)_46%,rgba(5,7,9,0.18)_100%)]" />
       <div data-cstd-page-hero-grid aria-hidden="true" className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.09)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.09)_1px,transparent_1px)] [background-size:64px_64px]" />
+      <div data-cstd-page-hero-material aria-hidden="true" className="pointer-events-none absolute inset-0" />
+      <div data-cstd-page-hero-artifacts aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div data-cstd-deep-artifact="neon" className="cstd-deep-neon-rig">
+          <span className="cstd-deep-neon-index">{locale === "zh" ? "CSTD / 轨迹 09" : "CSTD / TRACE 09"}</span>
+          <span className="cstd-deep-neon-coordinate">-33.8688 / 151.2093</span>
+          <span className="cstd-deep-neon-signal"><i /><i /><i /><i /><i /><i /></span>
+          <span className="cstd-deep-neon-lock">{locale === "zh" ? "信号已锁定" : "SIGNAL LOCKED"}</span>
+        </div>
+        <div data-cstd-deep-artifact="ink" className="cstd-deep-ink-colophon">
+          <span>{locale === "zh" ? "奶黄包作品录" : "CUSTARD WORKS"}</span>
+          <span>{locale === "zh" ? "以代码为墨" : "CODE AS INK"}</span>
+          <i>{locale === "zh" ? "序" : "01"}</i>
+        </div>
+        <div data-cstd-deep-artifact="press" className="cstd-deep-press-folio">
+          <span>{locale === "zh" ? "CSTD 日报 / 独立工程" : "CSTD DAILY / INDEPENDENT ENGINEERING"}</span>
+          <span>{locale === "zh" ? "悉尼 · 技术与作品" : "SYDNEY · SYSTEMS & WORK"}</span>
+          <strong>{locale === "zh" ? "第 04 期" : "VOL. 04"}</strong>
+        </div>
+        <div data-cstd-deep-artifact="pixel" className="cstd-deep-pixel-hud">
+          <span className="cstd-deep-pixel-status">{locale === "zh" ? "任务数据" : "QUEST DATA"}</span>
+          <span className="cstd-deep-pixel-bars"><i /><i /><i /><i /><i /></span>
+          <span className="cstd-deep-pixel-level">{locale === "zh" ? "等级 26 / 就绪" : "LV. 26 / READY"}</span>
+          <span className="cstd-deep-pixel-corners"><i /><i /><i /><i /></span>
+        </div>
+      </div>
       <div data-cstd-page-hero-content className="relative mx-auto flex w-full max-w-[1540px] flex-col justify-end px-5 pb-16 pt-28 md:px-10 lg:px-16 lg:pb-20">
         <div className="max-w-5xl">
           <p data-cstd-page-hero-eyebrow className="font-mono text-[11px] font-black text-[#f4d431]">{eyebrow}</p>
@@ -59,7 +84,7 @@ export function CstdPageHero({
         ) : null}
 
         <div data-cstd-page-hero-scroll aria-hidden="true" className="mt-9 flex items-center gap-3 font-mono text-[11px] font-black text-[#748187]">
-          <ArrowDown className="h-3.5 w-3.5 animate-bounce text-[#f4d431]" /> SCROLL / CONTINUE TRACE
+          <ArrowDown className="h-3.5 w-3.5 animate-bounce text-[#f4d431]" /> {locale === "zh" ? "向下滚动 / 继续查看" : "SCROLL / CONTINUE TRACE"}
         </div>
       </div>
     </header>

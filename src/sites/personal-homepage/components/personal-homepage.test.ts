@@ -43,6 +43,7 @@ const siteChromeSource = read("./site/cstd-site-chrome.tsx");
 const englishHomepageSource = read("../../../app/(personal-en)/cstd/en/page.tsx");
 const themeCssSource = read("../../../app/cstd-themes.css");
 const themeCompositionSource = read("../../../app/cstd-theme-compositions.css");
+const themeFoundationSource = read("../../../app/cstd-theme-foundations.css");
 const personalLayoutSource = read("../../../app/(personal)/layout.tsx");
 const englishLayoutSource = read("../../../app/(personal-en)/layout.tsx");
 const assetManifestSource = read("../media/asset-manifest.ts");
@@ -224,6 +225,8 @@ describe("CSTD personal homepage", () => {
     expect(themeStoreSource).toContain("document.documentElement.dataset.cstdTheme");
     expect(themeBootstrapSource).toContain("MutationObserver");
     expect(themeBootstrapSource).toContain("cstd-world-theme");
+    expect(themeBootstrapSource).toContain("fontAssets");
+    expect(themeBootstrapSource).toContain("dataset.cstdThemeFont");
     expect(personalLayoutSource).toContain("<CstdThemeBootstrapScript />");
     expect(englishLayoutSource).toContain("<CstdThemeBootstrapScript />");
     expect(themeSwitcherSource).toContain("data-cstd-theme-switcher");
@@ -258,11 +261,14 @@ describe("CSTD personal homepage", () => {
     expect(pageHeroSource).toContain("data-cstd-page-hero-image");
     expect(pageHeroSource).toContain("data-cstd-page-hero-title");
     expect(pageHeroSource).toContain("data-cstd-page-hero-metrics");
+    expect(pageHeroSource).toContain("data-cstd-page-hero-material");
   });
 
   test("isolates each world's language, hero artifact, navigation grammar, and chapter composition", () => {
     expect(personalLayoutSource).toContain('import "../cstd-theme-compositions.css"');
     expect(englishLayoutSource).toContain('import "../cstd-theme-compositions.css"');
+    expect(personalLayoutSource).toContain('import "../cstd-theme-foundations.css"');
+    expect(englishLayoutSource).toContain('import "../cstd-theme-foundations.css"');
     expect(personalLayoutSource).toContain('<html lang="zh-CN"');
     expect(englishLayoutSource).toContain('<html lang="en-AU"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="neon"');
@@ -287,5 +293,26 @@ describe("CSTD personal homepage", () => {
     expect(themeCompositionSource).toContain('[data-cstd-theme="ink-protocol"] [data-cstd-proof-grid]');
     expect(themeCompositionSource).toContain('[data-cstd-theme="press-room"] [data-cstd-proof-grid]');
     expect(themeCompositionSource).toContain('[data-cstd-theme="pixel-quest"] [data-cstd-system-tabs]');
+  });
+
+  test("gives every world its own licensed type, generated material, deep-page artifact, and motion grammar", () => {
+    expect(themeFoundationSource).toContain('font-family: "CSTD Neon Display"');
+    expect(themeFoundationSource).toContain('font-family: "CSTD Ink Text"');
+    expect(themeFoundationSource).toContain('font-family: "CSTD Press Serif"');
+    expect(themeFoundationSource).toContain('font-family: "CSTD Pixel Text"');
+    expect(themeFoundationSource).toContain('/cstd-materials/neon-alloy-v1.webp');
+    expect(themeFoundationSource).toContain('/cstd-materials/ink-xuan-v1.webp');
+    expect(themeFoundationSource).toContain('/cstd-materials/press-newsprint-v1.webp');
+    expect(themeFoundationSource).toContain('/cstd-materials/pixel-circuit-v1.webp');
+    expect(themeFoundationSource).toContain("cstd-neon-heading-lock");
+    expect(themeFoundationSource).toContain("cstd-ink-heading-unroll");
+    expect(themeFoundationSource).toContain("cstd-press-heading-typeset");
+    expect(themeFoundationSource).toContain("cstd-pixel-heading-spawn");
+    expect(themeFoundationSource).toContain("prefers-reduced-motion: reduce");
+    expect(themeFoundationSource).not.toContain("@import url(");
+    expect(pageHeroSource).toContain('data-cstd-deep-artifact="neon"');
+    expect(pageHeroSource).toContain('data-cstd-deep-artifact="ink"');
+    expect(pageHeroSource).toContain('data-cstd-deep-artifact="press"');
+    expect(pageHeroSource).toContain('data-cstd-deep-artifact="pixel"');
   });
 });

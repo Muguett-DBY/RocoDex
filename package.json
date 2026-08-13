@@ -33,6 +33,7 @@
     "test:personal": "vitest run src/sites/personal-homepage src/sites/shared src/app/robots.txt src/app/sitemap.xml",
     "test:e2e:personal": "playwright test personal-homepage personal-archive",
     "test:e2e:rocodex": "playwright test e2e/rocodex.spec.ts",
+    "capture:cstd:themes": "node scripts/capture-cstd-theme-gallery.mjs",
     "audit:dependencies": "npm audit --audit-level=high",
     "verify:personal-bundle": "node scripts/verify-personal-bundle.mjs",
     "verify:cstd:performance-contract": "node scripts/verify-cstd-performance-contract.mjs",

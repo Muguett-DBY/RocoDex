@@ -4,10 +4,12 @@ const cstdImmutableAssetRoots = [
   "cstd-archive",
   "cstd-broadcasts",
   "cstd-districts",
+  "cstd-materials",
   "cstd-persona",
   "cstd-themes",
   "cstd-universe",
   "cstd-world",
+  "fonts/cstd",
 ] as const;
 
 const nextConfig: NextConfig = {

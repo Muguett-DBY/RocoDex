@@ -1,3 +1,7 @@
+import { cstdThemeFontAssets } from "../media/asset-manifest";
+
+const serializedThemeFontAssets = JSON.stringify(cstdThemeFontAssets);
+
 const cstdThemeBootstrapScript = String.raw`(() => {
   const storageKey = "cstd-world-theme";
   const kinds = {
@@ -15,6 +19,20 @@ const cstdThemeBootstrapScript = String.raw`(() => {
 
   const html = document.documentElement;
   const kind = kinds[theme];
+  const fontAssets = ${serializedThemeFontAssets};
+
+  fontAssets[theme].forEach((href) => {
+    if (document.head.querySelector('link[href="' + href + '"]')) return;
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.as = "font";
+    link.type = "font/woff2";
+    link.crossOrigin = "anonymous";
+    link.href = href;
+    link.dataset.cstdThemeFont = theme;
+    document.head.appendChild(link);
+  });
+
   html.dataset.cstdTheme = theme;
   html.dataset.cstdThemeKind = kind;
 

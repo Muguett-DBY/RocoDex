@@ -1,0 +1,700 @@
+/* Theme foundations: licensed type, generated materials, deep-page grammar and motion language. */
+
+@font-face {
+  font-family: "CSTD Neon Display";
+  src: url("/fonts/cstd/neon-display-v1.woff2") format("woff2");
+  font-display: swap;
+  font-style: oblique;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "CSTD Ink Text";
+  src: url("/fonts/cstd/ink-text-v1.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "CSTD Ink Display";
+  src: url("/fonts/cstd/ink-display-v1.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "CSTD Press Serif";
+  src: url("/fonts/cstd/press-serif-v1.woff2") format("woff2-variations");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 100 900;
+}
+
+@font-face {
+  font-family: "CSTD Press Latin";
+  src: url("/fonts/cstd/press-latin-v1.woff2") format("woff2-variations");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 200 800;
+}
+
+@font-face {
+  font-family: "CSTD Pixel Text";
+  src: url("/fonts/cstd/pixel-text-12-v1.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "CSTD Pixel Label";
+  src: url("/fonts/cstd/pixel-label-10-v1.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+[data-cstd-theme="neon-district"] {
+  --cstd-font-display: "CSTD Neon Display", "Arial Narrow", "Microsoft YaHei UI", sans-serif;
+  --cstd-font-body: Inter, "Segoe UI", "Microsoft YaHei UI", sans-serif;
+  --cstd-font-label: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  --cstd-font-code: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  --cstd-material-image: url("/cstd-materials/neon-alloy-v1.webp");
+  --cstd-material-size: 760px 760px;
+  --cstd-material-opacity: 0.24;
+  --cstd-material-blend: soft-light;
+  --cstd-theme-ease: cubic-bezier(0.14, 0.86, 0.2, 1);
+}
+
+[data-cstd-theme="ink-protocol"] {
+  --cstd-font-display: "CSTD Ink Display", "STKaiti", "KaiTi", serif;
+  --cstd-font-body: "CSTD Ink Text", "STKaiti", "KaiTi", serif;
+  --cstd-font-label: "CSTD Ink Display", "STKaiti", "KaiTi", serif;
+  --cstd-font-code: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  --cstd-material-image: url("/cstd-materials/ink-xuan-v1.webp");
+  --cstd-material-size: 720px 720px;
+  --cstd-material-opacity: 0.42;
+  --cstd-material-blend: multiply;
+  --cstd-theme-ease: cubic-bezier(0.22, 0.74, 0.28, 1);
+}
+
+[data-cstd-theme="press-room"] {
+  --cstd-font-display: "CSTD Press Latin", "CSTD Press Serif", Georgia, serif;
+  --cstd-font-body: "CSTD Press Latin", "CSTD Press Serif", Georgia, serif;
+  --cstd-font-label: "Arial Narrow", "Roboto Condensed", "Microsoft YaHei UI", sans-serif;
+  --cstd-font-code: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  --cstd-material-image: url("/cstd-materials/press-newsprint-v1.webp");
+  --cstd-material-size: 640px 640px;
+  --cstd-material-opacity: 0.46;
+  --cstd-material-blend: multiply;
+  --cstd-theme-ease: cubic-bezier(0.2, 0.64, 0.22, 1);
+}
+
+[data-cstd-theme="pixel-quest"] {
+  --cstd-font-display: "CSTD Pixel Text", "Cascadia Mono", monospace;
+  --cstd-font-body: "CSTD Pixel Text", "Cascadia Mono", monospace;
+  --cstd-font-label: "CSTD Pixel Label", "Cascadia Mono", monospace;
+  --cstd-font-code: "CSTD Pixel Label", "Cascadia Mono", monospace;
+  --cstd-material-image: url("/cstd-materials/pixel-circuit-v1.webp");
+  --cstd-material-size: 512px 512px;
+  --cstd-material-opacity: 0.2;
+  --cstd-material-blend: screen;
+  --cstd-theme-ease: steps(5, end);
+}
+
+[data-cstd-theme] {
+  font-family: var(--cstd-font-body);
+}
+
+[data-cstd-theme] :where(
+  .cstd-hero-wordmark,
+  [data-cstd-hero-title],
+  [data-cstd-chapter] h2,
+  [data-cstd-finale] h2,
+  [data-cstd-page-hero-title],
+  [data-cstd-reading-document] h1,
+  [data-cstd-reading-document] h2,
+  [data-cstd-case-dossier] h2
+) {
+  font-family: var(--cstd-font-display) !important;
+  letter-spacing: 0 !important;
+}
+
+[data-cstd-theme] :where(
+  .font-mono,
+  [data-cstd-hero-role],
+  [data-cstd-page-hero-eyebrow],
+  [data-cstd-page-hero-scroll],
+  [data-cstd-page-hero-metrics] dt,
+  [data-cstd-system-metric-label],
+  [data-cstd-theme-switcher],
+  [data-cstd-theme-menu]
+) {
+  font-family: var(--cstd-font-label) !important;
+  letter-spacing: 0 !important;
+}
+
+[data-cstd-theme] :where(code, pre, kbd, samp, [data-rehype-pretty-code-figure]) {
+  font-family: var(--cstd-font-code) !important;
+  letter-spacing: 0 !important;
+}
+
+[data-cstd-theme="neon-district"] :where(.cstd-hero-wordmark, [data-cstd-chapter] h2, [data-cstd-finale] h2, [data-cstd-page-hero-title]) {
+  font-style: oblique;
+  font-weight: 400 !important;
+}
+
+[data-cstd-theme="ink-protocol"] {
+  font-synthesis: none;
+  line-break: strict;
+}
+
+[data-cstd-theme="ink-protocol"] :where(.cstd-hero-wordmark, [data-cstd-chapter] h2, [data-cstd-finale] h2, [data-cstd-page-hero-title]) {
+  font-weight: 500 !important;
+}
+
+[data-cstd-theme="press-room"] {
+  font-optical-sizing: auto;
+}
+
+[data-cstd-theme="press-room"] :where(.cstd-hero-wordmark, [data-cstd-chapter] h2, [data-cstd-finale] h2, [data-cstd-page-hero-title]) {
+  font-variation-settings: "opsz" 72, "wght" 720;
+}
+
+[data-cstd-theme="pixel-quest"] {
+  font-synthesis: none;
+  text-rendering: geometricPrecision;
+}
+
+[data-cstd-theme="pixel-quest"] :where(
+  .cstd-hero-wordmark,
+  [data-cstd-chapter] h2,
+  [data-cstd-finale] h2,
+  [data-cstd-page-hero-title]
+) {
+  font-weight: 400 !important;
+  line-height: 1.08;
+}
+
+[data-cstd-kinetic-world][data-cstd-theme="pixel-quest"] [data-cstd-hero-actions] a:first-child {
+  border-color: #ffd43b !important;
+  background: #ffd43b !important;
+  color: #071128 !important;
+}
+
+/* Generated surface materials are deliberately quiet; structure and type remain primary. */
+[data-cstd-theme] .cstd-theme-atmosphere {
+  background-image: var(--cstd-material-image);
+  background-position: center top;
+  background-repeat: repeat;
+  background-size: var(--cstd-material-size);
+  mix-blend-mode: var(--cstd-material-blend);
+  opacity: calc(var(--cstd-material-opacity) * 0.72);
+}
+
+[data-cstd-theme] :where([data-cstd-chapter], [data-cstd-finale]) {
+  background-image: var(--cstd-material-image) !important;
+  background-position: center top !important;
+  background-repeat: repeat !important;
+  background-size: var(--cstd-material-size) !important;
+  background-blend-mode: var(--cstd-material-blend) !important;
+}
+
+[data-cstd-page-hero-image] { z-index: 0; }
+[data-cstd-page-hero-overlay] { z-index: 1; }
+[data-cstd-page-hero-grid] { z-index: 2; }
+[data-cstd-page-hero-material] {
+  z-index: 2;
+  background-image: var(--cstd-material-image);
+  background-position: center;
+  background-repeat: repeat;
+  background-size: var(--cstd-material-size);
+  mix-blend-mode: var(--cstd-material-blend);
+  opacity: var(--cstd-material-opacity);
+}
+
+[data-cstd-page-hero-artifacts] { z-index: 3; }
+[data-cstd-page-hero-content] { z-index: 4; }
+[data-cstd-deep-artifact] { display: none; }
+
+[data-cstd-deep-shell][data-cstd-theme="neon-district"] [data-cstd-deep-artifact="neon"],
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-deep-artifact="ink"],
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-deep-artifact="press"],
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-deep-artifact="pixel"] {
+  display: block;
+}
+
+/* Neon District: asymmetric telemetry rig, spectral alloy and inertial motion. */
+.cstd-deep-neon-rig {
+  position: absolute;
+  top: clamp(6rem, 13vh, 9rem);
+  right: clamp(2.5rem, 6vw, 8rem);
+  width: clamp(16rem, 24vw, 23rem);
+  height: clamp(15rem, 32vh, 22rem);
+  border-top: 1px solid rgb(36 224 255 / 76%);
+  border-right: 1px solid rgb(36 224 255 / 28%);
+  color: #9defff;
+  font-family: var(--cstd-font-label);
+  font-size: 0.65rem;
+}
+
+.cstd-deep-neon-rig::before,
+.cstd-deep-neon-rig::after {
+  position: absolute;
+  content: "";
+}
+
+.cstd-deep-neon-rig::before {
+  top: -1px;
+  left: 0;
+  width: 34%;
+  height: 3px;
+  background: #f4d431;
+  box-shadow: 0 0 20px rgb(244 212 49 / 48%);
+}
+
+.cstd-deep-neon-rig::after {
+  inset: 1.25rem 1rem auto auto;
+  width: 4.5rem;
+  aspect-ratio: 1;
+  border: 1px solid rgb(36 224 255 / 55%);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.65rem rgb(36 224 255 / 5%), 0 0 32px rgb(36 224 255 / 12%);
+}
+
+.cstd-deep-neon-index,
+.cstd-deep-neon-coordinate,
+.cstd-deep-neon-lock {
+  position: absolute;
+  display: block;
+  letter-spacing: 0;
+}
+
+.cstd-deep-neon-index { top: 1rem; left: 0; color: #f4d431; }
+.cstd-deep-neon-coordinate { right: 0; bottom: 2.1rem; color: #748b91; }
+.cstd-deep-neon-lock { right: 0; bottom: 0; color: #24e0ff; }
+
+.cstd-deep-neon-signal {
+  position: absolute;
+  top: 45%;
+  right: 0;
+  display: flex;
+  align-items: end;
+  gap: 0.35rem;
+  width: 68%;
+  height: 4rem;
+  border-bottom: 1px solid rgb(36 224 255 / 34%);
+}
+
+.cstd-deep-neon-signal i {
+  display: block;
+  width: 0.22rem;
+  height: var(--cstd-signal-height, 42%);
+  background: #24e0ff;
+  box-shadow: 0 0 10px rgb(36 224 255 / 45%);
+}
+
+.cstd-deep-neon-signal i:nth-child(2) { --cstd-signal-height: 72%; }
+.cstd-deep-neon-signal i:nth-child(3) { --cstd-signal-height: 28%; }
+.cstd-deep-neon-signal i:nth-child(4) { --cstd-signal-height: 92%; }
+.cstd-deep-neon-signal i:nth-child(5) { --cstd-signal-height: 56%; }
+.cstd-deep-neon-signal i:nth-child(6) { --cstd-signal-height: 78%; }
+
+[data-cstd-deep-shell][data-cstd-theme="neon-district"] [data-cstd-page-hero-content] > div:first-child {
+  max-width: min(64rem, 68vw);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="neon-district"] [data-cstd-page-hero-title] {
+  text-shadow: 0 0 42px rgb(36 224 255 / 10%);
+}
+
+/* Ink Protocol: vertical colophon, xuan paper and brush-led hierarchy. */
+.cstd-deep-ink-colophon {
+  position: absolute;
+  top: clamp(5.5rem, 12vh, 9rem);
+  right: clamp(2.5rem, 8vw, 10rem);
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.8rem;
+  color: #343a34;
+  font-family: var(--cstd-font-display);
+  font-size: clamp(1rem, 1.35vw, 1.35rem);
+  writing-mode: vertical-rl;
+}
+
+.cstd-deep-ink-colophon::before {
+  width: 1px;
+  height: clamp(7rem, 16vh, 11rem);
+  background: linear-gradient(#8d2b25, rgb(141 43 37 / 8%));
+  content: "";
+}
+
+.cstd-deep-ink-colophon span {
+  letter-spacing: 0;
+}
+
+.cstd-deep-ink-colophon i {
+  display: grid;
+  width: 2.65rem;
+  height: 2.65rem;
+  place-items: center;
+  border: 2px solid #9d3029;
+  color: #9d3029;
+  font-size: 0.82rem;
+  font-style: normal;
+  line-height: 1;
+  writing-mode: horizontal-tb;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-content] {
+  padding-right: clamp(9rem, 17vw, 18rem);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-content] > div:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-title] {
+  max-width: 50rem;
+  text-wrap: balance;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] :where([data-cstd-reading-document], [data-cstd-note-paths]) {
+  background-image: var(--cstd-material-image);
+  background-size: var(--cstd-material-size);
+  background-blend-mode: multiply;
+}
+
+/* Press Room: a real folio, editorial hierarchy and visible production marks. */
+.cstd-deep-press-folio {
+  position: absolute;
+  top: 1.5rem;
+  right: clamp(2rem, 5vw, 6rem);
+  left: clamp(2rem, 5vw, 6rem);
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 2rem;
+  border-top: 5px solid #171714;
+  border-bottom: 1px solid #171714;
+  padding: 0.55rem 0;
+  color: #171714;
+  font-family: var(--cstd-font-label);
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cstd-deep-press-folio span,
+.cstd-deep-press-folio strong {
+  letter-spacing: 0;
+}
+
+.cstd-deep-press-folio span:nth-child(2) { color: #9f241c; }
+
+.cstd-deep-press-folio strong {
+  border-left: 1px solid #171714;
+  padding-left: 2rem;
+  font-family: var(--cstd-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-content] {
+  padding-top: 8rem;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-content] > div:first-child {
+  display: grid;
+  max-width: 72rem;
+  grid-template-columns: minmax(0, 1.55fr) minmax(15rem, 0.6fr);
+  column-gap: clamp(2rem, 6vw, 7rem);
+  align-items: end;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-eyebrow] {
+  grid-column: 1 / -1;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-title] {
+  grid-column: 1;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-summary] {
+  grid-column: 2;
+  margin-bottom: 0.25rem;
+  border-left: 1px solid rgb(23 23 20 / 46%);
+  padding-left: 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] :where([data-cstd-case-dossier], [data-cstd-reading-document], [data-cstd-topic-path]) {
+  background-image: var(--cstd-material-image);
+  background-size: var(--cstd-material-size);
+  background-blend-mode: multiply;
+}
+
+/* Pixel Quest: hard HUD framing, integer geometry and discrete state changes. */
+.cstd-deep-pixel-hud {
+  position: absolute;
+  inset: 1.15rem;
+  display: block !important;
+  border: 1px solid rgb(49 215 255 / 38%);
+  color: #31d7ff;
+  font-family: var(--cstd-font-label);
+  font-size: 0.72rem;
+}
+
+.cstd-deep-pixel-status,
+.cstd-deep-pixel-level,
+.cstd-deep-pixel-bars {
+  position: absolute;
+  letter-spacing: 0;
+}
+
+.cstd-deep-pixel-status {
+  top: 1rem;
+  left: 1rem;
+  border: 2px solid #ffd43b;
+  padding: 0.45rem 0.65rem;
+  background: #071128;
+  color: #ffd43b;
+  box-shadow: 3px 3px 0 #000;
+}
+
+.cstd-deep-pixel-level { right: 1rem; bottom: 1rem; color: #f8f2d0; }
+
+.cstd-deep-pixel-bars {
+  top: 1.15rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.22rem;
+}
+
+.cstd-deep-pixel-bars i {
+  display: block;
+  width: 0.75rem;
+  height: 0.45rem;
+  border: 1px solid #31d7ff;
+  background: #31d7ff;
+}
+
+.cstd-deep-pixel-bars i:last-child { background: transparent; }
+
+.cstd-deep-pixel-corners i {
+  position: absolute;
+  width: 1.4rem;
+  height: 1.4rem;
+  border-color: #ffd43b;
+}
+
+.cstd-deep-pixel-corners i:nth-child(1) { top: -3px; left: -3px; border-top: 5px solid; border-left: 5px solid; }
+.cstd-deep-pixel-corners i:nth-child(2) { top: -3px; right: -3px; border-top: 5px solid; border-right: 5px solid; }
+.cstd-deep-pixel-corners i:nth-child(3) { right: -3px; bottom: -3px; border-right: 5px solid; border-bottom: 5px solid; }
+.cstd-deep-pixel-corners i:nth-child(4) { bottom: -3px; left: -3px; border-bottom: 5px solid; border-left: 5px solid; }
+
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-content] {
+  padding-right: clamp(4rem, 11vw, 11rem);
+  padding-left: clamp(3rem, 7vw, 7rem);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] :where(
+  [data-cstd-case-dossier],
+  [data-cstd-proof-mesh],
+  [data-cstd-evidence-graph],
+  [data-cstd-knowledge-constellation],
+  [data-cstd-case-film]
+) {
+  border-color: #29436d !important;
+  border-radius: 0 !important;
+  background-image: var(--cstd-material-image) !important;
+  background-size: var(--cstd-material-size) !important;
+  background-blend-mode: screen !important;
+  image-rendering: pixelated;
+}
+
+/* Keep decorative systems mutually exclusive even when their internal layout uses flex/grid. */
+[data-cstd-deep-shell] [data-cstd-deep-artifact] {
+  display: none !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="neon-district"] [data-cstd-deep-artifact="neon"] {
+  display: block !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-deep-artifact="ink"] {
+  display: flex !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-deep-artifact="press"] {
+  display: grid !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-deep-artifact="pixel"] {
+  display: block !important;
+}
+
+/* Four motion grammars share reveal state, but not tempo or physical behavior. */
+@keyframes cstd-neon-heading-lock {
+  0% { opacity: 0; clip-path: inset(0 100% 0 0); transform: translate3d(-2.5rem, 0, 0) skewX(-7deg); }
+  52% { opacity: 1; clip-path: inset(0 8% 0 0); transform: translate3d(0.4rem, 0, 0) skewX(-2deg); }
+  72% { clip-path: inset(0 0 58% 0); transform: translate3d(-0.2rem, 0, 0) skewX(-4deg); }
+  100% { opacity: 1; clip-path: inset(0); transform: translate3d(0, 0, 0) skewX(0); }
+}
+
+@keyframes cstd-neon-signal-pulse {
+  0%, 100% { opacity: 0.45; transform: scaleY(0.48); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+@keyframes cstd-ink-heading-unroll {
+  0% { opacity: 0; clip-path: inset(0 100% 0 0); transform: translate3d(1.5rem, 0, 0); }
+  38% { opacity: 0.68; }
+  100% { opacity: 1; clip-path: inset(-8%); transform: translate3d(0, 0, 0); }
+}
+
+@keyframes cstd-ink-colophon-settle {
+  0% { opacity: 0; transform: translate3d(0, -1.25rem, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes cstd-press-heading-typeset {
+  0% { opacity: 0; clip-path: inset(0 0 100% 0); transform: translate3d(0, 1rem, 0); }
+  35% { opacity: 1; }
+  68% { clip-path: inset(0 0 8% 0); transform: translate3d(0, -0.2rem, 0); }
+  100% { opacity: 1; clip-path: inset(0); transform: translate3d(0, 0, 0); }
+}
+
+@keyframes cstd-press-folio-arrive {
+  0% { opacity: 0; transform: translate3d(0, -0.75rem, 0); }
+  100% { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes cstd-pixel-heading-spawn {
+  0% { opacity: 0; clip-path: inset(0 100% 0 0); transform: translate3d(-16px, 8px, 0); }
+  50% { opacity: 1; clip-path: inset(0 36% 0 0); transform: translate3d(8px, 0, 0); }
+  100% { opacity: 1; clip-path: inset(0); transform: translate3d(0, 0, 0); }
+}
+
+@keyframes cstd-pixel-hud-blink {
+  0%, 46% { opacity: 1; }
+  47%, 52% { opacity: 0.28; }
+  53%, 100% { opacity: 1; }
+}
+
+[data-cstd-enhancements-ready="true"][data-cstd-motion="full"][data-cstd-theme="neon-district"] :where([data-cstd-chapter], [data-cstd-finale])[data-cstd-revealed="true"] h2 {
+  animation: cstd-neon-heading-lock 820ms var(--cstd-theme-ease) both;
+}
+
+[data-cstd-enhancements-ready="true"][data-cstd-motion="full"][data-cstd-theme="ink-protocol"] :where([data-cstd-chapter], [data-cstd-finale])[data-cstd-revealed="true"] h2 {
+  animation: cstd-ink-heading-unroll 1120ms var(--cstd-theme-ease) both;
+}
+
+[data-cstd-enhancements-ready="true"][data-cstd-motion="full"][data-cstd-theme="press-room"] :where([data-cstd-chapter], [data-cstd-finale])[data-cstd-revealed="true"] h2 {
+  animation: cstd-press-heading-typeset 620ms var(--cstd-theme-ease) both;
+}
+
+[data-cstd-enhancements-ready="true"][data-cstd-motion="full"][data-cstd-theme="pixel-quest"] :where([data-cstd-chapter], [data-cstd-finale])[data-cstd-revealed="true"] h2 {
+  animation: cstd-pixel-heading-spawn 640ms steps(6, end) both;
+}
+
+[data-cstd-deep-shell][data-cstd-visual-mode="full"][data-cstd-theme="neon-district"] [data-cstd-page-hero-title] {
+  animation: cstd-neon-heading-lock 920ms var(--cstd-theme-ease) 80ms both;
+}
+
+[data-cstd-deep-shell][data-cstd-visual-mode="full"][data-cstd-theme="neon-district"] .cstd-deep-neon-signal i {
+  transform-origin: bottom;
+  animation: cstd-neon-signal-pulse 1.35s ease-in-out infinite;
+}
+
+[data-cstd-deep-shell][data-cstd-visual-mode="full"][data-cstd-theme="neon-district"] .cstd-deep-neon-signal i:nth-child(2n) { animation-delay: -480ms; }
+[data-cstd-deep-shell][data-cstd-visual-mode="full"][data-cstd-theme="neon-district"] .cstd-deep-neon-signal i:nth-child(3n) { animation-delay: -820ms; }
+
+[data-cstd-deep-shell][data-cstd-visual-mode="full"][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-title] {
+  animation: cstd-ink-heading-unroll 1260ms var(--cstd-theme-ease) 100ms both;
+}
+
+[data-cstd-deep-shell][data-cstd-visual-mode="full"][data-cstd-theme="ink-protocol"] .cstd-deep-ink-colophon {
+  animation: cstd-ink-colophon-settle 1480ms var(--cstd-theme-ease) 280ms both;
+}
+
+[data-cstd-deep-shell][data-cstd-visual-mode="full"][data-cstd-theme="press-room"] [data-cstd-page-hero-title] {
+  animation: cstd-press-heading-typeset 720ms var(--cstd-theme-ease) 80ms both;
+}
+
+[data-cstd-deep-shell][data-cstd-visual-mode="full"][data-cstd-theme="press-room"] .cstd-deep-press-folio {
+  animation: cstd-press-folio-arrive 520ms var(--cstd-theme-ease) both;
+}
+
+[data-cstd-deep-shell][data-cstd-visual-mode="full"][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-title] {
+  animation: cstd-pixel-heading-spawn 700ms steps(7, end) 80ms both;
+}
+
+[data-cstd-deep-shell][data-cstd-visual-mode="full"][data-cstd-theme="pixel-quest"] .cstd-deep-pixel-status {
+  animation: cstd-pixel-hud-blink 1.8s steps(1, end) infinite;
+}
+
+@media (max-width: 1023px) {
+  .cstd-deep-neon-rig { right: 2rem; width: 15rem; opacity: 0.68; }
+  .cstd-deep-ink-colophon { right: 2.5rem; opacity: 0.72; }
+
+  [data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-content] {
+    padding-right: 8rem;
+  }
+
+  [data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-content] > div:first-child {
+    display: block;
+  }
+
+  [data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-summary] {
+    margin-bottom: 0;
+    border-left: 0;
+    padding-left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  [data-cstd-page-hero-artifacts] { display: none; }
+
+  [data-cstd-deep-shell][data-cstd-theme] [data-cstd-page-hero-content] {
+    padding-right: 1.25rem;
+    padding-left: 1.25rem;
+  }
+
+  [data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-content] {
+    padding-top: 7rem;
+  }
+
+  [data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero] {
+    margin: 0.45rem;
+    min-height: calc(82svh - 0.9rem);
+  }
+
+  [data-cstd-theme="pixel-quest"] :where([data-cstd-chapter] h2, [data-cstd-finale] h2, [data-cstd-page-hero-title]) {
+    line-height: 1.14;
+  }
+}
+
+[data-cstd-motion="calm"] :where(.cstd-deep-neon-signal i, [data-cstd-chapter] h2, [data-cstd-finale] h2),
+[data-cstd-visual-mode="calm"] :where([data-cstd-page-hero-title], .cstd-deep-ink-colophon, .cstd-deep-press-folio, .cstd-deep-pixel-status) {
+  animation: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-cstd-theme] :where(
+    [data-cstd-page-hero-title],
+    [data-cstd-chapter] h2,
+    [data-cstd-finale] h2,
+    .cstd-deep-neon-signal i,
+    .cstd-deep-ink-colophon,
+    .cstd-deep-press-folio,
+    .cstd-deep-pixel-status
+  ) {
+    animation: none !important;
+  }
+}

@@ -156,6 +156,20 @@ test.describe("CSTD technical archive", () => {
       expect(themeAssetResponse.headers()["cache-control"]).toContain("immutable");
     }
 
+    for (const asset of ["neon-alloy-v1.webp", "ink-xuan-v1.webp", "press-newsprint-v1.webp", "pixel-circuit-v1.webp"]) {
+      const materialResponse = await request.get(`/cstd-materials/${asset}`, { headers });
+      expect(materialResponse.status()).toBe(200);
+      expect(materialResponse.headers()["content-type"]).toContain("image/webp");
+      expect(materialResponse.headers()["cache-control"]).toContain("immutable");
+    }
+
+    for (const asset of ["neon-display-v1.woff2", "ink-display-v1.woff2", "ink-text-v1.woff2", "press-latin-v1.woff2", "press-serif-v1.woff2", "pixel-text-12-v1.woff2", "pixel-label-10-v1.woff2"]) {
+      const fontResponse = await request.get(`/fonts/cstd/${asset}`, { headers });
+      expect(fontResponse.status()).toBe(200);
+      expect(fontResponse.headers()["content-type"]).toContain("font/woff2");
+      expect(fontResponse.headers()["cache-control"]).toContain("immutable");
+    }
+
     const rssResponse = await request.get("/rss.xml?lang=en", { headers });
     expect(rssResponse.status()).toBe(200);
     expect(rssResponse.headers()["content-type"]).toContain("application/rss+xml");

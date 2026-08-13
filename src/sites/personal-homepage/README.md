@@ -39,6 +39,8 @@ Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器�
 - `public/cstd-world/`
 - `public/cstd-universe/`
 - `public/cstd-themes/`
+- `public/cstd-materials/`
+- `public/fonts/cstd/`
 - `public/cstd-districts/`
 - `public/cstd-broadcasts/`
 - `public/cstd-archive/`
@@ -56,6 +58,7 @@ npm run test:architecture
 npm run test:host
 npm run test:personal
 npm run test:e2e:personal
+npm run capture:cstd:themes
 npm run build
 npm run verify:cstd:performance-contract
 npm run verify:personal-bundle

@@ -128,12 +128,14 @@ function isAllowedPersonalSitePath(path: string) {
   return PERSONAL_SITE_ALLOWED_PATHS.has(path)
     || path.startsWith("/cstd-projects/")
     || path.startsWith("/cstd-archive/")
+    || path.startsWith("/cstd-materials/")
     || path.startsWith("/cstd-persona/")
     || path.startsWith("/cstd-themes/")
     || path.startsWith("/cstd-world/")
     || path.startsWith("/cstd-universe/")
     || path.startsWith("/cstd-broadcasts/")
-    || path.startsWith("/cstd-districts/");
+    || path.startsWith("/cstd-districts/")
+    || path.startsWith("/fonts/cstd/");
 }
 
 function normalizeHost(host: string) {

@@ -82,6 +82,7 @@ sync_config.py
 *.txt
 !requirements.txt
 !LICENSE.txt
+!public/fonts/cstd/licenses/*.txt
 !src/app/robots.txt/
 !src/app/robots.txt/*.ts
 !src/app/(personal)/cstd/llms.txt/
