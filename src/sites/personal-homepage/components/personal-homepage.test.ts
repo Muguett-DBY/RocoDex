@@ -38,10 +38,11 @@ const themeHeroArtifactSource = read("./theme-hero-artifact.tsx");
 const languageSwitcherSource = read("./site/cstd-language-switcher.tsx");
 const documentLocaleSource = read("./site/cstd-document-locale.tsx");
 const siteChromeSource = read("./site/cstd-site-chrome.tsx");
-const englishHomepageSource = read("../../../app/(personal)/cstd/en/page.tsx");
+const englishHomepageSource = read("../../../app/(personal-en)/cstd/en/page.tsx");
 const themeCssSource = read("../../../app/cstd-themes.css");
 const themeCompositionSource = read("../../../app/cstd-theme-compositions.css");
-const appLayoutSource = read("../../../app/layout.tsx");
+const personalLayoutSource = read("../../../app/(personal)/layout.tsx");
+const englishLayoutSource = read("../../../app/(personal-en)/layout.tsx");
 const assetManifestSource = read("../media/asset-manifest.ts");
 
 describe("CSTD personal homepage", () => {
@@ -241,7 +242,10 @@ describe("CSTD personal homepage", () => {
   });
 
   test("isolates each world's language, hero artifact, navigation grammar, and chapter composition", () => {
-    expect(appLayoutSource).toContain('import "./cstd-theme-compositions.css"');
+    expect(personalLayoutSource).toContain('import "../cstd-theme-compositions.css"');
+    expect(englishLayoutSource).toContain('import "../cstd-theme-compositions.css"');
+    expect(personalLayoutSource).toContain('<html lang="zh-CN"');
+    expect(englishLayoutSource).toContain('<html lang="en-AU"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="neon"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="ink"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="press"');

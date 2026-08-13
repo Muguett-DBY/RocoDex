@@ -77,6 +77,13 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   const pageErrors: string[] = [];
   page.on("pageerror", (error) => pageErrors.push(error.message));
 
+  const [rawChineseResponse, rawEnglishResponse] = await Promise.all([
+    page.request.get("/cstd"),
+    page.request.get("/cstd/en"),
+  ]);
+  expect(await rawChineseResponse.text()).toMatch(/<html[^>]*\blang="zh-CN"/i);
+  expect(await rawEnglishResponse.text()).toMatch(/<html[^>]*\blang="en-AU"/i);
+
   await page.goto("/cstd/en?view=compact#proof", { waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
   await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");

@@ -1,19 +1,9 @@
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
-import { AuthProvider } from "@/components/auth-provider";
 import { PageShell } from "@/components/page-shell";
 import { Button } from "@/components/ui/button";
-import { isAuthConfigured } from "@/lib/auth-availability";
 
-export default function NotFound() {
-  return (
-    <AuthProvider enabled={isAuthConfigured()}>
-      <RocoDexNotFound />
-    </AuthProvider>
-  );
-}
-
-function RocoDexNotFound() {
+export function RocoDexNotFound() {
   return (
     <PageShell>
       <main className="mx-auto flex max-w-2xl flex-col items-center px-4 py-24 text-center lg:px-8">

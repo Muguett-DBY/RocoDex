@@ -25,20 +25,27 @@ function collectSourceFiles(directory: string): string[] {
 describe("site architecture boundaries", () => {
   it("keeps each website behind an explicit route group", () => {
     expect(existsSync(sourcePath("app/(personal)/cstd/page.tsx"))).toBe(true);
+    expect(existsSync(sourcePath("app/(personal-en)/cstd/en/page.tsx"))).toBe(true);
+    expect(existsSync(sourcePath("app/(personal)/layout.tsx"))).toBe(true);
+    expect(existsSync(sourcePath("app/(personal-en)/layout.tsx"))).toBe(true);
     expect(existsSync(sourcePath("app/(rocodex)/page.tsx"))).toBe(true);
     expect(existsSync(sourcePath("app/(rocodex)/layout.tsx"))).toBe(true);
   });
 
-  it("keeps the shared root layout free of RocoDex providers", () => {
-    expect(readSource("app/layout.tsx")).not.toContain("AuthProvider");
+  it("gives every site-owned root document the correct language and providers", () => {
+    expect(readSource("app/(personal)/layout.tsx")).toContain('<html lang="zh-CN"');
+    expect(readSource("app/(personal-en)/layout.tsx")).toContain('<html lang="en-AU"');
+    expect(readSource("app/(personal)/layout.tsx")).not.toContain("AuthProvider");
+    expect(readSource("app/(personal-en)/layout.tsx")).not.toContain("AuthProvider");
+    expect(readSource("app/(rocodex)/layout.tsx")).toContain('<html lang="zh-CN"');
     expect(readSource("app/(rocodex)/layout.tsx")).toContain("AuthProvider");
+    expect(existsSync(sourcePath("app/layout.tsx"))).toBe(false);
   });
 
-  it("provides RocoDex auth context to the global not-found fallback", () => {
-    const notFoundSource = readSource("app/not-found.tsx");
-
-    expect(notFoundSource).toContain("AuthProvider");
-    expect(notFoundSource).toContain("isAuthConfigured");
+  it("keeps unmatched RocoDex paths inside its authenticated root document", () => {
+    expect(readSource("app/(rocodex)/[...not-found]/page.tsx")).toContain("notFound()");
+    expect(readSource("app/(rocodex)/not-found.tsx")).toContain("RocoDexNotFound");
+    expect(readSource("app/(rocodex)/layout.tsx")).toContain("AuthProvider");
   });
 
   it("owns personal homepage code inside one site module", () => {

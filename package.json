@@ -32,7 +32,7 @@
     "test:host": "vitest run src/sites/site-boundaries.test.ts src/sites/personal-homepage/infrastructure/routing.test.ts src/app/robots.txt/route.test.ts src/app/sitemap.xml/route.test.ts",
     "test:personal": "vitest run src/sites/personal-homepage src/sites/shared src/app/robots.txt src/app/sitemap.xml",
     "test:e2e:personal": "playwright test personal-homepage personal-archive",
-    "test:e2e:rocodex": "playwright test rocodex",
+    "test:e2e:rocodex": "playwright test e2e/rocodex.spec.ts",
     "audit:dependencies": "npm audit --audit-level=high",
     "verify:personal-bundle": "node scripts/verify-personal-bundle.mjs",
     "verify:cstd:performance-contract": "node scripts/verify-cstd-performance-contract.mjs",
