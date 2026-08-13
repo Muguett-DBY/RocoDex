@@ -144,10 +144,10 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
             <span className="flex h-9 w-9 items-center justify-center bg-[#f4d431] font-mono text-[11px] font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">CS</span>
             <span className="hidden sm:block">
               <span data-cstd-deep-brand className="block font-mono text-xs font-black text-white">
-                {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.brand}</span>)}
+                {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.brand[locale]}</span>)}
               </span>
               <span data-cstd-deep-edition className="mt-0.5 block font-mono text-[11px] font-bold text-[#68757b]">
-                {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.edition}</span>)}
+                {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.edition[locale]}</span>)}
               </span>
             </span>
           </CstdLink>

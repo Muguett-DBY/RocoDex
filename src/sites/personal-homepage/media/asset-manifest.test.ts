@@ -60,7 +60,13 @@ describe("CSTD media manifest", () => {
       expect(statSync(filePath).size).toBeLessThanOrEqual(320_000);
     }
 
-    for (const asset of Object.values(cstdThemeFontAssets).flat()) {
+    expect(cstdThemeFontAssets["neon-district"].zh).toEqual(["/fonts/cstd/neon-display-v1.woff2"]);
+    expect(cstdThemeFontAssets["neon-district"].en).toEqual(["/fonts/cstd/neon-latin-v1.woff2"]);
+    expect(cstdThemeFontAssets["ink-protocol"].zh).toEqual(["/fonts/cstd/ink-display-v1.woff2", "/fonts/cstd/ink-text-v1.woff2"]);
+    expect(cstdThemeFontAssets["ink-protocol"].en).toEqual(["/fonts/cstd/ink-latin-v1.woff2", "/fonts/cstd/ink-latin-italic-v1.woff2"]);
+
+    const fontAssets = new Set(Object.values(cstdThemeFontAssets).flatMap((locales) => Object.values(locales).flat()));
+    for (const asset of fontAssets) {
       const filePath = path.join(process.cwd(), "public", asset.slice(1));
       expect(asset).toMatch(/^\/fonts\/cstd\/.+-v1\.woff2$/);
       expect(existsSync(filePath)).toBe(true);

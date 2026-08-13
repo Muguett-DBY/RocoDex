@@ -7,12 +7,12 @@ import { cstdThemeWorldAssets } from "../media/asset-manifest";
 import type { CstdLocale, LocalizedText } from "../content/content-types";
 
 const sceneCopy: Record<CstdSceneId, { ink: LocalizedText; press: string; pixel: string }> = {
-  hero: { ink: { zh: "卷首", en: "OPENING" }, press: "FRONT PAGE", pixel: "STAGE 01" },
-  systems: { ink: { zh: "器", en: "CRAFT" }, press: "SYSTEMS DESK", pixel: "STAGE 02" },
-  proof: { ink: { zh: "证", en: "EVIDENCE" }, press: "FIELD REPORTS", pixel: "STAGE 03" },
+  hero: { ink: { zh: "卷首", en: "OPEN" }, press: "FRONT PAGE", pixel: "STAGE 01" },
+  systems: { ink: { zh: "器", en: "FORM" }, press: "SYSTEMS DESK", pixel: "STAGE 02" },
+  proof: { ink: { zh: "证", en: "PROOF" }, press: "FIELD REPORTS", pixel: "STAGE 03" },
   operator: { ink: { zh: "验", en: "TEST" }, press: "LIVE LAB", pixel: "BOSS LAB" },
   path: { ink: { zh: "迹", en: "TRACE" }, press: "OPINION & NOTES", pixel: "LORE ROOM" },
-  finale: { ink: { zh: "未完", en: "TO BE CONTINUED" }, press: "LATE EDITION", pixel: "CONTINUE?" },
+  finale: { ink: { zh: "未完", en: "NEXT" }, press: "LATE EDITION", pixel: "CONTINUE?" },
 };
 
 const sceneSequence: CstdSceneId[] = ["hero", "systems", "proof", "operator", "path", "finale"];

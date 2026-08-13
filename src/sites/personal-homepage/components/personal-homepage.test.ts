@@ -220,15 +220,18 @@ describe("CSTD personal homepage", () => {
     expect(themeStoreSource).toContain('export type CstdThemeId = "neon-district" | "ink-protocol" | "press-room" | "pixel-quest"');
     expect(themeStoreSource).toContain('export type CstdThemeKind = "cyberpunk" | "ink-scroll" | "broadsheet" | "pixel-game"');
     expect(themeStoreSource).toContain('cstdThemeStorageKey = "cstd-world-theme"');
+    expect(themeStoreSource).toContain("brand: LocalizedText");
+    expect(themeStoreSource).toContain("edition: LocalizedText");
     expect(themeStoreSource).toContain('if (value === "solar-lab") return "press-room"');
     expect(themeStoreSource).toContain("setCstdTheme");
     expect(themeStoreSource).toContain("document.documentElement.dataset.cstdTheme");
     expect(themeBootstrapSource).toContain("MutationObserver");
     expect(themeBootstrapSource).toContain("cstd-world-theme");
     expect(themeBootstrapSource).toContain("fontAssets");
-    expect(themeBootstrapSource).toContain("dataset.cstdThemeFont");
-    expect(personalLayoutSource).toContain("<CstdThemeBootstrapScript />");
-    expect(englishLayoutSource).toContain("<CstdThemeBootstrapScript />");
+    expect(themeBootstrapSource).toContain("fontAssets[theme][locale]");
+    expect(themeBootstrapSource).toContain("dataset.cstdThemeFontLocale");
+    expect(personalLayoutSource).toContain('<CstdThemeBootstrapScript locale="zh" />');
+    expect(englishLayoutSource).toContain('<CstdThemeBootstrapScript locale="en" />');
     expect(themeSwitcherSource).toContain("data-cstd-theme-switcher");
     expect(themeSwitcherSource).toContain("data-cstd-theme-option={candidate.id}");
     expect(themeSwitcherSource).toContain("createPortal(menu, document.body)");
@@ -242,6 +245,10 @@ describe("CSTD personal homepage", () => {
     expect(themeWorldSource).toContain("data-cstd-theme-world-image={candidateTheme}");
     expect(themeWorldSource).toContain("data-cstd-theme-world-decoration=\"neon-district\"");
     expect(themeWorldSource).toContain("ThemeSceneNavigator");
+    expect(headerSource).toContain("candidate.brand[locale]");
+    expect(headerSource).toContain("candidate.edition[locale]");
+    expect(siteChromeSource).toContain("candidate.brand[locale]");
+    expect(siteChromeSource).toContain("candidate.edition[locale]");
     expect(themeWorldSource).toContain("data-cstd-theme-scene-node={sceneId}");
     expect(assetManifestSource).toContain("/cstd-themes/ink-scroll-v1.webp");
     expect(assetManifestSource).toContain("/cstd-themes/press-room-v1.webp");
@@ -297,9 +304,17 @@ describe("CSTD personal homepage", () => {
 
   test("gives every world its own licensed type, generated material, deep-page artifact, and motion grammar", () => {
     expect(themeFoundationSource).toContain('font-family: "CSTD Neon Display"');
+    expect(themeFoundationSource).toContain('font-family: "CSTD Neon Latin"');
     expect(themeFoundationSource).toContain('font-family: "CSTD Ink Text"');
+    expect(themeFoundationSource).toContain('font-family: "CSTD Ink Latin"');
+    expect(themeFoundationSource).toContain('font-family: "CSTD Ink Latin Italic"');
     expect(themeFoundationSource).toContain('font-family: "CSTD Press Serif"');
     expect(themeFoundationSource).toContain('font-family: "CSTD Pixel Text"');
+    expect(themeFoundationSource).toContain('[data-cstd-theme="neon-district"][data-cstd-locale="en"]');
+    expect(themeFoundationSource).toContain('[data-cstd-theme="ink-protocol"][data-cstd-locale="en"]');
+    expect(themeFoundationSource).toContain('[data-cstd-theme="press-room"][data-cstd-locale="en"] [data-cstd-hero-description]');
+    expect(themeWorldSource).toContain('en: "OPEN"');
+    expect(themeWorldSource).toContain('en: "NEXT"');
     expect(themeFoundationSource).toContain('/cstd-materials/neon-alloy-v1.webp');
     expect(themeFoundationSource).toContain('/cstd-materials/ink-xuan-v1.webp');
     expect(themeFoundationSource).toContain('/cstd-materials/press-newsprint-v1.webp');

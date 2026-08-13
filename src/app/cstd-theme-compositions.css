@@ -1496,17 +1496,6 @@
   }
 
   [data-cstd-theme-scene-rail="press-room"] {
-    height: 2rem;
-  }
-
-  [data-cstd-theme-scene-rail="press-room"] > div {
-    min-height: 2rem;
-    grid-template-columns: 1fr;
-    justify-items: center;
-    padding: 0;
-  }
-
-  [data-cstd-theme-scene-rail="press-room"] b {
     display: none;
   }
 
@@ -1574,7 +1563,7 @@
   }
 
   [data-cstd-theme="press-room"] [data-cstd-header-brand] {
-    font-size: 0.9rem !important;
+    font-size: 0.76rem !important;
   }
 
   [data-cstd-theme="press-room"] [data-cstd-home-header] [href="#proof"] {

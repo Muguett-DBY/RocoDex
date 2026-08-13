@@ -163,7 +163,7 @@ test.describe("CSTD technical archive", () => {
       expect(materialResponse.headers()["cache-control"]).toContain("immutable");
     }
 
-    for (const asset of ["neon-display-v1.woff2", "ink-display-v1.woff2", "ink-text-v1.woff2", "press-latin-v1.woff2", "press-serif-v1.woff2", "pixel-text-12-v1.woff2", "pixel-label-10-v1.woff2"]) {
+    for (const asset of ["neon-display-v1.woff2", "neon-latin-v1.woff2", "ink-display-v1.woff2", "ink-text-v1.woff2", "ink-latin-v1.woff2", "ink-latin-italic-v1.woff2", "press-latin-v1.woff2", "press-serif-v1.woff2", "pixel-text-12-v1.woff2", "pixel-label-10-v1.woff2"]) {
       const fontResponse = await request.get(`/fonts/cstd/${asset}`, { headers });
       expect(fontResponse.status()).toBe(200);
       expect(fontResponse.headers()["content-type"]).toContain("font/woff2");

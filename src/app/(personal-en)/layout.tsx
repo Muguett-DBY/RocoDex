@@ -14,7 +14,7 @@ export default function PersonalEnglishRootLayout({ children }: Readonly<{ child
   return (
     <html lang="en-AU" dir="ltr" className="h-full antialiased" suppressHydrationWarning>
       <head>
-        <CstdThemeBootstrapScript />
+        <CstdThemeBootstrapScript locale="en" />
       </head>
       <body className="min-h-full">
         {children}

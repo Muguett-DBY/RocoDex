@@ -59,10 +59,10 @@ export function HomepageHeader({
           </span>
           <span className="min-w-0 overflow-hidden">
             <span data-cstd-header-brand className="block truncate text-sm font-black">
-              {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.brand}</span>)}
+              {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.brand[locale]}</span>)}
             </span>
             <span data-cstd-header-edition className="hidden whitespace-nowrap text-[8px] font-bold uppercase lg:block">
-              {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.edition}</span>)}
+              {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.edition[locale]}</span>)}
             </span>
           </span>
         </CstdChapterLink>
