@@ -85,11 +85,15 @@ function normalizeTheme(value: string | null): CstdThemeId | null {
 }
 
 function subscribe(onStoreChange: () => void) {
-  window.addEventListener("storage", onStoreChange);
-  window.addEventListener(cstdThemeEvent, onStoreChange);
+  const syncTheme = () => {
+    applyDocumentTheme(getSnapshot());
+    onStoreChange();
+  };
+  window.addEventListener("storage", syncTheme);
+  window.addEventListener(cstdThemeEvent, syncTheme);
   return () => {
-    window.removeEventListener("storage", onStoreChange);
-    window.removeEventListener(cstdThemeEvent, onStoreChange);
+    window.removeEventListener("storage", syncTheme);
+    window.removeEventListener(cstdThemeEvent, syncTheme);
   };
 }
 
@@ -102,6 +106,8 @@ function getSnapshot(): CstdThemeId {
 }
 
 function getServerSnapshot(): CstdThemeId {
+  // Keep hydration identical to the static HTML. The head bootstrap applies the
+  // persisted world before paint; the live snapshot takes over after hydration.
   return "neon-district";
 }
 
@@ -113,8 +119,15 @@ export function getCstdThemeMeta(theme: CstdThemeId) {
   return cstdThemes.find((candidate) => candidate.id === theme) ?? cstdThemes[0];
 }
 
+function applyDocumentTheme(theme: CstdThemeId) {
+  const meta = getCstdThemeMeta(theme);
+  document.documentElement.dataset.cstdTheme = theme;
+  document.documentElement.dataset.cstdThemeKind = meta.kind;
+}
+
 export function setCstdTheme(theme: CstdThemeId) {
   volatileTheme = theme;
+  applyDocumentTheme(theme);
   try {
     window.localStorage.setItem(cstdThemeStorageKey, theme);
   } catch {

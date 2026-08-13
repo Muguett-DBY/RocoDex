@@ -128,7 +128,7 @@ export function StudioSystemExplorer({
               [String(activeStatus?.projectCount ?? 0), locale === "zh" ? "系统" : "SYSTEMS"],
             ].map(([value, label]) => (
               <div key={label} className="flex flex-col">
-                <dt className="order-2 mt-1.5 font-mono text-[11px] font-black text-[#697478]">{label}</dt>
+                <dt data-cstd-system-metric-label className="order-2 mt-1.5 font-mono text-[11px] font-black text-[#697478]">{label}</dt>
                 <dd className="order-1 font-mono text-xl font-black text-white">{value}</dd>
               </div>
             ))}

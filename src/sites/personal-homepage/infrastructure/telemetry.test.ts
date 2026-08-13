@@ -5,7 +5,17 @@ const baseMetric = { value: 1, page: "work-rocodex-platform", path: "/work/rocod
 
 describe("bounded anonymous CSTD telemetry", () => {
   it("accepts only the new release's named experience signals", () => {
-    for (const name of ["case_act_share", "case_failure_drill", "lab_conflict", "route_transition", "reading_quiet"]) {
+    for (const name of [
+      "case_act_share",
+      "case_failure_drill",
+      "lab_conflict",
+      "route_transition",
+      "reading_quiet",
+      "theme_neon-district",
+      "theme_ink-protocol",
+      "theme_press-room",
+      "theme_pixel-quest",
+    ]) {
       expect(parseCstdMetric({ ...baseMetric, name })?.name).toBe(name);
     }
     expect(parseCstdMetric({ ...baseMetric, name: "free_form_user_payload" })).toBeNull();

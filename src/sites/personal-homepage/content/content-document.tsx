@@ -41,7 +41,7 @@ function createComponents(locale: CstdLocale, variant: ContentVariant) {
     CodeSample: ({ language, label, children }: { language: string; label: string; children: ReactNode }) => {
       const value = extractText(children).trim();
       return (
-        <div className={dark ? "mt-9 overflow-hidden border-l-2 border-[#24e0ff] bg-black/45" : "mt-8 overflow-hidden bg-[#0a0c0e] text-[#d9f9ff] shadow-[12px_12px_0_#e3b800]"}>
+        <div data-cstd-code-sample data-cstd-code-tone={dark ? "dark" : "light"} className={dark ? "mt-9 overflow-hidden border-l-2 border-[#24e0ff] bg-black/45" : "mt-8 overflow-hidden bg-[#0a0c0e] text-[#d9f9ff] shadow-[12px_12px_0_#e3b800]"}>
       <div className="flex items-center justify-between gap-4 border-b border-white/10 px-5 py-3 font-mono text-[11px] font-black text-[#24e0ff]">
             <span>{label.toUpperCase()} / {language}</span>
             <CopyCodeButton value={value} label={locale === "zh" ? "复制代码" : "Copy code"} />

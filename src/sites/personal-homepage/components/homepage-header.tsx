@@ -6,7 +6,7 @@ import { HomepageControls } from "./homepage-controls";
 import { ThemeSwitcher } from "./theme-switcher";
 import { CstdChapterLink } from "./site/cstd-chapter-link";
 import { CstdLink } from "./site/cstd-link";
-import { getCstdThemeMeta, useCstdTheme } from "../experience/theme-store";
+import { cstdThemes, getCstdThemeMeta, useCstdTheme, type CstdThemeId } from "../experience/theme-store";
 import type { CstdLocale } from "../content/content-types";
 import { getLocalizedCstdHref } from "../infrastructure/i18n";
 import { CstdLanguageSwitcher } from "./site/cstd-language-switcher";
@@ -16,6 +16,13 @@ const homepageLinks = [
   { href: "#proof", label: { zh: "作品", en: "Work" }, sceneId: "proof" },
   { href: "#operator", label: { zh: "证据", en: "Proof" }, sceneId: "operator" },
 ] as const;
+
+function getThemeMark(theme: CstdThemeId, locale: CstdLocale) {
+  if (theme === "ink-protocol") return locale === "zh" ? "墨" : "IK";
+  if (theme === "press-room") return locale === "zh" ? "报" : "PR";
+  if (theme === "pixel-quest") return "8B";
+  return locale === "zh" ? "奶" : "CS";
+}
 
 export function HomepageHeader({
   activeSceneId,
@@ -34,11 +41,9 @@ export function HomepageHeader({
 }) {
   const theme = useCstdTheme();
   const themeMeta = getCstdThemeMeta(theme);
-  const mark = locale === "zh"
-    ? theme === "ink-protocol" ? "墨" : theme === "press-room" ? "报" : theme === "pixel-quest" ? "8B" : "奶"
-    : theme === "ink-protocol" ? "IK" : theme === "press-room" ? "PR" : theme === "pixel-quest" ? "8B" : "CS";
   return (
     <header
+      suppressHydrationWarning
       data-cstd-home-header
       data-cstd-header-theme={activeSceneId}
       data-cstd-header-world={themeMeta.kind}
@@ -50,11 +55,15 @@ export function HomepageHeader({
           className="flex min-w-0 flex-1 items-center gap-2.5 overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]"
         >
           <span data-cstd-header-mark className="flex h-9 w-9 shrink-0 items-center justify-center bg-[#f4d431] text-sm font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">
-            {mark}
+            {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-mark-copy={candidate.id}>{getThemeMark(candidate.id, locale)}</span>)}
           </span>
           <span className="min-w-0 overflow-hidden">
-            <span data-cstd-header-brand className="block truncate text-sm font-black">{themeMeta.brand}</span>
-            <span data-cstd-header-edition className="hidden whitespace-nowrap text-[8px] font-bold uppercase lg:block">{themeMeta.edition}</span>
+            <span data-cstd-header-brand className="block truncate text-sm font-black">
+              {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.brand}</span>)}
+            </span>
+            <span data-cstd-header-edition className="hidden whitespace-nowrap text-[8px] font-bold uppercase lg:block">
+              {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.edition}</span>)}
+            </span>
           </span>
         </CstdChapterLink>
 

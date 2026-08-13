@@ -5,11 +5,11 @@ import { ThemeChapterLabel, ThemeCopy } from "../theme-copy";
 import type { CstdLocale, LocalizedText } from "../../content/content-types";
 
 const finalNodes = [
-  { code: "PRODUCT", color: "#f4d431" },
-  { code: "AGENT", color: "#24e0ff" },
-  { code: "DATA", color: "#e8edf0" },
-  { code: "EDGE", color: "#899499" },
-  { code: "RESEARCH", color: "#b9c2c5" },
+  { code: "PRODUCT", tone: "product" },
+  { code: "AGENT", tone: "agent" },
+  { code: "DATA", tone: "data" },
+  { code: "EDGE", tone: "edge" },
+  { code: "RESEARCH", tone: "research" },
 ] as const;
 
 const collaborationCopy = {
@@ -62,7 +62,7 @@ export function Finale({ narrativeMode, locale }: { narrativeMode: CstdNarrative
             </p>
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 font-mono text-[11px] font-black">
               {finalNodes.map((node) => (
-                <span key={node.code} className="flex items-center gap-2" style={{ color: node.color }}>
+                <span key={node.code} data-cstd-final-tone={node.tone} className="cstd-final-capability flex items-center gap-2">
                   <span className="cstd-final-node h-1 w-1 bg-current" />
                   {node.code}
                 </span>
@@ -70,16 +70,16 @@ export function Finale({ narrativeMode, locale }: { narrativeMode: CstdNarrative
             </div>
           </div>
 
-          <div className="border-l border-white/15 pl-6 font-mono md:pl-8">
+          <div className="cstd-finale-contact border-l pl-6 font-mono md:pl-8">
             <p className="text-[11px] font-black text-[#24e0ff]">{collaboration.signal}</p>
-            <p className="mt-4 text-xs leading-6 text-[#929da1]">{locale === "zh" ? "当前观看路径：" : "Current viewing path: "}<span className="text-[#f4d431]">{narrative.label[locale]}</span></p>
+            <p className="cstd-finale-context mt-4 text-xs leading-6">{locale === "zh" ? "当前观看路径：" : "Current viewing path: "}<span className="text-[#f4d431]">{narrative.label[locale]}</span></p>
             <a
               href={`mailto:cstd@custard.top?subject=${encodeURIComponent(`CSTD / ${collaboration.signal}`)}`}
-              className="mt-5 block text-base font-black text-[#f2efe7] transition-colors hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
+              className="cstd-finale-address mt-5 block text-base font-black transition-colors hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]"
             >
               cstd@custard.top
             </a>
-            <p className="mt-3 text-[11px] leading-5 text-[#717c80]">{locale === "zh" ? "奶黄包个人技术工作室" : "CUSTARD PERSONAL ENGINEERING STUDIO"} / SYDNEY</p>
+            <p className="cstd-finale-meta mt-3 text-[11px] leading-5">{locale === "zh" ? "奶黄包个人技术工作室" : "CUSTARD PERSONAL ENGINEERING STUDIO"} / SYDNEY</p>
             <div className="mt-7 flex items-center gap-5">
               <CstdLink href={getCstdNarrativeSharePath(narrativeMode, locale)} aria-label={locale === "zh" ? "分享这条观看路径" : "Share this viewing path"} className="inline-flex h-10 w-10 items-center justify-center border border-[#24e0ff]/35 text-[#24e0ff] hover:bg-[#24e0ff] hover:text-[#050709]">
                 <ArrowUpRight aria-hidden="true" className="h-4 w-4" />

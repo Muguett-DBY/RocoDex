@@ -140,6 +140,7 @@ export function HomepageRuntime({
   return <>
     <CstdDocumentLocale locale={locale} />
     <main
+      suppressHydrationWarning
       ref={rootRef}
       data-cstd-kinetic-world
       data-cstd-home-refined
