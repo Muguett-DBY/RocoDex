@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { existsSync, statSync } from "node:fs";
 import path from "node:path";
-import { cstdBroadcasts, cstdEditorialAssets, cstdThemeWorldAssets, cstdVisualAssets } from "./asset-manifest";
+import { cstdBroadcasts, cstdEditorialAssets, cstdThemeFontAssets, cstdThemeMaterialAssets, cstdThemeWorldAssets, cstdVisualAssets } from "./asset-manifest";
 
 describe("CSTD media manifest", () => {
   test("maps one original visual to every directed scene", () => {
@@ -46,6 +46,25 @@ describe("CSTD media manifest", () => {
       expect(asset).toMatch(/^\/cstd-themes\/.+-v1\.webp$/);
       expect(existsSync(filePath)).toBe(true);
       expect(statSync(filePath).size).toBeLessThanOrEqual(320_000);
+    }
+  });
+
+  test("keeps every theme foundation asset versioned, deployable, and budgeted", () => {
+    expect(Object.keys(cstdThemeMaterialAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest"]);
+    expect(Object.keys(cstdThemeFontAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest"]);
+
+    for (const asset of Object.values(cstdThemeMaterialAssets)) {
+      const filePath = path.join(process.cwd(), "public", asset.slice(1));
+      expect(asset).toMatch(/^\/cstd-materials\/.+-v1\.webp$/);
+      expect(existsSync(filePath)).toBe(true);
+      expect(statSync(filePath).size).toBeLessThanOrEqual(320_000);
+    }
+
+    for (const asset of Object.values(cstdThemeFontAssets).flat()) {
+      const filePath = path.join(process.cwd(), "public", asset.slice(1));
+      expect(asset).toMatch(/^\/fonts\/cstd\/.+-v1\.woff2$/);
+      expect(existsSync(filePath)).toBe(true);
+      expect(statSync(filePath).size).toBeLessThanOrEqual(450_000);
     }
   });
 });

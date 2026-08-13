@@ -83,6 +83,8 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-themes/ink-scroll-v1.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-themes/press-room-v1.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-themes/pixel-quest-v1.webp")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-materials/ink-xuan-v1.webp")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/fonts/cstd/ink-text-v1.woff2")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-projects/rocodex.png")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-universe/cstd-neural-city-v3.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-universe/cstd-neural-gate-v1.webp")).toEqual({ kind: "next" });

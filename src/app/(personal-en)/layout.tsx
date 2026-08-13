@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 import "../cstd-themes.css";
 import "../cstd-theme-compositions.css";
+import "../cstd-theme-foundations.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://custard.top"),

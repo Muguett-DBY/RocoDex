@@ -12,6 +12,14 @@ const themeRoot = path.resolve("public/cstd-themes");
 const themeAssets = readdirSync(themeRoot).filter((name) => name.endsWith(".webp"));
 const themeBytes = themeAssets.reduce((total, name) => total + statSync(path.join(themeRoot, name)).size, 0);
 const oversizedThemeAsset = themeAssets.find((name) => statSync(path.join(themeRoot, name)).size > contract.budgets.sceneAssetBytes);
+const materialRoot = path.resolve("public/cstd-materials");
+const materialAssets = readdirSync(materialRoot).filter((name) => name.endsWith(".webp"));
+const materialBytes = materialAssets.reduce((total, name) => total + statSync(path.join(materialRoot, name)).size, 0);
+const oversizedMaterialAsset = materialAssets.find((name) => statSync(path.join(materialRoot, name)).size > contract.budgets.sceneAssetBytes);
+const fontRoot = path.resolve("public/fonts/cstd");
+const fontAssets = readdirSync(fontRoot).filter((name) => name.endsWith(".woff2"));
+const fontBytes = fontAssets.reduce((total, name) => total + statSync(path.join(fontRoot, name)).size, 0);
+const oversizedFontAsset = fontAssets.find((name) => statSync(path.join(fontRoot, name)).size > contract.budgets.themeFontFileBytes);
 
 if (contract.cacheComponents.status !== "evaluated-not-enabled") {
   throw new Error("Cache Components status must be explicitly reviewed before changing the static delivery contract");
@@ -42,5 +50,17 @@ if (themeBytes > contract.budgets.themeAssetBytes) {
 if (oversizedThemeAsset) {
   throw new Error(`CSTD theme asset ${oversizedThemeAsset} exceeds ${contract.budgets.sceneAssetBytes} bytes`);
 }
+if (materialBytes > contract.budgets.themeMaterialAssetBytes) {
+  throw new Error(`CSTD theme materials total ${materialBytes} bytes; budget is ${contract.budgets.themeMaterialAssetBytes}`);
+}
+if (oversizedMaterialAsset) {
+  throw new Error(`CSTD theme material ${oversizedMaterialAsset} exceeds ${contract.budgets.sceneAssetBytes} bytes`);
+}
+if (fontBytes > contract.budgets.themeFontAssetBytes) {
+  throw new Error(`CSTD theme fonts total ${fontBytes} bytes; budget is ${contract.budgets.themeFontAssetBytes}`);
+}
+if (oversizedFontAsset) {
+  throw new Error(`CSTD theme font ${oversizedFontAsset} exceeds ${contract.budgets.themeFontFileBytes} bytes`);
+}
 
-console.log(`CSTD performance contract OK: ${universeAssets.length} universe assets / ${universeBytes} bytes, ${themeAssets.length} theme assets / ${themeBytes} bytes, ${contract.delivery.immutableAssetRoots.length} immutable roots.`);
+console.log(`CSTD performance contract OK: ${universeAssets.length} universe assets / ${universeBytes} bytes, ${themeAssets.length} theme assets / ${themeBytes} bytes, ${materialAssets.length} materials / ${materialBytes} bytes, ${fontAssets.length} fonts / ${fontBytes} bytes, ${contract.delivery.immutableAssetRoots.length} immutable roots.`);

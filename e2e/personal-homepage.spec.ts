@@ -384,6 +384,8 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeHidden();
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="pixel-quest"]')).toBeVisible();
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("主线任务：");
+  await expect(page.locator('[data-cstd-hero-actions] a[href="#proof"]')).toHaveCSS("color", "rgb(7, 17, 40)");
+  await expect(page.locator('[data-cstd-hero-actions] a[href="#proof"]')).toHaveCSS("background-color", "rgb(255, 212, 59)");
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(root).toHaveAttribute("data-cstd-theme", "pixel-quest");
   const infinitePixelAnimations = await page.evaluate(() => document.getAnimations().filter((animation) => {
@@ -398,6 +400,76 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(page.locator("[data-cstd-finale]")).toBeVisible();
   const bottomGap = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight - window.scrollY);
   expect(bottomGap).toBeLessThanOrEqual(8);
+});
+
+test("CSTD loads each world's type, material, and deep-page composition as one coherent system", async ({ page, isMobile }) => {
+  const worlds = [
+    {
+      id: "neon-district",
+      font: "CSTD Neon Display",
+      material: "neon-alloy-v1.webp",
+      artifact: "neon",
+      copy: { zh: "信号已锁定", en: "SIGNAL LOCKED" },
+      preloads: ["neon-display-v1.woff2"],
+    },
+    {
+      id: "ink-protocol",
+      font: "CSTD Ink Display",
+      material: "ink-xuan-v1.webp",
+      artifact: "ink",
+      copy: { zh: "以代码为墨", en: "CODE AS INK" },
+      preloads: ["ink-display-v1.woff2", "ink-text-v1.woff2"],
+    },
+    {
+      id: "press-room",
+      font: "CSTD Press Latin",
+      material: "press-newsprint-v1.webp",
+      artifact: "press",
+      copy: { zh: "CSTD 日报 / 独立工程", en: "CSTD DAILY / INDEPENDENT ENGINEERING" },
+      preloads: ["press-latin-v1.woff2", "press-serif-v1.woff2"],
+    },
+    {
+      id: "pixel-quest",
+      font: "CSTD Pixel Text",
+      material: "pixel-circuit-v1.webp",
+      artifact: "pixel",
+      copy: { zh: "任务数据", en: "QUEST DATA" },
+      preloads: ["pixel-text-12-v1.woff2", "pixel-label-10-v1.woff2"],
+    },
+  ] as const;
+
+  for (const world of worlds) {
+    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.evaluate((theme) => window.localStorage.setItem("cstd-world-theme", theme), world.id);
+    await page.goto("/cstd/work/rocodex-platform", { waitUntil: "networkidle" });
+
+    const shell = page.locator("[data-cstd-deep-shell]");
+    const heroTitle = page.locator("[data-cstd-page-hero-title]");
+    const material = page.locator("[data-cstd-page-hero-material]");
+    const artifact = page.locator(`[data-cstd-deep-artifact="${world.artifact}"]`);
+
+    await expect(shell).toHaveAttribute("data-cstd-theme", world.id);
+    await page.evaluate(() => document.fonts.ready);
+    await expect(heroTitle).toHaveCSS("font-family", new RegExp(world.font));
+    expect(await material.evaluate((element) => getComputedStyle(element).backgroundImage)).toContain(world.material);
+    await expect(artifact).toContainText(world.copy.zh);
+    await expect(page.locator("[data-cstd-page-hero-scroll]")).toContainText("向下滚动 / 继续查看");
+    if (isMobile) await expect(artifact).toBeHidden();
+    else await expect(artifact).toBeVisible();
+    for (const otherArtifact of ["neon", "ink", "press", "pixel"].filter((candidate) => candidate !== world.artifact)) {
+      await expect(page.locator(`[data-cstd-deep-artifact="${otherArtifact}"]`)).toBeHidden();
+    }
+
+    const preloadedFonts = await page.locator('link[data-cstd-theme-font]').evaluateAll((links) => links.map((link) => (link as HTMLLinkElement).href.split("/").at(-1)));
+    expect(preloadedFonts).toEqual(world.preloads);
+    await expectNoHorizontalOverflow(page);
+
+    await page.goto("/cstd/en/work/rocodex-platform", { waitUntil: "domcontentloaded" });
+    await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-locale", "en");
+    await expect(page.locator(`[data-cstd-deep-artifact="${world.artifact}"]`)).toContainText(world.copy.en);
+    await expect(page.locator("[data-cstd-page-hero-scroll]")).toContainText("SCROLL / CONTINUE TRACE");
+    await expectNoHorizontalOverflow(page);
+  }
 });
 
 test("CSTD keeps the theme control reachable on compact mobile screens", async ({ page, isMobile }) => {

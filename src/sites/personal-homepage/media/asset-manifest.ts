@@ -1,4 +1,5 @@
 import type { CstdSceneId } from "../experience/scene-manifest";
+import type { CstdThemeId } from "../experience/theme-store";
 
 export type CstdVisualAsset = {
   id: string;
@@ -74,6 +75,20 @@ export const cstdThemeWorldAssets = {
   "press-room": "/cstd-themes/press-room-v1.webp",
   "pixel-quest": "/cstd-themes/pixel-quest-v1.webp",
 } as const;
+
+export const cstdThemeMaterialAssets = {
+  "neon-district": "/cstd-materials/neon-alloy-v1.webp",
+  "ink-protocol": "/cstd-materials/ink-xuan-v1.webp",
+  "press-room": "/cstd-materials/press-newsprint-v1.webp",
+  "pixel-quest": "/cstd-materials/pixel-circuit-v1.webp",
+} as const satisfies Record<CstdThemeId, string>;
+
+export const cstdThemeFontAssets = {
+  "neon-district": ["/fonts/cstd/neon-display-v1.woff2"],
+  "ink-protocol": ["/fonts/cstd/ink-display-v1.woff2", "/fonts/cstd/ink-text-v1.woff2"],
+  "press-room": ["/fonts/cstd/press-latin-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"],
+  "pixel-quest": ["/fonts/cstd/pixel-text-12-v1.woff2", "/fonts/cstd/pixel-label-10-v1.woff2"],
+} as const satisfies Record<CstdThemeId, readonly string[]>;
 
 export type CstdBroadcastId = "rocodex" | "alpha" | "crm";
 
