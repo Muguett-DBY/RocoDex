@@ -84,11 +84,11 @@ export function SelectedWork({ narrativeMode, locale }: { narrativeMode: CstdNar
           })}
         </div>
 
-        <div className="mt-9 flex flex-wrap items-center justify-between gap-5 border-t border-black/15 pt-5 font-mono text-[11px] font-black text-[#596368]">
+        <div data-cstd-proof-footer className="mt-9 flex flex-wrap items-center justify-between gap-5 border-t pt-5 font-mono text-[11px] font-black">
           <span>{cstdProofMesh.length} {locale === "zh" ? "个已发布案例" : "PUBLISHED CASES"} / {cstdProofMesh.reduce((sum, entry) => sum + entry.artifactCount, 0)} {locale === "zh" ? "项公开证据" : "PUBLIC ARTIFACTS"}</span>
           <div className="flex gap-6">
-            <CstdLink href={getLocalizedCstdHref("/work", locale)} className="text-[#7a6200] hover:text-black">{locale === "zh" ? "全部案例" : "ALL CASES"}</CstdLink>
-            <CstdLink href={getLocalizedCstdHref("/proof.json", locale)} className="text-[#005f70] hover:text-black">PROOF.JSON</CstdLink>
+            <CstdLink data-cstd-proof-footer-link="primary" href={getLocalizedCstdHref("/work", locale)}>{locale === "zh" ? "全部案例" : "ALL CASES"}</CstdLink>
+            <CstdLink data-cstd-proof-footer-link="secondary" href={getLocalizedCstdHref("/proof.json", locale)}>PROOF.JSON</CstdLink>
           </div>
         </div>
       </div>

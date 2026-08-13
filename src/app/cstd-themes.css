@@ -12,6 +12,15 @@
   transition: background-color 620ms ease, color 620ms ease;
 }
 
+html[data-cstd-theme="neon-district"],
+html[data-cstd-theme="neon-district"] body { background: #07090b; }
+html[data-cstd-theme="ink-protocol"],
+html[data-cstd-theme="ink-protocol"] body { background: #e9e0ce; }
+html[data-cstd-theme="press-room"],
+html[data-cstd-theme="press-room"] body { background: #eee5d3; }
+html[data-cstd-theme="pixel-quest"],
+html[data-cstd-theme="pixel-quest"] body { background: #050a18; }
+
 .cstd-theme-atmosphere {
   position: fixed;
   inset: 0;
@@ -74,6 +83,62 @@
   background: var(--cstd-world-bg);
 }
 
+[data-cstd-kinetic-world][data-cstd-theme="neon-district"] [data-cstd-theme-world] {
+  position: absolute;
+}
+
+[data-cstd-theme-world-image],
+[data-cstd-theme-world-decoration],
+[data-cstd-theme-world-copy],
+[data-cstd-theme-scene-copy],
+[data-cstd-theme-label-option],
+[data-cstd-theme-meta-copy],
+[data-cstd-theme-mark-copy] {
+  display: none;
+}
+
+[data-cstd-theme="ink-protocol"] [data-cstd-theme-world-image="ink-protocol"],
+[data-cstd-theme="press-room"] [data-cstd-theme-world-image="press-room"],
+[data-cstd-theme="pixel-quest"] [data-cstd-theme-world-image="pixel-quest"] {
+  display: block;
+}
+
+[data-cstd-theme="neon-district"] [data-cstd-theme-world-decoration="neon-district"],
+[data-cstd-theme="ink-protocol"] [data-cstd-theme-world-decoration="ink-protocol"],
+[data-cstd-theme="press-room"] [data-cstd-theme-world-decoration="press-room"],
+[data-cstd-theme="pixel-quest"] [data-cstd-theme-world-decoration="pixel-quest"] {
+  display: contents;
+}
+
+[data-cstd-theme="neon-district"] [data-cstd-theme-world-copy="neon-district"],
+[data-cstd-theme="ink-protocol"] [data-cstd-theme-world-copy="ink-protocol"],
+[data-cstd-theme="press-room"] [data-cstd-theme-world-copy="press-room"],
+[data-cstd-theme="pixel-quest"] [data-cstd-theme-world-copy="pixel-quest"],
+[data-cstd-theme-scene-rail="neon-district"] [data-cstd-theme-scene-copy="neon-district"],
+[data-cstd-theme-scene-rail="ink-protocol"] [data-cstd-theme-scene-copy="ink-protocol"],
+[data-cstd-theme-scene-rail="press-room"] [data-cstd-theme-scene-copy="press-room"],
+[data-cstd-theme-scene-rail="pixel-quest"] [data-cstd-theme-scene-copy="pixel-quest"] {
+  display: inline;
+}
+
+[data-cstd-theme="neon-district"] [data-cstd-theme-label-option="neon-district"],
+[data-cstd-theme="ink-protocol"] [data-cstd-theme-label-option="ink-protocol"],
+[data-cstd-theme="press-room"] [data-cstd-theme-label-option="press-room"],
+[data-cstd-theme="pixel-quest"] [data-cstd-theme-label-option="pixel-quest"],
+[data-cstd-theme="neon-district"] [data-cstd-theme-meta-copy="neon-district"],
+[data-cstd-theme="ink-protocol"] [data-cstd-theme-meta-copy="ink-protocol"],
+[data-cstd-theme="press-room"] [data-cstd-theme-meta-copy="press-room"],
+[data-cstd-theme="pixel-quest"] [data-cstd-theme-meta-copy="pixel-quest"] {
+  display: inline;
+}
+
+[data-cstd-theme="neon-district"] [data-cstd-theme-mark-copy="neon-district"],
+[data-cstd-theme="ink-protocol"] [data-cstd-theme-mark-copy="ink-protocol"],
+[data-cstd-theme="press-room"] [data-cstd-theme-mark-copy="press-room"],
+[data-cstd-theme="pixel-quest"] [data-cstd-theme-mark-copy="pixel-quest"] {
+  display: inline;
+}
+
 .cstd-theme-world-image {
   transition: opacity 640ms ease, transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -111,82 +176,140 @@
   opacity: 0 !important;
 }
 
-[data-cstd-theme="ink-protocol"] [class~="text-white"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#f2efe7]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#dce1e2]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#cbd3d5]"],
-[data-cstd-theme="press-room"] [class~="text-white"],
-[data-cstd-theme="press-room"] [class~="text-[#f2efe7]"],
-[data-cstd-theme="press-room"] [class~="text-[#dce1e2]"],
-[data-cstd-theme="press-room"] [class~="text-[#cbd3d5]"] {
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-white"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#f2efe7]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#dce1e2]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#cbd3d5]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-white"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#f2efe7]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#dce1e2]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#cbd3d5]"] {
   color: var(--cstd-world-ink) !important;
 }
 
-[data-cstd-theme="ink-protocol"] [class~="text-[#aeb8bb]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#aeb7ba]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#9aa4a8]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#9da8ab]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#8f9ba0]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#899499]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#7f8b90]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#68757b]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#a5aaad]"],
-[data-cstd-theme="ink-protocol"] [class~="text-[#aab3b6]"],
-[data-cstd-theme="press-room"] [class~="text-[#aeb8bb]"],
-[data-cstd-theme="press-room"] [class~="text-[#aeb7ba]"],
-[data-cstd-theme="press-room"] [class~="text-[#9aa4a8]"],
-[data-cstd-theme="press-room"] [class~="text-[#9da8ab]"],
-[data-cstd-theme="press-room"] [class~="text-[#8f9ba0]"],
-[data-cstd-theme="press-room"] [class~="text-[#899499]"],
-[data-cstd-theme="press-room"] [class~="text-[#7f8b90]"],
-[data-cstd-theme="press-room"] [class~="text-[#68757b]"],
-[data-cstd-theme="press-room"] [class~="text-[#a5aaad]"],
-[data-cstd-theme="press-room"] [class~="text-[#aab3b6]"] {
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#aeb8bb]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#aeb7ba]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#9aa4a8]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#9da8ab]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#8f9ba0]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#899499]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#7f8b90]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#68757b]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#a5aaad]"],
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#aab3b6]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#aeb8bb]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#aeb7ba]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#9aa4a8]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#9da8ab]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#8f9ba0]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#899499]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#7f8b90]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#68757b]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#a5aaad]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#aab3b6]"] {
   color: var(--cstd-world-muted) !important;
 }
 
-[data-cstd-theme="ink-protocol"] [class~="text-[#f4d431]"],
-[data-cstd-theme="press-room"] [class~="text-[#f4d431]"],
-[data-cstd-theme="pixel-quest"] [class~="text-[#f4d431]"] {
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#f4d431]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#f4d431]"],
+[data-cstd-kinetic-world][data-cstd-theme="pixel-quest"] [class~="text-[#f4d431]"] {
   color: var(--cstd-world-accent) !important;
 }
 
-[data-cstd-theme="ink-protocol"] [class~="text-[#24e0ff]"],
-[data-cstd-theme="press-room"] [class~="text-[#24e0ff]"],
-[data-cstd-theme="pixel-quest"] [class~="text-[#24e0ff]"] {
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="text-[#24e0ff]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="text-[#24e0ff]"],
+[data-cstd-kinetic-world][data-cstd-theme="pixel-quest"] [class~="text-[#24e0ff]"] {
   color: var(--cstd-world-signal) !important;
 }
 
-[data-cstd-theme="ink-protocol"] [class~="bg-[#f4d431]"],
-[data-cstd-theme="press-room"] [class~="bg-[#f4d431]"],
-[data-cstd-theme="pixel-quest"] [class~="bg-[#f4d431]"] {
+[data-cstd-kinetic-world][data-cstd-theme="ink-protocol"] [class~="bg-[#f4d431]"],
+[data-cstd-kinetic-world][data-cstd-theme="press-room"] [class~="bg-[#f4d431]"],
+[data-cstd-kinetic-world][data-cstd-theme="pixel-quest"] [class~="bg-[#f4d431]"] {
   background-color: var(--cstd-world-accent) !important;
 }
 
 /* Shared picker lives in a body portal so it cannot be clipped by any themed header. */
 .cstd-theme-menu {
-  border-color: #34342e;
-  background: #f4eddf;
-  color: #171714;
+  --cstd-menu-bg: #f4eddf;
+  --cstd-menu-ink: #171714;
+  --cstd-menu-muted: #646157;
+  --cstd-menu-accent: #a6372e;
+  --cstd-menu-line: rgb(23 23 20 / 24%);
+  --cstd-menu-hover: #fffaf0;
+  border-color: var(--cstd-menu-line);
+  background: var(--cstd-menu-bg);
+  color: var(--cstd-menu-ink);
   font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+[data-cstd-theme-menu-theme="neon-district"] {
+  --cstd-menu-bg: #060a0c;
+  --cstd-menu-ink: #eefcff;
+  --cstd-menu-muted: #a7b8bd;
+  --cstd-menu-accent: #24e0ff;
+  --cstd-menu-line: rgb(36 224 255 / 36%);
+  --cstd-menu-hover: #0b171b;
+  border-top: 3px solid #f4d431;
+  font-family: "Cascadia Mono", ui-monospace, monospace;
+  box-shadow: 8px 8px 0 rgb(0 0 0 / 55%), 0 0 48px rgb(36 224 255 / 12%);
+}
+
+[data-cstd-theme-menu-theme="ink-protocol"] {
+  --cstd-menu-bg: #eee4d1;
+  --cstd-menu-ink: #20241f;
+  --cstd-menu-muted: #5d5b52;
+  --cstd-menu-accent: #992f28;
+  --cstd-menu-line: rgb(32 36 31 / 28%);
+  --cstd-menu-hover: #f8f1e4;
+  border: 2px solid #992f28;
+  background-image: repeating-linear-gradient(88deg, transparent 0 10px, rgb(32 36 31 / 3%) 11px, transparent 12px 24px);
+  font-family: "Songti SC", "STSong", Georgia, serif;
+  box-shadow: 0 18px 50px rgb(48 38 25 / 24%);
+}
+
+[data-cstd-theme-menu-theme="press-room"] {
+  --cstd-menu-bg: #f3e9d6;
+  --cstd-menu-ink: #171714;
+  --cstd-menu-muted: #514e46;
+  --cstd-menu-accent: #a9271f;
+  --cstd-menu-line: rgb(23 23 20 / 48%);
+  --cstd-menu-hover: #fff7e8;
+  border-width: 4px 1px 2px;
+  border-color: #171714;
+  background-image: radial-gradient(circle, rgb(23 23 20 / 9%) 0 0.45px, transparent 0.6px);
+  background-size: 4px 4px;
+  font-family: Georgia, "Times New Roman", serif;
+  box-shadow: 10px 10px 0 rgb(23 23 20 / 20%);
+}
+
+[data-cstd-theme-menu-theme="pixel-quest"] {
+  --cstd-menu-bg: #071128;
+  --cstd-menu-ink: #f8f2d0;
+  --cstd-menu-muted: #b5c5e2;
+  --cstd-menu-accent: #ffd43b;
+  --cstd-menu-line: #3d5e91;
+  --cstd-menu-hover: #102341;
+  border: 3px solid #31d7ff;
+  font-family: "Cascadia Mono", "Courier New", monospace;
+  box-shadow: 7px 7px 0 #000, inset 0 0 0 2px #172b51;
 }
 
 .cstd-theme-menu > div:first-child,
 .cstd-theme-menu-close,
 .cstd-theme-option,
 .cstd-theme-preview {
-  border-color: rgb(23 23 20 / 22%);
+  border-color: var(--cstd-menu-line);
 }
 
 .cstd-theme-menu-kicker,
 .cstd-theme-option-index {
-  color: #a6372e;
+  color: var(--cstd-menu-accent);
   font-family: ui-monospace, monospace;
 }
 
 .cstd-theme-menu-current,
 .cstd-theme-option-description {
-  color: #646157;
+  color: var(--cstd-menu-muted);
 }
 
 .cstd-theme-option {
@@ -196,14 +319,19 @@
 
 .cstd-theme-option:hover,
 .cstd-theme-option:focus-visible {
-  background: #fffaf0;
+  background: var(--cstd-menu-hover);
   transform: translate3d(2px, 0, 0);
-  outline: 2px solid #171714;
+  outline: 2px solid var(--cstd-menu-accent);
   outline-offset: -2px;
 }
 
 .cstd-theme-option-check {
-  color: #a6372e;
+  color: var(--cstd-menu-accent);
+}
+
+.cstd-theme-option[aria-checked="true"] {
+  background: var(--cstd-menu-hover);
+  box-shadow: inset 3px 0 0 var(--cstd-menu-accent);
 }
 
 .cstd-theme-switcher-trigger {
@@ -216,6 +344,89 @@
 
 .cstd-theme-switcher-copy {
   letter-spacing: 0;
+}
+
+.cstd-final-capability[data-cstd-final-tone="product"] { color: var(--cstd-world-accent); }
+.cstd-final-capability[data-cstd-final-tone="agent"] { color: var(--cstd-world-signal); }
+.cstd-final-capability[data-cstd-final-tone="data"] { color: var(--cstd-world-ink); }
+.cstd-final-capability[data-cstd-final-tone="edge"] { color: var(--cstd-world-muted); }
+.cstd-final-capability[data-cstd-final-tone="research"] { color: var(--cstd-world-ink); }
+.cstd-finale-contact { border-color: var(--cstd-world-line); }
+.cstd-finale-context,
+.cstd-finale-meta { color: var(--cstd-world-muted); }
+.cstd-finale-address { color: var(--cstd-world-ink); }
+
+[data-cstd-proof-footer] {
+  --cstd-proof-footer-muted: #596368;
+  --cstd-proof-footer-primary: #6c5600;
+  --cstd-proof-footer-secondary: #005f70;
+  --cstd-proof-footer-hover: #090b0d;
+  border-color: rgb(0 0 0 / 15%);
+  color: var(--cstd-proof-footer-muted);
+}
+
+[data-cstd-proof-footer-link] {
+  transition: color 160ms ease;
+}
+
+[data-cstd-proof-footer-link="primary"] { color: var(--cstd-proof-footer-primary); }
+[data-cstd-proof-footer-link="secondary"] { color: var(--cstd-proof-footer-secondary); }
+[data-cstd-proof-footer-link]:hover { color: var(--cstd-proof-footer-hover); }
+
+[data-cstd-theme="ink-protocol"] [data-cstd-proof-footer] {
+  --cstd-proof-footer-muted: #555c55;
+  --cstd-proof-footer-primary: #8e2c25;
+  --cstd-proof-footer-secondary: #304a46;
+  --cstd-proof-footer-hover: #20241f;
+  border-color: rgb(32 36 31 / 24%);
+}
+
+[data-cstd-theme="ink-protocol"] [data-cstd-finale] {
+  --cstd-world-muted: #4b514a;
+}
+
+[data-cstd-theme="press-room"] [data-cstd-proof-footer] {
+  --cstd-proof-footer-muted: #555249;
+  --cstd-proof-footer-primary: #9b211a;
+  --cstd-proof-footer-secondary: #00626c;
+  --cstd-proof-footer-hover: #141411;
+  border-color: rgb(20 20 17 / 40%);
+}
+
+[data-cstd-theme="press-room"] [data-cstd-theme-scene-rail] > div > span,
+[data-cstd-theme="press-room"] [data-cstd-theme-scene-rail] > div > b {
+  color: #ff806d;
+}
+
+[data-cstd-theme-scene-rail="press-room"] [data-cstd-theme-scene-copy="press-room"] {
+  color: #ff806d !important;
+}
+
+[data-cstd-theme="press-room"] [data-cstd-studio-district-option][data-cstd-system-active="true"] > span:first-child {
+  color: #8d211a !important;
+}
+
+[data-cstd-theme="press-room"] [data-cstd-finale] .cstd-final-capability[data-cstd-final-tone="product"] { color: #ff806d; }
+[data-cstd-theme="press-room"] [data-cstd-finale] .cstd-final-capability[data-cstd-final-tone="agent"] { color: #63dfe9; }
+[data-cstd-theme="press-room"] [data-cstd-finale] .cstd-final-capability[data-cstd-final-tone="data"],
+[data-cstd-theme="press-room"] [data-cstd-finale] .cstd-final-capability[data-cstd-final-tone="research"],
+[data-cstd-theme="press-room"] [data-cstd-finale] .cstd-finale-address { color: #f3ead8; }
+[data-cstd-theme="press-room"] [data-cstd-finale] .cstd-final-capability[data-cstd-final-tone="edge"],
+[data-cstd-theme="press-room"] [data-cstd-finale] .cstd-finale-context,
+[data-cstd-theme="press-room"] [data-cstd-finale] .cstd-finale-meta { color: #bdc6c8; }
+[data-cstd-theme="press-room"] [data-cstd-finale] .cstd-finale-contact > p:first-child { color: #63dfe9 !important; }
+[data-cstd-theme="press-room"] [data-cstd-finale] .cstd-finale-context > span { color: #ff806d !important; }
+
+[data-cstd-theme="pixel-quest"] [data-cstd-system-metric-label] {
+  color: #b6c6e3 !important;
+}
+
+[data-cstd-theme="pixel-quest"] [data-cstd-proof-footer] {
+  --cstd-proof-footer-muted: #b1c0dd;
+  --cstd-proof-footer-primary: #ffd43b;
+  --cstd-proof-footer-secondary: #31d7ff;
+  --cstd-proof-footer-hover: #f8f2d0;
+  border-color: #3d5e91;
 }
 
 .cstd-theme-preview::before,
@@ -873,7 +1084,13 @@
   background-image: radial-gradient(circle, #31d7ff 0 1px, transparent 1px), radial-gradient(circle, #ff4fa3 0 1px, transparent 1px), radial-gradient(circle, #ffd43b 0 1px, transparent 1px);
   background-position: 0 0, 37px 52px, 83px 21px;
   background-size: 97px 89px, 131px 113px, 157px 139px;
-  animation: cstd-pixel-stars 9s steps(9, end) infinite;
+  contain: strict;
+  backface-visibility: hidden;
+}
+
+[data-cstd-enhancements-ready="true"][data-cstd-motion="full"][data-cstd-theme="pixel-quest"] .cstd-pixel-stars {
+  animation: cstd-pixel-stars 9s steps(9, end) 4;
+  will-change: transform;
 }
 
 @keyframes cstd-pixel-stars {
@@ -1108,7 +1325,10 @@
 
 [data-cstd-theme="pixel-quest"] .cstd-finale-title {
   color: #f8f2d0 !important;
-  animation: cstd-pixel-continue 1.1s steps(2, end) infinite;
+}
+
+[data-cstd-theme="pixel-quest"] [data-cstd-finale][data-cstd-revealed="true"] .cstd-finale-title {
+  animation: cstd-pixel-continue 1.1s steps(2, end) 6;
 }
 
 @keyframes cstd-pixel-continue {
@@ -1143,6 +1363,194 @@
 [data-cstd-deep-shell][data-cstd-theme="pixel-quest"]::before {
   opacity: 0.15;
   background-image: repeating-linear-gradient(0deg, transparent 0 3px, #31d7ff 3px 4px);
+}
+
+/* Deep pages keep the same content, but each world owns its hero composition and chrome. */
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] > header a,
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] > header button {
+  border-color: rgb(48 74 70 / 34%);
+  color: #3e504a;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] > header a:hover,
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] > header button:hover {
+  border-color: #992f28;
+  color: #992f28;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] > header a,
+[data-cstd-deep-shell][data-cstd-theme="press-room"] > header button {
+  border-color: rgb(23 23 20 / 38%);
+  color: #37352f;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] > header a:hover,
+[data-cstd-deep-shell][data-cstd-theme="press-room"] > header button:hover {
+  border-color: #a9271f;
+  color: #a9271f;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] > header a > span:first-child {
+  background: #992f28 !important;
+  color: #f5efe2 !important;
+  clip-path: none;
+  font-family: "Songti SC", serif;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] > header a > span:first-child {
+  border: 2px solid #a9271f;
+  background: transparent !important;
+  color: #a9271f !important;
+  clip-path: none;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero],
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero] {
+  color-scheme: light;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero] {
+  border-color: rgb(32 36 31 / 34%);
+  background: #e7ddc9;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-image] {
+  opacity: 0.34;
+  filter: grayscale(0.82) sepia(0.24) brightness(1.16) contrast(0.84);
+  mix-blend-mode: multiply;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-overlay] {
+  background: linear-gradient(90deg, rgb(238 230 214 / 98%) 0%, rgb(238 230 214 / 92%) 48%, rgb(238 230 214 / 48%) 78%, rgb(238 230 214 / 20%) 100%);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-grid] {
+  opacity: 0.2;
+  background-image: repeating-linear-gradient(88deg, transparent 0 11px, rgb(32 36 31 / 16%) 12px, transparent 13px 25px);
+  background-size: auto;
+  mix-blend-mode: multiply;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-content] > div:first-child {
+  max-width: 57rem;
+  border-left: 3px solid #992f28;
+  padding-left: clamp(1.25rem, 3vw, 3rem);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-title] {
+  color: #20241f !important;
+  font-family: "Songti SC", "STSong", Georgia, serif;
+  font-weight: 600;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-eyebrow] { color: #8d2b25 !important; }
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-summary] { color: #414840 !important; }
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-scroll] { color: #565e56 !important; }
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-metrics] { border-color: rgb(32 36 31 / 35%); }
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-metrics] > div { border-color: rgb(32 36 31 / 24%); }
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-metrics] dt { color: #535c54 !important; }
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-page-hero-metrics] dd { color: #304a46 !important; }
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero] {
+  border-width: 0 0 4px;
+  border-color: #171714;
+  background: #eee3ce;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-image] {
+  opacity: 0.42;
+  filter: grayscale(1) contrast(1.12) brightness(1.08);
+  mix-blend-mode: multiply;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-overlay] {
+  background: linear-gradient(90deg, rgb(246 237 220 / 99%) 0%, rgb(246 237 220 / 94%) 52%, rgb(246 237 220 / 55%) 78%, rgb(246 237 220 / 18%) 100%);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-grid] {
+  opacity: 0.18;
+  background-image: radial-gradient(circle, #171714 0 0.55px, transparent 0.65px);
+  background-size: 4px 4px;
+  mix-blend-mode: multiply;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-content] > div:first-child {
+  max-width: 66rem;
+  border-top: 5px solid #171714;
+  border-bottom: 1px solid #171714;
+  padding-block: clamp(1.25rem, 3vw, 2.5rem);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-title] {
+  max-width: 62rem;
+  color: #171714 !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-eyebrow] { color: #9f241c !important; }
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-summary] { color: #3f3d37 !important; }
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-scroll] { color: #4f4c45 !important; }
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-metrics] { border-width: 3px 0 1px; border-color: #171714; }
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-metrics] > div { border-color: rgb(23 23 20 / 45%); }
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-metrics] dt { color: #514e46 !important; }
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-page-hero-metrics] dd { color: #00636d !important; }
+
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero] {
+  margin: 0.75rem;
+  min-height: calc(82svh - 1.5rem);
+  border: 3px solid #31d7ff;
+  background: #071128;
+  box-shadow: 7px 7px 0 #000, inset 0 0 0 2px #172b51;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-image] {
+  image-rendering: pixelated;
+  filter: saturate(1.28) contrast(1.08);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-overlay] {
+  background: linear-gradient(90deg, rgb(5 10 24 / 98%) 0%, rgb(5 10 24 / 86%) 52%, rgb(5 10 24 / 32%) 100%);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-grid] {
+  opacity: 0.24;
+  background-image: repeating-linear-gradient(0deg, transparent 0 3px, rgb(49 215 255 / 24%) 3px 4px);
+  background-size: auto;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-content] > div:first-child {
+  max-width: 58rem;
+  border-left: 5px solid #ffd43b;
+  padding-left: clamp(1rem, 2.5vw, 2.5rem);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-title] {
+  color: #f8f2d0 !important;
+  font-family: "Cascadia Mono", "Courier New", monospace;
+  font-weight: 900;
+  text-shadow: 4px 4px 0 #000;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-eyebrow] { color: #ffd43b !important; }
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-summary] { color: #c6d5ed !important; }
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-scroll] { color: #aebfdd !important; }
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-metrics] { border-width: 2px 0; border-color: #3d5e91; }
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-metrics] > div { border-color: #3d5e91; }
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-metrics] dt { color: #b5c5e2 !important; }
+[data-cstd-deep-shell][data-cstd-theme="pixel-quest"] [data-cstd-page-hero-metrics] dd { color: #31d7ff !important; }
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-code-tone="dark"],
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-code-tone="dark"] {
+  border-color: #4fc6d1 !important;
+  background: #0b1012 !important;
+  color: #eef7f8 !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="ink-protocol"] [data-cstd-code-tone="dark"] [data-rehype-pretty-code-figure] *,
+[data-cstd-deep-shell][data-cstd-theme="press-room"] [data-cstd-code-tone="dark"] [data-rehype-pretty-code-figure] * {
+  color: #eef7f8 !important;
 }
 
 html[data-cstd-theme-transition]::after {

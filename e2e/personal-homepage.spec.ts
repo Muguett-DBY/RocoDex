@@ -336,7 +336,7 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "broadsheet");
   await expect(switcher).toHaveAttribute("data-cstd-theme-active", "press-room");
   await expect(switcher.locator("[data-cstd-theme-label]")).toContainText("工程日报");
-  await expect(page.locator('[data-cstd-theme-world-kind="broadsheet"] img')).toHaveAttribute("src", /press-room-v1/);
+  await expect(page.locator('[data-cstd-theme-world-image="press-room"]')).toBeVisible();
   if (isMobile) {
     await expect(page.locator('[data-cstd-hero-artifact="press"]')).toBeHidden();
   } else {
@@ -358,7 +358,7 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await page.locator('[data-cstd-theme-option="ink-protocol"]').click();
   await expect(root).toHaveAttribute("data-cstd-theme", "ink-protocol");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "ink-scroll");
-  await expect(page.locator('[data-cstd-theme-world-kind="ink-scroll"] img')).toHaveAttribute("src", /ink-scroll-v1/);
+  await expect(page.locator('[data-cstd-theme-world-image="ink-protocol"]')).toBeVisible();
   if (isMobile) {
     await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeHidden();
   } else {
@@ -375,7 +375,7 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "pixel-game");
   await expect(root).toHaveAttribute("data-cstd-render-policy", "balanced");
   await expect(page.locator("[data-cstd-webgl]")).toHaveCount(0);
-  await expect(page.locator('[data-cstd-theme-world-kind="pixel-game"] img')).toHaveAttribute("src", /pixel-quest-v1/);
+  await expect(page.locator('[data-cstd-theme-world-image="pixel-quest"]')).toBeVisible();
   if (isMobile) {
     await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeHidden();
   } else {
@@ -386,6 +386,13 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("主线任务：");
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(root).toHaveAttribute("data-cstd-theme", "pixel-quest");
+  const infinitePixelAnimations = await page.evaluate(() => document.getAnimations().filter((animation) => {
+    const target = animation.effect instanceof KeyframeEffect ? animation.effect.target : null;
+    return target instanceof Element
+      && Boolean(target.closest(".cstd-pixel-stars, .cstd-pixel-runner, .cstd-pixel-quest-ready, [data-cstd-finale]"))
+      && animation.effect?.getTiming().iterations === Infinity;
+  }).length);
+  expect(infinitePixelAnimations).toBe(0);
   await expectNoHorizontalOverflow(page);
   await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
   await expect(page.locator("[data-cstd-finale]")).toBeVisible();
@@ -416,6 +423,8 @@ test("CSTD keeps the theme control reachable on compact mobile screens", async (
     await expect(menu).toBeVisible();
     const menuBox = await menu.boundingBox();
     expect(menuBox).not.toBeNull();
+    expect(menuBox!.x).toBeGreaterThanOrEqual(0);
+    expect(menuBox!.x + menuBox!.width).toBeLessThanOrEqual(320);
     expect(menuBox!.y).toBeGreaterThanOrEqual(0);
     expect(menuBox!.y + menuBox!.height).toBeLessThanOrEqual(640);
     await page.locator(`[data-cstd-theme-option="${theme}"]`).click();
@@ -425,6 +434,35 @@ test("CSTD keeps the theme control reachable on compact mobile screens", async (
   await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight / 2, behavior: "instant" }));
   await expect(page.locator("[data-cstd-theme-switcher]")).toBeInViewport();
   await expectNoHorizontalOverflow(page);
+});
+
+test("CSTD theme picker supports roving keyboard focus and restores the trigger", async ({ page }) => {
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  const trigger = page.locator("[data-cstd-theme-switcher]");
+  await trigger.focus();
+  await page.keyboard.press("Enter");
+
+  const dialog = page.getByRole("dialog", { name: /选择视觉世界|Choose a visual world/ });
+  await expect(dialog).toBeVisible();
+  await expect(page.getByRole("radio", { checked: true })).toBeFocused();
+  await page.keyboard.press("ArrowDown");
+  await expect(page.locator('[data-cstd-theme-option="ink-protocol"]')).toBeFocused();
+  await page.keyboard.press("End");
+  await expect(page.locator('[data-cstd-theme-option="pixel-quest"]')).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
+test("CSTD applies a persisted visual world before the React runtime loads", async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "press-room"));
+  await page.route("**/_next/static/chunks/**", (route) => route.request().resourceType() === "script" ? route.abort() : route.continue());
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+
+  await expect(page.locator("html")).toHaveAttribute("data-cstd-theme", "press-room");
+  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-theme", "press-room");
+  await expect(page.locator('[data-cstd-theme-world-image="press-room"]')).toBeVisible();
+  await expect(page.locator('[data-cstd-theme-world-decoration="neon-district"]')).toBeHidden();
 });
 
 test("CSTD header anchors land immediately without a stalled view transition", async ({ page, isMobile }) => {
@@ -535,20 +573,27 @@ test("CSTD explicit calm mode reduces render cost and survives context loss", as
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD primary and deep surfaces pass automated WCAG A/AA checks", async ({ page }) => {
+test("CSTD primary and deep surfaces pass automated WCAG A/AA checks in every visual world", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 
-  for (const path of ["/cstd", "/cstd/work/rocodex-platform"]) {
-    await page.goto(path, { waitUntil: "domcontentloaded" });
-    if (path === "/cstd") {
-      await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
-      for (const heading of ["#proof-heading", "#executable-evidence-heading"]) {
-        await expect(page.locator(heading)).toHaveCSS("opacity", "1");
+  for (const theme of ["neon-district", "ink-protocol", "press-room", "pixel-quest"] as const) {
+    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.evaluate((nextTheme) => window.localStorage.setItem("cstd-world-theme", nextTheme), theme);
+
+    for (const path of ["/cstd", "/cstd/work/rocodex-platform"]) {
+      await page.goto(path, { waitUntil: "domcontentloaded" });
+      const themedRoot = path === "/cstd" ? page.locator("[data-cstd-kinetic-world]") : page.locator("[data-cstd-deep-shell]");
+      await expect(themedRoot).toHaveAttribute("data-cstd-theme", theme);
+      if (path === "/cstd") {
+        await expect(themedRoot).toHaveAttribute("data-cstd-enhancements-ready", "true");
+        for (const heading of ["#proof-heading", "#executable-evidence-heading"]) {
+          await expect(page.locator(heading)).toHaveCSS("opacity", "1");
+        }
       }
+      const results = await new AxeBuilder({ page })
+        .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+        .analyze();
+      expect(results.violations.map((violation) => ({ id: violation.id, targets: violation.nodes.map((node) => node.target) }))).toEqual([]);
     }
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
-      .analyze();
-    expect(results.violations.map((violation) => ({ id: violation.id, targets: violation.nodes.map((node) => node.target) }))).toEqual([]);
   }
 });

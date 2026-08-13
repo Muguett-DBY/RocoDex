@@ -1016,7 +1016,7 @@
 }
 
 [data-cstd-motion="full"] .cstd-pixel-runner {
-  animation: cstd-pixel-runner-bob 600ms steps(2, end) infinite;
+  animation: cstd-pixel-runner-bob 600ms steps(2, end) 8;
 }
 
 [data-cstd-theme-scene-rail="pixel-quest"] {
@@ -1201,7 +1201,7 @@
 }
 
 [data-cstd-motion="full"] .cstd-pixel-quest-ready {
-  animation: cstd-pixel-ready 1s steps(2, end) infinite;
+  animation: cstd-pixel-ready 1s steps(2, end) 6;
 }
 
 [data-cstd-theme="pixel-quest"] [data-cstd-chapter="systems"] { background: rgb(8 17 38 / 97%) !important; }

@@ -1,4 +1,5 @@
 import { VercelObservability } from "@/sites/shared/vercel-observability";
+import { CstdThemeBootstrapScript } from "@/sites/personal-homepage/experience/theme-bootstrap";
 import type { Metadata } from "next";
 import "../globals.css";
 import "../cstd-themes.css";
@@ -11,6 +12,9 @@ export const metadata: Metadata = {
 export default function PersonalEnglishRootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-AU" dir="ltr" className="h-full antialiased" suppressHydrationWarning>
+      <head>
+        <CstdThemeBootstrapScript />
+      </head>
       <body className="min-h-full">
         {children}
         <VercelObservability enabled={process.env.VERCEL === "1"} />
