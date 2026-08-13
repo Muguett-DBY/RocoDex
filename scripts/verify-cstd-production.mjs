@@ -17,15 +17,26 @@ async function get(path) {
   return response;
 }
 
-for (const path of ["/", "/topics", "/lab/proof-museum"]) {
+const htmlSurfaces = [
+  { path: "/", language: "zh-CN", marker: "奶黄包" },
+  { path: "/topics", language: "zh-CN", marker: "CSTD" },
+  { path: "/lab/proof-museum", language: "zh-CN", marker: "CSTD" },
+  { path: "/en", language: "en-AU", marker: "Custard" },
+  { path: "/en/notes/host-boundaries-in-one-next-deployment", language: "en-AU", marker: "Next.js" },
+  { path: "/en/for/research", language: "en-AU", marker: "Research" },
+];
+const htmlResponses = new Map();
+for (const { path, language, marker } of htmlSurfaces) {
   const response = await get(path);
   const body = await response.text();
   if (!response.headers.get("content-type")?.includes("text/html")) throw new Error(`${path} is not HTML`);
-  if (!body.includes("CSTD")) throw new Error(`${path} is missing the CSTD system identity`);
-  if (path === "/" && !body.includes("奶黄包")) throw new Error("Homepage is missing the Custard identity");
+  if (response.headers.get("content-language") !== language) throw new Error(`${path} has the wrong Content-Language`);
+  if (!new RegExp(`<html[^>]*\\blang=["']${language}["']`, "i").test(body)) throw new Error(`${path} has the wrong server-rendered html lang`);
+  if (!body.includes(marker)) throw new Error(`${path} is missing the expected localized identity`);
+  htmlResponses.set(path, response);
 }
 
-const homepage = await get("/");
+const homepage = htmlResponses.get("/");
 const requiredHeaders = {
   "content-security-policy": "frame-ancestors 'none'",
   "strict-transport-security": "max-age=63072000",
@@ -66,9 +77,26 @@ const security = await get("/.well-known/security.txt");
 if (!(await security.text()).includes("Contact: mailto:cstd@custard.top")) throw new Error("security.txt is missing the contact method");
 const manifest = await get("/manifest.webmanifest");
 if (!manifest.headers.get("content-type")?.includes("application/manifest+json")) throw new Error("Web manifest content type is invalid");
-if ((await manifest.json()).short_name !== "Custard") throw new Error("Web manifest identity is invalid");
+if (manifest.headers.get("content-language") !== "zh-CN") throw new Error("Chinese web manifest language header is invalid");
+const manifestPayload = await manifest.json();
+if (manifestPayload.short_name !== "奶黄包" || manifestPayload.lang !== "zh-CN" || manifestPayload.start_url !== "/") throw new Error("Chinese web manifest identity is invalid");
+
+const englishManifest = await get("/en/manifest.webmanifest");
+if (!englishManifest.headers.get("content-type")?.includes("application/manifest+json")) throw new Error("English web manifest content type is invalid");
+if (englishManifest.headers.get("content-language") !== "en-AU") throw new Error("English web manifest language header is invalid");
+const englishManifestPayload = await englishManifest.json();
+if (englishManifestPayload.short_name !== "Custard" || englishManifestPayload.lang !== "en-AU" || englishManifestPayload.start_url !== "/en") throw new Error("English web manifest identity is invalid");
+
+const englishFeed = await get("/en/feed.json");
+if (englishFeed.headers.get("content-language") !== "en-AU") throw new Error("English JSON Feed language header is invalid");
+const englishFeedPayload = await englishFeed.json();
+if (englishFeedPayload.language !== "en-AU" || englishFeedPayload.feed_url !== `${origin}/en/feed.json`) throw new Error("English JSON Feed identity is invalid");
+
+const sitemap = await get("/sitemap.xml");
+const sitemapBody = await sitemap.text();
+if (!sitemapBody.includes('hreflang="zh-CN"') || !sitemapBody.includes('hreflang="en-AU"') || !sitemapBody.includes('hreflang="x-default"')) throw new Error("Sitemap locale alternates are incomplete");
 
 const worker = await get("/cstd-case-worker.js");
 if (!(await worker.text()).includes('"crm-lock"')) throw new Error("Production Worker is missing the CRM lock capsule");
 
-console.log(`CSTD production smoke OK: ${origin}, ${jsonEndpoints.length} public contracts, 6 experience acts, 5 topics, 4 proof capsules, content health 100.`);
+console.log(`CSTD production smoke OK: ${origin}, ${htmlSurfaces.length} bilingual HTML surfaces, ${jsonEndpoints.length} public contracts, localized manifests/feed/sitemap, 6 experience acts, 5 topics, 4 proof capsules, content health 100.`);
