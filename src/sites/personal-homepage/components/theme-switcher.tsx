@@ -63,7 +63,7 @@ export function ThemeSwitcher({ locale = "zh" }: { locale?: CstdLocale }) {
       role="menu"
       aria-label={copy.menu}
       style={{ top: position.top, right: position.right }}
-      className="cstd-theme-menu fixed z-[190] w-[min(26rem,calc(100vw-1.5rem))] border p-2 shadow-[0_24px_80px_rgba(0,0,0,0.32)]"
+      className="cstd-theme-menu fixed z-[190] max-h-[calc(100dvh-1.5rem)] w-[min(26rem,calc(100vw-1.5rem))] overflow-y-auto overscroll-contain border p-2 shadow-[0_24px_80px_rgba(0,0,0,0.32)]"
     >
       <div className="flex items-center justify-between border-b px-2 pb-2 pt-1">
         <div>

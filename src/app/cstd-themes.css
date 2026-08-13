@@ -1263,6 +1263,7 @@ html[data-cstd-theme-transition="pixel-quest"]::after {
 
   [data-cstd-theme="press-room"] [data-cstd-home-header] > div {
     height: 4rem;
+    overflow: hidden;
   }
 
   [data-cstd-theme="press-room"] [data-cstd-hero-description] {

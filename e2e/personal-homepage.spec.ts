@@ -393,6 +393,40 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   expect(bottomGap).toBeLessThanOrEqual(8);
 });
 
+test("CSTD keeps the theme control reachable on compact mobile screens", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "This contract targets compact mobile header geometry.");
+  await page.setViewportSize({ width: 320, height: 640 });
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+
+  for (const theme of ["press-room", "ink-protocol", "pixel-quest", "neon-district"] as const) {
+    const switcher = page.locator("[data-cstd-theme-switcher]");
+    await expect(switcher).toBeVisible();
+    const box = await switcher.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.x).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(320);
+    expect(await switcher.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      return Boolean(hit && (hit === element || element.contains(hit)));
+    })).toBe(true);
+
+    await switcher.click();
+    const menu = page.locator("[data-cstd-theme-menu]");
+    await expect(menu).toBeVisible();
+    const menuBox = await menu.boundingBox();
+    expect(menuBox).not.toBeNull();
+    expect(menuBox!.y).toBeGreaterThanOrEqual(0);
+    expect(menuBox!.y + menuBox!.height).toBeLessThanOrEqual(640);
+    await page.locator(`[data-cstd-theme-option="${theme}"]`).click();
+    await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-theme", theme);
+  }
+
+  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight / 2, behavior: "instant" }));
+  await expect(page.locator("[data-cstd-theme-switcher]")).toBeInViewport();
+  await expectNoHorizontalOverflow(page);
+});
+
 test("CSTD header anchors land immediately without a stalled view transition", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "The compact mobile header exposes the primary work shortcut instead of the desktop rail.");
   const transitionErrors: string[] = [];

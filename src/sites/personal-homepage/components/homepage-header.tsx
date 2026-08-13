@@ -47,18 +47,18 @@ export function HomepageHeader({
       <div className="pointer-events-auto relative mx-auto flex h-14 w-full max-w-[1320px] items-center overflow-hidden rounded-[7px] border border-white/10 bg-[#050709]/95 px-2.5 shadow-[0_16px_48px_rgba(0,0,0,0.3)] md:px-3">
         <CstdChapterLink
           href="#top"
-          className="flex items-center gap-2.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]"
+          className="flex min-w-0 flex-1 items-center gap-2.5 overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]"
         >
-          <span data-cstd-header-mark className="flex h-9 w-9 items-center justify-center bg-[#f4d431] text-sm font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">
+          <span data-cstd-header-mark className="flex h-9 w-9 shrink-0 items-center justify-center bg-[#f4d431] text-sm font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">
             {mark}
           </span>
-          <span className="min-w-0">
-            <span data-cstd-header-brand className="block whitespace-nowrap text-sm font-black">{themeMeta.brand}</span>
+          <span className="min-w-0 overflow-hidden">
+            <span data-cstd-header-brand className="block truncate text-sm font-black">{themeMeta.brand}</span>
             <span data-cstd-header-edition className="hidden whitespace-nowrap text-[8px] font-bold uppercase lg:block">{themeMeta.edition}</span>
           </span>
         </CstdChapterLink>
 
-        <div className="ml-auto flex items-center gap-2 md:gap-4">
+        <div className="ml-auto flex shrink-0 items-center gap-1.5 min-[360px]:gap-2 md:gap-4">
           <nav aria-label={locale === "zh" ? "首页导航" : "Homepage navigation"} className="hidden items-center gap-0.5 text-[12px] font-semibold text-[#9ca5a8] md:flex">
             {homepageLinks.map((link) => {
               const active = activeSceneId === link.sceneId;
@@ -85,11 +85,11 @@ export function HomepageHeader({
               {locale === "zh" ? "关于" : "About"}
             </CstdLink>
           </nav>
-          <CstdChapterLink href="#proof" className="mr-1 font-mono text-xs font-semibold text-[#f4d431] md:hidden">
+          <CstdChapterLink href="#proof" className="mr-1 hidden font-mono text-xs font-semibold text-[#f4d431] min-[360px]:inline-flex md:hidden">
             {locale === "zh" ? "作品" : "Work"}
           </CstdChapterLink>
-          <CstdLanguageSwitcher locale={locale} compact />
           <ThemeSwitcher locale={locale} />
+          <CstdLanguageSwitcher locale={locale} compact />
           <HomepageControls
             locale={locale}
             overdrive={overdrive}
