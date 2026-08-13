@@ -403,38 +403,39 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
 });
 
 test("CSTD loads each world's type, material, and deep-page composition as one coherent system", async ({ page, isMobile }) => {
+  test.setTimeout(120_000);
   const worlds = [
     {
       id: "neon-district",
-      font: "CSTD Neon Display",
+      font: { zh: "CSTD Neon Display", en: "CSTD Neon Latin" },
       material: "neon-alloy-v1.webp",
       artifact: "neon",
       copy: { zh: "信号已锁定", en: "SIGNAL LOCKED" },
-      preloads: ["neon-display-v1.woff2"],
+      preloads: { zh: ["neon-display-v1.woff2"], en: ["neon-latin-v1.woff2"] },
     },
     {
       id: "ink-protocol",
-      font: "CSTD Ink Display",
+      font: { zh: "CSTD Ink Display", en: "CSTD Ink Latin" },
       material: "ink-xuan-v1.webp",
       artifact: "ink",
       copy: { zh: "以代码为墨", en: "CODE AS INK" },
-      preloads: ["ink-display-v1.woff2", "ink-text-v1.woff2"],
+      preloads: { zh: ["ink-display-v1.woff2", "ink-text-v1.woff2"], en: ["ink-latin-v1.woff2", "ink-latin-italic-v1.woff2"] },
     },
     {
       id: "press-room",
-      font: "CSTD Press Latin",
+      font: { zh: "CSTD Press Latin", en: "CSTD Press Latin" },
       material: "press-newsprint-v1.webp",
       artifact: "press",
       copy: { zh: "CSTD 日报 / 独立工程", en: "CSTD DAILY / INDEPENDENT ENGINEERING" },
-      preloads: ["press-latin-v1.woff2", "press-serif-v1.woff2"],
+      preloads: { zh: ["press-latin-v1.woff2", "press-serif-v1.woff2"], en: ["press-latin-v1.woff2"] },
     },
     {
       id: "pixel-quest",
-      font: "CSTD Pixel Text",
+      font: { zh: "CSTD Pixel Text", en: "CSTD Pixel Text" },
       material: "pixel-circuit-v1.webp",
       artifact: "pixel",
       copy: { zh: "任务数据", en: "QUEST DATA" },
-      preloads: ["pixel-text-12-v1.woff2", "pixel-label-10-v1.woff2"],
+      preloads: { zh: ["pixel-text-12-v1.woff2", "pixel-label-10-v1.woff2"], en: ["pixel-text-12-v1.woff2", "pixel-label-10-v1.woff2"] },
     },
   ] as const;
 
@@ -450,7 +451,7 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
 
     await expect(shell).toHaveAttribute("data-cstd-theme", world.id);
     await page.evaluate(() => document.fonts.ready);
-    await expect(heroTitle).toHaveCSS("font-family", new RegExp(world.font));
+    await expect(heroTitle).toHaveCSS("font-family", new RegExp(world.font.zh));
     expect(await material.evaluate((element) => getComputedStyle(element).backgroundImage)).toContain(world.material);
     await expect(artifact).toContainText(world.copy.zh);
     await expect(page.locator("[data-cstd-page-hero-scroll]")).toContainText("向下滚动 / 继续查看");
@@ -461,11 +462,35 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
     }
 
     const preloadedFonts = await page.locator('link[data-cstd-theme-font]').evaluateAll((links) => links.map((link) => (link as HTMLLinkElement).href.split("/").at(-1)));
-    expect(preloadedFonts).toEqual(world.preloads);
+    expect(preloadedFonts).toEqual(world.preloads.zh);
+    await expectNoHorizontalOverflow(page);
+
+    await page.goto("/cstd/en", { waitUntil: "domcontentloaded" });
+    const englishRoot = page.locator("[data-cstd-kinetic-world]");
+    await expect(englishRoot).toHaveAttribute("data-cstd-locale", "en");
+    await expect(englishRoot).toHaveAttribute("data-cstd-theme", world.id);
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator(".cstd-hero-wordmark")).toHaveCSS("font-family", new RegExp(world.font.en));
+    const englishPreloads = await page.locator('link[data-cstd-theme-font]').evaluateAll((links) => links.map((link) => (link as HTMLLinkElement).href.split("/").at(-1)));
+    expect(englishPreloads).toEqual(world.preloads.en);
+    if (world.id === "neon-district") {
+      await expect(page.locator("[data-cstd-hero-thesis]")).toHaveCSS("font-family", /CSTD Neon Latin/);
+    }
+    if (world.id === "ink-protocol") {
+      await expect(page.locator("[data-cstd-hero-thesis]")).toHaveCSS("font-family", /CSTD Ink Latin/);
+      const labels = await page.locator('[data-cstd-theme-scene-rail="ink-protocol"] [data-cstd-theme-scene-copy="ink-protocol"]').evaluateAll((nodes) => nodes.map((node) => node.textContent));
+      expect(labels).toEqual(["OPEN", "FORM", "PROOF", "TEST", "TRACE", "NEXT"]);
+    }
+    if (world.id === "press-room") {
+      await expect(page.locator("[data-cstd-hero-description]")).toHaveCSS("column-count", "auto");
+      await expect(page.locator("[data-cstd-hero-description]")).toHaveCSS("font-family", /CSTD Press Latin/);
+    }
     await expectNoHorizontalOverflow(page);
 
     await page.goto("/cstd/en/work/rocodex-platform", { waitUntil: "domcontentloaded" });
-    await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-locale", "en");
+    const englishShell = page.locator("[data-cstd-deep-shell]");
+    await expect(englishShell).toHaveAttribute("data-cstd-locale", "en");
+    await expect(page.locator("[data-cstd-page-hero-title]")).toHaveCSS("font-family", new RegExp(world.font.en));
     await expect(page.locator(`[data-cstd-deep-artifact="${world.artifact}"]`)).toContainText(world.copy.en);
     await expect(page.locator("[data-cstd-page-hero-scroll]")).toContainText("SCROLL / CONTINUE TRACE");
     await expectNoHorizontalOverflow(page);

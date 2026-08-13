@@ -14,7 +14,7 @@ export default function PersonalChineseRootLayout({ children }: Readonly<{ child
   return (
     <html lang="zh-CN" dir="ltr" className="h-full antialiased" suppressHydrationWarning>
       <head>
-        <CstdThemeBootstrapScript />
+        <CstdThemeBootstrapScript locale="zh" />
       </head>
       <body className="min-h-full">
         {children}

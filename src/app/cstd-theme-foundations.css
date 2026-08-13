@@ -9,6 +9,14 @@
 }
 
 @font-face {
+  font-family: "CSTD Neon Latin";
+  src: url("/fonts/cstd/neon-latin-v1.woff2") format("woff2-variations");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 200 800;
+}
+
+@font-face {
   font-family: "CSTD Ink Text";
   src: url("/fonts/cstd/ink-text-v1.woff2") format("woff2");
   font-display: swap;
@@ -22,6 +30,22 @@
   font-display: swap;
   font-style: normal;
   font-weight: 500;
+}
+
+@font-face {
+  font-family: "CSTD Ink Latin";
+  src: url("/fonts/cstd/ink-latin-v1.woff2") format("woff2-variations");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 300 700;
+}
+
+@font-face {
+  font-family: "CSTD Ink Latin Italic";
+  src: url("/fonts/cstd/ink-latin-italic-v1.woff2") format("woff2-variations");
+  font-display: swap;
+  font-style: italic;
+  font-weight: 300 700;
 }
 
 @font-face {
@@ -104,6 +128,17 @@
   --cstd-theme-ease: steps(5, end);
 }
 
+[data-cstd-theme="neon-district"][data-cstd-locale="en"] {
+  --cstd-font-display: "CSTD Neon Latin", "Arial Narrow", sans-serif;
+  --cstd-font-label: "CSTD Neon Latin", "Arial Narrow", sans-serif;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] {
+  --cstd-font-display: "CSTD Ink Latin", Georgia, serif;
+  --cstd-font-body: "CSTD Ink Latin", Georgia, serif;
+  --cstd-font-label: "CSTD Ink Latin", Georgia, serif;
+}
+
 [data-cstd-theme] {
   font-family: var(--cstd-font-body);
 }
@@ -176,6 +211,147 @@
 ) {
   font-weight: 400 !important;
   line-height: 1.08;
+}
+
+[data-cstd-theme="neon-district"][data-cstd-locale="en"] :where(
+  .cstd-hero-wordmark,
+  [data-cstd-chapter] h2,
+  [data-cstd-finale] h2,
+  [data-cstd-page-hero-title]
+) {
+  font-style: normal;
+  font-weight: 650 !important;
+}
+
+[data-cstd-theme="neon-district"][data-cstd-locale="en"] .cstd-hero-wordmark {
+  font-size: clamp(4.5rem, 8.8vw, 8.6rem);
+  line-height: 0.84;
+  text-transform: uppercase;
+}
+
+[data-cstd-theme="neon-district"][data-cstd-locale="en"] :where(
+  [data-cstd-hero-thesis],
+  [data-cstd-header-brand],
+  [data-cstd-deep-brand],
+  [data-cstd-home-header] nav,
+  [data-cstd-hero-actions] a
+) {
+  font-family: var(--cstd-font-display) !important;
+}
+
+[data-cstd-theme="neon-district"][data-cstd-locale="en"] [data-cstd-hero-thesis] {
+  max-width: 44rem;
+  font-weight: 520;
+  text-wrap: balance;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] .cstd-hero-wordmark {
+  font-family: "CSTD Ink Latin Italic", Georgia, serif !important;
+  font-size: clamp(4.75rem, 8.5vw, 8.4rem);
+  font-style: italic;
+  font-weight: 520 !important;
+  line-height: 0.84;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] :where(
+  [data-cstd-hero-thesis],
+  [data-cstd-hero-description],
+  [data-cstd-header-brand],
+  [data-cstd-deep-brand],
+  [data-cstd-home-header] nav,
+  [data-cstd-hero-actions] a
+) {
+  font-family: var(--cstd-font-body) !important;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] [data-cstd-hero-thesis] [data-cstd-theme-copy="ink"] > span {
+  font-family: "CSTD Ink Latin Italic", Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] [data-cstd-hero-description] {
+  max-width: 36rem;
+  font-size: 1.16rem;
+  line-height: 1.62;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] .cstd-ink-running-copy {
+  left: clamp(1.5rem, 8vw, 8rem);
+  bottom: 1.5rem;
+  font-family: var(--cstd-font-label);
+  font-size: 0.72rem;
+  writing-mode: horizontal-tb;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] .cstd-theme-world-scene-label {
+  padding: 0.4rem 0.65rem;
+  font-family: var(--cstd-font-label);
+  writing-mode: horizontal-tb;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] [data-cstd-theme-scene-rail="ink-protocol"] > div {
+  width: 4.5rem;
+  min-height: 1.85rem;
+  justify-content: flex-start;
+  padding-left: 0.55rem;
+  font-family: var(--cstd-font-label);
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] [data-cstd-theme-scene-rail="ink-protocol"] b {
+  font-size: 0.66rem;
+  writing-mode: horizontal-tb;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] [data-cstd-theme-scene-rail="ink-protocol"] [data-cstd-theme-scene-active="true"] {
+  min-height: 2.7rem;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] .cstd-ink-colophon {
+  top: 14%;
+  width: min(16rem, 20vw);
+  height: auto;
+  align-items: flex-start;
+  gap: 0.6rem;
+  padding: 1.25rem 1.1rem;
+  border-block: 1px solid rgb(166 55 46 / 28%);
+  border-inline: 0;
+  font-family: var(--cstd-font-body);
+  writing-mode: horizontal-tb;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] .cstd-ink-colophon p {
+  font-family: "CSTD Ink Latin Italic", Georgia, serif;
+  font-size: 1.05rem;
+  font-style: italic;
+  line-height: 1.08;
+  letter-spacing: 0;
+}
+
+[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] .cstd-ink-colophon span {
+  width: 2.8rem;
+  height: 2.8rem;
+  margin-top: 0.7rem;
+}
+
+[data-cstd-theme="press-room"][data-cstd-locale="en"] :where(
+  [data-cstd-hero-thesis],
+  [data-cstd-hero-description],
+  [data-cstd-header-brand],
+  [data-cstd-deep-brand],
+  [data-cstd-home-header] nav,
+  .cstd-press-front-index,
+  [data-cstd-theme-scene-rail="press-room"] > div
+) {
+  font-family: var(--cstd-font-body) !important;
+}
+
+[data-cstd-theme="press-room"][data-cstd-locale="en"] [data-cstd-hero-description] {
+  max-width: 39rem;
+  columns: auto;
+  font-size: 1.08rem;
+  line-height: 1.58;
+  text-wrap: pretty;
 }
 
 [data-cstd-kinetic-world][data-cstd-theme="pixel-quest"] [data-cstd-hero-actions] a:first-child {

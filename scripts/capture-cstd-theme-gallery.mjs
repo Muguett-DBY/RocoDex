@@ -19,9 +19,11 @@ const themes = [
 
 const captures = [
   { id: "desktop-home", path: "/cstd", viewport: { width: 1440, height: 900 } },
+  { id: "desktop-home-en", path: "/cstd/en", viewport: { width: 1440, height: 900 } },
   { id: "desktop-deep", path: "/cstd/work/rocodex-platform", viewport: { width: 1440, height: 900 } },
   { id: "desktop-deep-en", path: "/cstd/en/work/rocodex-platform", viewport: { width: 1440, height: 900 } },
   { id: "mobile-deep", path: "/cstd/work/rocodex-platform", viewport: { width: 390, height: 844 } },
+  { id: "mobile-home-en", path: "/cstd/en", viewport: { width: 390, height: 844 } },
 ];
 
 await rm(outputRoot, { recursive: true, force: true });
@@ -46,7 +48,8 @@ try {
       const response = await page.goto(`${baseURL}${capture.path}`, { waitUntil: "networkidle", timeout: 30_000 });
       if (!response?.ok()) throw new Error(`${capture.path} returned ${response?.status() ?? "no response"}`);
 
-      const rootSelector = capture.path === "/cstd" ? "[data-cstd-kinetic-world]" : "[data-cstd-deep-shell]";
+      const isHomepage = capture.path === "/cstd" || capture.path === "/cstd/en";
+      const rootSelector = isHomepage ? "[data-cstd-kinetic-world]" : "[data-cstd-deep-shell]";
       await page.locator(rootSelector).waitFor({ state: "visible" });
       await page.evaluate(async () => { await document.fonts.ready; });
 

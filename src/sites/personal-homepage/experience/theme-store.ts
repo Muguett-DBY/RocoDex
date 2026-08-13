@@ -1,6 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
+import type { LocalizedText } from "../content/content-types";
 
 export type CstdThemeId = "neon-district" | "ink-protocol" | "press-room" | "pixel-quest";
 export type CstdThemeKind = "cyberpunk" | "ink-scroll" | "broadsheet" | "pixel-game";
@@ -14,8 +15,8 @@ export type CstdThemeMeta = Readonly<{
   zhDescription: string;
   swatch: string;
   signal: string;
-  brand: string;
-  edition: string;
+  brand: LocalizedText;
+  edition: LocalizedText;
 }>;
 
 export const cstdThemeStorageKey = "cstd-world-theme";
@@ -31,8 +32,8 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
     zhDescription: "赛博夜城、工程舱与实时信号构成的电影化世界。",
     swatch: "#f4d431",
     signal: "#24e0ff",
-    brand: "奶黄包",
-    edition: "CSTD / PERSONAL STUDIO",
+    brand: { zh: "奶黄包", en: "CUSTARD" },
+    edition: { zh: "CSTD / 个人工作室", en: "CSTD / PERSONAL STUDIO" },
   },
   {
     id: "ink-protocol",
@@ -43,8 +44,8 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
     zhDescription: "宣纸、山水、印章与工程图谱共同展开的数字长卷。",
     swatch: "#a7382f",
     signal: "#273d39",
-    brand: "奶黄包",
-    edition: "水墨协议 / 造物求真",
+    brand: { zh: "奶黄包", en: "CUSTARD" },
+    edition: { zh: "水墨协议 / 造物求真", en: "INK / CRAFT + TRUTH" },
   },
   {
     id: "press-room",
@@ -55,8 +56,8 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
     zhDescription: "版头、分栏、铅字和半调图像组成的独立技术报纸。",
     swatch: "#c43124",
     signal: "#087c89",
-    brand: "THE CUSTARD CHRONICLE",
-    edition: "SYSTEMS / RESEARCH / SYDNEY EDITION",
+    brand: { zh: "THE CUSTARD CHRONICLE", en: "THE CUSTARD CHRONICLE" },
+    edition: { zh: "系统 / 研究 / 悉尼版", en: "SYSTEMS / RESEARCH / SYDNEY EDITION" },
   },
   {
     id: "pixel-quest",
@@ -67,8 +68,8 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
     zhDescription: "把能力、作品和证据编排成一条 16-bit 工程关卡。",
     swatch: "#ffd43b",
     signal: "#31d7ff",
-    brand: "CSTD QUEST",
-    edition: "PLAYER 01 / LEVEL 17",
+    brand: { zh: "CSTD QUEST", en: "CSTD QUEST" },
+    edition: { zh: "玩家 01 / 等级 17", en: "PLAYER 01 / LEVEL 17" },
   },
 ] as const;
 

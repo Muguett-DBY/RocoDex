@@ -1,5 +1,6 @@
 import type { CstdSceneId } from "../experience/scene-manifest";
 import type { CstdThemeId } from "../experience/theme-store";
+import type { CstdLocale } from "../content/content-types";
 
 export type CstdVisualAsset = {
   id: string;
@@ -84,11 +85,23 @@ export const cstdThemeMaterialAssets = {
 } as const satisfies Record<CstdThemeId, string>;
 
 export const cstdThemeFontAssets = {
-  "neon-district": ["/fonts/cstd/neon-display-v1.woff2"],
-  "ink-protocol": ["/fonts/cstd/ink-display-v1.woff2", "/fonts/cstd/ink-text-v1.woff2"],
-  "press-room": ["/fonts/cstd/press-latin-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"],
-  "pixel-quest": ["/fonts/cstd/pixel-text-12-v1.woff2", "/fonts/cstd/pixel-label-10-v1.woff2"],
-} as const satisfies Record<CstdThemeId, readonly string[]>;
+  "neon-district": {
+    zh: ["/fonts/cstd/neon-display-v1.woff2"],
+    en: ["/fonts/cstd/neon-latin-v1.woff2"],
+  },
+  "ink-protocol": {
+    zh: ["/fonts/cstd/ink-display-v1.woff2", "/fonts/cstd/ink-text-v1.woff2"],
+    en: ["/fonts/cstd/ink-latin-v1.woff2", "/fonts/cstd/ink-latin-italic-v1.woff2"],
+  },
+  "press-room": {
+    zh: ["/fonts/cstd/press-latin-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"],
+    en: ["/fonts/cstd/press-latin-v1.woff2"],
+  },
+  "pixel-quest": {
+    zh: ["/fonts/cstd/pixel-text-12-v1.woff2", "/fonts/cstd/pixel-label-10-v1.woff2"],
+    en: ["/fonts/cstd/pixel-text-12-v1.woff2", "/fonts/cstd/pixel-label-10-v1.woff2"],
+  },
+} as const satisfies Record<CstdThemeId, Record<CstdLocale, readonly string[]>>;
 
 export type CstdBroadcastId = "rocodex" | "alpha" | "crm";
 
