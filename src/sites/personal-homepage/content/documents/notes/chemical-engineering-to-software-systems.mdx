@@ -3,14 +3,14 @@ kind: "note"
 schemaVersion: 1
 slug: "chemical-engineering-to-software-systems"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-07-14"
-updatedAt: "2026-08-09"
-readingMinutes: 8
+updatedAt: "2026-08-27"
+readingMinutes: 12
 category: {"zh":"学习路径","en":"Learning path"}
 series: {"zh":"从课程到系统","en":"From coursework to systems"}
 title: {"zh":"化工训练如何进入软件系统设计","en":"How chemical engineering shaped software systems thinking"}
-summary: {"zh":"能量衡算、传递过程、分离与实验训练，最终变成对边界、守恒、状态和可观测性的工程直觉。","en":"Balances, transport, separation, and lab work became engineering intuition about boundaries, conservation, state, and observability."}
+summary: {"zh":"我在化工里学到的边界、衡算和实验记录，后来怎样影响我做数据、权限、状态和发布。","en":"How boundaries, balances, and lab records from chemical engineering changed the way I build data, permissions, state, and releases."}
 image: {"src":"/cstd-archive/cstd-archive-notebook-v1.webp","alt":{"zh":"写满系统图的研究笔记","en":"A research notebook filled with system diagrams"}}
 relatedCaseSlugs: ["dcf-quantum","alpha-research-system"]
 tags: ["Systems thinking","Research","Engineering","Learning"]
@@ -24,17 +24,27 @@ toc: [{"id":"balance","eyebrow":null,"title":{"zh":"任何系统先画边界，�
 
 在化工里，边界决定什么是输入、输出、积累和损失。软件也一样：请求、缓存、任务队列和数据库之间若没有明确边界，就无法解释状态从哪里来、去了哪里。
 
+我做系统设计时会先问一个很朴素的问题：这件事到底由谁负责？在双站部署里，Host 决定请求属于主站还是图鉴；在研究工具里，数据快照决定一份估值引用了哪一刻的事实；在 CRM 里，服务端决定一个用户能看到哪一块数据。边界画清楚之后，很多看似复杂的异常其实只是责任落错了地方。
+
+这也是我不太喜欢“所有东西都从一个全局状态里取”的原因。它短期写起来快，出了问题却很难知道是页面、缓存还是后台任务改了结果。把输入、状态和输出分开，系统会多一些接口，但排查时有一条能走回去的路。
+
 </ArchiveSection>
 
 <ArchiveSection id="transport" title="吞吐、延迟和瓶颈是一套传递问题">
 
 传质与传热训练会自然追问驱动力、阻力和控制步骤。性能分析同样不能平均用力，而要找到支配总时间的阶段。
 
+吞吐和延迟也不是一回事：队列可以提高单位时间完成的工作，却不会让某一个任务瞬间结束。这个区别会直接影响界面该显示什么、超时该由谁处理，以及用户应该怎样理解进度。做 DCF 扫描时，我更愿意先看完整程序的调用栈，再决定究竟该动公式、缓存还是文件读写。
+
 </ArchiveSection>
 
 <ArchiveSection id="experiment" title="实验记录比漂亮结论更重要">
 
 实验训练要求记录条件、误差和异常。它直接影响了我对运行清单、证据快照、可复现测试和失败分类的偏好。
+
+在实验室里，一次结果如果没有温度、浓度、设备和操作顺序，就不能和下一次结果公平比较。软件里的“环境”同样具体：提交版本、数据来源、缓存状态和浏览器能力都可能改变结果。记录这些条件并不华丽，却能让“这次为什么不一样”从猜测变成检查清单。
+
+所以我更愿意把失败写进交付物。一个明确的失败状态，通常比一个看起来成功、但无法解释的页面更有价值。它告诉使用者下一步该补什么，也告诉后来维护的人应该从哪里开始。
 
 </ArchiveSection>
 
@@ -46,17 +56,27 @@ toc: [{"id":"balance","eyebrow":null,"title":{"zh":"任何系统先画边界，�
 
 In chemical engineering, boundaries define input, output, accumulation, and loss. Software is similar: without boundaries between requests, caches, queues, and databases, state cannot be explained.
 
+When I design a system, I start with a plain question: who owns this part? In the dual-site deployment, the host decides whether a request belongs to the portfolio or the encyclopedia. In the research tool, the data snapshot decides which facts an estimate used. In the CRM, the server decides which records a user may see. Once ownership is explicit, many “complex” failures turn out to be responsibility landing in the wrong place.
+
+That is why I avoid putting every answer in one global state. It is quick at first and difficult to debug later. Separating input, state, and output adds a few boundaries, but it also leaves a route back to the cause.
+
 </ArchiveSection>
 
 <ArchiveSection id="transport" title="Throughput, latency, and bottlenecks are transport problems">
 
 Transport training asks about driving force, resistance, and the controlling step. Performance work likewise targets the stage that governs total time rather than optimizing evenly.
 
+Throughput and latency are different too: a queue can raise work completed per minute without making one job finish instantly. That distinction changes interface copy, timeout behavior, and what a user should expect from progress feedback. When profiling the DCF scan, I would rather start with the full call stack than guess whether the formula, cache, or file access needs attention.
+
 </ArchiveSection>
 
 <ArchiveSection id="experiment" title="Experimental records matter more than elegant conclusions">
 
 Lab practice records conditions, error, and anomalies. That directly shaped my preference for manifests, evidence snapshots, reproducible tests, and explicit failure classes.
+
+A lab result without temperature, concentration, equipment, and order of operations cannot be compared fairly with the next run. Software has its own conditions: commit, data source, cache state, and browser capability can all change the outcome. Recording them is not glamorous, but it turns “why was this different?” into a checklist.
+
+I would rather ship an explicit failure than a page that looks successful but cannot explain itself. A named failure tells the user what to fix and gives the next maintainer a place to start.
 
 </ArchiveSection>
 

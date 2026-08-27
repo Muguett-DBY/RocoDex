@@ -12,7 +12,7 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1, name: "奶黄包" })).toBeVisible();
-  await expect(page.getByText("奶黄包的个人技术工作室", { exact: false })).toBeVisible();
+  await expect(page.getByText("我做产品，也做背后的系统", { exact: false })).toBeVisible();
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   await expect(page.locator("[data-cstd-hero-summary] > div")).toHaveCount(3);
   await expect(page.locator("[data-cstd-narrative-switcher]")).toHaveCount(0);
@@ -90,7 +90,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   await expect(page.locator("html")).toHaveAttribute("data-cstd-locale", "en");
   await expect(root).toHaveAttribute("data-cstd-locale", "en");
   await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
-  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("Compile complex problems");
+  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("I take problems apart");
   await expect(page.locator("[data-cstd-scene]")).toHaveCount(6);
   await expect(page.locator("[data-cstd-knowledge-list]")).not.toContainText("[object Object]");
   const englishCopy = stripPermittedEnglishAutonyms((await root.innerText()) ?? "");
@@ -103,7 +103,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
 
   for (const world of [
     { id: "press-room", thesis: "Today's lead:" },
-    { id: "ink-protocol", thesis: "Ideas become ink;" },
+    { id: "ink-protocol", thesis: "Name the problem clearly;" },
     { id: "pixel-quest", thesis: "Main quest:" },
   ]) {
     await page.locator("[data-cstd-theme-switcher]").click();
@@ -313,11 +313,7 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
 
   await expect(root).toHaveAttribute("data-cstd-theme", "neon-district");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "cyberpunk");
-  if (isMobile) {
-    await expect(page.locator('[data-cstd-hero-artifact="neon"]')).toBeHidden();
-  } else {
-    await expect(page.locator('[data-cstd-hero-artifact="neon"]')).toBeVisible();
-  }
+  await expect(page.locator('[data-cstd-hero-artifact="neon"]')).toBeVisible();
   await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeHidden();
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="neon-district"]')).toBeVisible();
   await switcher.click();
@@ -337,11 +333,7 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(switcher).toHaveAttribute("data-cstd-theme-active", "press-room");
   await expect(switcher.locator("[data-cstd-theme-label]")).toContainText("工程日报");
   await expect(page.locator('[data-cstd-theme-world-image="press-room"]')).toBeVisible();
-  if (isMobile) {
-    await expect(page.locator('[data-cstd-hero-artifact="press"]')).toBeHidden();
-  } else {
-    await expect(page.locator('[data-cstd-hero-artifact="press"]')).toBeVisible();
-  }
+  await expect(page.locator('[data-cstd-hero-artifact="press"]')).toBeVisible();
   await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeHidden();
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="press-room"]')).toBeVisible();
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("今日头条：");
@@ -359,14 +351,10 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(root).toHaveAttribute("data-cstd-theme", "ink-protocol");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "ink-scroll");
   await expect(page.locator('[data-cstd-theme-world-image="ink-protocol"]')).toBeVisible();
-  if (isMobile) {
-    await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeHidden();
-  } else {
-    await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeVisible();
-  }
+  await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeVisible();
   await expect(page.locator('[data-cstd-hero-artifact="press"]')).toBeHidden();
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="ink-protocol"]')).toBeVisible();
-  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("万象入墨，");
+  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("先把问题说清，");
   await expectNoHorizontalOverflow(page);
 
   await page.locator("[data-cstd-theme-switcher]").click();
@@ -376,11 +364,7 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(root).toHaveAttribute("data-cstd-render-policy", "balanced");
   await expect(page.locator("[data-cstd-webgl]")).toHaveCount(0);
   await expect(page.locator('[data-cstd-theme-world-image="pixel-quest"]')).toBeVisible();
-  if (isMobile) {
-    await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeHidden();
-  } else {
-    await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeVisible();
-  }
+  await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeVisible();
   await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeHidden();
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="pixel-quest"]')).toBeVisible();
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("主线任务：");

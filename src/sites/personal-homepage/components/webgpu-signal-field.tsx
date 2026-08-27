@@ -45,10 +45,15 @@ const shader = /* wgsl */ `
 export function WebGpuSignalField(props: PersonalImmersiveSceneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const runtimeRef = useRef({ active: props.active, reducedMotion: props.reducedMotion });
+  const frameRef = useRef(0);
+  const renderRef = useRef<((timestamp: number) => void) | null>(null);
   const [state, setState] = useState<"loading" | "ready" | "fallback">("loading");
 
   useEffect(() => {
     runtimeRef.current = { active: props.active, reducedMotion: props.reducedMotion };
+    if (props.active && renderRef.current && !frameRef.current) {
+      frameRef.current = window.requestAnimationFrame(renderRef.current);
+    }
   }, [props.active, props.reducedMotion]);
 
   useEffect(() => {
@@ -61,7 +66,6 @@ export function WebGpuSignalField(props: PersonalImmersiveSceneProps) {
     }
 
     let cancelled = false;
-    let frame = 0;
     let lastFrame = 0;
     let contextReady = false;
     let device: GPUDevice | null = null;
@@ -114,10 +118,18 @@ export function WebGpuSignalField(props: PersonalImmersiveSceneProps) {
       window.addEventListener("resize", resize);
       setState("ready");
 
+      const schedule = () => {
+        if (!frameRef.current && runtimeRef.current.active && (!runtimeRef.current.reducedMotion || lastFrame === 0)) {
+          frameRef.current = window.requestAnimationFrame(render);
+        }
+      };
       const render = (timestamp: number) => {
-        frame = window.requestAnimationFrame(render);
+        frameRef.current = 0;
         if (!runtimeRef.current.active || !contextReady) return;
-        if (!runtimeRef.current.reducedMotion && timestamp - lastFrame < 32) return;
+        if (!runtimeRef.current.reducedMotion && timestamp - lastFrame < 32) {
+          schedule();
+          return;
+        }
         if (runtimeRef.current.reducedMotion && lastFrame > 0) return;
         lastFrame = timestamp;
         const values = new Float32Array([
@@ -141,8 +153,10 @@ export function WebGpuSignalField(props: PersonalImmersiveSceneProps) {
         pass.draw(3);
         pass.end();
         createdDevice.queue.submit([encoder.finish()]);
+        schedule();
       };
-      frame = window.requestAnimationFrame(render);
+      renderRef.current = render;
+      schedule();
 
       return () => window.removeEventListener("resize", resize);
     };
@@ -151,7 +165,9 @@ export function WebGpuSignalField(props: PersonalImmersiveSceneProps) {
     void start().then((cleanup) => { removeResize = cleanup; }).catch(() => setState("fallback"));
     return () => {
       cancelled = true;
-      if (frame) window.cancelAnimationFrame(frame);
+      if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+      frameRef.current = 0;
+      renderRef.current = null;
       removeResize?.();
       if (contextReady) context.unconfigure();
       device?.destroy();

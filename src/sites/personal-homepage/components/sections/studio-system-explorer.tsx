@@ -10,6 +10,7 @@ import type { CstdSystem } from "../../content/systems";
 import { CstdLink } from "../site/cstd-link";
 import type { CstdLocale } from "../../content/content-types";
 import { getLocalizedCstdHref } from "../../infrastructure/i18n";
+import { useCstdTheme } from "../../experience/theme-store";
 
 export type StudioSystemArt = Readonly<{
   accent: string;
@@ -30,6 +31,8 @@ export function StudioSystemExplorer({
   observatory: CstdHomepageObservatory;
   locale: CstdLocale;
 }) {
+  const theme = useCstdTheme();
+  const tabsAreHorizontal = theme !== "neon-district";
   const [activeSystemId, setActiveSystemId] = useState<CstdSystem["id"]>(() => systems[0].id);
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const activeSystem = systems.find((system) => system.id === activeSystemId) ?? systems[0];
@@ -51,7 +54,7 @@ export function StudioSystemExplorer({
 
   return (
     <div data-cstd-system-explorer className="mt-14 grid gap-8 lg:grid-cols-[19rem_minmax(0,1fr)] lg:gap-12">
-      <div data-cstd-system-tabs className="border-t border-white/12" role="tablist" aria-label={locale === "zh" ? "能力方向" : "Capability directions"} aria-orientation="vertical">
+      <div data-cstd-system-tabs className="border-t border-white/12" role="tablist" aria-label={locale === "zh" ? "能力方向" : "Capability directions"} aria-orientation={tabsAreHorizontal ? "horizontal" : "vertical"}>
         {systems.map((system, index) => {
           const active = system.id === activeSystem.id;
           return (

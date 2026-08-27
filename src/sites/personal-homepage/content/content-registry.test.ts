@@ -10,6 +10,11 @@ function unique(values: readonly string[]) {
   return new Set(values).size === values.length;
 }
 
+function localeBodyLength(source: string, locale: "zh" | "en") {
+  const match = source.match(new RegExp(`<LocaleBlock locale="${locale}">([\\s\\S]*?)</LocaleBlock>`));
+  return match?.[1].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim().length ?? 0;
+}
+
 describe("CSTD content registry", () => {
   test("keeps every public slug unique", () => {
     expect(unique(cstdCaseStudies.map((entry) => entry.slug))).toBe(true);
@@ -60,6 +65,16 @@ describe("CSTD content registry", () => {
         expect(source).toContain('<LocaleBlock locale="zh">');
         expect(source).toContain('<LocaleBlock locale="en">');
         expect(source).not.toMatch(/\b[a-zA-Z][a-zA-Z0-9]*=\{"/);
+      }
+    }
+  });
+
+  test("keeps both published language blocks substantial enough to read", () => {
+    for (const [directory, entries] of [["cases", cstdCaseStudies], ["notes", cstdTechnicalNotes]] as const) {
+      for (const entry of entries) {
+        const source = readFileSync(path.join(process.cwd(), "src", "sites", "personal-homepage", "content", "documents", directory, `${entry.slug}.mdx`), "utf8");
+        expect(localeBodyLength(source, "zh")).toBeGreaterThan(280);
+        expect(localeBodyLength(source, "en")).toBeGreaterThan(700);
       }
     }
   });

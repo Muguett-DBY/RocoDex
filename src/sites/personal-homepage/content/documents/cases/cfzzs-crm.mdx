@@ -5,12 +5,12 @@ slug: "cfzzs-crm"
 projectId: "crm"
 year: "2026"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-01-01"
-updatedAt: "2026-08-09"
+updatedAt: "2026-08-27"
 title: {"zh":"CFZZS 招商 CRM","en":"CFZZS industrial CRM"}
 kicker: {"zh":"业务系统 / 权限与并发","en":"Operations / permissions and concurrency"}
-summary: {"zh":"面向产业园区招商团队的完整线索工作流：权限范围、阶段流转、企业查重、空间资源和审计型导出。","en":"A complete lead workflow for industrial park teams: scoped permissions, stage transitions, deduplication, spatial inventory, and auditable exports."}
+summary: {"zh":"给产业园区招商团队用的一套线索工作台：从企业查重、阶段推进到空间资源和导出，关键状态都能追溯。","en":"A lead workbench for an industrial-park team, keeping deduplication, stage changes, spatial inventory, and exports tied to traceable state."}
 film: {"durationSeconds":102,"logline":{"zh":"把散落的招商表格变成一条状态可信、多人协作的业务链。","en":"Turning scattered business spreadsheets into a trustworthy multi-role operating chain."},"beats":[{"id":"fragmented-truth","phase":"problem","title":{"zh":"业务真相散落在表格里","en":"Business truth was scattered"},"detail":{"zh":"线索、企业、空间与跟进记录彼此脱节，状态无法被团队共同相信。","en":"Leads, companies, spaces, and follow-ups were disconnected, so the team could not trust shared state."},"signal":{"zh":"问题不是缺页面，而是缺一致状态","en":"The gap was consistent state, not more screens"}},{"id":"role-concurrency","phase":"constraint","title":{"zh":"多人同时推进同一条线索","en":"Multiple roles, one changing lead"},"detail":{"zh":"销售、招商主管和管理员需要不同权限，也会同时修改阶段与资源。","en":"Sales, managers, and administrators need scoped access while changing stages and inventory concurrently."},"signal":{"zh":"权限与并发必须一起设计","en":"Permissions and concurrency are one design problem"}},{"id":"state-machine","phase":"architecture","title":{"zh":"把流程写成状态机","en":"Encode the workflow as state"},"detail":{"zh":"明确阶段转换、查重规则、空间占用与审计事件，让接口与界面共享同一契约。","en":"Explicit transitions, deduplication, occupancy, and audit events give APIs and UI one contract."},"signal":{"zh":"每次流转都可解释","en":"Every transition is explainable"}},{"id":"optimistic-lock","phase":"decision","title":{"zh":"冲突不再静默覆盖","en":"Conflicts stop overwriting silently"},"detail":{"zh":"乐观锁在写入前比较版本，冲突回到用户而不是篡改事实。","en":"Optimistic locking compares versions before writes and returns conflicts instead of corrupting truth."},"signal":{"zh":"409 是保护，不是故障","en":"A 409 is protection, not failure"}},{"id":"role-acceptance","phase":"evidence","title":{"zh":"按真实角色验收","en":"Acceptance follows real roles"},"detail":{"zh":"浏览器测试覆盖登录、创建、流转、查重、导出和权限边界。","en":"Browser tests cover sign-in, creation, transitions, deduplication, exports, and permission boundaries."},"signal":{"zh":"业务故事完整通过","en":"The complete operating story passes"}}]}
 role: {"zh":"需求拆解、全栈实现与生产验收","en":"Requirements, full stack, and production acceptance"}
 runtimeStatus: {"zh":"线上运行","en":"Live"}
@@ -32,17 +32,25 @@ toc: [{"id":"workflow","eyebrow":{"zh":"01 / 工作流","en":"01 / Workflow"},"t
 
 线索、联系人、企业、跟进记录和园区空间必须在同一权限模型下协作。仪表盘只是结果，服务端数据范围才是产品骨架。
 
+这个项目一开始最像一张很大的表：字段很多，页面也可以继续加。但招商团队真正需要的不是更多输入框，而是知道这条线索现在由谁负责、下一步是什么、这次修改有没有影响别人。于是我先把实体关系和阶段流转画出来，再决定哪些信息应该在同一屏出现。
+
+查重和空间资源也是同一个问题的另一面。企业名称相同不代表一定是同一家公司，空间状态也不能只靠前端颜色判断。把判断放到服务端，页面才不会因为不同人的缓存而讲出两套故事。
+
 </ArchiveSection>
 
 <ArchiveSection id="concurrency" title="阶段流转用乐观锁保护。" eyebrow="02 / 并发">
 
 多人同时编辑时，旧版本更新会被拒绝并要求重新读取，避免后提交的人悄悄覆盖现场信息。
 
+冲突提示必须是业务语言，而不是一句“保存失败”。用户需要知道谁先改了哪一类信息，以及自己可以重新确认还是需要找负责人处理。版本号藏在接口里，冲突理由应该出现在界面里。
+
 </ArchiveSection>
 
 <ArchiveSection id="delivery" title="生产验收覆盖真实角色动作。" eyebrow="03 / 交付">
 
 E2E 不只检查页面能开，还覆盖登录、业务路由、后台路由、用户创建与 CSV 导入。
+
+验收脚本按角色走完整动作：登录后能看到什么，创建线索后能推进到哪里，越权请求会被挡在哪里，导入失败时是否留下可理解的反馈。这样查出来的问题才接近上线后的问题，而不是只证明几个 URL 返回了 200。
 
 </ArchiveSection>
 
@@ -54,17 +62,25 @@ E2E 不只检查页面能开，还覆盖登录、业务路由、后台路由、�
 
 Leads, contacts, companies, follow-ups, and spatial inventory must cooperate under one permission model. The dashboard is an output; server-side scope is the product skeleton.
 
+At first the project looked like a large table with room for more fields. The team did not really need more inputs; they needed to know who owned a lead, what came next, and whether a change affected somebody else. I mapped the entities and stage transitions first, then decided what deserved to share a screen.
+
+Deduplication and spatial inventory are the same problem in another form. A matching company name is not proof of identity, and a space cannot be trusted because a front-end color says it is free. Keeping those decisions on the server prevents different cached pages from telling different stories.
+
 </ArchiveSection>
 
 <ArchiveSection id="concurrency" title="Optimistic locking protects stage transitions." eyebrow="02 / Concurrency">
 
 When multiple operators edit the same lead, stale updates are rejected and refreshed instead of silently overwriting field intelligence.
 
+The conflict message has to use business language, not only “save failed”. An operator needs to know what changed and whether a fresh confirmation is enough or an owner needs to be involved. The version belongs in the API; the reason belongs in the interface.
+
 </ArchiveSection>
 
 <ArchiveSection id="delivery" title="Production acceptance follows real role actions." eyebrow="03 / Delivery">
 
 E2E checks more than page availability: login, business and admin routes, user creation, and CSV import are exercised.
+
+The acceptance flow follows roles and complete actions: what is visible after sign-in, where a lead can move, where an unauthorized request is stopped, and whether a failed import leaves a useful explanation. That catches problems closer to production than proving a few URLs return 200.
 
 </ArchiveSection>
 

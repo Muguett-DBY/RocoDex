@@ -3,14 +3,14 @@ kind: "note"
 schemaVersion: 1
 slug: "optimistic-locking-for-operations"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-07-26"
-updatedAt: "2026-08-09"
-readingMinutes: 7
+updatedAt: "2026-08-27"
+readingMinutes: 11
 category: {"zh":"业务系统","en":"Operational systems"}
 series: {"zh":"可信状态","en":"Trustworthy state"}
 title: {"zh":"多人 CRM 里，最后提交不应该自动获胜","en":"In a multi-user CRM, last write should not automatically win"}
-summary: {"zh":"用乐观锁、服务端数据范围和显式冲突恢复保护现场业务信息。","en":"Optimistic locking, server-side scopes, and explicit conflict recovery protect operational truth."}
+summary: {"zh":"多人同时改一条 CRM 线索时，怎么让冲突被看见，而不是让最后一次提交悄悄覆盖现场。","en":"When two operators edit one CRM lead, make the conflict visible instead of letting the last submission erase the field record."}
 image: {"src":"/cstd-world/cstd-kinetic-studio-v2.webp","alt":{"zh":"并发运行的业务控制台","en":"Concurrent operational consoles"}}
 relatedCaseSlugs: ["cfzzs-crm"]
 tags: ["CRM","Concurrency","RBAC","D1"]
@@ -24,11 +24,15 @@ toc: [{"id":"conflict","eyebrow":null,"title":{"zh":"静默覆盖是最昂贵的
 
 两个招商人员可能同时更新同一线索：一个刚电话确认需求，另一个还停留在旧页面。若后者提交成功，系统看似稳定，实际已经丢掉业务事实。
 
+这类冲突最麻烦的地方在于它通常没有报错。页面收到 200，用户以为自己的动作完成了，真正被覆盖的那句话却不会出现在监控里。业务系统应该把“有人比我先改过”当成一种需要处理的状态，而不是把最后一次网络请求当成真理。
+
 </ArchiveSection>
 
 <ArchiveSection id="version" title="更新必须携带读取时版本">
 
 服务端用记录版本作为条件更新。受影响行数为零时返回冲突，前端重新读取并让用户决定合并，而不是自动重放旧输入。
+
+前端可以把新旧值并排展示，也可以只提示用户重新确认，但不能替用户猜。尤其是阶段、负责人和空间这类字段，自动合并很容易把一次业务判断伪装成机械更新。冲突响应应该带上当前版本，让界面有机会解释发生了什么。
 
 <CodeSample language="sql" label="条件更新">
 
@@ -46,6 +50,8 @@ WHERE id = ? AND version = ?
 
 版本检查只回答数据是否变化，RBAC 与数据范围回答用户是否有权看到和修改。两者都必须在服务端执行。
 
+顺序也很重要：先验证身份和数据范围，再做版本更新，不能因为版本号正确就绕过权限。并发控制保护的是“别人刚刚写过的事实”，授权保护的是“你本来能不能写这条事实”。
+
 </ArchiveSection>
 
 </LocaleBlock>
@@ -56,11 +62,15 @@ WHERE id = ? AND version = ?
 
 Two operators may update one lead at once: one has just confirmed requirements by phone while the other still holds an old page. A successful stale write makes the system look healthy while losing business truth.
 
+The difficult part is that this conflict usually produces no error. The page receives a 200, the operator thinks the action worked, and the overwritten sentence never appears in monitoring. An operational system should treat “someone changed this first” as a state that needs handling, not let the last network request become truth.
+
 </ArchiveSection>
 
 <ArchiveSection id="version" title="Every update carries its read version">
 
 The server conditions updates on the record version. Zero affected rows becomes a conflict; the client refreshes and lets the user reconcile instead of replaying stale input.
+
+The client can show old and current values side by side or ask for a fresh confirmation, but it should not guess. Stage, owner, and space fields often represent a business decision; automatic merging can disguise that decision as a mechanical update. A conflict response should include the current version so the interface can explain what happened.
 
 <CodeSample language="sql" label="Conditional update">
 
@@ -77,6 +87,8 @@ WHERE id = ? AND version = ?
 <ArchiveSection id="scope" title="Concurrency control does not replace authorization">
 
 Version checks answer whether data changed; RBAC and data scope answer whether a user may see or change it. Both belong on the server.
+
+The order matters too: authenticate and check the data scope before the versioned update. A correct version must never become a way around authorization. Concurrency control protects the fact that someone else just wrote; authorization protects whether you were allowed to write it at all.
 
 </ArchiveSection>
 

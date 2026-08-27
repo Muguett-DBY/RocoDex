@@ -18,7 +18,7 @@ const pointCount: Record<CstdVisualMode, number> = {
   calm: 0,
 };
 
-export function SignalField({ mode }: { mode: CstdVisualMode }) {
+export function SignalField({ mode, active = true }: { mode: CstdVisualMode; active?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export function SignalField({ mode }: { mode: CstdVisualMode }) {
 
     const render = (time: number) => {
       context.clearRect(0, 0, width, height);
-      if (document.visibilityState !== "hidden") {
+      if (active && document.visibilityState !== "hidden") {
         const maxDistance = mode === "full" ? 150 : 112;
 
         for (const point of points) {
@@ -100,14 +100,14 @@ export function SignalField({ mode }: { mode: CstdVisualMode }) {
           }
         }
       }
-      frame = document.visibilityState === "hidden" ? 0 : window.requestAnimationFrame(render);
+      frame = active && document.visibilityState !== "hidden" ? window.requestAnimationFrame(render) : 0;
     };
 
     const onVisibilityChange = () => {
       if (document.visibilityState === "hidden") {
         if (frame) window.cancelAnimationFrame(frame);
         frame = 0;
-      } else if (mode !== "calm" && !frame) {
+      } else if (active && mode !== "calm" && !frame) {
         frame = window.requestAnimationFrame(render);
       }
     };
@@ -117,14 +117,14 @@ export function SignalField({ mode }: { mode: CstdVisualMode }) {
     window.addEventListener("resize", resize, { passive: true });
     window.addEventListener("pointermove", onPointerMove, { passive: true });
     document.addEventListener("visibilitychange", onVisibilityChange);
-    if (mode !== "calm") frame = window.requestAnimationFrame(render);
+    if (active && mode !== "calm") frame = window.requestAnimationFrame(render);
     return () => {
       window.cancelAnimationFrame(frame);
       window.removeEventListener("resize", resize);
       window.removeEventListener("pointermove", onPointerMove);
       document.removeEventListener("visibilitychange", onVisibilityChange);
     };
-  }, [mode]);
+  }, [active, mode]);
 
   return <canvas ref={canvasRef} data-cstd-signal-field aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 opacity-80" />;
 }

@@ -56,21 +56,22 @@ try {
       const fileName = `${theme.id}-${capture.id}.png`;
       await page.screenshot({ path: path.join(outputRoot, fileName), animations: "disabled", fullPage: false });
 
-      report.push(await page.evaluate(({ rootSelector, themeId, artifact, captureId, fileName }) => {
+      report.push(await page.evaluate(({ rootSelector, themeId, artifact, captureId, fileName, isHomepage }) => {
         const root = document.querySelector(rootSelector);
         const title = document.querySelector("[data-cstd-page-hero-title], #cstd-hero-title");
         const material = document.querySelector("[data-cstd-page-hero-material]");
-        const artifactNode = document.querySelector(`[data-cstd-deep-artifact="${artifact}"]`);
-        const artifactLayer = artifactNode?.closest("[data-cstd-page-hero-artifacts]");
+        const artifactSelector = isHomepage ? `[data-cstd-hero-artifact="${artifact}"]` : `[data-cstd-deep-artifact="${artifact}"]`;
+        const artifactNode = document.querySelector(artifactSelector);
+        const artifactLayer = artifactNode?.closest(isHomepage ? "[data-cstd-theme-hero-artifact]" : "[data-cstd-page-hero-artifacts]");
         const heroActions = [...document.querySelectorAll("[data-cstd-hero-actions] a")].map((action) => ({
           text: action.textContent?.trim() ?? "",
           color: getComputedStyle(action).color,
           background: getComputedStyle(action).backgroundColor,
           font: getComputedStyle(action).fontFamily,
         }));
-        const visibleDeepArtifacts = [...document.querySelectorAll("[data-cstd-deep-artifact]")]
+        const visibleDeepArtifacts = [...document.querySelectorAll(isHomepage ? "[data-cstd-hero-artifact]" : "[data-cstd-deep-artifact]")]
           .filter((node) => getComputedStyle(node).display !== "none" && node.getClientRects().length > 0)
-          .map((node) => node.getAttribute("data-cstd-deep-artifact"));
+          .map((node) => node.getAttribute(isHomepage ? "data-cstd-hero-artifact" : "data-cstd-deep-artifact"));
         return {
           theme: themeId,
           capture: captureId,
@@ -86,7 +87,7 @@ try {
           heroActions,
           horizontalOverflow: document.documentElement.scrollWidth > window.innerWidth + 1,
         };
-      }, { rootSelector, themeId: theme.id, artifact: theme.artifact, captureId: capture.id, fileName }));
+      }, { rootSelector, themeId: theme.id, artifact: theme.artifact, captureId: capture.id, fileName, isHomepage }));
 
       if (issues.length > 0) throw new Error(`${theme.id}/${capture.id}: ${issues.join(" | ")}`);
       await context.close();

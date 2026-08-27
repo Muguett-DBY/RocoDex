@@ -48,6 +48,7 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/en/releases.json",
   "/en/feed.json",
   "/en/manifest.webmanifest",
+  "/en/llms.txt",
 ]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",

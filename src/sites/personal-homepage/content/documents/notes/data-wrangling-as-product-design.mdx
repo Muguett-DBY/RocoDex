@@ -3,14 +3,14 @@ kind: "note"
 schemaVersion: 1
 slug: "data-wrangling-as-product-design"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-07-18"
-updatedAt: "2026-08-09"
-readingMinutes: 9
+updatedAt: "2026-08-27"
+readingMinutes: 12
 category: {"zh":"数据科学","en":"Data science"}
 series: {"zh":"从课程到系统","en":"From coursework to systems"}
 title: {"zh":"数据清洗也是产品设计","en":"Data wrangling is product design"}
-summary: {"zh":"从 USYD 数据课程、Monash data wrangling 与实际研究管线中形成的一套数据契约观。","en":"A view of data contracts shaped by USYD data coursework, Monash data wrangling, and production research pipelines."}
+summary: {"zh":"数据清洗并不只是分析前的杂活：每个缺失值、日期和主体匹配规则，都会改变产品怎么说话。","en":"Wrangling is not disposable prep: every missing value, date, and entity match changes what a product is able to say."}
 image: {"src":"/cstd-archive/cstd-archive-data-film-v1.webp","alt":{"zh":"记录数据血缘的胶片档案","en":"A film archive preserving data lineage"}}
 relatedCaseSlugs: ["alpha-research-system","dcf-quantum"]
 tags: ["Data wrangling","R","Python","Contracts"]
@@ -24,17 +24,25 @@ toc: [{"id":"contract","eyebrow":null,"title":{"zh":"脏数据通常是未写下
 
 缺失值是未知、未适用还是抓取失败？日期属于交易所还是用户时区？同名公司是否同一上市主体？每个清洗规则都在替产品回答问题。
 
+同一个字段在不同页面上被解释成不同意思时，问题已经不在脚本，而在产品没有决定什么叫“有效”。一旦规则写进数据契约，前端就可以明确地显示未知、缺失、代理值和已确认，而不是把它们都压成一个空白或零。
+
+这件事还会改变团队的协作方式。研究者可以质疑口径，开发者可以定位转换，使用者可以知道一个数字能不能拿来做决定。数据清洗不是把脏东西藏起来，而是给每一次改变留下一条解释。
+
 </ArchiveSection>
 
 <ArchiveSection id="layers" title="保留原始层、规范层和派生层">
 
 原始响应用于追溯，规范记录用于跨来源比较，派生指标用于产品决策。覆盖原始值会让未来无法解释变化来自数据源、清洗规则还是业务公式。
 
+研究管线可以保留三种视图：原始响应尽量不动，规范层只做可说明的格式统一，派生层才计算评分、估值或排序。这样做会多占一点存储，却能把“源数据变了”和“我们的规则变了”分开。对于会定期刷新、还要给别人复核的产品，这个取舍很划算。
+
 </ArchiveSection>
 
 <ArchiveSection id="quality" title="数据质量要成为界面状态">
 
 与其给不完整数据一个看似精确的数字，不如把来源、缺口、更新时间与确认级别展示给用户。好的产品不隐藏不确定性，而是让它可操作。
+
+界面不需要把所有内部细节都倾倒给使用者，但应该给出足够的下一步：补充哪个字段、换一个数据源、等待下一次刷新，还是暂时不要使用这条结论。把质量当作状态设计，产品就不会在数据不完整时假装自己很确定。
 
 </ArchiveSection>
 
@@ -46,17 +54,25 @@ toc: [{"id":"contract","eyebrow":null,"title":{"zh":"脏数据通常是未写下
 
 Does missing mean unknown, not applicable, or collection failure? Does a date belong to an exchange or user timezone? Are same-name companies the same listing? Every cleaning rule answers a product question.
 
+When the same field means different things on two screens, the problem is no longer just a script; the product never defined what “valid” meant. Once the rule becomes a data contract, the interface can distinguish unknown, missing, proxy, and confirmed values instead of flattening them into an empty cell or zero.
+
+That also changes collaboration. A researcher can challenge the definition, an engineer can locate the transformation, and a user can judge whether a number is decision-ready. Wrangling is not hiding the dirt; it is keeping an explanation for every change.
+
 </ArchiveSection>
 
 <ArchiveSection id="layers" title="Keep raw, normalized, and derived layers">
 
 Raw responses support traceability, normalized records support comparison, and derived metrics support decisions. Overwriting raw values makes later changes impossible to attribute.
 
+A research pipeline can keep three views: raw responses remain as close to the source as possible, the normalized layer applies explainable formatting rules, and the derived layer calculates scores, valuations, or rankings. It costs a little more storage, but separates “the source changed” from “our rule changed”. For a product that refreshes regularly and must survive review, that is a good trade.
+
 </ArchiveSection>
 
 <ArchiveSection id="quality" title="Data quality should become interface state">
 
 Instead of producing a precise-looking number from incomplete data, expose source, gaps, freshness, and confirmation level. Good products make uncertainty actionable.
+
+The interface does not need to dump every internal detail on the user, but it should offer a next move: fill a field, choose another source, wait for a refresh, or hold the conclusion. Treating quality as state design keeps a product from pretending to be certain when the data is not.
 
 </ArchiveSection>
 

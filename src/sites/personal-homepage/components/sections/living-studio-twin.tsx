@@ -10,6 +10,21 @@ import { StudioSystemExplorer, type StudioSystemArt } from "./studio-system-expl
 import { ThemeChapterLabel, ThemeCopy } from "../theme-copy";
 import type { CstdLocale } from "../../content/content-types";
 
+const studioIntro = {
+  zh: {
+    neon: "产品、AI、数据和发布是同一件事的不同侧面。点开一个方向，看它在真实项目里承担了什么。",
+    ink: "这里不挂满术语。每一项能力都要落到一件做成的器物上，再留下可以回看的痕迹。",
+    press: "本版按五个部门整理工作：产品、边缘交付、AI、研究和数据。它们不是栏目，而是同一张生产单上的协作关系。",
+    pixel: "五条技能线，五种过关方式。打开一个节点，看看它用过什么装备，又在哪个项目里真正派上了用场。",
+  },
+  en: {
+    neon: "Product, AI, data, and release are different sides of the same job. Open a district to see what it carried in a real project.",
+    ink: "This is not a wall of terms. Each skill has to become a made object, with a trace that can still be read later.",
+    press: "This edition files the work under five desks: product, edge delivery, AI, research, and data. They are collaborators on one production sheet, not empty categories.",
+    pixel: "Five skill lines, five ways to clear a level. Open a node to see the gear it used and the project where it had to work.",
+  },
+} as const;
+
 export function LivingStudioTwin({
   narrativeMode,
   observatory,
@@ -51,8 +66,8 @@ export function LivingStudioTwin({
               <ThemeChapterLabel
                 neon="02 / CAPABILITY SYSTEM"
                 ink={locale === "zh" ? "第二卷 / 器与术" : "SCROLL II / CRAFT & METHOD"}
-                press="SECTION A / SYSTEMS DESK"
-                pixel="LEVEL 02 / SKILL TREE"
+                press={locale === "zh" ? "栏目 A / 系统部" : "SECTION A / SYSTEMS DESK"}
+                pixel={locale === "zh" ? "关卡 02 / 技能树" : "LEVEL 02 / SKILL TREE"}
               />
             </p>
             <h2 id="studio-twin-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
@@ -64,7 +79,12 @@ export function LivingStudioTwin({
               />
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-8 text-[#aeb8bb]">
-              {locale === "zh" ? "产品界面、智能能力、数据工程、边缘部署和研究模型共同组成一条完整交付链。选择一个方向，查看它如何落进真实作品。" : "Product surfaces, intelligent capability, data engineering, edge delivery, and research models form one complete delivery chain. Choose a direction to see where it lands in shipped work."}
+              <ThemeCopy
+                neon={studioIntro[locale].neon}
+                ink={studioIntro[locale].ink}
+                press={studioIntro[locale].press}
+                pixel={studioIntro[locale].pixel}
+              />
             </p>
           </div>
 

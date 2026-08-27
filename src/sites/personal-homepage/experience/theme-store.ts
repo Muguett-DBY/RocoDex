@@ -16,6 +16,7 @@ export type CstdThemeMeta = Readonly<{
   swatch: string;
   signal: string;
   brand: LocalizedText;
+  compactBrand: LocalizedText;
   edition: LocalizedText;
 }>;
 
@@ -28,11 +29,12 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
     kind: "cyberpunk",
     label: "NEON DISTRICT",
     zhLabel: "霓虹街区",
-    description: "A cinematic cyberpunk engineering district.",
-    zhDescription: "赛博夜城、工程舱与实时信号构成的电影化世界。",
+    description: "A night district for systems that have to work in the real world.",
+    zhDescription: "夜城、工程舱和实时信号，给那些必须在现实里跑起来的作品。",
     swatch: "#f4d431",
     signal: "#24e0ff",
     brand: { zh: "奶黄包", en: "CUSTARD" },
+    compactBrand: { zh: "奶黄包", en: "CUSTARD" },
     edition: { zh: "CSTD / 个人工作室", en: "CSTD / PERSONAL STUDIO" },
   },
   {
@@ -40,11 +42,12 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
     kind: "ink-scroll",
     label: "INK PROTOCOL",
     zhLabel: "水墨协议",
-    description: "A living technical scroll drawn in ink and silence.",
-    zhDescription: "宣纸、山水、印章与工程图谱共同展开的数字长卷。",
+    description: "A quiet work scroll where craft and evidence share a page.",
+    zhDescription: "宣纸、山水和工程批注铺开一卷，慢慢看清每个取舍。",
     swatch: "#a7382f",
     signal: "#273d39",
     brand: { zh: "奶黄包", en: "CUSTARD" },
+    compactBrand: { zh: "奶黄包", en: "CUSTARD" },
     edition: { zh: "水墨协议 / 造物求真", en: "INK / CRAFT + TRUTH" },
   },
   {
@@ -52,11 +55,12 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
     kind: "broadsheet",
     label: "CSTD PRESS ROOM",
     zhLabel: "工程日报",
-    description: "An independent technology broadsheet built from evidence.",
-    zhDescription: "版头、分栏、铅字和半调图像组成的独立技术报纸。",
+    description: "A working newspaper for release notes, reports, and corrections.",
+    zhDescription: "像一份仍在编辑的技术报纸，报道交付，也刊登修订。",
     swatch: "#c43124",
     signal: "#087c89",
     brand: { zh: "THE CUSTARD CHRONICLE", en: "THE CUSTARD CHRONICLE" },
+    compactBrand: { zh: "工程日报", en: "CSTD PRESS" },
     edition: { zh: "系统 / 研究 / 悉尼版", en: "SYSTEMS / RESEARCH / SYDNEY EDITION" },
   },
   {
@@ -64,11 +68,12 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
     kind: "pixel-game",
     label: "PIXEL QUEST",
     zhLabel: "像素任务",
-    description: "A playable 16-bit engineering journey.",
-    zhDescription: "把能力、作品和证据编排成一条 16-bit 工程关卡。",
+    description: "A small 16-bit quest through choices, bugs, and release checks.",
+    zhDescription: "一条 16-bit 小路，把能力、漏洞和过关记录编在一起。",
     swatch: "#ffd43b",
     signal: "#31d7ff",
     brand: { zh: "CSTD QUEST", en: "CSTD QUEST" },
+    compactBrand: { zh: "CSTD QUEST", en: "CSTD QUEST" },
     edition: { zh: "玩家 01 / 等级 17", en: "PLAYER 01 / LEVEL 17" },
   },
 ] as const;

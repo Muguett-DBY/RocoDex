@@ -3,14 +3,14 @@ kind: "note"
 schemaVersion: 1
 slug: "host-boundaries-in-one-next-deployment"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-08-08"
-updatedAt: "2026-08-09"
-readingMinutes: 8
+updatedAt: "2026-08-27"
+readingMinutes: 12
 category: {"zh":"系统架构","en":"Systems architecture"}
 series: {"zh":"把边界写进代码","en":"Boundaries in code"}
 title: {"zh":"一个 Next.js 部署，两个真正独立的网站","en":"One Next.js deployment, two genuinely separate websites"}
-summary: {"zh":"从 Host 决策、route group、最小 public API 到导入守卫，解释共享部署如何不演变成共享泥球。","en":"Host decisions, route groups, narrow public APIs, and import guards keep shared deployment from becoming shared product code."}
+summary: {"zh":"一个仓库、一次部署，如何让 custard.top 和 RocoDex 仍然像两套真正独立的产品。","en":"How one repository and one deployment can still keep custard.top and RocoDex as genuinely separate products."}
 image: {"src":"/cstd-universe/cstd-neural-city-v3.webp","alt":{"zh":"由独立节点组成的神经城市","en":"A neural city made from isolated nodes"}}
 relatedCaseSlugs: ["rocodex-platform"]
 tags: ["Next.js","Architecture","Testing"]
@@ -26,17 +26,23 @@ toc: [{"id":"boundary","eyebrow":null,"title":{"zh":"先定义谁拥有 URL","en
 
 这也意味着 404 属于域名，而不是碰巧匹配到的 Next 页面。错误域名永远不应该靠页面组件自己发现。
 
+我把这件事写成入口契约，是因为主站和 RocoDex 的“看起来像”会越来越多：它们都用 Next.js，都有内容页，也都会需要图片和部署。越是相似，越不能靠命名习惯来阻止误用。请求在进入 React 之前就决定归属，后面的模块才有清晰的前提。
+
 </ArchiveSection>
 
 <ArchiveSection id="imports" title="用 public API 缩小跨站接触面">
 
 个人主站只向外暴露页面组件、metadata 与 server adapters。路由文件不能直接穿透到内部 content、components 或 infrastructure。这个限制让站点目录可以独立演进。
 
+public API 的价值不在于多一层文件，而在于把可依赖的东西写出来。新的页面如果必须穿透三层目录才能拿到一个数据，就说明接口还没有长好；当接口足够窄，代码评审也更容易看出一次改动是否越过了站点边界。
+
 </ArchiveSection>
 
 <ArchiveSection id="guard" title="架构测试要验证负空间">
 
 最有价值的断言不是某文件存在，而是某类导入永远不能出现。扫描生产 TS/TSX 能在代码评审前阻止认证、数据或 Three.js 运行时跨越边界。
+
+这类测试不替代人工设计，但能把最容易反复发生的错误变成机器门禁。它们也会提醒我，架构不是目录树的截图，而是一组可以在每次提交时重新回答的问题。
 
 <CodeSample language="ts" label="边界断言">
 
@@ -59,17 +65,23 @@ Folders organize code, but the host is the earliest product boundary visible to 
 
 A 404 belongs to the domain, not whichever Next page happened to match. The page tree should never discover a wrong host after rendering begins.
 
+I made this an entry contract because the portfolio and RocoDex will keep looking similar: both use Next.js, both have content pages, images, and deployments. The more they resemble each other, the less a naming convention can protect them. Ownership is decided before React starts; the modules downstream can then rely on a clear premise.
+
 </ArchiveSection>
 
 <ArchiveSection id="imports" title="Shrink cross-site contact with a public API">
 
 The portfolio exposes only page components, metadata, and server adapters. Route files cannot reach through to internal content, components, or infrastructure, allowing each site module to evolve independently.
 
+The value of a public API is not another folder. It is a written list of what other code may depend on. If a new route needs to reach through three directories for one datum, the interface is not mature yet. A narrow API makes it easier to see when a change crosses the site boundary.
+
 </ArchiveSection>
 
 <ArchiveSection id="guard" title="Architecture tests should verify negative space">
 
 The most useful assertion is not that a file exists, but that a class of import can never appear. Scanning production TS/TSX catches auth, data, or Three.js runtime leaks before review.
+
+These tests do not replace design judgment, but they turn recurring mistakes into machine gates. They also keep the architecture honest: it is not a screenshot of folders, but a set of questions answered again at every commit.
 
 <CodeSample language="ts" label="Boundary assertion">
 

@@ -2,18 +2,18 @@ import type { CstdLocale, LocalizedText } from "./content-types";
 
 export const cstdProfile = {
   name: { zh: "奶黄包", en: "Custard" },
-  title: { zh: "产品工程师 / 创意系统构建者", en: "Product engineer / creative systems builder" },
+  title: { zh: "产品工程师 / 创作工具与研究系统构建者", en: "Product engineer / builder of creative tools and research systems" },
   location: { zh: "悉尼 / 南京", en: "Sydney / Nanjing" },
-  availability: { zh: "持续构建独立产品与研究工具", en: "Building independent products and research tools" },
+  availability: { zh: "正在做独立产品，也在整理做产品的方法", en: "Building independent products and writing down how they get made" },
   intro: {
-    zh: "我把产品、数据、AI、研究与视觉工程编译成真正运行的系统。这里不把技术栈当徽章，而把每一个架构决定、失败边界和发布证据放回作品本身。",
-    en: "I compile product, data, AI, research, and visual engineering into systems that actually run. Technologies are not badges here; architecture decisions, failure boundaries, and release evidence stay attached to the work.",
+    zh: "我做产品，也做产品背后的系统：界面、数据、AI、研究和发布都要对真实使用负责。这个站不是技能清单，放在这里的是作品、取舍，以及它们后来怎么被验证。",
+    en: "I build products and the systems behind them: interfaces, data, AI, research, and release all have to answer to real use. This site is not a skills list; it keeps the work, the trade-offs, and how they were checked.",
   },
   now: {
-    updatedAt: "2026-08-09",
+    updatedAt: "2026-08-27",
     focus: {
-      zh: "把 CSTD 17.0 建成奶黄包的个人工程宇宙：身份先于系统，作品连接方法，证据能够运行，知识可以继续生长。",
-      en: "Building CSTD 17.0 as Custard's personal engineering universe: identity before system, work connected to method, executable proof, and knowledge that keeps growing.",
+      zh: "把 CSTD 17.0 做成一个能慢慢长大的个人档案：先让人看见我在做什么，再把作品、方法和验证过程连起来。",
+      en: "Making CSTD 17.0 into a personal archive that can grow: show what I am making first, then connect the work to its methods and checks.",
     },
     building: [
       { zh: "证据优先的公司研究与确定性估值工具。", en: "Evidence-first company research and deterministic valuation tools." },
