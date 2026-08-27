@@ -133,7 +133,7 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
     <CstdDocumentLocale locale={locale} />
     <div suppressHydrationWarning data-cstd-deep-shell data-cstd-locale={locale} data-cstd-theme={theme} data-cstd-theme-kind={themeMeta.kind} data-cstd-controls-ready={controlsReady ? "true" : "false"} data-cstd-visual-mode={visualMode} data-cstd-reading-mode={readingSurface ? readingMode : "studio"} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
       <a href="#cstd-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:bg-white focus:px-4 focus:py-3 focus:text-black">{locale === "zh" ? "跳到主要内容" : "Skip to content"}</a>
-      <SignalField mode={visualMode} />
+      <SignalField mode={visualMode} active={!(readingSurface && readingMode === "quiet")} />
       <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" />
       <div data-cstd-shell-overlay aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(7,9,11,0.18),rgba(7,9,11,0.82)_80%)]" />
       <div aria-hidden="true" className="cstd-route-progress fixed inset-x-0 top-0 z-[80] h-0.5 origin-left bg-[#f4d431] shadow-[0_0_16px_rgba(244,212,49,0.6)]" />

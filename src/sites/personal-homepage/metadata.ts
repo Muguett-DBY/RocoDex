@@ -15,7 +15,7 @@ export function getPersonalHomepageMetadata(locale: CstdLocale): Metadata {
   return createCstdMetadata({
     locale,
     path: locale === "en" ? "/en" : "/",
-    title: locale === "zh" ? "奶黄包 / Custard | 产品工程师与创意系统构建者" : "Custard | Product engineer and creative systems builder",
+    title: locale === "zh" ? "奶黄包 / Custard | 产品工程师与创作工具、研究系统构建者" : "Custard | Product engineer building creative tools and research systems",
     description: locale === "zh" ? "奶黄包的独立技术工作室：把产品、数据、AI、研究与边缘系统编译成真正运行的作品。" : "Custard's independent engineering studio, compiling product, data, AI, research, and edge systems into work that actually runs.",
     image: "/cstd-og-v2.webp",
     type: "profile",
@@ -45,7 +45,7 @@ export function getPersonalHomepageStructuredData(locale: CstdLocale) {
       "@type": "Person",
       name: locale === "zh" ? "奶黄包" : "Custard",
       alternateName: locale === "zh" ? "Custard" : "奶黄包",
-      jobTitle: locale === "zh" ? "产品工程师与创意系统构建者" : "Product engineer and creative systems builder",
+      jobTitle: locale === "zh" ? "产品工程师与创作工具、研究系统构建者" : "Product engineer building creative tools and research systems",
       knowsAbout: locale === "zh"
         ? ["产品工程", "证据优先 AI", "数据系统", "量化研究", "浏览器视觉工程"]
         : ["Product engineering", "Evidence-first AI", "Data systems", "Quantitative research", "Visual engineering"],

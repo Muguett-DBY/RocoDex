@@ -5,12 +5,12 @@ slug: "portrait-booking"
 projectId: "photography"
 year: "2026"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-01-01"
-updatedAt: "2026-08-09"
+updatedAt: "2026-08-27"
 title: {"zh":"奶黄包摄影体验","en":"Custard portrait experience"}
 kicker: {"zh":"服务设计 / 预约与视觉","en":"Service design / booking and visual system"}
-summary: {"zh":"把作品展示、预约、客户账户、课程活动、浏览器修图和后台管理串成一条完整摄影服务链。","en":"A complete portrait-service journey connecting work, booking, customer accounts, courses, browser editing, and administration."}
+summary: {"zh":"让访客从看照片、选服务一路走到预约；客户账户、活动、浏览器修图和后台管理共享同一份服务状态。","en":"A portrait site that takes a visitor from photographs to a booking, with accounts, events, browser editing, and admin sharing one service state."}
 film: {"durationSeconds":94,"logline":{"zh":"让一段电影化摄影展示自然抵达一个真实、可靠的预约。","en":"Letting a cinematic portrait showcase arrive naturally at a real, reliable booking."},"beats":[{"id":"beautiful-dead-end","phase":"problem","title":{"zh":"好看不能成为旅程终点","en":"Beauty cannot be a dead end"},"detail":{"zh":"作品、档期、客户账户与交付分散时，访客欣赏完仍然不知道下一步。","en":"When work, availability, accounts, and delivery are separate, visitors admire the page but cannot continue."},"signal":{"zh":"展示必须连接服务","en":"Presentation must connect to service"}},{"id":"media-first","phase":"constraint","title":{"zh":"真实照片必须先到","en":"Real photographs arrive first"},"detail":{"zh":"三维氛围、视频和编辑器不能阻塞 LCP，也不能掩盖真正作品。","en":"3D atmosphere, video, and editing cannot block LCP or obscure the actual work."},"signal":{"zh":"素材是主角，特效是调度","en":"The work is primary; effects are orchestration"}},{"id":"journey-model","phase":"architecture","title":{"zh":"一条完整服务链","en":"One complete service journey"},"detail":{"zh":"作品、日历、预约、账户、活动、修图与后台共享清晰的状态边界。","en":"Work, calendar, booking, accounts, events, editing, and administration share explicit state boundaries."},"signal":{"zh":"每个页面都有下一步","en":"Every surface has a next step"}},{"id":"capacity-safe","phase":"decision","title":{"zh":"容量安全优先于乐观界面","en":"Capacity safety before optimistic UI"},"detail":{"zh":"预约与改期必须重新确认服务容量，避免漂亮界面制造超售。","en":"Booking and rescheduling revalidate service capacity so a polished interface cannot create overbooking."},"signal":{"zh":"可用性是后端事实","en":"Availability is a backend fact"}},{"id":"whole-story","phase":"evidence","title":{"zh":"浏览器验收完整故事","en":"The browser verifies the whole story"},"detail":{"zh":"响应式首映、预约、自助改期和后台状态在同一发布流程中通过。","en":"The responsive premiere, booking, self-service rescheduling, and administrative state pass one release flow."},"signal":{"zh":"从第一帧到履约都可验证","en":"From first frame to fulfillment, every step is verifiable"}}]}
 role: {"zh":"体验设计、前后端与沉浸式视觉","en":"Experience design, full stack, and immersive visual direction"}
 runtimeStatus: {"zh":"线上运行","en":"Live"}
@@ -32,17 +32,25 @@ toc: [{"id":"journey","eyebrow":{"zh":"01 / 旅程","en":"01 / Journey"},"title"
 
 首页不是作品堆叠，而是从风格确认、服务理解、档期选择到预约恢复的连续路径。后台与客户账户共享同一预约事实。
 
+摄影站最容易掉进一个陷阱：把首页做成漂亮的画廊，却没有给访客一个自然的下一步。我把服务说明、作品气质、可选时间和预约状态看成同一个旅程的四个节点。访客可以先看照片，也可以直接问档期，但两条路最后都会回到同一份服务事实。
+
+这要求文案和交互都少一点“请探索”，多一点明确回应：这是什么拍摄、适合谁、要准备什么、提交之后会发生什么。好看的首屏负责让人留下，清楚的路径负责让人完成预约。
+
 </ArchiveSection>
 
 <ArchiveSection id="experience" title="三维氛围不能阻塞真实照片。" eyebrow="02 / 体验">
 
 沉浸层被隔离在单画布运行时，图片使用响应式资源，PWA 支持离线恢复；动效服务于品牌气质而不是取代内容。
 
+我把照片放在视觉层的最前面，再让三维和转场补空间感。网络慢、设备弱或用户关闭动效时，作品仍然是完整的第一主角。预约表单也不依赖一次长请求：本地状态保留未完成输入，恢复时重新检查可用档期。
+
 </ArchiveSection>
 
 <ArchiveSection id="release" title="发布门禁覆盖完整预约故事。" eyebrow="03 / 发布">
 
 静态检查、单测、构建预算与 Playwright 共同验证页面、API、服务工作线程和核心预约流程。
+
+发布前我会从访客和管理员两端各走一遍：打开首页、查看作品、选择时间、提交预约，再到后台确认状态。视觉回归只是一部分，真正需要确认的是预约事实没有在漂亮的转场中丢失，离线恢复也不会把旧档期当成新档期。
 
 </ArchiveSection>
 
@@ -54,17 +62,25 @@ toc: [{"id":"journey","eyebrow":{"zh":"01 / 旅程","en":"01 / Journey"},"title"
 
 The homepage is not a pile of images. It guides visitors from style and service understanding into availability, booking, and recovery, while admin and customer accounts share one booking truth.
 
+Photography sites have an easy trap: build a beautiful gallery and leave visitors without a natural next step. I treated service explanation, visual style, availability, and booking state as four points in one journey. Someone can begin with a photograph or with a date; both routes return to the same service truth.
+
+That means the copy and interaction need fewer invitations to “explore” and more direct answers: what the session is, who it suits, what to prepare, and what happens after submission. The first frame earns attention; a clear path earns the booking.
+
 </ArchiveSection>
 
 <ArchiveSection id="experience" title="3D atmosphere must not block the photographs." eyebrow="02 / Experience">
 
 The immersive layer stays in one isolated canvas, imagery is responsive, and the PWA restores interrupted booking. Motion supports the brand without replacing the work.
 
+The photographs sit in front of the visual layer, while 3D and transitions add a sense of space. On a slow network, a modest device, or a calm-motion setting, the work remains the main subject. The form also avoids one fragile long request: local state keeps unfinished input, and recovery rechecks availability.
+
 </ArchiveSection>
 
 <ArchiveSection id="release" title="Release gates cover the whole booking story." eyebrow="03 / Release">
 
 Static checks, unit tests, build budgets, and Playwright jointly verify pages, APIs, service workers, and the critical booking flow.
+
+Before release I walk the visitor and admin sides: open the home page, view the work, choose a time, submit a booking, and confirm the state in the back office. Visual regression is only part of it. The important check is that the booking truth survives the transition, and that offline recovery does not treat an old slot as a new one.
 
 </ArchiveSection>
 

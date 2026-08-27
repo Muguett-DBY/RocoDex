@@ -5,12 +5,12 @@ slug: "dcf-quantum"
 projectId: "dcf"
 year: "2026"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-01-01"
-updatedAt: "2026-08-09"
+updatedAt: "2026-08-27"
 title: {"zh":"DCF Quantum","en":"DCF Quantum"}
 kicker: {"zh":"确定性金融计算 / 本地软件","en":"Deterministic finance / local software"}
-summary: {"zh":"面向全量 A 股与港股通的三情景 DCF 筛选器：公开计算、离线缓存、可审计运行清单与 Windows 安装包。","en":"A three-scenario DCF screener for mainland shares and Stock Connect, with public calculations, offline caching, auditable manifests, and a Windows installer."}
+summary: {"zh":"一套能在本机运行的三情景 DCF 筛选器：把数据口径、缓存、运行清单和 Windows 交付放在同一条研究流程里。","en":"A local three-scenario DCF screener that keeps data definitions, caching, run manifests, and Windows delivery in one research flow."}
 film: {"durationSeconds":108,"logline":{"zh":"让全市场估值从黑盒答案变成可复算、可追踪、可交付的研究工具。","en":"Turning full-market valuation from a black box into a reproducible, traceable research tool."},"beats":[{"id":"black-box","phase":"problem","title":{"zh":"估值结论无法复算","en":"Valuations could not be reproduced"},"detail":{"zh":"数据版本、假设和运行路径不透明时，再漂亮的价格目标也无法审计。","en":"Without visible data versions, assumptions, and run paths, even polished targets cannot be audited."},"signal":{"zh":"结论必须携带来路","en":"Every conclusion needs lineage"}},{"id":"market-scale","phase":"constraint","title":{"zh":"全市场规模与离线交付","en":"Market scale and offline delivery"},"detail":{"zh":"扫描要覆盖大量证券，并在没有 Python 环境的 Windows 电脑上稳定运行。","en":"The scan covers a broad security universe and must run on Windows machines without Python."},"signal":{"zh":"研究内核不能依赖开发环境","en":"The research core cannot depend on a dev environment"}},{"id":"deterministic-core","phase":"architecture","title":{"zh":"确定性公式拥有最终权威","en":"Deterministic formulas retain authority"},"detail":{"zh":"三情景 DCF、数据指纹、运行清单和缓存层被拆成可独立验证的阶段。","en":"Three-scenario DCF, data fingerprints, run manifests, and caches become independently verifiable stages."},"signal":{"zh":"AI 解释，不替代计算","en":"AI explains; it does not replace calculation"}},{"id":"real-bottleneck","phase":"failure","title":{"zh":"瓶颈并不在 DCF 数学","en":"The bottleneck was not DCF math"},"detail":{"zh":"真实可执行文件剖析把热点定位到重复缓存 JSON 解析与序列化。","en":"Profiling the real executable located the hot path in repeated cache JSON parsing and serialization."},"signal":{"zh":"先测量，再优化","en":"Measure before optimizing"}},{"id":"windows-release","phase":"outcome","title":{"zh":"研究成为可安装产品","en":"Research becomes an installable product"},"detail":{"zh":"Windows 安装包、离线缓存和验证脚本把模型交到最终使用环境。","en":"A Windows installer, offline cache, and release verifier carry the model into its actual environment."},"signal":{"zh":"公式、数据与交付同链验收","en":"Formula, data, and delivery pass one gate"}}]}
 role: {"zh":"产品、Python 内核、性能与桌面交付","en":"Product, Python core, performance, and desktop delivery"}
 runtimeStatus: {"zh":"本地发布","en":"Local release"}
@@ -32,17 +32,23 @@ toc: [{"id":"principle","eyebrow":{"zh":"01 / 原则","en":"01 / Principle"},"ti
 
 软件不调用大模型，也不自动交易。悲观、中性和乐观区间由公开、确定性的 Python 公式产生，并保留实际折现率口径。
 
+我做这个工具的出发点很简单：同一家公司换一台电脑、换一次运行时间，不应该因为页面重新组织了一下就得到另一套数学。用户可以调整假设，但每个输入都要有明确含义，结果也要能回到公式和数据。它不是替人做投资决定，而是把研究过程从黑盒里拿出来。
+
 </ArchiveSection>
 
 <ArchiveSection id="audit" title="每次扫描都有数据血缘。" eyebrow="02 / 审计">
 
 运行清单记录模型版本、配置哈希、数据指纹、缓存参数、依赖版本与输出哈希。代理结果与已完成 FCFF 桥接的确认结果明确分离。
 
+“代理”在这里不是一个模糊的免责声明，而是产品里的真实状态。缺少足够财务数据时，系统可以告诉用户目前能算到哪一步，但不能把估算包装成已经确认的 FCFF。清单把这层差别留下来，后续更新数据时也能知道哪些结果值得重算。
+
 </ArchiveSection>
 
 <ArchiveSection id="desktop" title="把研究内核交付给没有 Python 的电脑。" eyebrow="03 / 交付">
 
 Windows x64 安装包包含本地浏览器 GUI、独立工作进程、安全取消和离线体验；服务只监听本机回环地址。
+
+桌面交付的难点不只是把 Python 打成一个 exe。启动、取消、缓存目录、错误提示和没有网络时的行为都要在最终机器上试过。把服务限制在回环地址，是因为这个工具的目标是本机研究，不需要把数据接口暴露到局域网。
 
 </ArchiveSection>
 
@@ -54,17 +60,23 @@ Windows x64 安装包包含本地浏览器 GUI、独立工作进程、安全取�
 
 The software calls no language model and makes no trades. Bear, base, and bull ranges come from public deterministic Python formulas with the applied discount-rate basis retained.
 
+The motivation was simple: the same company should not produce different mathematics just because the page was rearranged or the program ran on another machine. Users can change assumptions, but each input needs a clear meaning and each output should lead back to a formula and its data. The tool does not decide an investment; it makes the research process inspectable.
+
 </ArchiveSection>
 
 <ArchiveSection id="audit" title="Every scan carries data lineage." eyebrow="02 / Audit">
 
 Run manifests retain model version, config hash, data fingerprint, cache parameters, dependencies, and output hashes. Proxy estimates remain explicitly separate from FCFF-bridged confirmations.
 
+“Proxy” is not a vague disclaimer here; it is a real product state. When enough financial evidence is missing, the system can say how far it got without presenting an estimate as a confirmed FCFF result. Keeping the distinction in the manifest also shows what deserves recalculation when new data arrives.
+
 </ArchiveSection>
 
 <ArchiveSection id="desktop" title="Ship the research core to machines without Python." eyebrow="03 / Delivery">
 
 The Windows x64 package includes a browser GUI, isolated worker process, safe cancellation, and offline demo, bound only to loopback.
+
+Desktop delivery is more than turning Python into an executable. Startup, cancellation, cache directories, error messages, and offline behavior all need to be tried on the machine that receives the package. Binding to loopback is deliberate: this is a local research tool, not a data service for the whole network.
 
 </ArchiveSection>
 

@@ -5,12 +5,12 @@ slug: "alpha-research-system"
 projectId: "alpha"
 year: "2026"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-01-01"
-updatedAt: "2026-08-09"
+updatedAt: "2026-08-27"
 title: {"zh":"CSTD Alpha 研究系统","en":"CSTD Alpha research system"}
 kicker: {"zh":"证据管线 / 决策工作台","en":"Evidence pipeline / decision workspace"}
-summary: {"zh":"把公司研究从一次性 AI 回答改造成有数据来源、异步任务、不可变估值版本和反证条件的私人研究工作流。","en":"Company research becomes a source-aware workflow with background jobs, immutable valuation versions, and explicit disconfirming conditions instead of a one-shot AI answer."}
+summary: {"zh":"把“问一句出一篇报告”拆成可回看的研究流程：来源、异步任务、估值版本和反证条件都跟着结果保存。","en":"A research workflow instead of a one-shot report: sources, background jobs, valuation versions, and disconfirming conditions stay with each result."}
 film: {"durationSeconds":112,"logline":{"zh":"把一次性 AI 回答改造成能够被追问、复核和反证的研究系统。","en":"Turning one-shot AI answers into research that can be questioned, verified, and disproved."},"beats":[{"id":"answer-trap","phase":"problem","title":{"zh":"流畅回答不等于可靠研究","en":"Fluent answers are not reliable research"},"detail":{"zh":"没有来源寿命、任务状态和反证条件的文本，无法支撑长期决策。","en":"Text without source age, job state, or disconfirming conditions cannot support durable decisions."},"signal":{"zh":"回答长度不是质量指标","en":"Answer length is not a quality metric"}},{"id":"stale-races","phase":"constraint","title":{"zh":"过期任务不能覆盖新事实","en":"Stale jobs cannot overwrite fresh truth"},"detail":{"zh":"异步收集与综合会乱序完成，必须识别证据版本和当前任务。","en":"Asynchronous collection and synthesis finish out of order, so evidence versions and current jobs must be explicit."},"signal":{"zh":"完成不代表仍然有效","en":"Completion does not imply currency"}},{"id":"fingerprint-first","phase":"decision","title":{"zh":"先指纹，再调用模型","en":"Fingerprint before model invocation"},"detail":{"zh":"证据集先被规范化和指纹化；没有变化时复用结果，有变化时创建新版本。","en":"Evidence is normalized and fingerprinted first; unchanged inputs reuse work, changed inputs create a new version."},"signal":{"zh":"模型成本服从证据变化","en":"Model cost follows evidence change"}},{"id":"immutable-versions","phase":"architecture","title":{"zh":"估值版本不可变","en":"Valuation versions are immutable"},"detail":{"zh":"确定性计算、AI 解释、来源与反证条件共同绑定到同一个研究快照。","en":"Deterministic calculations, AI explanation, sources, and disconfirming conditions bind to one research snapshot."},"signal":{"zh":"每个结论都能回到输入","en":"Every conclusion returns to its inputs"}},{"id":"evidence-release","phase":"evidence","title":{"zh":"研究链路可重放","en":"The research chain can be replayed"},"detail":{"zh":"Agent Replay、测试与生产检查共同证明收集、排队、综合和发布行为。","en":"Agent Replay, tests, and production checks prove collection, queueing, synthesis, and publication behavior."},"signal":{"zh":"公开证据约束公开回答","en":"Published evidence constrains published answers"}}]}
 role: {"zh":"产品、全栈、数据管线与 AI 编排","en":"Product, full stack, data pipeline, and AI orchestration"}
 runtimeStatus: {"zh":"私有生产系统","en":"Private production system"}
@@ -32,11 +32,15 @@ toc: [{"id":"problem","eyebrow":{"zh":"01 / 问题","en":"01 / Problem"},"title"
 
 行情、财务、公告和行业线索更新频率不同。把抓取、综合与页面请求绑在一起，会同时得到超时、重复成本和不可追溯结论。
 
+我不想再做一个“问一句就给一篇报告”的页面。研究真正需要的是把问题拆成几个可以回看的决定：这家公司是谁，数据来自哪里，哪些字段还缺，估值用的是什么假设，什么证据会让结论失效。报告只是这串决定最后被整理出来的一个版本。
+
 </ArchiveSection>
 
 <ArchiveSection id="pipeline" title="先生成证据指纹，再决定是否调用模型。" eyebrow="02 / 管线">
 
 定时 Action 负责收集和归一化公开数据；Pages Function 只创建或复用任务；后台工作流完成深度综合并写回 D1/R2。证据没有实质变化时复用缓存。
+
+这样分层还有一个实际好处：某一环失败时，不会把所有状态都说成失败。抓取失败可以保留上一次有时间戳的资料，模型调用失败可以重试综合，发布失败也不会抹掉已经生成的版本。用户看到的不只是一个 loading，而是当前研究到底走到了哪一步。
 
 <CodeSample language="text" label="异步研究链">
 
@@ -54,6 +58,8 @@ collect -> normalize -> fingerprint
 
 五年 FCFF DCF 在浏览器预览和服务端保存中使用同一套公式。AI 只解释假设，不直接修改最终计算；每次保存创建不可变后继版本。
 
+版本不可变是为了让复盘有对象可指。下一次研究可以基于新证据建立后继版本，但不会改写旧报告的输入。遇到争议时，可以先比较两个版本的证据和假设，再讨论结论，而不是凭印象回忆模型当时说了什么。
+
 </ArchiveSection>
 
 </LocaleBlock>
@@ -64,11 +70,15 @@ collect -> normalize -> fingerprint
 
 Prices, filings, disclosures, and industry signals age at different rates. Binding collection and synthesis to a page request creates timeouts, repeated cost, and untraceable conclusions.
 
+I did not want another page that answers one prompt with one report. Research needs a series of decisions that can be revisited: which company is this, where did the data come from, what is missing, which assumptions drive the valuation, and what evidence would disprove it. The report is one version of that chain, not the whole product.
+
 </ArchiveSection>
 
 <ArchiveSection id="pipeline" title="Fingerprint evidence before invoking a model." eyebrow="02 / Pipeline">
 
 Scheduled Actions collect and normalize public data. Pages Functions create or reuse jobs; background workflows synthesize and persist to D1/R2. Unchanged evidence reuses cached work.
+
+The separation has a practical benefit: one failed stage does not make every state look failed. Collection can keep the last dated material, synthesis can retry without fetching everything again, and publication does not erase a version that already exists. The user sees where the research stopped instead of one permanent loading state.
 
 <CodeSample language="text" label="Asynchronous research chain">
 
@@ -85,6 +95,8 @@ collect -> normalize -> fingerprint
 <ArchiveSection id="valuation" title="Deterministic formulas retain final authority." eyebrow="03 / Valuation">
 
 The five-year FCFF DCF uses the same deterministic formula in browser preview and server persistence. AI explains assumptions but cannot decide outputs; every save creates an immutable successor.
+
+Immutable versions give review something concrete to point at. A new run can build a successor from new evidence without rewriting the old inputs. When two results disagree, compare their evidence and assumptions before debating what the model “meant”.
 
 </ArchiveSection>
 

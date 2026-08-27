@@ -3,14 +3,14 @@ kind: "note"
 schemaVersion: 1
 slug: "evidence-first-ai-research"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-08-06"
-updatedAt: "2026-08-09"
-readingMinutes: 10
+updatedAt: "2026-08-27"
+readingMinutes: 13
 category: {"zh":"AI 系统","en":"AI systems"}
 series: {"zh":"证据优先的智能系统","en":"Evidence-first intelligence"}
 title: {"zh":"先刷新证据，再让模型说话","en":"Refresh evidence before asking the model to speak"}
-summary: {"zh":"公司研究里真正昂贵的不是 token，而是过期事实、重复任务和无法复现的结论。","en":"In company research, stale facts, duplicate jobs, and irreproducible conclusions cost more than tokens."}
+summary: {"zh":"公司研究最贵的往往不是 token，而是过期事实、重复任务和说不清来路的结论。","en":"In company research, stale facts, duplicate jobs, and conclusions without a clear source usually cost more than tokens."}
 image: {"src":"/cstd-universe/cstd-data-vault-v1.webp","alt":{"zh":"有来源约束的数据舱","en":"A source-constrained data vault"}}
 relatedCaseSlugs: ["alpha-research-system"]
 tags: ["AI","Evidence","Cloudflare","Workflows"]
@@ -24,11 +24,15 @@ toc: [{"id":"separate","eyebrow":null,"title":{"zh":"收集、综合、发布是
 
 公开数据抓取适合定时批处理；模型综合适合可重试后台任务；页面请求只应该读取已发布结果并触发轻量状态变化。把三者绑在一个 HTTP 请求中，只会把最慢环节变成所有人的超时。
 
+我会把研究请求拆成三个可以分别失败的阶段。抓取失败时，系统应该保留上一份有日期的证据，而不是返回一张没有来源的新报告；模型失败时，可以重试综合，不必再抓一遍数据；发布失败时，已经生成的版本仍然应该能被查到。分开之后，错误会更具体，成本也更容易解释。
+
 </ArchiveSection>
 
 <ArchiveSection id="fingerprint" title="缓存键应该描述证据，而不是时间">
 
 模板版本与公司证据指纹共同构成可复用单元。即使定时任务再次运行，只要归一化内容没有变化，就不需要重新调用模型。
+
+指纹的意义不只是省 token。它把“输入没有变，所以结果可以复用”变成一条可检查的规则。模板升级、来源变化或缺失字段补齐时，指纹会变化，系统才创建新的版本；普通的定时触发不会凭空制造一个新结论。
 
 <CodeSample language="text" label="复用键">
 
@@ -44,6 +48,8 @@ result_key = template_version + evidence_fingerprint
 
 任务创建时生成运行令牌，后台 worker 回写前原子认领当前运行。新任务已经取代旧任务时，旧回调只能被记录，不能覆盖最新报告。
 
+这个边界也解决了一个很容易被忽略的界面问题：完成状态不等于当前状态。旧任务即使最后完成，也可能已经不是用户正在看的那一版。把运行令牌、版本和发布时间一起展示，用户才能分辨“完成了”与“现在仍然有效”。
+
 </ArchiveSection>
 
 </LocaleBlock>
@@ -54,11 +60,15 @@ result_key = template_version + evidence_fingerprint
 
 Public data collection belongs in scheduled batches, model synthesis in retryable background jobs, and page requests in reading published state. Binding them to one HTTP request turns the slowest stage into everybody's timeout.
 
+I split a research request into three stages that can fail independently. If collection fails, the system can keep the last dated evidence instead of returning a new report without sources. If synthesis fails, it can retry without collecting everything again. If publication fails, the generated version should still be inspectable. The separation makes errors more specific and costs easier to explain.
+
 </ArchiveSection>
 
 <ArchiveSection id="fingerprint" title="Cache keys should describe evidence, not time">
 
 Template version plus company evidence fingerprint forms the reusable unit. A scheduled run does not justify a new model call when normalized evidence has not changed.
+
+The fingerprint is not only about saving tokens. It turns “the input did not change, so reuse is allowed” into a checkable rule. A template update, source change, or newly filled gap changes the fingerprint and creates a new version; a routine schedule does not invent a new conclusion.
 
 <CodeSample language="text" label="Reuse key">
 
@@ -73,6 +83,8 @@ result_key = template_version + evidence_fingerprint
 <ArchiveSection id="stale" title="Stale callbacks must lose write authority">
 
 A run token is created with each job and atomically claimed before publication. Once a newer run supersedes it, an old callback may be logged but cannot overwrite the latest report.
+
+This also fixes an easy-to-miss interface problem: completed is not the same as current. An old job may finish after it has stopped being the report a user is looking at. Showing the run token, version, and publication time together makes that difference visible.
 
 </ArchiveSection>
 

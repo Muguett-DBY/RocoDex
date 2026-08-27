@@ -4,9 +4,9 @@ import type { CstdCaseStudy, CstdProofMeshEntry, CstdTechnicalNote } from "../co
 export const generatedCstdCaseStudies = [
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-01-01",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "alpha-research-system",
     "projectId": "alpha",
     "year": "2026",
@@ -19,8 +19,8 @@ export const generatedCstdCaseStudies = [
       "en": "Evidence pipeline / decision workspace"
     },
     "summary": {
-      "zh": "把公司研究从一次性 AI 回答改造成有数据来源、异步任务、不可变估值版本和反证条件的私人研究工作流。",
-      "en": "Company research becomes a source-aware workflow with background jobs, immutable valuation versions, and explicit disconfirming conditions instead of a one-shot AI answer."
+      "zh": "把“问一句出一篇报告”拆成可回看的研究流程：来源、异步任务、估值版本和反证条件都跟着结果保存。",
+      "en": "A research workflow instead of a one-shot report: sources, background jobs, valuation versions, and disconfirming conditions stay with each result."
     },
     "film": {
       "durationSeconds": 112,
@@ -326,9 +326,9 @@ export const generatedCstdCaseStudies = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-01-01",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "cfzzs-crm",
     "projectId": "crm",
     "year": "2026",
@@ -341,8 +341,8 @@ export const generatedCstdCaseStudies = [
       "en": "Operations / permissions and concurrency"
     },
     "summary": {
-      "zh": "面向产业园区招商团队的完整线索工作流：权限范围、阶段流转、企业查重、空间资源和审计型导出。",
-      "en": "A complete lead workflow for industrial park teams: scoped permissions, stage transitions, deduplication, spatial inventory, and auditable exports."
+      "zh": "给产业园区招商团队用的一套线索工作台：从企业查重、阶段推进到空间资源和导出，关键状态都能追溯。",
+      "en": "A lead workbench for an industrial-park team, keeping deduplication, stage changes, spatial inventory, and exports tied to traceable state."
     },
     "film": {
       "durationSeconds": 102,
@@ -612,9 +612,9 @@ export const generatedCstdCaseStudies = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-01-01",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "creative-workbench",
     "projectId": "design",
     "year": "2026",
@@ -627,8 +627,8 @@ export const generatedCstdCaseStudies = [
       "en": "Generative media / private workflow"
     },
     "summary": {
-      "zh": "一个把流式对话、图片、视频、消息分支和素材管理放进统一数据模型的私人中文创作环境。",
-      "en": "A private Chinese creative environment that unifies streaming chat, images, video, message branches, and asset management."
+      "zh": "一个给自己使用的中文创作工作台：对话可以分支，图片和视频任务可以恢复，素材始终找得到来源。",
+      "en": "A private Chinese workbench where conversations branch, image and video jobs can recover, and every asset keeps its source."
     },
     "film": {
       "durationSeconds": 100,
@@ -895,9 +895,9 @@ export const generatedCstdCaseStudies = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-01-01",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "dcf-quantum",
     "projectId": "dcf",
     "year": "2026",
@@ -910,8 +910,8 @@ export const generatedCstdCaseStudies = [
       "en": "Deterministic finance / local software"
     },
     "summary": {
-      "zh": "面向全量 A 股与港股通的三情景 DCF 筛选器：公开计算、离线缓存、可审计运行清单与 Windows 安装包。",
-      "en": "A three-scenario DCF screener for mainland shares and Stock Connect, with public calculations, offline caching, auditable manifests, and a Windows installer."
+      "zh": "一套能在本机运行的三情景 DCF 筛选器：把数据口径、缓存、运行清单和 Windows 交付放在同一条研究流程里。",
+      "en": "A local three-scenario DCF screener that keeps data definitions, caching, run manifests, and Windows delivery in one research flow."
     },
     "film": {
       "durationSeconds": 108,
@@ -1198,9 +1198,9 @@ export const generatedCstdCaseStudies = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-01-01",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "portrait-booking",
     "projectId": "photography",
     "year": "2026",
@@ -1213,8 +1213,8 @@ export const generatedCstdCaseStudies = [
       "en": "Service design / booking and visual system"
     },
     "summary": {
-      "zh": "把作品展示、预约、客户账户、课程活动、浏览器修图和后台管理串成一条完整摄影服务链。",
-      "en": "A complete portrait-service journey connecting work, booking, customer accounts, courses, browser editing, and administration."
+      "zh": "让访客从看照片、选服务一路走到预约；客户账户、活动、浏览器修图和后台管理共享同一份服务状态。",
+      "en": "A portrait site that takes a visitor from photographs to a booking, with accounts, events, browser editing, and admin sharing one service state."
     },
     "film": {
       "durationSeconds": 94,
@@ -1500,9 +1500,9 @@ export const generatedCstdCaseStudies = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-01-01",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "rocodex-platform",
     "projectId": "rocodex",
     "year": "2026",
@@ -1515,8 +1515,8 @@ export const generatedCstdCaseStudies = [
       "en": "Domain boundaries / content product"
     },
     "summary": {
-      "zh": "把个人主站与图鉴产品放进同一个 Next.js 部署容器，同时让域名、认证、内容和回归测试保持真正独立。",
-      "en": "Two independent websites share one Next.js deployment container while domains, authentication, content, and regression suites remain isolated."
+      "zh": "个人主站和 RocoDex 共用一个 Next.js 部署，但域名、认证、内容模块和回归测试各自负责，互不越界。",
+      "en": "The portfolio and RocoDex share one Next.js deployment while hosts, auth, content modules, and regression suites remain separately owned."
     },
     "film": {
       "durationSeconds": 96,
@@ -1855,11 +1855,11 @@ export const generatedCstdCaseStudies = [
 export const generatedCstdTechnicalNotes = [
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-07-14",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "chemical-engineering-to-software-systems",
-    "readingMinutes": 8,
+    "readingMinutes": 12,
     "category": {
       "zh": "学习路径",
       "en": "Learning path"
@@ -1873,8 +1873,8 @@ export const generatedCstdTechnicalNotes = [
       "en": "How chemical engineering shaped software systems thinking"
     },
     "summary": {
-      "zh": "能量衡算、传递过程、分离与实验训练，最终变成对边界、守恒、状态和可观测性的工程直觉。",
-      "en": "Balances, transport, separation, and lab work became engineering intuition about boundaries, conservation, state, and observability."
+      "zh": "我在化工里学到的边界、衡算和实验记录，后来怎样影响我做数据、权限、状态和发布。",
+      "en": "How boundaries, balances, and lab records from chemical engineering changed the way I build data, permissions, state, and releases."
     },
     "image": {
       "src": "/cstd-archive/cstd-archive-notebook-v1.webp",
@@ -1923,11 +1923,11 @@ export const generatedCstdTechnicalNotes = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-07-18",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "data-wrangling-as-product-design",
-    "readingMinutes": 9,
+    "readingMinutes": 12,
     "category": {
       "zh": "数据科学",
       "en": "Data science"
@@ -1941,8 +1941,8 @@ export const generatedCstdTechnicalNotes = [
       "en": "Data wrangling is product design"
     },
     "summary": {
-      "zh": "从 USYD 数据课程、Monash data wrangling 与实际研究管线中形成的一套数据契约观。",
-      "en": "A view of data contracts shaped by USYD data coursework, Monash data wrangling, and production research pipelines."
+      "zh": "数据清洗并不只是分析前的杂活：每个缺失值、日期和主体匹配规则，都会改变产品怎么说话。",
+      "en": "Wrangling is not disposable prep: every missing value, date, and entity match changes what a product is able to say."
     },
     "image": {
       "src": "/cstd-archive/cstd-archive-data-film-v1.webp",
@@ -1991,11 +1991,11 @@ export const generatedCstdTechnicalNotes = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-08-03",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "deterministic-core-ai-edge",
-    "readingMinutes": 9,
+    "readingMinutes": 12,
     "category": {
       "zh": "产品工程",
       "en": "Product engineering"
@@ -2009,8 +2009,8 @@ export const generatedCstdTechnicalNotes = [
       "en": "Put AI at the explanation edge, not the decision core"
     },
     "summary": {
-      "zh": "估值系统如何让生成式能力增加理解，而不污染可复算的财务结果。",
-      "en": "How a valuation system adds generative explanation without contaminating reproducible financial outputs."
+      "zh": "让 AI 帮忙整理和解释，但把估值公式、现金流、折现和版本决定权留给能测试的代码。",
+      "en": "Let AI organize and explain while testable code keeps authority over valuation formulas, cash flow, discounting, and versions."
     },
     "image": {
       "src": "/cstd-archive/cstd-archive-cobalt-modules-v1.webp",
@@ -2059,11 +2059,11 @@ export const generatedCstdTechnicalNotes = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-08-06",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "evidence-first-ai-research",
-    "readingMinutes": 10,
+    "readingMinutes": 13,
     "category": {
       "zh": "AI 系统",
       "en": "AI systems"
@@ -2077,8 +2077,8 @@ export const generatedCstdTechnicalNotes = [
       "en": "Refresh evidence before asking the model to speak"
     },
     "summary": {
-      "zh": "公司研究里真正昂贵的不是 token，而是过期事实、重复任务和无法复现的结论。",
-      "en": "In company research, stale facts, duplicate jobs, and irreproducible conclusions cost more than tokens."
+      "zh": "公司研究最贵的往往不是 token，而是过期事实、重复任务和说不清来路的结论。",
+      "en": "In company research, stale facts, duplicate jobs, and conclusions without a clear source usually cost more than tokens."
     },
     "image": {
       "src": "/cstd-universe/cstd-data-vault-v1.webp",
@@ -2126,11 +2126,11 @@ export const generatedCstdTechnicalNotes = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-08-08",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "host-boundaries-in-one-next-deployment",
-    "readingMinutes": 8,
+    "readingMinutes": 12,
     "category": {
       "zh": "系统架构",
       "en": "Systems architecture"
@@ -2144,8 +2144,8 @@ export const generatedCstdTechnicalNotes = [
       "en": "One Next.js deployment, two genuinely separate websites"
     },
     "summary": {
-      "zh": "从 Host 决策、route group、最小 public API 到导入守卫，解释共享部署如何不演变成共享泥球。",
-      "en": "Host decisions, route groups, narrow public APIs, and import guards keep shared deployment from becoming shared product code."
+      "zh": "一个仓库、一次部署，如何让 custard.top 和 RocoDex 仍然像两套真正独立的产品。",
+      "en": "How one repository and one deployment can still keep custard.top and RocoDex as genuinely separate products."
     },
     "image": {
       "src": "/cstd-universe/cstd-neural-city-v3.webp",
@@ -2192,11 +2192,11 @@ export const generatedCstdTechnicalNotes = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-07-30",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "observable-dcf-pipeline",
-    "readingMinutes": 11,
+    "readingMinutes": 13,
     "category": {
       "zh": "数据与性能",
       "en": "Data and performance"
@@ -2210,8 +2210,8 @@ export const generatedCstdTechnicalNotes = [
       "en": "Why a market-wide DCF scan optimized cache JSON first"
     },
     "summary": {
-      "zh": "性能分析显示瓶颈不在财务公式，而在重复解析与序列化；正确优化从实测调用栈开始。",
-      "en": "Profiling found repeated parsing and serialization, not finance math, dominating runtime. Optimization started with the measured call stack."
+      "zh": "一次 DCF 扫描的性能复盘：热点不在公式，而在缓存 JSON 被反复搬运。",
+      "en": "A performance postmortem from a DCF scan: the hot path was repeated cache JSON handling, not the formula."
     },
     "image": {
       "src": "/cstd-world/cstd-data-loom-v2.webp",
@@ -2259,11 +2259,11 @@ export const generatedCstdTechnicalNotes = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-07-26",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "optimistic-locking-for-operations",
-    "readingMinutes": 7,
+    "readingMinutes": 11,
     "category": {
       "zh": "业务系统",
       "en": "Operational systems"
@@ -2277,8 +2277,8 @@ export const generatedCstdTechnicalNotes = [
       "en": "In a multi-user CRM, last write should not automatically win"
     },
     "summary": {
-      "zh": "用乐观锁、服务端数据范围和显式冲突恢复保护现场业务信息。",
-      "en": "Optimistic locking, server-side scopes, and explicit conflict recovery protect operational truth."
+      "zh": "多人同时改一条 CRM 线索时，怎么让冲突被看见，而不是让最后一次提交悄悄覆盖现场。",
+      "en": "When two operators edit one CRM lead, make the conflict visible instead of letting the last submission erase the field record."
     },
     "image": {
       "src": "/cstd-world/cstd-kinetic-studio-v2.webp",
@@ -2326,11 +2326,11 @@ export const generatedCstdTechnicalNotes = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-07-22",
-    "updatedAt": "2026-08-09",
+    "updatedAt": "2026-08-27",
     "slug": "single-canvas-immersive-web",
-    "readingMinutes": 8,
+    "readingMinutes": 12,
     "category": {
       "zh": "前端体验",
       "en": "Frontend experience"
@@ -2344,8 +2344,8 @@ export const generatedCstdTechnicalNotes = [
       "en": "An immersive website needs only one 3D runtime"
     },
     "summary": {
-      "zh": "将 Three.js 隔离为一个按需画布，让内容、滚动和辅助技术保持普通网页语义。",
-      "en": "Isolate Three.js in one lazy canvas so content, scrolling, and assistive technology retain ordinary web semantics."
+      "zh": "想做沉浸式视觉，先把标题、链接和滚动留给网页，再让一个按需画布负责空间感。",
+      "en": "For immersive visuals, keep headings, links, and scrolling as web semantics, then let one lazy canvas handle the sense of space."
     },
     "image": {
       "src": "/cstd-universe/cstd-skill-reactor-v1.webp",

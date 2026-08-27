@@ -5,12 +5,12 @@ slug: "rocodex-platform"
 projectId: "rocodex"
 year: "2026"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-01-01"
-updatedAt: "2026-08-09"
+updatedAt: "2026-08-27"
 title: {"zh":"RocoDex 双站平台","en":"RocoDex dual-site platform"}
 kicker: {"zh":"领域边界 / 内容产品","en":"Domain boundaries / content product"}
-summary: {"zh":"把个人主站与图鉴产品放进同一个 Next.js 部署容器，同时让域名、认证、内容和回归测试保持真正独立。","en":"Two independent websites share one Next.js deployment container while domains, authentication, content, and regression suites remain isolated."}
+summary: {"zh":"个人主站和 RocoDex 共用一个 Next.js 部署，但域名、认证、内容模块和回归测试各自负责，互不越界。","en":"The portfolio and RocoDex share one Next.js deployment while hosts, auth, content modules, and regression suites remain separately owned."}
 film: {"durationSeconds":96,"logline":{"zh":"一次共享部署如何被拆成两个真正独立、可验证的产品。","en":"How one shared deployment became two genuinely independent, verifiable products."},"beats":[{"id":"shared-container","phase":"problem","title":{"zh":"同一个容器，两个产品","en":"One container, two products"},"detail":{"zh":"个人主站与图鉴共享 Next.js，却拥有完全不同的用户、路由和运行时。","en":"The portfolio and encyclopedia share Next.js but serve different users, routes, and runtimes."},"signal":{"zh":"边界不能只存在于目录名","en":"A folder name is not a boundary"}},{"id":"host-first","phase":"constraint","title":{"zh":"Host 必须先于 React","en":"Host before React"},"detail":{"zh":"错误域名不得初始化另一站的认证、页面树或数据接口。","en":"The wrong host must never initialize the other site's auth, page tree, or data APIs."},"signal":{"zh":"请求入口即产品边界","en":"The request edge is the product boundary"}},{"id":"routing-contract","phase":"architecture","title":{"zh":"三层隔离契约","en":"A three-layer isolation contract"},"detail":{"zh":"Proxy、route group 与最小 public API 共同表达所有权。","en":"Proxy decisions, route groups, and narrow public APIs express ownership together."},"signal":{"zh":"路由、模块、认证同时隔离","en":"Routes, modules, and auth stay isolated"}},{"id":"tests-as-walls","phase":"decision","title":{"zh":"让测试成为墙","en":"Turn tests into walls"},"detail":{"zh":"导入扫描和双站 E2E 把口头约定变成不可绕过的回归门禁。","en":"Import scans and isolated E2E suites turn convention into an enforceable gate."},"signal":{"zh":"失败必须在 CI 暴露","en":"Boundary failures surface in CI"}},{"id":"two-live-surfaces","phase":"evidence","title":{"zh":"两个域名同时验收","en":"Accept both live surfaces"},"detail":{"zh":"每次发布同时核验 GitHub Actions、Vercel 与两个生产域名。","en":"Every release verifies Actions, Vercel, and both production hosts."},"signal":{"zh":"共享部署，不共享风险","en":"Shared deployment, isolated risk"}}]}
 role: {"zh":"产品设计、前后端、架构与发布","en":"Product, frontend, architecture, and release"}
 runtimeStatus: {"zh":"持续上线","en":"Live and evolving"}
@@ -36,11 +36,15 @@ toc: [{"id":"problem","eyebrow":{"zh":"01 / 问题","en":"01 / Problem"},"title"
 - 错误域名不能泄露另一站页面。
 - 每站都要有自己的浏览器回归与 SEO 输出。
 
+把两个产品放进一个仓库，最初看起来只是方便部署。但主站要保持个人表达和视觉实验，图鉴要稳定服务查询、收藏和阵容关系；它们的节奏、数据和错误处理完全不同。共享基础设施可以，默认共享产品状态不可以。
+
 </ArchiveSection>
 
 <ArchiveSection id="architecture" title="Host 决策先于页面渲染。" eyebrow="02 / 架构">
 
 Proxy 先按 Host 决定重写、跳转、放行或 404；Next route group 再表达页面所有权；站点模块通过极小 public API 暴露给路由适配器。
+
+这条顺序解决了一个很具体的问题：当访客访问 custard.top 时，图鉴的认证、数据接口和页面树根本不会被初始化。反过来，rocodex.custard.top 也不会因为主站有一个相似的路径就落进主站。域名先分流，React 再渲染，错误的产品没有机会先跑起来。
 
 <CodeSample language="text" label="请求链路">
 
@@ -60,6 +64,8 @@ request
 
 架构测试扫描生产代码导入关系，禁止个人主站越界使用 RocoDex 模块，也限制 Three.js 运行时只出现在延迟场景中。
 
+这使得“主站是主站，RocoDex 是 RocoDex”不只是一句目录说明。以后新增页面、认证或数据模块时，测试会把越界变成具体失败；维护者不需要靠记忆知道哪些 import 不能出现。
+
 </ArchiveSection>
 
 </LocaleBlock>
@@ -74,11 +80,15 @@ custard.top and RocoDex serve different audiences with different routes and runt
 - The wrong host must never expose pages owned by the other product.
 - Each site needs its own browser regression and SEO output.
 
+Putting both products in one repository first looked like a deployment convenience. The portfolio needs room for personal expression and visual experiments; the encyclopedia needs stable search, collection, and team data. Shared infrastructure is useful. Shared product state by default is not.
+
 </ArchiveSection>
 
 <ArchiveSection id="architecture" title="Host decisions happen before rendering." eyebrow="02 / Architecture">
 
 The proxy chooses rewrite, redirect, pass-through, or 404 by host. Route groups then express ownership, while each site exposes only a narrow public API.
+
+The order solves a concrete problem: when someone visits custard.top, the encyclopedia auth, data APIs, and page tree are never initialized. The reverse is true for rocodex.custard.top; a similar path in the portfolio cannot catch the request. The host routes first, React renders second, and the wrong product never gets a chance to start.
 
 <CodeSample language="text" label="Request path">
 
@@ -97,6 +107,8 @@ request
 <ArchiveSection id="decision" title="Tests enforce what folders alone cannot." eyebrow="03 / Decision">
 
 Architecture tests scan production imports, block cross-site dependencies, and keep the Three.js runtime confined to its lazy scene boundary.
+
+That makes “the portfolio is the portfolio, and RocoDex is RocoDex” more than a folder note. When a new page, auth path, or data module is added, the test turns a boundary crossing into a concrete failure. Maintainers do not have to remember every import that is forbidden.
 
 </ArchiveSection>
 

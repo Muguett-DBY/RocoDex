@@ -3,14 +3,14 @@ kind: "note"
 schemaVersion: 1
 slug: "observable-dcf-pipeline"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-07-30"
-updatedAt: "2026-08-09"
-readingMinutes: 11
+updatedAt: "2026-08-27"
+readingMinutes: 13
 category: {"zh":"数据与性能","en":"Data and performance"}
 series: {"zh":"可审计计算","en":"Auditable computation"}
 title: {"zh":"全市场 DCF 扫描为什么先优化缓存 JSON","en":"Why a market-wide DCF scan optimized cache JSON first"}
-summary: {"zh":"性能分析显示瓶颈不在财务公式，而在重复解析与序列化；正确优化从实测调用栈开始。","en":"Profiling found repeated parsing and serialization, not finance math, dominating runtime. Optimization started with the measured call stack."}
+summary: {"zh":"一次 DCF 扫描的性能复盘：热点不在公式，而在缓存 JSON 被反复搬运。","en":"A performance postmortem from a DCF scan: the hot path was repeated cache JSON handling, not the formula."}
 image: {"src":"/cstd-world/cstd-data-loom-v2.webp","alt":{"zh":"高速数据织机","en":"A high-throughput data loom"}}
 relatedCaseSlugs: ["dcf-quantum"]
 tags: ["Python","Profiling","Caching","Data lineage"]
@@ -24,17 +24,27 @@ toc: [{"id":"measure","eyebrow":null,"title":{"zh":"先测正式可执行文件"
 
 只测孤立函数会错过启动、缓存、数据归一化和报告输出。性能调查应该从完整扫描命令开始，再沿调用栈缩小范围。
 
+遇到这类问题，先忍住“优化公式”的冲动。一个函数在 notebook 里很快，不代表打包后的程序也快；启动、磁盘、进程间通信和报告写入都可能改变排序。先跑使用者真正会跑的命令，才能知道时间花在了哪里。
+
+剖析结果还应该和输入条件放在一起看。数据量、缓存命中率和机器环境不一样，数字就不能直接横向比较。性能结论如果没有这些前提，往往只是一张漂亮的截图。
+
 </ArchiveSection>
 
 <ArchiveSection id="hotpath" title="公式很快，重复搬运数据很慢">
 
 同一缓存载荷在扫描中被多次读取、JSON 解析和序列化。把已解析对象绑定到一次运行，并延迟只为最终工件序列化，收益远高于微调 DCF 公式。
 
+这类优化没有特别神秘：减少重复搬运，让一份已经解析好的对象在一次运行中复用；只有需要写入磁盘或返回结果时，才做最后一次序列化。重要的是先确认对象不会被意外修改，再用正式数据复测总时长和内存占用。
+
+如果热点换了，优化也应该跟着换。性能工作不是提前猜一个“高级”方案，而是让每次改动都能在调用栈和基准结果里留下对应的变化。
+
 </ArchiveSection>
 
 <ArchiveSection id="integrity" title="优化不能跳过数据指纹">
 
 缓存对象可以复用，但运行清单仍要记录原始文件、接口参数、创建与到期时间以及载荷哈希。速度提升不能以失去审计能力为代价。
+
+对研究工具来说，快一点却说不清数据从哪来，通常不算真正的提升。运行清单可以很朴素，但至少要让后来的人知道这次扫描读了什么、何时生成、何时过期，以及结果是否还值得使用。
 
 </ArchiveSection>
 
@@ -46,17 +56,27 @@ toc: [{"id":"measure","eyebrow":null,"title":{"zh":"先测正式可执行文件"
 
 Isolated functions miss startup, cache access, normalization, and report output. Performance work should begin with the complete scan command and narrow down the measured call stack.
 
+The first impulse is often to optimize the formula, but that is the wrong starting point. A function that is fast in a notebook may not be fast in the packaged application; startup, disk access, process boundaries, and report writing can reorder the costs. Run the command a user actually runs, then find where the time goes.
+
+The profile also needs its conditions. Dataset size, cache hit rate, and machine environment affect the number, so a benchmark without them is often just a nice screenshot.
+
 </ArchiveSection>
 
 <ArchiveSection id="hotpath" title="The formula was fast; repeated data movement was slow">
 
 The same cached payload was repeatedly read, parsed, and serialized. Binding parsed objects to one run and serializing only final artifacts mattered more than micro-optimizing DCF math.
 
+The fix is not mysterious: stop moving the same data around. Reuse a parsed object within one run and serialize only when a file or response actually needs it. First make sure the object cannot be mutated by accident, then re-run the full workload with production-shaped data and check both duration and memory.
+
+When the hot path moves, the optimization should move with it. Performance work is not guessing an impressive solution in advance; each change should leave a visible mark in the call stack and benchmark.
+
 </ArchiveSection>
 
 <ArchiveSection id="integrity" title="Optimization must preserve data fingerprints">
 
 Cached objects may be reused, but manifests still record source files, parameters, creation and expiry times, and payload hashes. Speed cannot trade away auditability.
+
+For a research tool, a faster result that cannot explain its source is usually not a real improvement. A manifest can stay simple, but it should tell the next person what the scan read, when it was created, when it expires, and whether the result is still fit for use.
 
 </ArchiveSection>
 

@@ -58,8 +58,11 @@ export function HomepageHeader({
             {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-mark-copy={candidate.id}>{getThemeMark(candidate.id, locale)}</span>)}
           </span>
           <span className="min-w-0 overflow-hidden">
-            <span data-cstd-header-brand className="block truncate text-sm font-black">
+            <span data-cstd-header-brand className="hidden truncate text-sm font-black sm:block">
               {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.brand[locale]}</span>)}
+            </span>
+            <span data-cstd-header-brand-compact className="block truncate text-xs font-black sm:hidden">
+              {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.compactBrand[locale]}</span>)}
             </span>
             <span data-cstd-header-edition className="hidden whitespace-nowrap text-[8px] font-bold uppercase lg:block">
               {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.edition[locale]}</span>)}

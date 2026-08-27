@@ -62,10 +62,15 @@ function createShader(gl: WebGLRenderingContext, type: number, source: string) {
 export function LitePersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const runtimeRef = useRef({ active: props.active, reducedMotion: props.reducedMotion });
+  const frameRef = useRef(0);
+  const renderRef = useRef<((timestamp: number) => void) | null>(null);
   const [renderState, setRenderState] = useState<"loading" | "true" | "fallback">("loading");
 
   useEffect(() => {
     runtimeRef.current = { active: props.active, reducedMotion: props.reducedMotion };
+    if (props.active && renderRef.current && !frameRef.current) {
+      frameRef.current = window.requestAnimationFrame(renderRef.current);
+    }
   }, [props.active, props.reducedMotion]);
 
   useEffect(() => {
@@ -111,7 +116,6 @@ export function LitePersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
     gl.enableVertexAttribArray(position);
     gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
 
-    let frame = 0;
     let lastFrame = 0;
     let firstFrame = true;
     const resize = () => {
@@ -124,9 +128,13 @@ export function LitePersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
       gl.viewport(0, 0, width, height);
     };
     const render = (timestamp: number) => {
-      frame = window.requestAnimationFrame(render);
+      frameRef.current = 0;
       const runtime = runtimeRef.current;
-      if (!runtime.active || (!runtime.reducedMotion && timestamp - lastFrame < 42)) return;
+      if (!runtime.active) return;
+      if (!runtime.reducedMotion && timestamp - lastFrame < 42) {
+        frameRef.current = window.requestAnimationFrame(render);
+        return;
+      }
       if (runtime.reducedMotion && !firstFrame) return;
       lastFrame = timestamp;
       resize();
@@ -142,6 +150,7 @@ export function LitePersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
         firstFrame = false;
         setRenderState("true");
       }
+      if (!runtime.reducedMotion) frameRef.current = window.requestAnimationFrame(render);
     };
 
     const onContextLost = (event: Event) => {
@@ -149,9 +158,12 @@ export function LitePersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
       setRenderState("fallback");
     };
     canvas.addEventListener("webglcontextlost", onContextLost, { once: true });
-    frame = window.requestAnimationFrame(render);
+    renderRef.current = render;
+    if (runtimeRef.current.active) frameRef.current = window.requestAnimationFrame(render);
     return () => {
-      window.cancelAnimationFrame(frame);
+      if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
+      frameRef.current = 0;
+      renderRef.current = null;
       canvas.removeEventListener("webglcontextlost", onContextLost);
       gl.deleteBuffer(buffer);
       gl.deleteProgram(program);

@@ -3,14 +3,14 @@ kind: "note"
 schemaVersion: 1
 slug: "single-canvas-immersive-web"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-07-22"
-updatedAt: "2026-08-09"
-readingMinutes: 8
+updatedAt: "2026-08-27"
+readingMinutes: 12
 category: {"zh":"前端体验","en":"Frontend experience"}
 series: {"zh":"动效有预算","en":"Motion with a budget"}
 title: {"zh":"沉浸式网站只需要一个三维运行时","en":"An immersive website needs only one 3D runtime"}
-summary: {"zh":"将 Three.js 隔离为一个按需画布，让内容、滚动和辅助技术保持普通网页语义。","en":"Isolate Three.js in one lazy canvas so content, scrolling, and assistive technology retain ordinary web semantics."}
+summary: {"zh":"想做沉浸式视觉，先把标题、链接和滚动留给网页，再让一个按需画布负责空间感。","en":"For immersive visuals, keep headings, links, and scrolling as web semantics, then let one lazy canvas handle the sense of space."}
 image: {"src":"/cstd-universe/cstd-skill-reactor-v1.webp","alt":{"zh":"单画布技能反应堆","en":"A single-canvas skill reactor"}}
 relatedCaseSlugs: ["portrait-booking","rocodex-platform"]
 tags: ["Three.js","Performance","Accessibility","Canvas"]
@@ -24,17 +24,25 @@ toc: [{"id":"separation","eyebrow":null,"title":{"zh":"DOM 负责信息，Canvas
 
 标题、链接、图片和表单都保留在 DOM；固定画布只接收滚动进度、指针和质量等级。即使 WebGL 未加载，网站仍然完整可读可用。
 
+这条原则看起来保守，实际给了视觉层更多自由。内容不需要等待场景初始化，浏览器也不必把所有信息交给一个无法被搜索和朗读的画布。Three.js 负责气氛、深度和空间关系，DOM 负责让人读懂、点击和返回。
+
+我会先做一张不带画布的页面截图，再把画布当作第二层加上去。如果去掉它之后信息层级塌了，说明视觉已经喧宾夺主。好的沉浸感不是把网页变成游戏，而是让网页在保持可用的同时多一个观看角度。
+
 </ArchiveSection>
 
 <ArchiveSection id="lifecycle" title="渲染循环要服从页面生命周期">
 
 页面不可见时暂停；窄屏与粗指针使用静态图；DPR 封顶；长任务或低帧率触发质量降级。动效不是例外线程，而是资源预算中的一部分。
 
+这里的“降级”不是简单关掉效果。静态图要保留构图，Lite 场景要保留方向感，完整模式才承担粒子、后处理和更高频的指针反馈。用户看到的是同一套设计语言，只是浏览器根据条件选择了不同成本。
+
 </ArchiveSection>
 
 <ArchiveSection id="preference" title="系统偏好是默认值，站内开关是最终选择">
 
 首次访问可参考 prefers-reduced-motion，但用户明确开启增强动效后应保存站内选择。关键是平静模式仍有构图、层次和状态反馈，而不是一张失去设计的静态页面。
+
+站内开关还要能被理解：它应该告诉用户现在是平静、平衡还是增强，而不是只换一个图标。这样当系统偏好和站内选择不一致时，用户知道自己为什么看到当前的效果，也能随时把控制权拿回来。
 
 </ArchiveSection>
 
@@ -46,17 +54,25 @@ toc: [{"id":"separation","eyebrow":null,"title":{"zh":"DOM 负责信息，Canvas
 
 Headings, links, images, and forms remain in the DOM. A fixed canvas receives only scroll progress, pointer input, and quality level. The site stays complete when WebGL never loads.
 
+The rule sounds conservative, but it gives the visual layer more room. Content does not wait for scene initialization, and the browser does not have to place every piece of information inside a canvas that cannot be searched or read aloud. Three.js handles atmosphere, depth, and spatial relationships; the DOM handles reading, clicking, and returning.
+
+I first take a screenshot without the canvas, then add it as a second layer. If the hierarchy collapses when the canvas is removed, the visual layer has taken over. Immersion should give a web page another way to be seen, not turn it into an inaccessible game.
+
 </ArchiveSection>
 
 <ArchiveSection id="lifecycle" title="The render loop follows page lifecycle">
 
 Rendering pauses while hidden, coarse pointers use static imagery, DPR is capped, and long tasks or low frame rate lower quality. Motion is part of the resource budget, not an exception to it.
 
+Degrading does not mean switching everything off. A static image keeps the composition, a lite scene keeps direction, and full mode takes on particles, post-processing, and higher-frequency pointer feedback. The design language stays the same while the browser chooses a different cost.
+
 </ArchiveSection>
 
 <ArchiveSection id="preference" title="System preference is a default; the site switch is final">
 
 The first visit may honor prefers-reduced-motion, while an explicit in-site choice persists. Calm mode must retain composition, hierarchy, and state feedback rather than becoming an undesigned static page.
+
+The in-site control also needs to be legible: it should say whether the page is calm, balanced, or enhanced, rather than only swapping an icon. When system preference and site choice disagree, the user should know why the current effect is present and how to take control back.
 
 </ArchiveSection>
 

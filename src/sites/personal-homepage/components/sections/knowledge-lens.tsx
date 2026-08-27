@@ -41,7 +41,7 @@ export function KnowledgeLens({ observatory, locale }: { observatory: CstdHomepa
       <div className="relative mx-auto max-w-[1320px]">
         <header data-cstd-chapter-header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="05 / TECH NOTES" ink={locale === "zh" ? "第五卷 / 心法" : "SCROLL V / JUDGMENT"} press="SECTION D / OPINION & NOTES" pixel="LEVEL 05 / LORE LIBRARY" /></p>
+            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="05 / TECH NOTES" ink={locale === "zh" ? "第五卷 / 心法" : "SCROLL V / JUDGMENT"} press={locale === "zh" ? "栏目 D / 观点与札记" : "SECTION D / OPINION & NOTES"} pixel={locale === "zh" ? "关卡 05 / 知识房" : "LEVEL 05 / LORE LIBRARY"} /></p>
             <h2 id="knowledge-lens-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
               <ThemeCopy
                 neon={locale === "zh" ? <>技术分享不堆术语，<span className="block text-[#f4d431]">只讲做过的判断。</span></> : <>Technical writing without a jargon wall.<span className="block text-[#f4d431]">Only decisions tested in practice.</span></>}
@@ -51,7 +51,14 @@ export function KnowledgeLens({ observatory, locale }: { observatory: CstdHomepa
               />
             </h2>
           </div>
-          <p className="text-sm leading-7 text-[#aeb8bb] md:text-base md:leading-8">{locale === "zh" ? "每个答案都来自本站公开案例和札记。问题、结论与来源同屏，读者不需要先学会操作另一套工具。" : "Every answer comes from published cases and notes on this site. Question, conclusion, and source stay together, so readers do not need to learn another tool first."}</p>
+          <p className="text-sm leading-7 text-[#aeb8bb] md:text-base md:leading-8">
+            <ThemeCopy
+              neon={locale === "zh" ? "有问题就从问题开始。答案、依据和下一步都放在眼前，不把读者赶去猜我的上下文。" : "Start with the question. The answer, its evidence, and the next step stay in view instead of making readers guess the context."}
+              ink={locale === "zh" ? "札记不是心得墙，而是做过事情之后留下的回声。沿着出处读，才知道一笔从哪里起。" : "These are not mood-board reflections. They are notes left by work already done; follow the source to see where each line began."}
+              press={locale === "zh" ? "本栏每条观点都标出出处。你可以从标题读到结论，也可以反过来从证据追问标题。" : "Every opinion in this column has a source. Read from headline to conclusion, or work backwards from evidence to the claim."}
+              pixel={locale === "zh" ? "欢迎查攻略，但别跳过地图。每个答案都连着一个案例或札记，顺着节点继续探索。" : "Use the guide, but do not skip the map. Every answer connects to a case or note; follow the node when you want the longer route."}
+            />
+          </p>
         </header>
 
         <div data-cstd-knowledge-list className="mt-12 border-t border-white/14">

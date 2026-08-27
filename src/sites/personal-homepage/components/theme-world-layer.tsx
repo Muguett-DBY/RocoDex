@@ -6,13 +6,13 @@ import { cstdThemes, getCstdThemeMeta, type CstdThemeId } from "../experience/th
 import { cstdThemeWorldAssets } from "../media/asset-manifest";
 import type { CstdLocale, LocalizedText } from "../content/content-types";
 
-const sceneCopy: Record<CstdSceneId, { ink: LocalizedText; press: string; pixel: string }> = {
-  hero: { ink: { zh: "卷首", en: "OPEN" }, press: "FRONT PAGE", pixel: "STAGE 01" },
-  systems: { ink: { zh: "器", en: "FORM" }, press: "SYSTEMS DESK", pixel: "STAGE 02" },
-  proof: { ink: { zh: "证", en: "PROOF" }, press: "FIELD REPORTS", pixel: "STAGE 03" },
-  operator: { ink: { zh: "验", en: "TEST" }, press: "LIVE LAB", pixel: "BOSS LAB" },
-  path: { ink: { zh: "迹", en: "TRACE" }, press: "OPINION & NOTES", pixel: "LORE ROOM" },
-  finale: { ink: { zh: "未完", en: "NEXT" }, press: "LATE EDITION", pixel: "CONTINUE?" },
+const sceneCopy: Record<CstdSceneId, { ink: LocalizedText; press: LocalizedText; pixel: LocalizedText }> = {
+  hero: { ink: { zh: "卷首", en: "OPEN" }, press: { zh: "头版", en: "FRONT PAGE" }, pixel: { zh: "关卡 01", en: "STAGE 01" } },
+  systems: { ink: { zh: "器", en: "FORM" }, press: { zh: "系统部", en: "SYSTEMS DESK" }, pixel: { zh: "关卡 02", en: "STAGE 02" } },
+  proof: { ink: { zh: "证", en: "PROOF" }, press: { zh: "现场报道", en: "FIELD REPORTS" }, pixel: { zh: "关卡 03", en: "STAGE 03" } },
+  operator: { ink: { zh: "验", en: "TEST" }, press: { zh: "实验台", en: "LIVE LAB" }, pixel: { zh: "BOSS 关", en: "BOSS LAB" } },
+  path: { ink: { zh: "迹", en: "TRACE" }, press: { zh: "观点与札记", en: "OPINION & NOTES" }, pixel: { zh: "知识房", en: "LORE ROOM" } },
+  finale: { ink: { zh: "未完", en: "NEXT" }, press: { zh: "晚刊", en: "LATE EDITION" }, pixel: { zh: "继续？", en: "CONTINUE?" } },
 };
 
 const sceneSequence: CstdSceneId[] = ["hero", "systems", "proof", "operator", "path", "finale"];
@@ -20,8 +20,8 @@ const visualWorldThemes = ["ink-protocol", "press-room", "pixel-quest"] as const
 
 function getSceneLabel(theme: CstdThemeId, sceneId: CstdSceneId, locale: CstdLocale) {
   if (theme === "ink-protocol") return sceneCopy[sceneId].ink[locale];
-  if (theme === "press-room") return sceneCopy[sceneId].press;
-  if (theme === "pixel-quest") return sceneCopy[sceneId].pixel;
+  if (theme === "press-room") return sceneCopy[sceneId].press[locale];
+  if (theme === "pixel-quest") return sceneCopy[sceneId].pixel[locale];
   return sceneId.toUpperCase();
 }
 

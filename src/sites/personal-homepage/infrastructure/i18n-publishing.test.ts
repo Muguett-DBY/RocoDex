@@ -30,7 +30,7 @@ describe("CSTD localized publishing", () => {
     expect(JSON.stringify(chineseSchema)).toContain("CSTD 工程观测站");
     expect(englishSchema.every((entry) => entry.inLanguage === "en-AU")).toBe(true);
     expect(JSON.stringify(englishSchema)).toContain("Custard");
-    expect(getPersonalHomepageMetadata("en").title).toBe("Custard | Product engineer and creative systems builder | CSTD");
+    expect(getPersonalHomepageMetadata("en").title).toBe("Custard | Product engineer building creative tools and research systems | CSTD");
     expect(englishAudience.alternates?.canonical).toBe("https://custard.top/en/for/research");
     expect(englishAudience.other?.["content-language"]).toBe("en-AU");
   });

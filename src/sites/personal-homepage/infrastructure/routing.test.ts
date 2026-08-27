@@ -43,6 +43,7 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/en/for/research")).toEqual({ kind: "rewrite", path: "/cstd/en/for/research" });
     expect(getPersonalSiteRouteDecision("custard.top", "/en/feed.json")).toEqual({ kind: "rewrite", path: "/cstd/en/feed.json" });
     expect(getPersonalSiteRouteDecision("custard.top", "/en/manifest.webmanifest")).toEqual({ kind: "rewrite", path: "/cstd/en/manifest.webmanifest" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/en/llms.txt")).toEqual({ kind: "rewrite", path: "/cstd/en/llms.txt" });
     expect(getPersonalSiteRouteDecision("custard.top", "/map")).toEqual({ kind: "rewrite", path: "/cstd/map" });
     expect(getPersonalSiteRouteDecision("custard.top", "/en/map")).toEqual({ kind: "rewrite", path: "/cstd/en/map" });
     expect(getPersonalSiteRouteDecision("custard.top", "/proof.json")).toEqual({ kind: "rewrite", path: "/cstd/proof.json" });

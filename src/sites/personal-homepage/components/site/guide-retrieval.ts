@@ -95,11 +95,23 @@ export function answerGuideQuestion(question: string, locale: CstdLocale): Guide
 
   const topScore = ranked[0].score;
   const selected = [ranked[0]];
-  for (const candidate of ranked.slice(1)) {
-    if (selected.length >= 3) break;
-    if (candidate.score < Math.max(5, topScore * 0.36)) continue;
-    const introducesType = !selected.some((entry) => entry.candidate.entry.type === candidate.candidate.entry.type);
-    if (introducesType || selected.length < 2) selected.push(candidate);
+  const isDirectlyRelated = (candidate: IndexedEntry) => selected.some((entry) => (
+    entry.candidate.entry.relatedIds.includes(candidate.entry.id)
+    || candidate.entry.relatedIds.includes(entry.candidate.entry.id)
+  ));
+  while (selected.length < 3) {
+    const candidate = ranked.slice(1).find((result) => {
+      if (selected.some((entry) => entry.candidate.entry.id === result.candidate.entry.id)) return false;
+      if (result.score < Math.max(5, topScore * 0.36)) return false;
+      const introducesType = !selected.some((entry) => entry.candidate.entry.type === result.candidate.entry.type);
+      return introducesType && isDirectlyRelated(result.candidate);
+    }) ?? ranked.slice(1).find((result) => {
+      if (selected.some((entry) => entry.candidate.entry.id === result.candidate.entry.id)) return false;
+      if (result.score < Math.max(5, topScore * 0.36)) return false;
+      return !selected.some((entry) => entry.candidate.entry.type === result.candidate.entry.type);
+    });
+    if (!candidate) break;
+    selected.push(candidate);
   }
   const sources = selected.map((result) => result.candidate.entry);
   const matchedTerms = [...new Set(selected.flatMap((result) => result.matched))].slice(0, 6);

@@ -36,7 +36,7 @@ test.describe("CSTD technical archive", () => {
 
     await page.goto("/cstd/en");
     await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
-    await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("Compile complex problems");
+    await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("I take problems apart");
     await expect(page.getByRole("link", { name: "View selected work" })).toBeVisible();
     expect(errors).toEqual([]);
   });
@@ -48,7 +48,7 @@ test.describe("CSTD technical archive", () => {
     await expect(lens).toBeVisible();
     await expect(lens.locator("[data-cstd-knowledge-card]")).toHaveCount(3);
     await expect(lens.getByRole("heading", { name: "你的双站架构怎么隔离？" })).toBeVisible();
-    await expect(lens).toContainText("真正独立");
+    await expect(lens).toContainText("互不越界");
     await expect(lens.getByText("SOURCE LINKED", { exact: true })).toHaveCount(3);
     await expect(lens.getByRole("link", { name: "阅读来源" }).first()).toHaveAttribute("href", "/work/rocodex-platform");
     await expect(lens.getByRole("button")).toHaveCount(0);

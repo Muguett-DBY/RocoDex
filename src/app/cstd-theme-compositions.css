@@ -1409,6 +1409,46 @@
     display: none !important;
   }
 
+  [data-cstd-theme="neon-district"] .cstd-neon-console,
+  [data-cstd-theme="press-room"] .cstd-press-front-index,
+  [data-cstd-theme="pixel-quest"] .cstd-pixel-player-card {
+    display: block !important;
+    z-index: 1;
+    opacity: 0.44;
+    transform: scale(0.82);
+    transform-origin: right top;
+  }
+
+  [data-cstd-theme="pixel-quest"] .cstd-pixel-player-card {
+    display: grid !important;
+    min-height: 0;
+  }
+
+  [data-cstd-theme="neon-district"] .cstd-neon-console {
+    right: -1rem;
+    top: 18%;
+    width: 19rem;
+  }
+
+  [data-cstd-theme="press-room"] .cstd-press-front-index {
+    right: 0;
+    top: 12%;
+    width: min(17rem, 48vw);
+  }
+
+  [data-cstd-theme="pixel-quest"] .cstd-pixel-player-card {
+    right: 0;
+    top: 12%;
+    width: min(18rem, 54vw);
+  }
+
+  [data-cstd-theme="ink-protocol"] .cstd-ink-colophon {
+    z-index: 1;
+    opacity: 0.48;
+    transform: scale(0.82);
+    transform-origin: right top;
+  }
+
   [data-cstd-theme="ink-protocol"] .cstd-hero-stage {
     padding-left: 4rem;
     padding-right: 7rem;
@@ -1514,6 +1554,51 @@
 
   [data-cstd-theme="ink-protocol"] .cstd-ink-colophon {
     display: none !important;
+  }
+
+  [data-cstd-theme="ink-protocol"] .cstd-ink-colophon {
+    display: flex !important;
+    right: -1rem;
+    top: 12%;
+    height: 22rem;
+  }
+
+  [data-cstd-theme="neon-district"] .cstd-neon-console {
+    right: -5.5rem;
+    top: 16%;
+    width: 15rem;
+    opacity: 0.28;
+    transform: scale(0.76);
+  }
+
+  [data-cstd-theme="press-room"] .cstd-press-front-index {
+    right: -7rem;
+    top: 44%;
+    width: min(14rem, 62vw);
+    opacity: 0.24;
+    transform: scale(0.62);
+  }
+
+  [data-cstd-theme="pixel-quest"] .cstd-pixel-player-card {
+    right: -8.5rem;
+    top: 42%;
+    width: min(15rem, 68vw);
+    opacity: 0.32;
+    transform: scale(0.62);
+  }
+
+  [data-cstd-theme="ink-protocol"] .cstd-ink-colophon {
+    right: -1.5rem;
+    top: 9%;
+    height: 19rem;
+    opacity: 0.38;
+    transform: scale(0.68);
+  }
+
+  .cstd-hero-copy,
+  [data-cstd-hero-summary] {
+    position: relative;
+    z-index: 2;
   }
 
   [data-cstd-theme="ink-protocol"] [data-cstd-chapter-header] > div:first-child::before {

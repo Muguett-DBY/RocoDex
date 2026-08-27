@@ -3,14 +3,14 @@ kind: "note"
 schemaVersion: 1
 slug: "deterministic-core-ai-edge"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-08-03"
-updatedAt: "2026-08-09"
-readingMinutes: 9
+updatedAt: "2026-08-27"
+readingMinutes: 12
 category: {"zh":"产品工程","en":"Product engineering"}
 series: {"zh":"证据优先的智能系统","en":"Evidence-first intelligence"}
 title: {"zh":"AI 放在解释层，公式留在决策层","en":"Put AI at the explanation edge, not the decision core"}
-summary: {"zh":"估值系统如何让生成式能力增加理解，而不污染可复算的财务结果。","en":"How a valuation system adds generative explanation without contaminating reproducible financial outputs."}
+summary: {"zh":"让 AI 帮忙整理和解释，但把估值公式、现金流、折现和版本决定权留给能测试的代码。","en":"Let AI organize and explain while testable code keeps authority over valuation formulas, cash flow, discounting, and versions."}
 image: {"src":"/cstd-archive/cstd-archive-cobalt-modules-v1.webp","alt":{"zh":"相互隔离的确定性模块","en":"Isolated deterministic modules"}}
 relatedCaseSlugs: ["alpha-research-system","dcf-quantum"]
 tags: ["AI","DCF","Determinism","Product"]
@@ -24,17 +24,25 @@ toc: [{"id":"authority","eyebrow":null,"title":{"zh":"先标记谁拥有最终�
 
 预测假设可以来自用户、历史基线或模型建议，但现金流、折现和终值计算只有一个确定性实现。界面预览与服务端持久化调用同一公式，避免两个真相。
 
+我把这条分界看得很实际：AI 可以帮我整理资料、比较情景、解释一段结果，但它不应该在用户看不见的地方改变折现率，或者把缺失数据补成“看起来合理”的数字。决定权属于规则明确、可以测试的代码；解释权可以交给模型，但必须带着输入和限制一起回来。
+
+这样做也让产品更容易改。换模型不会重写估值内核，更新公式也不会悄悄改变过去已经保存的研究版本。两边的节奏不同，边界就应该写在系统里。
+
 </ArchiveSection>
 
 <ArchiveSection id="provenance" title="版本要保存来源，也要保存缺口">
 
 数据快照、来源引用、缺失字段、fallback 与警告都属于估值版本。只保存最终数字会让未来的复盘失去上下文。
 
+一份研究结果至少要回答三件事：当时看到了什么，哪些地方没有看到，以及基于什么假设得到这个结果。把这些信息绑定在同一个版本里，后续才有可能重放，或者明确指出“这次变化来自新数据”而不是误以为模型突然改变了看法。
+
 </ArchiveSection>
 
 <ArchiveSection id="language" title="语言模型负责把不确定性说清楚">
 
 模型可以比较情景、总结风险和提出需要验证的问题，但不能悄悄改写折现率，也不能把代理估值描述成确认结果。
+
+好的解释不应该抹掉不确定性。它可以告诉我为什么两个情景差距变大，也可以把最值得查证的字段排出来；最后是否采用，仍然要回到原始来源、计算公式和用户自己的判断。
 
 </ArchiveSection>
 
@@ -46,17 +54,25 @@ toc: [{"id":"authority","eyebrow":null,"title":{"zh":"先标记谁拥有最终�
 
 Assumptions may come from users, historical baselines, or model suggestions, but cash flow, discounting, and terminal value have one deterministic implementation shared by preview and persistence.
 
+I keep this boundary practical. AI can organize material, compare scenarios, and explain a result, but it should not change a discount rate out of sight or turn missing data into a plausible-looking number. Authority belongs to rules that can be tested; a model may help explain them, but it must return with its inputs and limits.
+
+That split also makes change less risky. A new model does not rewrite the valuation core, and a formula update does not silently alter research versions already saved. The two sides move at different speeds, so the system should say where the line is.
+
 </ArchiveSection>
 
 <ArchiveSection id="provenance" title="Versions preserve sources and gaps">
 
 Snapshots, citations, missing fields, fallbacks, and warnings all belong to a valuation version. Saving only the final number destroys future review context.
 
+A research result should answer three questions: what was visible then, what was missing, and which assumptions produced the outcome. Keeping those details with the version makes a replay possible and makes it clear whether a change came from new data rather than a mysterious change of mind by the model.
+
 </ArchiveSection>
 
 <ArchiveSection id="language" title="Language models explain uncertainty">
 
 A model can compare scenarios, summarize risks, and propose verification questions, but it cannot silently rewrite discount rates or describe a proxy estimate as confirmed.
+
+A good explanation does not erase uncertainty. It can show why two scenarios diverged or list the fields most worth checking. Adoption still returns to the source, the formula, and the user's own judgment.
 
 </ArchiveSection>
 

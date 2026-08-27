@@ -5,12 +5,12 @@ slug: "creative-workbench"
 projectId: "design"
 year: "2026"
 publicationStatus: "published"
-revision: 1
+revision: 2
 publishedAt: "2026-01-01"
-updatedAt: "2026-08-09"
+updatedAt: "2026-08-27"
 title: {"zh":"CSTD Design 创作工作台","en":"CSTD Design creative workbench"}
 kicker: {"zh":"生成式媒体 / 私有工作流","en":"Generative media / private workflow"}
-summary: {"zh":"一个把流式对话、图片、视频、消息分支和素材管理放进统一数据模型的私人中文创作环境。","en":"A private Chinese creative environment that unifies streaming chat, images, video, message branches, and asset management."}
+summary: {"zh":"一个给自己使用的中文创作工作台：对话可以分支，图片和视频任务可以恢复，素材始终找得到来源。","en":"A private Chinese workbench where conversations branch, image and video jobs can recover, and every asset keeps its source."}
 film: {"durationSeconds":100,"logline":{"zh":"把生成式创作从一个输入框扩展成可分支、可追溯的私人工作台。","en":"Expanding generative creation from one prompt box into a private, traceable branching workbench."},"beats":[{"id":"prompt-box","phase":"problem","title":{"zh":"创作不是一次请求","en":"Creation is not one request"},"detail":{"zh":"文字、图片、视频、版本和回退无法被压进单一对话流而不丢失上下文。","en":"Text, images, video, versions, and retries cannot fit into one chat stream without losing context."},"signal":{"zh":"素材必须成为一等对象","en":"Artifacts must be first-class objects"}},{"id":"private-boundaries","phase":"constraint","title":{"zh":"私人系统也有滥用边界","en":"Private tools still need abuse boundaries"},"detail":{"zh":"流式任务、媒体上传、存储成本与错误重试都需要明确额度和状态。","en":"Streaming jobs, media uploads, storage cost, and retries need explicit limits and state."},"signal":{"zh":"自由创作需要清晰约束","en":"Creative freedom needs clear constraints"}},{"id":"unified-model","phase":"architecture","title":{"zh":"消息、分支与素材统一建模","en":"Model messages, branches, and artifacts together"},"detail":{"zh":"会话保存意图，分支保存探索，素材记录生成来源和持久地址。","en":"Conversations retain intent, branches preserve exploration, and artifacts retain provenance and durable addresses."},"signal":{"zh":"每次生成都可寻址","en":"Every generation is addressable"}},{"id":"storage-split","phase":"decision","title":{"zh":"元数据与大对象分层","en":"Separate metadata from large objects"},"detail":{"zh":"D1 负责关系和状态，R2 负责图片与视频，队列负责耗时工作。","en":"D1 owns relations and state, R2 owns images and video, and queues own long-running work."},"signal":{"zh":"存储结构跟随访问模式","en":"Storage follows access patterns"}},{"id":"creative-proof","phase":"outcome","title":{"zh":"创作过程可以被恢复","en":"The creative process can be resumed"},"detail":{"zh":"刷新、分支切换与失败重试都回到同一份持久状态，不依赖浏览器偶然记忆。","en":"Refreshes, branch switches, and retries return to one durable state rather than accidental browser memory."},"signal":{"zh":"工作台记得每次选择","en":"The workbench remembers every choice"}}]}
 role: {"zh":"产品、交互、全栈与安全","en":"Product, interaction, full stack, and security"}
 runtimeStatus: {"zh":"私有生产系统","en":"Private production system"}
@@ -32,17 +32,23 @@ toc: [{"id":"model","eyebrow":{"zh":"01 / 模型","en":"01 / Model"},"title":{"z
 
 对话会分支，生成会排队，素材会回溯到提示词。系统因此围绕可恢复的会话、任务与资产实体设计，而不是围绕一个聊天组件。
 
+我不希望创作过程被压扁成“输入一次，等一个答案”。一个想法往往要经过几次改写、参考图和方向分叉，最后才知道哪一条值得留下。会话保存上下文，分支保存试错，资产保存结果和来源，这三个对象分开之后，用户才有机会回到某个决定之前重新走一遍。
+
 </ArchiveSection>
 
 <ArchiveSection id="media" title="元数据走 D1，大对象走 R2。" eyebrow="02 / 媒体">
 
 图片和视频任务保留状态、尺寸、种子和错误；素材上传检查 Magic Bytes；界面轮询有失败上限，避免永远旋转的任务。
 
+这些细节看似偏后台，却会直接影响创作体验。生成失败时，用户需要看到失败发生在哪一步，而不是把一个加载圈留到第二天；刷新页面后，已经完成的素材也应该能被找回来。D1 和 R2 的分工，最终要在这种日常操作里体现出来。
+
 </ArchiveSection>
 
 <ArchiveSection id="safety" title="私人系统也需要明确的滥用边界。" eyebrow="03 / 安全">
 
 登录指数退避、API 分级限流、Secure Cookie、401 自动退出和内容类型校验共同缩小攻击面。
+
+私人并不等于可以省略边界。上传、生成和导出都会消耗资源，失败重试也可能放大成本。把身份、额度、文件类型和任务状态分别写清楚，既保护系统，也让使用者知道为什么某个动作需要等待或确认。
 
 </ArchiveSection>
 
@@ -54,17 +60,23 @@ toc: [{"id":"model","eyebrow":{"zh":"01 / 模型","en":"01 / Model"},"title":{"z
 
 Conversations branch, generations queue, and assets trace back to prompts. The system is modeled around recoverable sessions, jobs, and assets rather than a single chat component.
 
+I did not want the creative process reduced to “enter once, wait for an answer”. An idea usually passes through rewrites, reference images, and divergent directions before one path earns a place. Conversations keep context, branches keep experiments, and assets keep results and provenance; separating them lets someone return to an earlier decision and try again.
+
 </ArchiveSection>
 
 <ArchiveSection id="media" title="Metadata goes to D1; large objects go to R2." eyebrow="02 / Media">
 
 Image and video jobs retain status, dimensions, seed, and errors. Uploads inspect magic bytes, while bounded polling prevents permanently spinning jobs.
 
+These backend details shape the daily experience. When generation fails, the user should see which step failed instead of an endless spinner; after a refresh, completed assets should still be there. The D1/R2 split matters only when it makes those ordinary actions dependable.
+
 </ArchiveSection>
 
 <ArchiveSection id="safety" title="Private tools still need abuse boundaries." eyebrow="03 / Security">
 
 Login backoff, endpoint-specific rate limits, secure cookies, automatic 401 logout, and content validation reduce the attack surface.
+
+Private does not mean that boundaries can be skipped. Uploads, generations, and exports consume resources, and retries can multiply the cost. Separating identity, limits, file types, and job state protects the system while explaining why an action must wait or be confirmed.
 
 </ArchiveSection>
 

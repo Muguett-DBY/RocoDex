@@ -24,16 +24,16 @@ type HeroThemeCopy = Readonly<{
 
 const heroCopy: Record<CstdLocale, Record<"neon" | "ink" | "press" | "pixel", HeroThemeCopy>> = {
   zh: {
-    neon: { kicker: "CSTD / PERSONAL STUDIO", role: "PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER", thesis: "把复杂问题，", accent: "编译成真正运行的系统。", description: "奶黄包的个人技术工作室。用产品、AI、数据和工程判断，把想法做成真实上线、可以验证的系统。" },
-    ink: { kicker: "奶黄包 · 工程手卷", role: "产品工程 · 智能系统 · 造物求真", thesis: "万象入墨，", accent: "工程成卷。", description: "以产品为骨、数据为墨、工程为法，让每一个想法都落成可运行、可验证的真实器物。" },
-    press: { kicker: "THE LEAD / PROFILE", role: "INDEPENDENT PRODUCT ENGINEER / SYSTEMS DESK", thesis: "今日头条：", accent: "复杂系统如期上线。", description: "本期人物奶黄包：横跨产品、AI、数据与工程，把复杂命题报道成已经运行的事实。" },
-    pixel: { kicker: "NEW GAME / PLAYER 01", role: "CLASS / PRODUCT ENGINEER + SYSTEM BUILDER", thesis: "主线任务：", accent: "编译现实世界。", description: "装备产品、AI、数据与工程技能，完成从想法到上线验证的整条主线任务。" },
+    neon: { kicker: "CSTD / PERSONAL STUDIO", role: "PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER", thesis: "我把问题拆开，", accent: "直到它能在现实里运行。", description: "我做产品，也做背后的系统。界面、AI、数据和发布都要经得住真实使用，而不是只在演示里好看。" },
+    ink: { kicker: "奶黄包 · 工程手卷", role: "产品工程 · 智能系统 · 造物求真", thesis: "先把问题说清，", accent: "再把系统做成。", description: "一卷一卷记录我怎么做决定：什么该保留，什么要舍弃，哪里必须留下证据。" },
+    press: { kicker: "THE LEAD / PROFILE", role: "INDEPENDENT PRODUCT ENGINEER / SYSTEMS DESK", thesis: "今日头条：", accent: "一个人把复杂系统做完。", description: "本期记录一名产品工程师如何在产品、AI、数据和发布之间来回切换，并把结果交到真实用户手里。" },
+    pixel: { kicker: "NEW GAME / PLAYER 01", role: "CLASS / PRODUCT ENGINEER + SYSTEM BUILDER", thesis: "主线任务：", accent: "把想法做成能用的东西。", description: "拿产品、AI、数据和工程当装备，从第一个草图开始，打通实现、修 bug 和上线验收。" },
   },
   en: {
-    neon: { kicker: "CSTD / PERSONAL STUDIO", role: "PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER", thesis: "Compile complex problems", accent: "into systems that actually run.", description: "Custard's personal engineering studio. Product, AI, data, and engineering judgment turn ideas into shipped, verifiable systems." },
-    ink: { kicker: "CUSTARD · ENGINEERING SCROLL", role: "PRODUCT ENGINEERING · INTELLIGENT SYSTEMS · CRAFT", thesis: "Ideas become ink;", accent: "systems become a living scroll.", description: "Product gives form, data leaves the trace, and engineering turns each idea into a working object that can be verified." },
-    press: { kicker: "THE LEAD / PROFILE", role: "INDEPENDENT PRODUCT ENGINEER / SYSTEMS DESK", thesis: "Today's lead:", accent: "complex systems shipped on schedule.", description: "Profile: Custard moves across product, AI, data, and engineering, reporting difficult problems as facts already running in production." },
-    pixel: { kicker: "NEW GAME / PLAYER 01", role: "CLASS / PRODUCT ENGINEER + SYSTEM BUILDER", thesis: "Main quest:", accent: "compile the real world.", description: "Equip product, AI, data, and engineering skills, then clear the complete quest from idea to verified release." },
+    neon: { kicker: "CSTD / PERSONAL STUDIO", role: "PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER", thesis: "I take problems apart", accent: "until they work in the real world.", description: "I build products and the systems behind them. Interfaces, AI, data, and release all have to survive real use, not just a polished demo." },
+    ink: { kicker: "CUSTARD · ENGINEERING SCROLL", role: "PRODUCT ENGINEERING · INTELLIGENT SYSTEMS · CRAFT", thesis: "Name the problem clearly;", accent: "then make the system.", description: "Each scroll records a decision: what stayed, what changed, and where the evidence had to remain visible." },
+    press: { kicker: "THE LEAD / PROFILE", role: "INDEPENDENT PRODUCT ENGINEER / SYSTEMS DESK", thesis: "Today's lead:", accent: "one person ships a complex system.", description: "This issue follows a product engineer across product, AI, data, and release work, then into the hands of people who use the result." },
+    pixel: { kicker: "NEW GAME / PLAYER 01", role: "CLASS / PRODUCT ENGINEER + SYSTEM BUILDER", thesis: "Main quest:", accent: "turn an idea into something useful.", description: "Use product, AI, data, and engineering as your kit. Start with a sketch, then work through implementation, bug fixes, and release checks." },
   },
 };
 
@@ -85,7 +85,7 @@ export function NeuralGate({ narrativeMode, locale }: { narrativeMode: CstdNarra
 
           <p
             data-cstd-hero-thesis
-            aria-label={narrative.thesis[locale]}
+            data-cstd-narrative-thesis={narrative.thesis[locale]}
             className="mt-10 max-w-3xl text-3xl font-semibold leading-[1.08] text-[#f2efe7] md:text-[2.8rem] lg:text-[3.1rem]"
           >
             <ThemeCopy

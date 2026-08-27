@@ -43,6 +43,7 @@ describe("CSTD publishing infrastructure", () => {
     expect(serializeCstdRss("zh")).toContain("https://custard.top/notes/host-boundaries-in-one-next-deployment");
     expect(serializeCstdRss("en")).toContain("https://custard.top/en/notes/host-boundaries-in-one-next-deployment");
     expect(serializeCstdRss("zh").match(/<item>/g)?.length).toBeGreaterThanOrEqual(8);
+    expect(serializeCstdRss("zh")).toContain("<lastBuildDate>Thu, 27 Aug 2026");
   });
 
   test("publishes one canonical RFC 9116 security contract", () => {

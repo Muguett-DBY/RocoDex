@@ -40,6 +40,7 @@ const themeHeroArtifactSource = read("./theme-hero-artifact.tsx");
 const languageSwitcherSource = read("./site/cstd-language-switcher.tsx");
 const documentLocaleSource = read("./site/cstd-document-locale.tsx");
 const siteChromeSource = read("./site/cstd-site-chrome.tsx");
+const signalFieldSource = read("./site/signal-field.tsx");
 const englishHomepageSource = read("../../../app/(personal-en)/cstd/en/page.tsx");
 const themeCssSource = read("../../../app/cstd-themes.css");
 const themeCompositionSource = read("../../../app/cstd-theme-compositions.css");
@@ -115,7 +116,7 @@ describe("CSTD personal homepage", () => {
   test("keeps representative work concise and sends depth to case pages", () => {
     expect(proofSource).toContain("cstdProofMesh");
     expect(proofSource).toContain("getCaseStudyPath");
-    expect(proofSource).toContain("首页只给出结论");
+    expect(proofSource).toContain("首页先给你看结果");
     expect(proofSource).not.toContain("ProjectBroadcast");
     expect(proofSource).not.toContain("backdrop-blur");
   });
@@ -155,6 +156,9 @@ describe("CSTD personal homepage", () => {
     expect(sceneRuntimeSource).toContain("<FullScene");
     expect(sceneRuntimeSource).toContain("<WebGpuField");
     expect(webgpuSource).toContain("navigator.gpu");
+    expect(webgpuSource).toContain("lastFrame === 0");
+    expect(signalFieldSource).toContain("active?: boolean");
+    expect(siteChromeSource).toContain('active={!(readingSurface && readingMode === "quiet")}');
     expect(sceneSource).toContain("@react-three/fiber");
     expect(sceneSource).toContain("<Canvas");
     expect(sceneSource).toContain("const LazyImmersivePostprocessing = lazy(");
@@ -282,7 +286,7 @@ describe("CSTD personal homepage", () => {
     expect(themeCopySource).toContain('data-cstd-theme-copy="ink"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="press"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="pixel"');
-    expect(gateSource).toContain("万象入墨");
+    expect(gateSource).toContain("先把问题说清");
     expect(gateSource).toContain("今日头条");
     expect(gateSource).toContain("主线任务");
     expect(themeHeroArtifactSource).toContain('data-cstd-hero-artifact="neon"');
