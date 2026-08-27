@@ -61,6 +61,8 @@ describe("site architecture boundaries", () => {
       "sites/personal-homepage/content/systems.ts",
       "sites/personal-homepage/infrastructure/routing.ts",
       "sites/personal-homepage/infrastructure/sitemap.ts",
+      "app/(personal)/cstd/llms.txt/route.ts",
+      "app/(personal-en)/cstd/en/llms.txt/route.ts",
       "sites/shared/robots.ts",
       "sites/shared/sitemap.ts",
     ];

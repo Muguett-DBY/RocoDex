@@ -87,6 +87,8 @@ sync_config.py
 !src/app/robots.txt/*.ts
 !src/app/(personal)/cstd/llms.txt/
 !src/app/(personal)/cstd/llms.txt/route.ts
+!src/app/(personal-en)/cstd/en/llms.txt/
+!src/app/(personal-en)/cstd/en/llms.txt/route.ts
 !src/app/.well-known/security.txt/
 !src/app/.well-known/security.txt/route.ts
 
