@@ -1,21 +1,20 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import type { CstdSceneId } from "../experience/scene-manifest";
+import { cstdSceneManifest, type CstdSceneId } from "../experience/scene-manifest";
 import { cstdThemes, getCstdThemeMeta, type CstdThemeId } from "../experience/theme-store";
 import { cstdThemeWorldAssets } from "../media/asset-manifest";
 import type { CstdLocale, LocalizedText } from "../content/content-types";
+import { CstdChapterLink } from "./site/cstd-chapter-link";
 
 const sceneCopy: Record<CstdSceneId, { ink: LocalizedText; press: LocalizedText; pixel: LocalizedText }> = {
   hero: { ink: { zh: "卷首", en: "OPEN" }, press: { zh: "头版", en: "FRONT PAGE" }, pixel: { zh: "关卡 01", en: "STAGE 01" } },
   systems: { ink: { zh: "器", en: "FORM" }, press: { zh: "系统部", en: "SYSTEMS DESK" }, pixel: { zh: "关卡 02", en: "STAGE 02" } },
   proof: { ink: { zh: "证", en: "PROOF" }, press: { zh: "现场报道", en: "FIELD REPORTS" }, pixel: { zh: "关卡 03", en: "STAGE 03" } },
-  operator: { ink: { zh: "验", en: "TEST" }, press: { zh: "实验台", en: "LIVE LAB" }, pixel: { zh: "BOSS 关", en: "BOSS LAB" } },
   path: { ink: { zh: "迹", en: "TRACE" }, press: { zh: "观点与札记", en: "OPINION & NOTES" }, pixel: { zh: "知识房", en: "LORE ROOM" } },
   finale: { ink: { zh: "未完", en: "NEXT" }, press: { zh: "晚刊", en: "LATE EDITION" }, pixel: { zh: "继续？", en: "CONTINUE?" } },
 };
 
-const sceneSequence: CstdSceneId[] = ["hero", "systems", "proof", "operator", "path", "finale"];
 const visualWorldThemes = ["ink-protocol", "press-room", "pixel-quest"] as const;
 
 function getSceneLabel(theme: CstdThemeId, sceneId: CstdSceneId, locale: CstdLocale) {
@@ -95,22 +94,24 @@ export function ThemeWorldLayer({ theme, activeSceneId, locale }: { theme: CstdT
 
 export function ThemeSceneNavigator({ theme, activeSceneId, locale }: { theme: CstdThemeId; activeSceneId: CstdSceneId; locale: CstdLocale }) {
   return (
-    <div
+    <nav
       suppressHydrationWarning
-      aria-hidden="true"
+      aria-label={locale === "zh" ? "五幕主页导航" : "Five-act homepage navigation"}
       data-cstd-theme-scene-rail={theme}
-      className="cstd-theme-scene-rail pointer-events-none z-[34]"
+      className="cstd-theme-scene-rail pointer-events-auto z-[34]"
     >
-      {sceneSequence.map((sceneId, index) => (
+      {cstdSceneManifest.map((scene, index) => (
         <div
-          key={sceneId}
-          data-cstd-theme-scene-node={sceneId}
-          data-cstd-theme-scene-active={activeSceneId === sceneId ? "true" : "false"}
+          key={scene.id}
+          data-cstd-theme-scene-node={scene.id}
+          data-cstd-theme-scene-active={activeSceneId === scene.id ? "true" : "false"}
         >
-          <span>{String(index + 1).padStart(2, "0")}</span>
-          <b>{cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-scene-copy={candidate.id}>{getSceneLabel(candidate.id, sceneId, locale)}</span>)}</b>
+          <CstdChapterLink href={scene.shareHref} aria-current={activeSceneId === scene.id ? "location" : undefined} aria-label={`${String(index + 1).padStart(2, "0")} / ${scene.navLabel[locale]}`}>
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            <b>{cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-scene-copy={candidate.id}>{getSceneLabel(candidate.id, scene.id, locale)}</span>)}</b>
+          </CstdChapterLink>
         </div>
       ))}
-    </div>
+    </nav>
   );
 }

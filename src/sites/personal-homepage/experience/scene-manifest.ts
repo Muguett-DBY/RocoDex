@@ -1,8 +1,9 @@
+import type { LocalizedText } from "../content/content-types";
+
 export const cstdSceneIds = [
   "hero",
   "systems",
   "proof",
-  "operator",
   "path",
   "finale",
 ] as const;
@@ -20,11 +21,14 @@ export type CstdSceneDefinition = {
   elementId: string;
   index: number;
   label: string;
-  navLabel: string;
+  title: LocalizedText;
+  navLabel: LocalizedText;
   signal: string;
+  promise: string;
   accent: string;
   visualId: string;
   shareHref: `#${string}`;
+  pauseGpu: boolean;
   transition: {
     axis: "x" | "y" | "z";
     aperture: "iris" | "shutter" | "split";
@@ -42,11 +46,14 @@ export const cstdSceneManifest = [
     elementId: "top",
     index: 0,
     label: "Custard / identity",
-    navLabel: "身份",
+    title: { zh: "身份信号", en: "Identity signal" },
+    navLabel: { zh: "信号", en: "Signal" },
     signal: "CUSTARD ONLINE",
+    promise: "MEET THE BUILDER",
     accent: "#f4d431",
     visualId: "neural-gate",
     shareHref: "#top",
+    pauseGpu: false,
     transition: { axis: "z", aperture: "iris", durationMs: 920 },
     camera: {
       from: { position: [-0.18, 0.16, 7.6], target: [0, 0, -0.2], cityOffset: [1.6, -2.7, -1.7] },
@@ -58,11 +65,14 @@ export const cstdSceneManifest = [
     elementId: "systems",
     index: 1,
     label: "CSTD Core",
-    navLabel: "核心",
+    title: { zh: "系统核心", en: "Systems core" },
+    navLabel: { zh: "系统", en: "Systems" },
     signal: "FIVE CAPABILITY DISTRICTS",
+    promise: "READ THE CAPABILITY MAP",
     accent: "#24e0ff",
     visualId: "skill-reactor",
     shareHref: "#systems",
+    pauseGpu: false,
     transition: { axis: "x", aperture: "split", durationMs: 760 },
     camera: {
       from: { position: [0.18, 0.34, 5.85], target: [0.1, 0.02, -0.7], cityOffset: [0.72, -1.96, -0.72] },
@@ -73,44 +83,34 @@ export const cstdSceneManifest = [
     id: "proof",
     elementId: "proof",
     index: 2,
-    label: "Shipped systems",
-    navLabel: "作品",
-    signal: "DECISIONS TRANSMITTING",
+    label: "Shipped systems + executable evidence",
+    title: { zh: "作品与证据", en: "Work and evidence" },
+    navLabel: { zh: "证据", en: "Evidence" },
+    signal: "EVIDENCE CHAIN + REPLAY ONLINE",
+    promise: "INSPECT AND RUN THE PROOF",
     accent: "#f4d431",
     visualId: "broadcast-nexus",
     shareHref: "#proof",
+    pauseGpu: true,
     transition: { axis: "x", aperture: "shutter", durationMs: 820 },
     camera: {
       from: { position: [-0.72, 0.72, 6.45], target: [-0.18, 0.1, -1.2], cityOffset: [-0.12, -1.72, -1.45] },
-      to: { position: [0.74, -0.06, 6.05], target: [0.36, -0.12, -1.1], cityOffset: [0.52, -2.05, -0.9] },
-    },
-  },
-  {
-    id: "operator",
-    elementId: "operator",
-    index: 3,
-    label: "Executable evidence",
-    navLabel: "重放",
-    signal: "DETERMINISTIC WORKERS ONLINE",
-    accent: "#ff3b30",
-    visualId: "operator-workstation",
-    shareHref: "#operator",
-    transition: { axis: "z", aperture: "iris", durationMs: 740 },
-    camera: {
-      from: { position: [0.74, -0.06, 6.05], target: [0.36, -0.12, -1.1], cityOffset: [0.52, -2.05, -0.9] },
       to: { position: [-0.22, 0.18, 7.0], target: [-0.36, 0.08, -1.35], cityOffset: [1.22, -2.34, -1.8] },
     },
   },
   {
     id: "path",
     elementId: "path",
-    index: 4,
+    index: 3,
     label: "Knowledge paths",
-    navLabel: "知识",
+    title: { zh: "技术札记", en: "Technical notes" },
+    navLabel: { zh: "知识", en: "Knowledge" },
     signal: "EVIDENCE PATH RESOLVED",
+    promise: "FOLLOW THE JUDGMENT",
     accent: "#3dff8f",
     visualId: "data-vault",
     shareHref: "#path",
+    pauseGpu: true,
     transition: { axis: "y", aperture: "split", durationMs: 880 },
     camera: {
       from: { position: [-0.22, 0.18, 7.0], target: [-0.36, 0.08, -1.35], cityOffset: [1.22, -2.34, -1.8] },
@@ -120,13 +120,16 @@ export const cstdSceneManifest = [
   {
     id: "finale",
     elementId: "cstd-footer",
-    index: 5,
+    index: 4,
     label: "Open channel",
-    navLabel: "信号",
+    title: { zh: "开放联络", en: "Open channel" },
+    navLabel: { zh: "联络", en: "Dispatch" },
     signal: "SIGNAL REMAINS OPEN",
+    promise: "CONTINUE THE CONVERSATION",
     accent: "#f4d431",
     visualId: "departure-city",
     shareHref: "#cstd-footer",
+    pauseGpu: true,
     transition: { axis: "z", aperture: "shutter", durationMs: 1040 },
     camera: {
       from: { position: [0.12, 0.92, 6.7], target: [0, 0.24, -1.7], cityOffset: [0.08, -1.66, -2.15] },
@@ -146,5 +149,8 @@ export function getCstdSceneWindow(activeSceneId: CstdSceneId) {
 
 export function getCstdSceneFromHash(hash: string) {
   const elementId = hash.replace(/^#/, "");
-  return cstdSceneManifest.find((scene) => scene.elementId === elementId);
+  const directScene = cstdSceneManifest.find((scene) => scene.elementId === elementId);
+  if (directScene) return directScene;
+  if (elementId === "operator") return cstdSceneById.proof;
+  return undefined;
 }

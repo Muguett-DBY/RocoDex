@@ -41,7 +41,7 @@ export function KnowledgeLens({ observatory, locale }: { observatory: CstdHomepa
       <div className="relative mx-auto max-w-[1320px]">
         <header data-cstd-chapter-header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="05 / TECH NOTES" ink={locale === "zh" ? "第五卷 / 心法" : "SCROLL V / JUDGMENT"} press={locale === "zh" ? "栏目 D / 观点与札记" : "SECTION D / OPINION & NOTES"} pixel={locale === "zh" ? "关卡 05 / 知识房" : "LEVEL 05 / LORE LIBRARY"} /></p>
+            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="04 / TECH NOTES" ink={locale === "zh" ? "第四卷 / 心法" : "SCROLL IV / JUDGMENT"} press={locale === "zh" ? "栏目 D / 观点与札记" : "SECTION D / OPINION & NOTES"} pixel={locale === "zh" ? "关卡 04 / 知识房" : "LEVEL 04 / LORE LIBRARY"} /></p>
             <h2 id="knowledge-lens-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
               <ThemeCopy
                 neon={locale === "zh" ? <>技术分享不堆术语，<span className="block text-[#f4d431]">只讲做过的判断。</span></> : <>Technical writing without a jargon wall.<span className="block text-[#f4d431]">Only decisions tested in practice.</span></>}

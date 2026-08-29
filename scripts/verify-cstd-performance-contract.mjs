@@ -16,6 +16,10 @@ const materialRoot = path.resolve("public/cstd-materials");
 const materialAssets = readdirSync(materialRoot).filter((name) => name.endsWith(".webp"));
 const materialBytes = materialAssets.reduce((total, name) => total + statSync(path.join(materialRoot, name)).size, 0);
 const oversizedMaterialAsset = materialAssets.find((name) => statSync(path.join(materialRoot, name)).size > contract.budgets.sceneAssetBytes);
+const stageRoot = path.resolve("public/cstd-stage");
+const stageAssets = readdirSync(stageRoot).filter((name) => name.endsWith(".webp"));
+const stageBytes = stageAssets.reduce((total, name) => total + statSync(path.join(stageRoot, name)).size, 0);
+const oversizedStageAsset = stageAssets.find((name) => statSync(path.join(stageRoot, name)).size > contract.budgets.sceneAssetBytes);
 const fontRoot = path.resolve("public/fonts/cstd");
 const fontAssets = readdirSync(fontRoot).filter((name) => name.endsWith(".woff2"));
 const fontBytes = fontAssets.reduce((total, name) => total + statSync(path.join(fontRoot, name)).size, 0);
@@ -56,6 +60,12 @@ if (materialBytes > contract.budgets.themeMaterialAssetBytes) {
 if (oversizedMaterialAsset) {
   throw new Error(`CSTD theme material ${oversizedMaterialAsset} exceeds ${contract.budgets.sceneAssetBytes} bytes`);
 }
+if (stageBytes > contract.budgets.stageAssetBytes) {
+  throw new Error(`CSTD stage assets total ${stageBytes} bytes; budget is ${contract.budgets.stageAssetBytes}`);
+}
+if (oversizedStageAsset) {
+  throw new Error(`CSTD stage asset ${oversizedStageAsset} exceeds ${contract.budgets.sceneAssetBytes} bytes`);
+}
 if (fontBytes > contract.budgets.themeFontAssetBytes) {
   throw new Error(`CSTD theme fonts total ${fontBytes} bytes; budget is ${contract.budgets.themeFontAssetBytes}`);
 }
@@ -63,4 +73,4 @@ if (oversizedFontAsset) {
   throw new Error(`CSTD theme font ${oversizedFontAsset} exceeds ${contract.budgets.themeFontFileBytes} bytes`);
 }
 
-console.log(`CSTD performance contract OK: ${universeAssets.length} universe assets / ${universeBytes} bytes, ${themeAssets.length} theme assets / ${themeBytes} bytes, ${materialAssets.length} materials / ${materialBytes} bytes, ${fontAssets.length} fonts / ${fontBytes} bytes, ${contract.delivery.immutableAssetRoots.length} immutable roots.`);
+console.log(`CSTD performance contract OK: ${universeAssets.length} universe assets / ${universeBytes} bytes, ${stageAssets.length} stage assets / ${stageBytes} bytes, ${themeAssets.length} theme assets / ${themeBytes} bytes, ${materialAssets.length} materials / ${materialBytes} bytes, ${fontAssets.length} fonts / ${fontBytes} bytes, ${contract.delivery.immutableAssetRoots.length} immutable roots.`);

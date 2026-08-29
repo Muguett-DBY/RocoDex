@@ -22,19 +22,16 @@ export function PersonalHomepage({
     <HomepageRuntime narrativeMode={initialNarrativeMode} locale={locale}>
       <NeuralGate narrativeMode={initialNarrativeMode} locale={locale} />
 
-      <div id="systems" data-cstd-scene-shell="systems" className="relative scroll-mt-16">
+      <div id="systems" tabIndex={-1} data-cstd-scene-shell="systems" className="relative scroll-mt-16 focus:outline-none">
         <LivingStudioTwin narrativeMode={initialNarrativeMode} observatory={observatory} locale={locale} />
       </div>
 
-      <div id="proof" data-cstd-scene-shell="proof" className="relative scroll-mt-16">
+      <div id="proof" tabIndex={-1} data-cstd-scene-shell="proof" className="relative scroll-mt-16 focus:outline-none">
         <SelectedWork narrativeMode={initialNarrativeMode} locale={locale} />
-      </div>
-
-      <div id="operator" data-cstd-scene-shell="operator" className="relative scroll-mt-16">
         <ExecutableEvidence locale={locale} />
       </div>
 
-      <div id="path" data-cstd-scene-shell="path" className="relative scroll-mt-16">
+      <div id="path" tabIndex={-1} data-cstd-scene-shell="path" className="relative scroll-mt-16 focus:outline-none">
         <KnowledgeLens observatory={observatory} locale={locale} />
       </div>
 

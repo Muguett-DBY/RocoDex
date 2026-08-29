@@ -1,6 +1,6 @@
 import type { CstdSceneId } from "../experience/scene-manifest";
 import type { CstdThemeId } from "../experience/theme-store";
-import type { CstdLocale } from "../content/content-types";
+import type { CstdLocale, LocalizedText } from "../content/content-types";
 
 export type CstdVisualAsset = {
   id: string;
@@ -35,13 +35,6 @@ export const cstdVisualAssets = [
     position: "58% center",
   },
   {
-    id: "operator-workstation",
-    sceneId: "operator",
-    src: "/cstd-universe/cstd-night-workstation-v1.webp",
-    alt: "Night Runner 面向城市网络的夜间工程工作台",
-    position: "center center",
-  },
-  {
     id: "data-vault",
     sceneId: "path",
     src: "/cstd-universe/cstd-quiet-archive-v4.webp",
@@ -63,7 +56,7 @@ export const cstdVisualAssetByScene = Object.fromEntries(
 
 export const cstdEditorialAssets = [
   { id: "custard-identity-core", src: "/cstd-universe/cstd-custard-core-v5.webp", purpose: "homepage-identity" },
-  { id: "cstd-core-world", src: "/cstd-universe/cstd-core-world-v4.webp", purpose: "homepage-six-act-world" },
+  { id: "cstd-core-world", src: "/cstd-universe/cstd-core-world-v4.webp", purpose: "homepage-five-act-world" },
   { id: "quiet-archive", src: "/cstd-universe/cstd-quiet-archive-v4.webp", purpose: "knowledge-reading-mode" },
   { id: "engineering-observatory", src: "/cstd-universe/cstd-observatory-core-v3.webp", purpose: "homepage-observatory" },
   { id: "system-blueprint", src: "/cstd-universe/cstd-case-blueprint-v3.webp", purpose: "flagship-case-dossiers" },
@@ -76,6 +69,29 @@ export const cstdThemeWorldAssets = {
   "press-room": "/cstd-themes/press-room-v1.webp",
   "pixel-quest": "/cstd-themes/pixel-quest-v1.webp",
 } as const;
+
+export const cstdThemeStageAssets = {
+  "neon-district": {
+    src: "/cstd-stage/cstd-neon-observatory-v2.webp",
+    alt: { zh: "雨夜工程观测舱中的奶油色计算核心", en: "A custard compute core inside a rain-lit engineering observatory" },
+    position: "center center",
+  },
+  "ink-protocol": {
+    src: "/cstd-stage/cstd-ink-decision-scroll-v2.webp",
+    alt: { zh: "铺有系统决策图的现代水墨工程手卷", en: "A contemporary ink engineering scroll mapped with system decisions" },
+    position: "center center",
+  },
+  "press-room": {
+    src: "/cstd-stage/cstd-press-evidence-desk-v2.webp",
+    alt: { zh: "铺满校样与证据材料的工程报纸编辑台", en: "An engineering newsroom desk covered with proofs and evidence" },
+    position: "center center",
+  },
+  "pixel-quest": {
+    src: "/cstd-stage/cstd-pixel-systems-quest-v2.webp",
+    alt: { zh: "由发光路径连接的像素系统任务地图", en: "A pixel systems quest map connected by a luminous route" },
+    position: "center center",
+  },
+} as const satisfies Record<CstdThemeId, { src: string; alt: LocalizedText; position: string }>;
 
 export const cstdThemeMaterialAssets = {
   "neon-district": "/cstd-materials/neon-alloy-v1.webp",

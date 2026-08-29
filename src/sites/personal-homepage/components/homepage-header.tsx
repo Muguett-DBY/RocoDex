@@ -1,7 +1,7 @@
 "use client";
 
 import { clsx } from "clsx";
-import type { CstdSceneId } from "../experience/scene-manifest";
+import { cstdSceneManifest, type CstdSceneId } from "../experience/scene-manifest";
 import { HomepageControls } from "./homepage-controls";
 import { ThemeSwitcher } from "./theme-switcher";
 import { CstdChapterLink } from "./site/cstd-chapter-link";
@@ -11,11 +11,7 @@ import type { CstdLocale } from "../content/content-types";
 import { getLocalizedCstdHref } from "../infrastructure/i18n";
 import { CstdLanguageSwitcher } from "./site/cstd-language-switcher";
 
-const homepageLinks = [
-  { href: "#systems", label: { zh: "能力", en: "Systems" }, sceneId: "systems" },
-  { href: "#proof", label: { zh: "作品", en: "Work" }, sceneId: "proof" },
-  { href: "#operator", label: { zh: "证据", en: "Proof" }, sceneId: "operator" },
-] as const;
+const homepageLinks = cstdSceneManifest.filter((scene) => scene.id === "systems" || scene.id === "proof" || scene.id === "path");
 
 function getThemeMark(theme: CstdThemeId, locale: CstdLocale) {
   if (theme === "ink-protocol") return locale === "zh" ? "墨" : "IK";
@@ -73,11 +69,11 @@ export function HomepageHeader({
         <div className="ml-auto flex shrink-0 items-center gap-1.5 min-[360px]:gap-2 md:gap-4">
           <nav aria-label={locale === "zh" ? "首页导航" : "Homepage navigation"} className="hidden items-center gap-0.5 text-[12px] font-semibold text-[#9ca5a8] md:flex">
             {homepageLinks.map((link) => {
-              const active = activeSceneId === link.sceneId;
+              const active = activeSceneId === link.id;
               return (
                 <CstdChapterLink
-                  key={link.href}
-                  href={link.href}
+                  key={link.shareHref}
+                  href={link.shareHref}
                   aria-current={active ? "location" : undefined}
                   data-cstd-nav-active={active ? "true" : "false"}
                   className={clsx(
@@ -85,7 +81,7 @@ export function HomepageHeader({
                     active ? "text-[#f4d431]" : "hover:text-white",
                   )}
                 >
-                  {link.label[locale]}
+                  {link.navLabel[locale]}
                 </CstdChapterLink>
               );
             })}
@@ -98,7 +94,7 @@ export function HomepageHeader({
             </CstdLink>
           </nav>
           <CstdChapterLink href="#proof" className="mr-1 hidden font-mono text-xs font-semibold text-[#f4d431] min-[360px]:inline-flex md:hidden">
-            {locale === "zh" ? "作品" : "Work"}
+            {locale === "zh" ? "证据" : "Evidence"}
           </CstdChapterLink>
           <ThemeSwitcher locale={locale} />
           <CstdLanguageSwitcher locale={locale} compact />

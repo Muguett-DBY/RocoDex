@@ -933,7 +933,7 @@ export function PersonalImmersiveScene(props: PersonalImmersiveSceneProps) {
           camera={{ position: [0, 0, 7.2], fov: 42, near: 0.1, far: 40 }}
           dpr={quality === "full" ? [1, 1.25] : 1}
           gl={{ antialias: true, alpha: true, powerPreference: "high-performance", preserveDrawingBuffer: true }}
-          frameloop={props.active && quality === "full" ? "always" : "demand"}
+          frameloop={props.active && !props.reducedMotion ? "always" : "demand"}
           onCreated={({ gl }) => {
             gl.outputColorSpace = THREE.SRGBColorSpace;
             gl.toneMapping = THREE.ACESFilmicToneMapping;

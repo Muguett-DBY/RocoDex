@@ -1,7 +1,10 @@
 import type { CstdLocale } from "../content/content-types";
-import { cstdThemeFontAssets } from "../media/asset-manifest";
+import { cstdThemeFontAssets, cstdThemeStageAssets } from "../media/asset-manifest";
 
 const serializedThemeFontAssets = JSON.stringify(cstdThemeFontAssets);
+const serializedThemeStageAssets = JSON.stringify(Object.fromEntries(
+  Object.entries(cstdThemeStageAssets).map(([theme, asset]) => [theme, asset.src]),
+));
 
 function createCstdThemeBootstrapScript(locale: CstdLocale) {
   const serializedLocale = JSON.stringify(locale);
@@ -25,6 +28,7 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
   const kind = kinds[theme];
   const locale = ${serializedLocale};
   const fontAssets = ${serializedThemeFontAssets};
+  const stageAssets = ${serializedThemeStageAssets};
 
   fontAssets[theme][locale].forEach((href) => {
     if (document.head.querySelector('link[href="' + href + '"]')) return;
@@ -38,6 +42,17 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
     link.dataset.cstdThemeFontLocale = locale;
     document.head.appendChild(link);
   });
+
+  const homepagePath = window.location.pathname.replace(/\/+$/, "");
+  if (["", "/cstd", "/en", "/cstd/en"].includes(homepagePath)) {
+    const stagePreload = document.createElement("link");
+    stagePreload.rel = "preload";
+    stagePreload.as = "image";
+    stagePreload.href = stageAssets[theme];
+    stagePreload.fetchPriority = "high";
+    stagePreload.dataset.cstdStagePreload = theme;
+    document.head.appendChild(stagePreload);
+  }
 
   html.dataset.cstdTheme = theme;
   html.dataset.cstdThemeKind = kind;

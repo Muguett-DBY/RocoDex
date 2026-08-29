@@ -42,7 +42,8 @@ const shader = /* wgsl */ `
   }
 `;
 
-export function WebGpuSignalField(props: PersonalImmersiveSceneProps) {
+export function WebGpuSignalField(props: PersonalImmersiveSceneProps & { onFallback?: () => void }) {
+  const { onFallback } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const runtimeRef = useRef({ active: props.active, reducedMotion: props.reducedMotion });
   const frameRef = useRef(0);
@@ -62,6 +63,7 @@ export function WebGpuSignalField(props: PersonalImmersiveSceneProps) {
     const context = canvas?.getContext("webgpu") as GPUCanvasContext | null;
     if (!canvas || !gpu || !context) {
       setState("fallback");
+      onFallback?.();
       return;
     }
 
@@ -74,6 +76,7 @@ export function WebGpuSignalField(props: PersonalImmersiveSceneProps) {
       const adapter = await gpu.requestAdapter();
       if (!adapter || cancelled) {
         setState("fallback");
+        if (!cancelled) onFallback?.();
         return;
       }
       const createdDevice = await adapter.requestDevice();
@@ -162,7 +165,11 @@ export function WebGpuSignalField(props: PersonalImmersiveSceneProps) {
     };
 
     let removeResize: void | (() => void);
-    void start().then((cleanup) => { removeResize = cleanup; }).catch(() => setState("fallback"));
+    void start().then((cleanup) => { removeResize = cleanup; }).catch(() => {
+      if (cancelled) return;
+      setState("fallback");
+      onFallback?.();
+    });
     return () => {
       cancelled = true;
       if (frameRef.current) window.cancelAnimationFrame(frameRef.current);
@@ -172,7 +179,7 @@ export function WebGpuSignalField(props: PersonalImmersiveSceneProps) {
       if (contextReady) context.unconfigure();
       device?.destroy();
     };
-  }, [props.overdriveRef, props.progressRef, props.velocityRef]);
+  }, [onFallback, props.overdriveRef, props.progressRef, props.velocityRef]);
 
   return (
     <canvas

@@ -1,8 +1,8 @@
-import type { CstdSceneId } from "../experience/scene-manifest";
+import { cstdSceneManifest } from "../experience/scene-manifest";
 import { cstdPerformanceContract } from "./performance-contract";
 
 export const cstdExperienceContract = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   release: "CSTD-17.0",
   identity: {
     zh: "奶黄包",
@@ -10,14 +10,25 @@ export const cstdExperienceContract = {
     role: "PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER",
     systemCodename: "CSTD://PERSONAL ENGINEERING UNIVERSE",
   },
-  acts: [
-    { id: "hero", number: "01", zh: "身份入口", en: "Identity gate", promise: "MEET THE BUILDER" },
-    { id: "systems", number: "02", zh: "系统核心", en: "CSTD Core", promise: "READ THE CAPABILITY MAP" },
-    { id: "proof", number: "03", zh: "真实作品", en: "Shipped systems", promise: "INSPECT THE DECISIONS" },
-    { id: "operator", number: "04", zh: "可执行证据", en: "Executable evidence", promise: "RUN THE PROOF" },
-    { id: "path", number: "05", zh: "知识路径", en: "Knowledge paths", promise: "FOLLOW THE JUDGMENT" },
-    { id: "finale", number: "06", zh: "开放信号", en: "Open channel", promise: "CONTINUE THE CONVERSATION" },
-  ] satisfies readonly Readonly<{ id: CstdSceneId; number: string; zh: string; en: string; promise: string }>[],
+  acts: cstdSceneManifest.map((scene) => ({
+    id: scene.id,
+    number: String(scene.index + 1).padStart(2, "0"),
+    zh: scene.title.zh,
+    en: scene.title.en,
+    promise: scene.promise,
+  })),
+  viewingDepths: [
+    { id: "signal", seconds: 10, destination: "#proof" },
+    { id: "tour", seconds: 60, destination: "#systems" },
+    { id: "archive", seconds: 300, destination: "/work" },
+  ],
+  motionLayers: ["ambient", "narrative", "interactive"] as const,
+  themeGrammars: {
+    "neon-district": "scan-trace-execute",
+    "ink-protocol": "unfurl-follow-seal",
+    "press-room": "select-source-correct",
+    "pixel-quest": "choose-route-clear",
+  } as const,
   runtime: {
     progressiveOrder: cstdPerformanceContract.delivery.runtimeFallbackOrder,
     initialJavaScriptBytes: cstdPerformanceContract.budgets.initialJavascriptBytes,

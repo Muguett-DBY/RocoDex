@@ -393,15 +393,6 @@ html[data-cstd-theme="pixel-quest"] body { background: #050a18; }
   border-color: rgb(20 20 17 / 40%);
 }
 
-[data-cstd-theme="press-room"] [data-cstd-theme-scene-rail] > div > span,
-[data-cstd-theme="press-room"] [data-cstd-theme-scene-rail] > div > b {
-  color: #ff806d;
-}
-
-[data-cstd-theme-scene-rail="press-room"] [data-cstd-theme-scene-copy="press-room"] {
-  color: #ff806d !important;
-}
-
 [data-cstd-theme="press-room"] [data-cstd-studio-district-option][data-cstd-system-active="true"] > span:first-child {
   color: #8d211a !important;
 }

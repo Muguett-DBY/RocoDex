@@ -131,6 +131,7 @@ function isAllowedPersonalSitePath(path: string) {
     || path.startsWith("/cstd-archive/")
     || path.startsWith("/cstd-materials/")
     || path.startsWith("/cstd-persona/")
+    || path.startsWith("/cstd-stage/")
     || path.startsWith("/cstd-themes/")
     || path.startsWith("/cstd-world/")
     || path.startsWith("/cstd-universe/")

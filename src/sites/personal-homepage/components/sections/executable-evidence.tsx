@@ -10,10 +10,11 @@ export function ExecutableEvidence({ locale }: { locale: CstdLocale }) {
   const replay = cstdCaseReplays[0];
 
   return (
-    <section data-cstd-chapter="operator" data-cstd-scene="operator" data-cstd-executable-evidence data-cstd-home-replay={replay.id} aria-labelledby="executable-evidence-heading" className="relative z-20 border-b border-white/10 bg-[#050709] px-5 py-20 text-[#f2efe7] md:px-10 lg:px-16 lg:py-28">
+    <section data-cstd-chapter="operator" data-cstd-evidence-subchapter data-cstd-executable-evidence data-cstd-home-replay={replay.id} aria-labelledby="executable-evidence-heading" className="relative z-20 border-b border-white/10 bg-[#050709] px-5 py-20 text-[#f2efe7] md:px-10 lg:px-16 lg:py-28">
+      <span id="operator" aria-hidden="true" className="absolute left-0 top-0 h-px w-px scroll-mt-20" />
       <div data-cstd-evidence-layout className="mx-auto grid max-w-[1320px] gap-10 xl:grid-cols-[minmax(25rem,0.9fr)_minmax(0,1.1fr)] xl:items-start xl:gap-16">
         <div>
-          <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><FlaskConical aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="04 / EXECUTABLE EVIDENCE" ink={locale === "zh" ? "第四卷 / 实证" : "SCROLL IV / PROOF IN MOTION"} press={locale === "zh" ? "栏目 C / 测试台" : "SECTION C / TEST BENCH"} pixel={locale === "zh" ? "关卡 04 / BOSS 实验室" : "LEVEL 04 / BOSS LAB"} /></p>
+          <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><FlaskConical aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="03B / EXECUTABLE EVIDENCE" ink={locale === "zh" ? "第三卷下 / 实证" : "SCROLL III-B / PROOF IN MOTION"} press={locale === "zh" ? "调查附录 / 测试台" : "INVESTIGATION / TEST BENCH"} pixel={locale === "zh" ? "关卡 03B / BOSS 实验室" : "LEVEL 03-B / BOSS LAB"} /></p>
           <h2 id="executable-evidence-heading" className="mt-5 text-4xl font-semibold leading-[1] md:text-6xl xl:text-[3.75rem]">
             <ThemeCopy
               neon={locale === "zh" ? <>案例不只可读，<span className="block text-[#f4d431]">还可以运行。</span></> : <>A case is not only readable.<span className="block text-[#f4d431]">It can be executed.</span></>}

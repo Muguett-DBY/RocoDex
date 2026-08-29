@@ -7,6 +7,9 @@ import { cstdVisualAssetByScene } from "../media/asset-manifest";
 
 function WorldBackdrop({ activeSceneId }: { activeSceneId: CstdSceneId }) {
   const sceneWindow = getCstdSceneWindow(activeSceneId);
+  const backdropScenes = activeSceneId === "hero"
+    ? []
+    : sceneWindow.filter((scene) => scene.id !== "hero");
 
   return (
     <div
@@ -15,7 +18,7 @@ function WorldBackdrop({ activeSceneId }: { activeSceneId: CstdSceneId }) {
       data-cstd-world-scene={activeSceneId}
       className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-[#050709]"
     >
-      {sceneWindow.map((scene) => {
+      {backdropScenes.map((scene) => {
         const asset = cstdVisualAssetByScene[scene.id];
         const active = scene.id === activeSceneId;
         return (

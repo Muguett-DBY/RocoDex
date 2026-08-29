@@ -37,7 +37,7 @@ test.describe("CSTD technical archive", () => {
     await page.goto("/cstd/en");
     await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
     await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("I take problems apart");
-    await expect(page.getByRole("link", { name: "View selected work" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Enter the systems field" })).toBeVisible();
     expect(errors).toEqual([]);
   });
 
@@ -216,7 +216,9 @@ test.describe("CSTD technical archive", () => {
 
     const experienceResponse = await request.get("/experience.json", { headers });
     expect(experienceResponse.status()).toBe(200);
-    expect((await experienceResponse.json()).acts).toHaveLength(6);
+    const experience = await experienceResponse.json();
+    expect(experience.schemaVersion).toBe(2);
+    expect(experience.acts).toHaveLength(5);
 
     const securityResponse = await request.get("/.well-known/security.txt", { headers });
     expect(securityResponse.status()).toBe(200);

@@ -112,15 +112,20 @@ export function useCstdSceneClock({
     const requestSync = () => {
       if (viewportHeight !== window.innerHeight) refreshMetrics();
       if (!frame) frame = window.requestAnimationFrame(sync);
+      if (rootRef.current) rootRef.current.dataset.cstdScrolling = "true";
       window.clearTimeout(velocityTimeout);
       velocityTimeout = window.setTimeout(() => {
         velocityRef.current = 0;
         rootRef.current?.style.setProperty("--cstd-scroll-velocity", "0");
+        if (rootRef.current) rootRef.current.dataset.cstdScrolling = "false";
       }, 140);
     };
 
     const root = rootRef.current;
-    if (root) root.dataset.cstdSceneCurrent = activeSceneRef.current;
+    if (root) {
+      root.dataset.cstdSceneCurrent = activeSceneRef.current;
+      root.dataset.cstdScrolling = "false";
+    }
     refreshMetrics();
     sync();
 
