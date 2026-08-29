@@ -1,7 +1,6 @@
 import type { CstdLocale } from "../content/content-types";
-import { cstdThemeFontAssets, cstdThemeStageAssets } from "../media/asset-manifest";
+import { cstdThemeStageAssets } from "../media/asset-manifest";
 
-const serializedThemeFontAssets = JSON.stringify(cstdThemeFontAssets);
 const serializedThemeStageAssets = JSON.stringify(Object.fromEntries(
   Object.entries(cstdThemeStageAssets).map(([theme, asset]) => [theme, asset.src]),
 ));
@@ -27,21 +26,7 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
   const html = document.documentElement;
   const kind = kinds[theme];
   const locale = ${serializedLocale};
-  const fontAssets = ${serializedThemeFontAssets};
   const stageAssets = ${serializedThemeStageAssets};
-
-  fontAssets[theme][locale].forEach((href) => {
-    if (document.head.querySelector('link[href="' + href + '"]')) return;
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.as = "font";
-    link.type = "font/woff2";
-    link.crossOrigin = "anonymous";
-    link.href = href;
-    link.dataset.cstdThemeFont = theme;
-    link.dataset.cstdThemeFontLocale = locale;
-    document.head.appendChild(link);
-  });
 
   const homepagePath = window.location.pathname.replace(/\/+$/, "");
   if (["", "/cstd", "/en", "/cstd/en"].includes(homepagePath)) {

@@ -393,7 +393,6 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
       material: "neon-alloy-v1.webp",
       artifact: "neon",
       copy: { zh: "信号已锁定", en: "SIGNAL LOCKED" },
-      preloads: { zh: ["neon-display-v1.woff2"], en: ["neon-latin-v1.woff2"] },
     },
     {
       id: "ink-protocol",
@@ -401,7 +400,6 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
       material: "ink-xuan-v1.webp",
       artifact: "ink",
       copy: { zh: "以代码为墨", en: "CODE AS INK" },
-      preloads: { zh: ["ink-display-v1.woff2", "ink-text-v1.woff2"], en: ["ink-latin-v1.woff2", "ink-latin-italic-v1.woff2"] },
     },
     {
       id: "press-room",
@@ -409,7 +407,6 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
       material: "press-newsprint-v1.webp",
       artifact: "press",
       copy: { zh: "CSTD 日报 / 独立工程", en: "CSTD DAILY / INDEPENDENT ENGINEERING" },
-      preloads: { zh: ["press-latin-v1.woff2", "press-serif-v1.woff2"], en: ["press-latin-v1.woff2"] },
     },
     {
       id: "pixel-quest",
@@ -417,7 +414,6 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
       material: "pixel-circuit-v1.webp",
       artifact: "pixel",
       copy: { zh: "任务数据", en: "QUEST DATA" },
-      preloads: { zh: ["pixel-text-12-v1.woff2", "pixel-label-10-v1.woff2"], en: ["pixel-text-12-v1.woff2", "pixel-label-10-v1.woff2"] },
     },
   ] as const;
 
@@ -443,8 +439,7 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
       await expect(page.locator(`[data-cstd-deep-artifact="${otherArtifact}"]`)).toBeHidden();
     }
 
-    const preloadedFonts = await page.locator('link[data-cstd-theme-font]').evaluateAll((links) => links.map((link) => (link as HTMLLinkElement).href.split("/").at(-1)));
-    expect(preloadedFonts).toEqual(world.preloads.zh);
+    await expect(page.locator('link[data-cstd-theme-font]')).toHaveCount(0);
     await expectNoHorizontalOverflow(page);
 
     await page.goto("/cstd/en", { waitUntil: "domcontentloaded" });
@@ -453,8 +448,7 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
     await expect(englishRoot).toHaveAttribute("data-cstd-theme", world.id);
     await page.evaluate(() => document.fonts.ready);
     await expect(page.locator(".cstd-hero-wordmark")).toHaveCSS("font-family", new RegExp(world.font.en));
-    const englishPreloads = await page.locator('link[data-cstd-theme-font]').evaluateAll((links) => links.map((link) => (link as HTMLLinkElement).href.split("/").at(-1)));
-    expect(englishPreloads).toEqual(world.preloads.en);
+    await expect(page.locator('link[data-cstd-theme-font]')).toHaveCount(0);
     if (world.id === "neon-district") {
       await expect(page.locator("[data-cstd-hero-thesis]")).toHaveCSS("font-family", /CSTD Neon Latin/);
     }

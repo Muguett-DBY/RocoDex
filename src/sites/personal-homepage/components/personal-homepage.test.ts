@@ -248,9 +248,9 @@ describe("CSTD personal homepage", () => {
     expect(themeStoreSource).toContain("document.documentElement.dataset.cstdTheme");
     expect(themeBootstrapSource).toContain("MutationObserver");
     expect(themeBootstrapSource).toContain("cstd-world-theme");
-    expect(themeBootstrapSource).toContain("fontAssets");
-    expect(themeBootstrapSource).toContain("fontAssets[theme][locale]");
-    expect(themeBootstrapSource).toContain("dataset.cstdThemeFontLocale");
+    expect(themeBootstrapSource).toContain("stageAssets[theme]");
+    expect(themeBootstrapSource).toContain("dataset.cstdStagePreload");
+    expect(themeBootstrapSource).not.toContain("dataset.cstdThemeFont");
     expect(personalLayoutSource).toContain('<CstdThemeBootstrapScript locale="zh" />');
     expect(englishLayoutSource).toContain('<CstdThemeBootstrapScript locale="en" />');
     expect(themeSwitcherSource).toContain("data-cstd-theme-switcher");
