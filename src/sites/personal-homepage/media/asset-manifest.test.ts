@@ -1,12 +1,12 @@
 import { describe, expect, test } from "vitest";
 import { existsSync, statSync } from "node:fs";
 import path from "node:path";
-import { cstdBroadcasts, cstdEditorialAssets, cstdThemeFontAssets, cstdThemeMaterialAssets, cstdThemeWorldAssets, cstdVisualAssets } from "./asset-manifest";
+import { cstdBroadcasts, cstdEditorialAssets, cstdThemeFontAssets, cstdThemeMaterialAssets, cstdThemeStageAssets, cstdThemeWorldAssets, cstdVisualAssets } from "./asset-manifest";
 
 describe("CSTD media manifest", () => {
   test("maps one original visual to every directed scene", () => {
-    expect(cstdVisualAssets).toHaveLength(6);
-    expect(new Set(cstdVisualAssets.map((asset) => asset.sceneId)).size).toBe(6);
+    expect(cstdVisualAssets).toHaveLength(5);
+    expect(new Set(cstdVisualAssets.map((asset) => asset.sceneId)).size).toBe(5);
     expect(
       cstdVisualAssets
         .filter((asset) => "priority" in asset && asset.priority)
@@ -17,6 +17,18 @@ describe("CSTD media manifest", () => {
     expect(cstdVisualAssets.filter((asset) => asset.src.endsWith("-v4.webp"))).toHaveLength(2);
     for (const asset of cstdVisualAssets) {
       const filePath = path.join(process.cwd(), "public", asset.src.slice(1));
+      expect(existsSync(filePath)).toBe(true);
+      expect(statSync(filePath).size).toBeLessThanOrEqual(320_000);
+    }
+  });
+
+  test("ships one dedicated, generated stage asset for every visual world", () => {
+    expect(Object.keys(cstdThemeStageAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest"]);
+    for (const asset of Object.values(cstdThemeStageAssets)) {
+      const filePath = path.join(process.cwd(), "public", asset.src.slice(1));
+      expect(asset.src).toMatch(/^\/cstd-stage\/.+-v2\.webp$/);
+      expect(asset.alt.zh.length).toBeGreaterThan(8);
+      expect(asset.alt.en.length).toBeGreaterThan(8);
       expect(existsSync(filePath)).toBe(true);
       expect(statSync(filePath).size).toBeLessThanOrEqual(320_000);
     }

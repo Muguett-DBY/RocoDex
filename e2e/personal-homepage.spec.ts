@@ -17,7 +17,7 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   await expect(page.locator("[data-cstd-hero-summary] > div")).toHaveCount(3);
   await expect(page.locator("[data-cstd-narrative-switcher]")).toHaveCount(0);
 
-  await expect(page.locator("[data-cstd-scene]")).toHaveCount(6);
+  await expect(page.locator("[data-cstd-scene]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-studio-twin]")).toHaveCount(1);
   await expect(page.locator("[data-cstd-studio-district-option]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-release-replay]")).toHaveCount(0);
@@ -91,7 +91,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   await expect(root).toHaveAttribute("data-cstd-locale", "en");
   await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("I take problems apart");
-  await expect(page.locator("[data-cstd-scene]")).toHaveCount(6);
+  await expect(page.locator("[data-cstd-scene]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-knowledge-list]")).not.toContainText("[object Object]");
   const englishCopy = stripPermittedEnglishAutonyms((await root.innerText()) ?? "");
   expect(englishCopy).not.toMatch(/[\p{Script=Han}]/u);
@@ -259,7 +259,8 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
   });
   const experience = readJson("/cstd/experience.json");
   expect(experience.identity.zh).toBe("奶黄包");
-  expect(experience.acts).toHaveLength(6);
+  expect(experience).toMatchObject({ schemaVersion: 2 });
+  expect(experience.acts).toHaveLength(5);
 });
 
 test("CSTD visual contracts keep identity, summary, and quiet reading coherent", async ({ page, isMobile }) => {
@@ -268,7 +269,7 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
     window.localStorage.setItem("cstd-motion-mode", "calm");
   });
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
-  await expect(page.locator('[data-cstd-world-frame="hero"] img')).toHaveAttribute("src", /cstd-custard-core-v5/);
+  await expect(page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image")).toBeVisible();
   const titleLocator = page.getByRole("heading", { level: 1, name: "奶黄包" });
   const summaryLocator = page.locator("[data-cstd-hero-summary]");
   await expect(titleLocator).toBeVisible();
@@ -313,8 +314,8 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
 
   await expect(root).toHaveAttribute("data-cstd-theme", "neon-district");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "cyberpunk");
-  await expect(page.locator('[data-cstd-hero-artifact="neon"]')).toBeVisible();
-  await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeHidden();
+  const stageImage = page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image");
+  await expect(stageImage).toHaveCSS("background-image", /cstd-neon-observatory-v2/);
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="neon-district"]')).toBeVisible();
   await switcher.click();
   await expect(page.locator("[data-cstd-theme-menu]")).toBeVisible();
@@ -333,8 +334,7 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(switcher).toHaveAttribute("data-cstd-theme-active", "press-room");
   await expect(switcher.locator("[data-cstd-theme-label]")).toContainText("工程日报");
   await expect(page.locator('[data-cstd-theme-world-image="press-room"]')).toBeVisible();
-  await expect(page.locator('[data-cstd-hero-artifact="press"]')).toBeVisible();
-  await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeHidden();
+  await expect(stageImage).toHaveCSS("background-image", /cstd-press-evidence-desk-v2/);
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="press-room"]')).toBeVisible();
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("今日头条：");
   await expectNoHorizontalOverflow(page);
@@ -351,8 +351,7 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(root).toHaveAttribute("data-cstd-theme", "ink-protocol");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "ink-scroll");
   await expect(page.locator('[data-cstd-theme-world-image="ink-protocol"]')).toBeVisible();
-  await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeVisible();
-  await expect(page.locator('[data-cstd-hero-artifact="press"]')).toBeHidden();
+  await expect(stageImage).toHaveCSS("background-image", /cstd-ink-decision-scroll-v2/);
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="ink-protocol"]')).toBeVisible();
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("先把问题说清，");
   await expectNoHorizontalOverflow(page);
@@ -364,12 +363,11 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(root).toHaveAttribute("data-cstd-render-policy", "balanced");
   await expect(page.locator("[data-cstd-webgl]")).toHaveCount(0);
   await expect(page.locator('[data-cstd-theme-world-image="pixel-quest"]')).toBeVisible();
-  await expect(page.locator('[data-cstd-hero-artifact="pixel"]')).toBeVisible();
-  await expect(page.locator('[data-cstd-hero-artifact="ink"]')).toBeHidden();
+  await expect(stageImage).toHaveCSS("background-image", /cstd-pixel-systems-quest-v2/);
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="pixel-quest"]')).toBeVisible();
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("主线任务：");
-  await expect(page.locator('[data-cstd-hero-actions] a[href="#proof"]')).toHaveCSS("color", "rgb(7, 17, 40)");
-  await expect(page.locator('[data-cstd-hero-actions] a[href="#proof"]')).toHaveCSS("background-color", "rgb(255, 212, 59)");
+  await expect(page.locator('[data-cstd-hero-actions] a[href="#systems"]')).toHaveCSS("color", "rgb(7, 17, 40)");
+  await expect(page.locator('[data-cstd-hero-actions] a[href="#systems"]')).toHaveCSS("background-color", "rgb(255, 212, 59)");
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(root).toHaveAttribute("data-cstd-theme", "pixel-quest");
   const infinitePixelAnimations = await page.evaluate(() => document.getAnimations().filter((animation) => {
@@ -463,7 +461,7 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
     if (world.id === "ink-protocol") {
       await expect(page.locator("[data-cstd-hero-thesis]")).toHaveCSS("font-family", /CSTD Ink Latin/);
       const labels = await page.locator('[data-cstd-theme-scene-rail="ink-protocol"] [data-cstd-theme-scene-copy="ink-protocol"]').evaluateAll((nodes) => nodes.map((node) => node.textContent));
-      expect(labels).toEqual(["OPEN", "FORM", "PROOF", "TEST", "TRACE", "NEXT"]);
+      expect(labels).toEqual(["OPEN", "FORM", "PROOF", "TRACE", "NEXT"]);
     }
     if (world.id === "press-room") {
       await expect(page.locator("[data-cstd-hero-description]")).toHaveCSS("column-count", "auto");
@@ -544,6 +542,46 @@ test("CSTD applies a persisted visual world before the React runtime loads", asy
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-theme", "press-room");
   await expect(page.locator('[data-cstd-theme-world-image="press-room"]')).toBeVisible();
   await expect(page.locator('[data-cstd-theme-world-decoration="neon-district"]')).toBeHidden();
+  await expect(page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image")).toHaveCSS("background-image", /cstd-press-evidence-desk-v2/);
+});
+
+test("CSTD exposes a five-act stage, useful depth routes, and an inspectable evidence chain", async ({ page }) => {
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+
+  const actNavigation = page.getByRole("navigation", { name: "五幕主页导航" });
+  await expect(actNavigation.getByRole("link")).toHaveCount(5);
+  await expect(page.locator("[data-cstd-stage-visual]")).toBeVisible();
+
+  const entryConsole = page.locator("[data-cstd-entry-console]");
+  await expect(entryConsole).toBeVisible();
+  await expect(entryConsole).toHaveAttribute("data-cstd-entry-ready", "true");
+  await expect(entryConsole.getByRole("tab")).toHaveCount(3);
+  await entryConsole.getByRole("tab", { name: "10 SEC" }).focus();
+  await page.keyboard.press("ArrowRight");
+  await expect(entryConsole.getByRole("tab", { name: "1 MIN" })).toBeFocused();
+  await expect(entryConsole.getByRole("tab", { name: "1 MIN" })).toHaveAttribute("aria-selected", "true");
+  await expect(entryConsole.getByRole("tabpanel")).toContainText("看我怎么做系统");
+
+  await page.locator("#proof").scrollIntoViewIfNeeded();
+  const evidence = page.locator("[data-cstd-evidence-chain]");
+  await expect(evidence).toBeVisible();
+  await expect(evidence.locator("[data-cstd-evidence-project-tabs]").getByRole("tab")).toHaveCount(3);
+  await evidence.locator("[data-cstd-evidence-project-tabs]").getByRole("tab").nth(1).click();
+  await evidence.locator("[data-cstd-evidence-phase-tabs]").getByRole("tab", { name: /取舍/ }).click();
+  await expect(evidence.locator("[data-cstd-evidence-phase-tabs]").getByRole("tab", { name: /取舍/ })).toHaveAttribute("aria-selected", "true");
+  await expect(evidence.locator("[data-cstd-evidence-phase-panel]")).toBeVisible();
+});
+
+test("CSTD follows system motion preference until the visitor chooses an explicit override", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  const root = page.locator("[data-cstd-kinetic-world]");
+  await expect(root).toHaveAttribute("data-cstd-motion", "calm");
+
+  await page.getByRole("button", { name: "开启增强动效" }).click();
+  await expect(root).toHaveAttribute("data-cstd-motion", "full");
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(root).toHaveAttribute("data-cstd-motion", "full");
 });
 
 test("CSTD header anchors land immediately without a stalled view transition", async ({ page, isMobile }) => {
@@ -557,9 +595,9 @@ test("CSTD header anchors land immediately without a stalled view transition", a
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   const navigation = page.getByRole("navigation", { name: "首页导航" });
   for (const destination of [
-    { id: "systems", label: "能力", selector: "#systems" },
-    { id: "proof", label: "作品", selector: "#proof" },
-    { id: "operator", label: "证据", selector: "#operator" },
+    { id: "systems", label: "系统", selector: "#systems" },
+    { id: "proof", label: "证据", selector: "#proof" },
+    { id: "path", label: "知识", selector: "#path" },
   ]) {
     await navigation.getByRole("link", { name: destination.label, exact: true }).click({ noWaitAfter: true });
     await expect(page.locator("html")).toHaveAttribute("data-cstd-anchor-target", destination.id);

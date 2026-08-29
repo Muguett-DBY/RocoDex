@@ -10,12 +10,15 @@ import { CstdLink } from "../site/cstd-link";
 import { ThemeChapterLabel, ThemeCopy } from "../theme-copy";
 import type { CstdLocale } from "../../content/content-types";
 import { getLocalizedCstdHref } from "../../infrastructure/i18n";
+import { createHomepageEvidenceChains } from "../../content/homepage-experience";
+import { EvidenceChainExplorer } from "./evidence-chain-explorer";
 
 export function SelectedWork({ narrativeMode, locale }: { narrativeMode: CstdNarrativeMode; locale: CstdLocale }) {
   const projectOrder = getCstdNarrative(narrativeMode).projectOrder;
   const cases = projectOrder
     .map((projectId) => cstdCaseStudies.find((entry) => entry.projectId === projectId))
     .filter((entry) => entry !== undefined);
+  const evidenceChains = createHomepageEvidenceChains(cases, locale);
 
   return (
     <section
@@ -88,6 +91,8 @@ export function SelectedWork({ narrativeMode, locale }: { narrativeMode: CstdNar
             );
           })}
         </div>
+
+        <EvidenceChainExplorer chains={evidenceChains} locale={locale} />
 
         <div data-cstd-proof-footer className="mt-9 flex flex-wrap items-center justify-between gap-5 border-t pt-5 font-mono text-[11px] font-black">
           <span>{cstdProofMesh.length} {locale === "zh" ? "个已发布案例" : "PUBLISHED CASES"} / {cstdProofMesh.reduce((sum, entry) => sum + entry.artifactCount, 0)} {locale === "zh" ? "项公开证据" : "PUBLIC ARTIFACTS"}</span>

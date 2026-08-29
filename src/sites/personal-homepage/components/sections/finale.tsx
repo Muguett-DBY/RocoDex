@@ -47,7 +47,7 @@ export function Finale({ narrativeMode, locale }: { narrativeMode: CstdNarrative
           <div className="max-w-6xl">
             <p className="flex items-center gap-3 font-mono text-[11px] font-black uppercase text-[#24e0ff]">
               <RadioTower aria-hidden="true" className="h-4 w-4" />
-              <ThemeChapterLabel neon="06 / FINAL TRANSMISSION" ink={locale === "zh" ? "卷尾 / 山高水长" : "CLOSING SCROLL / THE PATH CONTINUES"} press={locale === "zh" ? "末版 / 晚刊" : "BACK PAGE / LATE EDITION"} pixel={locale === "zh" ? "最终关 / 继续？" : "FINAL STAGE / CONTINUE?"} />
+              <ThemeChapterLabel neon="05 / FINAL TRANSMISSION" ink={locale === "zh" ? "卷尾 / 山高水长" : "CLOSING SCROLL / THE PATH CONTINUES"} press={locale === "zh" ? "末版 / 晚刊" : "BACK PAGE / LATE EDITION"} pixel={locale === "zh" ? "最终关 / 继续？" : "FINAL STAGE / CONTINUE?"} />
             </p>
             <h2 className="cstd-finale-title mt-8 text-5xl font-black leading-[0.9] tracking-[0] md:text-7xl lg:text-[6.5rem]">
               <ThemeCopy

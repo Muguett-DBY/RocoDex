@@ -70,7 +70,7 @@ for (const [name, expected] of Object.entries(performanceContract.budgets)) {
   if (actual !== expected) throw new Error(`Performance budget ${name} is ${actual}; expected ${expected}`);
 }
 if (payloads["/performance.json"].cacheComponents?.status !== "evaluated-not-enabled") throw new Error("Cache Components decision is missing");
-if (payloads["/experience.json"].acts?.length !== 6) throw new Error("Experience contract does not contain six acts");
+if (payloads["/experience.json"].schemaVersion !== 2 || payloads["/experience.json"].acts?.length !== 5) throw new Error("Experience contract does not contain the five-act stage");
 if (payloads["/experience.json"].identity?.zh !== "奶黄包") throw new Error("Experience contract identity is invalid");
 
 const security = await get("/.well-known/security.txt");
@@ -99,4 +99,4 @@ if (!sitemapBody.includes('hreflang="zh-CN"') || !sitemapBody.includes('hreflang
 const worker = await get("/cstd-case-worker.js");
 if (!(await worker.text()).includes('"crm-lock"')) throw new Error("Production Worker is missing the CRM lock capsule");
 
-console.log(`CSTD production smoke OK: ${origin}, ${htmlSurfaces.length} bilingual HTML surfaces, ${jsonEndpoints.length} public contracts, localized manifests/feed/sitemap, 6 experience acts, 5 topics, 4 proof capsules, content health 100.`);
+console.log(`CSTD production smoke OK: ${origin}, ${htmlSurfaces.length} bilingual HTML surfaces, ${jsonEndpoints.length} public contracts, localized manifests/feed/sitemap, 5 experience acts, 5 topics, 4 proof capsules, content health 100.`);

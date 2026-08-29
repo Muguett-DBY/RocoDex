@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { memo } from "react";
+import { memo, useCallback, useState } from "react";
 import type { CstdRuntimeProfile } from "../experience/runtime-hooks";
 import type { PersonalImmersiveSceneProps } from "./immersive-scene";
 
@@ -22,18 +22,22 @@ function SceneRuntime({ profile, enabled, ...sceneProps }: PersonalImmersiveScen
   profile: CstdRuntimeProfile;
   enabled: boolean;
 }) {
+  const [webGpuFailed, setWebGpuFailed] = useState(false);
+  const handleWebGpuFallback = useCallback(() => setWebGpuFailed(true), []);
   if (!enabled) return null;
+  const useWebGpu = profile.tier === "full" && profile.webgpu && !webGpuFailed;
 
   return (
     <div
       data-cstd-scene-runtime
       data-cstd-scene-runtime-tier={profile.tier}
-      data-cstd-scene-runtime-webgpu={profile.webgpu ? "true" : "false"}
+      data-cstd-scene-runtime-backend={useWebGpu ? "webgpu" : profile.backend}
+      data-cstd-scene-runtime-webgpu={useWebGpu ? "true" : "false"}
       className="absolute inset-0"
     >
-      {profile.tier === "full" ? <FullScene {...sceneProps} /> : null}
+      {profile.tier === "full" && !useWebGpu ? <FullScene {...sceneProps} /> : null}
       {profile.tier === "lite" ? <LiteScene {...sceneProps} /> : null}
-      {profile.tier === "full" && profile.webgpu ? <WebGpuField {...sceneProps} /> : null}
+      {useWebGpu ? <WebGpuField {...sceneProps} onFallback={handleWebGpuFallback} /> : null}
     </div>
   );
 }

@@ -24,6 +24,8 @@ const narrativeSource = read("../content/narratives.ts");
 const studioSource = read("./sections/living-studio-twin.tsx");
 const studioExplorerSource = read("./sections/studio-system-explorer.tsx");
 const proofSource = read("./sections/selected-work.tsx");
+const evidenceChainSource = read("./sections/evidence-chain-explorer.tsx");
+const homepageExperienceSource = read("../content/homepage-experience.ts");
 const replaySource = read("./sections/executable-evidence.tsx");
 const replayRuntimeSource = read("./site/executable-case-replay.tsx");
 const workerSource = read("../../../../public/cstd-case-worker.js");
@@ -37,6 +39,8 @@ const themeWorldSource = read("./theme-world-layer.tsx");
 const pageHeroSource = read("./pages/page-hero.tsx");
 const themeCopySource = read("./theme-copy.tsx");
 const themeHeroArtifactSource = read("./theme-hero-artifact.tsx");
+const stageVisualSource = read("./stage/theme-stage-visual.tsx");
+const entryConsoleSource = read("./stage/studio-entry-console.tsx");
 const languageSwitcherSource = read("./site/cstd-language-switcher.tsx");
 const documentLocaleSource = read("./site/cstd-document-locale.tsx");
 const siteChromeSource = read("./site/cstd-site-chrome.tsx");
@@ -45,6 +49,7 @@ const englishHomepageSource = read("../../../app/(personal-en)/cstd/en/page.tsx"
 const themeCssSource = read("../../../app/cstd-themes.css");
 const themeCompositionSource = read("../../../app/cstd-theme-compositions.css");
 const themeFoundationSource = read("../../../app/cstd-theme-foundations.css");
+const studioStageSource = read("../../../app/cstd-studio-stage.css");
 const personalLayoutSource = read("../../../app/(personal)/layout.tsx");
 const englishLayoutSource = read("../../../app/(personal-en)/layout.tsx");
 const assetManifestSource = read("../media/asset-manifest.ts");
@@ -53,7 +58,8 @@ describe("CSTD personal homepage", () => {
   test("keeps Custard identity and a direct portfolio promise above the fold", () => {
     expect(gateSource).toContain('id="cstd-hero-title"');
     expect(gateSource).toContain("data-text={cstdProfile.name[locale]}");
-    expect(gateSource).toContain('href="#proof"');
+    expect(gateSource).toContain('href="#systems"');
+    expect(entryConsoleSource).toContain('target: "#proof"');
     expect(gateSource).toContain('data-cstd-hero-summary');
     expect(gateSource).toContain("narrative.thesis[locale]");
     expect(narrativeSource).toContain('"/for/research"');
@@ -82,7 +88,7 @@ describe("CSTD personal homepage", () => {
     expect(finaleSource).toContain("narrative.label[locale]");
   });
 
-  test("uses six focused scenes without app-like homepage controls", () => {
+  test("uses five focused acts without app-like homepage controls", () => {
     expect(landingSource).not.toContain('"use client"');
     expect(landingSource).toContain("<HomepageRuntime");
     expect(landingSource).toContain("<NeuralGate");
@@ -97,6 +103,9 @@ describe("CSTD personal homepage", () => {
     expect(landingSource).not.toContain("LazySceneDirector");
     expect(landingSource).not.toContain("HomepageHud");
     expect(landingSource).not.toContain("command-drawer");
+    expect(sceneManifestSource).not.toContain('"operator",');
+    expect(entryConsoleSource).toContain('role="tablist"');
+    expect(entryConsoleSource).toContain('data-cstd-entry-console');
   });
 
   test("presents five capability directions without release-dashboard churn", () => {
@@ -119,6 +128,10 @@ describe("CSTD personal homepage", () => {
     expect(proofSource).toContain("首页先给你看结果");
     expect(proofSource).not.toContain("ProjectBroadcast");
     expect(proofSource).not.toContain("backdrop-blur");
+    expect(proofSource).toContain("<EvidenceChainExplorer");
+    expect(homepageExperienceSource).toContain("caseStudy.film.beats");
+    expect(evidenceChainSource).toContain("data-cstd-evidence-chain");
+    expect(evidenceChainSource).toContain('aria-orientation="vertical"');
   });
 
   test("offers one representative deterministic replay instead of a tool selector", () => {
@@ -147,7 +160,9 @@ describe("CSTD personal homepage", () => {
     expect(homepageRuntimeSource).toContain('reason: "balanced-default"');
     expect(homepageRuntimeSource).toContain("useCstdRuntimeProfile(enhancementsReady && overdrive && immersiveTheme, desktopScene)");
     expect(homepageRuntimeSource).toContain('data-cstd-render-policy={overdrive && immersiveTheme ? "enhanced" : "balanced"}');
-    expect(homepageRuntimeSource).toContain("enabled={enhancementsReady && desktopScene && overdrive && immersiveTheme}");
+    expect(homepageRuntimeSource).toContain("const immersiveSceneEnabled = enhancementsReady && desktopScene && overdrive && immersiveTheme");
+    expect(homepageRuntimeSource).toContain("{immersiveSceneEnabled ? (");
+    expect(homepageRuntimeSource).toContain("profile={renderedProfile} enabled");
     expect(runtimeHooksSource).toContain("desktopSceneQuery");
     expect(runtimeHooksSource).toContain('import("./runtime-capabilities")');
     expect(runtimeSource).toContain("WEBGL_debug_renderer_info");
@@ -155,6 +170,8 @@ describe("CSTD personal homepage", () => {
     expect(sceneRuntimeSource).toContain("<LiteScene");
     expect(sceneRuntimeSource).toContain("<FullScene");
     expect(sceneRuntimeSource).toContain("<WebGpuField");
+    expect(sceneRuntimeSource).toContain('data-cstd-scene-runtime-backend={useWebGpu ? "webgpu" : profile.backend}');
+    expect(sceneRuntimeSource).toContain('profile.tier === "full" && !useWebGpu');
     expect(webgpuSource).toContain("navigator.gpu");
     expect(webgpuSource).toContain("lastFrame === 0");
     expect(signalFieldSource).toContain("active?: boolean");
@@ -182,7 +199,7 @@ describe("CSTD personal homepage", () => {
     expect(homepageRuntimeSource).toContain("useCstdDocumentVisibility");
     expect(runtimeHooksSource).toContain('document.addEventListener("visibilitychange", sync)');
     expect(runtimeHooksSource).not.toContain("new MutationObserver");
-    expect(sceneSource).toContain('frameloop={props.active && quality === "full" ? "always" : "demand"}');
+    expect(sceneSource).toContain('frameloop={props.active && !props.reducedMotion ? "always" : "demand"}');
     expect(homepageRuntimeSource).not.toContain('from "framer-motion"');
   });
 
@@ -206,12 +223,12 @@ describe("CSTD personal homepage", () => {
     expect(chapterLinkSource).toContain("data-cstd-anchor-jump");
     expect(landingSource).toContain('id="systems"');
     expect(landingSource).toContain('id="proof"');
-    expect(landingSource).toContain('id="operator"');
+    expect(replaySource).toContain('id="operator"');
     expect(globalsSource).not.toContain("content-visibility: auto");
   });
 
   test("keeps scene changes cinematic without hijacking document scroll", () => {
-    expect(sceneManifestSource).toContain('label: "Executable evidence"');
+    expect(sceneManifestSource).toContain('label: "Shipped systems + executable evidence"');
     expect(sceneManifestSource).toContain('label: "Knowledge paths"');
     expect(worldSource).toContain("getCstdSceneWindow");
     expect(finaleSource).toContain("collaborationCopy");
@@ -253,10 +270,19 @@ describe("CSTD personal homepage", () => {
     expect(headerSource).toContain("candidate.edition[locale]");
     expect(siteChromeSource).toContain("candidate.brand[locale]");
     expect(siteChromeSource).toContain("candidate.edition[locale]");
-    expect(themeWorldSource).toContain("data-cstd-theme-scene-node={sceneId}");
+    expect(themeWorldSource).toContain("data-cstd-theme-scene-node={scene.id}");
     expect(assetManifestSource).toContain("/cstd-themes/ink-scroll-v1.webp");
     expect(assetManifestSource).toContain("/cstd-themes/press-room-v1.webp");
     expect(assetManifestSource).toContain("/cstd-themes/pixel-quest-v1.webp");
+    expect(assetManifestSource).toContain("/cstd-stage/cstd-neon-observatory-v2.webp");
+    expect(assetManifestSource).toContain("/cstd-stage/cstd-ink-decision-scroll-v2.webp");
+    expect(assetManifestSource).toContain("/cstd-stage/cstd-press-evidence-desk-v2.webp");
+    expect(assetManifestSource).toContain("/cstd-stage/cstd-pixel-systems-quest-v2.webp");
+    expect(stageVisualSource).toContain("cstd-stage-visual-image");
+    expect(stageVisualSource).not.toContain("next/image");
+    expect(themeBootstrapSource).toContain("cstdThemeStageAssets");
+    expect(themeBootstrapSource).toContain("dataset.cstdStagePreload");
+    expect(studioStageSource).toContain("--cstd-stage-image");
     expect(themeStoreSource).toContain("INK PROTOCOL");
     expect(themeStoreSource).toContain("CSTD PRESS ROOM");
     expect(themeStoreSource).toContain("PIXEL QUEST");
@@ -280,6 +306,8 @@ describe("CSTD personal homepage", () => {
     expect(englishLayoutSource).toContain('import "../cstd-theme-compositions.css"');
     expect(personalLayoutSource).toContain('import "../cstd-theme-foundations.css"');
     expect(englishLayoutSource).toContain('import "../cstd-theme-foundations.css"');
+    expect(personalLayoutSource).toContain('import "../cstd-studio-stage.css"');
+    expect(englishLayoutSource).toContain('import "../cstd-studio-stage.css"');
     expect(personalLayoutSource).toContain('<html lang="zh-CN"');
     expect(englishLayoutSource).toContain('<html lang="en-AU"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="neon"');
@@ -304,6 +332,10 @@ describe("CSTD personal homepage", () => {
     expect(themeCompositionSource).toContain('[data-cstd-theme="ink-protocol"] [data-cstd-proof-grid]');
     expect(themeCompositionSource).toContain('[data-cstd-theme="press-room"] [data-cstd-proof-grid]');
     expect(themeCompositionSource).toContain('[data-cstd-theme="pixel-quest"] [data-cstd-system-tabs]');
+    expect(studioStageSource).toContain('[data-cstd-theme="neon-district"] [data-cstd-entry-console]');
+    expect(studioStageSource).toContain('[data-cstd-theme="ink-protocol"] [data-cstd-evidence-chain]');
+    expect(studioStageSource).toContain('[data-cstd-theme="press-room"] [data-cstd-evidence-chain]');
+    expect(studioStageSource).toContain('[data-cstd-theme="pixel-quest"] [data-cstd-evidence-chain]');
   });
 
   test("gives every world its own licensed type, generated material, deep-page artifact, and motion grammar", () => {

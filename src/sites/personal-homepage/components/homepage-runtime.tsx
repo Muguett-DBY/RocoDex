@@ -23,6 +23,7 @@ import {
   type CstdRuntimeProfile,
 } from "../experience/runtime-hooks";
 import { useCstdSceneClock } from "../experience/scene-clock";
+import { cstdSceneById } from "../experience/scene-manifest";
 import { getCstdThemeMeta, useCstdTheme } from "../experience/theme-store";
 import { HomepageHeader } from "./homepage-header";
 import { MemoizedSceneRuntime } from "./scene-runtime";
@@ -75,6 +76,7 @@ export function HomepageRuntime({
     progressBarRef,
   });
   const renderedProfile = useMemo(() => getRenderedProfile(runtimeProfile, overdrive && immersiveTheme), [immersiveTheme, overdrive, runtimeProfile]);
+  const immersiveSceneEnabled = enhancementsReady && desktopScene && overdrive && immersiveTheme;
 
   const toggleOverdrive = useCallback(() => {
     setOverdrive((current) => !current);
@@ -101,7 +103,7 @@ export function HomepageRuntime({
       overdriveRef,
       reducedMotion,
       showArchive: activeSceneId === "systems" || activeSceneId === "path",
-      active: documentVisible,
+      active: documentVisible && !cstdSceneById[activeSceneId].pauseGpu,
     }),
     [activeSceneId, documentVisible, progressRef, reducedMotion, sceneIndexRef, sceneProgressRef, velocityRef],
   );
@@ -119,11 +121,12 @@ export function HomepageRuntime({
   }
 
   function handlePointerMove(event: ReactPointerEvent<HTMLElement>) {
-    if (reducedMotion) return;
-    pendingPointerRef.current = {
-      x: event.clientX / window.innerWidth,
-      y: event.clientY / window.innerHeight,
-    };
+    if (reducedMotion || theme === "ink-protocol" || theme === "press-room") return;
+    const rawX = event.clientX / window.innerWidth;
+    const rawY = event.clientY / window.innerHeight;
+    pendingPointerRef.current = theme === "pixel-quest"
+      ? { x: Math.round(rawX * 12) / 12, y: Math.round(rawY * 8) / 8 }
+      : { x: rawX, y: rawY };
     if (!pointerFrameRef.current) pointerFrameRef.current = window.requestAnimationFrame(flushPointerPosition);
   }
 
@@ -156,6 +159,7 @@ export function HomepageRuntime({
       data-cstd-narrative-mode={narrativeMode}
       data-cstd-locale={locale}
       data-cstd-motion={reducedMotion ? "calm" : "full"}
+      data-cstd-motion-system="layered"
       data-cstd-theme={theme}
       data-cstd-theme-kind={getCstdThemeMeta(theme).kind}
       data-cstd-overdrive={overdrive && immersiveTheme ? "true" : "false"}
@@ -173,9 +177,11 @@ export function HomepageRuntime({
       <MemoizedWorldBackdrop activeSceneId={activeSceneId} />
       <ThemeWorldLayer theme={theme} activeSceneId={activeSceneId} locale={locale} />
       <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" />
-      <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
-        <MemoizedSceneRuntime {...sceneProps} profile={renderedProfile} enabled={enhancementsReady && desktopScene && overdrive && immersiveTheme} />
-      </div>
+      {immersiveSceneEnabled ? (
+        <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
+          <MemoizedSceneRuntime {...sceneProps} profile={renderedProfile} enabled />
+        </div>
+      ) : null}
       <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[2] hidden overflow-hidden md:block">
         <div className="cstd-world-copy-shade absolute inset-0" />
         <div

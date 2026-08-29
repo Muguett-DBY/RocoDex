@@ -4,9 +4,12 @@ import { cstdSceneIds } from "../experience/scene-manifest";
 import { cstdPerformanceContract } from "./performance-contract";
 
 describe("CSTD experience contract", () => {
-  it("keeps the six-act experience aligned with the runtime scene order", () => {
+  it("keeps the five-act experience aligned with the runtime scene order", () => {
     expect(cstdExperienceContract.acts.map((act) => act.id)).toEqual(cstdSceneIds);
-    expect(new Set(cstdExperienceContract.acts.map((act) => act.promise)).size).toBe(6);
+    expect(new Set(cstdExperienceContract.acts.map((act) => act.promise)).size).toBe(5);
+    expect(cstdExperienceContract.schemaVersion).toBe(2);
+    expect(cstdExperienceContract.viewingDepths.map((entry) => entry.seconds)).toEqual([10, 60, 300]);
+    expect(cstdExperienceContract.motionLayers).toEqual(["ambient", "narrative", "interactive"]);
   });
 
   it("publishes strict visual and interaction budgets", () => {

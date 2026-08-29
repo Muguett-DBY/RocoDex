@@ -23,10 +23,10 @@ Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器�
 - `content/observatory.ts` 是完整工程观测站契约；首页只接收 `cstdHomepageObservatory` 的精简服务端投影，避免把发布账本和证据全集发送到浏览器。
 - `content/content-health.ts` 汇总双语完整度、关系覆盖率、孤立内容与过期证据；发布健康分数必须由内容真源计算，不能手填。
 - `content/case-dossiers.ts` 为重点案例提供架构、权衡、故障边界和证据链接；`components/site/case-dossier.tsx` 只负责交互呈现。
-- `content/experience-contract.ts` 固定身份优先的六幕叙事；`content/performance-contract.json` 同时供页面、测试、构建脚本与公开端点使用，禁止复制阈值。
+- `content/experience-contract.ts` 从唯一 Scene Manifest 投影身份优先的五幕叙事、三种浏览深度与四套主题交互语法；`content/performance-contract.json` 同时供页面、测试、构建脚本与公开端点使用，禁止复制阈值。
 - `domain/dcf-model.ts`、`failure-drill.ts` 与 `route-transition.ts` 保存可独立测试的实验、纪录片和导航状态机，交互组件不得复制核心判断。
 - `experience/runtime-capabilities.ts` 依据数据节省、网络、视口像素与设备密度选择增强视觉的 `full / lite / image` 档位；`quality-controller.ts` 在持续低帧率后可解释地降级。
-- 首页保持六段普通文档流：身份、能力、作品、可执行证据、技术札记与联系。能力区只展示当前方向，证据区只保留一个代表性互动，复杂检索和完整档案进入深层页面。
+- 首页保持五幕普通文档流：身份信号、能力系统、作品与可执行证据、技术札记、开放联络。证据幕只投影三项代表作、一条可检查的决策链和一个确定性重放，完整档案进入深层页面。
 - 首页根编排和纯展示章节必须保持服务端组件；`homepage-runtime.tsx` 只负责导航、滚动、指针、遥测与可选 GPU，能力切换和案例 Worker 是独立客户端岛。不要用立即挂载的 `React.lazy` 伪装视口延迟。
 - 首页不得恢复常驻 HUD、场景导演、自动音频、发布重放或知识路径播放器；这些交互会把个人展示页重新推向应用控制台，并增加固定层和持续动画成本。
 
@@ -38,6 +38,7 @@ Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器�
 
 - `public/cstd-world/`
 - `public/cstd-universe/`
+- `public/cstd-stage/`
 - `public/cstd-themes/`
 - `public/cstd-materials/`
 - `public/fonts/cstd/`
