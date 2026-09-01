@@ -1,4 +1,4 @@
-export const PERSONAL_SITE_HOST = "custard.top";
+const PERSONAL_SITE_HOST = "custard.top";
 const PERSONAL_SITE_REDIRECT_HOSTS = new Set(["www.custard.top"]);
 const PERSONAL_SITE_HOSTS = new Set([PERSONAL_SITE_HOST, ...PERSONAL_SITE_REDIRECT_HOSTS]);
 const PERSONAL_SITE_ENTRY_PATHS = new Set(["/", "/index.html"]);
@@ -135,7 +135,6 @@ function isAllowedPersonalSitePath(path: string) {
     || path.startsWith("/cstd-themes/")
     || path.startsWith("/cstd-world/")
     || path.startsWith("/cstd-universe/")
-    || path.startsWith("/cstd-broadcasts/")
     || path.startsWith("/cstd-districts/")
     || path.startsWith("/fonts/cstd/");
 }

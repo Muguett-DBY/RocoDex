@@ -105,6 +105,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
     { id: "press-room", thesis: "Today's lead:" },
     { id: "ink-protocol", thesis: "Name the problem clearly;" },
     { id: "pixel-quest", thesis: "Main quest:" },
+    { id: "underworld-forge", thesis: "Difficult systems are forged" },
   ]) {
     await page.locator("[data-cstd-theme-switcher]").click();
     await page.locator(`[data-cstd-theme-option="${world.id}"]`).click();
@@ -307,7 +308,7 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
   await expectNoHorizontalOverflow(page);
 });
 
-test("CSTD switches and persists four structurally distinct visual worlds", async ({ page, isMobile }) => {
+test("CSTD switches and persists five structurally distinct visual worlds", async ({ page, isMobile }) => {
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
   const switcher = page.locator("[data-cstd-theme-switcher]");
@@ -319,7 +320,7 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="neon-district"]')).toBeVisible();
   await switcher.click();
   await expect(page.locator("[data-cstd-theme-menu]")).toBeVisible();
-  await expect(page.locator("[data-cstd-theme-option]")).toHaveCount(4);
+  await expect(page.locator("[data-cstd-theme-option]")).toHaveCount(5);
   const pressOption = page.locator('[data-cstd-theme-option="press-room"]');
   await expect(pressOption).toBeVisible();
   const pressOptionReceivesPointer = await pressOption.evaluate((element) => {
@@ -382,6 +383,17 @@ test("CSTD switches and persists four structurally distinct visual worlds", asyn
   await expect(page.locator("[data-cstd-finale]")).toBeVisible();
   const bottomGap = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight - window.scrollY);
   expect(bottomGap).toBeLessThanOrEqual(8);
+
+  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
+  await page.locator("[data-cstd-theme-switcher]").click();
+  await page.locator('[data-cstd-theme-option="underworld-forge"]').click();
+  await expect(root).toHaveAttribute("data-cstd-theme", "underworld-forge");
+  await expect(root).toHaveAttribute("data-cstd-theme-kind", "mythic-underworld");
+  await expect(page.locator('[data-cstd-theme-world-image="underworld-forge"]')).toBeVisible();
+  await expect(stageImage).toHaveCSS("background-image", /cstd-underworld-forge-v1/);
+  if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="underworld-forge"]')).toBeVisible();
+  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("困难的系统，");
+  await expectNoHorizontalOverflow(page);
 });
 
 test("CSTD loads each world's type, material, and deep-page composition as one coherent system", async ({ page, isMobile }) => {
@@ -415,6 +427,13 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
       artifact: "pixel",
       copy: { zh: "任务数据", en: "QUEST DATA" },
     },
+    {
+      id: "underworld-forge",
+      font: { zh: "CSTD Underworld Display", en: "CSTD Underworld Display" },
+      material: "underworld-basalt-v1.webp",
+      artifact: "underworld",
+      copy: { zh: "冥府档案 / 工坊 017", en: "UNDERWORLD ARCHIVE / FORGE 017" },
+    },
   ] as const;
 
   for (const world of worlds) {
@@ -435,7 +454,7 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
     await expect(page.locator("[data-cstd-page-hero-scroll]")).toContainText("向下滚动 / 继续查看");
     if (isMobile) await expect(artifact).toBeHidden();
     else await expect(artifact).toBeVisible();
-    for (const otherArtifact of ["neon", "ink", "press", "pixel"].filter((candidate) => candidate !== world.artifact)) {
+    for (const otherArtifact of ["neon", "ink", "press", "pixel", "underworld"].filter((candidate) => candidate !== world.artifact)) {
       await expect(page.locator(`[data-cstd-deep-artifact="${otherArtifact}"]`)).toBeHidden();
     }
 
@@ -478,7 +497,7 @@ test("CSTD keeps the theme control reachable on compact mobile screens", async (
   await page.setViewportSize({ width: 320, height: 640 });
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
 
-  for (const theme of ["press-room", "ink-protocol", "pixel-quest", "neon-district"] as const) {
+  for (const theme of ["press-room", "ink-protocol", "pixel-quest", "underworld-forge", "neon-district"] as const) {
     const switcher = page.locator("[data-cstd-theme-switcher]");
     await expect(switcher).toBeVisible();
     const box = await switcher.boundingBox();
@@ -521,7 +540,7 @@ test("CSTD theme picker supports roving keyboard focus and restores the trigger"
   await page.keyboard.press("ArrowDown");
   await expect(page.locator('[data-cstd-theme-option="ink-protocol"]')).toBeFocused();
   await page.keyboard.press("End");
-  await expect(page.locator('[data-cstd-theme-option="pixel-quest"]')).toBeFocused();
+  await expect(page.locator('[data-cstd-theme-option="underworld-forge"]')).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await expect(trigger).toBeFocused();
@@ -689,7 +708,7 @@ test("CSTD explicit calm mode reduces render cost and survives context loss", as
 test("CSTD primary and deep surfaces pass automated WCAG A/AA checks in every visual world", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 
-  for (const theme of ["neon-district", "ink-protocol", "press-room", "pixel-quest"] as const) {
+  for (const theme of ["neon-district", "ink-protocol", "press-room", "pixel-quest", "underworld-forge"] as const) {
     await page.goto("/cstd", { waitUntil: "domcontentloaded" });
     await page.evaluate((nextTheme) => window.localStorage.setItem("cstd-world-theme", nextTheme), theme);
 

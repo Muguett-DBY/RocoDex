@@ -7,20 +7,21 @@ import { cstdThemeWorldAssets } from "../media/asset-manifest";
 import type { CstdLocale, LocalizedText } from "../content/content-types";
 import { CstdChapterLink } from "./site/cstd-chapter-link";
 
-const sceneCopy: Record<CstdSceneId, { ink: LocalizedText; press: LocalizedText; pixel: LocalizedText }> = {
-  hero: { ink: { zh: "卷首", en: "OPEN" }, press: { zh: "头版", en: "FRONT PAGE" }, pixel: { zh: "关卡 01", en: "STAGE 01" } },
-  systems: { ink: { zh: "器", en: "FORM" }, press: { zh: "系统部", en: "SYSTEMS DESK" }, pixel: { zh: "关卡 02", en: "STAGE 02" } },
-  proof: { ink: { zh: "证", en: "PROOF" }, press: { zh: "现场报道", en: "FIELD REPORTS" }, pixel: { zh: "关卡 03", en: "STAGE 03" } },
-  path: { ink: { zh: "迹", en: "TRACE" }, press: { zh: "观点与札记", en: "OPINION & NOTES" }, pixel: { zh: "知识房", en: "LORE ROOM" } },
-  finale: { ink: { zh: "未完", en: "NEXT" }, press: { zh: "晚刊", en: "LATE EDITION" }, pixel: { zh: "继续？", en: "CONTINUE?" } },
+const sceneCopy: Record<CstdSceneId, { ink: LocalizedText; press: LocalizedText; pixel: LocalizedText; underworld: LocalizedText }> = {
+  hero: { ink: { zh: "卷首", en: "OPEN" }, press: { zh: "头版", en: "FRONT PAGE" }, pixel: { zh: "关卡 01", en: "STAGE 01" }, underworld: { zh: "门庭", en: "GATE" } },
+  systems: { ink: { zh: "器", en: "FORM" }, press: { zh: "系统部", en: "SYSTEMS DESK" }, pixel: { zh: "关卡 02", en: "STAGE 02" }, underworld: { zh: "锻造", en: "FORGE" } },
+  proof: { ink: { zh: "证", en: "PROOF" }, press: { zh: "现场报道", en: "FIELD REPORTS" }, pixel: { zh: "关卡 03", en: "STAGE 03" }, underworld: { zh: "试炼", en: "TRIALS" } },
+  path: { ink: { zh: "迹", en: "TRACE" }, press: { zh: "观点与札记", en: "OPINION & NOTES" }, pixel: { zh: "知识房", en: "LORE ROOM" }, underworld: { zh: "神谕", en: "ORACLE" } },
+  finale: { ink: { zh: "未完", en: "NEXT" }, press: { zh: "晚刊", en: "LATE EDITION" }, pixel: { zh: "继续？", en: "CONTINUE?" }, underworld: { zh: "归返", en: "RETURN" } },
 };
 
-const visualWorldThemes = ["ink-protocol", "press-room", "pixel-quest"] as const;
+const visualWorldThemes = ["ink-protocol", "press-room", "pixel-quest", "underworld-forge"] as const;
 
 function getSceneLabel(theme: CstdThemeId, sceneId: CstdSceneId, locale: CstdLocale) {
   if (theme === "ink-protocol") return sceneCopy[sceneId].ink[locale];
   if (theme === "press-room") return sceneCopy[sceneId].press[locale];
   if (theme === "pixel-quest") return sceneCopy[sceneId].pixel[locale];
+  if (theme === "underworld-forge") return sceneCopy[sceneId].underworld[locale];
   return sceneId.toUpperCase();
 }
 
@@ -85,6 +86,18 @@ export function ThemeWorldLayer({ theme, activeSceneId, locale }: { theme: CstdT
           <div className="cstd-pixel-runner absolute"><span /></div>
           <div className="cstd-pixel-hud absolute inset-x-0 top-0 flex items-center justify-between">
             <span>{locale === "zh" ? "玩家 01" : "PLAYER 01"}</span><span>XP 01700</span><span>{locale === "zh" ? "构建" : "BUILD"} × ∞</span>
+          </div>
+        </>
+      </div>
+      <div data-cstd-theme-world-decoration="underworld-forge">
+        <>
+          <div className="cstd-underworld-vignette absolute inset-0" />
+          <div className="cstd-underworld-arch absolute"><span /><span /><span /></div>
+          <div className="cstd-underworld-embers absolute inset-0"><i /><i /><i /><i /><i /><i /><i /><i /></div>
+          <div className="cstd-underworld-orbit absolute"><span /><i /><b /></div>
+          <div className="cstd-underworld-furniture absolute inset-x-0 top-0 flex justify-between">
+            <span>{locale === "zh" ? "冥府档案 / 卷五" : "UNDERWORLD ARCHIVE / V"}</span>
+            <span>{locale === "zh" ? "造物 · 试炼 · 归返" : "CRAFT · TRIAL · RETURN"}</span>
           </div>
         </>
       </div>

@@ -15,6 +15,7 @@ const themes = [
   { id: "ink-protocol", artifact: "ink" },
   { id: "press-room", artifact: "press" },
   { id: "pixel-quest", artifact: "pixel" },
+  { id: "underworld-forge", artifact: "underworld" },
 ];
 
 const captures = [
@@ -60,18 +61,17 @@ try {
         const root = document.querySelector(rootSelector);
         const title = document.querySelector("[data-cstd-page-hero-title], #cstd-hero-title");
         const material = document.querySelector("[data-cstd-page-hero-material]");
-        const artifactSelector = isHomepage ? `[data-cstd-hero-artifact="${artifact}"]` : `[data-cstd-deep-artifact="${artifact}"]`;
-        const artifactNode = document.querySelector(artifactSelector);
-        const artifactLayer = artifactNode?.closest(isHomepage ? "[data-cstd-theme-hero-artifact]" : "[data-cstd-page-hero-artifacts]");
+        const artifactNode = isHomepage ? null : document.querySelector(`[data-cstd-deep-artifact="${artifact}"]`);
+        const artifactLayer = artifactNode?.closest("[data-cstd-page-hero-artifacts]");
         const heroActions = [...document.querySelectorAll("[data-cstd-hero-actions] a")].map((action) => ({
           text: action.textContent?.trim() ?? "",
           color: getComputedStyle(action).color,
           background: getComputedStyle(action).backgroundColor,
           font: getComputedStyle(action).fontFamily,
         }));
-        const visibleDeepArtifacts = [...document.querySelectorAll(isHomepage ? "[data-cstd-hero-artifact]" : "[data-cstd-deep-artifact]")]
+        const visibleDeepArtifacts = [...document.querySelectorAll("[data-cstd-deep-artifact]")]
           .filter((node) => getComputedStyle(node).display !== "none" && node.getClientRects().length > 0)
-          .map((node) => node.getAttribute(isHomepage ? "data-cstd-hero-artifact" : "data-cstd-deep-artifact"));
+          .map((node) => node.getAttribute("data-cstd-deep-artifact"));
         return {
           theme: themeId,
           capture: captureId,

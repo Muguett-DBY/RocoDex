@@ -15,6 +15,7 @@ describe("bounded anonymous CSTD telemetry", () => {
       "theme_ink-protocol",
       "theme_press-room",
       "theme_pixel-quest",
+      "theme_underworld-forge",
     ]) {
       expect(parseCstdMetric({ ...baseMetric, name })?.name).toBe(name);
     }

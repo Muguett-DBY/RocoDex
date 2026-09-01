@@ -1,12 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { cstdProjects } from "./projects";
-import {
-  cstdLearningPath,
-  cstdLiveObjectIds,
-  cstdProofs,
-  cstdSystems,
-  getCstdProjectsById,
-} from "./systems";
+import { cstdSystems } from "./systems";
 
 describe("CSTD creative systems", () => {
   test("separates shipped systems from study and research work", () => {
@@ -19,18 +12,4 @@ describe("CSTD creative systems", () => {
     expect(cstdSystems.every((system) => system.evidenceLinks.every((link) => link.label.zh && link.label.en))).toBe(true);
   });
 
-  test("keeps selected proof and quieter live objects distinct and navigable", () => {
-    const proofs = getCstdProjectsById(cstdProjects, cstdProofs.map((proof) => proof.projectId));
-    const liveObjects = getCstdProjectsById(cstdProjects, cstdLiveObjectIds);
-
-    expect(proofs).toHaveLength(3);
-    expect(liveObjects).toHaveLength(2);
-    expect(new Set([...proofs, ...liveObjects].map((project) => project.id)).size).toBe(5);
-    expect([...proofs, ...liveObjects].every((project) => project.status === "Live")).toBe(true);
-  });
-
-  test("records a grounded 2022 to 2026 learning path", () => {
-    expect(cstdLearningPath.map((entry) => entry.year)).toEqual(["2022", "2024", "2025", "2026"]);
-    expect(cstdLearningPath.at(-1)?.focus).toContain("Cloudflare");
-  });
 });

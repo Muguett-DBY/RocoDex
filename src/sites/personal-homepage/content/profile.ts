@@ -1,4 +1,4 @@
-import type { CstdLocale, LocalizedText } from "./content-types";
+import type { LocalizedText } from "./content-types";
 
 export const cstdProfile = {
   name: { zh: "奶黄包", en: "Custard" },
@@ -44,7 +44,3 @@ export const cstdProfile = {
     { label: { zh: "质量与交付", en: "Quality and delivery" }, value: "Vitest · Playwright · CI/CD · RUM · Release acceptance" },
   ],
 } as const;
-
-export function getLocalePrefix(locale: CstdLocale) {
-  return locale === "en" ? "/en" : "";
-}

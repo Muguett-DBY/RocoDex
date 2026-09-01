@@ -58,10 +58,6 @@ export function getNarrativeSystems(mode: CstdNarrativeMode) {
     .filter((system) => system !== undefined) as readonly CstdSystem[];
 }
 
-export function getNarrativeLabel(mode: CstdNarrativeMode, locale: CstdLocale) {
-  return getCstdNarrative(mode).label[locale];
-}
-
 export function getCstdNarrativeSharePath(mode: CstdNarrativeMode, locale: CstdLocale = "zh") {
   const path = mode === "researcher" ? "/for/research" : mode === "collaborator" ? "/for/collaboration" : "/for/builder";
   return locale === "en" ? `/en${path}` : path;

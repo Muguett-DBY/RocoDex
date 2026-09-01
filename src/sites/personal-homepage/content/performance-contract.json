@@ -25,7 +25,7 @@
     "runtimeFallbackOrder": ["webgpu", "webgl", "image"],
     "defaultRuntimeTier": "image",
     "enhancedRuntimeTrigger": "explicit-user-action",
-    "immutableAssetRoots": ["cstd-archive", "cstd-broadcasts", "cstd-districts", "cstd-materials", "cstd-persona", "cstd-stage", "cstd-themes", "cstd-universe", "cstd-world", "fonts/cstd"],
+    "immutableAssetRoots": ["cstd-archive", "cstd-districts", "cstd-materials", "cstd-persona", "cstd-stage", "cstd-themes", "cstd-universe", "cstd-world", "fonts/cstd"],
     "imageFormats": ["avif", "webp"],
     "imageMinimumCacheTtlSeconds": 2678400
   },

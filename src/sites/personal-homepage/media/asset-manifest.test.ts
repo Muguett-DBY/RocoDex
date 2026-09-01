@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 import { existsSync, statSync } from "node:fs";
 import path from "node:path";
-import { cstdBroadcasts, cstdEditorialAssets, cstdThemeFontAssets, cstdThemeMaterialAssets, cstdThemeStageAssets, cstdThemeWorldAssets, cstdVisualAssets } from "./asset-manifest";
+import { cstdEditorialAssets, cstdThemeFontAssets, cstdThemeMaterialAssets, cstdThemeStageAssets, cstdThemeWorldAssets, cstdVisualAssets } from "./asset-manifest";
 
 describe("CSTD media manifest", () => {
   test("maps one original visual to every directed scene", () => {
@@ -23,22 +23,14 @@ describe("CSTD media manifest", () => {
   });
 
   test("ships one dedicated, generated stage asset for every visual world", () => {
-    expect(Object.keys(cstdThemeStageAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest"]);
+    expect(Object.keys(cstdThemeStageAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest", "underworld-forge"]);
     for (const asset of Object.values(cstdThemeStageAssets)) {
       const filePath = path.join(process.cwd(), "public", asset.src.slice(1));
-      expect(asset.src).toMatch(/^\/cstd-stage\/.+-v2\.webp$/);
+      expect(asset.src).toMatch(/^\/cstd-stage\/.+-v[12]\.webp$/);
       expect(asset.alt.zh.length).toBeGreaterThan(8);
       expect(asset.alt.en.length).toBeGreaterThan(8);
       expect(existsSync(filePath)).toBe(true);
       expect(statSync(filePath).size).toBeLessThanOrEqual(320_000);
-    }
-  });
-
-  test("provides modern and compatibility video sources for each primary project", () => {
-    expect(Object.keys(cstdBroadcasts)).toEqual(["rocodex", "alpha", "crm"]);
-    for (const broadcast of Object.values(cstdBroadcasts)) {
-      expect(broadcast.webm).toMatch(/\.webm$/);
-      expect(broadcast.mp4).toMatch(/\.mp4$/);
     }
   });
 
@@ -52,7 +44,7 @@ describe("CSTD media manifest", () => {
   });
 
   test("keeps every visual world asset deployable and inside the scene budget", () => {
-    expect(Object.keys(cstdThemeWorldAssets)).toEqual(["ink-protocol", "press-room", "pixel-quest"]);
+    expect(Object.keys(cstdThemeWorldAssets)).toEqual(["ink-protocol", "press-room", "pixel-quest", "underworld-forge"]);
     for (const asset of Object.values(cstdThemeWorldAssets)) {
       const filePath = path.join(process.cwd(), "public", asset.slice(1));
       expect(asset).toMatch(/^\/cstd-themes\/.+-v1\.webp$/);
@@ -62,8 +54,8 @@ describe("CSTD media manifest", () => {
   });
 
   test("keeps every theme foundation asset versioned, deployable, and budgeted", () => {
-    expect(Object.keys(cstdThemeMaterialAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest"]);
-    expect(Object.keys(cstdThemeFontAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest"]);
+    expect(Object.keys(cstdThemeMaterialAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest", "underworld-forge"]);
+    expect(Object.keys(cstdThemeFontAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest", "underworld-forge"]);
 
     for (const asset of Object.values(cstdThemeMaterialAssets)) {
       const filePath = path.join(process.cwd(), "public", asset.slice(1));
@@ -76,6 +68,8 @@ describe("CSTD media manifest", () => {
     expect(cstdThemeFontAssets["neon-district"].en).toEqual(["/fonts/cstd/neon-latin-v1.woff2"]);
     expect(cstdThemeFontAssets["ink-protocol"].zh).toEqual(["/fonts/cstd/ink-display-v1.woff2", "/fonts/cstd/ink-text-v1.woff2"]);
     expect(cstdThemeFontAssets["ink-protocol"].en).toEqual(["/fonts/cstd/ink-latin-v1.woff2", "/fonts/cstd/ink-latin-italic-v1.woff2"]);
+    expect(cstdThemeFontAssets["underworld-forge"].zh).toEqual(["/fonts/cstd/underworld-display-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"]);
+    expect(cstdThemeFontAssets["underworld-forge"].en).toEqual(["/fonts/cstd/underworld-display-v1.woff2"]);
 
     const fontAssets = new Set(Object.values(cstdThemeFontAssets).flatMap((locales) => Object.values(locales).flat()));
     for (const asset of fontAssets) {

@@ -180,7 +180,7 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
           </div>
         </div>
 
-        <nav aria-label={locale === "zh" ? "移动导航" : "Mobile navigation"} className="flex h-11 items-center gap-1 overflow-x-auto border-t border-white/8 px-3 lg:hidden">
+        <nav aria-label={locale === "zh" ? "移动导航" : "Mobile navigation"} className="flex h-11 items-center gap-1 overflow-x-auto overscroll-x-contain border-t border-white/8 px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:hidden">
           {navItems.map((item) => (
             <CstdLink key={item.href} href={localizedHref(item.href, locale)} className="shrink-0 px-3 py-2 font-mono text-[11px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{item.label[locale]}</CstdLink>
           ))}

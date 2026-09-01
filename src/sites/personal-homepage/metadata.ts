@@ -22,8 +22,6 @@ export function getPersonalHomepageMetadata(locale: CstdLocale): Metadata {
   });
 }
 
-export const personalHomepageMetadata = getPersonalHomepageMetadata("zh");
-
 export function getPersonalHomepageStructuredData(locale: CstdLocale) {
   const prefix = locale === "en" ? "/en" : "";
   return [
@@ -78,8 +76,6 @@ export function getPersonalHomepageStructuredData(locale: CstdLocale) {
   },
 ] as const;
 }
-
-export const personalHomepageStructuredData = getPersonalHomepageStructuredData("zh");
 
 type CstdMetadataInput = {
   title: string;

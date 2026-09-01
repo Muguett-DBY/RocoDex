@@ -7,7 +7,7 @@ const internalOrHttpsHref = z.string().refine(
   "Expected an internal path or HTTPS URL",
 );
 
-export const localizedTextSchema = z.object({
+const localizedTextSchema = z.object({
   zh: z.string().min(1),
   en: z.string().min(1),
 }).strict();
