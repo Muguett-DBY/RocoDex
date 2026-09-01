@@ -46,16 +46,16 @@
   },
   "dependencies": {
     "@react-three/fiber": "^9.7.0",
-    "@react-three/postprocessing": "^3.0.4",
-    "@upstash/redis": "^1.38.1",
+    "@react-three/postprocessing": "^3.1.1",
+    "@upstash/redis": "^1.38.3",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "framer-motion": "^12.43.0",
     "gray-matter": "^4.0.3",
-    "lucide-react": "^1.28.0",
-    "next": "16.2.12",
+    "lucide-react": "^1.37.0",
+    "next": "16.3.3",
     "next-auth": "5.0.0-beta.32",
     "next-mdx-remote": "^6.0.0",
     "postprocessing": "^6.39.4",
@@ -64,10 +64,10 @@
     "rehype-pretty-code": "^0.14.5",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.1",
-    "shiki": "^4.4.2",
+    "shiki": "^4.4.3",
     "tailwind-merge": "^3.6.0",
     "three": "0.182.0",
-    "zod": "^4.4.3"
+    "zod": "^4.5.2"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
