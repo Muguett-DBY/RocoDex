@@ -1,0 +1,517 @@
+.cstd-theme-encounter {
+  display: none;
+  position: relative;
+  z-index: 12;
+  width: 100%;
+  overflow: hidden;
+}
+
+[data-cstd-theme="neon-district"] [data-cstd-theme-encounter-theme="neon-district"],
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-encounter-theme="underworld-forge"],
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-encounter-theme="astral-covenant"] {
+  display: block;
+}
+
+.cstd-encounter-inner {
+  position: relative;
+  z-index: 2;
+  width: min(100% - 2rem, 1320px);
+  margin-inline: auto;
+}
+
+/* Neon District: a horizontal intrusion console with an executable signal chain. */
+.cstd-neon-breach {
+  color: #e8f8f5;
+  border-block: 1px solid rgb(36 224 255 / 24%);
+  background:
+    linear-gradient(90deg, rgb(244 212 49 / 8%) 1px, transparent 1px) 0 0 / 72px 100%,
+    #05080a;
+}
+
+.cstd-neon-breach::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background:
+    linear-gradient(110deg, transparent 0 46%, rgb(36 224 255 / 7%) 46% 46.3%, transparent 46.3%),
+    linear-gradient(90deg, #f4d431 0 9rem, #ff3b30 9rem 11rem, transparent 11rem);
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 3px;
+}
+
+.cstd-neon-breach .cstd-encounter-inner {
+  padding-block: clamp(2.75rem, 5vw, 4.5rem);
+}
+
+.cstd-neon-breach-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.cstd-neon-breach-header p,
+.cstd-neon-breach-footer,
+.cstd-neon-breach-header [data-cstd-neon-breach-status] {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.cstd-neon-breach-header p {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: #24e0ff;
+  font-size: 0.68rem;
+}
+
+.cstd-neon-breach-header p svg,
+.cstd-neon-breach-header [data-cstd-neon-breach-status] svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.cstd-neon-breach-header h2 {
+  max-width: 50rem;
+  margin-top: 0.75rem;
+  font-size: clamp(2rem, 4.6vw, 4.75rem);
+  font-weight: 750;
+  line-height: 0.92;
+}
+
+.cstd-neon-breach-header [data-cstd-neon-breach-status] {
+  display: flex;
+  min-width: 10rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  border: 1px solid rgb(36 224 255 / 38%);
+  padding: 0.8rem 1rem;
+  color: #24e0ff;
+  font-size: 0.7rem;
+  background: rgb(4 16 18 / 88%);
+  box-shadow: inset 3px 0 #24e0ff;
+}
+
+.cstd-neon-breach-header [data-cstd-neon-breach-status="locked"] {
+  color: #050709;
+  border-color: #f4d431;
+  background: #f4d431;
+  box-shadow: 0 0 32px rgb(244 212 49 / 18%);
+}
+
+.cstd-neon-breach-line {
+  --cstd-breach-progress: 0;
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.75rem, 2vw, 2rem);
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+.cstd-neon-breach-line::before,
+.cstd-neon-breach-line::after {
+  position: absolute;
+  top: 2rem;
+  right: 8%;
+  left: 8%;
+  z-index: -1;
+  height: 2px;
+  content: "";
+}
+
+.cstd-neon-breach-line::before { background: rgb(255 255 255 / 13%); }
+
+.cstd-neon-breach-line::after {
+  right: auto;
+  width: calc(84% * var(--cstd-breach-progress));
+  background: #24e0ff;
+  box-shadow: 0 0 18px #24e0ff;
+  transition: width 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cstd-neon-breach-line button {
+  position: relative;
+  display: grid;
+  min-height: 9.5rem;
+  grid-template-columns: 3.5rem minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  border: 1px solid rgb(255 255 255 / 15%);
+  padding: 1.1rem;
+  color: #829095;
+  text-align: left;
+  background: rgb(7 12 15 / 94%);
+  clip-path: polygon(0 0, calc(100% - 1rem) 0, 100% 1rem, 100% 100%, 1rem 100%, 0 calc(100% - 1rem));
+  transition: transform 180ms ease, border-color 180ms ease, color 180ms ease, background 180ms ease;
+}
+
+.cstd-neon-breach-line button:not(:disabled):hover {
+  transform: translateY(-4px);
+  border-color: #24e0ff;
+  color: #e8f8f5;
+  background: rgb(4 22 25 / 96%);
+}
+
+.cstd-neon-breach-line button:focus-visible { outline: 2px solid #f4d431; outline-offset: 4px; }
+
+.cstd-neon-breach-line button > span {
+  display: grid;
+  width: 3rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid currentColor;
+  color: inherit;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-weight: 900;
+}
+
+.cstd-neon-breach-line button > span svg { width: 1rem; height: 1rem; }
+
+.cstd-neon-breach-line button strong {
+  align-self: center;
+  color: inherit;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: clamp(0.85rem, 1.4vw, 1.1rem);
+}
+
+.cstd-neon-breach-line button small {
+  grid-column: 2;
+  margin-top: 0.75rem;
+  color: #89969a;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.cstd-neon-breach-line [data-cstd-neon-breach-node-state="active"] {
+  color: #f4d431;
+  border-color: rgb(244 212 49 / 72%);
+  animation: cstd-neon-node-pulse 1.6s ease-in-out infinite;
+}
+
+.cstd-neon-breach-line [data-cstd-neon-breach-node-state="complete"] {
+  color: #24e0ff;
+  border-color: rgb(36 224 255 / 55%);
+  background: rgb(2 28 31 / 96%);
+}
+
+.cstd-neon-breach-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+  color: #657277;
+  font-size: 0.62rem;
+}
+
+.cstd-neon-breach-footer button {
+  display: grid;
+  width: 2.25rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 18%);
+  color: #89969a;
+}
+
+.cstd-neon-breach-footer button:hover { color: #f4d431; border-color: #f4d431; }
+.cstd-neon-breach-footer button svg { width: 0.9rem; height: 0.9rem; }
+
+/* Underworld Forge: an altar of boons, with a slash response instead of a console. */
+.cstd-underworld-boon {
+  min-height: 42rem;
+  color: #f5e8d0;
+  border-block: 1px solid rgb(215 168 75 / 30%);
+  background:
+    radial-gradient(circle at 50% 110%, rgb(190 46 30 / 33%), transparent 42%),
+    #110d0c;
+}
+
+.cstd-underworld-boon::before,
+.cstd-underworld-boon::after {
+  position: absolute;
+  content: "";
+  pointer-events: none;
+}
+
+.cstd-underworld-boon::before {
+  inset: 0;
+  opacity: 0.24;
+  background-image: url("/cstd-materials/underworld-basalt-v1.webp");
+  background-size: cover;
+  mix-blend-mode: soft-light;
+}
+
+.cstd-underworld-boon::after {
+  inset: 1rem;
+  border: 1px solid rgb(215 168 75 / 16%);
+  clip-path: polygon(0 0, 46% 0, 50% 0.65rem, 54% 0, 100% 0, 100% 100%, 54% 100%, 50% calc(100% - 0.65rem), 46% 100%, 0 100%);
+}
+
+.cstd-underworld-boon .cstd-encounter-inner { padding-block: clamp(3.5rem, 7vw, 6rem); }
+
+.cstd-underworld-slash {
+  position: absolute;
+  top: -20%;
+  left: 50%;
+  z-index: 4;
+  width: 3px;
+  height: 145%;
+  opacity: 0;
+  background: #e9d98e;
+  box-shadow: 0 0 22px #f03b2e, 0 0 60px #d7a84b;
+  transform: rotate(28deg) scaleY(0.1);
+  transform-origin: center;
+  pointer-events: none;
+}
+
+.cstd-underworld-boon:not([data-cstd-boon-selected="none"]) .cstd-underworld-slash {
+  animation: cstd-underworld-slash 560ms cubic-bezier(0.2, 0.85, 0.25, 1);
+}
+
+.cstd-underworld-boon-header {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  align-items: center;
+  gap: 1.5rem;
+  text-align: center;
+}
+
+.cstd-underworld-boon-header > span {
+  display: grid;
+  width: 5rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid #d7a84b;
+  color: #e55535;
+  transform: rotate(45deg);
+  box-shadow: inset 0 0 28px rgb(229 85 53 / 14%);
+}
+
+.cstd-underworld-boon-header > span svg { width: 1.75rem; height: 1.75rem; transform: rotate(-45deg); }
+
+.cstd-underworld-boon-header p {
+  color: #8fe0b7;
+  font-family: var(--cstd-font-display, serif);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+}
+
+.cstd-underworld-boon-header h2 {
+  margin-top: 0.65rem;
+  font-family: var(--cstd-font-display, serif);
+  font-size: clamp(2rem, 4.8vw, 4.6rem);
+  line-height: 0.96;
+  text-wrap: balance;
+}
+
+.cstd-underworld-boon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.cstd-underworld-boon-grid button {
+  position: relative;
+  display: flex;
+  min-height: 17rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgb(215 168 75 / 30%);
+  padding: 2rem 1.25rem;
+  color: #cbbda6;
+  background: rgb(19 14 13 / 88%);
+  clip-path: polygon(0.8rem 0, calc(100% - 0.8rem) 0, 100% 0.8rem, 100% calc(100% - 1.5rem), calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 calc(100% - 1.5rem), 0 0.8rem);
+  transition: color 220ms ease, border-color 220ms ease, transform 220ms ease, background 220ms ease;
+}
+
+.cstd-underworld-boon-grid button::before {
+  position: absolute;
+  inset: 0.5rem;
+  border: 1px solid rgb(215 168 75 / 13%);
+  content: "";
+  pointer-events: none;
+}
+
+.cstd-underworld-boon-grid button:hover,
+.cstd-underworld-boon-grid [data-cstd-underworld-boon-active="true"] {
+  color: #f7e7c7;
+  border-color: #d7a84b;
+  background: rgb(56 20 17 / 92%);
+  transform: translateY(-5px);
+  box-shadow: 0 18px 50px rgb(0 0 0 / 32%), inset 0 -4px #9b2e25;
+}
+
+.cstd-underworld-boon-grid button:focus-visible { outline: 2px solid #8fe0b7; outline-offset: 4px; }
+
+.cstd-underworld-boon-number {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  color: #8f7450;
+  font-family: var(--cstd-font-display, serif);
+  font-size: 0.7rem;
+}
+
+.cstd-underworld-boon-sigil {
+  display: grid;
+  width: 4.5rem;
+  aspect-ratio: 1;
+  place-items: center;
+  border: 1px solid currentColor;
+  color: #d7a84b;
+  transform: rotate(45deg);
+}
+
+.cstd-underworld-boon-sigil svg { width: 1.5rem; height: 1.5rem; transform: rotate(-45deg); }
+
+.cstd-underworld-boon-grid strong {
+  margin-top: 2rem;
+  color: inherit;
+  font-family: var(--cstd-font-display, serif);
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
+}
+
+.cstd-underworld-boon-grid small { margin-top: 0.6rem; color: #938574; font-size: 0.78rem; }
+
+.cstd-underworld-boon [data-cstd-underworld-boon-result] {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin: 1.5rem auto 0;
+  color: #8fe0b7;
+  font-family: var(--cstd-font-body, serif);
+  font-size: 0.88rem;
+  text-align: center;
+}
+
+.cstd-underworld-boon [data-cstd-underworld-boon-result] svg { width: 1rem; height: 1rem; flex: none; }
+
+/* Astral Covenant: a campaign table with selectable abilities and a deterministic D20 check. */
+.cstd-astral-roll {
+  min-height: 40rem;
+  color: #e9dfc9;
+  border-block: 1px solid rgb(197 166 104 / 35%);
+  background:
+    radial-gradient(circle at 72% 36%, rgb(79 174 173 / 12%), transparent 28%),
+    linear-gradient(110deg, #101721 0 52%, #15130f 52% 100%);
+}
+
+.cstd-astral-roll::before {
+  position: absolute;
+  inset: 0;
+  content: "";
+  opacity: 0.18;
+  background-image: url("/cstd-materials/astral-vellum-v1.webp");
+  background-size: cover;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.cstd-astral-roll .cstd-encounter-inner { padding-block: clamp(3.5rem, 7vw, 6rem); }
+
+.cstd-astral-route-map { position: absolute; inset: 0; opacity: 0.32; pointer-events: none; }
+.cstd-astral-route-map i { position: absolute; width: 0.45rem; aspect-ratio: 1; border: 1px solid #77d6d1; border-radius: 50%; box-shadow: 0 0 16px #77d6d1; }
+.cstd-astral-route-map i::after { position: absolute; top: 50%; left: 100%; width: 18vw; height: 1px; content: ""; background: linear-gradient(90deg, #77d6d1, transparent); transform: rotate(var(--route-angle, 0deg)); transform-origin: left; }
+.cstd-astral-route-map i:nth-child(1) { top: 16%; left: 8%; --route-angle: 18deg; }
+.cstd-astral-route-map i:nth-child(2) { top: 27%; left: 31%; --route-angle: -12deg; }
+.cstd-astral-route-map i:nth-child(3) { top: 12%; right: 18%; --route-angle: 92deg; }
+.cstd-astral-route-map i:nth-child(4) { right: 8%; bottom: 19%; --route-angle: 165deg; }
+.cstd-astral-route-map i:nth-child(5) { bottom: 11%; left: 24%; --route-angle: -42deg; }
+
+.cstd-astral-roll-header { max-width: 62rem; }
+.cstd-astral-roll-header p { display: flex; align-items: center; gap: 0.65rem; color: #77d6d1; font-family: var(--cstd-font-display, serif); font-size: 0.72rem; text-transform: uppercase; }
+.cstd-astral-roll-header p svg { width: 1rem; height: 1rem; }
+.cstd-astral-roll-header h2 { margin-top: 0.75rem; font-family: var(--cstd-font-display, serif); font-size: clamp(2rem, 4.8vw, 4.8rem); line-height: 0.95; text-wrap: balance; }
+
+.cstd-astral-roll-table {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.9fr) 13rem minmax(18rem, 1.05fr);
+  align-items: stretch;
+  gap: clamp(1rem, 2.4vw, 2.5rem);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+.cstd-astral-approaches { display: grid; border-block: 1px solid rgb(197 166 104 / 28%); }
+.cstd-astral-approaches button { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0.35rem 1rem; align-items: center; border-bottom: 1px solid rgb(197 166 104 / 18%); padding: 1rem 0.75rem; color: #998f7e; text-align: left; transition: color 180ms ease, background 180ms ease, padding 180ms ease; }
+.cstd-astral-approaches button:last-child { border-bottom: 0; }
+.cstd-astral-approaches button:hover,
+.cstd-astral-approaches [data-cstd-astral-approach-active="true"] { padding-left: 1.25rem; color: #e9dfc9; background: linear-gradient(90deg, rgb(119 214 209 / 14%), transparent); box-shadow: inset 2px 0 #77d6d1; }
+.cstd-astral-approaches button:focus-visible { outline: 2px solid #c5a668; outline-offset: -2px; }
+.cstd-astral-approaches span { font-family: var(--cstd-font-display, serif); font-size: 0.9rem; }
+.cstd-astral-approaches strong { color: #c5a668; font-family: var(--cstd-font-display, serif); font-size: 1rem; }
+.cstd-astral-approaches small { grid-column: 1 / -1; color: #817a6e; font-size: 0.72rem; line-height: 1.5; }
+
+.cstd-astral-d20-button { display: flex; min-height: 13rem; flex-direction: column; align-items: center; justify-content: center; color: #c5a668; }
+.cstd-astral-d20-button:focus-visible { outline: 2px solid #77d6d1; outline-offset: 4px; }
+.cstd-astral-d20-face { position: relative; display: grid; width: 10rem; aspect-ratio: 1; place-items: center; background: rgb(16 42 49 / 82%); clip-path: polygon(50% 0, 91% 20%, 100% 64%, 72% 100%, 28% 100%, 0 64%, 9% 20%); filter: drop-shadow(0 16px 24px rgb(0 0 0 / 42%)); transition: transform 300ms ease, filter 300ms ease; }
+.cstd-astral-d20-face::before { position: absolute; inset: 0.55rem; content: ""; border: 1px solid #c5a668; clip-path: inherit; }
+.cstd-astral-d20-face svg { position: absolute; width: 4.5rem; height: 4.5rem; opacity: 0.14; }
+.cstd-astral-d20-face strong { position: relative; z-index: 1; color: #f2e6cb; font-family: var(--cstd-font-display, serif); font-size: 1.6rem; }
+.cstd-astral-d20-button:hover .cstd-astral-d20-face { transform: rotate(8deg) translateY(-5px); filter: drop-shadow(0 18px 28px rgb(0 0 0 / 55%)) drop-shadow(0 0 12px rgb(119 214 209 / 25%)); }
+.cstd-astral-d20-button > small { margin-top: 0.75rem; color: #77d6d1; font-family: var(--cstd-font-display, serif); font-size: 0.68rem; }
+[data-cstd-astral-rolling="true"] .cstd-astral-d20-face { animation: cstd-astral-die-cast 640ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+.cstd-astral-roll-result { display: grid; align-content: center; border-left: 1px solid rgb(197 166 104 / 30%); padding: 1.5rem 0 1.5rem clamp(1.5rem, 3vw, 3rem); }
+.cstd-astral-roll-result > span { color: #77d6d1; font-family: var(--cstd-font-display, serif); font-size: 0.68rem; }
+.cstd-astral-roll-result > strong { margin-top: 1rem; color: #c5a668; font-family: var(--cstd-font-display, serif); font-size: clamp(2rem, 4vw, 4rem); font-weight: 500; }
+.cstd-astral-roll-result > p { max-width: 28rem; margin-top: 1rem; color: #ada594; font-family: var(--cstd-font-body, serif); font-size: 0.9rem; line-height: 1.75; }
+
+@keyframes cstd-neon-node-pulse {
+  0%, 100% { box-shadow: inset 0 0 0 rgb(244 212 49 / 0%); }
+  50% { box-shadow: inset 0 0 34px rgb(244 212 49 / 10%); }
+}
+
+@keyframes cstd-underworld-slash {
+  0% { opacity: 0; transform: rotate(28deg) scaleY(0.05); }
+  35% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(28deg) scaleY(1); }
+}
+
+@keyframes cstd-astral-die-cast {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  45% { transform: translateY(-2.25rem) rotate(135deg) scale(1.08); }
+  100% { transform: translateY(0) rotate(360deg) scale(1); }
+}
+
+@media (max-width: 800px) {
+  .cstd-neon-breach-header { align-items: flex-start; flex-direction: column; }
+  .cstd-neon-breach-header [data-cstd-neon-breach-status] { align-self: stretch; }
+  .cstd-neon-breach-line { grid-template-columns: 1fr; }
+  .cstd-neon-breach-line::before,
+  .cstd-neon-breach-line::after { top: 0; bottom: 0; left: 1.5rem; right: auto; width: 2px; height: auto; }
+  .cstd-neon-breach-line::after { height: calc(100% * var(--cstd-breach-progress)); }
+  .cstd-neon-breach-line button { min-height: 7.5rem; }
+
+  .cstd-underworld-boon-header { grid-template-columns: 3.75rem minmax(0, 1fr); text-align: left; }
+  .cstd-underworld-boon-header > span { width: 3.75rem; }
+  .cstd-underworld-boon-grid { grid-template-columns: 1fr; }
+  .cstd-underworld-boon-grid button { min-height: 12rem; }
+
+  .cstd-astral-roll-table { grid-template-columns: 1fr; }
+  .cstd-astral-approaches { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .cstd-astral-approaches button { align-content: start; }
+  .cstd-astral-roll-result { min-height: 11rem; border-top: 1px solid rgb(197 166 104 / 30%); border-left: 0; padding: 1.5rem 0; }
+}
+
+@media (max-width: 480px) {
+  .cstd-encounter-inner { width: min(100% - 1.25rem, 1320px); }
+  .cstd-underworld-boon-header { display: block; }
+  .cstd-underworld-boon-header > span { margin-bottom: 1.5rem; }
+  .cstd-astral-approaches { grid-template-columns: 1fr; }
+  .cstd-astral-d20-button { min-height: 11rem; }
+}
+
+[data-cstd-motion="calm"] .cstd-neon-breach-line [data-cstd-neon-breach-node-state="active"],
+[data-cstd-motion="calm"] .cstd-underworld-boon:not([data-cstd-boon-selected="none"]) .cstd-underworld-slash,
+[data-cstd-motion="calm"] [data-cstd-astral-rolling="true"] .cstd-astral-d20-face {
+  animation: none;
+}

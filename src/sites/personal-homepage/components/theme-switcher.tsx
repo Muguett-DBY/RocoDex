@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, CircuitBoard, Dices, Flame, Gamepad2, Newspaper, Palette, ScrollText, X } from "lucide-react";
+import { Check, CircuitBoard, Dices, Flame, Palette, X } from "lucide-react";
 import { useEffect, useId, useRef, useState, type ComponentType, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPortal } from "react-dom";
 import type { CstdLocale } from "../content/content-types";
@@ -8,9 +8,6 @@ import { cstdThemes, getCstdThemeMeta, setCstdTheme, useCstdTheme, type CstdThem
 
 const themeIcons: Record<CstdThemeId, ComponentType<{ className?: string; "aria-hidden"?: "true" }>> = {
   "neon-district": CircuitBoard,
-  "ink-protocol": ScrollText,
-  "press-room": Newspaper,
-  "pixel-quest": Gamepad2,
   "underworld-forge": Flame,
   "astral-covenant": Dices,
 };

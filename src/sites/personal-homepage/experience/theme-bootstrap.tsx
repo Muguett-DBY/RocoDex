@@ -13,16 +13,14 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
   const storageKey = "cstd-world-theme";
   const kinds = {
     "neon-district": "cyberpunk",
-    "ink-protocol": "ink-scroll",
-    "press-room": "broadsheet",
-    "pixel-quest": "pixel-game",
     "underworld-forge": "mythic-underworld",
     "astral-covenant": "fantasy-codex"
   };
   let theme = "neon-district";
   try {
     const stored = window.localStorage.getItem(storageKey);
-    const normalized = stored === "solar-lab" ? "press-room" : stored;
+    const retired = ["solar-lab", "ink-protocol", "press-room", "pixel-quest"];
+    const normalized = stored && retired.includes(stored) ? "neon-district" : stored;
     if (normalized && Object.prototype.hasOwnProperty.call(kinds, normalized)) theme = normalized;
   } catch {}
 

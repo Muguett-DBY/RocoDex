@@ -65,9 +65,6 @@ export const cstdEditorialAssets = [
 ] as const;
 
 export const cstdThemeWorldAssets = {
-  "ink-protocol": "/cstd-themes/ink-scroll-v1.webp",
-  "press-room": "/cstd-themes/press-room-v1.webp",
-  "pixel-quest": "/cstd-themes/pixel-quest-v1.webp",
   "underworld-forge": "/cstd-themes/underworld-forge-v1.webp",
   "astral-covenant": "/cstd-themes/astral-covenant-v1.webp",
 } as const;
@@ -76,21 +73,6 @@ export const cstdThemeStageAssets = {
   "neon-district": {
     src: "/cstd-stage/cstd-neon-observatory-v2.webp",
     alt: { zh: "雨夜工程观测舱中的奶油色计算核心", en: "A custard compute core inside a rain-lit engineering observatory" },
-    position: "center center",
-  },
-  "ink-protocol": {
-    src: "/cstd-stage/cstd-ink-decision-scroll-v2.webp",
-    alt: { zh: "铺有系统决策图的现代水墨工程手卷", en: "A contemporary ink engineering scroll mapped with system decisions" },
-    position: "center center",
-  },
-  "press-room": {
-    src: "/cstd-stage/cstd-press-evidence-desk-v2.webp",
-    alt: { zh: "铺满校样与证据材料的工程报纸编辑台", en: "An engineering newsroom desk covered with proofs and evidence" },
-    position: "center center",
-  },
-  "pixel-quest": {
-    src: "/cstd-stage/cstd-pixel-systems-quest-v2.webp",
-    alt: { zh: "由发光路径连接的像素系统任务地图", en: "A pixel systems quest map connected by a luminous route" },
     position: "center center",
   },
   "underworld-forge": {
@@ -107,9 +89,6 @@ export const cstdThemeStageAssets = {
 
 export const cstdThemeMaterialAssets = {
   "neon-district": "/cstd-materials/neon-alloy-v1.webp",
-  "ink-protocol": "/cstd-materials/ink-xuan-v1.webp",
-  "press-room": "/cstd-materials/press-newsprint-v1.webp",
-  "pixel-quest": "/cstd-materials/pixel-circuit-v1.webp",
   "underworld-forge": "/cstd-materials/underworld-basalt-v1.webp",
   "astral-covenant": "/cstd-materials/astral-vellum-v1.webp",
 } as const satisfies Record<CstdThemeId, string>;
@@ -118,18 +97,6 @@ export const cstdThemeFontAssets = {
   "neon-district": {
     zh: ["/fonts/cstd/neon-display-v1.woff2"],
     en: ["/fonts/cstd/neon-latin-v1.woff2"],
-  },
-  "ink-protocol": {
-    zh: ["/fonts/cstd/ink-display-v1.woff2", "/fonts/cstd/ink-text-v1.woff2"],
-    en: ["/fonts/cstd/ink-latin-v1.woff2", "/fonts/cstd/ink-latin-italic-v1.woff2"],
-  },
-  "press-room": {
-    zh: ["/fonts/cstd/press-latin-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"],
-    en: ["/fonts/cstd/press-latin-v1.woff2"],
-  },
-  "pixel-quest": {
-    zh: ["/fonts/cstd/pixel-text-12-v1.woff2", "/fonts/cstd/pixel-label-10-v1.woff2"],
-    en: ["/fonts/cstd/pixel-text-12-v1.woff2", "/fonts/cstd/pixel-label-10-v1.woff2"],
   },
   "underworld-forge": {
     zh: ["/fonts/cstd/underworld-display-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"],

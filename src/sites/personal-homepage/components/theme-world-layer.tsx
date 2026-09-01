@@ -7,23 +7,20 @@ import { cstdThemeWorldAssets } from "../media/asset-manifest";
 import type { CstdLocale, LocalizedText } from "../content/content-types";
 import { CstdChapterLink } from "./site/cstd-chapter-link";
 
-const sceneCopy: Record<CstdSceneId, { ink: LocalizedText; press: LocalizedText; pixel: LocalizedText; underworld: LocalizedText; astral: LocalizedText }> = {
-  hero: { ink: { zh: "卷首", en: "OPEN" }, press: { zh: "头版", en: "FRONT PAGE" }, pixel: { zh: "关卡 01", en: "STAGE 01" }, underworld: { zh: "门庭", en: "GATE" }, astral: { zh: "启程", en: "VENTURE" } },
-  systems: { ink: { zh: "器", en: "FORM" }, press: { zh: "系统部", en: "SYSTEMS DESK" }, pixel: { zh: "关卡 02", en: "STAGE 02" }, underworld: { zh: "锻造", en: "FORGE" }, astral: { zh: "法术书", en: "SPELLBOOK" } },
-  proof: { ink: { zh: "证", en: "PROOF" }, press: { zh: "现场报道", en: "FIELD REPORTS" }, pixel: { zh: "关卡 03", en: "STAGE 03" }, underworld: { zh: "试炼", en: "TRIALS" }, astral: { zh: "判定", en: "ROLL" } },
-  path: { ink: { zh: "迹", en: "TRACE" }, press: { zh: "观点与札记", en: "OPINION & NOTES" }, pixel: { zh: "知识房", en: "LORE ROOM" }, underworld: { zh: "神谕", en: "ORACLE" }, astral: { zh: "编年史", en: "CHRONICLE" } },
-  finale: { ink: { zh: "未完", en: "NEXT" }, press: { zh: "晚刊", en: "LATE EDITION" }, pixel: { zh: "继续？", en: "CONTINUE?" }, underworld: { zh: "归返", en: "RETURN" }, astral: { zh: "传承", en: "LEGACY" } },
+const sceneCopy: Record<CstdSceneId, { neon: LocalizedText; underworld: LocalizedText; astral: LocalizedText }> = {
+  hero: { neon: { zh: "入侵", en: "BREACH" }, underworld: { zh: "门庭", en: "GATE" }, astral: { zh: "启程", en: "VENTURE" } },
+  systems: { neon: { zh: "装载", en: "LOADOUT" }, underworld: { zh: "锻造", en: "FORGE" }, astral: { zh: "法术书", en: "SPELLBOOK" } },
+  proof: { neon: { zh: "追踪", en: "TRACE" }, underworld: { zh: "试炼", en: "TRIALS" }, astral: { zh: "判定", en: "ROLL" } },
+  path: { neon: { zh: "记忆", en: "MEMORY" }, underworld: { zh: "神谕", en: "ORACLE" }, astral: { zh: "编年史", en: "CHRONICLE" } },
+  finale: { neon: { zh: "撤离", en: "EXIT" }, underworld: { zh: "归返", en: "RETURN" }, astral: { zh: "传承", en: "LEGACY" } },
 };
 
-const visualWorldThemes = ["ink-protocol", "press-room", "pixel-quest", "underworld-forge", "astral-covenant"] as const;
+const visualWorldThemes = ["underworld-forge", "astral-covenant"] as const;
 
 function getSceneLabel(theme: CstdThemeId, sceneId: CstdSceneId, locale: CstdLocale) {
-  if (theme === "ink-protocol") return sceneCopy[sceneId].ink[locale];
-  if (theme === "press-room") return sceneCopy[sceneId].press[locale];
-  if (theme === "pixel-quest") return sceneCopy[sceneId].pixel[locale];
   if (theme === "underworld-forge") return sceneCopy[sceneId].underworld[locale];
   if (theme === "astral-covenant") return sceneCopy[sceneId].astral[locale];
-  return sceneId.toUpperCase();
+  return sceneCopy[sceneId].neon[locale];
 }
 
 export function ThemeWorldLayer({ theme, activeSceneId, locale }: { theme: CstdThemeId; activeSceneId: CstdSceneId; locale: CstdLocale }) {
@@ -60,33 +57,6 @@ export function ThemeWorldLayer({ theme, activeSceneId, locale }: { theme: CstdT
           <div className="cstd-neon-world-target absolute"><span /><i /></div>
           <div className="cstd-neon-world-telemetry absolute">
             <span>{locale === "zh" ? "信号" : "SIG"} / CSTD-017</span><span>{locale === "zh" ? "同步" : "SYNC"} / {activeSceneId.toUpperCase()}</span><span>LAT / -33.8688</span>
-          </div>
-        </>
-      </div>
-      <div data-cstd-theme-world-decoration="ink-protocol">
-        <>
-          <div className="cstd-ink-mist cstd-ink-mist-one absolute" />
-          <div className="cstd-ink-mist cstd-ink-mist-two absolute" />
-          <div className="cstd-ink-running-copy absolute"><span>{locale === "zh" ? "造物" : "CRAFT"}</span><span>{locale === "zh" ? "求真" : "TRUTH"}</span><span>{locale === "zh" ? "知行" : "PRAXIS"}</span></div>
-          <div className="cstd-ink-seal absolute">CSTD</div>
-        </>
-      </div>
-      <div data-cstd-theme-world-decoration="press-room">
-        <>
-          <div className="cstd-press-column-grid absolute inset-0" />
-          <div className="cstd-press-registration absolute"><i /><i /><i /><i /></div>
-          <div className="cstd-press-furniture absolute inset-x-0 top-0 flex justify-between">
-            <span>VOL. XVII</span><span>SYDNEY / NANJING</span><span>EST. 2026</span>
-          </div>
-        </>
-      </div>
-      <div data-cstd-theme-world-decoration="pixel-quest">
-        <>
-          <div className="cstd-pixel-stars absolute inset-0" />
-          <div className="cstd-pixel-terrain absolute inset-x-0 bottom-0"><i /><i /><i /><i /><i /></div>
-          <div className="cstd-pixel-runner absolute"><span /></div>
-          <div className="cstd-pixel-hud absolute inset-x-0 top-0 flex items-center justify-between">
-            <span>{locale === "zh" ? "玩家 01" : "PLAYER 01"}</span><span>XP 01700</span><span>{locale === "zh" ? "构建" : "BUILD"} × ∞</span>
           </div>
         </>
       </div>

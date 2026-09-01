@@ -149,21 +149,21 @@ test.describe("CSTD technical archive", () => {
     expect(pageResponse.headers()["x-content-type-options"]).toBe("nosniff");
     expect(pageResponse.headers()["content-security-policy"]).toContain("frame-ancestors 'none'");
 
-    for (const asset of ["ink-scroll-v1.webp", "press-room-v1.webp", "pixel-quest-v1.webp"]) {
+    for (const asset of ["underworld-forge-v1.webp", "astral-covenant-v1.webp"]) {
       const themeAssetResponse = await request.get(`/cstd-themes/${asset}`, { headers });
       expect(themeAssetResponse.status()).toBe(200);
       expect(themeAssetResponse.headers()["content-type"]).toContain("image/webp");
       expect(themeAssetResponse.headers()["cache-control"]).toContain("immutable");
     }
 
-    for (const asset of ["neon-alloy-v1.webp", "ink-xuan-v1.webp", "press-newsprint-v1.webp", "pixel-circuit-v1.webp"]) {
+    for (const asset of ["neon-alloy-v1.webp", "underworld-basalt-v1.webp", "astral-vellum-v1.webp"]) {
       const materialResponse = await request.get(`/cstd-materials/${asset}`, { headers });
       expect(materialResponse.status()).toBe(200);
       expect(materialResponse.headers()["content-type"]).toContain("image/webp");
       expect(materialResponse.headers()["cache-control"]).toContain("immutable");
     }
 
-    for (const asset of ["neon-display-v1.woff2", "neon-latin-v1.woff2", "ink-display-v1.woff2", "ink-text-v1.woff2", "ink-latin-v1.woff2", "ink-latin-italic-v1.woff2", "press-latin-v1.woff2", "press-serif-v1.woff2", "pixel-text-12-v1.woff2", "pixel-label-10-v1.woff2"]) {
+    for (const asset of ["neon-display-v1.woff2", "neon-latin-v1.woff2", "press-serif-v1.woff2", "underworld-display-v1.woff2", "astral-display-v1.woff2"]) {
       const fontResponse = await request.get(`/fonts/cstd/${asset}`, { headers });
       expect(fontResponse.status()).toBe(200);
       expect(fontResponse.headers()["content-type"]).toContain("font/woff2");

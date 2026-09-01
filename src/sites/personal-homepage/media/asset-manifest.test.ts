@@ -23,7 +23,7 @@ describe("CSTD media manifest", () => {
   });
 
   test("ships one dedicated, generated stage asset for every visual world", () => {
-    expect(Object.keys(cstdThemeStageAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest", "underworld-forge", "astral-covenant"]);
+    expect(Object.keys(cstdThemeStageAssets)).toEqual(["neon-district", "underworld-forge", "astral-covenant"]);
     for (const asset of Object.values(cstdThemeStageAssets)) {
       const filePath = path.join(process.cwd(), "public", asset.src.slice(1));
       expect(asset.src).toMatch(/^\/cstd-stage\/.+-v[12]\.webp$/);
@@ -44,7 +44,7 @@ describe("CSTD media manifest", () => {
   });
 
   test("keeps every visual world asset deployable and inside the scene budget", () => {
-    expect(Object.keys(cstdThemeWorldAssets)).toEqual(["ink-protocol", "press-room", "pixel-quest", "underworld-forge", "astral-covenant"]);
+    expect(Object.keys(cstdThemeWorldAssets)).toEqual(["underworld-forge", "astral-covenant"]);
     for (const asset of Object.values(cstdThemeWorldAssets)) {
       const filePath = path.join(process.cwd(), "public", asset.slice(1));
       expect(asset).toMatch(/^\/cstd-themes\/.+-v1\.webp$/);
@@ -54,8 +54,8 @@ describe("CSTD media manifest", () => {
   });
 
   test("keeps every theme foundation asset versioned, deployable, and budgeted", () => {
-    expect(Object.keys(cstdThemeMaterialAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest", "underworld-forge", "astral-covenant"]);
-    expect(Object.keys(cstdThemeFontAssets)).toEqual(["neon-district", "ink-protocol", "press-room", "pixel-quest", "underworld-forge", "astral-covenant"]);
+    expect(Object.keys(cstdThemeMaterialAssets)).toEqual(["neon-district", "underworld-forge", "astral-covenant"]);
+    expect(Object.keys(cstdThemeFontAssets)).toEqual(["neon-district", "underworld-forge", "astral-covenant"]);
 
     for (const asset of Object.values(cstdThemeMaterialAssets)) {
       const filePath = path.join(process.cwd(), "public", asset.slice(1));
@@ -66,8 +66,6 @@ describe("CSTD media manifest", () => {
 
     expect(cstdThemeFontAssets["neon-district"].zh).toEqual(["/fonts/cstd/neon-display-v1.woff2"]);
     expect(cstdThemeFontAssets["neon-district"].en).toEqual(["/fonts/cstd/neon-latin-v1.woff2"]);
-    expect(cstdThemeFontAssets["ink-protocol"].zh).toEqual(["/fonts/cstd/ink-display-v1.woff2", "/fonts/cstd/ink-text-v1.woff2"]);
-    expect(cstdThemeFontAssets["ink-protocol"].en).toEqual(["/fonts/cstd/ink-latin-v1.woff2", "/fonts/cstd/ink-latin-italic-v1.woff2"]);
     expect(cstdThemeFontAssets["underworld-forge"].zh).toEqual(["/fonts/cstd/underworld-display-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"]);
     expect(cstdThemeFontAssets["underworld-forge"].en).toEqual(["/fonts/cstd/underworld-display-v1.woff2"]);
     expect(cstdThemeFontAssets["astral-covenant"].zh).toEqual(["/fonts/cstd/astral-display-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"]);

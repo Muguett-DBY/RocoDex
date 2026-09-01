@@ -24,12 +24,9 @@ export const cstdExperienceContract = {
   ],
   motionLayers: ["ambient", "narrative", "interactive"] as const,
   themeGrammars: {
-    "neon-district": "scan-trace-execute",
-    "ink-protocol": "unfurl-follow-seal",
-    "press-room": "select-source-correct",
-    "pixel-quest": "choose-route-clear",
-    "underworld-forge": "descend-forge-return",
-    "astral-covenant": "gather-choose-inscribe",
+    "neon-district": "breach-scan-extract",
+    "underworld-forge": "choose-boon-descend-return",
+    "astral-covenant": "gather-roll-inscribe",
   } as const,
   runtime: {
     progressiveOrder: cstdPerformanceContract.delivery.runtimeFallbackOrder,

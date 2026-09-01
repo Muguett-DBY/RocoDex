@@ -102,9 +102,6 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   await expect(page.locator('link[rel="alternate"][hreflang="en-AU"]')).toHaveAttribute("href", "https://custard.top/en");
 
   for (const world of [
-    { id: "press-room", thesis: "Today's lead:" },
-    { id: "ink-protocol", thesis: "Name the problem clearly;" },
-    { id: "pixel-quest", thesis: "Main quest:" },
     { id: "underworld-forge", thesis: "Difficult systems are forged" },
     { id: "astral-covenant", thesis: "Complex systems are adventures" },
   ]) {
@@ -115,11 +112,11 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   }
 
   await page.locator("[data-cstd-theme-switcher]").click();
-  await page.locator('[data-cstd-theme-option="press-room"]').click();
+  await page.locator('[data-cstd-theme-option="astral-covenant"]').click();
   await page.goto("/cstd/en/notes/host-boundaries-in-one-next-deployment?view=compact#sources", { waitUntil: "domcontentloaded" });
   const englishShell = page.locator("[data-cstd-deep-shell]");
   await expect(englishShell).toHaveAttribute("data-cstd-locale", "en");
-  await expect(englishShell).toHaveAttribute("data-cstd-theme", "press-room");
+  await expect(englishShell).toHaveAttribute("data-cstd-theme", "astral-covenant");
   await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
   const englishTitle = (await page.getByRole("heading", { level: 1 }).textContent()) ?? "";
   expect(englishTitle).toContain("Next.js");
@@ -133,7 +130,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   await expect(page).toHaveURL(/\/cstd\/notes\/host-boundaries-in-one-next-deployment\?view=compact#sources$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
   await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-locale", "zh");
-  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "press-room");
+  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "astral-covenant");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("一个 Next.js 部署");
 
   const toEnglish = page.locator('[data-cstd-locale-switch][data-cstd-locale-to="en"]');
@@ -309,101 +306,62 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
   await expectNoHorizontalOverflow(page);
 });
 
-test("CSTD switches and persists six structurally distinct visual worlds", async ({ page, isMobile }) => {
+test("CSTD switches and persists three game worlds with distinct interactions", async ({ page, isMobile }) => {
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
   const switcher = page.locator("[data-cstd-theme-switcher]");
+  const stageImage = page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image");
 
   await expect(root).toHaveAttribute("data-cstd-theme", "neon-district");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "cyberpunk");
-  const stageImage = page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image");
   await expect(stageImage).toHaveCSS("background-image", /cstd-neon-observatory-v2/);
+  await expect(page.locator('[data-cstd-theme-encounter-theme="neon-district"]')).toBeVisible();
+  await page.locator('[data-cstd-neon-breach-node="1"]').click();
+  await page.locator('[data-cstd-neon-breach-node="2"]').click();
+  await page.locator('[data-cstd-neon-breach-node="3"]').click();
+  await expect(page.locator('[data-cstd-neon-breach-status="locked"]')).toBeVisible();
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="neon-district"]')).toBeVisible();
+
   await switcher.click();
-  await expect(page.locator("[data-cstd-theme-menu]")).toBeVisible();
-  await expect(page.locator("[data-cstd-theme-option]")).toHaveCount(6);
-  const pressOption = page.locator('[data-cstd-theme-option="press-room"]');
-  await expect(pressOption).toBeVisible();
-  const pressOptionReceivesPointer = await pressOption.evaluate((element) => {
+  await expect(page.locator("[data-cstd-theme-option]")).toHaveCount(3);
+  const underworldOption = page.locator('[data-cstd-theme-option="underworld-forge"]');
+  await expect(underworldOption).toBeVisible();
+  expect(await underworldOption.evaluate((element) => {
     const rect = element.getBoundingClientRect();
     const target = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
-    return Boolean(target?.closest('[data-cstd-theme-option="press-room"]'));
-  });
-  expect(pressOptionReceivesPointer).toBe(true);
-  await pressOption.click();
-  await expect(root).toHaveAttribute("data-cstd-theme", "press-room");
-  await expect(root).toHaveAttribute("data-cstd-theme-kind", "broadsheet");
-  await expect(switcher).toHaveAttribute("data-cstd-theme-active", "press-room");
-  await expect(switcher.locator("[data-cstd-theme-label]")).toContainText("工程日报");
-  await expect(page.locator('[data-cstd-theme-world-image="press-room"]')).toBeVisible();
-  await expect(stageImage).toHaveCSS("background-image", /cstd-press-evidence-desk-v2/);
-  if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="press-room"]')).toBeVisible();
-  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("今日头条：");
-  await expectNoHorizontalOverflow(page);
-
-  await page.reload({ waitUntil: "domcontentloaded" });
-  await expect(root).toHaveAttribute("data-cstd-theme", "press-room");
-  await page.goto("/cstd/notes/host-boundaries-in-one-next-deployment", { waitUntil: "domcontentloaded" });
-  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "press-room");
-  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme-kind", "broadsheet");
-
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
-  await page.locator("[data-cstd-theme-switcher]").click();
-  await page.locator('[data-cstd-theme-option="ink-protocol"]').click();
-  await expect(root).toHaveAttribute("data-cstd-theme", "ink-protocol");
-  await expect(root).toHaveAttribute("data-cstd-theme-kind", "ink-scroll");
-  await expect(page.locator('[data-cstd-theme-world-image="ink-protocol"]')).toBeVisible();
-  await expect(stageImage).toHaveCSS("background-image", /cstd-ink-decision-scroll-v2/);
-  if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="ink-protocol"]')).toBeVisible();
-  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("先把问题说清，");
-  await expectNoHorizontalOverflow(page);
-
-  await page.locator("[data-cstd-theme-switcher]").click();
-  await page.locator('[data-cstd-theme-option="pixel-quest"]').click();
-  await expect(root).toHaveAttribute("data-cstd-theme", "pixel-quest");
-  await expect(root).toHaveAttribute("data-cstd-theme-kind", "pixel-game");
-  await expect(root).toHaveAttribute("data-cstd-render-policy", "balanced");
-  await expect(page.locator("[data-cstd-webgl]")).toHaveCount(0);
-  await expect(page.locator('[data-cstd-theme-world-image="pixel-quest"]')).toBeVisible();
-  await expect(stageImage).toHaveCSS("background-image", /cstd-pixel-systems-quest-v2/);
-  if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="pixel-quest"]')).toBeVisible();
-  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("主线任务：");
-  await expect(page.locator('[data-cstd-hero-actions] a[href="#systems"]')).toHaveCSS("color", "rgb(7, 17, 40)");
-  await expect(page.locator('[data-cstd-hero-actions] a[href="#systems"]')).toHaveCSS("background-color", "rgb(255, 212, 59)");
-  await page.reload({ waitUntil: "domcontentloaded" });
-  await expect(root).toHaveAttribute("data-cstd-theme", "pixel-quest");
-  const infinitePixelAnimations = await page.evaluate(() => document.getAnimations().filter((animation) => {
-    const target = animation.effect instanceof KeyframeEffect ? animation.effect.target : null;
-    return target instanceof Element
-      && Boolean(target.closest(".cstd-pixel-stars, .cstd-pixel-runner, .cstd-pixel-quest-ready, [data-cstd-finale]"))
-      && animation.effect?.getTiming().iterations === Infinity;
-  }).length);
-  expect(infinitePixelAnimations).toBe(0);
-  await expectNoHorizontalOverflow(page);
-  await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
-  await expect(page.locator("[data-cstd-finale]")).toBeVisible();
-  const bottomGap = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight - window.scrollY);
-  expect(bottomGap).toBeLessThanOrEqual(8);
-
-  await page.evaluate(() => window.scrollTo({ top: 0, behavior: "instant" }));
-  await page.locator("[data-cstd-theme-switcher]").click();
-  await page.locator('[data-cstd-theme-option="underworld-forge"]').click();
+    return Boolean(target?.closest('[data-cstd-theme-option="underworld-forge"]'));
+  })).toBe(true);
+  await underworldOption.click();
   await expect(root).toHaveAttribute("data-cstd-theme", "underworld-forge");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "mythic-underworld");
+  await expect(switcher).toHaveAttribute("data-cstd-theme-active", "underworld-forge");
   await expect(page.locator('[data-cstd-theme-world-image="underworld-forge"]')).toBeVisible();
   await expect(stageImage).toHaveCSS("background-image", /cstd-underworld-forge-v1/);
+  await expect(page.locator('[data-cstd-theme-encounter-theme="underworld-forge"]')).toBeVisible();
+  await page.locator('[data-cstd-underworld-boon="insight"]').click();
+  await expect(page.locator('[data-cstd-boon-selected="insight"]')).toBeVisible();
+  await expect(page.locator("[data-cstd-underworld-boon-result]")).toContainText("洞察");
+  await expect(page.locator("[data-cstd-overdrive-toggle]")).toHaveCount(0);
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="underworld-forge"]')).toBeVisible();
-  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("困难的系统，");
   await expectNoHorizontalOverflow(page);
 
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(root).toHaveAttribute("data-cstd-theme", "underworld-forge");
+  await page.goto("/cstd/notes/host-boundaries-in-one-next-deployment", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "underworld-forge");
+
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await page.locator("[data-cstd-theme-switcher]").click();
   await page.locator('[data-cstd-theme-option="astral-covenant"]').click();
   await expect(root).toHaveAttribute("data-cstd-theme", "astral-covenant");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "fantasy-codex");
   await expect(page.locator('[data-cstd-theme-world-image="astral-covenant"]')).toBeVisible();
   await expect(stageImage).toHaveCSS("background-image", /cstd-astral-covenant-v1/);
+  await expect(page.locator('[data-cstd-theme-encounter-theme="astral-covenant"]')).toBeVisible();
+  await page.locator('[data-cstd-astral-approach="lore"]').click();
+  await page.locator("[data-cstd-astral-roll]").click();
+  await expect(page.locator("[data-cstd-astral-roll-result]")).toContainText("7 + 4 = 11");
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="astral-covenant"]')).toBeVisible();
-  await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("复杂系统，");
   await expectNoHorizontalOverflow(page);
 });
 
@@ -416,27 +374,6 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
       material: "neon-alloy-v1.webp",
       artifact: "neon",
       copy: { zh: "信号已锁定", en: "SIGNAL LOCKED" },
-    },
-    {
-      id: "ink-protocol",
-      font: { zh: "CSTD Ink Display", en: "CSTD Ink Latin" },
-      material: "ink-xuan-v1.webp",
-      artifact: "ink",
-      copy: { zh: "以代码为墨", en: "CODE AS INK" },
-    },
-    {
-      id: "press-room",
-      font: { zh: "CSTD Press Latin", en: "CSTD Press Latin" },
-      material: "press-newsprint-v1.webp",
-      artifact: "press",
-      copy: { zh: "CSTD 日报 / 独立工程", en: "CSTD DAILY / INDEPENDENT ENGINEERING" },
-    },
-    {
-      id: "pixel-quest",
-      font: { zh: "CSTD Pixel Text", en: "CSTD Pixel Text" },
-      material: "pixel-circuit-v1.webp",
-      artifact: "pixel",
-      copy: { zh: "任务数据", en: "QUEST DATA" },
     },
     {
       id: "underworld-forge",
@@ -472,7 +409,7 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
     await expect(page.locator("[data-cstd-page-hero-scroll]")).toContainText("向下滚动 / 继续查看");
     if (isMobile) await expect(artifact).toBeHidden();
     else await expect(artifact).toBeVisible();
-    for (const otherArtifact of ["neon", "ink", "press", "pixel", "underworld", "astral"].filter((candidate) => candidate !== world.artifact)) {
+    for (const otherArtifact of ["neon", "underworld", "astral"].filter((candidate) => candidate !== world.artifact)) {
       await expect(page.locator(`[data-cstd-deep-artifact="${otherArtifact}"]`)).toBeHidden();
     }
 
@@ -489,14 +426,13 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
     if (world.id === "neon-district") {
       await expect(page.locator("[data-cstd-hero-thesis]")).toHaveCSS("font-family", /CSTD Neon Latin/);
     }
-    if (world.id === "ink-protocol") {
-      await expect(page.locator("[data-cstd-hero-thesis]")).toHaveCSS("font-family", /CSTD Ink Latin/);
-      const labels = await page.locator('[data-cstd-theme-scene-rail="ink-protocol"] [data-cstd-theme-scene-copy="ink-protocol"]').evaluateAll((nodes) => nodes.map((node) => node.textContent));
-      expect(labels).toEqual(["OPEN", "FORM", "PROOF", "TRACE", "NEXT"]);
+    if (world.id === "underworld-forge") {
+      const labels = await page.locator('[data-cstd-theme-scene-rail="underworld-forge"] [data-cstd-theme-scene-copy="underworld-forge"]').evaluateAll((nodes) => nodes.map((node) => node.textContent));
+      expect(labels).toEqual(["GATE", "FORGE", "TRIALS", "ORACLE", "RETURN"]);
     }
-    if (world.id === "press-room") {
-      await expect(page.locator("[data-cstd-hero-description]")).toHaveCSS("column-count", "auto");
-      await expect(page.locator("[data-cstd-hero-description]")).toHaveCSS("font-family", /CSTD Press Latin/);
+    if (world.id === "astral-covenant") {
+      const labels = await page.locator('[data-cstd-theme-scene-rail="astral-covenant"] [data-cstd-theme-scene-copy="astral-covenant"]').evaluateAll((nodes) => nodes.map((node) => node.textContent));
+      expect(labels).toEqual(["VENTURE", "SPELLBOOK", "ROLL", "CHRONICLE", "LEGACY"]);
     }
     await expectNoHorizontalOverflow(page);
 
@@ -515,7 +451,7 @@ test("CSTD keeps the theme control reachable on compact mobile screens", async (
   await page.setViewportSize({ width: 320, height: 640 });
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
 
-  for (const theme of ["press-room", "ink-protocol", "pixel-quest", "underworld-forge", "astral-covenant", "neon-district"] as const) {
+  for (const theme of ["underworld-forge", "astral-covenant", "neon-district"] as const) {
     const switcher = page.locator("[data-cstd-theme-switcher]");
     await expect(switcher).toBeVisible();
     const box = await switcher.boundingBox();
@@ -556,7 +492,7 @@ test("CSTD theme picker supports roving keyboard focus and restores the trigger"
   await expect(dialog).toBeVisible();
   await expect(page.getByRole("radio", { checked: true })).toBeFocused();
   await page.keyboard.press("ArrowDown");
-  await expect(page.locator('[data-cstd-theme-option="ink-protocol"]')).toBeFocused();
+  await expect(page.locator('[data-cstd-theme-option="underworld-forge"]')).toBeFocused();
   await page.keyboard.press("End");
   await expect(page.locator('[data-cstd-theme-option="astral-covenant"]')).toBeFocused();
   await page.keyboard.press("Escape");
@@ -565,15 +501,15 @@ test("CSTD theme picker supports roving keyboard focus and restores the trigger"
 });
 
 test("CSTD applies a persisted visual world before the React runtime loads", async ({ page }) => {
-  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "press-room"));
+  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "astral-covenant"));
   await page.route("**/_next/static/chunks/**", (route) => route.request().resourceType() === "script" ? route.abort() : route.continue());
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
 
-  await expect(page.locator("html")).toHaveAttribute("data-cstd-theme", "press-room");
-  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-theme", "press-room");
-  await expect(page.locator('[data-cstd-theme-world-image="press-room"]')).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-cstd-theme", "astral-covenant");
+  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-theme", "astral-covenant");
+  await expect(page.locator('[data-cstd-theme-world-image="astral-covenant"]')).toBeVisible();
   await expect(page.locator('[data-cstd-theme-world-decoration="neon-district"]')).toBeHidden();
-  await expect(page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image")).toHaveCSS("background-image", /cstd-press-evidence-desk-v2/);
+  await expect(page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image")).toHaveCSS("background-image", /cstd-astral-covenant-v1/);
 });
 
 test("CSTD exposes a five-act stage, useful depth routes, and an inspectable evidence chain", async ({ page }) => {
@@ -726,7 +662,7 @@ test("CSTD explicit calm mode reduces render cost and survives context loss", as
 test("CSTD primary and deep surfaces pass automated WCAG A/AA checks in every visual world", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 
-  for (const theme of ["neon-district", "ink-protocol", "press-room", "pixel-quest", "underworld-forge", "astral-covenant"] as const) {
+  for (const theme of ["neon-district", "underworld-forge", "astral-covenant"] as const) {
     await page.goto("/cstd", { waitUntil: "domcontentloaded" });
     await page.evaluate((nextTheme) => window.localStorage.setItem("cstd-world-theme", nextTheme), theme);
 

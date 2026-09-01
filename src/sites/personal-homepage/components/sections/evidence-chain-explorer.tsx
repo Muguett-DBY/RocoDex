@@ -47,7 +47,7 @@ export function EvidenceChainExplorer({ chains, locale }: { chains: readonly Hom
     <section data-cstd-evidence-chain aria-labelledby="evidence-chain-heading" className="mt-14">
       <header data-cstd-evidence-chain-header className="flex flex-wrap items-end justify-between gap-6">
         <div>
-          <p className="flex items-center gap-2 font-mono text-[10px] font-black"><GitBranch aria-hidden="true" className="h-4 w-4" /> <ThemeCopy neon="TRACE / DECISION CHAIN" ink={locale === "zh" ? "循迹 / 由因至证" : "TRACE / CAUSE TO PROOF"} press={locale === "zh" ? "调查图 / 来源与复核" : "INVESTIGATION / SOURCES"} pixel={locale === "zh" ? "任务路线 / 检查点" : "QUEST ROUTE / CHECKPOINTS"} underworld={locale === "zh" ? "试炼谱 / 因果与证据" : "TRIAL MAP / CAUSE TO PROOF"} astral={locale === "zh" ? "冒险日志 / 选择与后果" : "ADVENTURE LOG / CHOICE & CONSEQUENCE"} /></p>
+          <p className="flex items-center gap-2 font-mono text-[10px] font-black"><GitBranch aria-hidden="true" className="h-4 w-4" /> <ThemeCopy neon="TRACE / DECISION CHAIN" underworld={locale === "zh" ? "试炼谱 / 因果与证据" : "TRIAL MAP / CAUSE TO PROOF"} astral={locale === "zh" ? "冒险日志 / 选择与后果" : "ADVENTURE LOG / CHOICE & CONSEQUENCE"} /></p>
           <h3 id="evidence-chain-heading" className="mt-3 text-2xl font-semibold md:text-4xl">{locale === "zh" ? "别只看成品，沿着决定走一遍。" : "Do not stop at the outcome. Follow the decisions."}</h3>
         </div>
         <p className="max-w-md text-sm leading-6">{locale === "zh" ? "选择一个项目，再检查问题、取舍、系统和验证。每一段都来自对应案例与公开证据清单。" : "Choose a project, then inspect its problem, decision, system, and verification. Every step is projected from the case and proof manifest."}</p>

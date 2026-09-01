@@ -12,11 +12,11 @@ describe("bounded anonymous CSTD telemetry", () => {
       "route_transition",
       "reading_quiet",
       "theme_neon-district",
-      "theme_ink-protocol",
-      "theme_press-room",
-      "theme_pixel-quest",
       "theme_underworld-forge",
       "theme_astral-covenant",
+      "signature_breach",
+      "signature_boon",
+      "signature_roll",
     ]) {
       expect(parseCstdMetric({ ...baseMetric, name })?.name).toBe(name);
     }
