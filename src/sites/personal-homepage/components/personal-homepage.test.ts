@@ -38,7 +38,6 @@ const themeSwitcherSource = read("./theme-switcher.tsx");
 const themeWorldSource = read("./theme-world-layer.tsx");
 const pageHeroSource = read("./pages/page-hero.tsx");
 const themeCopySource = read("./theme-copy.tsx");
-const themeHeroArtifactSource = read("./theme-hero-artifact.tsx");
 const stageVisualSource = read("./stage/theme-stage-visual.tsx");
 const entryConsoleSource = read("./stage/studio-entry-console.tsx");
 const languageSwitcherSource = read("./site/cstd-language-switcher.tsx");
@@ -50,6 +49,7 @@ const themeCssSource = read("../../../app/cstd-themes.css");
 const themeCompositionSource = read("../../../app/cstd-theme-compositions.css");
 const themeFoundationSource = read("../../../app/cstd-theme-foundations.css");
 const studioStageSource = read("../../../app/cstd-studio-stage.css");
+const underworldThemeSource = read("../../../app/cstd-theme-underworld.css");
 const personalLayoutSource = read("../../../app/(personal)/layout.tsx");
 const englishLayoutSource = read("../../../app/(personal-en)/layout.tsx");
 const assetManifestSource = read("../media/asset-manifest.ts");
@@ -237,9 +237,9 @@ describe("CSTD personal homepage", () => {
     expect(finaleSource).not.toContain("lg:h-[155svh]");
   });
 
-  test("offers four persistent visual worlds with distinct structural engines", () => {
-    expect(themeStoreSource).toContain('export type CstdThemeId = "neon-district" | "ink-protocol" | "press-room" | "pixel-quest"');
-    expect(themeStoreSource).toContain('export type CstdThemeKind = "cyberpunk" | "ink-scroll" | "broadsheet" | "pixel-game"');
+  test("offers five persistent visual worlds with distinct structural engines", () => {
+    expect(themeStoreSource).toContain('export type CstdThemeId = "neon-district" | "ink-protocol" | "press-room" | "pixel-quest" | "underworld-forge"');
+    expect(themeStoreSource).toContain('export type CstdThemeKind = "cyberpunk" | "ink-scroll" | "broadsheet" | "pixel-game" | "mythic-underworld"');
     expect(themeStoreSource).toContain('cstdThemeStorageKey = "cstd-world-theme"');
     expect(themeStoreSource).toContain("brand: LocalizedText");
     expect(themeStoreSource).toContain("edition: LocalizedText");
@@ -250,6 +250,8 @@ describe("CSTD personal homepage", () => {
     expect(themeBootstrapSource).toContain("cstd-world-theme");
     expect(themeBootstrapSource).toContain("stageAssets[theme]");
     expect(themeBootstrapSource).toContain("dataset.cstdStagePreload");
+    expect(themeBootstrapSource).toContain("fontAssets[theme][locale]");
+    expect(themeBootstrapSource).toContain("dataset.cstdFontPreload");
     expect(themeBootstrapSource).not.toContain("dataset.cstdThemeFont");
     expect(personalLayoutSource).toContain('<CstdThemeBootstrapScript locale="zh" />');
     expect(englishLayoutSource).toContain('<CstdThemeBootstrapScript locale="en" />');
@@ -265,6 +267,7 @@ describe("CSTD personal homepage", () => {
     expect(themeWorldSource).toContain('import { cstdThemeWorldAssets } from "../media/asset-manifest"');
     expect(themeWorldSource).toContain("data-cstd-theme-world-image={candidateTheme}");
     expect(themeWorldSource).toContain("data-cstd-theme-world-decoration=\"neon-district\"");
+    expect(themeWorldSource).toContain("data-cstd-theme-world-decoration=\"underworld-forge\"");
     expect(themeWorldSource).toContain("ThemeSceneNavigator");
     expect(headerSource).toContain("candidate.brand[locale]");
     expect(headerSource).toContain("candidate.edition[locale]");
@@ -274,10 +277,12 @@ describe("CSTD personal homepage", () => {
     expect(assetManifestSource).toContain("/cstd-themes/ink-scroll-v1.webp");
     expect(assetManifestSource).toContain("/cstd-themes/press-room-v1.webp");
     expect(assetManifestSource).toContain("/cstd-themes/pixel-quest-v1.webp");
+    expect(assetManifestSource).toContain("/cstd-themes/underworld-forge-v1.webp");
     expect(assetManifestSource).toContain("/cstd-stage/cstd-neon-observatory-v2.webp");
     expect(assetManifestSource).toContain("/cstd-stage/cstd-ink-decision-scroll-v2.webp");
     expect(assetManifestSource).toContain("/cstd-stage/cstd-press-evidence-desk-v2.webp");
     expect(assetManifestSource).toContain("/cstd-stage/cstd-pixel-systems-quest-v2.webp");
+    expect(assetManifestSource).toContain("/cstd-stage/cstd-underworld-forge-v1.webp");
     expect(stageVisualSource).toContain("cstd-stage-visual-image");
     expect(stageVisualSource).not.toContain("next/image");
     expect(themeBootstrapSource).toContain("cstdThemeStageAssets");
@@ -286,6 +291,7 @@ describe("CSTD personal homepage", () => {
     expect(themeStoreSource).toContain("INK PROTOCOL");
     expect(themeStoreSource).toContain("CSTD PRESS ROOM");
     expect(themeStoreSource).toContain("PIXEL QUEST");
+    expect(themeStoreSource).toContain("UNDERWORLD FORGE");
     expect(themeCssSource).toContain('[data-cstd-theme="ink-protocol"]');
     expect(themeCssSource).toContain('[data-cstd-theme="press-room"]');
     expect(themeCssSource).toContain('[data-cstd-theme="pixel-quest"]');
@@ -295,40 +301,37 @@ describe("CSTD personal homepage", () => {
     expect(themeCssSource).toContain('[data-cstd-theme-menu-theme="ink-protocol"]');
     expect(themeCssSource).toContain('[data-cstd-theme-menu-theme="press-room"]');
     expect(themeCssSource).toContain('[data-cstd-theme-menu-theme="pixel-quest"]');
+    expect(underworldThemeSource).toContain('[data-cstd-theme-menu-theme="underworld-forge"]');
     expect(pageHeroSource).toContain("data-cstd-page-hero-image");
     expect(pageHeroSource).toContain("data-cstd-page-hero-title");
     expect(pageHeroSource).toContain("data-cstd-page-hero-metrics");
     expect(pageHeroSource).toContain("data-cstd-page-hero-material");
   });
 
-  test("isolates each world's language, hero artifact, navigation grammar, and chapter composition", () => {
+  test("isolates each world's language, navigation grammar, and chapter composition", () => {
     expect(personalLayoutSource).toContain('import "../cstd-theme-compositions.css"');
     expect(englishLayoutSource).toContain('import "../cstd-theme-compositions.css"');
     expect(personalLayoutSource).toContain('import "../cstd-theme-foundations.css"');
     expect(englishLayoutSource).toContain('import "../cstd-theme-foundations.css"');
     expect(personalLayoutSource).toContain('import "../cstd-studio-stage.css"');
     expect(englishLayoutSource).toContain('import "../cstd-studio-stage.css"');
+    expect(personalLayoutSource).toContain('import "../cstd-theme-underworld.css"');
+    expect(englishLayoutSource).toContain('import "../cstd-theme-underworld.css"');
     expect(personalLayoutSource).toContain('<html lang="zh-CN"');
     expect(englishLayoutSource).toContain('<html lang="en-AU"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="neon"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="ink"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="press"');
     expect(themeCopySource).toContain('data-cstd-theme-copy="pixel"');
+    expect(themeCopySource).toContain('data-cstd-theme-copy="underworld"');
     expect(gateSource).toContain("先把问题说清");
     expect(gateSource).toContain("今日头条");
     expect(gateSource).toContain("主线任务");
-    expect(themeHeroArtifactSource).toContain('data-cstd-hero-artifact="neon"');
-    expect(themeHeroArtifactSource).toContain('data-cstd-hero-artifact="ink"');
-    expect(themeHeroArtifactSource).toContain('data-cstd-hero-artifact="press"');
-    expect(themeHeroArtifactSource).toContain('data-cstd-hero-artifact="pixel"');
+    expect(gateSource).toContain("冥府档案");
     expect(themeCompositionSource).toContain('[data-cstd-theme-scene-rail="neon-district"]');
     expect(themeCompositionSource).toContain('[data-cstd-theme-scene-rail="ink-protocol"]');
     expect(themeCompositionSource).toContain('[data-cstd-theme-scene-rail="press-room"]');
     expect(themeCompositionSource).toContain('[data-cstd-theme-scene-rail="pixel-quest"]');
-    expect(themeCompositionSource).toContain(".cstd-ink-colophon");
-    expect(themeCompositionSource).toContain(".cstd-press-front-index");
-    expect(themeCompositionSource).toContain(".cstd-pixel-player-card");
-    expect(themeCompositionSource).toContain(".cstd-neon-console");
     expect(themeCompositionSource).toContain('[data-cstd-theme="ink-protocol"] [data-cstd-proof-grid]');
     expect(themeCompositionSource).toContain('[data-cstd-theme="press-room"] [data-cstd-proof-grid]');
     expect(themeCompositionSource).toContain('[data-cstd-theme="pixel-quest"] [data-cstd-system-tabs]');
@@ -336,6 +339,7 @@ describe("CSTD personal homepage", () => {
     expect(studioStageSource).toContain('[data-cstd-theme="ink-protocol"] [data-cstd-evidence-chain]');
     expect(studioStageSource).toContain('[data-cstd-theme="press-room"] [data-cstd-evidence-chain]');
     expect(studioStageSource).toContain('[data-cstd-theme="pixel-quest"] [data-cstd-evidence-chain]');
+    expect(underworldThemeSource).toContain('[data-cstd-theme="underworld-forge"] [data-cstd-evidence-chain]');
   });
 
   test("gives every world its own licensed type, generated material, deep-page artifact, and motion grammar", () => {
@@ -346,6 +350,7 @@ describe("CSTD personal homepage", () => {
     expect(themeFoundationSource).toContain('font-family: "CSTD Ink Latin Italic"');
     expect(themeFoundationSource).toContain('font-family: "CSTD Press Serif"');
     expect(themeFoundationSource).toContain('font-family: "CSTD Pixel Text"');
+    expect(underworldThemeSource).toContain('font-family: "CSTD Underworld Display"');
     expect(themeFoundationSource).toContain('[data-cstd-theme="neon-district"][data-cstd-locale="en"]');
     expect(themeFoundationSource).toContain('[data-cstd-theme="ink-protocol"][data-cstd-locale="en"]');
     expect(themeFoundationSource).toContain('[data-cstd-theme="press-room"][data-cstd-locale="en"] [data-cstd-hero-description]');
@@ -355,6 +360,7 @@ describe("CSTD personal homepage", () => {
     expect(themeFoundationSource).toContain('/cstd-materials/ink-xuan-v1.webp');
     expect(themeFoundationSource).toContain('/cstd-materials/press-newsprint-v1.webp');
     expect(themeFoundationSource).toContain('/cstd-materials/pixel-circuit-v1.webp');
+    expect(underworldThemeSource).toContain('/cstd-materials/underworld-basalt-v1.webp');
     expect(themeFoundationSource).toContain("cstd-neon-heading-lock");
     expect(themeFoundationSource).toContain("cstd-ink-heading-unroll");
     expect(themeFoundationSource).toContain("cstd-press-heading-typeset");
@@ -365,5 +371,6 @@ describe("CSTD personal homepage", () => {
     expect(pageHeroSource).toContain('data-cstd-deep-artifact="ink"');
     expect(pageHeroSource).toContain('data-cstd-deep-artifact="press"');
     expect(pageHeroSource).toContain('data-cstd-deep-artifact="pixel"');
+    expect(pageHeroSource).toContain('data-cstd-deep-artifact="underworld"');
   });
 });

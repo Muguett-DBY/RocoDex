@@ -114,7 +114,3 @@ export function createCstdStudioSnapshot(now = new Date()): CstdStudioSnapshot {
 }
 
 export const cstdStudioSnapshot = createCstdStudioSnapshot();
-
-export function getCstdDistrictStatus(id: CstdSystem["id"]) {
-  return cstdStudioSnapshot.districts.find((district) => district.id === id);
-}

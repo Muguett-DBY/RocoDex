@@ -17,6 +17,7 @@ function getThemeMark(theme: CstdThemeId, locale: CstdLocale) {
   if (theme === "ink-protocol") return locale === "zh" ? "墨" : "IK";
   if (theme === "press-room") return locale === "zh" ? "报" : "PR";
   if (theme === "pixel-quest") return "8B";
+  if (theme === "underworld-forge") return locale === "zh" ? "冥" : "UF";
   return locale === "zh" ? "奶" : "CS";
 }
 

@@ -1,11 +1,12 @@
 import { VercelObservability } from "@/sites/shared/vercel-observability";
-import { CstdThemeBootstrapScript } from "@/sites/personal-homepage/experience/theme-bootstrap";
+import { CstdThemeBootstrapScript } from "@/sites/personal-homepage";
 import type { Metadata } from "next";
 import "../globals.css";
 import "../cstd-themes.css";
 import "../cstd-theme-compositions.css";
 import "../cstd-theme-foundations.css";
 import "../cstd-studio-stage.css";
+import "../cstd-theme-underworld.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://custard.top"),

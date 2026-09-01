@@ -58,7 +58,3 @@ export const cstdArtBible = {
     atmosphere: { zh: "连续、透明、对数据血缘负责", en: "Continuous, transparent, and accountable to lineage" },
   },
 } as const satisfies Record<CstdSystem["id"], CstdDistrictArt>;
-
-export function getCstdDistrictArt(systemId: CstdSystem["id"]) {
-  return cstdArtBible[systemId];
-}

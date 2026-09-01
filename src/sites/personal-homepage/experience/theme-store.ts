@@ -3,8 +3,8 @@
 import { useSyncExternalStore } from "react";
 import type { LocalizedText } from "../content/content-types";
 
-export type CstdThemeId = "neon-district" | "ink-protocol" | "press-room" | "pixel-quest";
-export type CstdThemeKind = "cyberpunk" | "ink-scroll" | "broadsheet" | "pixel-game";
+export type CstdThemeId = "neon-district" | "ink-protocol" | "press-room" | "pixel-quest" | "underworld-forge";
+export type CstdThemeKind = "cyberpunk" | "ink-scroll" | "broadsheet" | "pixel-game" | "mythic-underworld";
 
 export type CstdThemeMeta = Readonly<{
   id: CstdThemeId;
@@ -20,7 +20,7 @@ export type CstdThemeMeta = Readonly<{
   edition: LocalizedText;
 }>;
 
-export const cstdThemeStorageKey = "cstd-world-theme";
+const cstdThemeStorageKey = "cstd-world-theme";
 const cstdThemeEvent = "cstd-world-theme-change";
 
 export const cstdThemes: readonly CstdThemeMeta[] = [
@@ -76,13 +76,32 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
     compactBrand: { zh: "CSTD QUEST", en: "CSTD QUEST" },
     edition: { zh: "玩家 01 / 等级 17", en: "PLAYER 01 / LEVEL 17" },
   },
+  {
+    id: "underworld-forge",
+    kind: "mythic-underworld",
+    label: "UNDERWORLD FORGE",
+    zhLabel: "冥府工坊",
+    description: "A mythic forge where difficult systems are shaped, tested, and sent back into the world.",
+    zhDescription: "黑曜石、金箔与冥火围成一座工坊，把复杂系统锻造成能回到现实的作品。",
+    swatch: "#d7a84b",
+    signal: "#8fe0b7",
+    brand: { zh: "奶黄包 · 冥府工坊", en: "CUSTARD / UNDERWORLD FORGE" },
+    compactBrand: { zh: "冥府工坊", en: "CSTD FORGE" },
+    edition: { zh: "造物 / 试炼 / 归返", en: "CRAFT / TRIAL / RETURN" },
+  },
 ] as const;
 
 let volatileTheme: CstdThemeId = "neon-district";
 let transitionTimer: number | undefined;
 
 function normalizeTheme(value: string | null): CstdThemeId | null {
-  if (value === "neon-district" || value === "ink-protocol" || value === "press-room" || value === "pixel-quest") {
+  if (
+    value === "neon-district"
+    || value === "ink-protocol"
+    || value === "press-room"
+    || value === "pixel-quest"
+    || value === "underworld-forge"
+  ) {
     return value;
   }
   // CSTD 18 used this palette-only theme. Preserve the preference while upgrading it to the press world.

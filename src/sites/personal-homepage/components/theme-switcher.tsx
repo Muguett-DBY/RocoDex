@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, CircuitBoard, Gamepad2, Newspaper, Palette, ScrollText, X } from "lucide-react";
+import { Check, CircuitBoard, Flame, Gamepad2, Newspaper, Palette, ScrollText, X } from "lucide-react";
 import { useEffect, useId, useRef, useState, type ComponentType, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPortal } from "react-dom";
 import type { CstdLocale } from "../content/content-types";
@@ -11,6 +11,7 @@ const themeIcons: Record<CstdThemeId, ComponentType<{ className?: string; "aria-
   "ink-protocol": ScrollText,
   "press-room": Newspaper,
   "pixel-quest": Gamepad2,
+  "underworld-forge": Flame,
 };
 
 export function ThemeSwitcher({ locale = "zh" }: { locale?: CstdLocale }) {

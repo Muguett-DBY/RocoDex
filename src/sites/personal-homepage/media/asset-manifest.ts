@@ -68,6 +68,7 @@ export const cstdThemeWorldAssets = {
   "ink-protocol": "/cstd-themes/ink-scroll-v1.webp",
   "press-room": "/cstd-themes/press-room-v1.webp",
   "pixel-quest": "/cstd-themes/pixel-quest-v1.webp",
+  "underworld-forge": "/cstd-themes/underworld-forge-v1.webp",
 } as const;
 
 export const cstdThemeStageAssets = {
@@ -91,6 +92,11 @@ export const cstdThemeStageAssets = {
     alt: { zh: "由发光路径连接的像素系统任务地图", en: "A pixel systems quest map connected by a luminous route" },
     position: "center center",
   },
+  "underworld-forge": {
+    src: "/cstd-stage/cstd-underworld-forge-v1.webp",
+    alt: { zh: "黑曜石冥府工坊中的熔流、金箔壁画与工程制图台", en: "Molten channels, gilded reliefs, and a drafting table inside a basalt underworld forge" },
+    position: "center center",
+  },
 } as const satisfies Record<CstdThemeId, { src: string; alt: LocalizedText; position: string }>;
 
 export const cstdThemeMaterialAssets = {
@@ -98,6 +104,7 @@ export const cstdThemeMaterialAssets = {
   "ink-protocol": "/cstd-materials/ink-xuan-v1.webp",
   "press-room": "/cstd-materials/press-newsprint-v1.webp",
   "pixel-quest": "/cstd-materials/pixel-circuit-v1.webp",
+  "underworld-forge": "/cstd-materials/underworld-basalt-v1.webp",
 } as const satisfies Record<CstdThemeId, string>;
 
 export const cstdThemeFontAssets = {
@@ -117,21 +124,8 @@ export const cstdThemeFontAssets = {
     zh: ["/fonts/cstd/pixel-text-12-v1.woff2", "/fonts/cstd/pixel-label-10-v1.woff2"],
     en: ["/fonts/cstd/pixel-text-12-v1.woff2", "/fonts/cstd/pixel-label-10-v1.woff2"],
   },
+  "underworld-forge": {
+    zh: ["/fonts/cstd/underworld-display-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"],
+    en: ["/fonts/cstd/underworld-display-v1.woff2"],
+  },
 } as const satisfies Record<CstdThemeId, Record<CstdLocale, readonly string[]>>;
-
-export type CstdBroadcastId = "rocodex" | "alpha" | "crm";
-
-export const cstdBroadcasts = {
-  rocodex: {
-    webm: "/cstd-broadcasts/rocodex-broadcast-v1.webm",
-    mp4: "/cstd-broadcasts/rocodex-broadcast-v1.mp4",
-  },
-  alpha: {
-    webm: "/cstd-broadcasts/alpha-broadcast-v1.webm",
-    mp4: "/cstd-broadcasts/alpha-broadcast-v1.mp4",
-  },
-  crm: {
-    webm: "/cstd-broadcasts/crm-broadcast-v1.webm",
-    mp4: "/cstd-broadcasts/crm-broadcast-v1.mp4",
-  },
-} as const satisfies Record<CstdBroadcastId, { webm: string; mp4: string }>;

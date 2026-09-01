@@ -64,6 +64,12 @@ export function CstdPageHero({
           <span className="cstd-deep-pixel-level">{locale === "zh" ? "等级 26 / 就绪" : "LV. 26 / READY"}</span>
           <span className="cstd-deep-pixel-corners"><i /><i /><i /><i /></span>
         </div>
+        <div data-cstd-deep-artifact="underworld" className="cstd-deep-underworld-stele">
+          <span className="cstd-deep-underworld-kicker">{locale === "zh" ? "冥府档案 / 工坊 017" : "UNDERWORLD ARCHIVE / FORGE 017"}</span>
+          <span className="cstd-deep-underworld-seal"><i /><i /><b>V</b></span>
+          <span className="cstd-deep-underworld-oath">{locale === "zh" ? "经试炼，方可归返" : "TRIED BELOW · RETURNED WHOLE"}</span>
+          <span className="cstd-deep-underworld-cuts"><i /><i /><i /><i /><i /></span>
+        </div>
       </div>
       <div data-cstd-page-hero-content className="relative mx-auto flex w-full max-w-[1540px] flex-col justify-end px-5 pb-16 pt-28 md:px-10 lg:px-16 lg:pb-20">
         <div className="max-w-5xl">

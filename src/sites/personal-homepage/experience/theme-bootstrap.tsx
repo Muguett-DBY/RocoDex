@@ -1,9 +1,10 @@
 import type { CstdLocale } from "../content/content-types";
-import { cstdThemeStageAssets } from "../media/asset-manifest";
+import { cstdThemeFontAssets, cstdThemeStageAssets } from "../media/asset-manifest";
 
 const serializedThemeStageAssets = JSON.stringify(Object.fromEntries(
   Object.entries(cstdThemeStageAssets).map(([theme, asset]) => [theme, asset.src]),
 ));
+const serializedThemeFontAssets = JSON.stringify(cstdThemeFontAssets);
 
 function createCstdThemeBootstrapScript(locale: CstdLocale) {
   const serializedLocale = JSON.stringify(locale);
@@ -14,7 +15,8 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
     "neon-district": "cyberpunk",
     "ink-protocol": "ink-scroll",
     "press-room": "broadsheet",
-    "pixel-quest": "pixel-game"
+    "pixel-quest": "pixel-game",
+    "underworld-forge": "mythic-underworld"
   };
   let theme = "neon-district";
   try {
@@ -27,6 +29,18 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
   const kind = kinds[theme];
   const locale = ${serializedLocale};
   const stageAssets = ${serializedThemeStageAssets};
+  const fontAssets = ${serializedThemeFontAssets};
+
+  for (const href of fontAssets[theme][locale]) {
+    const fontPreload = document.createElement("link");
+    fontPreload.rel = "preload";
+    fontPreload.as = "font";
+    fontPreload.type = "font/woff2";
+    fontPreload.href = href;
+    fontPreload.crossOrigin = "anonymous";
+    fontPreload.dataset.cstdFontPreload = theme;
+    document.head.appendChild(fontPreload);
+  }
 
   const homepagePath = window.location.pathname.replace(/\/+$/, "");
   if (["", "/cstd", "/en", "/cstd/en"].includes(homepagePath)) {

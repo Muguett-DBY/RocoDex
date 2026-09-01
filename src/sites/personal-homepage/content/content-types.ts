@@ -53,9 +53,3 @@ export type ContentImage = Readonly<{
   alt: LocalizedText;
   position?: string;
 }>;
-
-export function localize(text: LocalizedText, locale: CstdLocale) {
-  return text[locale];
-}
-
-export const supportedCstdLocales = ["zh", "en"] as const satisfies readonly CstdLocale[];

@@ -1,0 +1,1030 @@
+/* UNDERWORLD FORGE / an original mythic workshop of basalt, bronze, trial, and return. */
+
+@font-face {
+  font-family: "CSTD Underworld Display";
+  src: url("/fonts/cstd/underworld-display-v1.woff2") format("woff2-variations");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400 900;
+}
+
+html[data-cstd-theme="underworld-forge"],
+html[data-cstd-theme="underworld-forge"] body {
+  background: #090806;
+}
+
+[data-cstd-theme="underworld-forge"] {
+  --cstd-world-bg: #090806;
+  --cstd-world-surface: #100e0b;
+  --cstd-world-raised: #17130e;
+  --cstd-world-ink: #f5eddb;
+  --cstd-world-muted: #b8a98f;
+  --cstd-world-line: rgb(215 168 75 / 28%);
+  --cstd-world-accent: #d7a84b;
+  --cstd-world-signal: #8fe0b7;
+  --cstd-font-display: "CSTD Underworld Display", "CSTD Press Serif", Georgia, serif;
+  --cstd-font-body: "CSTD Press Serif", Georgia, "Microsoft YaHei UI", serif;
+  --cstd-font-label: "CSTD Underworld Display", "Cascadia Mono", Consolas, monospace;
+  --cstd-font-code: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  --cstd-material-image: url("/cstd-materials/underworld-basalt-v1.webp");
+  --cstd-material-size: 768px 768px;
+  --cstd-material-opacity: 0.31;
+  --cstd-material-blend: soft-light;
+  --cstd-theme-ease: cubic-bezier(0.16, 0.84, 0.24, 1);
+  background: var(--cstd-world-bg) !important;
+  color: var(--cstd-world-ink) !important;
+  color-scheme: dark;
+  font-synthesis: none;
+}
+
+[data-cstd-theme="underworld-forge"] :where(
+  .cstd-hero-wordmark,
+  [data-cstd-chapter] h2,
+  [data-cstd-finale] h2,
+  [data-cstd-page-hero-title],
+  [data-cstd-reading-document] h1,
+  [data-cstd-reading-document] h2,
+  [data-cstd-case-dossier] h2
+) {
+  font-family: var(--cstd-font-display) !important;
+  font-weight: 650 !important;
+  letter-spacing: 0 !important;
+}
+
+[data-cstd-theme="underworld-forge"][data-cstd-locale="en"] :where(
+  .cstd-hero-wordmark,
+  [data-cstd-chapter] h2,
+  [data-cstd-finale] h2,
+  [data-cstd-page-hero-title]
+) {
+  text-transform: uppercase;
+}
+
+/* Theme visibility and portal chrome. */
+
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-copy="underworld"] {
+  display: contents !important;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-world-image="underworld-forge"] {
+  display: block;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-world-decoration="underworld-forge"] {
+  display: contents;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-world-copy="underworld-forge"],
+[data-cstd-theme-scene-rail="underworld-forge"] [data-cstd-theme-scene-copy="underworld-forge"],
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-label-option="underworld-forge"],
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-meta-copy="underworld-forge"],
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-mark-copy="underworld-forge"] {
+  display: inline;
+}
+
+[data-cstd-theme-menu-theme="underworld-forge"] {
+  --cstd-menu-bg: #100e0b;
+  --cstd-menu-ink: #f5eddb;
+  --cstd-menu-muted: #aa9b83;
+  --cstd-menu-line: rgb(215 168 75 / 36%);
+  --cstd-menu-accent: #d7a84b;
+  --cstd-menu-signal: #8fe0b7;
+  border-color: #8f6a30;
+  background-image:
+    linear-gradient(135deg, rgb(193 48 38 / 13%), transparent 38%),
+    url("/cstd-materials/underworld-basalt-v1.webp");
+  background-size: auto, 500px 500px;
+  box-shadow: 0 24px 80px rgb(0 0 0 / 62%), inset 0 0 0 1px rgb(240 202 113 / 10%);
+}
+
+[data-cstd-theme-preview="mythic-underworld"] {
+  color: #d7a84b;
+  border-color: #7f5f2b;
+  background: #0e0c09;
+  box-shadow: inset 0 0 18px rgb(193 48 38 / 18%);
+}
+
+[data-cstd-theme-preview="mythic-underworld"]::before {
+  inset: 5px;
+  border: 1px solid rgb(215 168 75 / 54%);
+  clip-path: polygon(0 0, 100% 0, 100% 76%, 76% 100%, 0 100%);
+}
+
+[data-cstd-theme-preview="mythic-underworld"]::after {
+  right: 4px;
+  bottom: 3px;
+  width: 1.1rem;
+  height: 0.3rem;
+  background: #c13026;
+  box-shadow: -22px -27px 0 rgb(143 224 183 / 38%);
+  transform: skewX(-28deg);
+}
+
+/* Stage and persistent world. */
+
+html[data-cstd-theme="underworld-forge"] {
+  --cstd-stage-image: url("/cstd-stage/cstd-underworld-forge-v1.webp");
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-world-backdrop] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-world] {
+  background: #090806;
+}
+
+[data-cstd-theme="underworld-forge"] .cstd-theme-world-image {
+  filter: saturate(0.82) contrast(1.08) brightness(0.52);
+  opacity: 0.56;
+  transform: scale(1.04) translate3d(0, 0, 0);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-world-scene="systems"] .cstd-theme-world-image {
+  transform: scale(1.09) translate3d(-2%, 1%, 0);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-world-scene="proof"] .cstd-theme-world-image,
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-world-scene="operator"] .cstd-theme-world-image {
+  filter: saturate(0.95) contrast(1.12) brightness(0.48);
+  transform: scale(1.12) translate3d(2%, -2%, 0);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-world-scene="path"] .cstd-theme-world-image,
+[data-cstd-theme="underworld-forge"] [data-cstd-theme-world-scene="finale"] .cstd-theme-world-image {
+  filter: saturate(0.7) contrast(1.14) brightness(0.42);
+  transform: scale(1.15) translate3d(-3%, -4%, 0);
+}
+
+.cstd-underworld-vignette {
+  z-index: 2;
+  background:
+    radial-gradient(circle at 76% 78%, rgb(193 48 38 / 18%), transparent 27%),
+    radial-gradient(circle at 18% 72%, rgb(143 224 183 / 8%), transparent 23%),
+    linear-gradient(180deg, rgb(4 3 2 / 34%), rgb(4 3 2 / 5%) 38%, rgb(4 3 2 / 58%));
+}
+
+.cstd-underworld-arch {
+  z-index: 4;
+  top: 17vh;
+  right: 7vw;
+  width: min(28vw, 29rem);
+  aspect-ratio: 0.84;
+  border: 1px solid rgb(215 168 75 / 22%);
+  border-bottom: 0;
+  border-radius: 48% 48% 0 0;
+  box-shadow: inset 0 0 0 1.15rem rgb(8 6 4 / 26%), inset 0 0 0 1.2rem rgb(215 168 75 / 9%);
+}
+
+.cstd-underworld-arch::before,
+.cstd-underworld-arch::after,
+.cstd-underworld-arch span {
+  position: absolute;
+  content: "";
+}
+
+.cstd-underworld-arch::before {
+  inset: 11% 12% 0;
+  border: 1px solid rgb(215 168 75 / 18%);
+  border-bottom: 0;
+  border-radius: 48% 48% 0 0;
+}
+
+.cstd-underworld-arch::after {
+  left: 50%;
+  bottom: 0;
+  width: 1px;
+  height: 74%;
+  background: linear-gradient(transparent, rgb(215 168 75 / 46%));
+}
+
+.cstd-underworld-arch span:nth-child(1) {
+  inset: 47% -9% auto;
+  border-top: 1px solid rgb(215 168 75 / 28%);
+}
+
+.cstd-underworld-arch span:nth-child(2) {
+  left: 18%;
+  right: 18%;
+  bottom: 17%;
+  height: 0.45rem;
+  background: linear-gradient(90deg, transparent, #9d2c24, #d7a84b, #9d2c24, transparent);
+  clip-path: polygon(4% 0, 96% 0, 100% 50%, 96% 100%, 4% 100%, 0 50%);
+  box-shadow: 0 0 24px rgb(193 48 38 / 42%);
+}
+
+.cstd-underworld-arch span:nth-child(3) {
+  left: calc(50% - 0.35rem);
+  bottom: 39%;
+  width: 0.7rem;
+  aspect-ratio: 1;
+  border: 1px solid #d7a84b;
+  transform: rotate(45deg);
+  box-shadow: 0 0 18px rgb(215 168 75 / 34%);
+}
+
+.cstd-underworld-orbit {
+  z-index: 4;
+  left: 5vw;
+  bottom: 13vh;
+  width: 8.5rem;
+  aspect-ratio: 1;
+  border: 1px solid rgb(215 168 75 / 24%);
+  border-radius: 50%;
+}
+
+.cstd-underworld-orbit::before,
+.cstd-underworld-orbit::after,
+.cstd-underworld-orbit span,
+.cstd-underworld-orbit i,
+.cstd-underworld-orbit b {
+  position: absolute;
+  content: "";
+}
+
+.cstd-underworld-orbit::before {
+  inset: 17%;
+  border: 1px dashed rgb(215 168 75 / 45%);
+  border-radius: 50%;
+}
+
+.cstd-underworld-orbit::after {
+  inset: 48% -18% auto;
+  border-top: 1px solid rgb(143 224 183 / 26%);
+}
+
+.cstd-underworld-orbit span {
+  inset: 42%;
+  border: 1px solid #d7a84b;
+  transform: rotate(45deg);
+}
+
+.cstd-underworld-orbit i {
+  top: 12%;
+  left: 46%;
+  width: 0.45rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #8fe0b7;
+  box-shadow: 0 0 14px #8fe0b7;
+}
+
+.cstd-underworld-orbit b {
+  inset: -8%;
+  border-top: 1px solid rgb(193 48 38 / 62%);
+  border-radius: 50%;
+}
+
+.cstd-underworld-embers {
+  z-index: 3;
+}
+
+.cstd-underworld-embers i {
+  position: absolute;
+  left: calc(10% + var(--ember-x, 0%));
+  bottom: -1rem;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #f1b354;
+  box-shadow: 0 0 8px #c13026;
+  opacity: 0;
+}
+
+.cstd-underworld-embers i:nth-child(1) { --ember-x: 4%; animation-delay: -1s; }
+.cstd-underworld-embers i:nth-child(2) { --ember-x: 17%; animation-delay: -4.2s; }
+.cstd-underworld-embers i:nth-child(3) { --ember-x: 31%; animation-delay: -2.3s; }
+.cstd-underworld-embers i:nth-child(4) { --ember-x: 47%; animation-delay: -6.8s; }
+.cstd-underworld-embers i:nth-child(5) { --ember-x: 59%; animation-delay: -3.4s; }
+.cstd-underworld-embers i:nth-child(6) { --ember-x: 68%; animation-delay: -7.6s; }
+.cstd-underworld-embers i:nth-child(7) { --ember-x: 77%; animation-delay: -5.1s; }
+.cstd-underworld-embers i:nth-child(8) { --ember-x: 84%; animation-delay: -8.4s; }
+
+[data-cstd-motion="full"] .cstd-underworld-embers i {
+  animation: cstd-underworld-ember-rise 9s linear infinite;
+}
+
+[data-cstd-motion="full"] .cstd-underworld-orbit b {
+  animation: cstd-underworld-orbit 12s linear infinite;
+}
+
+.cstd-underworld-furniture {
+  z-index: 5;
+  padding: 6.2rem 2rem 0;
+  color: rgb(215 168 75 / 58%);
+  font-family: "CSTD Underworld Display", serif;
+  font-size: 0.56rem;
+  font-weight: 700;
+}
+
+[data-cstd-theme="underworld-forge"] .cstd-theme-world-scene-label {
+  right: 2.2rem;
+  bottom: 2.1rem;
+  color: #d7a84b;
+  font-family: "CSTD Underworld Display", serif;
+}
+
+@keyframes cstd-underworld-ember-rise {
+  0% { opacity: 0; transform: translate3d(0, 0, 0) scale(0.7); }
+  15% { opacity: 0.7; }
+  70% { opacity: 0.28; }
+  100% { opacity: 0; transform: translate3d(2.4rem, -64vh, 0) scale(1.4); }
+}
+
+@keyframes cstd-underworld-orbit {
+  to { transform: rotate(360deg); }
+}
+
+/* Homepage composition. */
+
+[data-cstd-theme="underworld-forge"] [data-cstd-hero] > [data-cstd-stage-visual] {
+  opacity: 1 !important;
+}
+
+[data-cstd-theme="underworld-forge"] .cstd-stage-visual-image {
+  filter: saturate(0.82) contrast(1.08) brightness(0.9);
+  transform: scale(1.035) translate3d(var(--cstd-pointer-shift-x, 0), var(--cstd-pointer-shift-y, 0), 0);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-stage-visual-wash] {
+  background:
+    linear-gradient(90deg, rgb(7 6 4 / 99%) 0 31%, rgb(7 6 4 / 84%) 47%, rgb(7 6 4 / 16%) 76%),
+    linear-gradient(0deg, rgb(7 6 4 / 72%), transparent 48%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-stage-visual-focus] {
+  border: 1rem solid rgb(215 168 75 / 5%);
+  background:
+    linear-gradient(115deg, transparent 0 66%, rgb(215 168 75 / 7%) 66.2% 66.5%, transparent 66.8%),
+    radial-gradient(circle at 74% 67%, rgb(193 48 38 / 16%), transparent 24%);
+  box-shadow: inset 0 0 100px rgb(0 0 0 / 48%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-hero] > [data-cstd-motion-layer="ambient"] {
+  background: linear-gradient(90deg, rgb(7 6 4 / 98%), rgb(7 6 4 / 72%) 62%, transparent) !important;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-hero] > .absolute.bottom-0 {
+  background: linear-gradient(0deg, #090806, transparent) !important;
+}
+
+[data-cstd-theme="underworld-forge"] .cstd-hero-scanline {
+  top: 22% !important;
+  height: 0.4rem !important;
+  background: linear-gradient(90deg, transparent, #a42f26 34%, #d7a84b 67%, transparent) !important;
+  clip-path: polygon(0 42%, 54% 42%, 56% 0, 60% 100%, 62% 42%, 100% 42%, 100% 58%, 0 58%);
+  opacity: 0.48;
+}
+
+[data-cstd-theme="underworld-forge"] .cstd-hero-wordmark {
+  color: #f5eddb !important;
+  text-shadow: 0 3px 0 #5d251e, 0 20px 52px rgb(0 0 0 / 64%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-hero-role],
+[data-cstd-theme="underworld-forge"] [data-cstd-entry-status],
+[data-cstd-theme="underworld-forge"] [data-cstd-depth-panel] > p:first-child,
+[data-cstd-theme="underworld-forge"] [data-cstd-depth-action] {
+  color: #8fe0b7 !important;
+}
+
+[data-cstd-theme="underworld-forge"] :where(
+  [data-cstd-hero-thesis] [data-cstd-theme-copy="underworld"] > span,
+  [data-cstd-chapter] h2 [data-cstd-theme-copy="underworld"] > span,
+  [data-cstd-finale] h2 [data-cstd-theme-copy="underworld"] > span
+) {
+  color: #d7a84b !important;
+  text-shadow: 0 2px 0 rgb(117 42 33 / 52%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-entry-console] {
+  position: relative;
+  border: 1px solid #8c6931;
+  border-radius: 0;
+  background:
+    linear-gradient(150deg, rgb(193 48 38 / 10%), transparent 38%),
+    rgb(10 8 6 / 91%);
+  color: #f5eddb;
+  box-shadow: 10px 12px 0 rgb(4 3 2 / 72%), inset 0 0 0 1px rgb(241 198 103 / 8%);
+  clip-path: polygon(0 0, calc(100% - 1.1rem) 0, 100% 1.1rem, 100% 100%, 1.1rem 100%, 0 calc(100% - 1.1rem));
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-entry-console]::before {
+  position: absolute;
+  inset: 0.55rem;
+  border: 1px solid rgb(215 168 75 / 16%);
+  content: "";
+  pointer-events: none;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-entry-status] > span,
+[data-cstd-theme="underworld-forge"] [data-cstd-depth-panel] > p:not(:first-child) {
+  color: #b8a98f;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-entry-status] i {
+  background: #c13026;
+  box-shadow: 0 0 16px #c13026;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-entry-ready="true"] [data-cstd-entry-status] i {
+  background: #8fe0b7;
+  box-shadow: 0 0 16px #8fe0b7;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-boot-step] {
+  height: 4px;
+  background: #241c13;
+  clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-boot-step-ready="true"] {
+  background: linear-gradient(90deg, #76271f, #d7a84b);
+  box-shadow: 0 0 11px rgb(193 48 38 / 35%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-depth-tabs] {
+  border-color: #6f552b;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-depth-tabs] button {
+  border-color: rgb(215 168 75 / 22%);
+  color: #9c8c72;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-depth-active="true"] {
+  background: #d7a84b !important;
+  color: #120e09 !important;
+  box-shadow: inset 0 -3px #872a22;
+}
+
+[data-cstd-theme="underworld-forge"] :where([data-cstd-chapter], [data-cstd-finale]) {
+  border-color: rgb(215 168 75 / 20%) !important;
+  background-color: rgb(9 8 6 / 94%) !important;
+  color: #f5eddb !important;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-chapter="proof"] {
+  background-color: rgb(15 12 8 / 96%) !important;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-chapter] > img {
+  filter: sepia(0.36) saturate(0.65) contrast(1.1);
+  opacity: 0.11 !important;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-chapter] > [aria-hidden="true"] {
+  opacity: 0.72;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-chapter-header] > p,
+[data-cstd-theme="underworld-forge"] [data-cstd-chapter] p {
+  border-color: rgb(215 168 75 / 23%) !important;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-chapter-header] > div:first-child::before {
+  display: block;
+  width: 5.5rem;
+  margin-bottom: 1.1rem;
+  border-top: 4px solid #8f2c23;
+  border-bottom: 1px solid #d7a84b;
+  content: "";
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-system-tabs] {
+  border-color: rgb(215 168 75 / 25%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-studio-district-option] {
+  border-color: rgb(215 168 75 / 18%) !important;
+  color: #9f917a;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-system-active="true"] {
+  padding-left: 1rem;
+  background: linear-gradient(90deg, rgb(193 48 38 / 16%), transparent);
+  color: #f5eddb !important;
+  box-shadow: inset 3px 0 #d7a84b;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-system-visual] {
+  border-color: #795b2c !important;
+  clip-path: polygon(0 0, calc(100% - 1.2rem) 0, 100% 1.2rem, 100% 100%, 0 100%);
+  box-shadow: inset 0 0 0 1px rgb(215 168 75 / 10%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-system-visual] img {
+  filter: sepia(0.38) saturate(0.72) contrast(1.12);
+}
+
+[data-cstd-theme="underworld-forge"] #cstd-system-detail > div:nth-child(2) {
+  border-color: rgb(215 168 75 / 24%) !important;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-proof-grid] article {
+  border-color: #765a2e !important;
+  background: #090705 !important;
+  box-shadow: 9px 11px 0 rgb(3 2 1 / 64%) !important;
+  clip-path: polygon(0 0, calc(100% - 1rem) 0, 100% 1rem, 100% 100%, 0 100%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-proof-grid] article::after {
+  position: absolute;
+  inset: 0.55rem;
+  border: 1px solid rgb(215 168 75 / 12%);
+  content: "";
+  pointer-events: none;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-proof-grid] article img {
+  filter: sepia(0.32) saturate(0.8) contrast(1.1);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-chain] {
+  border: 1px solid #805f2d;
+  border-top: 5px solid #a93227;
+  border-radius: 0;
+  background:
+    linear-gradient(145deg, rgb(193 48 38 / 9%), transparent 32%),
+    rgb(10 8 6 / 94%);
+  color: #f5eddb;
+  box-shadow: 10px 12px 0 rgb(3 2 1 / 58%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-chain-header] > div > p,
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-signal],
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-actions] a {
+  color: #d7a84b;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-chain-header] > p,
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-phase-panel] > p:not([data-cstd-evidence-signal]) {
+  color: #b8a98f;
+}
+
+[data-cstd-theme="underworld-forge"] :where(
+  [data-cstd-evidence-project-tabs],
+  [data-cstd-evidence-panel],
+  [data-cstd-evidence-project-tabs] button,
+  [data-cstd-evidence-phase-tabs]
+) {
+  border-color: rgb(215 168 75 / 25%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-project-active="true"] {
+  background: #d7a84b !important;
+  color: #100c08;
+  box-shadow: inset 0 -4px #8f2c23;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-project-active="true"] :where(span, small) {
+  color: #100c08;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-phase-tabs] button {
+  border-color: rgb(215 168 75 / 16%);
+  color: #988a73;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-phase-active="true"] {
+  color: #f5eddb !important;
+  box-shadow: inset 3px 0 #a93227;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-evidence-phase-active="true"] i {
+  border-radius: 0;
+  border-color: #d7a84b !important;
+  background: #d7a84b;
+  box-shadow: 0 0 16px rgb(193 48 38 / 72%);
+  transform: rotate(45deg);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-knowledge-list] {
+  border-color: rgb(215 168 75 / 30%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-knowledge-card] {
+  position: relative;
+  border-color: rgb(215 168 75 / 20%) !important;
+  padding-inline: 1rem;
+  transition: background 220ms ease, padding 220ms ease, transform 220ms ease;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-knowledge-card]::before {
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1px solid #7d5e2e;
+  content: "";
+  transform: rotate(45deg);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-knowledge-card]:hover {
+  padding-inline: 1.35rem 0.65rem;
+  background: linear-gradient(90deg, rgb(193 48 38 / 13%), transparent);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-executable-evidence] > div,
+[data-cstd-theme="underworld-forge"] [data-cstd-finale-layout] > div:last-child {
+  border-color: rgb(215 168 75 / 30%) !important;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-finale] > div > [aria-hidden="true"] {
+  opacity: 0.52 !important;
+  filter: sepia(0.45) saturate(0.72);
+}
+
+/* Five-act trial rail. */
+
+[data-cstd-theme-scene-rail="underworld-forge"] {
+  border-left: 1px solid rgb(215 168 75 / 36%);
+  padding-left: 0.45rem;
+}
+
+[data-cstd-theme-scene-rail="underworld-forge"] > div > a {
+  color: #8f826d;
+}
+
+[data-cstd-theme-scene-rail="underworld-forge"] > div > a::before {
+  width: 0.38rem;
+  height: 0.38rem;
+  margin-right: 0.2rem;
+  border: 1px solid currentColor;
+  content: "";
+  transform: rotate(45deg);
+}
+
+[data-cstd-theme-scene-rail="underworld-forge"] [data-cstd-theme-scene-active="true"] > a {
+  border-color: #8a682f !important;
+  background: linear-gradient(90deg, rgb(92 29 24 / 88%), rgb(12 9 6 / 94%));
+  color: #f0c66b !important;
+  box-shadow: inset 3px 0 #d7a84b;
+}
+
+/* Header and controls. */
+
+[data-cstd-theme="underworld-forge"] [data-cstd-home-header] > div {
+  overflow: visible;
+  border-color: #765a2e;
+  border-radius: 0;
+  background:
+    linear-gradient(90deg, rgb(193 48 38 / 12%), transparent 26%),
+    rgb(8 6 4 / 94%);
+  box-shadow: 0 18px 56px rgb(0 0 0 / 50%), inset 0 -1px rgb(215 168 75 / 9%);
+  clip-path: polygon(0 0, calc(100% - 0.8rem) 0, 100% 0.8rem, 100% 100%, 0 100%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-header-mark] {
+  background: linear-gradient(145deg, #e1b55d, #9d742f) !important;
+  color: #160f08 !important;
+  box-shadow: inset 0 0 0 1px rgb(255 235 179 / 30%);
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-header-brand],
+[data-cstd-theme="underworld-forge"] [data-cstd-header-brand-compact] {
+  color: #f5eddb;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-header-edition] {
+  color: #9f8d70;
+}
+
+[data-cstd-theme="underworld-forge"] :where(.cstd-theme-switcher-trigger, [data-cstd-home-header] button) {
+  border-color: rgb(215 168 75 / 34%);
+  color: #d7a84b;
+}
+
+[data-cstd-theme="underworld-forge"] [data-cstd-nav-active="true"] {
+  color: #d7a84b !important;
+}
+
+/* Deep pages and reading surfaces. */
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] {
+  background:
+    linear-gradient(rgb(8 6 4 / 91%), rgb(8 6 4 / 94%)),
+    var(--cstd-material-image);
+  background-size: auto, var(--cstd-material-size);
+  color: #f5eddb;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] > header,
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] > footer {
+  border-color: rgb(215 168 75 / 28%) !important;
+  background: rgb(8 6 4 / 94%) !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-shell-overlay] {
+  background:
+    radial-gradient(circle at 84% 18%, rgb(193 48 38 / 10%), transparent 28%),
+    linear-gradient(180deg, rgb(8 6 4 / 10%), rgb(8 6 4 / 76%));
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero] {
+  border-color: rgb(215 168 75 / 28%) !important;
+  background: #090806;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-image] {
+  filter: sepia(0.34) saturate(0.7) contrast(1.12) brightness(0.72);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-overlay] {
+  background:
+    linear-gradient(90deg, rgb(7 5 3 / 98%) 0 42%, rgb(7 5 3 / 75%) 62%, rgb(7 5 3 / 24%)),
+    linear-gradient(0deg, rgb(7 5 3 / 78%), transparent 54%) !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-grid] {
+  opacity: 0.18 !important;
+  background-image:
+    linear-gradient(45deg, transparent 49.5%, rgb(215 168 75 / 25%) 50%, transparent 50.5%),
+    linear-gradient(-45deg, transparent 49.5%, rgb(193 48 38 / 17%) 50%, transparent 50.5%) !important;
+  background-size: 86px 86px !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-content] > div:first-child {
+  border-left: 4px solid #a93227;
+  padding-left: clamp(1rem, 2vw, 2rem);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-title] {
+  color: #f5eddb !important;
+  text-shadow: 0 3px 0 #57231c, 0 20px 62px rgb(0 0 0 / 58%);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-eyebrow],
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-scroll] {
+  color: #d7a84b !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-summary] {
+  color: #c8baa1 !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-metrics] {
+  border-color: #775a2d;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-metrics] > div {
+  border-color: rgb(215 168 75 / 24%);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-metrics] dt {
+  color: #9b8c75 !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-metrics] dd {
+  color: #8fe0b7 !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] :where(
+  [data-cstd-case-dossier],
+  [data-cstd-reading-document],
+  [data-cstd-topic-path],
+  [data-cstd-note-paths],
+  [data-cstd-proof-mesh],
+  [data-cstd-knowledge-constellation],
+  [data-cstd-case-film],
+  [data-cstd-case-replay],
+  [data-cstd-lab]
+) {
+  border-color: rgb(215 168 75 / 26%) !important;
+  border-radius: 0 !important;
+  background-color: rgb(12 9 6 / 91%) !important;
+  background-image: var(--cstd-material-image) !important;
+  background-size: var(--cstd-material-size) !important;
+  background-blend-mode: soft-light !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] :where(
+  [class~="text-white"],
+  [class~="text-[#f2efe7]"],
+  [class~="text-[#dce1e2]"],
+  [class~="text-[#cbd3d5]"]
+) {
+  color: #f5eddb !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] :where(
+  [class~="text-[#aeb8bb]"],
+  [class~="text-[#aeb7ba]"],
+  [class~="text-[#9aa4a8]"],
+  [class~="text-[#8f9ba0]"]
+) {
+  color: #b8a98f !important;
+}
+
+[data-cstd-theme="underworld-forge"] [class~="text-[#f4d431]"],
+[data-cstd-theme="underworld-forge"] [class~="text-[#007e92]"],
+[data-cstd-theme="underworld-forge"] [class~="text-[#005f70]"] {
+  color: #d7a84b !important;
+}
+
+[data-cstd-theme="underworld-forge"] [class~="text-[#24e0ff]"] {
+  color: #8fe0b7 !important;
+}
+
+[data-cstd-theme="underworld-forge"] [class~="bg-[#f4d431]"] {
+  background-color: #d7a84b !important;
+}
+
+/* Deep-page stele. */
+
+.cstd-deep-underworld-stele {
+  position: absolute;
+  top: 18%;
+  right: clamp(2rem, 7vw, 8rem);
+  display: none;
+  width: clamp(12rem, 20vw, 19rem);
+  min-height: 25rem;
+  border: 1px solid rgb(215 168 75 / 32%);
+  background: linear-gradient(160deg, rgb(193 48 38 / 12%), transparent 36%), rgb(7 5 3 / 58%);
+  color: #d7a84b;
+  box-shadow: inset 0 0 0 0.8rem rgb(0 0 0 / 18%), 0 28px 80px rgb(0 0 0 / 35%);
+  clip-path: polygon(0 0, 88% 0, 100% 8%, 100% 100%, 12% 100%, 0 92%);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-deep-artifact="underworld"] {
+  display: block !important;
+}
+
+.cstd-deep-underworld-stele::before {
+  position: absolute;
+  inset: 0.8rem;
+  border: 1px solid rgb(215 168 75 / 15%);
+  content: "";
+}
+
+.cstd-deep-underworld-kicker,
+.cstd-deep-underworld-oath {
+  position: absolute;
+  left: 1.5rem;
+  right: 1.5rem;
+  font-family: "CSTD Underworld Display", serif;
+  font-size: 0.55rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.cstd-deep-underworld-kicker { top: 2rem; }
+.cstd-deep-underworld-oath { bottom: 2rem; color: #b8a98f; }
+
+.cstd-deep-underworld-seal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7rem;
+  aspect-ratio: 1;
+  border: 1px solid rgb(215 168 75 / 48%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.cstd-deep-underworld-seal::before,
+.cstd-deep-underworld-seal::after,
+.cstd-deep-underworld-seal i {
+  position: absolute;
+  content: "";
+}
+
+.cstd-deep-underworld-seal::before {
+  inset: 17%;
+  border: 1px dashed rgb(215 168 75 / 42%);
+  border-radius: 50%;
+}
+
+.cstd-deep-underworld-seal::after {
+  inset: 50% -22% auto;
+  border-top: 1px solid rgb(143 224 183 / 34%);
+}
+
+.cstd-deep-underworld-seal i:first-child {
+  inset: -18% 50% -18% auto;
+  border-left: 1px solid rgb(193 48 38 / 52%);
+}
+
+.cstd-deep-underworld-seal i:nth-child(2) {
+  inset: 30%;
+  border: 1px solid #d7a84b;
+  transform: rotate(45deg);
+}
+
+.cstd-deep-underworld-seal b {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #f5eddb;
+  font-family: "CSTD Underworld Display", serif;
+  font-size: 1.4rem;
+}
+
+.cstd-deep-underworld-cuts {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 4.2rem;
+  left: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.cstd-deep-underworld-cuts i {
+  width: 1.2rem;
+  height: 0.18rem;
+  background: #8e2b23;
+  transform: skewX(-28deg);
+}
+
+/* Theme transition and motion character. */
+
+html[data-cstd-theme-transition="underworld-forge"]::after {
+  background:
+    radial-gradient(circle at 78% 72%, transparent 0 9%, rgb(193 48 38 / 58%) 9.5% 10%, transparent 10.5%),
+    conic-gradient(from 224deg at 78% 72%, #090806 0 20%, #d7a84b 20.5% 21%, #76271f 21.5% 34%, #090806 34.5% 100%);
+}
+
+[data-cstd-enhancements-ready="true"][data-cstd-motion="full"][data-cstd-theme="underworld-forge"] :where(
+  [data-cstd-chapter],
+  [data-cstd-finale]
+)[data-cstd-revealed="true"] h2 {
+  animation: cstd-underworld-title-arrive 720ms var(--cstd-theme-ease) both;
+}
+
+@keyframes cstd-underworld-title-arrive {
+  from { opacity: 0; transform: translate3d(-1.3rem, 0.8rem, 0) skewX(-2deg); filter: blur(5px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) skewX(0); filter: blur(0); }
+}
+
+@media (max-width: 1023px) {
+  .cstd-underworld-arch { right: -8vw; width: 42vw; }
+  .cstd-underworld-orbit { display: none; }
+  .cstd-deep-underworld-stele { opacity: 0.42; right: 1.5rem; }
+}
+
+@media (max-width: 767px) {
+  [data-cstd-theme="underworld-forge"] [data-cstd-stage-visual] {
+    inset: 0 -74% 0 -4%;
+  }
+
+  [data-cstd-theme="underworld-forge"] .cstd-stage-visual-image {
+    background-position: 58% center;
+  }
+
+  [data-cstd-theme="underworld-forge"] [data-cstd-stage-visual-wash] {
+    background: linear-gradient(90deg, rgb(7 6 4 / 98%) 0 44%, rgb(7 6 4 / 76%) 69%, rgb(7 6 4 / 26%));
+  }
+
+  .cstd-underworld-furniture { display: none; }
+  .cstd-underworld-arch { top: 25vh; right: -22vw; width: 76vw; opacity: 0.58; }
+
+  [data-cstd-theme-scene-rail="underworld-forge"] {
+    top: auto;
+    right: 0.75rem;
+    bottom: max(0.65rem, env(safe-area-inset-bottom));
+    left: 0.75rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    border: 1px solid #765a2e;
+    border-radius: 0;
+    background: rgb(8 6 4 / 95%);
+    padding: 0.3rem;
+    box-shadow: 0 16px 42px rgb(0 0 0 / 48%);
+  }
+
+  [data-cstd-theme-scene-rail="underworld-forge"] > div > a::before {
+    display: none;
+  }
+
+  [data-cstd-theme="underworld-forge"] [data-cstd-entry-console] {
+    box-shadow: 5px 7px 0 rgb(3 2 1 / 64%);
+  }
+
+  [data-cstd-theme="underworld-forge"] [data-cstd-proof-grid] article {
+    box-shadow: 5px 7px 0 rgb(3 2 1 / 58%) !important;
+  }
+
+  [data-cstd-theme="underworld-forge"] [data-cstd-evidence-chain] {
+    box-shadow: 5px 7px 0 rgb(3 2 1 / 52%);
+  }
+
+  [data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-content] > div:first-child {
+    padding-left: 0.9rem;
+  }
+
+  .cstd-deep-underworld-stele {
+    top: 12%;
+    right: -4rem;
+    width: 13rem;
+    min-height: 21rem;
+    opacity: 0.2;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cstd-underworld-embers i,
+  .cstd-underworld-orbit b,
+  [data-cstd-theme="underworld-forge"] [data-cstd-chapter] h2 {
+    animation: none !important;
+  }
+}

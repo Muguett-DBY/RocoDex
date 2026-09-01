@@ -23,7 +23,7 @@ export const cstdLocaleConfig = {
   shortLabel: string;
 }>;
 
-export const defaultCstdLocale: CstdLocale = "zh";
+const defaultCstdLocale: CstdLocale = "zh";
 
 function stripInternalPrefix(pathname: string) {
   if (pathname === "/cstd") return "/";

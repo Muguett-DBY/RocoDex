@@ -21,7 +21,7 @@ function normalize(value: string) {
   return value.toLowerCase().normalize("NFKC").replace(/[^\p{L}\p{N}+#.]+/gu, " ").trim();
 }
 
-export function tokenizeGuideText(value: string) {
+function tokenizeGuideText(value: string) {
   const tokens = new Set<string>();
   for (const segment of normalize(value).match(/[\p{Script=Han}]+|[a-z0-9+#.]+/gu) ?? []) {
     tokens.add(segment);

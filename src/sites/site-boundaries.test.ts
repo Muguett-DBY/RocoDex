@@ -88,11 +88,22 @@ describe("site architecture boundaries", () => {
 
   it("exposes personal homepage internals only through public entry points", () => {
     const personalSiteRoot = sourcePath("sites/personal-homepage");
-    const privateImport = /@\/sites\/personal-homepage\/(?:components|content|domain|infrastructure)\//;
+    const publicEntries = new Set([
+      "@/sites/personal-homepage",
+      "@/sites/personal-homepage/metadata",
+      "@/sites/personal-homepage/not-found",
+      "@/sites/personal-homepage/routes",
+      "@/sites/personal-homepage/server",
+    ]);
+    const personalImport = /(?:from\s+|import\s*\(\s*)["'](@\/sites\/personal-homepage(?:\/[^"']+)*)["']/g;
     const violations = collectSourceFiles(sourceRoot)
       .filter((file) => !file.startsWith(personalSiteRoot))
-      .filter((file) => privateImport.test(readFileSync(file, "utf8")))
-      .map((file) => path.relative(repositoryRoot, file).replaceAll("\\", "/"));
+      .flatMap((file) => {
+        const imports = [...readFileSync(file, "utf8").matchAll(personalImport)]
+          .map((match) => match[1])
+          .filter((specifier): specifier is string => Boolean(specifier) && !publicEntries.has(specifier));
+        return imports.map((specifier) => `${path.relative(repositoryRoot, file).replaceAll("\\", "/")}: ${specifier}`);
+      });
 
     expect(violations).toEqual([]);
   });

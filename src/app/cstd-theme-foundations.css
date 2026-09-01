@@ -145,7 +145,6 @@
 
 [data-cstd-theme] :where(
   .cstd-hero-wordmark,
-  [data-cstd-hero-title],
   [data-cstd-chapter] h2,
   [data-cstd-finale] h2,
   [data-cstd-page-hero-title],
@@ -307,40 +306,12 @@
   min-height: 2.7rem;
 }
 
-[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] .cstd-ink-colophon {
-  top: 14%;
-  width: min(16rem, 20vw);
-  height: auto;
-  align-items: flex-start;
-  gap: 0.6rem;
-  padding: 1.25rem 1.1rem;
-  border-block: 1px solid rgb(166 55 46 / 28%);
-  border-inline: 0;
-  font-family: var(--cstd-font-body);
-  writing-mode: horizontal-tb;
-}
-
-[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] .cstd-ink-colophon p {
-  font-family: "CSTD Ink Latin Italic", Georgia, serif;
-  font-size: 1.05rem;
-  font-style: italic;
-  line-height: 1.08;
-  letter-spacing: 0;
-}
-
-[data-cstd-theme="ink-protocol"][data-cstd-locale="en"] .cstd-ink-colophon span {
-  width: 2.8rem;
-  height: 2.8rem;
-  margin-top: 0.7rem;
-}
-
 [data-cstd-theme="press-room"][data-cstd-locale="en"] :where(
   [data-cstd-hero-thesis],
   [data-cstd-hero-description],
   [data-cstd-header-brand],
   [data-cstd-deep-brand],
   [data-cstd-home-header] nav,
-  .cstd-press-front-index,
   [data-cstd-theme-scene-rail="press-room"] > div
 ) {
   font-family: var(--cstd-font-body) !important;
@@ -715,7 +686,7 @@
   display: block !important;
 }
 
-/* Four motion grammars share reveal state, but not tempo or physical behavior. */
+/* The original four motion grammars share reveal state, while later worlds extend the same contract independently. */
 @keyframes cstd-neon-heading-lock {
   0% { opacity: 0; clip-path: inset(0 100% 0 0); transform: translate3d(-2.5rem, 0, 0) skewX(-7deg); }
   52% { opacity: 1; clip-path: inset(0 8% 0 0); transform: translate3d(0.4rem, 0, 0) skewX(-2deg); }

@@ -1,7 +1,6 @@
 /* CSTD theme compositions. Content stays shared; each world owns a different page grammar. */
 
-[data-cstd-theme-copy],
-[data-cstd-hero-artifact] {
+[data-cstd-theme-copy] {
   display: none !important;
 }
 
@@ -10,25 +9,6 @@
 [data-cstd-theme="press-room"] [data-cstd-theme-copy="press"],
 [data-cstd-theme="pixel-quest"] [data-cstd-theme-copy="pixel"] {
   display: contents !important;
-}
-
-[data-cstd-theme="neon-district"] [data-cstd-hero-artifact="neon"],
-[data-cstd-theme="press-room"] [data-cstd-hero-artifact="press"] {
-  display: block !important;
-}
-
-[data-cstd-theme="ink-protocol"] [data-cstd-hero-artifact="ink"] {
-  display: flex !important;
-}
-
-[data-cstd-theme="pixel-quest"] [data-cstd-hero-artifact="pixel"] {
-  display: grid !important;
-}
-
-[data-cstd-theme-hero-artifact] {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
 }
 
 .cstd-theme-scene-rail {
@@ -167,110 +147,8 @@
   opacity: 1;
 }
 
-.cstd-neon-console {
-  position: absolute;
-  right: 3.5%;
-  top: 22%;
-  width: min(29vw, 25rem);
-  aspect-ratio: 1;
-}
-
-.cstd-neon-console-reticle {
-  position: absolute;
-  inset: 0;
-  border: 1px solid rgb(36 224 255 / 28%);
-  border-radius: 50%;
-  background: radial-gradient(circle, transparent 0 34%, rgb(5 7 9 / 42%) 34.5% 48%, transparent 48.5%);
-  box-shadow: 0 0 60px rgb(36 224 255 / 7%);
-}
-
-.cstd-neon-console-reticle::before,
-.cstd-neon-console-reticle::after {
-  position: absolute;
-  content: "";
-}
-
-.cstd-neon-console-reticle::before {
-  inset: 13%;
-  border: 1px dashed rgb(244 212 49 / 42%);
-  border-radius: 50%;
-}
-
-.cstd-neon-console-reticle::after {
-  inset: 46%;
-  border: 5px solid #24e0ff;
-  box-shadow: 0 0 22px #24e0ff;
-}
-
-.cstd-neon-console-reticle span {
-  position: absolute;
-  inset: 28%;
-  border: 1px solid rgb(36 224 255 / 50%);
-  transform: rotate(45deg);
-}
-
-[data-cstd-motion="full"] .cstd-neon-console-reticle::before {
-  animation: cstd-neon-reticle-spin 13s linear 3;
-}
-
-.cstd-neon-console-readout {
-  position: absolute;
-  right: -1rem;
-  bottom: 6%;
-  display: grid;
-  min-width: 9rem;
-  padding: 0.8rem;
-  border-left: 2px solid #f4d431;
-  background: rgb(5 7 9 / 76%);
-  color: #24e0ff;
-  font-family: ui-monospace, monospace;
-  font-size: 0.5rem;
-  font-weight: 900;
-  backdrop-filter: blur(8px);
-}
-
-.cstd-neon-console-readout strong {
-  color: #f4d431;
-  font-size: 1.4rem;
-}
-
-.cstd-neon-console-wave {
-  position: absolute;
-  left: -2rem;
-  top: 51%;
-  display: flex;
-  height: 2rem;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.cstd-neon-console-wave i {
-  width: 2px;
-  height: 45%;
-  background: #24e0ff;
-  box-shadow: 0 0 8px #24e0ff;
-}
-
-.cstd-neon-console-wave i:nth-child(2n) { height: 100%; }
-.cstd-neon-console-wave i:nth-child(3n) { height: 70%; }
-
-[data-cstd-motion="full"] .cstd-neon-console-wave i {
-  animation: cstd-neon-wave 900ms ease-in-out 6 alternate;
-}
-
-[data-cstd-motion="full"] .cstd-neon-console-wave i:nth-child(2n) { animation-delay: -420ms; }
-[data-cstd-motion="full"] .cstd-neon-console-wave i:nth-child(3n) { animation-delay: -700ms; }
-
 @keyframes cstd-neon-target-pulse {
   50% { opacity: 0.62; transform: scale(1.045); }
-}
-
-@keyframes cstd-neon-reticle-spin {
-  to { transform: rotate(360deg); }
-}
-
-@keyframes cstd-neon-wave {
-  to { height: 20%; opacity: 0.35; }
 }
 
 /* INK PROTOCOL / a vertical handscroll with breathing negative space and stamped evidence. */
@@ -392,46 +270,6 @@
 
 [data-cstd-theme="ink-protocol"] .cstd-hero-copy {
   grid-column: 1;
-}
-
-.cstd-ink-colophon {
-  position: absolute;
-  right: 0;
-  top: 5%;
-  display: flex;
-  height: 31rem;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.1rem;
-  padding: 2rem 1.4rem;
-  border-inline: 1px solid rgb(166 55 46 / 28%);
-  color: #343a34;
-  font-family: "Songti SC", serif;
-  writing-mode: vertical-rl;
-}
-
-.cstd-ink-colophon p {
-  font-size: 1.15rem;
-  letter-spacing: 0.18em;
-}
-
-.cstd-ink-colophon span {
-  display: grid;
-  width: 3.3rem;
-  height: 3.3rem;
-  margin-top: auto;
-  place-items: center;
-  border: 2px solid #a6372e;
-  color: #a6372e;
-  font-size: 0.8rem;
-  font-weight: 700;
-  writing-mode: horizontal-tb;
-  transform: rotate(-5deg);
-}
-
-.cstd-ink-colophon small {
-  color: #777166;
-  font-size: 0.65rem;
 }
 
 [data-cstd-theme="ink-protocol"] [data-cstd-hero-summary] {
@@ -725,66 +563,6 @@
 
 [data-cstd-theme="press-room"] [data-cstd-hero-summary] {
   grid-column: 1;
-}
-
-.cstd-press-front-index {
-  position: absolute;
-  right: 0;
-  top: 7%;
-  width: min(26vw, 21rem);
-  border-top: 0.45rem solid #171714;
-  border-bottom: 1px solid #171714;
-  color: #171714;
-  font-family: Georgia, serif;
-}
-
-.cstd-press-front-index-kicker {
-  padding-block: 0.65rem;
-  border-bottom: 1px solid #171714;
-  color: #bd2d22;
-  font-family: ui-monospace, monospace;
-  font-size: 0.58rem;
-  font-weight: 900;
-}
-
-.cstd-press-front-index ol {
-  list-style: none;
-}
-
-.cstd-press-front-index li {
-  display: grid;
-  grid-template-columns: 2rem 1fr;
-  padding-block: 1rem;
-  border-bottom: 1px solid rgb(23 23 20 / 35%);
-}
-
-.cstd-press-front-index li > span {
-  grid-row: 1 / span 2;
-  color: #bd2d22;
-  font-size: 1.5rem;
-  font-weight: 900;
-}
-
-.cstd-press-front-index strong {
-  font-size: 1rem;
-  line-height: 1.1;
-  text-transform: uppercase;
-}
-
-.cstd-press-front-index small {
-  margin-top: 0.25rem;
-  color: #6a6559;
-  font-family: ui-monospace, monospace;
-  font-size: 0.52rem;
-  font-weight: 900;
-}
-
-.cstd-press-front-quote {
-  padding-block: 1.2rem;
-  color: #bd2d22;
-  font-size: 1.35rem;
-  font-weight: 900;
-  line-height: 0.95;
 }
 
 [data-cstd-theme="press-room"] [data-cstd-chapter] {
@@ -1086,124 +864,6 @@
   grid-column: 1;
 }
 
-.cstd-pixel-player-card {
-  position: absolute;
-  right: 7.5rem;
-  top: 8%;
-  display: grid;
-  width: min(30vw, 25rem);
-  min-height: 28rem;
-  grid-template-columns: 6rem 1fr;
-  align-content: start;
-  gap: 1.5rem;
-  padding: 1.6rem;
-  border: 4px solid #31d7ff;
-  background: rgb(7 17 40 / 88%);
-  color: #f8f2d0;
-  font-family: "Cascadia Mono", monospace;
-  box-shadow: 0.6rem 0.6rem 0 #000, inset 0 0 0 3px #172b51;
-}
-
-.cstd-pixel-avatar {
-  position: relative;
-  width: 6rem;
-  height: 7rem;
-  background: #ffd43b;
-  box-shadow: inset 1rem 0 #ff8a30, inset -0.7rem 0 #f3a241;
-}
-
-.cstd-pixel-avatar::before {
-  position: absolute;
-  inset: 0.8rem 0.9rem 2rem;
-  background: #f8cf9b;
-  box-shadow: inset 1rem 0 #2c264c, inset -0.5rem 0 #ff8a30;
-  content: "";
-}
-
-.cstd-pixel-avatar::after {
-  position: absolute;
-  left: 1.65rem;
-  top: 2.7rem;
-  width: 0.65rem;
-  height: 0.65rem;
-  background: #071128;
-  box-shadow: 2.2rem 0 #071128;
-  content: "";
-}
-
-.cstd-pixel-avatar span {
-  position: absolute;
-  left: 0.8rem;
-  bottom: 0.6rem;
-  width: 4.4rem;
-  height: 1rem;
-  background: #31d7ff;
-}
-
-.cstd-pixel-player-copy p,
-.cstd-pixel-player-copy small {
-  color: #31d7ff;
-  font-size: 0.58rem;
-  font-weight: 900;
-}
-
-.cstd-pixel-player-copy strong {
-  display: block;
-  margin-block: 0.45rem;
-  color: #ffd43b;
-  font-size: 1.45rem;
-  text-shadow: 3px 3px 0 #000;
-}
-
-.cstd-pixel-player-card dl {
-  grid-column: 1 / -1;
-  display: grid;
-  gap: 0.8rem;
-  padding-top: 1rem;
-  border-top: 3px solid #29436d;
-}
-
-.cstd-pixel-player-card dl > div {
-  display: grid;
-  grid-template-columns: 5.5rem 1fr;
-  gap: 0.7rem;
-  align-items: center;
-}
-
-.cstd-pixel-player-card dt {
-  color: #a4b6d6;
-  font-size: 0.58rem;
-  font-weight: 900;
-}
-
-.cstd-pixel-player-card dd {
-  position: relative;
-  height: 1rem;
-  border: 2px solid #29436d;
-  color: transparent;
-}
-
-.cstd-pixel-player-card dd span {
-  display: block;
-  height: 100%;
-  background: repeating-linear-gradient(90deg, #ff4fa3 0 0.75rem, #d83582 0.75rem 0.95rem);
-}
-
-.cstd-pixel-quest-ready {
-  grid-column: 1 / -1;
-  padding: 0.75rem;
-  border: 3px solid #ffd43b;
-  color: #ffd43b;
-  font-size: 0.8rem;
-  font-weight: 900;
-  text-align: center;
-  box-shadow: 4px 4px 0 #000;
-}
-
-[data-cstd-motion="full"] .cstd-pixel-quest-ready {
-  animation: cstd-pixel-ready 1s steps(2, end) 6;
-}
-
 [data-cstd-theme="pixel-quest"] [data-cstd-chapter="systems"] { background: rgb(8 17 38 / 97%) !important; }
 [data-cstd-theme="pixel-quest"] [data-cstd-chapter="proof"] { background: rgb(19 10 42 / 97%) !important; }
 [data-cstd-theme="pixel-quest"] [data-cstd-chapter="operator"] { background: rgb(35 8 42 / 97%) !important; }
@@ -1350,43 +1010,15 @@
   50% { transform: translateY(-0.4rem); }
 }
 
-@keyframes cstd-pixel-ready {
-  50% { color: #ff4fa3; border-color: #ff4fa3; }
-}
-
 /* Responsive composition: preserve each world's identity without trapping or crowding the page. */
 
 @media (max-width: 1199px) {
-  .cstd-neon-console {
-    right: 1%;
-    width: 22rem;
-    opacity: 0.62;
-  }
 
   [data-cstd-theme="ink-protocol"] [data-cstd-hero-layout],
   [data-cstd-theme="press-room"] [data-cstd-hero-layout],
   [data-cstd-theme="pixel-quest"] [data-cstd-hero-layout] {
     grid-template-columns: minmax(0, 1fr) 15rem;
     gap: 2rem;
-  }
-
-  .cstd-ink-colophon {
-    right: 1rem;
-  }
-
-  .cstd-press-front-index,
-  .cstd-pixel-player-card {
-    right: 1rem;
-    width: 15rem;
-  }
-
-  .cstd-pixel-player-card {
-    grid-template-columns: 1fr;
-    min-height: 24rem;
-  }
-
-  .cstd-pixel-avatar {
-    display: none;
   }
 
   [data-cstd-theme-scene-rail="neon-district"],
@@ -1403,61 +1035,9 @@
     display: block;
   }
 
-  [data-cstd-theme="neon-district"] .cstd-neon-console,
-  [data-cstd-theme="press-room"] .cstd-press-front-index,
-  [data-cstd-theme="pixel-quest"] .cstd-pixel-player-card {
-    display: none !important;
-  }
-
-  [data-cstd-theme="neon-district"] .cstd-neon-console,
-  [data-cstd-theme="press-room"] .cstd-press-front-index,
-  [data-cstd-theme="pixel-quest"] .cstd-pixel-player-card {
-    display: block !important;
-    z-index: 1;
-    opacity: 0.44;
-    transform: scale(0.82);
-    transform-origin: right top;
-  }
-
-  [data-cstd-theme="pixel-quest"] .cstd-pixel-player-card {
-    display: grid !important;
-    min-height: 0;
-  }
-
-  [data-cstd-theme="neon-district"] .cstd-neon-console {
-    right: -1rem;
-    top: 18%;
-    width: 19rem;
-  }
-
-  [data-cstd-theme="press-room"] .cstd-press-front-index {
-    right: 0;
-    top: 12%;
-    width: min(17rem, 48vw);
-  }
-
-  [data-cstd-theme="pixel-quest"] .cstd-pixel-player-card {
-    right: 0;
-    top: 12%;
-    width: min(18rem, 54vw);
-  }
-
-  [data-cstd-theme="ink-protocol"] .cstd-ink-colophon {
-    z-index: 1;
-    opacity: 0.48;
-    transform: scale(0.82);
-    transform-origin: right top;
-  }
-
   [data-cstd-theme="ink-protocol"] .cstd-hero-stage {
     padding-left: 4rem;
     padding-right: 7rem;
-  }
-
-  .cstd-ink-colophon {
-    top: 12%;
-    height: 25rem;
-    padding: 1.3rem 0.8rem;
   }
 
   [data-cstd-theme="ink-protocol"] [data-cstd-chapter-header],
@@ -1550,49 +1130,6 @@
 
   [data-cstd-theme="ink-protocol"] .cstd-hero-stage {
     padding-inline: 1.25rem;
-  }
-
-  [data-cstd-theme="ink-protocol"] .cstd-ink-colophon {
-    display: none !important;
-  }
-
-  [data-cstd-theme="ink-protocol"] .cstd-ink-colophon {
-    display: flex !important;
-    right: -1rem;
-    top: 12%;
-    height: 22rem;
-  }
-
-  [data-cstd-theme="neon-district"] .cstd-neon-console {
-    right: -5.5rem;
-    top: 16%;
-    width: 15rem;
-    opacity: 0.28;
-    transform: scale(0.76);
-  }
-
-  [data-cstd-theme="press-room"] .cstd-press-front-index {
-    right: -7rem;
-    top: 44%;
-    width: min(14rem, 62vw);
-    opacity: 0.24;
-    transform: scale(0.62);
-  }
-
-  [data-cstd-theme="pixel-quest"] .cstd-pixel-player-card {
-    right: -8.5rem;
-    top: 42%;
-    width: min(15rem, 68vw);
-    opacity: 0.32;
-    transform: scale(0.62);
-  }
-
-  [data-cstd-theme="ink-protocol"] .cstd-ink-colophon {
-    right: -1.5rem;
-    top: 9%;
-    height: 19rem;
-    opacity: 0.38;
-    transform: scale(0.68);
   }
 
   .cstd-hero-copy,
@@ -1689,21 +1226,15 @@
 }
 
 [data-cstd-motion="calm"] .cstd-neon-world-target,
-[data-cstd-motion="calm"] .cstd-neon-console-reticle::before,
-[data-cstd-motion="calm"] .cstd-neon-console-wave i,
 [data-cstd-motion="calm"] .cstd-ink-mist,
-[data-cstd-motion="calm"] .cstd-pixel-runner,
-[data-cstd-motion="calm"] .cstd-pixel-quest-ready {
+[data-cstd-motion="calm"] .cstd-pixel-runner {
   animation: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .cstd-neon-world-target,
-  .cstd-neon-console-reticle::before,
-  .cstd-neon-console-wave i,
-  .cstd-ink-mist,
-  .cstd-pixel-runner,
-  .cstd-pixel-quest-ready {
+.cstd-ink-mist,
+.cstd-pixel-runner {
     animation: none !important;
   }
 }

@@ -28,6 +28,7 @@ export const cstdExperienceContract = {
     "ink-protocol": "unfurl-follow-seal",
     "press-room": "select-source-correct",
     "pixel-quest": "choose-route-clear",
+    "underworld-forge": "descend-forge-return",
   } as const,
   runtime: {
     progressiveOrder: cstdPerformanceContract.delivery.runtimeFallbackOrder,
