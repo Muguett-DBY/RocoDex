@@ -3,8 +3,8 @@
 import { useSyncExternalStore } from "react";
 import type { LocalizedText } from "../content/content-types";
 
-export type CstdThemeId = "neon-district" | "ink-protocol" | "press-room" | "pixel-quest" | "underworld-forge";
-export type CstdThemeKind = "cyberpunk" | "ink-scroll" | "broadsheet" | "pixel-game" | "mythic-underworld";
+export type CstdThemeId = "neon-district" | "ink-protocol" | "press-room" | "pixel-quest" | "underworld-forge" | "astral-covenant";
+export type CstdThemeKind = "cyberpunk" | "ink-scroll" | "broadsheet" | "pixel-game" | "mythic-underworld" | "fantasy-codex";
 
 export type CstdThemeMeta = Readonly<{
   id: CstdThemeId;
@@ -89,6 +89,19 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
     compactBrand: { zh: "冥府工坊", en: "CSTD FORGE" },
     edition: { zh: "造物 / 试炼 / 归返", en: "CRAFT / TRIAL / RETURN" },
   },
+  {
+    id: "astral-covenant",
+    kind: "fantasy-codex",
+    label: "ASTRAL COVENANT",
+    zhLabel: "星界契约",
+    description: "A celestial campaign table where systems advance through choices, companions, and proof.",
+    zhDescription: "星图、羊皮卷和命运骰铺成一张冒险桌，让系统沿着选择、协作与证据继续前进。",
+    swatch: "#c5a668",
+    signal: "#77d6d1",
+    brand: { zh: "奶黄包 · 星界契约", en: "CUSTARD / ASTRAL COVENANT" },
+    compactBrand: { zh: "星界契约", en: "CSTD ASTRAL" },
+    edition: { zh: "同行 / 抉择 / 传承", en: "PARTY / CHOICE / LEGACY" },
+  },
 ] as const;
 
 let volatileTheme: CstdThemeId = "neon-district";
@@ -101,6 +114,7 @@ function normalizeTheme(value: string | null): CstdThemeId | null {
     || value === "press-room"
     || value === "pixel-quest"
     || value === "underworld-forge"
+    || value === "astral-covenant"
   ) {
     return value;
   }

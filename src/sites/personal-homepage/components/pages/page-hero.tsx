@@ -70,6 +70,12 @@ export function CstdPageHero({
           <span className="cstd-deep-underworld-oath">{locale === "zh" ? "经试炼，方可归返" : "TRIED BELOW · RETURNED WHOLE"}</span>
           <span className="cstd-deep-underworld-cuts"><i /><i /><i /><i /><i /></span>
         </div>
+        <div data-cstd-deep-artifact="astral" className="cstd-deep-astral-compass">
+          <span className="cstd-deep-astral-kicker">{locale === "zh" ? "星界旅记 / 判定 017" : "ASTRAL JOURNAL / ROLL 017"}</span>
+          <span className="cstd-deep-astral-die"><i /><b>20</b><i /></span>
+          <span className="cstd-deep-astral-route"><i /><i /><i /><i /><i /></span>
+          <span className="cstd-deep-astral-oath">{locale === "zh" ? "选择落笔，旅程成章" : "CHOICE INKED · LEGACY CARRIED"}</span>
+        </div>
       </div>
       <div data-cstd-page-hero-content className="relative mx-auto flex w-full max-w-[1540px] flex-col justify-end px-5 pb-16 pt-28 md:px-10 lg:px-16 lg:pb-20">
         <div className="max-w-5xl">

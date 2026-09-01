@@ -12,6 +12,7 @@ The files in this directory are WOFF2 subsets made for the personal homepage. Th
 | CSTD Press Latin | [Newsreader](https://github.com/productiontype/Newsreader) | current source snapshot | Latin editorial serif | SIL OFL 1.1 |
 | CSTD Pixel Text / Label | [Fusion Pixel Font](https://github.com/TakWolf/fusion-pixel-font) | 2026.08.11 | Proportional and monospaced pixel type | SIL OFL 1.1 |
 | CSTD Underworld Display | [Cinzel](https://github.com/google/fonts/tree/main/ofl/cinzel) | current source snapshot | Latin mythic display and inscription type | SIL OFL 1.1 |
+| CSTD Astral Display | [Marcellus SC](https://github.com/google/fonts/tree/main/ofl/marcellussc) | current source snapshot | Celestial campaign headings and engraved interface type | SIL OFL 1.1 |
 
 The corresponding license text is stored beside these files. The homepage preloads only the persisted active theme and locale's font files; inactive faces remain lazy.
 

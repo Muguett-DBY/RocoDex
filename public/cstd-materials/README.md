@@ -9,5 +9,6 @@ These seamless visual materials were generated with OpenAI image generation in b
 | `press-newsprint-v1.webp` | Press Room | Uncoated newsprint with offset pressure, fine halftone, fold, crop and registration traces with subtle cyan-red misregistration. |
 | `pixel-circuit-v1.webp` | Pixel Quest | Strict 16-color pixel circuit and tile field with crisp integer geometry and no antialiasing. |
 | `underworld-basalt-v1.webp` | Underworld Forge | Hand-painted black basalt, bronze geometric borders, gold-leaf fractures, dried crimson pigment and sparse spectral-green embers. |
+| `astral-vellum-v1.webp` | Astral Covenant | Midnight-blue vellum with celestial cartography, worn brass arcs, restrained violet ink and sparse teal constellation marks. |
 
 Do not add readable typography or logos to these assets. Theme copy must remain real HTML for localization and accessibility.

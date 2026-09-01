@@ -1,0 +1,1025 @@
+/* ASTRAL COVENANT / an original celestial campaign of choice, fellowship, and proof. */
+
+@font-face {
+  font-family: "CSTD Astral Display";
+  src: url("/fonts/cstd/astral-display-v1.woff2") format("woff2");
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}
+
+html[data-cstd-theme="astral-covenant"],
+html[data-cstd-theme="astral-covenant"] body {
+  background: #090b17;
+}
+
+[data-cstd-theme="astral-covenant"] {
+  --cstd-world-bg: #090b17;
+  --cstd-world-surface: #111426;
+  --cstd-world-raised: #1a1d34;
+  --cstd-world-ink: #f0e8d3;
+  --cstd-world-muted: #b9af9c;
+  --cstd-world-line: rgb(197 166 104 / 32%);
+  --cstd-world-accent: #c5a668;
+  --cstd-world-signal: #77d6d1;
+  --cstd-world-arcane: #8d79dc;
+  --cstd-font-display: "CSTD Astral Display", "CSTD Press Serif", Georgia, serif;
+  --cstd-font-body: "CSTD Press Serif", Georgia, "Microsoft YaHei UI", serif;
+  --cstd-font-label: "CSTD Astral Display", "Cascadia Mono", Consolas, monospace;
+  --cstd-font-code: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+  --cstd-material-image: url("/cstd-materials/astral-vellum-v1.webp");
+  --cstd-material-size: 768px 768px;
+  --cstd-material-opacity: 0.28;
+  --cstd-material-blend: soft-light;
+  --cstd-theme-ease: cubic-bezier(0.18, 0.86, 0.22, 1);
+  background: var(--cstd-world-bg) !important;
+  color: var(--cstd-world-ink) !important;
+  color-scheme: dark;
+  font-synthesis: none;
+}
+
+[data-cstd-theme="astral-covenant"] :where(
+  .cstd-hero-wordmark,
+  [data-cstd-chapter] h2,
+  [data-cstd-finale] h2,
+  [data-cstd-page-hero-title],
+  [data-cstd-reading-document] h1,
+  [data-cstd-reading-document] h2,
+  [data-cstd-case-dossier] h2
+) {
+  font-family: var(--cstd-font-display) !important;
+  font-weight: 400 !important;
+  letter-spacing: 0 !important;
+}
+
+[data-cstd-theme="astral-covenant"][data-cstd-locale="en"] :where(
+  .cstd-hero-wordmark,
+  [data-cstd-chapter] h2,
+  [data-cstd-finale] h2,
+  [data-cstd-page-hero-title]
+) {
+  text-transform: uppercase;
+}
+
+/* Theme visibility and picker. */
+
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-copy="astral"] {
+  display: contents !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-world-image="astral-covenant"] {
+  display: block;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-world-decoration="astral-covenant"] {
+  display: contents;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-world-copy="astral-covenant"],
+[data-cstd-theme-scene-rail="astral-covenant"] [data-cstd-theme-scene-copy="astral-covenant"],
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-label-option="astral-covenant"],
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-meta-copy="astral-covenant"],
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-mark-copy="astral-covenant"] {
+  display: inline;
+}
+
+[data-cstd-theme-menu-theme="astral-covenant"] {
+  --cstd-menu-bg: #111426;
+  --cstd-menu-ink: #f0e8d3;
+  --cstd-menu-muted: #ada48f;
+  --cstd-menu-line: rgb(197 166 104 / 38%);
+  --cstd-menu-accent: #c5a668;
+  --cstd-menu-signal: #77d6d1;
+  border-color: #74674a;
+  background-color: #101324;
+  background-image:
+    linear-gradient(135deg, rgb(141 121 220 / 14%), transparent 42%),
+    url("/cstd-materials/astral-vellum-v1.webp");
+  background-size: auto, 540px 540px;
+  box-shadow: 0 28px 90px rgb(2 3 10 / 72%), inset 0 0 0 1px rgb(231 213 163 / 10%);
+}
+
+[data-cstd-theme-preview="fantasy-codex"] {
+  color: #d6ba78;
+  border-color: #74664a;
+  background: #101426;
+  box-shadow: inset 0 0 22px rgb(109 86 196 / 25%);
+}
+
+[data-cstd-theme-preview="fantasy-codex"]::before {
+  inset: 6px;
+  border: 1px solid rgb(119 214 209 / 55%);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 5px rgb(141 121 220 / 8%);
+}
+
+[data-cstd-theme-preview="fantasy-codex"]::after {
+  top: 7px;
+  right: 7px;
+  width: 0.45rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #77d6d1;
+  box-shadow: -25px 28px 0 #c5a668, -10px 13px 0 rgb(141 121 220 / 72%);
+}
+
+/* Stage and persistent atlas. */
+
+html[data-cstd-theme="astral-covenant"] {
+  --cstd-stage-image: url("/cstd-stage/cstd-astral-covenant-v1.webp");
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-world-backdrop] {
+  opacity: 0;
+  visibility: hidden;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-world] {
+  background: #090b17;
+}
+
+[data-cstd-theme="astral-covenant"] .cstd-theme-world-image {
+  filter: saturate(0.78) contrast(1.08) brightness(0.48);
+  opacity: 0.58;
+  transform: scale(1.035) translate3d(0, 0, 0);
+  transition: filter 900ms var(--cstd-theme-ease), transform 1200ms var(--cstd-theme-ease);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-world-scene="systems"] .cstd-theme-world-image {
+  transform: scale(1.08) translate3d(-2%, 1%, 0);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-world-scene="proof"] .cstd-theme-world-image,
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-world-scene="operator"] .cstd-theme-world-image {
+  filter: saturate(0.9) contrast(1.08) brightness(0.45);
+  transform: scale(1.1) translate3d(2%, -2%, 0);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-world-scene="path"] .cstd-theme-world-image,
+[data-cstd-theme="astral-covenant"] [data-cstd-theme-world-scene="finale"] .cstd-theme-world-image {
+  filter: saturate(0.7) contrast(1.12) brightness(0.39);
+  transform: scale(1.12) translate3d(-2%, -3%, 0);
+}
+
+.cstd-astral-vignette {
+  z-index: 2;
+  background:
+    radial-gradient(circle at 73% 35%, rgb(113 92 201 / 20%), transparent 25%),
+    radial-gradient(circle at 18% 78%, rgb(119 214 209 / 9%), transparent 24%),
+    linear-gradient(180deg, rgb(4 6 17 / 30%), transparent 40%, rgb(4 6 17 / 68%));
+}
+
+.cstd-astral-routes {
+  z-index: 3;
+  opacity: 0.42;
+}
+
+.cstd-astral-routes i {
+  position: absolute;
+  height: 1px;
+  transform-origin: left;
+  background: linear-gradient(90deg, transparent, rgb(197 166 104 / 66%), rgb(119 214 209 / 38%), transparent);
+}
+
+.cstd-astral-routes i::before,
+.cstd-astral-routes i::after {
+  position: absolute;
+  top: -0.2rem;
+  width: 0.38rem;
+  aspect-ratio: 1;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: #111426;
+  content: "";
+}
+
+.cstd-astral-routes i::before { left: 18%; }
+.cstd-astral-routes i::after { right: 12%; }
+.cstd-astral-routes i:nth-child(1) { top: 23%; left: 8%; width: 34%; transform: rotate(11deg); }
+.cstd-astral-routes i:nth-child(2) { top: 41%; left: 31%; width: 43%; transform: rotate(-13deg); }
+.cstd-astral-routes i:nth-child(3) { top: 61%; left: 8%; width: 49%; transform: rotate(-4deg); }
+.cstd-astral-routes i:nth-child(4) { top: 74%; left: 48%; width: 37%; transform: rotate(8deg); }
+.cstd-astral-routes i:nth-child(5) { top: 49%; left: 73%; width: 19%; transform: rotate(71deg); }
+
+.cstd-astral-die {
+  z-index: 5;
+  top: 24vh;
+  right: 10vw;
+  display: grid;
+  width: clamp(5.2rem, 8vw, 8.5rem);
+  aspect-ratio: 1;
+  place-items: center;
+  color: #f0e8d3;
+  font-family: "CSTD Astral Display", serif;
+  font-size: clamp(0.8rem, 1.2vw, 1.2rem);
+  clip-path: polygon(50% 0, 92% 24%, 100% 70%, 69% 100%, 25% 91%, 0 51%, 13% 13%);
+  background:
+    linear-gradient(145deg, rgb(119 214 209 / 21%), transparent 43%),
+    rgb(35 28 76 / 72%);
+  box-shadow: 0 0 60px rgb(141 121 220 / 34%);
+}
+
+.cstd-astral-die::before,
+.cstd-astral-die::after,
+.cstd-astral-die i,
+.cstd-astral-die b {
+  position: absolute;
+  content: "";
+}
+
+.cstd-astral-die::before {
+  inset: 0.55rem;
+  clip-path: inherit;
+  border: 1px solid rgb(231 213 163 / 48%);
+}
+
+.cstd-astral-die::after {
+  inset: 49% 9% auto;
+  border-top: 1px solid rgb(119 214 209 / 38%);
+  transform: rotate(-18deg);
+}
+
+.cstd-astral-die i { inset: 10% 50% 12% auto; border-left: 1px solid rgb(197 166 104 / 42%); transform: rotate(24deg); }
+.cstd-astral-die b { inset: 50% 18% auto; border-top: 1px solid rgb(197 166 104 / 42%); transform: rotate(48deg); }
+
+.cstd-astral-compass {
+  z-index: 4;
+  right: 27vw;
+  bottom: 15vh;
+  width: clamp(8rem, 13vw, 13rem);
+  aspect-ratio: 1;
+  border: 1px solid rgb(197 166 104 / 32%);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1.15rem rgb(8 10 23 / 18%), inset 0 0 0 1.2rem rgb(119 214 209 / 12%);
+}
+
+.cstd-astral-compass::before,
+.cstd-astral-compass::after,
+.cstd-astral-compass span,
+.cstd-astral-compass i,
+.cstd-astral-compass b {
+  position: absolute;
+  content: "";
+}
+
+.cstd-astral-compass::before { inset: 22%; border: 1px dashed rgb(141 121 220 / 54%); border-radius: 50%; }
+.cstd-astral-compass::after { inset: 49% -12%; border-top: 1px solid rgb(197 166 104 / 28%); }
+.cstd-astral-compass span { inset: -12% 49%; border-left: 1px solid rgb(197 166 104 / 28%); }
+.cstd-astral-compass i { inset: 34%; border: 1px solid #77d6d1; transform: rotate(45deg); }
+.cstd-astral-compass b { inset: 46%; border-radius: 50%; background: #c5a668; box-shadow: 0 0 18px #8d79dc; }
+
+.cstd-astral-motes {
+  z-index: 4;
+}
+
+.cstd-astral-motes i {
+  position: absolute;
+  width: 0.2rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #77d6d1;
+  box-shadow: 0 0 13px #77d6d1;
+  opacity: 0.55;
+}
+
+.cstd-astral-motes i:nth-child(1) { top: 16%; left: 18%; }
+.cstd-astral-motes i:nth-child(2) { top: 33%; left: 56%; }
+.cstd-astral-motes i:nth-child(3) { top: 72%; left: 81%; }
+.cstd-astral-motes i:nth-child(4) { top: 61%; left: 29%; }
+.cstd-astral-motes i:nth-child(5) { top: 45%; left: 91%; }
+.cstd-astral-motes i:nth-child(6) { top: 84%; left: 62%; }
+
+.cstd-astral-furniture {
+  z-index: 6;
+  padding: 1.3rem 2rem;
+  color: rgb(224 205 157 / 62%);
+  font-family: "CSTD Astral Display", serif;
+  font-size: 0.52rem;
+  text-transform: uppercase;
+}
+
+[data-cstd-theme="astral-covenant"] .cstd-theme-world-scene-label {
+  right: 2rem;
+  bottom: 2rem;
+  color: #c5a668;
+  font-family: "CSTD Astral Display", serif;
+}
+
+[data-cstd-motion="full"] .cstd-astral-die {
+  animation: cstd-astral-die-drift 6s ease-in-out 3;
+}
+
+[data-cstd-motion="full"] .cstd-astral-compass i {
+  animation: cstd-astral-compass-turn 12s linear 2;
+}
+
+@keyframes cstd-astral-die-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-2deg); }
+  50% { transform: translate3d(0, -0.8rem, 0) rotate(3deg); }
+}
+
+@keyframes cstd-astral-compass-turn {
+  to { transform: rotate(405deg); }
+}
+
+/* Homepage campaign composition. */
+
+[data-cstd-theme="astral-covenant"] [data-cstd-hero] > [data-cstd-stage-visual] {
+  opacity: 1 !important;
+}
+
+[data-cstd-theme="astral-covenant"] .cstd-stage-visual-image {
+  filter: saturate(0.84) contrast(1.06) brightness(0.9);
+  transform: scale(1.025) translate3d(var(--cstd-pointer-shift-x, 0), var(--cstd-pointer-shift-y, 0), 0);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-stage-visual-wash] {
+  background:
+    linear-gradient(90deg, rgb(7 9 21 / 99%) 0 32%, rgb(7 9 21 / 80%) 49%, rgb(7 9 21 / 10%) 78%),
+    linear-gradient(0deg, rgb(7 9 21 / 66%), transparent 51%);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-stage-visual-focus] {
+  border: 0.75rem solid rgb(197 166 104 / 5%);
+  background:
+    radial-gradient(circle at 78% 37%, rgb(141 121 220 / 13%), transparent 28%),
+    linear-gradient(125deg, transparent 0 72%, rgb(119 214 209 / 6%) 72.2% 72.5%, transparent 72.8%);
+  box-shadow: inset 0 0 110px rgb(2 3 11 / 44%);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-hero] > [data-cstd-motion-layer="ambient"] {
+  background: linear-gradient(90deg, rgb(7 9 21 / 98%), rgb(7 9 21 / 69%) 63%, transparent) !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-hero] > .absolute.bottom-0 {
+  background: linear-gradient(0deg, #090b17, transparent) !important;
+}
+
+[data-cstd-theme="astral-covenant"] .cstd-hero-scanline {
+  top: 23% !important;
+  height: 1px !important;
+  background: linear-gradient(90deg, transparent, #77d6d1 36%, #c5a668 64%, transparent) !important;
+  box-shadow: 0 0 16px rgb(119 214 209 / 28%);
+  opacity: 0.58;
+}
+
+[data-cstd-theme="astral-covenant"] .cstd-hero-wordmark {
+  color: #f0e8d3 !important;
+  text-shadow: 0 3px 0 #342b60, 0 20px 58px rgb(1 2 9 / 68%);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-hero-role],
+[data-cstd-theme="astral-covenant"] [data-cstd-entry-status],
+[data-cstd-theme="astral-covenant"] [data-cstd-depth-panel] > p:first-child,
+[data-cstd-theme="astral-covenant"] [data-cstd-depth-action] {
+  color: #77d6d1 !important;
+}
+
+[data-cstd-theme="astral-covenant"] :where(
+  [data-cstd-hero-thesis] [data-cstd-theme-copy="astral"] > span,
+  [data-cstd-chapter] h2 [data-cstd-theme-copy="astral"] > span,
+  [data-cstd-finale] h2 [data-cstd-theme-copy="astral"] > span
+) {
+  color: #c5a668 !important;
+  text-shadow: 0 2px 0 rgb(54 42 94 / 48%);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-entry-console] {
+  position: relative;
+  border: 1px solid #756749;
+  border-radius: 0.2rem;
+  background:
+    linear-gradient(150deg, rgb(141 121 220 / 12%), transparent 38%),
+    rgb(13 16 31 / 91%);
+  color: #f0e8d3;
+  box-shadow: 0 24px 68px rgb(1 2 9 / 52%), inset 0 0 0 0.55rem rgb(197 166 104 / 4%);
+  clip-path: polygon(0.8rem 0, calc(100% - 0.8rem) 0, 100% 0.8rem, 100% calc(100% - 0.8rem), calc(100% - 0.8rem) 100%, 0.8rem 100%, 0 calc(100% - 0.8rem), 0 0.8rem);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-entry-console]::before {
+  position: absolute;
+  inset: 0.6rem;
+  border: 1px solid rgb(197 166 104 / 15%);
+  border-radius: 50% 50% 0.15rem 0.15rem / 0.65rem 0.65rem 0.15rem 0.15rem;
+  content: "";
+  pointer-events: none;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-entry-status] > span,
+[data-cstd-theme="astral-covenant"] [data-cstd-depth-panel] > p:not(:first-child) {
+  color: #b9af9c;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-entry-status] i {
+  background: #8d79dc;
+  box-shadow: 0 0 16px #8d79dc;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-entry-ready="true"] [data-cstd-entry-status] i {
+  background: #77d6d1;
+  box-shadow: 0 0 16px #77d6d1;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-boot-step] {
+  height: 3px;
+  background: #262a43;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-boot-step-ready="true"] {
+  background: linear-gradient(90deg, #5a4aa0, #77d6d1, #c5a668);
+  box-shadow: 0 0 10px rgb(119 214 209 / 25%);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-depth-tabs] {
+  border-color: #675c43;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-depth-tabs] button {
+  border-color: rgb(197 166 104 / 22%);
+  color: #9e9584;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-depth-active="true"] {
+  background: #d6ba78 !important;
+  color: #121426 !important;
+  box-shadow: inset 0 -3px #6650ad;
+}
+
+[data-cstd-theme="astral-covenant"] :where([data-cstd-chapter], [data-cstd-finale]) {
+  border-color: rgb(197 166 104 / 24%) !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-light-chapter] {
+  background-color: #e4d8bc !important;
+  background-blend-mode: multiply !important;
+  color: #17182a !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-light-chapter] [data-cstd-chapter-header] > p,
+[data-cstd-theme="astral-covenant"] [data-cstd-light-chapter] article p {
+  color: #4f4a43 !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-light-chapter] [data-cstd-chapter-header] > div:first-child::before {
+  position: absolute;
+  inset: -1.2rem auto auto -1.35rem;
+  width: 4.5rem;
+  aspect-ratio: 1;
+  border: 1px solid rgb(83 69 132 / 22%);
+  border-radius: 50%;
+  content: "";
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-system-tabs] {
+  border-color: rgb(197 166 104 / 25%);
+  background: rgb(11 14 29 / 66%);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-studio-district-option] {
+  border-color: rgb(197 166 104 / 18%);
+  color: #afa690;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-system-active="true"] {
+  background: linear-gradient(90deg, rgb(86 69 151 / 65%), rgb(17 20 38 / 82%)) !important;
+  color: #f0e8d3 !important;
+  box-shadow: inset 3px 0 #77d6d1;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-system-visual] {
+  border-color: rgb(197 166 104 / 28%) !important;
+  background: rgb(9 12 26 / 62%);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-system-visual] img {
+  filter: saturate(0.68) hue-rotate(14deg) contrast(1.04);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-proof-grid] article {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgb(74 61 111 / 34%) !important;
+  border-radius: 0.15rem !important;
+  background: rgb(238 226 197 / 90%) !important;
+  box-shadow: 0.5rem 0.65rem 0 rgb(54 44 84 / 16%) !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-proof-grid] article::after {
+  position: absolute;
+  right: 0.65rem;
+  bottom: 0.65rem;
+  width: 1.2rem;
+  aspect-ratio: 1;
+  border: 1px solid rgb(102 78 164 / 35%);
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 0.25rem rgb(102 78 164 / 7%);
+  content: "";
+  pointer-events: none;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-proof-grid] article img {
+  filter: sepia(0.12) saturate(0.78) contrast(1.04);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-chain] {
+  border: 1px solid rgb(92 75 137 / 38%);
+  border-radius: 0.2rem;
+  background:
+    linear-gradient(90deg, rgb(223 209 179 / 92%) 0 49.7%, rgb(87 68 121 / 18%) 49.8% 50.2%, rgb(231 218 190 / 92%) 50.3%),
+    var(--cstd-material-image);
+  background-size: auto, 620px 620px;
+  background-blend-mode: normal, multiply;
+  color: #1c1b2d;
+  box-shadow: 0 24px 56px rgb(47 36 72 / 20%);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-chain-header] > div > p,
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-signal],
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-actions] a {
+  color: #594a92 !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-chain-header] > p,
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-phase-panel] > p:not([data-cstd-evidence-signal]) {
+  color: #554f46 !important;
+}
+
+[data-cstd-theme="astral-covenant"] :where(
+  [data-cstd-evidence-project-tabs],
+  [data-cstd-evidence-panel],
+  [data-cstd-evidence-phase-tabs]
+) {
+  border-color: rgb(81 64 121 / 28%) !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-project-active="true"] {
+  background: #5a4a93 !important;
+  color: #f1e8d4 !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-project-active="true"] :where(span, small) {
+  color: #f1e8d4 !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-phase-tabs] button {
+  color: #5e574c;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-phase-active="true"] {
+  background: rgb(100 81 156 / 10%) !important;
+  color: #40316f !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-evidence-phase-active="true"] i {
+  background: #77a9a8 !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-executable-evidence] > div {
+  border-top: 1px solid rgb(197 166 104 / 22%);
+  padding-top: 2rem;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-knowledge-list] {
+  border-top: 1px solid rgb(197 166 104 / 24%);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-knowledge-card] {
+  position: relative;
+  border-color: rgb(197 166 104 / 20%) !important;
+  background: linear-gradient(90deg, rgb(19 22 43 / 82%), rgb(31 29 55 / 56%));
+  transition: background 260ms ease, transform 260ms var(--cstd-theme-ease);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-knowledge-card]::before {
+  position: absolute;
+  top: 50%;
+  left: -0.22rem;
+  width: 0.42rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #77d6d1;
+  box-shadow: 0 0 12px #77d6d1;
+  content: "";
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-knowledge-card]:hover {
+  background: linear-gradient(90deg, rgb(64 52 111 / 72%), rgb(24 27 49 / 72%));
+  transform: translateX(0.35rem);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-finale] > div > [aria-hidden="true"] {
+  opacity: 0.48 !important;
+  filter: saturate(0.62) hue-rotate(12deg);
+}
+
+/* Five-act route rail. */
+
+[data-cstd-theme-scene-rail="astral-covenant"] {
+  border-left: 1px solid rgb(197 166 104 / 34%);
+  padding-left: 0.45rem;
+}
+
+[data-cstd-theme-scene-rail="astral-covenant"] > div > a {
+  color: #9a927f;
+}
+
+[data-cstd-theme-scene-rail="astral-covenant"] > div > a::before {
+  width: 0.46rem;
+  aspect-ratio: 1;
+  margin-right: 0.15rem;
+  clip-path: polygon(50% 0, 93% 27%, 84% 78%, 50% 100%, 12% 76%, 0 31%);
+  background: currentColor;
+  content: "";
+}
+
+[data-cstd-theme-scene-rail="astral-covenant"] [data-cstd-theme-scene-active="true"] > a {
+  border-color: #6e6044 !important;
+  background: linear-gradient(90deg, rgb(76 61 129 / 86%), rgb(13 16 31 / 95%));
+  color: #ead291 !important;
+  box-shadow: inset 3px 0 #77d6d1;
+}
+
+/* Header and controls. */
+
+[data-cstd-theme="astral-covenant"] [data-cstd-home-header] > div {
+  overflow: visible;
+  border-color: #655a43;
+  border-radius: 0.2rem;
+  background:
+    linear-gradient(90deg, rgb(99 80 164 / 13%), transparent 30%),
+    rgb(9 12 25 / 94%);
+  box-shadow: 0 18px 58px rgb(1 2 9 / 54%), inset 0 -1px rgb(197 166 104 / 12%);
+  clip-path: polygon(0.55rem 0, calc(100% - 0.55rem) 0, 100% 0.55rem, 100% 100%, 0 100%, 0 0.55rem);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-header-mark] {
+  background: linear-gradient(145deg, #dec780, #8b70cf) !important;
+  color: #111326 !important;
+  box-shadow: inset 0 0 0 1px rgb(255 244 204 / 32%);
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-header-brand],
+[data-cstd-theme="astral-covenant"] [data-cstd-header-brand-compact] {
+  color: #f0e8d3;
+  font-family: "CSTD Astral Display", serif;
+  font-weight: 400 !important;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-header-edition] {
+  color: #a69c88;
+}
+
+[data-cstd-theme="astral-covenant"] :where(.cstd-theme-switcher-trigger, [data-cstd-home-header] button) {
+  border-color: rgb(197 166 104 / 34%);
+  color: #d6ba78;
+}
+
+[data-cstd-theme="astral-covenant"] [data-cstd-nav-active="true"] {
+  color: #77d6d1 !important;
+}
+
+/* Deep pages and reading surfaces. */
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] {
+  background:
+    linear-gradient(rgb(8 10 23 / 90%), rgb(8 10 23 / 94%)),
+    var(--cstd-material-image);
+  background-size: auto, var(--cstd-material-size);
+  color: #f0e8d3;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] > header,
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] > footer {
+  border-color: rgb(197 166 104 / 28%) !important;
+  background: rgb(8 10 23 / 95%) !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-shell-overlay] {
+  background:
+    radial-gradient(circle at 82% 14%, rgb(118 96 207 / 14%), transparent 29%),
+    linear-gradient(180deg, rgb(8 10 23 / 8%), rgb(8 10 23 / 78%));
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero] {
+  border-color: rgb(197 166 104 / 26%) !important;
+  background: #090b17;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-image] {
+  filter: sepia(0.14) hue-rotate(8deg) saturate(0.68) contrast(1.06) brightness(0.72);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-overlay] {
+  background:
+    linear-gradient(90deg, rgb(7 9 21 / 98%) 0 43%, rgb(7 9 21 / 71%) 63%, rgb(7 9 21 / 18%)),
+    linear-gradient(0deg, rgb(7 9 21 / 72%), transparent 55%) !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-grid] {
+  opacity: 0.22 !important;
+  background-image:
+    radial-gradient(circle, rgb(119 214 209 / 40%) 0 1px, transparent 1.5px),
+    linear-gradient(35deg, transparent 49.6%, rgb(197 166 104 / 18%) 50%, transparent 50.4%) !important;
+  background-size: 74px 74px, 132px 132px !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-content] > div:first-child {
+  position: relative;
+  border-left: 1px solid #77d6d1;
+  padding-left: clamp(1rem, 2vw, 2rem);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-content] > div:first-child::before {
+  position: absolute;
+  top: -0.35rem;
+  left: -0.26rem;
+  width: 0.45rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #c5a668;
+  box-shadow: 0 0 16px #8d79dc;
+  content: "";
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-title] {
+  color: #f0e8d3 !important;
+  text-shadow: 0 3px 0 #352c62, 0 20px 64px rgb(1 2 9 / 62%);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-eyebrow],
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-scroll] {
+  color: #c5a668 !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-summary] {
+  color: #c9bea8 !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-metrics] {
+  border-color: #6f6247;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-metrics] > div {
+  border-color: rgb(197 166 104 / 24%);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-metrics] dt {
+  color: #9f9683 !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-metrics] dd {
+  color: #77d6d1 !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] :where(
+  [data-cstd-case-dossier],
+  [data-cstd-reading-document],
+  [data-cstd-topic-path],
+  [data-cstd-note-paths],
+  [data-cstd-proof-mesh],
+  [data-cstd-knowledge-constellation],
+  [data-cstd-case-film],
+  [data-cstd-case-replay],
+  [data-cstd-lab]
+) {
+  border-color: rgb(197 166 104 / 25%) !important;
+  border-radius: 0.15rem !important;
+  background-color: rgb(14 17 33 / 91%) !important;
+  background-image: var(--cstd-material-image) !important;
+  background-size: var(--cstd-material-size) !important;
+  background-blend-mode: soft-light !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] :where(
+  [class~="text-white"],
+  [class~="text-[#f2efe7]"],
+  [class~="text-[#dce1e2]"],
+  [class~="text-[#cbd3d5]"]
+) {
+  color: #f0e8d3 !important;
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] :where(
+  [class~="text-[#aeb8bb]"],
+  [class~="text-[#aeb7ba]"],
+  [class~="text-[#9aa4a8]"],
+  [class~="text-[#8f9ba0]"]
+) {
+  color: #b9af9c !important;
+}
+
+[data-cstd-theme="astral-covenant"] [class~="text-[#f4d431]"],
+[data-cstd-theme="astral-covenant"] [class~="text-[#007e92]"],
+[data-cstd-theme="astral-covenant"] [class~="text-[#005f70]"] {
+  color: #c5a668 !important;
+}
+
+[data-cstd-theme="astral-covenant"] [class~="text-[#24e0ff]"] {
+  color: #77d6d1 !important;
+}
+
+[data-cstd-theme="astral-covenant"] [class~="bg-[#f4d431]"] {
+  background-color: #c5a668 !important;
+}
+
+/* Deep-page fate compass. */
+
+.cstd-deep-astral-compass {
+  position: absolute;
+  top: 17%;
+  right: clamp(2rem, 7vw, 8rem);
+  display: none;
+  width: clamp(13rem, 21vw, 20rem);
+  min-height: 25rem;
+  border: 1px solid rgb(197 166 104 / 34%);
+  border-radius: 50% 50% 0.3rem 0.3rem / 2rem 2rem 0.3rem 0.3rem;
+  background:
+    radial-gradient(circle at 50% 47%, rgb(119 214 209 / 9%), transparent 29%),
+    rgb(11 14 29 / 64%);
+  color: #d6ba78;
+  box-shadow: inset 0 0 0 0.7rem rgb(141 121 220 / 5%), 0 30px 84px rgb(1 2 9 / 42%);
+}
+
+[data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-deep-artifact="astral"] {
+  display: block !important;
+}
+
+.cstd-deep-astral-compass::before,
+.cstd-deep-astral-compass::after {
+  position: absolute;
+  content: "";
+}
+
+.cstd-deep-astral-compass::before {
+  inset: 0.75rem;
+  border: 1px solid rgb(197 166 104 / 17%);
+  border-radius: inherit;
+}
+
+.cstd-deep-astral-compass::after {
+  top: 31%;
+  right: 1.2rem;
+  left: 1.2rem;
+  border-top: 1px solid rgb(119 214 209 / 32%);
+}
+
+.cstd-deep-astral-kicker,
+.cstd-deep-astral-oath {
+  position: absolute;
+  right: 1.4rem;
+  left: 1.4rem;
+  font-family: "CSTD Astral Display", serif;
+  font-size: 0.56rem;
+  text-align: center;
+}
+
+.cstd-deep-astral-kicker { top: 2rem; }
+.cstd-deep-astral-oath { bottom: 2rem; color: #b9af9c; }
+
+.cstd-deep-astral-die {
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  display: grid;
+  width: 6.7rem;
+  aspect-ratio: 1;
+  place-items: center;
+  clip-path: polygon(50% 0, 94% 26%, 100% 70%, 69% 100%, 24% 91%, 0 51%, 13% 13%);
+  background: rgb(70 55 125 / 48%);
+  color: #f0e8d3;
+  transform: translate(-50%, -50%);
+}
+
+.cstd-deep-astral-die::before {
+  position: absolute;
+  inset: 0.45rem;
+  clip-path: inherit;
+  border: 1px solid rgb(197 166 104 / 52%);
+  content: "";
+}
+
+.cstd-deep-astral-die b {
+  position: relative;
+  z-index: 2;
+  font-family: "CSTD Astral Display", serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+}
+
+.cstd-deep-astral-die i {
+  position: absolute;
+  inset: 49% 8% auto;
+  border-top: 1px solid rgb(119 214 209 / 42%);
+}
+
+.cstd-deep-astral-die i:first-child { transform: rotate(28deg); }
+.cstd-deep-astral-die i:last-child { transform: rotate(-39deg); }
+
+.cstd-deep-astral-route {
+  position: absolute;
+  right: 1.6rem;
+  bottom: 4.4rem;
+  left: 1.6rem;
+  display: flex;
+  justify-content: space-between;
+  border-top: 1px solid rgb(197 166 104 / 32%);
+}
+
+.cstd-deep-astral-route i {
+  width: 0.36rem;
+  aspect-ratio: 1;
+  margin-top: -0.2rem;
+  border: 1px solid #77d6d1;
+  border-radius: 50%;
+  background: #111426;
+}
+
+/* Transition and motion character. */
+
+html[data-cstd-theme-transition="astral-covenant"]::after {
+  background:
+    radial-gradient(circle at 72% 32%, transparent 0 10%, rgb(119 214 209 / 38%) 10.4% 10.8%, transparent 11.2%),
+    conic-gradient(from 210deg at 72% 32%, #090b17 0 22%, #8d79dc 22.5% 23%, #c5a668 23.5% 31%, #090b17 31.5% 100%);
+}
+
+[data-cstd-enhancements-ready="true"][data-cstd-motion="full"][data-cstd-theme="astral-covenant"] :where(
+  [data-cstd-chapter],
+  [data-cstd-finale]
+)[data-cstd-revealed="true"] h2 {
+  animation: cstd-astral-title-inscribe 760ms var(--cstd-theme-ease) both;
+}
+
+@keyframes cstd-astral-title-inscribe {
+  from { opacity: 0; transform: translate3d(0, 1rem, 0); filter: blur(4px); }
+  58% { opacity: 1; }
+  to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+
+@media (max-width: 1023px) {
+  .cstd-astral-die { right: 4vw; }
+  .cstd-astral-compass { right: 20vw; opacity: 0.5; }
+  .cstd-deep-astral-compass { right: 1.5rem; opacity: 0.42; }
+}
+
+@media (max-width: 767px) {
+  [data-cstd-theme="astral-covenant"] [data-cstd-stage-visual] {
+    inset: 0 -76% 0 -4%;
+  }
+
+  [data-cstd-theme="astral-covenant"] .cstd-stage-visual-image {
+    background-position: 58% center;
+  }
+
+  [data-cstd-theme="astral-covenant"] [data-cstd-stage-visual-wash] {
+    background: linear-gradient(90deg, rgb(7 9 21 / 98%) 0 46%, rgb(7 9 21 / 75%) 70%, rgb(7 9 21 / 22%));
+  }
+
+  .cstd-astral-furniture { display: none; }
+  .cstd-astral-die { top: 27vh; right: -8vw; width: 7rem; opacity: 0.42; }
+  .cstd-astral-compass { right: -18vw; bottom: 22vh; width: 12rem; opacity: 0.34; }
+
+  [data-cstd-theme-scene-rail="astral-covenant"] {
+    top: auto;
+    right: 0.75rem;
+    bottom: max(0.65rem, env(safe-area-inset-bottom));
+    left: 0.75rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    border: 1px solid #655a43;
+    border-radius: 0.2rem;
+    background: rgb(9 12 25 / 95%);
+    padding: 0.3rem;
+    box-shadow: 0 16px 44px rgb(1 2 9 / 58%);
+  }
+
+  [data-cstd-theme-scene-rail="astral-covenant"] > div > a::before {
+    display: none;
+  }
+
+  [data-cstd-theme="astral-covenant"] [data-cstd-proof-grid] article {
+    box-shadow: 0.3rem 0.4rem 0 rgb(54 44 84 / 16%) !important;
+  }
+
+  [data-cstd-theme="astral-covenant"] [data-cstd-evidence-chain] {
+    background: rgb(229 216 186 / 94%);
+  }
+
+  [data-cstd-deep-shell][data-cstd-theme="astral-covenant"] [data-cstd-page-hero-content] > div:first-child {
+    padding-left: 0.9rem;
+  }
+
+  .cstd-deep-astral-compass {
+    top: 12%;
+    right: -4.5rem;
+    width: 13rem;
+    min-height: 21rem;
+    opacity: 0.18;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cstd-astral-die,
+  .cstd-astral-compass i,
+  [data-cstd-theme="astral-covenant"] [data-cstd-chapter] h2 {
+    animation: none !important;
+  }
+}

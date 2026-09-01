@@ -6,12 +6,14 @@ export function ThemeCopy({
   press,
   pixel,
   underworld,
+  astral,
 }: {
   neon: ReactNode;
   ink: ReactNode;
   press: ReactNode;
   pixel: ReactNode;
   underworld: ReactNode;
+  astral: ReactNode;
 }) {
   return (
     <>
@@ -20,6 +22,7 @@ export function ThemeCopy({
       <span data-cstd-theme-copy="press">{press}</span>
       <span data-cstd-theme-copy="pixel">{pixel}</span>
       <span data-cstd-theme-copy="underworld">{underworld}</span>
+      <span data-cstd-theme-copy="astral">{astral}</span>
     </>
   );
 }
@@ -30,12 +33,14 @@ export function ThemeChapterLabel({
   press,
   pixel,
   underworld,
+  astral,
 }: {
   neon: string;
   ink: string;
   press: string;
   pixel: string;
   underworld: string;
+  astral: string;
 }) {
-  return <ThemeCopy neon={neon} ink={ink} press={press} pixel={pixel} underworld={underworld} />;
+  return <ThemeCopy neon={neon} ink={ink} press={press} pixel={pixel} underworld={underworld} astral={astral} />;
 }

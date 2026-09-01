@@ -29,6 +29,7 @@ export const cstdExperienceContract = {
     "press-room": "select-source-correct",
     "pixel-quest": "choose-route-clear",
     "underworld-forge": "descend-forge-return",
+    "astral-covenant": "gather-choose-inscribe",
   } as const,
   runtime: {
     progressiveOrder: cstdPerformanceContract.delivery.runtimeFallbackOrder,

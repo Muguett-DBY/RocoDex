@@ -23,13 +23,14 @@ type HeroThemeCopy = Readonly<{
   description: string;
 }>;
 
-const heroCopy: Record<CstdLocale, Record<"neon" | "ink" | "press" | "pixel" | "underworld", HeroThemeCopy>> = {
+const heroCopy: Record<CstdLocale, Record<"neon" | "ink" | "press" | "pixel" | "underworld" | "astral", HeroThemeCopy>> = {
   zh: {
     neon: { kicker: "CSTD / PERSONAL STUDIO", role: "PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER", thesis: "我把问题拆开，", accent: "直到它能在现实里运行。", description: "我做产品，也做背后的系统。界面、AI、数据和发布都要经得住真实使用，而不是只在演示里好看。" },
     ink: { kicker: "奶黄包 · 工程手卷", role: "产品工程 · 智能系统 · 造物求真", thesis: "先把问题说清，", accent: "再把系统做成。", description: "一卷一卷记录我怎么做决定：什么该保留，什么要舍弃，哪里必须留下证据。" },
     press: { kicker: "THE LEAD / PROFILE", role: "INDEPENDENT PRODUCT ENGINEER / SYSTEMS DESK", thesis: "今日头条：", accent: "一个人把复杂系统做完。", description: "本期记录一名产品工程师如何在产品、AI、数据和发布之间来回切换，并把结果交到真实用户手里。" },
     pixel: { kicker: "NEW GAME / PLAYER 01", role: "CLASS / PRODUCT ENGINEER + SYSTEM BUILDER", thesis: "主线任务：", accent: "把想法做成能用的东西。", description: "拿产品、AI、数据和工程当装备，从第一个草图开始，打通实现、修 bug 和上线验收。" },
     underworld: { kicker: "冥府档案 / 造物者 017", role: "产品工程师 / 系统铸造者", thesis: "困难的系统，", accent: "要经得住一次次归返。", description: "我把产品、AI、数据和发布放进同一座工坊：先锻出形，再过试炼，最后带着证据回到现实。" },
+    astral: { kicker: "星界旅记 / 冒险者 017", role: "产品工程师 / 系统策士", thesis: "复杂系统，", accent: "也是一场由选择写成的冒险。", description: "我把需求、代码、数据和发布摊开在同一张冒险桌上：看清局势，组成工具，做出选择，再带着证据继续前进。" },
   },
   en: {
     neon: { kicker: "CSTD / PERSONAL STUDIO", role: "PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER", thesis: "I take problems apart", accent: "until they work in the real world.", description: "I build products and the systems behind them. Interfaces, AI, data, and release all have to survive real use, not just a polished demo." },
@@ -37,6 +38,7 @@ const heroCopy: Record<CstdLocale, Record<"neon" | "ink" | "press" | "pixel" | "
     press: { kicker: "THE LEAD / PROFILE", role: "INDEPENDENT PRODUCT ENGINEER / SYSTEMS DESK", thesis: "Today's lead:", accent: "one person ships a complex system.", description: "This issue follows a product engineer across product, AI, data, and release work, then into the hands of people who use the result." },
     pixel: { kicker: "NEW GAME / PLAYER 01", role: "CLASS / PRODUCT ENGINEER + SYSTEM BUILDER", thesis: "Main quest:", accent: "turn an idea into something useful.", description: "Use product, AI, data, and engineering as your kit. Start with a sketch, then work through implementation, bug fixes, and release checks." },
     underworld: { kicker: "UNDERWORLD ARCHIVE / MAKER 017", role: "PRODUCT ENGINEER / SYSTEMS ARTIFICER", thesis: "Difficult systems are forged", accent: "through trial and return.", description: "I bring product, AI, data, and release into one workshop: shape the system, put it through trial, then return it to the real world with evidence intact." },
+    astral: { kicker: "ASTRAL JOURNAL / ADVENTURER 017", role: "PRODUCT ENGINEER / SYSTEMS TACTICIAN", thesis: "Complex systems are adventures", accent: "written by choices.", description: "I spread product, code, data, and release across one campaign table: read the situation, assemble the tools, choose a route, and keep the evidence for what comes next." },
   },
 };
 
@@ -68,6 +70,7 @@ export function NeuralGate({ narrativeMode, locale }: { narrativeMode: CstdNarra
               press={copy.press.kicker}
               pixel={copy.pixel.kicker}
               underworld={copy.underworld.kicker}
+              astral={copy.astral.kicker}
             />
           </p>
 
@@ -86,6 +89,7 @@ export function NeuralGate({ narrativeMode, locale }: { narrativeMode: CstdNarra
               press={copy.press.role}
               pixel={copy.pixel.role}
               underworld={copy.underworld.role}
+              astral={copy.astral.role}
             />
           </p>
 
@@ -100,6 +104,7 @@ export function NeuralGate({ narrativeMode, locale }: { narrativeMode: CstdNarra
               press={<>{copy.press.thesis}<span className="block text-[#f4d431]">{copy.press.accent}</span></>}
               pixel={<>{copy.pixel.thesis}<span className="block text-[#f4d431]">{copy.pixel.accent}</span></>}
               underworld={<>{copy.underworld.thesis}<span className="block text-[#f4d431]">{copy.underworld.accent}</span></>}
+              astral={<>{copy.astral.thesis}<span className="block text-[#f4d431]">{copy.astral.accent}</span></>}
             />
           </p>
           <p data-cstd-hero-description className="mt-5 max-w-xl text-base leading-7 text-[#aeb8bb] md:text-lg md:leading-8">
@@ -109,6 +114,7 @@ export function NeuralGate({ narrativeMode, locale }: { narrativeMode: CstdNarra
               press={copy.press.description}
               pixel={copy.pixel.description}
               underworld={copy.underworld.description}
+              astral={copy.astral.description}
             />
           </p>
 

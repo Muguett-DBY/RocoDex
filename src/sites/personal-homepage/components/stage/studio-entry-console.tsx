@@ -87,7 +87,7 @@ export function StudioEntryConsole({ locale }: { locale: CstdLocale }) {
     <aside data-cstd-entry-console data-cstd-entry-ready={bootPhase === bootSteps.length ? "true" : "false"} aria-label={locale === "zh" ? "主页浏览深度" : "Homepage viewing depth"}>
       <div data-cstd-entry-status className="flex items-center justify-between gap-4">
         <p className="font-mono text-[10px] font-black">
-          <ThemeCopy neon="STUDIO LINK" ink={locale === "zh" ? "展卷" : "UNFURL"} press={locale === "zh" ? "本期导读" : "ISSUE GUIDE"} pixel={locale === "zh" ? "任务选择" : "QUEST SELECT"} underworld={locale === "zh" ? "踏入工坊" : "ENTER THE FORGE"} />
+          <ThemeCopy neon="STUDIO LINK" ink={locale === "zh" ? "展卷" : "UNFURL"} press={locale === "zh" ? "本期导读" : "ISSUE GUIDE"} pixel={locale === "zh" ? "任务选择" : "QUEST SELECT"} underworld={locale === "zh" ? "踏入工坊" : "ENTER THE FORGE"} astral={locale === "zh" ? "打开冒险日志" : "OPEN ADVENTURE LOG"} />
         </p>
         <span className="inline-flex items-center gap-2 font-mono text-[9px] font-black">
           <i aria-hidden="true" />

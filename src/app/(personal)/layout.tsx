@@ -7,6 +7,7 @@ import "../cstd-theme-compositions.css";
 import "../cstd-theme-foundations.css";
 import "../cstd-studio-stage.css";
 import "../cstd-theme-underworld.css";
+import "../cstd-theme-astral.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://custard.top"),

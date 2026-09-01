@@ -14,7 +14,7 @@ export function ExecutableEvidence({ locale }: { locale: CstdLocale }) {
       <span id="operator" aria-hidden="true" className="absolute left-0 top-0 h-px w-px scroll-mt-20" />
       <div data-cstd-evidence-layout className="mx-auto grid max-w-[1320px] gap-10 xl:grid-cols-[minmax(25rem,0.9fr)_minmax(0,1.1fr)] xl:items-start xl:gap-16">
         <div>
-          <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><FlaskConical aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="03B / EXECUTABLE EVIDENCE" ink={locale === "zh" ? "第三卷下 / 实证" : "SCROLL III-B / PROOF IN MOTION"} press={locale === "zh" ? "调查附录 / 测试台" : "INVESTIGATION / TEST BENCH"} pixel={locale === "zh" ? "关卡 03B / BOSS 实验室" : "LEVEL 03-B / BOSS LAB"} underworld={locale === "zh" ? "试炼场 / 可执行证据" : "TRIAL CHAMBER / EXECUTABLE PROOF"} /></p>
+          <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><FlaskConical aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="03B / EXECUTABLE EVIDENCE" ink={locale === "zh" ? "第三卷下 / 实证" : "SCROLL III-B / PROOF IN MOTION"} press={locale === "zh" ? "调查附录 / 测试台" : "INVESTIGATION / TEST BENCH"} pixel={locale === "zh" ? "关卡 03B / BOSS 实验室" : "LEVEL 03-B / BOSS LAB"} underworld={locale === "zh" ? "试炼场 / 可执行证据" : "TRIAL CHAMBER / EXECUTABLE PROOF"} astral={locale === "zh" ? "命运判定 / 可执行证据" : "FATE CHECK / EXECUTABLE PROOF"} /></p>
           <h2 id="executable-evidence-heading" className="mt-5 text-4xl font-semibold leading-[1] md:text-6xl xl:text-[3.75rem]">
             <ThemeCopy
               neon={locale === "zh" ? <>案例不只可读，<span className="block text-[#f4d431]">还可以运行。</span></> : <>A case is not only readable.<span className="block text-[#f4d431]">It can be executed.</span></>}
@@ -22,6 +22,7 @@ export function ExecutableEvidence({ locale }: { locale: CstdLocale }) {
               press={locale === "zh" ? <>编辑部不刊登，<span className="block text-[#f4d431]">未经复核的结论。</span></> : <>This desk does not publish<span className="block text-[#f4d431]">an unverified conclusion.</span></>}
               pixel={locale === "zh" ? <>进入 BOSS LAB，<span className="block text-[#f4d431]">亲自运行结果。</span></> : <>Enter the BOSS LAB.<span className="block text-[#f4d431]">Run the result yourself.</span></>}
               underworld={locale === "zh" ? <>别把结果写成传说，<span className="block text-[#f4d431]">运行才算证词。</span></> : <>Do not turn the result into legend.<span className="block text-[#f4d431]">The run is the testimony.</span></>}
+              astral={locale === "zh" ? <>结果不能靠传闻，<span className="block text-[#f4d431]">掷下骰子，亲自过一次判定。</span></> : <>A result cannot live on hearsay.<span className="block text-[#f4d431]">Make the roll and test it yourself.</span></>}
             />
           </h2>
           <p className="mt-5 max-w-xl text-base leading-8 text-[#aeb7ba]">
@@ -31,6 +32,7 @@ export function ExecutableEvidence({ locale }: { locale: CstdLocale }) {
               press={locale === "zh" ? "编辑部只收能复核的稿件。改动输入，重新运行，再看哪一条结论仍然站得住。" : "This desk only runs copy that can be checked. Change the input, run it again, and see which conclusion still holds."}
               pixel={locale === "zh" ? "别只看战报，自己按下运行。改一个参数，看看这个边界能不能过关。" : "Do not only read the battle report. Run it yourself, change a parameter, and see whether the boundary clears."}
               underworld={locale === "zh" ? "每个系统都要进试炼场。改动条件、重新点火，看看哪条结论还能从熔炉里完整走出来。" : "Every system enters the trial chamber. Change a condition, light the forge again, and see which conclusion emerges intact."}
+              astral={locale === "zh" ? "每个结论都要接受一次判定。改动条件、重新运行，看看成功究竟来自运气，还是来自系统本身。" : "Every conclusion has to face a check. Change the conditions, run it again, and see whether success came from luck or from the system itself."}
             />
           </p>
           <div className="mt-6 flex flex-wrap gap-6">
