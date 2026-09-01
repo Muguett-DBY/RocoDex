@@ -16,6 +16,7 @@ const themes = [
   { id: "press-room", artifact: "press" },
   { id: "pixel-quest", artifact: "pixel" },
   { id: "underworld-forge", artifact: "underworld" },
+  { id: "astral-covenant", artifact: "astral" },
 ];
 
 const captures = [

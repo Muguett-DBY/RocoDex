@@ -16,7 +16,8 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
     "ink-protocol": "ink-scroll",
     "press-room": "broadsheet",
     "pixel-quest": "pixel-game",
-    "underworld-forge": "mythic-underworld"
+    "underworld-forge": "mythic-underworld",
+    "astral-covenant": "fantasy-codex"
   };
   let theme = "neon-district";
   try {

@@ -1,4 +1,4 @@
-const allowedMetricName = /^(?:LCP|CLS|INP|page_view|client_error|atlas_district|graph_node|case_film_beat|case_act_share|case_failure_drill|case_replay|knowledge_path|lab_loaded|lab_conflict|route_transition|guide_(?:answer|refusal)|narrative_(?:builder|researcher|collaborator)|visual_(?:full|balanced|calm)|reading_(?:studio|quiet)|theme_(?:neon-district|ink-protocol|press-room|pixel-quest|underworld-forge))$/;
+const allowedMetricName = /^(?:LCP|CLS|INP|page_view|client_error|atlas_district|graph_node|case_film_beat|case_act_share|case_failure_drill|case_replay|knowledge_path|lab_loaded|lab_conflict|route_transition|guide_(?:answer|refusal)|narrative_(?:builder|researcher|collaborator)|visual_(?:full|balanced|calm)|reading_(?:studio|quiet)|theme_(?:neon-district|ink-protocol|press-room|pixel-quest|underworld-forge|astral-covenant))$/;
 
 type QuotaWindow = { startedAt: number; count: number };
 const quotaByIdentity = new Map<string, QuotaWindow>();

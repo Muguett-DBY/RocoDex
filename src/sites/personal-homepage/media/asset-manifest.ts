@@ -69,6 +69,7 @@ export const cstdThemeWorldAssets = {
   "press-room": "/cstd-themes/press-room-v1.webp",
   "pixel-quest": "/cstd-themes/pixel-quest-v1.webp",
   "underworld-forge": "/cstd-themes/underworld-forge-v1.webp",
+  "astral-covenant": "/cstd-themes/astral-covenant-v1.webp",
 } as const;
 
 export const cstdThemeStageAssets = {
@@ -97,6 +98,11 @@ export const cstdThemeStageAssets = {
     alt: { zh: "黑曜石冥府工坊中的熔流、金箔壁画与工程制图台", en: "Molten channels, gilded reliefs, and a drafting table inside a basalt underworld forge" },
     position: "center center",
   },
+  "astral-covenant": {
+    src: "/cstd-stage/cstd-astral-covenant-v1.webp",
+    alt: { zh: "星界观测台上的羊皮卷、黄铜天球仪与水晶命运骰", en: "Vellum maps, a brass astrolabe, and a crystal fate die on an astral observatory table" },
+    position: "center center",
+  },
 } as const satisfies Record<CstdThemeId, { src: string; alt: LocalizedText; position: string }>;
 
 export const cstdThemeMaterialAssets = {
@@ -105,6 +111,7 @@ export const cstdThemeMaterialAssets = {
   "press-room": "/cstd-materials/press-newsprint-v1.webp",
   "pixel-quest": "/cstd-materials/pixel-circuit-v1.webp",
   "underworld-forge": "/cstd-materials/underworld-basalt-v1.webp",
+  "astral-covenant": "/cstd-materials/astral-vellum-v1.webp",
 } as const satisfies Record<CstdThemeId, string>;
 
 export const cstdThemeFontAssets = {
@@ -127,5 +134,9 @@ export const cstdThemeFontAssets = {
   "underworld-forge": {
     zh: ["/fonts/cstd/underworld-display-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"],
     en: ["/fonts/cstd/underworld-display-v1.woff2"],
+  },
+  "astral-covenant": {
+    zh: ["/fonts/cstd/astral-display-v1.woff2", "/fonts/cstd/press-serif-v1.woff2"],
+    en: ["/fonts/cstd/astral-display-v1.woff2"],
   },
 } as const satisfies Record<CstdThemeId, Record<CstdLocale, readonly string[]>>;
