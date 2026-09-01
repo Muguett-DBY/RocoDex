@@ -5,9 +5,6 @@ These seamless visual materials were generated with OpenAI image generation in b
 | Asset | Theme | Generation prompt summary |
 | --- | --- | --- |
 | `neon-alloy-v1.webp` | Neon District | Premium near-black anodized metal and smoked acrylic, subtle machining grain, restrained cyan and amber spectral glints. |
-| `ink-xuan-v1.webp` | Ink Protocol | Warm xuan paper with visible fibers, restrained ink blooms, dry-brush traces and sparse vermilion registration marks. |
-| `press-newsprint-v1.webp` | Press Room | Uncoated newsprint with offset pressure, fine halftone, fold, crop and registration traces with subtle cyan-red misregistration. |
-| `pixel-circuit-v1.webp` | Pixel Quest | Strict 16-color pixel circuit and tile field with crisp integer geometry and no antialiasing. |
 | `underworld-basalt-v1.webp` | Underworld Forge | Hand-painted black basalt, bronze geometric borders, gold-leaf fractures, dried crimson pigment and sparse spectral-green embers. |
 | `astral-vellum-v1.webp` | Astral Covenant | Midnight-blue vellum with celestial cartography, worn brass arcs, restrained violet ink and sparse teal constellation marks. |
 

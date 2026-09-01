@@ -41,13 +41,10 @@ export function KnowledgeLens({ observatory, locale }: { observatory: CstdHomepa
       <div className="relative mx-auto max-w-[1320px]">
         <header data-cstd-chapter-header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="04 / TECH NOTES" ink={locale === "zh" ? "第四卷 / 心法" : "SCROLL IV / JUDGMENT"} press={locale === "zh" ? "栏目 D / 观点与札记" : "SECTION D / OPINION & NOTES"} pixel={locale === "zh" ? "关卡 04 / 知识房" : "LEVEL 04 / LORE LIBRARY"} underworld={locale === "zh" ? "神谕殿 / 技术札记" : "ORACLE HALL / TECH NOTES"} astral={locale === "zh" ? "第四章 / 旅途编年史" : "CHAPTER IV / TRAVEL CHRONICLE"} /></p>
+            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><BrainCircuit aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="04 / TECH NOTES" underworld={locale === "zh" ? "神谕殿 / 技术札记" : "ORACLE HALL / TECH NOTES"} astral={locale === "zh" ? "第四章 / 旅途编年史" : "CHAPTER IV / TRAVEL CHRONICLE"} /></p>
             <h2 id="knowledge-lens-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
               <ThemeCopy
                 neon={locale === "zh" ? <>技术分享不堆术语，<span className="block text-[#f4d431]">只讲做过的判断。</span></> : <>Technical writing without a jargon wall.<span className="block text-[#f4d431]">Only decisions tested in practice.</span></>}
-                ink={locale === "zh" ? <>行路有迹，<span className="block text-[#f4d431]">判断成章。</span></> : <>The path leaves a trace.<span className="block text-[#f4d431]">Judgment becomes a chapter.</span></>}
-                press={locale === "zh" ? <>观点必须有来源，<span className="block text-[#f4d431]">判断必须能追溯。</span></> : <>Every opinion needs a source.<span className="block text-[#f4d431]">Every judgment must be traceable.</span></>}
-                pixel={locale === "zh" ? <>解锁 LORE LIBRARY，<span className="block text-[#f4d431]">查看通关思路。</span></> : <>Unlock the LORE LIBRARY.<span className="block text-[#f4d431]">Inspect the strategy behind each clear.</span></>}
                 underworld={locale === "zh" ? <>神谕不替人判断，<span className="block text-[#f4d431]">只留下可追的线索。</span></> : <>An oracle does not decide for you.<span className="block text-[#f4d431]">It leaves a trail you can follow.</span></>}
                 astral={locale === "zh" ? <>地图不会替你选择，<span className="block text-[#f4d431]">但会标出每条走过的路。</span></> : <>A map will not choose for you.<span className="block text-[#f4d431]">It records every road already taken.</span></>}
               />
@@ -56,9 +53,6 @@ export function KnowledgeLens({ observatory, locale }: { observatory: CstdHomepa
           <p className="text-sm leading-7 text-[#aeb8bb] md:text-base md:leading-8">
             <ThemeCopy
               neon={locale === "zh" ? "有问题就从问题开始。答案、依据和下一步都放在眼前，不把读者赶去猜我的上下文。" : "Start with the question. The answer, its evidence, and the next step stay in view instead of making readers guess the context."}
-              ink={locale === "zh" ? "札记不是心得墙，而是做过事情之后留下的回声。沿着出处读，才知道一笔从哪里起。" : "These are not mood-board reflections. They are notes left by work already done; follow the source to see where each line began."}
-              press={locale === "zh" ? "本栏每条观点都标出出处。你可以从标题读到结论，也可以反过来从证据追问标题。" : "Every opinion in this column has a source. Read from headline to conclusion, or work backwards from evidence to the claim."}
-              pixel={locale === "zh" ? "欢迎查攻略，但别跳过地图。每个答案都连着一个案例或札记，顺着节点继续探索。" : "Use the guide, but do not skip the map. Every answer connects to a case or note; follow the node when you want the longer route."}
               underworld={locale === "zh" ? "这些札记不预言答案，只记录问题怎样被拆开、依据从哪里来，以及下一次应该把火烧向哪里。" : "These notes predict nothing. They record how a problem was opened, where the evidence came from, and where the next fire should be aimed."}
               astral={locale === "zh" ? "这些札记像旅途中摊开的地图：写下岔路、代价和当时没选的方向，下一次出发时就不必重新迷路。" : "These notes are maps opened on the road. They mark the fork, the cost, and the route left untaken so the next journey does not begin lost."}
             />

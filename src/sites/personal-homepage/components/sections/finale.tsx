@@ -47,14 +47,11 @@ export function Finale({ narrativeMode, locale }: { narrativeMode: CstdNarrative
           <div className="max-w-6xl">
             <p className="flex items-center gap-3 font-mono text-[11px] font-black uppercase text-[#24e0ff]">
               <RadioTower aria-hidden="true" className="h-4 w-4" />
-              <ThemeChapterLabel neon="05 / FINAL TRANSMISSION" ink={locale === "zh" ? "卷尾 / 山高水长" : "CLOSING SCROLL / THE PATH CONTINUES"} press={locale === "zh" ? "末版 / 晚刊" : "BACK PAGE / LATE EDITION"} pixel={locale === "zh" ? "最终关 / 继续？" : "FINAL STAGE / CONTINUE?"} underworld={locale === "zh" ? "终章 / 再赴人间" : "FINAL CANTO / RETURN"} astral={locale === "zh" ? "终章 / 营火仍明" : "FINAL CHAPTER / CAMPFIRE LIT"} />
+              <ThemeChapterLabel neon="05 / FINAL TRANSMISSION" underworld={locale === "zh" ? "终章 / 再赴人间" : "FINAL CANTO / RETURN"} astral={locale === "zh" ? "终章 / 营火仍明" : "FINAL CHAPTER / CAMPFIRE LIT"} />
             </p>
             <h2 className="cstd-finale-title mt-8 text-5xl font-black leading-[0.9] tracking-[0] md:text-7xl lg:text-[6.5rem]">
               <ThemeCopy
                 neon={locale === "zh" ? <>仍在<span className="block text-[#f4d431]">构建。</span></> : <>STILL<span className="block text-[#f4d431]">BUILDING.</span></>}
-                ink={locale === "zh" ? <>山水未尽<span className="block text-[#f4d431]">工程长流。</span></> : <>THE SCROLL CONTINUES<span className="block text-[#f4d431]">BEYOND THIS FRAME.</span></>}
-                press={locale === "zh" ? <>下一期<span className="block text-[#f4d431]">正在编辑中。</span></> : <>THE NEXT EDITION<span className="block text-[#f4d431]">IS IN PROGRESS.</span></>}
-                pixel={locale === "zh" ? <>任务完成<span className="block text-[#f4d431]">新游戏+</span></> : <>QUEST CLEAR<span className="block text-[#f4d431]">NEW GAME+</span></>}
                 underworld={locale === "zh" ? <>炉火未熄<span className="block text-[#f4d431]">继续锻造。</span></> : <>THE FIRE HOLDS<span className="block text-[#f4d431]">THE WORK RETURNS.</span></>}
                 astral={locale === "zh" ? <>营火还亮着<span className="block text-[#f4d431]">下一段旅程继续写。</span></> : <>THE CAMPFIRE HOLDS<span className="block text-[#f4d431]">THE NEXT JOURNEY BEGINS.</span></>}
               />

@@ -32,13 +32,10 @@ export function SelectedWork({ narrativeMode, locale }: { narrativeMode: CstdNar
       <div className="mx-auto max-w-[1320px]">
         <header data-cstd-chapter-header className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#005f70]"><RadioTower aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="03 / SELECTED WORK" ink={locale === "zh" ? "第三卷 / 成器" : "SCROLL III / WORKS MADE REAL"} press={locale === "zh" ? "栏目 B / 现场报道" : "SECTION B / FIELD REPORTS"} pixel={locale === "zh" ? "关卡 03 / 任务日志" : "LEVEL 03 / QUEST LOG"} underworld={locale === "zh" ? "第三殿 / 已成之器" : "HALL III / WORKS FORGED"} astral={locale === "zh" ? "第三章 / 已走过的旅程" : "CHAPTER III / JOURNEYS TAKEN"} /></p>
+            <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#005f70]"><RadioTower aria-hidden="true" className="h-4 w-4" /> <ThemeChapterLabel neon="03 / SELECTED WORK" underworld={locale === "zh" ? "第三殿 / 已成之器" : "HALL III / WORKS FORGED"} astral={locale === "zh" ? "第三章 / 已走过的旅程" : "CHAPTER III / JOURNEYS TAKEN"} /></p>
             <h2 id="proof-heading" className="mt-5 max-w-4xl text-4xl font-semibold leading-[1] md:text-6xl lg:text-[4rem]">
               <ThemeCopy
                 neon={locale === "zh" ? <>三个系统，<span className="block text-[#007e92]">三条足够清楚的证据链。</span></> : <>Three systems.<span className="block text-[#007e92]">Three inspectable chains of evidence.</span></>}
-                ink={locale === "zh" ? <>器成有痕，<span className="block text-[#007e92]">落款为证。</span></> : <>Each finished object leaves a trace.<span className="block text-[#007e92]">The signature is evidence.</span></>}
-                press={locale === "zh" ? <>三份现场报道，<span className="block text-[#007e92]">一条证据链。</span></> : <>Three reports from the field.<span className="block text-[#007e92]">One accountable evidence chain.</span></>}
-                pixel={locale === "zh" ? <>三项主线任务，<span className="block text-[#007e92]">战绩可验证。</span></> : <>Three main quests.<span className="block text-[#007e92]">Every clear is verifiable.</span></>}
                 underworld={locale === "zh" ? <>三件已成之器，<span className="block text-[#007e92]">每件都带着试炼的刻痕。</span></> : <>Three works leave the forge.<span className="block text-[#007e92]">Each carries the mark of its trials.</span></>}
                 astral={locale === "zh" ? <>三段已经走过的旅程，<span className="block text-[#007e92]">每一段都有选择与后果。</span></> : <>Three journeys already travelled.<span className="block text-[#007e92]">Each carries its choices and consequences.</span></>}
               />
@@ -47,9 +44,6 @@ export function SelectedWork({ narrativeMode, locale }: { narrativeMode: CstdNar
           <p className="border-l border-black/20 pl-6 text-sm leading-7 text-[#465156] md:text-base md:leading-8">
             <ThemeCopy
               neon={locale === "zh" ? "首页先给你看结果：什么做成了，为什么这样做，现在哪里能打开。完整拆解留给案例页。" : "The homepage starts with outcomes: what shipped, why it was shaped that way, and where it runs now. The full teardown lives in the case archive."}
-              ink={locale === "zh" ? "先看器物，再看落款。首页只保留作品最重要的几笔，剩下的来处和改稿放进案例卷。" : "Look at the object, then read the signature. The homepage keeps the essential strokes; the case scroll holds the revisions and the work behind them."}
-              press={locale === "zh" ? "本版不把项目写成报表。每篇现场报道只留下结果、关键取舍和可核验的出处。" : "This desk does not turn projects into spreadsheets. Each field report keeps the result, the decisive trade-off, and its checkable source."}
-              pixel={locale === "zh" ? "这里展示已经过关的任务，不展开整张技能树。想看地图、失败和掉落物，进入对应案例。" : "This screen shows cleared quests, not the whole skill tree. Enter a case for the map, the failures, and the loot."}
               underworld={locale === "zh" ? "这里不陈列未经试炼的样品。每件作品只留下结果、关键取舍和仍可核验的锻造记录。" : "Nothing leaves this forge untested. Each work keeps its outcome, decisive trade-off, and an inspectable record of how it was made."}
               astral={locale === "zh" ? "这里不写注定胜利的英雄故事。每段旅程只留下当时的局势、真正做过的选择，以及现在仍能核验的结果。" : "These are not tales of inevitable victory. Each journey keeps the situation, the choice that was actually made, and the outcome you can still verify."}
             />

@@ -14,9 +14,6 @@ import { CstdLanguageSwitcher } from "./site/cstd-language-switcher";
 const homepageLinks = cstdSceneManifest.filter((scene) => scene.id === "systems" || scene.id === "proof" || scene.id === "path");
 
 function getThemeMark(theme: CstdThemeId, locale: CstdLocale) {
-  if (theme === "ink-protocol") return locale === "zh" ? "墨" : "IK";
-  if (theme === "press-room") return locale === "zh" ? "报" : "PR";
-  if (theme === "pixel-quest") return "8B";
   if (theme === "underworld-forge") return locale === "zh" ? "冥" : "UF";
   if (theme === "astral-covenant") return locale === "zh" ? "星" : "AC";
   return locale === "zh" ? "奶" : "CS";
@@ -102,6 +99,7 @@ export function HomepageHeader({
           <CstdLanguageSwitcher locale={locale} compact />
           <HomepageControls
             locale={locale}
+            theme={theme}
             overdrive={overdrive}
             reducedMotion={reducedMotion}
             onToggleOverdrive={onToggleOverdrive}

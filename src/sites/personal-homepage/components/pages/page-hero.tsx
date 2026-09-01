@@ -48,22 +48,6 @@ export function CstdPageHero({
           <span className="cstd-deep-neon-signal"><i /><i /><i /><i /><i /><i /></span>
           <span className="cstd-deep-neon-lock">{locale === "zh" ? "信号已锁定" : "SIGNAL LOCKED"}</span>
         </div>
-        <div data-cstd-deep-artifact="ink" className="cstd-deep-ink-colophon">
-          <span>{locale === "zh" ? "奶黄包作品录" : "CUSTARD WORKS"}</span>
-          <span>{locale === "zh" ? "以代码为墨" : "CODE AS INK"}</span>
-          <i>{locale === "zh" ? "序" : "01"}</i>
-        </div>
-        <div data-cstd-deep-artifact="press" className="cstd-deep-press-folio">
-          <span>{locale === "zh" ? "CSTD 日报 / 独立工程" : "CSTD DAILY / INDEPENDENT ENGINEERING"}</span>
-          <span>{locale === "zh" ? "悉尼 · 技术与作品" : "SYDNEY · SYSTEMS & WORK"}</span>
-          <strong>{locale === "zh" ? "第 04 期" : "VOL. 04"}</strong>
-        </div>
-        <div data-cstd-deep-artifact="pixel" className="cstd-deep-pixel-hud">
-          <span className="cstd-deep-pixel-status">{locale === "zh" ? "任务数据" : "QUEST DATA"}</span>
-          <span className="cstd-deep-pixel-bars"><i /><i /><i /><i /><i /></span>
-          <span className="cstd-deep-pixel-level">{locale === "zh" ? "等级 26 / 就绪" : "LV. 26 / READY"}</span>
-          <span className="cstd-deep-pixel-corners"><i /><i /><i /><i /></span>
-        </div>
         <div data-cstd-deep-artifact="underworld" className="cstd-deep-underworld-stele">
           <span className="cstd-deep-underworld-kicker">{locale === "zh" ? "冥府档案 / 工坊 017" : "UNDERWORLD ARCHIVE / FORGE 017"}</span>
           <span className="cstd-deep-underworld-seal"><i /><i /><b>V</b></span>

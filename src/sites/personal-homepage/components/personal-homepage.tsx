@@ -8,6 +8,7 @@ import { Finale } from "./sections/finale";
 import { KnowledgeLens } from "./sections/knowledge-lens";
 import { LivingStudioTwin } from "./sections/living-studio-twin";
 import { SelectedWork } from "./sections/selected-work";
+import { ThemeSignatureExperience } from "./theme-signature-experience";
 
 export function PersonalHomepage({
   initialNarrativeMode = "builder",
@@ -21,6 +22,7 @@ export function PersonalHomepage({
   return (
     <HomepageRuntime narrativeMode={initialNarrativeMode} locale={locale}>
       <NeuralGate narrativeMode={initialNarrativeMode} locale={locale} />
+      <ThemeSignatureExperience locale={locale} />
 
       <div id="systems" tabIndex={-1} data-cstd-scene-shell="systems" className="relative scroll-mt-16 focus:outline-none">
         <LivingStudioTwin narrativeMode={initialNarrativeMode} observatory={observatory} locale={locale} />

@@ -121,12 +121,11 @@ export function HomepageRuntime({
   }
 
   function handlePointerMove(event: ReactPointerEvent<HTMLElement>) {
-    if (reducedMotion || theme === "ink-protocol" || theme === "press-room") return;
-    const rawX = event.clientX / window.innerWidth;
-    const rawY = event.clientY / window.innerHeight;
-    pendingPointerRef.current = theme === "pixel-quest"
-      ? { x: Math.round(rawX * 12) / 12, y: Math.round(rawY * 8) / 8 }
-      : { x: rawX, y: rawY };
+    if (reducedMotion) return;
+    pendingPointerRef.current = {
+      x: event.clientX / window.innerWidth,
+      y: event.clientY / window.innerHeight,
+    };
     if (!pointerFrameRef.current) pointerFrameRef.current = window.requestAnimationFrame(flushPointerPosition);
   }
 

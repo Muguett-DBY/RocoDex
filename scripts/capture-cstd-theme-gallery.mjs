@@ -12,9 +12,6 @@ if (!outputRoot.startsWith(`${outputParent}${path.sep}`)) {
 
 const themes = [
   { id: "neon-district", artifact: "neon" },
-  { id: "ink-protocol", artifact: "ink" },
-  { id: "press-room", artifact: "press" },
-  { id: "pixel-quest", artifact: "pixel" },
   { id: "underworld-forge", artifact: "underworld" },
   { id: "astral-covenant", artifact: "astral" },
 ];
