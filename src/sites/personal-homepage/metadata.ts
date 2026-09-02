@@ -213,6 +213,18 @@ export function getCstdLabMetadata(slug: string | undefined, locale: CstdLocale)
   });
 }
 
+export function getCstdVoxelMetadata(locale: CstdLocale) {
+  return createCstdMetadata({
+    locale,
+    path: locale === "en" ? "/en/voxel" : "/voxel",
+    title: locale === "zh" ? "奶黄包方块世界" : "Custard's Voxel World",
+    description: locale === "zh"
+      ? "藏在奶黄包个人主站里的原创体素沙盒：进入不同视觉世界，挖掘、搭建，并把进度留在浏览器里。"
+      : "An original voxel sandbox hidden inside Custard's personal site: enter each visual world, mine, build, and keep the result in your browser.",
+    image: "/cstd-stage/cstd-neon-observatory-v2.webp",
+  });
+}
+
 export function getCstdTopicMetadata(slug: string | undefined, locale: CstdLocale) {
   const topic = slug ? getCstdTopic(slug) : undefined;
   if (slug && !topic) return {};

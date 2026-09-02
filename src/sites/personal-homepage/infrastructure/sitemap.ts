@@ -5,7 +5,7 @@ import { cstdTechnicalNotes } from "../content/technical-notes";
 import { cstdTopics } from "../content/topics";
 
 export function getPersonalHomepageSitemapEntries(): SitemapEntry[] {
-  const stablePages = ["/work", "/notes", "/lab", "/topics", "/map", "/about", "/now", "/resume"];
+  const stablePages = ["/work", "/notes", "/lab", "/voxel", "/topics", "/map", "/about", "/now", "/resume"];
   const audiencePages = ["/for/builder", "/for/research", "/for/collaboration"];
   const latestContentDate = [...cstdCaseStudies, ...cstdTechnicalNotes, ...cstdLabs]
     .map((entry) => entry.updatedAt)

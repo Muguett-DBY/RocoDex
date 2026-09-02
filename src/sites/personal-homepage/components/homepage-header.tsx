@@ -10,6 +10,7 @@ import { cstdThemes, getCstdThemeMeta, useCstdTheme, type CstdThemeId } from "..
 import type { CstdLocale } from "../content/content-types";
 import { getLocalizedCstdHref } from "../infrastructure/i18n";
 import { CstdLanguageSwitcher } from "./site/cstd-language-switcher";
+import { VoxelNavLink } from "../voxel/voxel-nav-link";
 
 const homepageLinks = cstdSceneManifest.filter((scene) => scene.id === "systems" || scene.id === "proof" || scene.id === "path");
 
@@ -64,6 +65,8 @@ export function HomepageHeader({
             </span>
           </span>
         </CstdChapterLink>
+
+        <VoxelNavLink locale={locale} className="mx-3 hidden xl:inline-flex" />
 
         <div className="ml-auto flex shrink-0 items-center gap-1.5 min-[360px]:gap-2 md:gap-4">
           <nav aria-label={locale === "zh" ? "首页导航" : "Homepage navigation"} className="hidden items-center gap-0.5 text-[12px] font-semibold text-[#9ca5a8] md:flex">

@@ -11,6 +11,7 @@ import { ThemeSwitcher } from "../theme-switcher";
 import { CstdDocumentLocale } from "./cstd-document-locale";
 import { CstdLanguageSwitcher } from "./cstd-language-switcher";
 import { getLocalizedCstdHref } from "../../infrastructure/i18n";
+import { VoxelNavLink } from "../../voxel/voxel-nav-link";
 
 const visualModeKey = "cstd-visual-budget";
 const visualModeEvent = "cstd-visual-budget-change";
@@ -63,7 +64,7 @@ function localizedHref(href: string, locale: CstdLocale) {
   return locale === "en" ? `/en${href}` : href;
 }
 
-export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale; page: string; children: React.ReactNode }) {
+export function CstdSiteChrome({ locale, page, children, immersive = false }: { locale: CstdLocale; page: string; children: React.ReactNode; immersive?: boolean }) {
   const visualMode = useSyncExternalStore(subscribeVisualMode, getVisualModeSnapshot, getVisualModeServerSnapshot);
   const theme = useCstdTheme();
   const themeMeta = getCstdThemeMeta(theme);
@@ -133,9 +134,9 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
     <CstdDocumentLocale locale={locale} />
     <div suppressHydrationWarning data-cstd-deep-shell data-cstd-locale={locale} data-cstd-theme={theme} data-cstd-theme-kind={themeMeta.kind} data-cstd-controls-ready={controlsReady ? "true" : "false"} data-cstd-visual-mode={visualMode} data-cstd-reading-mode={readingSurface ? readingMode : "studio"} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
       <a href="#cstd-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:bg-white focus:px-4 focus:py-3 focus:text-black">{locale === "zh" ? "跳到主要内容" : "Skip to content"}</a>
-      <SignalField mode={visualMode} active={!(readingSurface && readingMode === "quiet")} />
-      <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" />
-      <div data-cstd-shell-overlay aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(7,9,11,0.18),rgba(7,9,11,0.82)_80%)]" />
+      {!immersive ? <SignalField mode={visualMode} active={!(readingSurface && readingMode === "quiet")} /> : null}
+      {!immersive ? <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" /> : null}
+      {!immersive ? <div data-cstd-shell-overlay aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(7,9,11,0.18),rgba(7,9,11,0.82)_80%)]" /> : null}
       <div aria-hidden="true" className="cstd-route-progress fixed inset-x-0 top-0 z-[80] h-0.5 origin-left bg-[#f4d431] shadow-[0_0_16px_rgba(244,212,49,0.6)]" />
 
       <header className="sticky top-0 z-50 border-b border-white/12 bg-[#07090b]/90 backdrop-blur-xl">
@@ -152,7 +153,9 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
             </span>
           </CstdLink>
 
-          <nav aria-label={locale === "zh" ? "主导航" : "Primary navigation"} className="ml-auto hidden items-center gap-1 lg:flex">
+          <VoxelNavLink locale={locale} className="ml-auto hidden xl:inline-flex" />
+
+          <nav aria-label={locale === "zh" ? "主导航" : "Primary navigation"} className="ml-auto hidden items-center gap-1 lg:flex xl:ml-2">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -184,13 +187,14 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
           {navItems.map((item) => (
             <CstdLink key={item.href} href={localizedHref(item.href, locale)} className="shrink-0 px-3 py-2 font-mono text-[11px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{item.label[locale]}</CstdLink>
           ))}
+          <VoxelNavLink locale={locale} compact className="shrink-0" />
           <CstdLink href={localizedHref("/now", locale)} className="shrink-0 px-3 py-2 font-mono text-[11px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{copy.now}</CstdLink>
         </nav>
       </header>
 
       <div className="relative z-10">{children}</div>
 
-      <footer className="relative z-10 border-t border-white/12 bg-[#050709]/90 px-5 py-12 md:px-10 lg:px-16">
+      {!immersive ? <footer className="relative z-10 border-t border-white/12 bg-[#050709]/90 px-5 py-12 md:px-10 lg:px-16">
         <div className="mx-auto grid max-w-[1540px] gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
             <p className="font-mono text-[11px] font-black text-[#24e0ff]">CSTD / SYDNEY NODE / 2026</p>
@@ -203,7 +207,7 @@ export function CstdSiteChrome({ locale, page, children }: { locale: CstdLocale;
             <a href={locale === "zh" ? "/rss.xml" : "/rss.xml?lang=en"} className="hover:text-[#f4d431]">RSS</a>
           </div>
         </div>
-      </footer>
+      </footer> : null}
 
       <CstdTelemetry page={page} />
     </div>

@@ -9,6 +9,8 @@ describe("GET /sitemap.xml", () => {
     expect(sitemap).toContain("<loc>https://custard.top/</loc>");
     expect(sitemap).toContain('hreflang="en-AU" href="https://custard.top/en"');
     expect(sitemap).toContain("<loc>https://custard.top/en/for/research</loc>");
+    expect(sitemap).toContain("<loc>https://custard.top/voxel</loc>");
+    expect(sitemap).toContain("<loc>https://custard.top/en/voxel</loc>");
     expect(sitemap).not.toContain("rocodex.custard.top/creatures");
   });
 

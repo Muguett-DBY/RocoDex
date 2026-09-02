@@ -7,6 +7,8 @@ describe("route transition continuity", () => {
     expect(getCstdRouteTransitionKind("/cstd/en/notes/a", "/en/notes/b")).toBe("reading");
     expect(getCstdRouteTransitionKind("/topics/system-boundaries", "/map")).toBe("path");
     expect(getCstdRouteTransitionKind("/", "/lab/data-lens")).toBe("execute");
+    expect(getCstdRouteTransitionKind("/en/voxel", "/")).toBe("execute");
+    expect(getCstdRouteTransitionKind("/", "/voxel")).toBe("execute");
   });
 
   it("stores a bounded source snapshot without changing navigation behavior", () => {
