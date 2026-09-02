@@ -93,10 +93,10 @@ export function CinematicCaseFilm({ caseStudy, locale }: { caseStudy: CstdCaseSt
             <li key={beat.id}>
               <article ref={(element) => { beatRefs.current[index] = element; }} data-cstd-film-beat={beat.id} data-cstd-film-beat-index={index} data-cstd-film-beat-active={activeIndex === index ? "true" : "false"} onPointerEnter={() => setActiveIndex(index)} className="flex min-h-[42svh] items-center border-t border-white/12 py-10 first:border-t-0 lg:min-h-[48svh]">
                 <button type="button" aria-pressed={activeIndex === index} onClick={() => selectBeat(index)} className="group w-full text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#24e0ff]">
-                  <span className="font-mono text-[11px] font-black text-[#68757b]">{String(index + 1).padStart(2, "0")} / {beat.phase.toUpperCase()}</span>
+                  <span className="font-mono text-[11px] font-black text-[#87949a]">{String(index + 1).padStart(2, "0")} / {beat.phase.toUpperCase()}</span>
                   <h3 className="mt-4 text-3xl font-semibold leading-tight text-[#a1aaad] transition-colors group-hover:text-white group-aria-pressed:text-white md:text-4xl">{beat.title[locale]}</h3>
                   <p className="mt-5 max-w-xl text-sm leading-7 text-[#7f8b90] md:text-base md:leading-8">{beat.detail[locale]}</p>
-                  <span className="mt-5 block font-mono text-[11px] font-black" style={{ color: activeIndex === index ? art.accent : "#68757b" }}>SIGNAL / {beat.signal[locale]}</span>
+                  <span className="mt-5 block font-mono text-[11px] font-black" style={{ color: activeIndex === index ? art.accent : "#87949a" }}>SIGNAL / {beat.signal[locale]}</span>
                 </button>
               </article>
             </li>
