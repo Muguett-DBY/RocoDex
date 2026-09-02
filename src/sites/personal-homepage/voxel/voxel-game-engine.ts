@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
 import type { CstdThemeId } from "../experience/theme-store";
+import { getVoxelThemeLayout, type VoxelExhibitId, type VoxelThemeLayout } from "./voxel-landmarks";
 import {
   createVoxelSnapshot,
   createVoxelWorld,
@@ -21,6 +22,8 @@ export type VoxelGameState = {
   active: boolean;
   blockCount: number;
   cycle: "day" | "night";
+  landmarkDistance: number | null;
+  landmarkId: VoxelExhibitId | null;
   position: readonly [number, number, number];
   selectedIndex: number;
   shards: number;
@@ -36,7 +39,18 @@ type VoxelEngineOptions = {
   onReady: (snapshot: VoxelWorldSnapshot) => void;
   onState: (state: VoxelGameState) => void;
   onWorldChange: (snapshot: VoxelWorldSnapshot) => void;
+  onInteract: (id: VoxelExhibitId) => void;
   onError: (message: string) => void;
+};
+
+type LandmarkVisual = {
+  id: VoxelExhibitId;
+  group: THREE.Group;
+  core: THREE.Mesh;
+  orbitA: THREE.Mesh;
+  orbitB: THREE.Mesh;
+  baseY: number;
+  phase: number;
 };
 
 type VoxelPalette = {
@@ -136,12 +150,14 @@ function createPixelTexture(base: number, fleck: number, salt: number) {
 export class VoxelGameEngine {
   private readonly mount: HTMLElement;
   private readonly theme: CstdThemeId;
+  private readonly layout: VoxelThemeLayout;
   private readonly palette: VoxelPalette;
   private readonly scene = new THREE.Scene();
   private readonly camera = new THREE.PerspectiveCamera(68, 1, 0.08, 180);
   private readonly renderer: THREE.WebGLRenderer;
   private readonly controls: PointerLockControls;
   private readonly worldGroup = new THREE.Group();
+  private readonly landmarkGroup = new THREE.Group();
   private readonly blockGeometry = new THREE.BoxGeometry(1, 1, 1);
   private readonly materials = new Map<VoxelBlockKind, THREE.MeshStandardMaterial>();
   private readonly textures: THREE.Texture[] = [];
@@ -159,7 +175,11 @@ export class VoxelGameEngine {
   private readonly onReady: VoxelEngineOptions["onReady"];
   private readonly onState: VoxelEngineOptions["onState"];
   private readonly onWorldChange: VoxelEngineOptions["onWorldChange"];
+  private readonly onInteract: VoxelEngineOptions["onInteract"];
   private readonly onError: VoxelEngineOptions["onError"];
+  private readonly landmarkGeometries: THREE.BufferGeometry[] = [];
+  private readonly landmarkMaterials: THREE.Material[] = [];
+  private readonly landmarkVisuals: LandmarkVisual[] = [];
   private world: VoxelWorld;
   private frame = 0;
   private previousFrame = performance.now();
@@ -167,16 +187,20 @@ export class VoxelGameEngine {
   private selectedIndex = 0;
   private target: { coordinate: VoxelCoordinate; normal: VoxelCoordinate; kind: VoxelBlockKind } | null = null;
   private touchPointer: { id: number; x: number; y: number } | null = null;
+  private focusedLandmarkId: VoxelExhibitId | null = null;
+  private focusedLandmarkDistance: number | null = null;
   private active = false;
   private cycle = 0.24;
 
   constructor(options: VoxelEngineOptions) {
     this.mount = options.mount;
     this.theme = options.theme;
+    this.layout = getVoxelThemeLayout(options.theme);
     this.palette = palettes[options.theme];
     this.onReady = options.onReady;
     this.onState = options.onState;
     this.onWorldChange = options.onWorldChange;
+    this.onInteract = options.onInteract;
     this.onError = options.onError;
     this.world = options.snapshot ? restoreVoxelWorld(options.snapshot) : createVoxelWorld(options.theme, options.seed);
 
@@ -191,8 +215,8 @@ export class VoxelGameEngine {
     this.renderer.domElement.tabIndex = 0;
     this.mount.appendChild(this.renderer.domElement);
 
-    this.scene.add(this.worldGroup);
-    this.scene.fog = new THREE.Fog(this.palette.fogNight, 12, 64);
+    this.scene.add(this.worldGroup, this.landmarkGroup);
+    this.scene.fog = new THREE.Fog(this.palette.fogNight, 12, this.theme === "underworld-forge" ? 52 : this.theme === "astral-covenant" ? 72 : 64);
 
     this.ambientLight = new THREE.HemisphereLight(this.palette.ambient, 0x171117, 1.1);
     this.sunLight = new THREE.DirectionalLight(this.palette.sun, 1.6);
@@ -210,11 +234,10 @@ export class VoxelGameEngine {
     this.scene.add(this.water);
     this.createMaterials();
     this.rebuildWorld();
+    this.createLandmarkVisuals();
 
-    const startY = this.findHighestVoxel(0, 8) + 5.5;
-    this.camera.position.set(0, startY, 12);
     this.camera.rotation.order = "YXZ";
-    this.camera.lookAt(0, Math.max(3, startY - 4), 0);
+    this.setStartPosition();
     this.controls = new PointerLockControls(this.camera, this.renderer.domElement);
     this.controls.addEventListener("lock", this.handleLock);
     this.controls.addEventListener("unlock", this.handleUnlock);
@@ -254,23 +277,51 @@ export class VoxelGameEngine {
   }
 
   private createStars() {
-    const positions = new Float32Array(420 * 3);
-    for (let index = 0; index < 420; index += 1) {
-      const angle = index * 2.39996;
-      const radius = 48 + (index % 31) * 0.82;
-      positions[index * 3] = Math.cos(angle) * radius;
-      positions[index * 3 + 1] = 18 + ((index * 17) % 43);
-      positions[index * 3 + 2] = Math.sin(angle) * radius;
+    const count = this.theme === "underworld-forge" ? 280 : 420;
+    const positions = new Float32Array(count * 3);
+    for (let index = 0; index < count; index += 1) {
+      if (this.theme === "neon-district") {
+        positions[index * 3] = ((index * 17) % 89) - 44;
+        positions[index * 3 + 1] = 8 + ((index * 23) % 34);
+        positions[index * 3 + 2] = ((index * 31) % 89) - 44;
+      } else if (this.theme === "underworld-forge") {
+        const angle = index * 2.39996;
+        const radius = 7 + (index % 29) * 0.72;
+        positions[index * 3] = Math.cos(angle) * radius;
+        positions[index * 3 + 1] = 4 + ((index * 13) % 19);
+        positions[index * 3 + 2] = Math.sin(angle) * radius;
+      } else {
+        const angle = index * 2.39996;
+        const radius = 44 + (index % 35) * 0.9;
+        positions[index * 3] = Math.cos(angle) * radius;
+        positions[index * 3 + 1] = 16 + ((index * 17) % 48);
+        positions[index * 3 + 2] = Math.sin(angle) * radius;
+      }
     }
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-    const material = new THREE.PointsMaterial({ color: this.palette.grid, size: 0.16, transparent: true, opacity: 0.75, depthWrite: false });
+    const material = new THREE.PointsMaterial({
+      color: this.theme === "underworld-forge" ? this.palette.sun : this.palette.grid,
+      size: this.theme === "underworld-forge" ? 0.2 : this.theme === "astral-covenant" ? 0.18 : 0.12,
+      transparent: true,
+      opacity: 0.78,
+      depthWrite: false,
+    });
     return new THREE.Points(geometry, material);
   }
 
   private createWater() {
     const geometry = new THREE.PlaneGeometry(52, 52, 1, 1);
-    const material = new THREE.MeshStandardMaterial({ color: this.palette.water, transparent: true, opacity: 0.48, roughness: 0.22, metalness: 0.22, depthWrite: false });
+    const material = new THREE.MeshStandardMaterial({
+      color: this.palette.water,
+      emissive: this.theme === "underworld-forge" ? this.palette.water : 0x000000,
+      emissiveIntensity: this.theme === "underworld-forge" ? 0.45 : 0,
+      transparent: true,
+      opacity: this.theme === "astral-covenant" ? 0.2 : 0.48,
+      roughness: 0.22,
+      metalness: 0.22,
+      depthWrite: false,
+    });
     const water = new THREE.Mesh(geometry, material);
     water.rotation.x = -Math.PI / 2;
     water.position.y = 2.35;
@@ -284,6 +335,119 @@ export class VoxelGameEngine {
       if (blockX === x && blockZ === z) highest = Math.max(highest, blockY ?? 0);
     }
     return highest;
+  }
+
+  private setStartPosition() {
+    const [spawnX, spawnZ] = this.layout.spawn;
+    const [lookX, lookZ] = this.layout.lookAt;
+    const startY = this.findHighestVoxel(Math.round(spawnX), Math.round(spawnZ)) + 4.5;
+    const lookY = Math.min(startY - 1, this.findHighestVoxel(Math.round(lookX), Math.round(lookZ)) + 2.5);
+    this.camera.position.set(spawnX, startY, spawnZ);
+    this.camera.lookAt(lookX, Math.max(3, lookY), lookZ);
+  }
+
+  private disposeLandmarkVisuals() {
+    this.landmarkGroup.clear();
+    this.landmarkVisuals.length = 0;
+    this.landmarkGeometries.splice(0).forEach((geometry) => geometry.dispose());
+    this.landmarkMaterials.splice(0).forEach((material) => material.dispose());
+  }
+
+  private createLandmarkVisuals() {
+    this.disposeLandmarkVisuals();
+    const accent = new THREE.MeshBasicMaterial({
+      color: this.palette.grid,
+      transparent: true,
+      opacity: 0.72,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const secondary = new THREE.MeshBasicMaterial({
+      color: this.palette.sun,
+      transparent: true,
+      opacity: 0.9,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+    });
+    const beamGeometry = new THREE.BoxGeometry(0.14, 6, 0.14);
+    const ringGeometry = new THREE.TorusGeometry(2.15, 0.08, 6, 36);
+    const smallRingGeometry = new THREE.TorusGeometry(1.25, 0.07, 5, 28);
+    const coreGeometry = this.theme === "underworld-forge"
+      ? new THREE.ConeGeometry(0.62, 1.8, 4)
+      : new THREE.OctahedronGeometry(0.72, 0);
+    this.landmarkMaterials.push(accent, secondary);
+    this.landmarkGeometries.push(beamGeometry, ringGeometry, smallRingGeometry, coreGeometry);
+
+    this.layout.landmarks.forEach((landmark, index) => {
+      const group = new THREE.Group();
+      const baseY = this.findHighestVoxel(landmark.x, landmark.z) + 1.35;
+      const phase = index * 0.83;
+      group.position.set(landmark.x, baseY, landmark.z);
+      group.userData.exhibitId = landmark.id;
+
+      const core = new THREE.Mesh(coreGeometry, secondary);
+      core.name = "core";
+      core.position.y = 1.1;
+      group.add(core);
+
+      const orbitA = new THREE.Mesh(ringGeometry, accent);
+      orbitA.name = "orbit-a";
+      const orbitB = new THREE.Mesh(smallRingGeometry, secondary);
+      orbitB.name = "orbit-b";
+
+      if (this.theme === "neon-district") {
+        const beam = new THREE.Mesh(beamGeometry, accent);
+        beam.name = "beam";
+        beam.position.y = 3;
+        orbitA.rotation.x = Math.PI / 2;
+        orbitA.position.y = 0.45;
+        orbitB.rotation.x = Math.PI / 2;
+        orbitB.position.y = 2.2;
+        group.add(beam, orbitA, orbitB);
+      } else if (this.theme === "underworld-forge") {
+        orbitA.rotation.y = Math.PI / 2;
+        orbitA.position.y = 1.25;
+        orbitB.rotation.x = Math.PI / 2;
+        orbitB.position.y = 0.35;
+        group.add(orbitA, orbitB);
+      } else {
+        orbitA.rotation.x = Math.PI / 2.8;
+        orbitA.position.y = 1.05;
+        orbitB.rotation.z = Math.PI / 2.4;
+        orbitB.position.y = 1.05;
+        group.add(orbitA, orbitB);
+      }
+
+      this.landmarkVisuals.push({ id: landmark.id, group, core, orbitA, orbitB, baseY, phase });
+      this.landmarkGroup.add(group);
+    });
+  }
+
+  private updateLandmarks(now: number, delta: number) {
+    for (const landmark of this.landmarkVisuals) {
+      const pulse = (Math.sin(now * 0.002 + landmark.phase) + 1) / 2;
+      const focused = landmark.id === this.focusedLandmarkId;
+      const scale = (focused ? 1.18 : 1) + pulse * 0.035;
+      landmark.group.scale.setScalar(scale);
+      landmark.group.position.y = landmark.baseY + Math.sin(now * 0.0014 + landmark.phase) * (this.theme === "astral-covenant" ? 0.32 : 0.1);
+      landmark.core.rotation.y += delta * (this.theme === "underworld-forge" ? 0.9 : 1.8);
+      landmark.orbitA.rotation.z += delta * (this.theme === "neon-district" ? 1.4 : 0.45);
+      landmark.orbitB.rotation.y -= delta * (this.theme === "astral-covenant" ? 1.15 : 0.7);
+    }
+  }
+
+  private updateLandmarkFocus() {
+    let id: VoxelExhibitId | null = null;
+    let distance: number | null = null;
+    for (const landmark of this.layout.landmarks) {
+      const candidate = Math.hypot(this.camera.position.x - landmark.x, this.camera.position.z - landmark.z);
+      if (candidate <= landmark.radius && (distance === null || candidate < distance)) {
+        id = landmark.id;
+        distance = candidate;
+      }
+    }
+    this.focusedLandmarkId = id;
+    this.focusedLandmarkDistance = distance;
   }
 
   private rebuildWorld() {
@@ -314,6 +478,11 @@ export class VoxelGameEngine {
   }
 
   private updateTarget() {
+    if (!this.active) {
+      this.target = null;
+      this.selection.visible = false;
+      return;
+    }
     this.raycaster.setFromCamera(this.pointer, this.camera);
     this.raycaster.far = 8;
     const hit = this.raycaster.intersectObjects(this.worldMeshes, false)[0];
@@ -407,6 +576,13 @@ export class VoxelGameEngine {
   };
 
   private handleKeyDown = (event: KeyboardEvent) => {
+    if (event.code === "KeyE" && this.active && this.focusedLandmarkId && !event.repeat) {
+      event.preventDefault();
+      const id = this.focusedLandmarkId;
+      this.pause();
+      this.onInteract(id);
+      return;
+    }
     if (event.code === "KeyP") {
       event.preventDefault();
       this.pause();
@@ -472,8 +648,10 @@ export class VoxelGameEngine {
     this.ambientLight.intensity = 0.35 + daylight * 0.85;
     this.sunLight.intensity = 0.22 + daylight * 1.6;
     (this.stars.material as THREE.PointsMaterial).opacity = 0.18 + (1 - daylight) * 0.82;
-    this.stars.rotation.y += delta * 0.012;
-    this.water.position.y = 2.35 + Math.sin(performance.now() * 0.00055) * 0.035;
+    const atmosphereSpeed = this.theme === "neon-district" ? 0.028 : this.theme === "underworld-forge" ? 0.008 : 0.018;
+    this.stars.rotation.y += delta * atmosphereSpeed;
+    this.stars.position.y = this.theme === "underworld-forge" ? Math.sin(performance.now() * 0.00035) * 0.7 : 0;
+    this.water.position.y = 2.35 + Math.sin(performance.now() * (this.theme === "underworld-forge" ? 0.0011 : 0.00055)) * 0.05;
   }
 
   private animate = (now: number) => {
@@ -482,6 +660,8 @@ export class VoxelGameEngine {
     this.updateMovement(delta);
     this.updateAtmosphere(delta);
     this.updateTarget();
+    this.updateLandmarkFocus();
+    this.updateLandmarks(now, delta);
     this.renderer.render(this.scene, this.camera);
     this.captureFrameSignal();
     this.emitState(false);
@@ -529,6 +709,8 @@ export class VoxelGameEngine {
       active: this.active,
       blockCount: this.world.blocks.size,
       cycle: Math.sin(this.cycle * Math.PI * 2 - Math.PI / 2) > -0.15 ? "day" : "night",
+      landmarkDistance: this.focusedLandmarkDistance,
+      landmarkId: this.focusedLandmarkId,
       position: [this.camera.position.x, this.camera.position.y, this.camera.position.z],
       selectedIndex: this.selectedIndex,
       shards: this.world.shards,
@@ -572,11 +754,26 @@ export class VoxelGameEngine {
     this.editWorld(action);
   }
 
+  travelToLandmark(id: VoxelExhibitId) {
+    const landmark = this.layout.landmarks.find((entry) => entry.id === id);
+    if (!landmark) return;
+    const approachX = Math.round(landmark.x * 0.66);
+    const approachZ = Math.round(landmark.z * 0.66);
+    const approachY = this.findHighestVoxel(approachX, approachZ) + 3.8;
+    const targetY = this.findHighestVoxel(landmark.x, landmark.z) + 1.8;
+    this.camera.position.set(approachX, approachY, approachZ);
+    this.camera.lookAt(landmark.x, Math.min(targetY, approachY + 2), landmark.z);
+    this.updateLandmarkFocus();
+    this.emitState(true);
+  }
+
   reset(seed: number) {
     this.world = createVoxelWorld(this.theme, seed);
     this.target = null;
     this.rebuildWorld();
-    this.camera.position.set(0, this.findHighestVoxel(0, 8) + 5.5, 12);
+    this.createLandmarkVisuals();
+    this.setStartPosition();
+    this.updateLandmarkFocus();
     const snapshot = this.getSnapshot();
     this.onWorldChange(snapshot);
     this.emitState(true);
@@ -611,6 +808,7 @@ export class VoxelGameEngine {
     (this.stars.material as THREE.Material).dispose();
     this.water.geometry.dispose();
     this.water.material.dispose();
+    this.disposeLandmarkVisuals();
     this.renderer.dispose();
     this.renderer.domElement.remove();
   }

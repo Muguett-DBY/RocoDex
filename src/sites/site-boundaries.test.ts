@@ -136,10 +136,14 @@ describe("site architecture boundaries", () => {
     const sceneSource = readFileSync(scenePath, "utf8");
     const runtimeSource = readSource("sites/personal-homepage/components/scene-runtime.tsx");
     const voxelSource = readSource("sites/personal-homepage/voxel/voxel-sandbox.tsx");
+    const voxelPageSource = readSource("sites/personal-homepage/voxel/voxel-page.tsx");
     expect(runtimeSource).toContain('import("./immersive-scene")');
     expect(runtimeSource).toContain("{ ssr: false }");
     expect(sceneSource).toContain('import("./immersive-postprocessing")');
     expect(voxelSource).toContain('import("./voxel-game-engine")');
+    expect(voxelSource).not.toContain('content/generated/content-registry');
+    expect(voxelSource).not.toContain('content/case-studies');
+    expect(voxelPageSource).toContain("getVoxelPortfolio(locale)");
   });
 
   it("removes the former personal-site files from generic RocoDex folders", () => {

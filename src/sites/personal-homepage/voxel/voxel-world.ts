@@ -1,4 +1,5 @@
 import type { CstdThemeId } from "../experience/theme-store";
+import { getVoxelThemeLayout, type VoxelLandmarkSpec } from "./voxel-landmarks";
 
 export const voxelBlockKinds = ["turf", "soil", "stone", "timber", "crystal"] as const;
 
@@ -11,14 +12,14 @@ export type VoxelWorld = {
 };
 
 export type VoxelWorldSnapshot = {
-  version: 1;
+  version: 2;
   theme: CstdThemeId;
   seed: number;
   shards: number;
   blocks: Array<[number, number, number, VoxelBlockKind]>;
 };
 
-const worldRadius = 11;
+const worldRadius = 18;
 const coordinateLimit = 40;
 const snapshotBlockLimit = 20_000;
 const blockKinds = new Set<string>(voxelBlockKinds);
@@ -46,11 +47,15 @@ function hash2(seed: number, x: number, z: number) {
   return ((value ^ (value >>> 16)) >>> 0) / 4_294_967_295;
 }
 
-function terrainHeight(seed: number, x: number, z: number) {
-  const broad = Math.sin((x + seed % 17) * 0.34) + Math.cos((z - seed % 13) * 0.29);
-  const ridge = Math.sin((x + z) * 0.18 + seed * 0.0017);
-  const detail = hash2(seed, x, z) - 0.5;
-  return Math.max(2, Math.min(8, Math.round(4.2 + broad * 0.9 + ridge * 0.75 + detail * 1.4)));
+function terrainHeight(theme: CstdThemeId, seed: number, x: number, z: number) {
+  const noise = hash2(seed, x, z) - 0.5;
+  if (theme === "neon-district") {
+    const boulevard = Math.abs(x % 6) <= 1 || Math.abs(z % 6) <= 1;
+    return boulevard ? 4 : Math.max(4, Math.min(6, Math.round(4.6 + noise * 1.6)));
+  }
+  const ridge = Math.sin((x + z) * 0.22 + seed * 0.0017) + Math.cos((x - z) * 0.17);
+  const crater = Math.max(0, 1.4 - Math.hypot(x, z) / 8);
+  return Math.max(3, Math.min(8, Math.round(4.7 + ridge * 0.75 + noise * 1.7 - crater)));
 }
 
 function setBlock(blocks: Map<string, VoxelBlockKind>, coordinate: VoxelCoordinate, kind: VoxelBlockKind) {
@@ -61,72 +66,221 @@ function buildColumn(blocks: Map<string, VoxelBlockKind>, x: number, z: number, 
   for (let offset = 1; offset <= height; offset += 1) setBlock(blocks, [x, baseY + offset, z], kind);
 }
 
-function addNeonLandmarks(blocks: Map<string, VoxelBlockKind>, surface: Map<string, number>) {
-  for (const [x, z] of [[-8, -8], [8, -8], [-8, 8], [8, 8]] as const) {
-    const baseY = surface.get(`${x},${z}`) ?? 4;
-    buildColumn(blocks, x, z, baseY, 5, "timber");
-    setBlock(blocks, [x, baseY + 3, z], "crystal");
-    setBlock(blocks, [x, baseY + 6, z], "crystal");
+function getSurfaceHeight(surface: Map<string, number>, x: number, z: number) {
+  return surface.get(`${x},${z}`) ?? 4;
+}
+
+function getPlatformY(surface: Map<string, number>, centerX: number, centerZ: number, radius: number) {
+  let highest = 0;
+  for (let x = centerX - radius; x <= centerX + radius; x += 1) {
+    for (let z = centerZ - radius; z <= centerZ + radius; z += 1) {
+      highest = Math.max(highest, getSurfaceHeight(surface, x, z));
+    }
+  }
+  return highest + 1;
+}
+
+function addPlate(
+  blocks: Map<string, VoxelBlockKind>,
+  centerX: number,
+  centerZ: number,
+  y: number,
+  radius: number,
+  kind: VoxelBlockKind,
+  diamond = false,
+) {
+  for (let dx = -radius; dx <= radius; dx += 1) {
+    for (let dz = -radius; dz <= radius; dz += 1) {
+      if (diamond && Math.abs(dx) + Math.abs(dz) > radius) continue;
+      setBlock(blocks, [centerX + dx, y, centerZ + dz], kind);
+    }
   }
 }
 
-function addUnderworldLandmarks(blocks: Map<string, VoxelBlockKind>, surface: Map<string, number>) {
-  for (const [x, z] of [[0, -7], [5, -5], [7, 0], [5, 5], [0, 7], [-5, 5], [-7, 0], [-5, -5]] as const) {
-    const baseY = surface.get(`${x},${z}`) ?? 4;
-    buildColumn(blocks, x, z, baseY, 3, "stone");
-    setBlock(blocks, [x, baseY + 4, z], "crystal");
+function addPath(
+  blocks: Map<string, VoxelBlockKind>,
+  surface: Map<string, number>,
+  from: readonly [number, number],
+  to: readonly [number, number],
+  accentEvery: number,
+) {
+  const steps = Math.max(Math.abs(to[0] - from[0]), Math.abs(to[1] - from[1]));
+  for (let step = 0; step <= steps; step += 1) {
+    const x = Math.round(from[0] + ((to[0] - from[0]) * step) / steps);
+    const z = Math.round(from[1] + ((to[1] - from[1]) * step) / steps);
+    const y = getSurfaceHeight(surface, x, z) + 1;
+    setBlock(blocks, [x, y, z], step % accentEvery === 0 ? "crystal" : "stone");
   }
-  const altarY = (surface.get("0,0") ?? 4) + 1;
-  for (let x = -2; x <= 2; x += 1) {
-    for (let z = -2; z <= 2; z += 1) {
-      if (Math.abs(x) === 2 || Math.abs(z) === 2) setBlock(blocks, [x, altarY, z], "timber");
-    }
-  }
-  setBlock(blocks, [0, altarY + 1, 0], "crystal");
 }
 
-function addAstralLandmarks(blocks: Map<string, VoxelBlockKind>) {
-  const center: VoxelCoordinate = [7, 12, -7];
-  for (let x = -3; x <= 3; x += 1) {
-    for (let z = -3; z <= 3; z += 1) {
-      const distance = Math.abs(x) + Math.abs(z);
-      if (distance > 4) continue;
-      setBlock(blocks, [center[0] + x, center[1], center[2] + z], distance < 3 ? "turf" : "stone");
-      if (distance < 2) setBlock(blocks, [center[0] + x, center[1] - 1, center[2] + z], "soil");
+function addNeonTower(
+  blocks: Map<string, VoxelBlockKind>,
+  surface: Map<string, number>,
+  landmark: VoxelLandmarkSpec,
+  index: number,
+) {
+  const baseY = getPlatformY(surface, landmark.x, landmark.z, 2);
+  addPlate(blocks, landmark.x, landmark.z, baseY, 2, "stone");
+  const height = 6 + (index % 3) * 2 + (landmark.tier === "archive" ? 2 : 0);
+
+  for (let y = 1; y <= height; y += 1) {
+    for (let dx = -1; dx <= 1; dx += 1) {
+      for (let dz = -1; dz <= 1; dz += 1) {
+        if (Math.abs(dx) !== 1 && Math.abs(dz) !== 1) continue;
+        const signalBand = y % 3 === 0 && (dx === 0 || dz === 0);
+        setBlock(blocks, [landmark.x + dx, baseY + y, landmark.z + dz], signalBand ? "crystal" : "timber");
+      }
     }
   }
-  buildColumn(blocks, center[0], center[2], center[1], 3, "timber");
-  setBlock(blocks, [center[0], center[1] + 4, center[2]], "crystal");
+
+  setBlock(blocks, [landmark.x, baseY + height, landmark.z], "stone");
+  buildColumn(blocks, landmark.x, landmark.z, baseY + height, 2, "timber");
+  setBlock(blocks, [landmark.x, baseY + height + 3, landmark.z], "crystal");
+  for (const dx of [-2, 2]) {
+    buildColumn(blocks, landmark.x + dx, landmark.z, baseY, 2 + (index % 2), "crystal");
+  }
+}
+
+function addUnderworldTemple(
+  blocks: Map<string, VoxelBlockKind>,
+  surface: Map<string, number>,
+  landmark: VoxelLandmarkSpec,
+  index: number,
+) {
+  const baseY = getPlatformY(surface, landmark.x, landmark.z, 3);
+  addPlate(blocks, landmark.x, landmark.z, baseY, 3, "stone");
+  addPlate(blocks, landmark.x, landmark.z, baseY + 1, 2, "timber", true);
+  const columnHeight = 4 + (index % 2);
+
+  for (const [dx, dz] of [[-2, -2], [2, -2], [-2, 2], [2, 2]] as const) {
+    buildColumn(blocks, landmark.x + dx, landmark.z + dz, baseY, columnHeight, "stone");
+    setBlock(blocks, [landmark.x + dx, baseY + columnHeight + 1, landmark.z + dz], "crystal");
+  }
+
+  for (let offset = -2; offset <= 2; offset += 1) {
+    setBlock(blocks, [landmark.x + offset, baseY + columnHeight, landmark.z - 2], "timber");
+    setBlock(blocks, [landmark.x + offset, baseY + columnHeight, landmark.z + 2], "timber");
+  }
+  buildColumn(blocks, landmark.x, landmark.z, baseY + 1, 2 + (landmark.tier === "archive" ? 1 : 0), "crystal");
+}
+
+function addFloatingIsland(
+  blocks: Map<string, VoxelBlockKind>,
+  surface: Map<string, number>,
+  centerX: number,
+  centerZ: number,
+  topY: number,
+  radius: number,
+) {
+  for (let depth = 0; depth <= 3; depth += 1) {
+    const layerRadius = Math.max(1, radius - depth);
+    addPlate(blocks, centerX, centerZ, topY - depth, layerRadius, depth === 0 ? "turf" : depth === 1 ? "soil" : "stone", true);
+  }
+  for (let dx = -radius; dx <= radius; dx += 1) {
+    for (let dz = -radius; dz <= radius; dz += 1) {
+      if (Math.abs(dx) + Math.abs(dz) <= radius) surface.set(`${centerX + dx},${centerZ + dz}`, topY);
+    }
+  }
+}
+
+function addAstralBridge(
+  blocks: Map<string, VoxelBlockKind>,
+  from: readonly [number, number, number],
+  to: readonly [number, number, number],
+) {
+  const steps = Math.max(Math.abs(to[0] - from[0]), Math.abs(to[2] - from[2]));
+  for (let step = 3; step <= steps - 3; step += 1) {
+    const ratio = step / steps;
+    const x = Math.round(from[0] + (to[0] - from[0]) * ratio);
+    const y = Math.round(from[1] + (to[1] - from[1]) * ratio);
+    const z = Math.round(from[2] + (to[2] - from[2]) * ratio);
+    setBlock(blocks, [x, y, z], step % 4 === 0 ? "crystal" : "timber");
+  }
+}
+
+function addAstralShrine(blocks: Map<string, VoxelBlockKind>, landmark: VoxelLandmarkSpec, topY: number, index: number) {
+  const columnHeight = 4 + (index % 3);
+  for (const dx of [-2, 2]) {
+    buildColumn(blocks, landmark.x + dx, landmark.z, topY, columnHeight, "stone");
+    setBlock(blocks, [landmark.x + dx, topY + columnHeight + 1, landmark.z], "crystal");
+  }
+  for (let dx = -2; dx <= 2; dx += 1) {
+    setBlock(blocks, [landmark.x + dx, topY + columnHeight, landmark.z], dx === 0 ? "crystal" : "timber");
+  }
+  buildColumn(blocks, landmark.x, landmark.z, topY, 2 + (landmark.tier === "archive" ? 1 : 0), "crystal");
+}
+
+function createGroundedWorld(theme: "neon-district" | "underworld-forge", seed: number) {
+  const blocks = new Map<string, VoxelBlockKind>();
+  const surface = new Map<string, number>();
+  const landmarks = getVoxelThemeLayout(theme).landmarks;
+
+  for (let x = -worldRadius; x <= worldRadius; x += 1) {
+    for (let z = -worldRadius; z <= worldRadius; z += 1) {
+      const height = terrainHeight(theme, seed, x, z);
+      surface.set(`${x},${z}`, height);
+      const boulevard = theme === "neon-district" && (Math.abs(x % 6) <= 1 || Math.abs(z % 6) <= 1);
+      for (let y = 0; y <= height; y += 1) {
+        const kind: VoxelBlockKind = y === height ? (boulevard ? "stone" : "turf") : y >= height - 2 ? "soil" : "stone";
+        setBlock(blocks, [x, y, z], kind);
+      }
+
+      const nearLandmark = landmarks.some((landmark) => Math.hypot(x - landmark.x, z - landmark.z) < 4.5);
+      const feature = hash2(seed + 71, x, z);
+      if (!nearLandmark && feature > 0.991 && Math.abs(x) < 17 && Math.abs(z) < 17) {
+        const featureHeight = theme === "neon-district" ? 3 : 2;
+        buildColumn(blocks, x, z, height, featureHeight, theme === "neon-district" ? "timber" : "stone");
+        setBlock(blocks, [x, height + featureHeight + 1, z], "crystal");
+      }
+    }
+  }
+
+  if (theme === "neon-district") {
+    landmarks.forEach((entry, index) => {
+      addPath(blocks, surface, [0, 0], [entry.x, entry.z], 5);
+      addNeonTower(blocks, surface, entry, index);
+    });
+    const hubY = getPlatformY(surface, 0, 0, 2);
+    addPlate(blocks, 0, 0, hubY, 2, "stone");
+    buildColumn(blocks, 0, 0, hubY, 4, "crystal");
+  } else {
+    landmarks.forEach((entry, index) => {
+      const next = landmarks[(index + 1) % landmarks.length];
+      addPath(blocks, surface, [entry.x, entry.z], [next.x, next.z], 4);
+      addUnderworldTemple(blocks, surface, entry, index);
+    });
+    const altarY = getPlatformY(surface, 0, 0, 3);
+    addPlate(blocks, 0, 0, altarY, 3, "stone", true);
+    addPlate(blocks, 0, 0, altarY + 1, 1, "timber", true);
+    setBlock(blocks, [0, altarY + 2, 0], "crystal");
+  }
+
+  return blocks;
+}
+
+function createAstralWorld() {
+  const blocks = new Map<string, VoxelBlockKind>();
+  const surface = new Map<string, number>();
+  const landmarks = getVoxelThemeLayout("astral-covenant").landmarks;
+  const centerY = 9;
+  addFloatingIsland(blocks, surface, 0, 0, centerY, 6);
+  addPlate(blocks, 0, 0, centerY + 1, 2, "stone", true);
+  buildColumn(blocks, 0, 0, centerY + 1, 3, "crystal");
+
+  landmarks.forEach((entry, index) => {
+    const topY = 9 + (index % 3) * 2;
+    addFloatingIsland(blocks, surface, entry.x, entry.z, topY, entry.tier === "primary" ? 4 : 3);
+    addAstralBridge(blocks, [0, centerY + 1, 0], [entry.x, topY + 1, entry.z]);
+    addAstralShrine(blocks, entry, topY, index);
+  });
+  return blocks;
 }
 
 export function createVoxelWorld(theme: CstdThemeId, seed: number): VoxelWorld {
   const normalizedSeed = Math.abs(Math.trunc(seed)) || 1;
-  const blocks = new Map<string, VoxelBlockKind>();
-  const surface = new Map<string, number>();
-
-  for (let x = -worldRadius; x <= worldRadius; x += 1) {
-    for (let z = -worldRadius; z <= worldRadius; z += 1) {
-      const height = terrainHeight(normalizedSeed, x, z);
-      surface.set(`${x},${z}`, height);
-      for (let y = 0; y <= height; y += 1) {
-        const kind: VoxelBlockKind = y === height ? "turf" : y >= height - 2 ? "soil" : "stone";
-        setBlock(blocks, [x, y, z], kind);
-      }
-
-      const feature = hash2(normalizedSeed + 71, x, z);
-      if (feature > 0.987 && Math.abs(x) < 9 && Math.abs(z) < 9) {
-        buildColumn(blocks, x, z, height, 2 + Math.floor(hash2(normalizedSeed + 99, x, z) * 2), "timber");
-        setBlock(blocks, [x, height + 3, z], "crystal");
-      } else if (feature > 0.972) {
-        setBlock(blocks, [x, height + 1, z], "crystal");
-      }
-    }
-  }
-
-  if (theme === "neon-district") addNeonLandmarks(blocks, surface);
-  if (theme === "underworld-forge") addUnderworldLandmarks(blocks, surface);
-  if (theme === "astral-covenant") addAstralLandmarks(blocks);
-
+  const blocks = theme === "astral-covenant"
+    ? createAstralWorld()
+    : createGroundedWorld(theme, normalizedSeed);
   return { seed: normalizedSeed, shards: 0, blocks };
 }
 
@@ -152,7 +306,7 @@ export function isEditableVoxelCoordinate([x, y, z]: VoxelCoordinate) {
 
 export function createVoxelSnapshot(world: VoxelWorld, theme: CstdThemeId): VoxelWorldSnapshot {
   return {
-    version: 1,
+    version: 2,
     theme,
     seed: world.seed,
     shards: world.shards,
@@ -164,7 +318,7 @@ export function parseVoxelSnapshot(value: string | null, theme: CstdThemeId): Vo
   if (!value) return null;
   try {
     const parsed = JSON.parse(value) as Partial<VoxelWorldSnapshot>;
-    if (parsed.version !== 1 || parsed.theme !== theme || typeof parsed.seed !== "number" || !Number.isInteger(parsed.seed) || typeof parsed.shards !== "number" || !Number.isInteger(parsed.shards)) return null;
+    if (parsed.version !== 2 || parsed.theme !== theme || typeof parsed.seed !== "number" || !Number.isInteger(parsed.seed) || typeof parsed.shards !== "number" || !Number.isInteger(parsed.shards)) return null;
     if (!Array.isArray(parsed.blocks) || parsed.blocks.length === 0 || parsed.blocks.length > snapshotBlockLimit) return null;
     const blocks: VoxelWorldSnapshot["blocks"] = [];
     for (const entry of parsed.blocks) {
@@ -173,7 +327,7 @@ export function parseVoxelSnapshot(value: string | null, theme: CstdThemeId): Vo
       if (!isEditableVoxelCoordinate([x, y, z]) || typeof kind !== "string" || !blockKinds.has(kind)) return null;
       blocks.push([x, y, z, kind as VoxelBlockKind]);
     }
-    return { version: 1, theme, seed: parsed.seed, shards: Math.max(0, parsed.shards), blocks };
+    return { version: 2, theme, seed: parsed.seed, shards: Math.max(0, parsed.shards), blocks };
   } catch {
     return null;
   }

@@ -34,6 +34,7 @@
     "test:e2e:personal": "playwright test personal-homepage personal-archive personal-voxel",
     "test:e2e:rocodex": "playwright test e2e/rocodex.spec.ts",
     "capture:cstd:themes": "node scripts/capture-cstd-theme-gallery.mjs",
+    "capture:cstd:voxel": "node scripts/capture-cstd-voxel-gallery.mjs",
     "audit:dependencies": "npm audit --audit-level=high",
     "verify:personal-bundle": "node scripts/verify-personal-bundle.mjs",
     "verify:cstd:performance-contract": "node scripts/verify-cstd-performance-contract.mjs",
