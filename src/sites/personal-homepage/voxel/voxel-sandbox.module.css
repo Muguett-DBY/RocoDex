@@ -1,0 +1,476 @@
+.page {
+  min-height: calc(100svh - 4rem);
+  background: #030608;
+}
+
+.stage {
+  --voxel-accent: #24e0ff;
+  --voxel-secondary: #f4d431;
+  --voxel-panel: rgb(2 8 12 / 82%);
+  --voxel-line: rgb(36 224 255 / 42%);
+  position: relative;
+  height: calc(100svh - 4rem);
+  min-height: 38rem;
+  overflow: hidden;
+  background: #030608;
+  color: #eefcff;
+  user-select: none;
+}
+
+:global(html[data-cstd-theme="underworld-forge"]) .stage {
+  --voxel-accent: #d7a84b;
+  --voxel-secondary: #8fe0b7;
+  --voxel-panel: rgb(15 7 4 / 84%);
+  --voxel-line: rgb(215 168 75 / 44%);
+  background: #0b0504;
+  color: #f3e7d0;
+}
+
+:global(html[data-cstd-theme="astral-covenant"]) .stage {
+  --voxel-accent: #77d6d1;
+  --voxel-secondary: #d7bc78;
+  --voxel-panel: rgb(6 8 24 / 84%);
+  --voxel-line: rgb(119 214 209 / 42%);
+  background: #060818;
+  color: #f0e8d3;
+}
+
+.canvasHost,
+.canvasHost canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.vignette {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgb(0 0 0 / 42%), transparent 22%, transparent 72%, rgb(0 0 0 / 58%)),
+    linear-gradient(90deg, rgb(0 0 0 / 24%), transparent 18%, transparent 82%, rgb(0 0 0 / 24%));
+  pointer-events: none;
+}
+
+.topHud {
+  position: absolute;
+  z-index: 6;
+  top: clamp(0.75rem, 2vw, 1.5rem);
+  right: clamp(0.75rem, 2vw, 1.5rem);
+  left: clamp(0.75rem, 2vw, 1.5rem);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  pointer-events: none;
+}
+
+.worldIdentity,
+.telemetry {
+  border-top: 2px solid var(--voxel-accent);
+  background: var(--voxel-panel);
+  padding: 0.75rem 0.9rem;
+  box-shadow: 0 12px 42px rgb(0 0 0 / 32%);
+}
+
+.eyebrow,
+.telemetry dt,
+.statusLine {
+  color: var(--voxel-accent);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.62rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.worldTitle {
+  margin-top: 0.2rem;
+  font-size: clamp(1.1rem, 2.4vw, 1.75rem);
+  font-weight: 900;
+  line-height: 1;
+}
+
+:global(html[data-cstd-theme="underworld-forge"]) .worldTitle,
+:global(html[data-cstd-theme="underworld-forge"]) .enterTitle {
+  font-family: "CSTD Underworld Display", Georgia, serif;
+  font-weight: 400;
+}
+
+:global(html[data-cstd-theme="astral-covenant"]) .worldTitle,
+:global(html[data-cstd-theme="astral-covenant"]) .enterTitle {
+  font-family: "CSTD Astral Display", Georgia, serif;
+  font-weight: 400;
+}
+
+.telemetry {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  gap: 0.7rem 1rem;
+  margin: 0;
+}
+
+.telemetry div {
+  min-width: 4rem;
+}
+
+.telemetry dd {
+  margin-top: 0.2rem;
+  color: #fff;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.utilityBar {
+  position: absolute;
+  z-index: 8;
+  top: clamp(6rem, 13vh, 8rem);
+  right: clamp(0.75rem, 2vw, 1.5rem);
+  display: flex;
+  gap: 0.4rem;
+}
+
+.iconButton,
+.touchButton,
+.hotbarButton {
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--voxel-line);
+  background: var(--voxel-panel);
+  color: #eefcff;
+  transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.iconButton {
+  width: 2.65rem;
+  height: 2.65rem;
+}
+
+.iconButton:hover,
+.touchButton:active,
+.hotbarButton:hover,
+.hotbarButton[data-selected="true"] {
+  border-color: var(--voxel-accent);
+  background: color-mix(in srgb, var(--voxel-accent) 19%, #050709);
+  color: var(--voxel-secondary);
+}
+
+.iconButton:active,
+.hotbarButton:active {
+  transform: translateY(1px);
+}
+
+.crosshair {
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  left: 50%;
+  width: 1.4rem;
+  height: 1.4rem;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.crosshair::before,
+.crosshair::after {
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 72%), 0 0 12px var(--voxel-accent);
+  content: "";
+}
+
+.crosshair::before {
+  top: 0.65rem;
+  left: 0.2rem;
+  width: 1rem;
+  height: 0.1rem;
+}
+
+.crosshair::after {
+  top: 0.2rem;
+  left: 0.65rem;
+  width: 0.1rem;
+  height: 1rem;
+}
+
+.enterLayer {
+  position: absolute;
+  z-index: 7;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background: rgb(0 0 0 / 24%);
+  pointer-events: none;
+}
+
+.enterPanel {
+  width: min(34rem, 100%);
+  border-top: 2px solid var(--voxel-accent);
+  border-bottom: 1px solid var(--voxel-line);
+  background: var(--voxel-panel);
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  text-align: center;
+  box-shadow: 0 28px 90px rgb(0 0 0 / 52%);
+  pointer-events: auto;
+}
+
+.enterMark {
+  display: grid;
+  width: 3.5rem;
+  aspect-ratio: 1;
+  margin: 0 auto 1.1rem;
+  place-items: center;
+  border: 1px solid var(--voxel-line);
+  color: var(--voxel-accent);
+  box-shadow: inset 0 0 0 0.45rem color-mix(in srgb, var(--voxel-accent) 8%, transparent);
+  transform: rotate(45deg);
+}
+
+.enterMark svg {
+  transform: rotate(-45deg);
+}
+
+.enterTitle {
+  font-size: clamp(2rem, 6vw, 4.4rem);
+  font-weight: 900;
+  line-height: 0.95;
+}
+
+.enterMood {
+  margin: 1rem auto 0;
+  color: rgb(230 239 241 / 74%);
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+.enterButton {
+  display: inline-flex;
+  min-height: 3.2rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  margin-top: 1.5rem;
+  border: 1px solid var(--voxel-accent);
+  background: var(--voxel-accent);
+  padding: 0 1.3rem;
+  color: #030608;
+  font-size: 0.75rem;
+  font-weight: 950;
+  clip-path: polygon(0.55rem 0, 100% 0, 100% calc(100% - 0.55rem), calc(100% - 0.55rem) 100%, 0 100%, 0 0.55rem);
+}
+
+.enterButton:hover {
+  background: var(--voxel-secondary);
+  border-color: var(--voxel-secondary);
+}
+
+.bottomHud {
+  position: absolute;
+  z-index: 7;
+  right: 50%;
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  display: grid;
+  justify-items: center;
+  gap: 0.55rem;
+  transform: translateX(50%);
+  pointer-events: none;
+}
+
+.statusLine {
+  border: 1px solid var(--voxel-line);
+  background: var(--voxel-panel);
+  padding: 0.42rem 0.65rem;
+}
+
+.hotbar {
+  display: grid;
+  grid-template-columns: repeat(5, 3.25rem);
+  gap: 0.25rem;
+  border: 1px solid var(--voxel-line);
+  background: var(--voxel-panel);
+  padding: 0.3rem;
+  pointer-events: auto;
+}
+
+.hotbarButton {
+  position: relative;
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.hotbarButton span:first-child {
+  width: 1.45rem;
+  aspect-ratio: 1;
+  border: 1px solid rgb(255 255 255 / 24%);
+  background: var(--block-color);
+  box-shadow: inset 0.25rem 0.25rem rgb(255 255 255 / 12%), inset -0.25rem -0.25rem rgb(0 0 0 / 18%);
+}
+
+.hotbarButton small {
+  position: absolute;
+  top: 0.2rem;
+  left: 0.28rem;
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.52rem;
+}
+
+.hotbarButton[data-kind="turf"] { --block-color: #3f8b68; }
+.hotbarButton[data-kind="soil"] { --block-color: #745340; }
+.hotbarButton[data-kind="stone"] { --block-color: #59636a; }
+.hotbarButton[data-kind="timber"] { --block-color: #9d762b; }
+.hotbarButton[data-kind="crystal"] { --block-color: var(--voxel-accent); }
+
+.touchControls {
+  display: none;
+}
+
+.errorLayer {
+  position: absolute;
+  z-index: 10;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #050709;
+  padding: 2rem;
+  color: #fff;
+  text-align: center;
+}
+
+.savePulse {
+  position: absolute;
+  z-index: 9;
+  top: 50%;
+  left: 50%;
+  border: 1px solid var(--voxel-accent);
+  background: var(--voxel-panel);
+  padding: 0.7rem 0.9rem;
+  color: var(--voxel-accent);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.68rem;
+  font-weight: 900;
+  transform: translate(-50%, 3rem);
+}
+
+.stage:fullscreen {
+  width: 100vw;
+  height: 100vh;
+  min-height: 0;
+}
+
+@media (max-width: 1023px) {
+  .page,
+  .stage {
+    min-height: calc(100svh - 6.75rem);
+  }
+
+  .stage {
+    height: calc(100svh - 6.75rem);
+  }
+}
+
+@media (max-width: 720px) {
+  .stage {
+    min-height: 34rem;
+  }
+
+  .worldIdentity {
+    max-width: 64vw;
+  }
+
+  .telemetry {
+    grid-template-columns: repeat(2, auto);
+    padding: 0.6rem 0.7rem;
+  }
+
+  .telemetry div:last-child {
+    display: none;
+  }
+
+  .worldTitle {
+    font-size: 1.05rem;
+  }
+
+  .utilityBar {
+    top: 5.5rem;
+  }
+
+  .enterLayer {
+    align-items: end;
+    padding-bottom: 8.5rem;
+  }
+
+  .enterPanel {
+    width: min(28rem, calc(100% - 1rem));
+    padding: 1.3rem;
+  }
+
+  .enterMark {
+    width: 2.8rem;
+  }
+
+  .hotbar {
+    grid-template-columns: repeat(5, 2.65rem);
+  }
+
+  .hotbarButton {
+    width: 2.65rem;
+    height: 2.65rem;
+  }
+}
+
+@media (pointer: coarse) {
+  .touchControls {
+    position: absolute;
+    z-index: 8;
+    right: 0.8rem;
+    bottom: max(5.2rem, calc(env(safe-area-inset-bottom) + 4.6rem));
+    left: 0.8rem;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
+  .movePad {
+    display: grid;
+    grid-template-columns: repeat(3, 2.85rem);
+    grid-template-rows: repeat(2, 2.85rem);
+    gap: 0.25rem;
+    pointer-events: auto;
+  }
+
+  .movePad .touchButton:first-child { grid-column: 2; }
+  .movePad .touchButton:nth-child(2) { grid-column: 1; grid-row: 2; }
+  .movePad .touchButton:nth-child(3) { grid-column: 2; grid-row: 2; }
+  .movePad .touchButton:nth-child(4) { grid-column: 3; grid-row: 2; }
+
+  .actionPad {
+    display: grid;
+    grid-template-columns: repeat(2, 3rem);
+    gap: 0.35rem;
+    pointer-events: auto;
+  }
+
+  .touchButton {
+    width: 2.85rem;
+    height: 2.85rem;
+    touch-action: none;
+  }
+
+  .actionPad .touchButton {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iconButton,
+  .touchButton,
+  .hotbarButton {
+    transition: none;
+  }
+}

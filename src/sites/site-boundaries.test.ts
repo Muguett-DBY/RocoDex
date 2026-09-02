@@ -119,10 +119,11 @@ describe("site architecture boundaries", () => {
     expect(violations).toEqual([]);
   });
 
-  it("keeps WebGL dependencies inside the personal homepage lazy scene", () => {
+  it("keeps WebGL dependencies inside explicitly lazy personal-site experiences", () => {
     const scenePath = sourcePath("sites/personal-homepage/components/immersive-scene.tsx");
     const postprocessingPath = sourcePath("sites/personal-homepage/components/immersive-postprocessing.tsx");
-    const allowedWebglEntries = new Set([scenePath, postprocessingPath]);
+    const voxelEnginePath = sourcePath("sites/personal-homepage/voxel/voxel-game-engine.ts");
+    const allowedWebglEntries = new Set([scenePath, postprocessingPath, voxelEnginePath]);
     const heavyRuntimeImport = /(?:from\s+|import\s*\()\s*["'](?:@react-three\/(?:fiber|postprocessing)|postprocessing|three)["']/;
     const violations = collectSourceFiles(sourceRoot)
       .filter((file) => !file.endsWith(".test.ts") && !file.endsWith(".test.tsx"))
@@ -134,9 +135,11 @@ describe("site architecture boundaries", () => {
 
     const sceneSource = readFileSync(scenePath, "utf8");
     const runtimeSource = readSource("sites/personal-homepage/components/scene-runtime.tsx");
+    const voxelSource = readSource("sites/personal-homepage/voxel/voxel-sandbox.tsx");
     expect(runtimeSource).toContain('import("./immersive-scene")');
     expect(runtimeSource).toContain("{ ssr: false }");
     expect(sceneSource).toContain('import("./immersive-postprocessing")');
+    expect(voxelSource).toContain('import("./voxel-game-engine")');
   });
 
   it("removes the former personal-site files from generic RocoDex folders", () => {

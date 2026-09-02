@@ -12,7 +12,7 @@ export function getCstdRouteTransitionKind(from: string, to: string): CstdRouteT
   if (source.startsWith("/work") || target.startsWith("/work")) return "work";
   if (source.startsWith("/notes") || target.startsWith("/notes")) return "reading";
   if (source.startsWith("/topics") || target.startsWith("/topics") || source === "/map" || target === "/map") return "path";
-  if (source.startsWith("/lab") || target.startsWith("/lab")) return "execute";
+  if (source.startsWith("/lab") || target.startsWith("/lab") || source === "/voxel" || target === "/voxel") return "execute";
   return "district";
 }
 

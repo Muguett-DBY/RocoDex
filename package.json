@@ -31,7 +31,7 @@
     "test:architecture": "vitest run src/sites/site-boundaries.test.ts",
     "test:host": "vitest run src/sites/site-boundaries.test.ts src/sites/personal-homepage/infrastructure/routing.test.ts src/app/robots.txt/route.test.ts src/app/sitemap.xml/route.test.ts",
     "test:personal": "vitest run src/sites/personal-homepage src/sites/shared src/app/robots.txt src/app/sitemap.xml",
-    "test:e2e:personal": "playwright test personal-homepage personal-archive",
+    "test:e2e:personal": "playwright test personal-homepage personal-archive personal-voxel",
     "test:e2e:rocodex": "playwright test e2e/rocodex.spec.ts",
     "capture:cstd:themes": "node scripts/capture-cstd-theme-gallery.mjs",
     "audit:dependencies": "npm audit --audit-level=high",

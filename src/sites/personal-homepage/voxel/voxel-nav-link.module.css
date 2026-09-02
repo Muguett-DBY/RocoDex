@@ -1,0 +1,76 @@
+.navLink {
+  --voxel-link-accent: #24e0ff;
+  --voxel-link-ink: #dffbff;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  height: 2.25rem;
+  align-items: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--voxel-link-accent) 42%, transparent);
+  padding: 0 0.75rem;
+  color: var(--voxel-link-ink);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.65rem;
+  font-weight: 900;
+  white-space: nowrap;
+  transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
+  clip-path: polygon(0.45rem 0, 100% 0, 100% calc(100% - 0.45rem), calc(100% - 0.45rem) 100%, 0 100%, 0 0.45rem);
+}
+
+.navLink::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--voxel-link-accent) 18%, transparent), transparent 72%);
+  content: "";
+  transform: translateX(-104%);
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.navLink::after {
+  position: absolute;
+  right: 0.32rem;
+  bottom: 0.28rem;
+  width: 0.28rem;
+  aspect-ratio: 1;
+  background: var(--voxel-link-accent);
+  box-shadow: 0 0 10px var(--voxel-link-accent);
+  content: "";
+}
+
+.navLink:hover {
+  border-color: var(--voxel-link-accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.navLink:hover::before {
+  transform: translateX(0);
+}
+
+:global(html[data-cstd-theme="underworld-forge"]) .navLink {
+  --voxel-link-accent: #d7a84b;
+  --voxel-link-ink: #f1dfb5;
+  font-family: "CSTD Underworld Display", Georgia, serif;
+  letter-spacing: 0;
+  clip-path: polygon(0.35rem 0, calc(100% - 0.35rem) 0, 100% 50%, calc(100% - 0.35rem) 100%, 0.35rem 100%, 0 50%);
+}
+
+:global(html[data-cstd-theme="astral-covenant"]) .navLink {
+  --voxel-link-accent: #77d6d1;
+  --voxel-link-ink: #e9dfc5;
+  border-color: #736797;
+  font-family: "CSTD Astral Display", Georgia, serif;
+  font-weight: 400;
+  letter-spacing: 0;
+  clip-path: polygon(0.35rem 0, calc(100% - 0.35rem) 0, 100% 0.35rem, 100% calc(100% - 0.35rem), calc(100% - 0.35rem) 100%, 0.35rem 100%, 0 50%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navLink,
+  .navLink::before {
+    transition: none;
+  }
+}
