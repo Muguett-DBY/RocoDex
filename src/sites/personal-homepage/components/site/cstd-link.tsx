@@ -76,6 +76,7 @@ export function CstdLink({
     event.preventDefault();
     document.documentElement.dataset.cstdNavigationPending = snapshot.kind;
     document.documentElement.dataset.cstdNavigationTarget = resolvedHref;
+    window.dispatchEvent(new CustomEvent("cstd:navigation-start", { detail: { href: resolvedHref } }));
     router.push(resolvedHref);
     window.setTimeout(() => {
       delete document.documentElement.dataset.cstdNavigationPending;

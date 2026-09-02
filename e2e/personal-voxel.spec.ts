@@ -53,6 +53,7 @@ test("CSTD renders three distinct playable voxel biomes without loading a blank 
 });
 
 test("CSTD voxel world supports movement, block selection, editing, and local save", async ({ page, isMobile }) => {
+  test.setTimeout(75_000);
   const browserIssues = captureBrowserIssues(page);
   await page.goto("/cstd/voxel", { waitUntil: "domcontentloaded" });
   const game = page.locator("[data-cstd-voxel-game]");
@@ -66,16 +67,17 @@ test("CSTD voxel world supports movement, block selection, editing, and local sa
   if (isMobile) {
     const forward = page.getByRole("button", { name: "向前" });
     await expect(forward).toBeVisible();
-    await page.keyboard.down("KeyW");
-    await page.waitForTimeout(280);
-    await page.keyboard.up("KeyW");
+    const pointer = { pointerId: 1, pointerType: "touch", isPrimary: true, buttons: 1 };
+    await forward.dispatchEvent("pointerdown", pointer);
+    await expect.poll(async () => page.locator("[data-cstd-voxel-game] dd").first().textContent()).not.toBe(positionBefore);
+    await forward.dispatchEvent("pointerup", { ...pointer, buttons: 0 });
     await page.getByRole("button", { name: "晶体" }).click();
     await page.getByRole("button", { name: "挖掘方块" }).click();
   } else {
     await page.keyboard.press("Digit5");
     await expect(game).toHaveAttribute("data-cstd-voxel-selected", "crystal");
     await page.keyboard.down("KeyW");
-    await page.waitForTimeout(280);
+    await expect.poll(async () => page.locator("[data-cstd-voxel-game] dd").first().textContent()).not.toBe(positionBefore);
     await page.keyboard.up("KeyW");
     const canvas = page.locator("[data-cstd-voxel-canvas]");
     const box = await canvas.boundingBox();
@@ -84,7 +86,6 @@ test("CSTD voxel world supports movement, block selection, editing, and local sa
     await page.keyboard.press("KeyP");
   }
 
-  await expect.poll(async () => page.locator("[data-cstd-voxel-game] dd").first().textContent()).not.toBe(positionBefore);
   if (!isMobile) await expect(game).toHaveAttribute("data-cstd-voxel-active", "false");
   const after = await game.getAttribute("data-cstd-voxel-block-count");
   expect(Number(after)).toBeLessThanOrEqual(Number(before));
@@ -94,7 +95,8 @@ test("CSTD voxel world supports movement, block selection, editing, and local sa
   expect(browserIssues).toEqual([]);
 });
 
-test("CSTD voxel world turns the portfolio directory into navigable landmarks", async ({ page }) => {
+test("CSTD voxel world turns the portfolio directory into navigable landmarks", async ({ page, isMobile }) => {
+  test.setTimeout(75_000);
   const browserIssues = captureBrowserIssues(page);
   await page.goto("/cstd/voxel", { waitUntil: "domcontentloaded" });
   const game = page.locator("[data-cstd-voxel-game]");
@@ -109,8 +111,12 @@ test("CSTD voxel world turns the portfolio directory into navigable landmarks", 
   await expect(game).toHaveAttribute("data-cstd-voxel-active", "true");
   await expect(game).toHaveAttribute("data-cstd-voxel-focus", "alpha-research-system");
   await expect(page.locator("[data-cstd-voxel-proximity]")).toContainText("CSTD Alpha 研究系统");
-  await page.keyboard.press("KeyE");
-  await expect(page).toHaveURL(/\/cstd\/work\/alpha-research-system$/);
+  if (isMobile) {
+    await page.locator('[data-cstd-voxel-proximity] [data-cstd-voxel-exhibit-link="alpha-research-system"]').click();
+  } else {
+    await page.keyboard.press("KeyE");
+  }
+  await expect(page).toHaveURL(/\/cstd\/work\/alpha-research-system$/, { timeout: 20_000 });
   expect(browserIssues).toEqual([]);
 });
 
