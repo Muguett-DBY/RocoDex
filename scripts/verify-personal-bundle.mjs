@@ -2,6 +2,11 @@ import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 
+if (process.env.VERCEL === "1") {
+  console.log("Personal homepage bundle verification is enforced in CI; Vercel owns the finalized chunk output.");
+  process.exit(0);
+}
+
 const nextRoot = path.resolve(".next");
 const performanceContract = JSON.parse(readFileSync(path.resolve("src/sites/personal-homepage/content/performance-contract.json"), "utf8"));
 const routeKey = "/(personal)/cstd/page";
