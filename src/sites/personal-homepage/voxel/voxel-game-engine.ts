@@ -190,6 +190,7 @@ export class VoxelGameEngine {
   private focusedLandmarkId: VoxelExhibitId | null = null;
   private focusedLandmarkDistance: number | null = null;
   private active = false;
+  private suspended = false;
   private cycle = 0.24;
 
   constructor(options: VoxelEngineOptions) {
@@ -655,6 +656,7 @@ export class VoxelGameEngine {
   }
 
   private animate = (now: number) => {
+    if (this.suspended) return;
     const delta = Math.min(0.05, Math.max(0, (now - this.previousFrame) / 1_000));
     this.previousFrame = now;
     this.updateMovement(delta);
@@ -719,6 +721,11 @@ export class VoxelGameEngine {
   }
 
   enter() {
+    if (this.suspended) {
+      this.suspended = false;
+      this.previousFrame = performance.now();
+      this.frame = window.requestAnimationFrame(this.animate);
+    }
     this.renderer.domElement.focus();
     if (window.matchMedia("(pointer: coarse)").matches) {
       this.active = true;
@@ -729,6 +736,15 @@ export class VoxelGameEngine {
   }
 
   pause() {
+    if (this.controls.isLocked) this.controls.unlock();
+    this.active = false;
+    this.movement.clear();
+    this.emitState(true);
+  }
+
+  suspend() {
+    this.suspended = true;
+    window.cancelAnimationFrame(this.frame);
     if (this.controls.isLocked) this.controls.unlock();
     this.active = false;
     this.movement.clear();
@@ -784,6 +800,7 @@ export class VoxelGameEngine {
   }
 
   destroy() {
+    this.suspended = true;
     window.cancelAnimationFrame(this.frame);
     this.pause();
     this.resizeObserver.disconnect();

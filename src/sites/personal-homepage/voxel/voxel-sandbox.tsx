@@ -320,6 +320,12 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
     if (saveTimerRef.current) window.clearTimeout(saveTimerRef.current);
   }, []);
 
+  useEffect(() => {
+    const suspendForNavigation = () => engineRef.current?.suspend();
+    window.addEventListener("cstd:navigation-start", suspendForNavigation);
+    return () => window.removeEventListener("cstd:navigation-start", suspendForNavigation);
+  }, []);
+
   function announce(message: string) {
     setAnnouncement(message);
     if (saveTimerRef.current) window.clearTimeout(saveTimerRef.current);
