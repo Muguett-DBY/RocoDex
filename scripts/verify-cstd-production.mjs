@@ -21,11 +21,11 @@ const htmlSurfaces = [
   { path: "/", language: "zh-CN", marker: "奶黄包" },
   { path: "/topics", language: "zh-CN", marker: "CSTD" },
   { path: "/lab/proof-museum", language: "zh-CN", marker: "CSTD" },
-  { path: "/voxel", language: "zh-CN", marker: "方块城 77" },
+  { path: "/voxel", language: "zh-CN", marker: "作品城 77" },
   { path: "/en", language: "en-AU", marker: "Custard" },
   { path: "/en/notes/host-boundaries-in-one-next-deployment", language: "en-AU", marker: "Next.js" },
   { path: "/en/for/research", language: "en-AU", marker: "Research" },
-  { path: "/en/voxel", language: "en-AU", marker: "BLOCK//CITY 77" },
+  { path: "/en/voxel", language: "en-AU", marker: "PORTFOLIO//CITY 77" },
 ];
 const htmlResponses = new Map();
 for (const { path, language, marker } of htmlSurfaces) {
