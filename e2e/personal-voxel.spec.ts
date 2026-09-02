@@ -3,9 +3,9 @@ import AxeBuilder from "@axe-core/playwright";
 import { captureBrowserIssues, expectNoHorizontalOverflow } from "./support/browser";
 
 const worlds = [
-  { id: "neon-district", title: { zh: "方块城 77", en: "BLOCK//CITY 77" } },
-  { id: "underworld-forge", title: { zh: "冥火采石场", en: "ASHEN QUARRY" } },
-  { id: "astral-covenant", title: { zh: "星骰浮岛", en: "DICEBOUND ISLES" } },
+  { id: "neon-district", title: { zh: "作品城 77", en: "PORTFOLIO//CITY 77" } },
+  { id: "underworld-forge", title: { zh: "冥火作品神殿", en: "TEMPLE OF SHIPPED WORK" } },
+  { id: "astral-covenant", title: { zh: "星骰作品群岛", en: "DICEBOUND PORTFOLIO ISLES" } },
 ] as const;
 
 async function expectRenderedVoxelCanvas(page: Page) {
@@ -43,8 +43,9 @@ test("CSTD renders three distinct playable voxel biomes without loading a blank 
     const game = page.locator("[data-cstd-voxel-game]");
     await expect(game).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
     await expect(game).toHaveAttribute("data-cstd-voxel-theme", world.id);
+    await expect(game).toHaveAttribute("data-cstd-voxel-landmark-count", "8");
     await expect(page.getByRole("heading", { level: 1, name: world.title.zh })).toBeVisible();
-    await expect(page.getByRole("toolbar", { name: "方块快捷栏" }).getByRole("button")).toHaveCount(5);
+    await expect(page.locator('[role="toolbar"][aria-label="方块快捷栏"] button')).toHaveCount(5);
     await expectRenderedVoxelCanvas(page);
     await expectNoHorizontalOverflow(page);
   }
@@ -58,7 +59,7 @@ test("CSTD voxel world supports movement, block selection, editing, and local sa
   await expect(game).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
   const before = await game.getAttribute("data-cstd-voxel-block-count");
 
-  await page.getByRole("button", { name: "进入世界" }).click();
+  await page.getByRole("button", { name: "进入作品世界" }).click();
   await expect(game).toHaveAttribute("data-cstd-voxel-active", "true");
   const positionBefore = await page.locator("[data-cstd-voxel-game] dd").first().textContent();
 
@@ -89,7 +90,27 @@ test("CSTD voxel world supports movement, block selection, editing, and local sa
   expect(Number(after)).toBeLessThanOrEqual(Number(before));
   await page.getByRole("button", { name: "保存世界" }).click();
   await expect(page.getByRole("status")).toContainText("世界已保存");
-  expect(await page.evaluate(() => Boolean(window.localStorage.getItem("cstd-voxel-world-v1:neon-district")))).toBe(true);
+  expect(await page.evaluate(() => Boolean(window.localStorage.getItem("cstd-voxel-world-v2:neon-district")))).toBe(true);
+  expect(browserIssues).toEqual([]);
+});
+
+test("CSTD voxel world turns the portfolio directory into navigable landmarks", async ({ page }) => {
+  const browserIssues = captureBrowserIssues(page);
+  await page.goto("/cstd/voxel", { waitUntil: "domcontentloaded" });
+  const game = page.locator("[data-cstd-voxel-game]");
+  await expect(game).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
+
+  await page.getByRole("button", { name: "城区索引" }).click();
+  const directory = page.getByRole("dialog", { name: "城区索引" });
+  await expect(directory).toBeVisible();
+  await expect(directory.locator("[data-cstd-voxel-exhibit-link]")).toHaveCount(8);
+  await page.getByRole("button", { name: /接入节点: CSTD Alpha 研究系统/ }).click();
+
+  await expect(game).toHaveAttribute("data-cstd-voxel-active", "true");
+  await expect(game).toHaveAttribute("data-cstd-voxel-focus", "alpha-research-system");
+  await expect(page.locator("[data-cstd-voxel-proximity]")).toContainText("CSTD Alpha 研究系统");
+  await page.keyboard.press("KeyE");
+  await expect(page).toHaveURL(/\/cstd\/work\/alpha-research-system$/);
   expect(browserIssues).toEqual([]);
 });
 
@@ -97,8 +118,8 @@ test("CSTD voxel world keeps English UI, compact geometry, and WCAG semantics", 
   await page.goto("/cstd/en/voxel", { waitUntil: "domcontentloaded" });
   const game = page.locator("[data-cstd-voxel-game]");
   await expect(game).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
-  await expect(page.getByRole("heading", { level: 1, name: "BLOCK//CITY 77" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Enter world" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "PORTFOLIO//CITY 77" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Enter portfolio world" })).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
   await expectNoHorizontalOverflow(page);
   const results = await new AxeBuilder({ page })

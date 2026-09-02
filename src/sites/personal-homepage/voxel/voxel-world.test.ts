@@ -11,7 +11,8 @@ describe("CSTD voxel world", () => {
     expect([...neonA.blocks]).toEqual([...neonB.blocks]);
     expect(neonA.blocks.size).toBeGreaterThan(2_000);
     expect([...neonA.blocks]).not.toEqual([...underworld.blocks]);
-    expect(astral.blocks.has(voxelKey(7, 16, -7))).toBe(true);
+    expect(astral.blocks.has(voxelKey(0, 9, 0))).toBe(true);
+    expect(astral.blocks.has(voxelKey(18, 0, 18))).toBe(false);
     expect(getExposedVoxels(neonA).length).toBeLessThan(neonA.blocks.size);
   });
 
@@ -26,6 +27,7 @@ describe("CSTD voxel world", () => {
     expect(restoreVoxelWorld(parsed!).blocks.get(voxelKey(2, 14, 3))).toBe("crystal");
     expect(parsed?.shards).toBe(4);
     expect(parseVoxelSnapshot(JSON.stringify(snapshot), "astral-covenant")).toBeNull();
-    expect(parseVoxelSnapshot('{"version":1,"theme":"underworld-forge","seed":1,"shards":0,"blocks":[[999,1,1,"stone"]]}', "underworld-forge")).toBeNull();
+    expect(parseVoxelSnapshot('{"version":2,"theme":"underworld-forge","seed":1,"shards":0,"blocks":[[999,1,1,"stone"]]}', "underworld-forge")).toBeNull();
+    expect(parseVoxelSnapshot('{"version":1,"theme":"underworld-forge","seed":1,"shards":0,"blocks":[[1,1,1,"stone"]]}', "underworld-forge")).toBeNull();
   });
 });
