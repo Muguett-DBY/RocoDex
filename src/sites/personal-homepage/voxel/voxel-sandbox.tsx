@@ -151,6 +151,7 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
   const [error, setError] = useState<string | null>(null);
   const [seed, setSeed] = useState(1707);
   const [announcement, setAnnouncement] = useState("");
+  const [announcementVisible, setAnnouncementVisible] = useState(false);
   const [directoryOpen, setDirectoryOpen] = useState(false);
   const [discovered, setDiscovered] = useState<Set<VoxelExhibitId>>(new Set());
 
@@ -328,8 +329,9 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
 
   function announce(message: string) {
     setAnnouncement(message);
+    setAnnouncementVisible(true);
     if (saveTimerRef.current) window.clearTimeout(saveTimerRef.current);
-    saveTimerRef.current = window.setTimeout(() => setAnnouncement(""), 1_400);
+    saveTimerRef.current = window.setTimeout(() => setAnnouncementVisible(false), 1_400);
   }
 
   function saveWorld() {
@@ -595,7 +597,8 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
           </div>
         </div>
 
-        {announcement ? <p role="status" className={styles.savePulse}>{announcement}</p> : null}
+        <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">{announcement}</p>
+        {announcementVisible && announcement ? <p aria-hidden="true" className={styles.savePulse}>{announcement}</p> : null}
         {error ? <div role="alert" className={styles.errorLayer}><div><Box aria-hidden="true" /><p>{ui.unavailable}</p></div></div> : null}
         <span className="sr-only">{seed} / {gameState.blockCount}</span>
       </section>
