@@ -14,6 +14,7 @@ type TelemetryEnvironment = Readonly<Record<string, string | undefined>>;
 export function resolveCstdTelemetryRedisConfig(environment: TelemetryEnvironment = process.env): CstdTelemetryRedisConfig | null {
   const credentialPairs = [
     { url: environment.CSTD_TELEMETRY_REDIS_URL, token: environment.CSTD_TELEMETRY_REDIS_TOKEN },
+    { url: environment.KV_REST_API_URL, token: environment.KV_REST_API_TOKEN },
     { url: environment.UPSTASH_REDIS_REST_URL, token: environment.UPSTASH_REDIS_REST_TOKEN },
     { url: environment.UPSTASH_REDIS_URL, token: environment.UPSTASH_REDIS_TOKEN },
   ];

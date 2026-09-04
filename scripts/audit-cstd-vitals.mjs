@@ -72,18 +72,23 @@ for (const [metricName, config] of Object.entries(rumAudit.metrics)) {
 const failures = [];
 let sawAnyData = false;
 
-for (const dateKey of days) {
-  await Promise.all(Object.entries(rumAudit.metrics).flatMap(([metricName]) =>
-    (["desktop", "mobile"]).map(async (device) => {
-      const fields = await fetchHash(`cstd:vitals:${dateKey}:${metricName}:${device}`);
-      if (!fields) return;
-      sawAnyData = true;
-      const target = perMetric[metricName][device];
-      const evaluated = evaluateBucketCounts(metricName, target.threshold, fields);
-      target.total += evaluated.total;
-      target.good += evaluated.good;
-    }),
-  ));
+try {
+  for (const dateKey of days) {
+    await Promise.all(Object.entries(rumAudit.metrics).flatMap(([metricName]) =>
+      (["desktop", "mobile"]).map(async (device) => {
+        const fields = await fetchHash(`cstd:vitals:${dateKey}:${metricName}:${device}`);
+        if (!fields) return;
+        sawAnyData = true;
+        const target = perMetric[metricName][device];
+        const evaluated = evaluateBucketCounts(metricName, target.threshold, fields);
+        target.total += evaluated.total;
+        target.good += evaluated.good;
+      }),
+    ));
+  }
+} catch (error) {
+  console.error(`Audit could not read telemetry aggregates from Redis: ${error instanceof Error ? error.message : error}`);
+  process.exit(1);
 }
 
 const summaryLines = [

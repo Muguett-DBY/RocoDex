@@ -105,6 +105,17 @@ describe("CSTD telemetry store configuration", () => {
     })).toEqual({ url: "https://cstd.upstash.io", token: "cstd-token" });
   });
 
+  test("prefers the Vercel Marketplace KV pair before the raw Upstash names", () => {
+    expect(resolveCstdTelemetryRedisConfig({
+      KV_REST_API_URL: "https://kv.upstash.io",
+      KV_REST_API_TOKEN: "kv-token",
+      UPSTASH_REDIS_REST_URL: "https://rest.upstash.io",
+      UPSTASH_REDIS_REST_TOKEN: "rest-token",
+      UPSTASH_REDIS_URL: "https://plain.upstash.io",
+      UPSTASH_REDIS_TOKEN: "plain-token",
+    })).toEqual({ url: "https://kv.upstash.io", token: "kv-token" });
+  });
+
   test("audits exactly the published RUM metrics", () => {
     expect(CSTD_RUM_METRICS).toEqual(["LCP", "INP", "CLS"]);
   });
