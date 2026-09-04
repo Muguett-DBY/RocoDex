@@ -20,12 +20,17 @@ Production exposes clean URLs on `custard.top`:
 The browser posts to `/api/cstd-vitals` only in production. The endpoint:
 
 - accepts only the personal-site host;
+- rate limits each identity to 30 requests per minute through Upstash Redis when telemetry credentials are configured (per-instance in-memory fallback otherwise);
 - rejects payloads over 2 KiB;
 - validates a closed metric-name set and bounded fields;
-- writes one structured Vercel log line and returns `204`;
+- writes one structured Vercel log line, aggregates LCP/INP/CLS value buckets into Redis, and returns `204`;
 - never persists a user profile.
 
-Operational targets at the 75th percentile are LCP at or below 1.8 seconds, INP at or below 150 ms, and CLS at or below 0.03. The existing personal bundle gate remains the hard build guard; browser acceptance additionally checks nonblank Canvas output and horizontal overflow.
+### Field vitals audit (closes the performance contract)
+
+When `CSTD_TELEMETRY_REDIS_URL`/`CSTD_TELEMETRY_REDIS_TOKEN` (or the shared `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN`) are present, the vitals endpoint aggregates daily, per-device value-bucket hashes under `cstd:vitals:<yyyymmdd>:<METRIC>:<device>` with a 40-day TTL. The weekly `CSTD Field Vitals Audit` GitHub Actions workflow runs `node scripts/audit-cstd-vitals.mjs`, which replays the trailing 28 days against the `rumAudit` thresholds published in `performance-contract.json` (LCP 1800 ms desktop / 2500 ms mobile, INP 150 ms, CLS 0.03; at least 75% of samples within budget with at least 30 samples) and fails the run on a breach. Without credentials the audit exits 0 with a skip notice. `verify:cstd:performance-contract` keeps the thresholds, bucket edges, audit script, and workflow build-linked.
+
+The homepage entry also negotiates the locale from `Accept-Language` when no `cstd-locale` cookie exists (explicit cookie always wins), and the proxy edge 404 and the React not-found page share one copy source in `infrastructure/not-found.ts`. All canonical `https://custard.top` URLs resolve through `infrastructure/origin.ts`, so preview builds can override them with `CSTD_ORIGIN`.
 
 ## Release checklist
 
@@ -35,3 +40,4 @@ Operational targets at the 75th percentile are LCP at or below 1.8 seconds, INP 
 4. Push only the intended CSTD changes; never stage `.reasonix/`, Playwright output, or unrelated RocoDex work.
 5. Wait for GitHub Actions and Vercel READY.
 6. Verify clean Chinese and English routes, RSS, sitemap, security headers, guide refusal, Lab controls, homepage WebGL, and both production domains.
+7. After telemetry storage is configured, check the latest `CSTD Field Vitals Audit` run summary (`gh run view --workflow "CSTD Field Vitals Audit"`) or trigger it with `gh workflow run "CSTD Field Vitals Audit"`.

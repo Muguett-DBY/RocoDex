@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { getPersonalSiteRouteDecision, isPersonalSiteHost, PERSONAL_SITE_SECURITY_HEADERS } from "./routing";
+import { getPersonalSiteRouteDecision, isPersonalSiteHost, parseCstdAcceptLanguage, PERSONAL_SITE_SECURITY_HEADERS } from "./routing";
 
 describe("CSTD host routing", () => {
   test("detects only the apex CSTD domain", () => {
@@ -19,6 +19,26 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/index.html", "en")).toEqual({ kind: "redirect-path", path: "/en" });
     expect(getPersonalSiteRouteDecision("custard.top", "/", "zh")).toEqual({ kind: "rewrite", path: "/cstd" });
     expect(getPersonalSiteRouteDecision("custard.top", "/work", "en")).toEqual({ kind: "rewrite", path: "/cstd/work" });
+  });
+
+  test("negotiates the entry locale from Accept-Language only without a saved preference", () => {
+    expect(getPersonalSiteRouteDecision("custard.top", "/", undefined, "en-US,en;q=0.9")).toEqual({ kind: "redirect-path", path: "/en" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/index.html", undefined, "en")).toEqual({ kind: "redirect-path", path: "/en" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/", undefined, "zh-CN,zh;q=0.9,en;q=0.8")).toEqual({ kind: "rewrite", path: "/cstd" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/", undefined, "fr;q=1,en;q=0.4")).toEqual({ kind: "redirect-path", path: "/en" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/", undefined, "fr;q=1,*;q=0.4")).toEqual({ kind: "rewrite", path: "/cstd" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/", undefined)).toEqual({ kind: "rewrite", path: "/cstd" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/", "zh", "en")).toEqual({ kind: "rewrite", path: "/cstd" });
+  });
+
+  test("parses Accept-Language quality values with deterministic tie-breaking", () => {
+    expect(parseCstdAcceptLanguage("en;q=0.8,zh;q=0.9")).toBe("zh");
+    expect(parseCstdAcceptLanguage("zh;q=0.5,en;q=0.5")).toBe("zh");
+    expect(parseCstdAcceptLanguage("*;q=1")).toBe("zh");
+    expect(parseCstdAcceptLanguage("en;q=0")).toBe("zh");
+    expect(parseCstdAcceptLanguage("EN-us")).toBe("en");
+    expect(parseCstdAcceptLanguage("")).toBe("zh");
+    expect(parseCstdAcceptLanguage(null)).toBe("zh");
   });
 
   test("serves the CSTD landing route on both canonical and explicit CSTD paths", () => {
@@ -77,9 +97,6 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-mascot.svg")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-og.svg")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-og-v2.webp")).toEqual({ kind: "next" });
-    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-systems-hero-v1.png")).toEqual({ kind: "next" });
-    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-systems-map-v1.png")).toEqual({ kind: "next" });
-    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-research-archive-v1.png")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-archive/cstd-archive-resin-circuit-v1.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-world/cstd-kinetic-studio-v2.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-persona/cstd-night-runner-v1.webp")).toEqual({ kind: "next" });

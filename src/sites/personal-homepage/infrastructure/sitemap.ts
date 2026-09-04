@@ -3,6 +3,7 @@ import { cstdCaseStudies } from "../content/case-studies";
 import { cstdLabs } from "../content/labs";
 import { cstdTechnicalNotes } from "../content/technical-notes";
 import { cstdTopics } from "../content/topics";
+import { createCstdUrl } from "./origin";
 
 export function getPersonalHomepageSitemapEntries(): SitemapEntry[] {
   const stablePages = ["/work", "/notes", "/lab", "/voxel", "/topics", "/map", "/about", "/now", "/resume"];
@@ -12,8 +13,8 @@ export function getPersonalHomepageSitemapEntries(): SitemapEntry[] {
     .sort()
     .at(-1) ?? "1970-01-01";
   const createPair = (path: string, changeFrequency: SitemapEntry["changeFrequency"], zhPriority: number, enPriority: number, lastModified = latestContentDate): SitemapEntry[] => {
-    const zhUrl = `https://custard.top${path || "/"}`;
-    const enUrl = `https://custard.top/en${path}`;
+    const zhUrl = createCstdUrl(path || "/");
+    const enUrl = createCstdUrl(`/en${path}`);
     const alternates = { "zh-CN": zhUrl, "en-AU": enUrl, "x-default": zhUrl };
     return [
       { url: zhUrl, alternates, lastModified, changeFrequency, priority: zhPriority },

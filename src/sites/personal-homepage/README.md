@@ -30,7 +30,13 @@ Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器�
 - 首页根编排和纯展示章节必须保持服务端组件；`homepage-runtime.tsx` 只负责导航、滚动、指针、遥测与可选 GPU，能力切换和案例 Worker 是独立客户端岛。不要用立即挂载的 `React.lazy` 伪装视口延迟。
 - 首页不得恢复常驻 HUD、场景导演、自动音频、发布重放或知识路径播放器；这些交互会把个人展示页重新推向应用控制台，并增加固定层和持续动画成本。
 
-公开机器契约包括 `observatory.json`、`performance.json`、`experience.json`、`content-health.json`、`studio.json`、`proof.json`、`graph.json`、`releases.json`、`topics.json`、`manifest.webmanifest` 与 `.well-known/security.txt`。中英文入口应保持同一 schema 和发布版本。
+公开机器契约包括 `observatory.json`、`performance.json`、`experience.json`、`content-health.json`、`studio.json`、`proof.json`、`graph.json`、`releases.json`、`topics.json`、`manifest.webmanifest` 与 `.well-known/security.txt`。中英文入口应保持同一 schema 和发布版本。发布版本以 `content/release.ts` 的 `CSTD_RELEASE` 为唯一真源；生产域名以 `infrastructure/origin.ts` 为唯一真源，preview 构建可用 `CSTD_ORIGIN` 环境变量覆盖。
+
+## 运行时观测
+
+- `/api/cstd-vitals` 由 `infrastructure/telemetry-store.ts` 支撑：配置了 `CSTD_TELEMETRY_REDIS_URL`/`CSTD_TELEMETRY_REDIS_TOKEN`（或复用 `UPSTASH_REDIS_REST_*`）时用 Upstash Redis 做 30 次/分限流与 LCP/INP/CLS 按日、按设备的价值桶聚合；未配置时自动退化为进程内限流，仅保留结构化日志。
+- `.github/workflows/cstd-vitals-audit.yml` 每周运行 `scripts/audit-cstd-vitals.mjs`，把 28 天现场数据对照 `performance-contract.json` 的 `rumAudit` 阈值并公布结论；阈值与桶边界由 `verify:cstd:performance-contract` 保证一致。
+- 首页入口在无 `cstd-locale` cookie 时按 `Accept-Language` 协商中英文（`parseCstdAcceptLanguage`）；代理边缘 404 与 React not-found 页共用 `infrastructure/not-found.ts` 的同一份文案。
 
 ## 静态资源
 

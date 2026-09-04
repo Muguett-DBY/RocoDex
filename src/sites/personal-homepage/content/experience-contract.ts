@@ -1,9 +1,10 @@
 import { cstdSceneManifest } from "../experience/scene-manifest";
 import { cstdPerformanceContract } from "./performance-contract";
+import { CSTD_RELEASE } from "./release";
 
 export const cstdExperienceContract = {
   schemaVersion: 2,
-  release: "CSTD-17.0",
+  release: CSTD_RELEASE,
   identity: {
     zh: "奶黄包",
     en: "Custard",

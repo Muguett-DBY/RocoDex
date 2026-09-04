@@ -1,5 +1,6 @@
+import { after } from "next/server";
 import type { NextRequest } from "next/server";
-import { consumeCstdTelemetryQuota, isPersonalSiteHost, parseCstdMetric } from "@/sites/personal-homepage/server";
+import { getCstdTelemetrySink, isPersonalSiteHost, parseCstdMetric } from "@/sites/personal-homepage/server";
 
 export async function POST(request: NextRequest) {
   const startedAt = Date.now();
@@ -8,7 +9,8 @@ export async function POST(request: NextRequest) {
   const identity = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim()
     ?? request.headers.get("x-real-ip")
     ?? "local";
-  const quota = consumeCstdTelemetryQuota(identity);
+  const sink = getCstdTelemetrySink();
+  const quota = await sink.consumeQuota(identity);
   if (!quota.allowed) return Response.json(
     { error: "rate_limited" },
     { status: 429, headers: { "retry-after": String(quota.retryAfterSeconds), "cache-control": "no-store" } },
@@ -25,6 +27,7 @@ export async function POST(request: NextRequest) {
   const metric = parseCstdMetric(value);
   if (!metric) return Response.json({ error: "invalid_metric" }, { status: 400 });
 
-  console.info(JSON.stringify({ level: "info", message: "cstd_vital", route: "/api/cstd-vitals", requestId, durationMs: Date.now() - startedAt, metric }));
+  console.info(JSON.stringify({ level: "info", message: "cstd_vital", route: "/api/cstd-vitals", requestId, durationMs: Date.now() - startedAt, telemetry: sink.mode, metric }));
+  after(() => sink.recordMetric(metric));
   return new Response(null, { status: 204, headers: { "cache-control": "no-store" } });
 }

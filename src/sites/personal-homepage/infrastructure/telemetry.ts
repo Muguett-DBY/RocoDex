@@ -3,7 +3,7 @@ const allowedMetricName = /^(?:LCP|CLS|INP|page_view|client_error|atlas_district
 type QuotaWindow = { startedAt: number; count: number };
 const quotaByIdentity = new Map<string, QuotaWindow>();
 
-function hashCstdTelemetryIdentity(value: string) {
+export function hashCstdTelemetryIdentity(value: string) {
   let hash = 2166136261;
   for (let index = 0; index < value.length; index += 1) {
     hash ^= value.charCodeAt(index);

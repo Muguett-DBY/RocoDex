@@ -3,7 +3,7 @@ const PERSONAL_SITE_REDIRECT_HOSTS = new Set(["www.custard.top"]);
 const PERSONAL_SITE_HOSTS = new Set([PERSONAL_SITE_HOST, ...PERSONAL_SITE_REDIRECT_HOSTS]);
 const PERSONAL_SITE_ENTRY_PATHS = new Set(["/", "/index.html"]);
 const PERSONAL_SITE_EXPLICIT_ENTRY_PATHS = new Set(["/cstd"]);
-const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
+export const PERSONAL_SITE_PUBLIC_PAGE_ROOTS: ReadonlySet<string> = new Set([
   "/work",
   "/notes",
   "/lab",
@@ -52,13 +52,29 @@ const PERSONAL_SITE_PUBLIC_PAGE_ROOTS = new Set([
   "/en/manifest.webmanifest",
   "/en/llms.txt",
 ]);
+export const PERSONAL_SITE_DYNAMIC_PAGE_PREFIXES: readonly string[] = [
+  "/work/",
+  "/for/",
+  "/notes/",
+  "/lab/",
+  "/topics/",
+  "/en/work/",
+  "/en/notes/",
+  "/en/lab/",
+  "/en/topics/",
+  "/en/for/",
+];
+
+export const PERSONAL_SITE_PUBLIC_EXACT_PATHS: ReadonlySet<string> = new Set([
+  "/en/now",
+  "/en/about",
+  "/en/resume",
+  "/en/map",
+]);
 const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",
   "/cstd-og.svg",
   "/cstd-og-v2.webp",
-  "/cstd-systems-hero-v1.png",
-  "/cstd-systems-map-v1.png",
-  "/cstd-research-archive-v1.png",
   "/cstd-resume.pdf",
   "/favicon.ico",
   "/robots.txt",
@@ -95,13 +111,46 @@ export function isPersonalSiteHost(host: string) {
   return PERSONAL_SITE_HOSTS.has(normalizeHost(host));
 }
 
-export function getPersonalSiteRouteDecision(host: string, path: string, preferredLocale?: "zh" | "en"): PersonalSiteRouteDecision {
+export function parseCstdAcceptLanguage(header: string | undefined | null): "zh" | "en" {
+  if (!header) return "zh";
+  const candidates = header
+    .split(",")
+    .map((part) => {
+      const [tag, ...params] = part.trim().split(";");
+      const qualityParam = params.find((param) => param.trim().startsWith("q="));
+      const quality = qualityParam ? Number.parseFloat(qualityParam.trim().slice(2)) : 1;
+      return { tag: (tag ?? "").trim().toLowerCase(), quality: Number.isFinite(quality) ? quality : 0 };
+    })
+    .filter((candidate) => candidate.tag.length > 0 && candidate.quality > 0);
+  let winner: { language: "zh" | "en"; quality: number } | null = null;
+  for (const candidate of candidates) {
+    const language = candidate.tag === "*" || candidate.tag.startsWith("zh") ? "zh"
+      : candidate.tag.startsWith("en") ? "en"
+      : null;
+    if (!language) continue;
+    if (!winner || candidate.quality > winner.quality) {
+      winner = { language, quality: candidate.quality };
+      if (language === "en" && candidate.quality === 1 && candidate.tag !== "*") break;
+    }
+  }
+  return winner?.language ?? "zh";
+}
+
+export function getPersonalSiteRouteDecision(
+  host: string,
+  path: string,
+  preferredLocale?: "zh" | "en",
+  acceptLanguage?: string,
+): PersonalSiteRouteDecision {
   const normalizedHost = normalizeHost(host);
 
   if (PERSONAL_SITE_REDIRECT_HOSTS.has(normalizedHost)) return { kind: "redirect", host: PERSONAL_SITE_HOST };
   if (!PERSONAL_SITE_HOSTS.has(normalizedHost)) return { kind: "next" };
-  if (PERSONAL_SITE_ENTRY_PATHS.has(path) && preferredLocale === "en") return { kind: "redirect-path", path: "/en" };
-  if (PERSONAL_SITE_ENTRY_PATHS.has(path)) return { kind: "rewrite", path: "/cstd" };
+  if (PERSONAL_SITE_ENTRY_PATHS.has(path)) {
+    const locale = preferredLocale ?? parseCstdAcceptLanguage(acceptLanguage);
+    if (locale === "en") return { kind: "redirect-path", path: "/en" };
+    return { kind: "rewrite", path: "/cstd" };
+  }
   if (PERSONAL_SITE_EXPLICIT_ENTRY_PATHS.has(path) || path.startsWith("/cstd/")) return { kind: "next" };
   if (isPublicPersonalPagePath(path)) return { kind: "rewrite", path: `/cstd${path}` };
   if (isAllowedPersonalSitePath(path)) return { kind: "next" };
@@ -111,20 +160,8 @@ export function getPersonalSiteRouteDecision(host: string, path: string, preferr
 
 function isPublicPersonalPagePath(path: string) {
   if (PERSONAL_SITE_PUBLIC_PAGE_ROOTS.has(path)) return true;
-  return path.startsWith("/work/")
-    || path.startsWith("/for/")
-    || path.startsWith("/notes/")
-    || path.startsWith("/lab/")
-    || path.startsWith("/topics/")
-    || path.startsWith("/en/work/")
-    || path.startsWith("/en/notes/")
-    || path.startsWith("/en/lab/")
-    || path.startsWith("/en/topics/")
-    || path.startsWith("/en/for/")
-    || path === "/en/now"
-    || path === "/en/about"
-    || path === "/en/resume"
-    || path === "/en/map";
+  if (PERSONAL_SITE_PUBLIC_EXACT_PATHS.has(path)) return true;
+  return PERSONAL_SITE_DYNAMIC_PAGE_PREFIXES.some((prefix) => path.startsWith(prefix));
 }
 
 function isAllowedPersonalSitePath(path: string) {
