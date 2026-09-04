@@ -34,12 +34,15 @@ function utcDateKey(offsetDays) {
 }
 
 async function fetchHash(key) {
-  const response = await fetch(`${restUrl}/get/${key}`, {
+  // The vitals sink stores aggregates as Redis hashes, so read them with HGETALL.
+  const response = await fetch(`${restUrl}/hgetall/${key}`, {
     headers: { authorization: `Bearer ${restToken}` },
   });
   if (!response.ok) throw new Error(`Upstash REST ${response.status} for ${key}`);
   const payload = await response.json();
-  return payload.result ?? null;
+  const fields = payload.result ?? null;
+  if (!fields || typeof fields !== "object") return null;
+  return Object.keys(fields).length > 0 ? fields : null;
 }
 
 function thresholdIndexFor(metricName, threshold) {
