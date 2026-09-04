@@ -29,16 +29,20 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
   const locale = ${serializedLocale};
   const stageAssets = ${serializedThemeStageAssets};
   const fontAssets = ${serializedThemeFontAssets};
+  const voxelGamePaths = ["/cstd/voxel", "/cstd/en/voxel"];
+  const onVoxelGame = voxelGamePaths.includes(window.location.pathname.replace(/\/+$/, ""));
 
-  for (const href of fontAssets[theme][locale]) {
-    const fontPreload = document.createElement("link");
-    fontPreload.rel = "preload";
-    fontPreload.as = "font";
-    fontPreload.type = "font/woff2";
-    fontPreload.href = href;
-    fontPreload.crossOrigin = "anonymous";
-    fontPreload.dataset.cstdFontPreload = theme;
-    document.head.appendChild(fontPreload);
+  if (!onVoxelGame) {
+    for (const href of fontAssets[theme][locale]) {
+      const fontPreload = document.createElement("link");
+      fontPreload.rel = "preload";
+      fontPreload.as = "font";
+      fontPreload.type = "font/woff2";
+      fontPreload.href = href;
+      fontPreload.crossOrigin = "anonymous";
+      fontPreload.dataset.cstdFontPreload = theme;
+      document.head.appendChild(fontPreload);
+    }
   }
 
   const homepagePath = window.location.pathname.replace(/\/+$/, "");

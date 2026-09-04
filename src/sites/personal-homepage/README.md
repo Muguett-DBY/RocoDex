@@ -38,6 +38,15 @@ Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器�
 - `.github/workflows/cstd-vitals-audit.yml` 每周运行 `scripts/audit-cstd-vitals.mjs`，把 28 天现场数据对照 `performance-contract.json` 的 `rumAudit` 阈值并公布结论；阈值与桶边界由 `verify:cstd:performance-contract` 保证一致。
 - 首页入口在无 `cstd-locale` cookie 时按 `Accept-Language` 协商中英文（`parseCstdAcceptLanguage`）；代理边缘 404 与 React not-found 页共用 `infrastructure/not-found.ts` 的同一份文案。
 
+## 体素作品世界
+
+`voxel/` 是藏在主站里的三套主题化体素作品集游戏，跟随视觉世界切换：
+
+- `neon-district` 生成永夜都市"作品城 77"（街道网格、霓虹窗带楼宇、全息信标与雨）；`underworld-forge` 生成冥府喀斯特"冥火作品神殿"（熔岩河道、金顶柱廊神殿、火盆神龛与余烬）；`astral-covenant` 生成浮空群岛"星骰作品群岛"（神龛岛链、星桥、奥术符文与漂浮骰子）。
+- 引擎在 `voxel-game-engine.ts`（异步 chunk，禁止静态导入）：步行控制器带重力、跳跃、疾跑、AABB 体素碰撞与 F 键飞行切换；坠入虚空自动回到出生点；每个展品地标有主题化视觉核、悬浮标题与接近交互（E 打开档案）。
+- 本地存档为 v3 只存差异格式（`cstd-voxel-world-v3:<theme>`）：记录相对种子世界的增删与改色，不随世界规模膨胀；旧版存档自动失效重生成。
+- 方块词汇表 8 种（turf/soil/stone/timber/crystal/neon/magma/gold），每主题有独立调色；触控端提供方向、跳跃、飞行切换与挖掘/放置。
+
 ## 静态资源
 
 个人主站资源保留在以下公开路径：

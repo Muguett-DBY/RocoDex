@@ -20,6 +20,7 @@ import {
   RotateCcw,
   Save,
   Sparkles,
+  Wind,
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
@@ -35,12 +36,13 @@ import styles from "./voxel-sandbox.module.css";
 const initialState: VoxelGameState = {
   active: false,
   blockCount: 0,
-  cycle: "day",
   landmarkDistance: null,
   landmarkId: null,
+  mode: "walk",
   position: [0, 0, 0],
   selectedIndex: 0,
   shards: 0,
+  sprinting: false,
   target: null,
 };
 
@@ -49,66 +51,72 @@ const worldCopy = {
     zh: {
       eyebrow: "CSTD // PORTFOLIO NETWORK",
       world: "作品城 77",
-      mood: "六座已交付系统成为城市节点。沿着信号走，进入作品真正运行过的地方。",
+      mood: "夜之城永不天亮。六座已交付系统化作霓虹数据堡垒：沿街道走过去，雨里的信号依然是热的。",
       portal: "接入作品城",
       landmark: "数据节点",
       directory: "城区索引",
       travel: "接入节点",
       open: "读取项目档案",
+      controls: "WASD 移动 · Space 跳跃 · Shift 疾跑 · F 飞行 · E 互动 · M 索引 · 1-8 选方块 · P 暂停",
     },
     en: {
       eyebrow: "CSTD // PORTFOLIO NETWORK",
       world: "PORTFOLIO//CITY 77",
-      mood: "Six shipped systems become city nodes. Follow the signal into the places where the work actually ran.",
+      mood: "Night City never sees dawn. Six shipped systems stand as neon data fortresses — walk the streets and the signals stay hot in the rain.",
       portal: "JACK INTO PORTFOLIO CITY",
       landmark: "Data node",
       directory: "District index",
       travel: "Jack into node",
       open: "Read project dossier",
+      controls: "WASD Move · Space Jump · Shift Sprint · F Fly · E Interact · M Index · 1-8 Blocks · P Pause",
     },
   },
   "underworld-forge": {
     zh: {
       eyebrow: "冥府 // 已完成的试炼",
       world: "冥火作品神殿",
-      mood: "每座神殿封存一次产品试炼：约束、抉择、失败，以及最后留下的证据。",
+      mood: "黑曜石高原被熔岩河劈开。每座神殿封存一次产品试炼：约束、抉择、失败，以及最后留下的证据。",
       portal: "踏入冥火神殿",
       landmark: "试炼遗物",
       directory: "冥府图谱",
       travel: "前往神殿",
       open: "翻开试炼铭文",
+      controls: "WASD 移动 · Space 跳跃 · Shift 疾跑 · F 飞行 · E 互动 · M 索引 · 1-8 选方块 · P 暂停",
     },
     en: {
       eyebrow: "UNDERWORLD // COMPLETED TRIALS",
       world: "TEMPLE OF SHIPPED WORK",
-      mood: "Each temple seals a product trial: constraints, decisions, failures, and the evidence that survived.",
+      mood: "Obsidian highlands split by rivers of fire. Each temple seals a product trial: constraints, decisions, failures, and the evidence that survived.",
       portal: "ENTER THE TEMPLE OF TRIALS",
       landmark: "Trial relic",
       directory: "Underworld atlas",
       travel: "Approach temple",
       open: "Unseal trial record",
+      controls: "WASD Move · Space Jump · Shift Sprint · F Fly · E Interact · M Index · 1-8 Blocks · P Pause",
     },
   },
   "astral-covenant": {
     zh: {
       eyebrow: "星界 // 奶黄包冒险档案",
       world: "星骰作品群岛",
-      mood: "作品化为漂浮岛屿，技术札记与实验室则藏在岛链尽头。选择一条星路出发。",
+      mood: "作品化作浮空神龛岛，星路在深渊微光之上延展。掷一次 d20，选择一条星路出发。",
       portal: "跃迁星骰群岛",
       landmark: "星界任务",
       directory: "冒险图鉴",
       travel: "跃迁浮岛",
       open: "开启任务编年史",
+      controls: "WASD 移动 · Space 跳跃 · Shift 疾跑 · F 飞行 · E 互动 · M 索引 · 1-8 选方块 · P 暂停",
     },
     en: {
       eyebrow: "ASTRAL // CUSTARD'S CAMPAIGN ARCHIVE",
       world: "DICEBOUND PORTFOLIO ISLES",
-      mood: "Work becomes a chain of floating islands, with notes and live labs waiting beyond the star roads.",
+      mood: "Work becomes a chain of floating shrine isles above a glowing abyss. Roll the d20 and pick a star road.",
       portal: "LEAP INTO THE DICEBOUND ISLES",
       landmark: "Astral quest",
       directory: "Campaign codex",
       travel: "Leap to isle",
       open: "Open quest chronicle",
+      controls: "WASD Move · Space Jump · Shift Sprint · F Fly · E Interact · M Index · 1-8 Blocks · P Pause",
     },
   },
 } as const;
@@ -119,6 +127,9 @@ const blockLabels: Record<VoxelBlockKind, { zh: string; en: string }> = {
   stone: { zh: "岩石", en: "Stone" },
   timber: { zh: "构件", en: "Frame" },
   crystal: { zh: "晶体", en: "Crystal" },
+  neon: { zh: "霓虹", en: "Neon" },
+  magma: { zh: "熔岩", en: "Magma" },
+  gold: { zh: "鎏金", en: "Gold" },
 };
 
 function formatCoordinate(value: number) {
@@ -141,6 +152,10 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
   const copy = worldCopy[theme][locale];
   const layout = getVoxelThemeLayout(theme);
   const exhibitById = useMemo(() => new Map(portfolio.exhibits.map((entry) => [entry.id, entry])), [portfolio.exhibits]);
+  const exhibitTitles = useMemo(
+    () => Object.fromEntries(portfolio.exhibits.map((entry) => [entry.id, entry.title])) as Record<VoxelExhibitId, string>,
+    [portfolio.exhibits],
+  );
   const engineRef = useRef<VoxelGameEngine | null>(null);
   const mountRef = useRef<HTMLDivElement>(null);
   const stageRef = useRef<HTMLElement>(null);
@@ -155,7 +170,7 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
   const [directoryOpen, setDirectoryOpen] = useState(false);
   const [discovered, setDiscovered] = useState<Set<VoxelExhibitId>>(new Set());
 
-  const storageKey = `cstd-voxel-world-v2:${theme}`;
+  const storageKey = `cstd-voxel-world-v3:${theme}`;
   const discoveryKey = `cstd-voxel-discoveries-v1:${theme}`;
   const focusedExhibit = gameState.landmarkId ? exhibitById.get(gameState.landmarkId) ?? null : null;
   const ui = locale === "zh" ? {
@@ -168,9 +183,9 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
     pause: "暂停",
     canvas: "奶黄包三维体素作品世界",
     coordinates: "坐标",
-    cycle: "天色",
-    day: "白昼",
-    night: "夜晚",
+    modeLabel: "模式",
+    walk: "步行",
+    fly: "飞行",
     shards: "晶体",
     discoveries: "发现",
     signal: "寻找作品信标",
@@ -178,8 +193,10 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
     unavailable: "这个浏览器没有成功启动 WebGL 世界。",
     breakBlock: "挖掘方块",
     placeBlock: "放置方块",
-    ascend: "向上飞行",
-    descend: "向下飞行",
+    jump: "跳跃",
+    toggleFly: "切换飞行",
+    ascend: "向上飞",
+    descend: "向下飞",
     close: "关闭",
     capabilities: "技术能力",
     directorySummary: "六个作品、技术札记与可执行实验共同组成这张三维作品地图。",
@@ -197,9 +214,9 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
     pause: "Pause",
     canvas: "Custard's 3D voxel portfolio world",
     coordinates: "Position",
-    cycle: "Sky",
-    day: "Day",
-    night: "Night",
+    modeLabel: "Mode",
+    walk: "Walk",
+    fly: "Fly",
     shards: "Shards",
     discoveries: "Found",
     signal: "Locate a portfolio beacon",
@@ -207,6 +224,8 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
     unavailable: "This browser could not start the WebGL world.",
     breakBlock: "Break block",
     placeBlock: "Place block",
+    jump: "Jump",
+    toggleFly: "Toggle flight",
     ascend: "Fly up",
     descend: "Fly down",
     close: "Close",
@@ -258,6 +277,7 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
           seed: nextSeed,
           snapshot,
           canvasLabel: ui.canvas,
+          exhibitTitles,
           onReady: (world) => {
             if (disposed) return;
             setReady(true);
@@ -306,7 +326,7 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
       engineRef.current = null;
       engine?.destroy();
     };
-  }, [discoveryKey, exhibitById, storageKey, theme, ui.canvas, ui.unavailable]);
+  }, [discoveryKey, exhibitById, exhibitTitles, storageKey, theme, ui.canvas, ui.unavailable]);
 
   useEffect(() => {
     if (!directoryOpen) return;
@@ -315,6 +335,18 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
     };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [directoryOpen]);
+
+  useEffect(() => {
+    const openOnM = (event: KeyboardEvent) => {
+      if (event.code === "KeyM" && !event.repeat && !directoryOpen) {
+        const target = event.target as HTMLElement | null;
+        if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA") return;
+        openDirectory();
+      }
+    };
+    window.addEventListener("keydown", openOnM);
+    return () => window.removeEventListener("keydown", openOnM);
   }, [directoryOpen]);
 
   useEffect(() => () => {
@@ -416,7 +448,7 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
           <dl className={styles.telemetry}>
             <div><dt>{ui.coordinates}</dt><dd>{gameState.position.map(formatCoordinate).join(" / ")}</dd></div>
             <div><dt>{ui.discoveries}</dt><dd>{String(discovered.size).padStart(2, "0")} / {String(portfolio.exhibits.length).padStart(2, "0")}</dd></div>
-            <div><dt>{ui.cycle}</dt><dd>{gameState.cycle === "day" ? ui.day : ui.night}</dd></div>
+            <div><dt>{ui.modeLabel}</dt><dd>{gameState.mode === "fly" ? ui.fly : ui.walk}{gameState.sprinting ? " +" : ""}</dd></div>
             <div><dt>{ui.shards}</dt><dd>{String(gameState.shards).padStart(2, "0")}</dd></div>
           </dl>
         </div>
@@ -424,6 +456,17 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
         <div className={styles.utilityBar}>
           <button type="button" data-cstd-voxel-directory-button onClick={openDirectory} aria-label={copy.directory} title={copy.directory} className={styles.iconButton}>
             <MapIcon aria-hidden="true" />
+          </button>
+          <button
+            type="button"
+            onClick={() => engineRef.current?.toggleFlight()}
+            aria-pressed={gameState.mode === "fly"}
+            aria-label={ui.toggleFly}
+            title={ui.toggleFly}
+            data-active={gameState.mode === "fly" ? "true" : "false"}
+            className={styles.iconButton}
+          >
+            <Wind aria-hidden="true" />
           </button>
           {gameState.active ? (
             <button type="button" onClick={() => engineRef.current?.pause()} aria-label={ui.pause} title={ui.pause} className={styles.iconButton}>
@@ -474,6 +517,7 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
                 </div>
               </div>
               <p className={styles.enterMood}>{copy.mood}</p>
+              <p className={styles.controlsLine}>{copy.controls}</p>
               <div className={styles.capabilityStrip} aria-label={ui.capabilities}>
                 {portfolio.capabilities.map((capability) => (
                   <div key={capability.label}>
@@ -590,7 +634,8 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
             <button type="button" aria-label={locale === "zh" ? "向右" : "Right"} title={locale === "zh" ? "向右" : "Right"} className={styles.touchButton} onPointerDown={(event) => startMovement("right", event)} onPointerUp={(event) => stopMovement("right", event)} onPointerCancel={(event) => stopMovement("right", event)}><ArrowRight aria-hidden="true" /></button>
           </div>
           <div className={styles.actionPad}>
-            <button type="button" aria-label={ui.ascend} title={ui.ascend} className={styles.touchButton} onPointerDown={(event) => startMovement("up", event)} onPointerUp={(event) => stopMovement("up", event)} onPointerCancel={(event) => stopMovement("up", event)}><ArrowUp aria-hidden="true" /></button>
+            <button type="button" aria-label={gameState.mode === "fly" ? ui.ascend : ui.jump} title={gameState.mode === "fly" ? ui.ascend : ui.jump} className={styles.touchButton} onPointerDown={(event) => startMovement("up", event)} onPointerUp={(event) => stopMovement("up", event)} onPointerCancel={(event) => stopMovement("up", event)}><ArrowUp aria-hidden="true" /></button>
+            <button type="button" aria-label={ui.toggleFly} title={ui.toggleFly} data-active={gameState.mode === "fly" ? "true" : "false"} onClick={() => engineRef.current?.toggleFlight()} className={styles.touchButton}><Wind aria-hidden="true" /></button>
             <button type="button" aria-label={ui.descend} title={ui.descend} className={styles.touchButton} onPointerDown={(event) => startMovement("down", event)} onPointerUp={(event) => stopMovement("down", event)} onPointerCancel={(event) => stopMovement("down", event)}><ArrowDown aria-hidden="true" /></button>
             <button type="button" aria-label={ui.breakBlock} title={ui.breakBlock} onClick={() => engineRef.current?.edit("break")} className={styles.touchButton}><Pickaxe aria-hidden="true" /></button>
             <button type="button" aria-label={ui.placeBlock} title={ui.placeBlock} onClick={() => engineRef.current?.edit("place")} className={styles.touchButton}><Box aria-hidden="true" /></button>
