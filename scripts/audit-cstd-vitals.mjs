@@ -14,8 +14,15 @@ const contract = JSON.parse(readFileSync(contractPath, "utf8"));
 const { rumAudit, budgets } = contract;
 
 const repositoryUrl = "https://github.com/Muguett-DBY/RocoDex";
-const restUrl = (process.env.CSTD_TELEMETRY_REDIS_URL ?? process.env.UPSTASH_REDIS_REST_URL ?? "").trim().replace(/\/$/, "");
-const restToken = (process.env.CSTD_TELEMETRY_REDIS_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN ?? "").trim();
+// Workflow env blocks resolve missing secrets to empty strings, so pick the first
+// complete pair instead of a ??-chain that would short-circuit on "".
+const credentialPairs = [
+  { url: process.env.CSTD_TELEMETRY_REDIS_URL, token: process.env.CSTD_TELEMETRY_REDIS_TOKEN },
+  { url: process.env.UPSTASH_REDIS_REST_URL, token: process.env.UPSTASH_REDIS_REST_TOKEN },
+];
+const credentials = credentialPairs.find((pair) => pair.url?.trim() && pair.token?.trim());
+const restUrl = (credentials?.url ?? "").trim().replace(/\/$/, "");
+const restToken = (credentials?.token ?? "").trim();
 
 if (!restUrl || !restToken) {
   console.log("SKIP: telemetry Redis credentials are not configured; nothing to audit.");
