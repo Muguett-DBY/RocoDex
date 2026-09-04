@@ -12,9 +12,14 @@ export type CstdTelemetryRedisConfig = { url: string; token: string };
 type TelemetryEnvironment = Readonly<Record<string, string | undefined>>;
 
 export function resolveCstdTelemetryRedisConfig(environment: TelemetryEnvironment = process.env): CstdTelemetryRedisConfig | null {
-  const url = (environment.CSTD_TELEMETRY_REDIS_URL ?? environment.UPSTASH_REDIS_REST_URL ?? "").trim();
-  const token = (environment.CSTD_TELEMETRY_REDIS_TOKEN ?? environment.UPSTASH_REDIS_REST_TOKEN ?? "").trim();
-  return url && token ? { url, token } : null;
+  const credentialPairs = [
+    { url: environment.CSTD_TELEMETRY_REDIS_URL, token: environment.CSTD_TELEMETRY_REDIS_TOKEN },
+    { url: environment.UPSTASH_REDIS_REST_URL, token: environment.UPSTASH_REDIS_REST_TOKEN },
+    { url: environment.UPSTASH_REDIS_URL, token: environment.UPSTASH_REDIS_TOKEN },
+  ];
+  const credentials = credentialPairs.find((pair) => pair.url?.trim() && pair.token?.trim());
+  if (!credentials) return null;
+  return { url: credentials.url!.trim(), token: credentials.token!.trim() };
 }
 
 export function getCstdMetricBucketIndex(metric: CstdRumMetricName, value: number) {

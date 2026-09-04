@@ -81,8 +81,16 @@ const baseMetric = {
 describe("CSTD telemetry store configuration", () => {
   test("requires both URL and token before using Redis", () => {
     expect(resolveCstdTelemetryRedisConfig({})).toBeNull();
+    expect(resolveCstdTelemetryRedisConfig({ UPSTASH_REDIS_URL: "https://example.upstash.io" })).toBeNull();
     expect(resolveCstdTelemetryRedisConfig({ UPSTASH_REDIS_REST_URL: "https://example.upstash.io" })).toBeNull();
     expect(resolveCstdTelemetryRedisConfig({ UPSTASH_REDIS_REST_URL: "https://example.upstash.io", UPSTASH_REDIS_REST_TOKEN: "token" })).toEqual({
+      url: "https://example.upstash.io",
+      token: "token",
+    });
+  });
+
+  test("accepts the non-prefixed Upstash variable names used by this project", () => {
+    expect(resolveCstdTelemetryRedisConfig({ UPSTASH_REDIS_URL: "https://example.upstash.io", UPSTASH_REDIS_TOKEN: "token" })).toEqual({
       url: "https://example.upstash.io",
       token: "token",
     });
