@@ -1,6 +1,7 @@
 import { cstdCaseStudies } from "./case-studies";
 import type { LocalizedText } from "./content-types";
 import { createCstdDigest } from "./digest";
+import { CSTD_RELEASE } from "./release";
 import { cstdLabs } from "./labs";
 import { cstdTechnicalNotes } from "./technical-notes";
 import { cstdTopics } from "./topics";
@@ -9,7 +10,7 @@ export type CstdContentFreshness = "current" | "aging" | "stale";
 
 export type CstdContentHealthSnapshot = Readonly<{
   schemaVersion: 1;
-  release: "CSTD-17.0";
+  release: typeof CSTD_RELEASE;
   generatedAt: string;
   status: "healthy" | "attention";
   score: number;
@@ -142,7 +143,7 @@ export function createCstdContentHealth(now = new Date()): CstdContentHealthSnap
 
   return {
     schemaVersion: 1,
-    release: "CSTD-17.0",
+    release: CSTD_RELEASE,
     generatedAt: latestUpdate,
     status: score === 100 ? "healthy" : "attention",
     score,

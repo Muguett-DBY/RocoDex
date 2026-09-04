@@ -19,6 +19,21 @@ export { createCstdSecurityTxtResponse } from "./infrastructure/security";
 export { cstdReleaseLedger } from "./content/release-ledger";
 export { cstdTopics } from "./content/topics";
 export { consumeCstdTelemetryQuota, parseCstdMetric, type CstdMetric } from "./infrastructure/telemetry";
+export {
+  createCstdTelemetrySink,
+  getCstdMetricBucketIndex,
+  getCstdRumThreshold,
+  getCstdTelemetrySink,
+  resetCstdTelemetrySinkForTests,
+  resolveCstdTelemetryRedisConfig,
+  CSTD_RUM_METRICS,
+  type CstdRumMetricName,
+  type CstdTelemetryRedisConfig,
+  type CstdTelemetrySink,
+} from "./infrastructure/telemetry-store";
+export { CSTD_SITE_ORIGIN, createCstdUrl, resolveCstdSiteOrigin } from "./infrastructure/origin";
+export { cstdNotFoundCopy, createCstdNotFoundHtml } from "./infrastructure/not-found";
+export { CSTD_RELEASE } from "./content/release";
 export { serializeCstdResume } from "./infrastructure/resume";
 export { createCstdManifest } from "./infrastructure/manifest";
 export { cstdLocaleConfig, getCstdLocaleFromPathname } from "./infrastructure/i18n";

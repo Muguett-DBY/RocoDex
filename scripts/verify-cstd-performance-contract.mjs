@@ -73,4 +73,36 @@ if (oversizedFontAsset) {
   throw new Error(`CSTD theme font ${oversizedFontAsset} exceeds ${contract.budgets.themeFontFileBytes} bytes`);
 }
 
-console.log(`CSTD performance contract OK: ${universeAssets.length} universe assets / ${universeBytes} bytes, ${stageAssets.length} stage assets / ${stageBytes} bytes, ${themeAssets.length} theme assets / ${themeBytes} bytes, ${materialAssets.length} materials / ${materialBytes} bytes, ${fontAssets.length} fonts / ${fontBytes} bytes, ${contract.delivery.immutableAssetRoots.length} immutable roots.`);
+const auditScriptPath = path.resolve("scripts/audit-cstd-vitals.mjs");
+const auditWorkflowPath = path.resolve(".github/workflows/cstd-vitals-audit.yml");
+const auditScript = readFileSync(auditScriptPath, "utf8");
+const auditWorkflow = readFileSync(auditWorkflowPath, "utf8");
+for (const [metricName, config] of Object.entries(contract.rumAudit.metrics)) {
+  const edges = contract.rumAudit.bucketEdges[metricName];
+  for (const budgetKey of [config.desktopBudgetKey, config.mobileBudgetKey]) {
+    const threshold = contract.budgets[budgetKey];
+    if (typeof threshold !== "number" || threshold <= 0) {
+      throw new Error(`RUM audit budget key ${budgetKey} for ${metricName} must reference a positive budgets entry`);
+    }
+    if (!edges.includes(threshold)) {
+      throw new Error(`RUM bucket edges for ${metricName} must include the ${budgetKey} budget value ${threshold}; edges are [${edges.join(", ")}]`);
+    }
+  }
+}
+if (contract.rumAudit.goodFraction <= 0 || contract.rumAudit.goodFraction > 1) {
+  throw new Error("rumAudit.goodFraction must be a fraction between 0 and 1");
+}
+if (!Number.isInteger(contract.rumAudit.minimumSamples) || contract.rumAudit.minimumSamples < 1) {
+  throw new Error("rumAudit.minimumSamples must be a positive integer");
+}
+if (!Number.isInteger(contract.rumAudit.windowDays) || contract.rumAudit.windowDays < 1) {
+  throw new Error("rumAudit.windowDays must be a positive integer");
+}
+if (!auditScript.includes("performance-contract.json") || !auditScript.includes("rumAudit")) {
+  throw new Error("scripts/audit-cstd-vitals.mjs must audit field vitals against the published performance contract");
+}
+if (!auditWorkflow.includes("audit-cstd-vitals.mjs")) {
+  throw new Error(".github/workflows/cstd-vitals-audit.yml must run the field vitals audit script");
+}
+
+console.log(`CSTD performance contract OK: ${universeAssets.length} universe assets / ${universeBytes} bytes, ${stageAssets.length} stage assets / ${stageBytes} bytes, ${themeAssets.length} theme assets / ${themeBytes} bytes, ${materialAssets.length} materials / ${materialBytes} bytes, ${fontAssets.length} fonts / ${fontBytes} bytes, ${contract.delivery.immutableAssetRoots.length} immutable roots, ${Object.keys(contract.rumAudit.metrics).length} field vitals audited weekly.`);

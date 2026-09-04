@@ -8,8 +8,8 @@ import { getCstdTechnicalNote } from "./content/technical-notes";
 import { getCstdNarrative, parseCstdNarrativeShareSlug } from "./content/narratives";
 import { getCstdTopic } from "./content/topics";
 import { cstdLocaleConfig, getCstdLanguageAlternates } from "./infrastructure/i18n";
-
-const CSTD_ORIGIN = "https://custard.top";
+import { CSTD_SITE_ORIGIN } from "./infrastructure/origin";
+import { CSTD_RELEASE } from "./content/release";
 
 export function getPersonalHomepageMetadata(locale: CstdLocale): Metadata {
   return createCstdMetadata({
@@ -29,7 +29,7 @@ export function getPersonalHomepageStructuredData(locale: CstdLocale) {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Custard / CSTD",
-    url: `${CSTD_ORIGIN}${prefix || "/"}`,
+    url: `${CSTD_SITE_ORIGIN}${prefix || "/"}`,
     inLanguage: cstdLocaleConfig[locale].htmlLang,
     description: locale === "zh" ? "奶黄包的个人工程工作室，展示已交付产品、证据优先 AI、数据系统、研究与视觉工程。" : "Custard's personal engineering studio for shipped products, evidence-first AI, data systems, research, and visual engineering.",
   },
@@ -37,7 +37,7 @@ export function getPersonalHomepageStructuredData(locale: CstdLocale) {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
     name: locale === "zh" ? "奶黄包 / CSTD" : "Custard / CSTD",
-    url: `${CSTD_ORIGIN}${prefix || "/"}`,
+    url: `${CSTD_SITE_ORIGIN}${prefix || "/"}`,
     inLanguage: cstdLocaleConfig[locale].htmlLang,
     mainEntity: {
       "@type": "Person",
@@ -57,10 +57,10 @@ export function getPersonalHomepageStructuredData(locale: CstdLocale) {
     description: locale === "zh"
       ? "custard.top 的构建关联验证、公开证据、内容健康度与发布来源记录。"
       : "Build-linked verification, public proof, content health, and release provenance for custard.top.",
-    url: `${CSTD_ORIGIN}${prefix}/observatory.json`,
+    url: `${CSTD_SITE_ORIGIN}${prefix}/observatory.json`,
     inLanguage: cstdLocaleConfig[locale].htmlLang,
     dateModified: cstdContentHealth.generatedAt,
-    version: "CSTD-17.0",
+    version: CSTD_RELEASE,
     isAccessibleForFree: true,
     creator: {
       "@type": "Person",
@@ -68,10 +68,10 @@ export function getPersonalHomepageStructuredData(locale: CstdLocale) {
       alternateName: locale === "zh" ? "Custard" : "奶黄包",
     },
     distribution: [
-      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}${prefix}/observatory.json` },
-      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}${prefix}/content-health.json` },
-      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}${prefix}/performance.json` },
-      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_ORIGIN}${prefix}/experience.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_SITE_ORIGIN}${prefix}/observatory.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_SITE_ORIGIN}${prefix}/content-health.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_SITE_ORIGIN}${prefix}/performance.json` },
+      { "@type": "DataDownload", encodingFormat: "application/json", contentUrl: `${CSTD_SITE_ORIGIN}${prefix}/experience.json` },
     ],
   },
 ] as const;
@@ -102,21 +102,21 @@ export function createCstdMetadata({
   publishedAt,
 }: CstdMetadataInput): Metadata {
   const canonicalPath = locale === "en" ? (path.startsWith("/en") ? path : `/en${path}`) : stripEnglishPrefix(path);
-  const canonical = new URL(canonicalPath, CSTD_ORIGIN).toString();
-  const imageUrl = new URL(image, CSTD_ORIGIN).toString();
+  const canonical = new URL(canonicalPath, CSTD_SITE_ORIGIN).toString();
+  const imageUrl = new URL(image, CSTD_SITE_ORIGIN).toString();
   const config = cstdLocaleConfig[locale];
   const alternates = getCstdLanguageAlternates(canonicalPath);
 
   return {
-    metadataBase: new URL(CSTD_ORIGIN),
+    metadataBase: new URL(CSTD_SITE_ORIGIN),
     title: `${title} | CSTD`,
     description,
     alternates: {
       canonical,
       languages: {
-        "zh-CN": new URL(alternates["zh-CN"], CSTD_ORIGIN).toString(),
-        "en-AU": new URL(alternates["en-AU"], CSTD_ORIGIN).toString(),
-        "x-default": new URL(alternates["x-default"], CSTD_ORIGIN).toString(),
+        "zh-CN": new URL(alternates["zh-CN"], CSTD_SITE_ORIGIN).toString(),
+        "en-AU": new URL(alternates["en-AU"], CSTD_SITE_ORIGIN).toString(),
+        "x-default": new URL(alternates["x-default"], CSTD_SITE_ORIGIN).toString(),
       },
     },
     manifest: locale === "en" ? "/en/manifest.webmanifest" : "/manifest.webmanifest",
@@ -238,7 +238,7 @@ export function getCstdTopicMetadata(slug: string | undefined, locale: CstdLocal
   });
 }
 
-export function getCstdProfileMetadata(page: "about" | "now" | "resume" | "en", locale: CstdLocale) {
+export function getCstdProfileMetadata(page: "about" | "now" | "resume", locale: CstdLocale) {
   const values = {
     about: {
       title: locale === "zh" ? "关于奶黄包" : "About Custard",
@@ -258,13 +258,7 @@ export function getCstdProfileMetadata(page: "about" | "now" | "resume" | "en", 
       image: "/cstd-og-v2.webp",
       type: "profile" as const,
     },
-    en: {
-      title: "Custard / CSTD",
-      description: "Product engineer and creative systems builder. Shipped systems, technical notes, and interactive labs.",
-      image: "/cstd-universe/cstd-night-workstation-v1.webp",
-      type: "profile" as const,
-    },
   }[page];
-  const path = page === "en" ? "/en" : locale === "en" ? `/en/${page}` : `/${page}`;
+  const path = locale === "en" ? `/en/${page}` : `/${page}`;
   return createCstdMetadata({ ...values, path, locale });
 }

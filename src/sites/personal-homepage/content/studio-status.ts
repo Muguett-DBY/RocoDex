@@ -1,5 +1,6 @@
 import { cstdCaseStudies } from "./case-studies";
 import { createCstdDigest } from "./digest";
+import { CSTD_RELEASE } from "./release";
 import { cstdProofMesh, getCstdProofFreshness, type CstdProofFreshness } from "./proof-mesh";
 import { cstdSystems, type CstdSystem } from "./systems";
 import { cstdTimeline } from "./timeline";
@@ -23,7 +24,7 @@ export type CstdDistrictStatus = Readonly<{
 
 export type CstdStudioSnapshot = Readonly<{
   schemaVersion: 3;
-  release: "CSTD-17.0";
+  release: typeof CSTD_RELEASE;
   generatedAt: string;
   source: "build-time-public-evidence";
   provenance: Readonly<{
@@ -90,7 +91,7 @@ export function createCstdStudioSnapshot(now = new Date()): CstdStudioSnapshot {
 
   return {
     schemaVersion: 3,
-    release: "CSTD-17.0",
+    release: CSTD_RELEASE,
     generatedAt,
     source: "build-time-public-evidence",
     provenance: {

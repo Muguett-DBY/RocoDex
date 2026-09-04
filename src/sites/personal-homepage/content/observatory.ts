@@ -2,6 +2,8 @@ import { cstdContentHealth, type CstdContentHealthSnapshot } from "./content-hea
 import { createCstdDigest } from "./digest";
 import { cstdStudioSnapshot } from "./studio-status";
 import { cstdPerformanceContract } from "./performance-contract";
+import { CSTD_RELEASE } from "./release";
+import { CSTD_SITE_ORIGIN } from "../infrastructure/origin";
 
 type ObservatoryEnvironment = Readonly<Record<string, string | undefined>>;
 
@@ -17,7 +19,7 @@ export type CstdObservatoryCheck = Readonly<{
 
 export type CstdEngineeringObservatory = Readonly<{
   schemaVersion: 2;
-  release: "CSTD-17.0";
+  release: typeof CSTD_RELEASE;
   generatedAt: string;
   freshness: "current" | "aging" | "stale";
   deployment: Readonly<{
@@ -94,7 +96,7 @@ export function createCstdEngineeringObservatory(
   const deploymentEnvironment = resolveEnvironment(environment.VERCEL_ENV);
   const sourceHref = buildLinked ? `${repository}/commit/${commit}/checks` : `${repository}/tree/main`;
   const url = deploymentEnvironment === "production"
-    ? "https://custard.top"
+    ? CSTD_SITE_ORIGIN
     : environment.VERCEL_URL
       ? `https://${environment.VERCEL_URL}`
       : "http://localhost:3000/cstd";
@@ -113,7 +115,7 @@ export function createCstdEngineeringObservatory(
 
   return {
     schemaVersion: 2,
-    release: "CSTD-17.0",
+    release: CSTD_RELEASE,
     generatedAt: now.toISOString(),
     freshness: getFreshness(now),
     deployment: {

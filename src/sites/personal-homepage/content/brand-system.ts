@@ -1,5 +1,7 @@
+import { CSTD_RELEASE } from "./release";
+
 export const cstdBrandSystem = {
-  release: "CSTD-17.0",
+  release: CSTD_RELEASE,
   name: "Neural Industrialism",
   thesis: {
     zh: "把代码、研究与交付证据建造成一座温和而精密的工程城市。",

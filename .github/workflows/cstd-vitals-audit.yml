@@ -1,0 +1,33 @@
+name: CSTD Field Vitals Audit
+
+on:
+  schedule:
+    - cron: "37 3 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cstd-field-vitals-audit
+  cancel-in-progress: true
+
+jobs:
+  audit:
+    name: Field Web Vitals vs performance contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Audit collected vitals against the performance contract
+        env:
+          CSTD_TELEMETRY_REDIS_URL: ${{ secrets.CSTD_TELEMETRY_REDIS_URL }}
+          CSTD_TELEMETRY_REDIS_TOKEN: ${{ secrets.CSTD_TELEMETRY_REDIS_TOKEN }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        run: node scripts/audit-cstd-vitals.mjs

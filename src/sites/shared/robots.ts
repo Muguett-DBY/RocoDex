@@ -1,6 +1,6 @@
-import { isPersonalSiteHost } from "@/sites/personal-homepage/server";
+import { CSTD_SITE_ORIGIN, isPersonalSiteHost } from "@/sites/personal-homepage/server";
 
-const CSTD_SITEMAP_URL = "https://custard.top/sitemap.xml";
+const CSTD_SITEMAP_URL = `${CSTD_SITE_ORIGIN}/sitemap.xml`;
 const ROCODEX_SITEMAP_URL = "https://rocodex.custard.top/sitemap.xml";
 
 const AI_RESTRICTED_BOTS = [

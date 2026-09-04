@@ -1,4 +1,6 @@
 import { generatedCstdProofMesh } from "./generated/content-registry";
+import { CSTD_RELEASE } from "./release";
+import { createCstdUrl } from "../infrastructure/origin";
 
 export type CstdProofFreshness = "current" | "aging" | "stale";
 
@@ -6,7 +8,7 @@ export const cstdProofMesh = generatedCstdProofMesh;
 
 export const cstdProofMeshManifest = {
   schemaVersion: 2,
-  release: "CSTD-17.0",
+  release: CSTD_RELEASE,
   verifiedAt: cstdProofMesh.map((entry) => entry.verifiedAt).sort().at(-1) ?? "2026-08-09",
   totals: {
     projects: cstdProofMesh.length,
@@ -14,15 +16,15 @@ export const cstdProofMeshManifest = {
     verified: cstdProofMesh.filter((entry) => entry.status === "verified").length,
   },
   related: {
-    graph: "https://custard.top/graph.json",
-    status: "https://custard.top/status.json",
-    studio: "https://custard.top/studio.json",
-    releases: "https://custard.top/releases.json",
-    feed: "https://custard.top/feed.json",
-    observatory: "https://custard.top/observatory.json",
-    contentHealth: "https://custard.top/content-health.json",
-    performance: "https://custard.top/performance.json",
-    experience: "https://custard.top/experience.json",
+    graph: createCstdUrl("/graph.json"),
+    status: createCstdUrl("/status.json"),
+    studio: createCstdUrl("/studio.json"),
+    releases: createCstdUrl("/releases.json"),
+    feed: createCstdUrl("/feed.json"),
+    observatory: createCstdUrl("/observatory.json"),
+    contentHealth: createCstdUrl("/content-health.json"),
+    performance: createCstdUrl("/performance.json"),
+    experience: createCstdUrl("/experience.json"),
   },
   entries: cstdProofMesh,
 } as const;
