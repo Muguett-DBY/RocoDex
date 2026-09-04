@@ -40,9 +40,21 @@ async function fetchHash(key) {
   });
   if (!response.ok) throw new Error(`Upstash REST ${response.status} for ${key}`);
   const payload = await response.json();
-  const fields = payload.result ?? null;
-  if (!fields || typeof fields !== "object") return null;
-  return Object.keys(fields).length > 0 ? fields : null;
+  return normalizeHash(payload.result);
+}
+
+function normalizeHash(result) {
+  // The Upstash REST API may answer HGETALL with a flat [field, value, ...] array
+  // or with a plain field->value object depending on response shape.
+  if (Array.isArray(result)) {
+    const fields = {};
+    for (let index = 0; index + 1 < result.length; index += 2) fields[result[index]] = result[index + 1];
+    return Object.keys(fields).length > 0 ? fields : null;
+  }
+  if (result && typeof result === "object") {
+    return Object.keys(result).length > 0 ? result : null;
+  }
+  return null;
 }
 
 function thresholdIndexFor(metricName, threshold) {
