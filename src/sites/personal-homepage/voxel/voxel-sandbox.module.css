@@ -210,6 +210,14 @@
   color: var(--voxel-secondary);
 }
 
+.iconButton[data-active="true"],
+.touchButton[data-active="true"] {
+  border-color: var(--voxel-secondary);
+  background: color-mix(in srgb, var(--voxel-secondary) 24%, #050709);
+  color: var(--voxel-secondary);
+  box-shadow: 0 0 14px color-mix(in srgb, var(--voxel-secondary) 42%, transparent);
+}
+
 .iconButton:active,
 .hotbarButton:active,
 .locateButton:active {
@@ -414,6 +422,17 @@
   color: var(--voxel-muted);
   font-size: 0.95rem;
   line-height: 1.8;
+}
+
+.controlsLine {
+  margin-top: 0.9rem;
+  border: 1px solid rgb(255 255 255 / 12%);
+  padding: 0.5rem 0.65rem;
+  color: var(--voxel-accent);
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
 }
 
 .capabilityStrip {
@@ -780,7 +799,7 @@
 
 .hotbar {
   display: grid;
-  grid-template-columns: repeat(5, 3.25rem);
+  grid-template-columns: repeat(8, 2.9rem);
   gap: 0.25rem;
   border: 1px solid var(--voxel-line);
   background: var(--voxel-panel);
@@ -790,8 +809,8 @@
 
 .hotbarButton {
   position: relative;
-  width: 3.25rem;
-  height: 3.25rem;
+  width: 2.9rem;
+  height: 2.9rem;
 }
 
 .hotbarButton span:first-child {
@@ -815,6 +834,9 @@
 .hotbarButton[data-kind="stone"] { --block-color: #59636a; }
 .hotbarButton[data-kind="timber"] { --block-color: #9d762b; }
 .hotbarButton[data-kind="crystal"] { --block-color: var(--voxel-accent); }
+.hotbarButton[data-kind="neon"] { --block-color: color-mix(in srgb, #7ff6ff 82%, #123c46); }
+.hotbarButton[data-kind="magma"] { --block-color: #ff5f2e; }
+.hotbarButton[data-kind="gold"] { --block-color: #ffd75e; }
 
 .touchControls {
   display: none;
@@ -1050,12 +1072,12 @@
   }
 
   .hotbar {
-    grid-template-columns: repeat(5, 2.65rem);
+    grid-template-columns: repeat(4, 2.5rem);
   }
 
   .hotbarButton {
-    width: 2.65rem;
-    height: 2.65rem;
+    width: 2.5rem;
+    height: 2.5rem;
   }
 }
 
@@ -1091,7 +1113,7 @@
 
   .actionPad {
     display: grid;
-    grid-template-columns: repeat(2, 3rem);
+    grid-template-columns: repeat(3, 3rem);
     gap: 0.35rem;
     pointer-events: auto;
   }

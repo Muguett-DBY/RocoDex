@@ -45,7 +45,7 @@ test("CSTD renders three distinct playable voxel biomes without loading a blank 
     await expect(game).toHaveAttribute("data-cstd-voxel-theme", world.id);
     await expect(game).toHaveAttribute("data-cstd-voxel-landmark-count", "8");
     await expect(page.getByRole("heading", { level: 1, name: world.title.zh })).toBeVisible();
-    await expect(page.locator('[role="toolbar"][aria-label="方块快捷栏"] button')).toHaveCount(5);
+    await expect(page.locator('[role="toolbar"][aria-label="方块快捷栏"] button')).toHaveCount(8);
     await expectRenderedVoxelCanvas(page);
     await expectNoHorizontalOverflow(page);
   }
@@ -91,7 +91,7 @@ test("CSTD voxel world supports movement, block selection, editing, and local sa
   expect(Number(after)).toBeLessThanOrEqual(Number(before));
   await page.getByRole("button", { name: "保存世界" }).click();
   await expect(page.getByRole("status")).toContainText("世界已保存");
-  expect(await page.evaluate(() => Boolean(window.localStorage.getItem("cstd-voxel-world-v2:neon-district")))).toBe(true);
+  expect(await page.evaluate(() => Boolean(window.localStorage.getItem("cstd-voxel-world-v3:neon-district")))).toBe(true);
   expect(browserIssues).toEqual([]);
 });
 
