@@ -12,10 +12,16 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1, name: "奶黄包" })).toBeVisible();
-  await expect(page.getByText("我用 R、Python 和 SQL 做可复现的分析", { exact: false })).toBeVisible();
+  await expect(page.locator('[data-cstd-theme-copy="atelier"]', { hasText: "我用 R、Python 和 SQL 做可复现的分析" }).first()).toBeVisible();
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
-  await expect(page.locator("[data-cstd-hero-summary] > div")).toHaveCount(3);
+  await expect(page.locator("[data-cstd-home-atelier]")).toHaveAttribute("data-cstd-atelier-section", "hero");
+  await expect(page.locator("[data-cstd-home-atelier] [data-cstd-atelier-section]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-narrative-switcher]")).toHaveCount(0);
+
+  // The game five-act composition lives behind the theme switch; neon asserts its counts.
+  await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-cstd-hero-summary] > div")).toHaveCount(3);
 
   await expect(page.locator("[data-cstd-scene]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-studio-twin]")).toHaveCount(1);
@@ -150,6 +156,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
 
 test("CSTD runs one deterministic worker example and keeps notes directly readable", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
+  await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
 
@@ -677,7 +684,7 @@ test("CSTD explicit calm mode reduces render cost and survives context loss", as
 test("CSTD primary and deep surfaces pass automated WCAG A/AA checks in every visual world", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 
-  for (const theme of ["neon-district", "underworld-forge", "astral-covenant"] as const) {
+  for (const theme of ["atelier", "neon-district", "underworld-forge", "astral-covenant"] as const) {
     await page.goto("/cstd", { waitUntil: "domcontentloaded" });
     await page.evaluate((nextTheme) => window.localStorage.setItem("cstd-world-theme", nextTheme), theme);
 

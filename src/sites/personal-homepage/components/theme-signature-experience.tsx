@@ -235,7 +235,7 @@ function AstralRoll({ locale }: { locale: CstdLocale }) {
   );
 }
 
-function AtelierMethod({ locale }: { locale: CstdLocale }) {
+export function AtelierMethod({ locale }: { locale: CstdLocale }) {
   const steps = locale === "zh"
     ? [
         { id: "deconstruct", icon: Terminal, title: "拆解", detail: "把问题拆成可验证的小问题：数据在哪、口径是什么、约束有哪些。", signal: "先对齐事实，再谈方案" },

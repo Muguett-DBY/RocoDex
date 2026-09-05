@@ -28,6 +28,38 @@ html[data-cstd-theme="atelier"] [data-cstd-theme-copy="atelier"] {
   display: contents !important;
 }
 
+/* The formal view is its own homepage composition, not a reskin. */
+[data-cstd-home-atelier] {
+  display: none !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-home-atelier] {
+  display: block !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-home-game] {
+  display: none !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-atelier-reveal="hidden"] {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-atelier-reveal="visible"] {
+  opacity: 1;
+  transform: none;
+  transition: opacity 640ms cubic-bezier(0.25, 0.1, 0.25, 1), transform 640ms cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-cstd-theme="atelier"] [data-cstd-atelier-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
 html[data-cstd-theme="atelier"] [data-cstd-theme-world],
 html[data-cstd-theme="atelier"] .cstd-theme-atmosphere,
 html[data-cstd-theme="atelier"] .cstd-theme-world-wash,
@@ -728,4 +760,40 @@ html[data-cstd-theme="atelier"] [data-cstd-depth-tabs] button[data-cstd-depth-ac
 
 html[data-cstd-theme="atelier"] [data-cstd-entry-console] [data-cstd-boot-track] i {
   background: var(--atelier-hairline) !important;
+}
+
+/* Deep case pages under atelier: the film column keeps its cinema, the
+   surrounding editorial elements switch to ink-on-paper. */
+html[data-cstd-theme="atelier"] [data-cstd-case-film] [data-cstd-film-beat] h3 {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-film] [data-cstd-film-beat] > button > span,
+html[data-cstd-theme="atelier"] [data-cstd-case-film] [data-cstd-film-beat] p {
+  color: var(--atelier-secondary) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-film] [data-cstd-film-beat] {
+  border-color: var(--atelier-hairline) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-dossier-tab] {
+  border-color: var(--atelier-hairline) !important;
+  color: var(--atelier-secondary) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"] {
+  background: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"],
+html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"] > span,
+html[data-cstd-theme="atelier"] [data-cstd-dossier-tab="architecture"] > span,
+html[data-cstd-theme="atelier"] [data-cstd-dossier-tab] > span {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"],
+html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"] > span {
+  color: #ffffff !important;
 }
