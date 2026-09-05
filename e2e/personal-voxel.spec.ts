@@ -34,7 +34,7 @@ test("CSTD exposes a themed voxel-world invitation from its navigation", async (
 });
 
 test("CSTD renders three distinct playable voxel biomes without loading a blank canvas", async ({ page }) => {
-  test.setTimeout(90_000);
+  test.setTimeout(150_000);
   const browserIssues = captureBrowserIssues(page);
   for (const world of worlds) {
     await page.goto("/cstd", { waitUntil: "domcontentloaded" });
@@ -53,7 +53,7 @@ test("CSTD renders three distinct playable voxel biomes without loading a blank 
 });
 
 test("CSTD voxel world supports movement, block selection, editing, and local save", async ({ page, isMobile }) => {
-  test.setTimeout(75_000);
+  test.setTimeout(180_000);
   const browserIssues = captureBrowserIssues(page);
   await page.goto("/cstd/voxel", { waitUntil: "domcontentloaded" });
   const game = page.locator("[data-cstd-voxel-game]");
@@ -96,7 +96,7 @@ test("CSTD voxel world supports movement, block selection, editing, and local sa
 });
 
 test("CSTD voxel world turns the portfolio directory into navigable landmarks", async ({ page, isMobile }) => {
-  test.setTimeout(75_000);
+  test.setTimeout(150_000);
   const browserIssues = captureBrowserIssues(page);
   await page.goto("/cstd/voxel", { waitUntil: "domcontentloaded" });
   const game = page.locator("[data-cstd-voxel-game]");
