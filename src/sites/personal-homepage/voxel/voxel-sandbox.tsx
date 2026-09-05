@@ -27,7 +27,7 @@ import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointer
 import { CstdLink } from "../components/site/cstd-link";
 import type { CstdLocale } from "../content/content-types";
 import { useCstdTheme } from "../experience/theme-store";
-import { getVoxelThemeLayout, type VoxelExhibitId } from "./voxel-landmarks";
+import { getVoxelThemeLayout, resolveVoxelTheme, type VoxelExhibitId } from "./voxel-landmarks";
 import type { VoxelPortfolioData, VoxelPortfolioExhibit } from "./voxel-portfolio";
 import type { VoxelGameEngine, VoxelGameState, VoxelMovement } from "./voxel-game-engine";
 import { parseVoxelSnapshot, voxelBlockKinds, type VoxelBlockKind } from "./voxel-world";
@@ -149,8 +149,9 @@ function ExhibitIcon({ kind }: { kind: VoxelPortfolioExhibit["kind"] }) {
 
 export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfolio: VoxelPortfolioData }) {
   const theme = useCstdTheme();
-  const copy = worldCopy[theme][locale];
-  const layout = getVoxelThemeLayout(theme);
+  const voxelTheme = resolveVoxelTheme(theme);
+  const copy = worldCopy[voxelTheme][locale];
+  const layout = getVoxelThemeLayout(voxelTheme);
   const exhibitById = useMemo(() => new Map(portfolio.exhibits.map((entry) => [entry.id, entry])), [portfolio.exhibits]);
   const exhibitTitles = useMemo(
     () => Object.fromEntries(portfolio.exhibits.map((entry) => [entry.id, entry.title])) as Record<VoxelExhibitId, string>,
@@ -170,7 +171,7 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
   const [directoryOpen, setDirectoryOpen] = useState(false);
   const [discovered, setDiscovered] = useState<Set<VoxelExhibitId>>(new Set());
 
-  const storageKey = `cstd-voxel-world-v3:${theme}`;
+  const storageKey = `cstd-voxel-world-v3:${voxelTheme}`;
   const discoveryKey = `cstd-voxel-discoveries-v1:${theme}`;
   const focusedExhibit = gameState.landmarkId ? exhibitById.get(gameState.landmarkId) ?? null : null;
   const ui = locale === "zh" ? {
@@ -256,8 +257,8 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
             return null;
           }
         })();
-        const snapshot = parseVoxelSnapshot(stored, theme);
-        const nextSeed = snapshot?.seed ?? (theme === "neon-district" ? 1707 : theme === "underworld-forge" ? 2771 : 7317);
+        const snapshot = parseVoxelSnapshot(stored, voxelTheme);
+        const nextSeed = snapshot?.seed ?? (voxelTheme === "neon-district" ? 1707 : voxelTheme === "underworld-forge" ? 2771 : 7317);
         const { VoxelGameEngine: Engine } = await import("./voxel-game-engine");
         if (disposed) return;
         try {
@@ -273,7 +274,7 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
         setSeed(nextSeed);
         engine = new Engine({
           mount,
-          theme,
+          theme: voxelTheme,
           seed: nextSeed,
           snapshot,
           canvasLabel: ui.canvas,

@@ -1,12 +1,13 @@
 "use client";
 
-import { Check, CircuitBoard, Dices, Flame, Palette, X } from "lucide-react";
+import { Check, CircuitBoard, Dices, Flame, Palette, PenLine, X } from "lucide-react";
 import { useEffect, useId, useRef, useState, type ComponentType, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPortal } from "react-dom";
 import type { CstdLocale } from "../content/content-types";
 import { cstdThemes, getCstdThemeMeta, setCstdTheme, useCstdTheme, type CstdThemeId } from "../experience/theme-store";
 
 const themeIcons: Record<CstdThemeId, ComponentType<{ className?: string; "aria-hidden"?: "true" }>> = {
+  "atelier": PenLine,
   "neon-district": CircuitBoard,
   "underworld-forge": Flame,
   "astral-covenant": Dices,

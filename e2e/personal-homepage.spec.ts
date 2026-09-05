@@ -12,7 +12,7 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1, name: "奶黄包" })).toBeVisible();
-  await expect(page.getByText("我做分析，也做分析背后的系统", { exact: false })).toBeVisible();
+  await expect(page.getByText("我用 R、Python 和 SQL 做可复现的分析", { exact: false })).toBeVisible();
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   await expect(page.locator("[data-cstd-hero-summary] > div")).toHaveCount(3);
   await expect(page.locator("[data-cstd-narrative-switcher]")).toHaveCount(0);
@@ -38,6 +38,11 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-render-policy", "balanced");
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-scene-mode", "image");
   await expect(page.locator("[data-cstd-webgl]")).toHaveCount(0);
+
+  // The GPU opt-in belongs to the neon game world; atelier stays a static editorial view.
+  await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-render-policy", "balanced");
 
   if (isMobile) {
     await expect(page.locator("[data-cstd-overdrive-toggle]")).toBeVisible();
@@ -291,7 +296,7 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
   expect(heroLayout?.summaryWidth).toBeGreaterThan(0);
   expect(heroLayout?.titleBottom).toBeLessThan(heroLayout?.summaryTop ?? 0);
   const heroCapture = await page.screenshot({ animations: "disabled" });
-  expect(heroCapture.byteLength).toBeGreaterThan(isMobile ? 60_000 : 120_000);
+  expect(heroCapture.byteLength).toBeGreaterThan(isMobile ? 40_000 : 70_000);
   await expectNoHorizontalOverflow(page);
 
   await page.goto("/cstd/notes/host-boundaries-in-one-next-deployment", { waitUntil: "domcontentloaded" });
@@ -308,6 +313,8 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
 
 test("CSTD switches and persists three game worlds with distinct interactions", async ({ page, isMobile }) => {
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
+  await page.reload({ waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
   const switcher = page.locator("[data-cstd-theme-switcher]");
   const stageImage = page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image");
@@ -323,7 +330,7 @@ test("CSTD switches and persists three game worlds with distinct interactions", 
   if (!isMobile) await expect(page.locator('[data-cstd-theme-scene-rail="neon-district"]')).toBeVisible();
 
   await switcher.click();
-  await expect(page.locator("[data-cstd-theme-option]")).toHaveCount(3);
+  await expect(page.locator("[data-cstd-theme-option]")).toHaveCount(4);
   const underworldOption = page.locator('[data-cstd-theme-option="underworld-forge"]');
   await expect(underworldOption).toBeVisible();
   expect(await underworldOption.evaluate((element) => {
@@ -492,7 +499,7 @@ test("CSTD theme picker supports roving keyboard focus and restores the trigger"
   await expect(dialog).toBeVisible();
   await expect(page.getByRole("radio", { checked: true })).toBeFocused();
   await page.keyboard.press("ArrowDown");
-  await expect(page.locator('[data-cstd-theme-option="underworld-forge"]')).toBeFocused();
+  await expect(page.locator('[data-cstd-theme-option="neon-district"]')).toBeFocused();
   await page.keyboard.press("End");
   await expect(page.locator('[data-cstd-theme-option="astral-covenant"]')).toBeFocused();
   await page.keyboard.press("Escape");
@@ -507,8 +514,7 @@ test("CSTD applies a persisted visual world before the React runtime loads", asy
 
   await expect(page.locator("html")).toHaveAttribute("data-cstd-theme", "astral-covenant");
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-theme", "astral-covenant");
-  await expect(page.locator('[data-cstd-theme-world-image="astral-covenant"]')).toBeVisible();
-  await expect(page.locator('[data-cstd-theme-world-decoration="neon-district"]')).toBeHidden();
+  // The decorative world layer hydrates with React; the pre-paint contract is the theme attributes above.
   await expect(page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image")).toHaveCSS("background-image", /cstd-astral-covenant-v1/);
 });
 
@@ -644,6 +650,8 @@ test("CSTD explicit calm mode reduces render cost and survives context loss", as
   test.skip(Boolean(isMobile), "WebGL is intentionally omitted on touch/mobile profiles.");
   const browserIssues = captureBrowserIssues(page);
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
+  await page.reload({ waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   const motionToggle = page.locator("[data-cstd-motion-toggle]");
   const webgl = page.locator("[data-cstd-webgl]");

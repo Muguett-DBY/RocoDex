@@ -241,12 +241,12 @@ describe("CSTD personal homepage", () => {
   });
 
   test("offers exactly three persistent game worlds with distinct structural engines", () => {
-    expect(themeStoreSource).toContain('export type CstdThemeId = "neon-district" | "underworld-forge" | "astral-covenant"');
-    expect(themeStoreSource).toContain('export type CstdThemeKind = "cyberpunk" | "mythic-underworld" | "fantasy-codex"');
+    expect(themeStoreSource).toContain('export type CstdThemeId = "atelier" | "neon-district" | "underworld-forge" | "astral-covenant"');
+    expect(themeStoreSource).toContain('export type CstdThemeKind = "editorial-studio" | "cyberpunk" | "mythic-underworld" | "fantasy-codex"');
     expect(themeStoreSource).toContain('cstdThemeStorageKey = "cstd-world-theme"');
     expect(themeStoreSource).toContain("brand: LocalizedText");
     expect(themeStoreSource).toContain("edition: LocalizedText");
-    expect(themeStoreSource).toContain('return "neon-district"');
+    expect(themeStoreSource).toContain('return "atelier"');
     expect(themeStoreSource).toContain("setCstdTheme");
     expect(themeStoreSource).toContain("document.documentElement.dataset.cstdTheme");
     expect(themeBootstrapSource).toContain("MutationObserver");

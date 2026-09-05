@@ -1,0 +1,731 @@
+/* ATELIER — the default, formal studio view.
+   Light editorial surfaces, ink typography, hairline rules, restrained motion.
+   The three visual worlds remain available as switchable escapes. */
+
+/* ---------- Foundation ---------- */
+
+html[data-cstd-theme="atelier"] {
+  color-scheme: light;
+  --atelier-bg: #f5f5f7;
+  --atelier-surface: #ffffff;
+  --atelier-ink: #1d1d1f;
+  --atelier-secondary: #55555c;
+  --atelier-muted: #6e6e73;
+  --atelier-hairline: rgb(0 0 0 / 10%);
+  --atelier-accent: #0066cc;
+}
+
+html[data-cstd-theme="atelier"] body {
+  background: var(--atelier-bg);
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] ::selection {
+  background: rgb(0 102 204 / 18%);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-theme-copy="atelier"] {
+  display: contents !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-theme-world],
+html[data-cstd-theme="atelier"] .cstd-theme-atmosphere,
+html[data-cstd-theme="atelier"] .cstd-theme-world-wash,
+html[data-cstd-theme="atelier"] .cstd-theme-world-texture,
+html[data-cstd-theme="atelier"] .cstd-theme-world-register,
+html[data-cstd-theme="atelier"] .cstd-theme-scene-rail .cstd-film-scan,
+html[data-cstd-theme="atelier"] .cstd-hero-scanline,
+html[data-cstd-theme="atelier"] [data-cstd-motion-layer="ambient"],
+html[data-cstd-theme="atelier"] [data-cstd-signal-field] {
+  display: none !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-theme-transition="atelier"] *,
+html[data-cstd-theme="atelier"] [data-cstd-theme-transition="atelier"] *::before,
+html[data-cstd-theme="atelier"] [data-cstd-theme-transition="atelier"] *::after {
+  transition: background-color 420ms ease, color 420ms ease, border-color 420ms ease !important;
+}
+
+/* ---------- Header chrome ---------- */
+
+html[data-cstd-theme="atelier"] header.sticky,
+html[data-cstd-theme="atelier"] [data-cstd-home-header] > div {
+  background: rgb(255 255 255 / 82%) !important;
+  border-color: var(--atelier-hairline) !important;
+  backdrop-filter: saturate(1.4) blur(18px);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%), 0 10px 30px rgb(0 0 0 / 6%) !important;
+}
+
+html[data-cstd-theme="atelier"] header.sticky :where(a, button, span, strong),
+html[data-cstd-theme="atelier"] [data-cstd-home-header] :where(a, button, span, strong, b, small) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] header.sticky :where(a, button):hover,
+html[data-cstd-theme="atelier"] [data-cstd-home-header] :where(a, button):hover {
+  color: var(--atelier-accent) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-home-header] [data-cstd-header-mark] {
+  background: var(--atelier-ink) !important;
+  color: #ffffff !important;
+  clip-path: none !important;
+  border-radius: 10px;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-home-header] [data-cstd-nav-active="true"] {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-home-header] nav {
+  color: var(--atelier-muted) !important;
+}
+
+html[data-cstd-theme="atelier"] header.sticky [data-cstd-header-mark] {
+  background: var(--atelier-ink) !important;
+  color: #ffffff !important;
+  clip-path: none !important;
+  border-radius: 10px;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-voxel-nav] {
+  background: var(--atelier-surface) !important;
+  border: 1px solid var(--atelier-hairline) !important;
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-voxel-nav]:hover {
+  border-color: rgb(0 102 204 / 40%) !important;
+  color: var(--atelier-accent) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-voxel-nav] :where(span, svg) {
+  color: var(--atelier-ink) !important;
+}
+
+/* ---------- Homepage hero ---------- */
+
+html[data-cstd-theme="atelier"] [data-cstd-hero],
+html[data-cstd-theme="atelier"] [data-cstd-chapter="hero"] {
+  background: var(--atelier-bg) !important;
+  border-bottom-color: var(--atelier-hairline) !important;
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero] > [data-cstd-stage-visual],
+html[data-cstd-theme="atelier"] [data-cstd-hero] > [data-cstd-stage-visual] * {
+  opacity: 0 !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero]::after,
+html[data-cstd-theme="atelier"] [data-cstd-chapter="hero"]::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(0 0 0 / 14%) 22%, rgb(0 0 0 / 14%) 78%, transparent);
+  pointer-events: none;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero] :where(h1, h2),
+html[data-cstd-theme="atelier"] [data-cstd-hero] :where(h1, h2) :where(span, p) {
+  color: var(--atelier-ink) !important;
+  letter-spacing: -0.028em;
+  text-shadow: none !important;
+}
+
+html[data-cstd-theme="atelier"] .cstd-hero-wordmark {
+  color: var(--atelier-ink) !important;
+  text-shadow: none !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero-role] {
+  color: var(--atelier-accent) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero-thesis] > span > span {
+  color: var(--atelier-accent) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero-description] {
+  color: var(--atelier-secondary) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero-actions] a:first-child {
+  background: var(--atelier-ink) !important;
+  color: #ffffff !important;
+  clip-path: none !important;
+  border-radius: 980px !important;
+  transition: transform 240ms cubic-bezier(0.25, 0.1, 0.25, 1), opacity 240ms ease;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero-actions] a:first-child:hover {
+  transform: translateY(-2px);
+  opacity: 0.86;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero-actions] a:last-child {
+  color: var(--atelier-accent) !important;
+  border-bottom-color: rgb(0 102 204 / 40%) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero-summary] {
+  border-top-color: var(--atelier-hairline) !important;
+  color: var(--atelier-secondary);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero-summary] :where(strong, span, dd) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero] [data-cstd-hero-title],
+html[data-cstd-theme="atelier"] [data-cstd-chapter="hero"] [data-cstd-hero-title] {
+  color: var(--atelier-ink) !important;
+  text-shadow: none !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero] p,
+html[data-cstd-theme="atelier"] [data-cstd-chapter="hero"] p {
+  color: var(--atelier-secondary) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero] [style*="--cstd-film-accent"],
+html[data-cstd-theme="atelier"] [data-cstd-hero] .font-mono {
+  color: var(--atelier-muted) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero] [data-cstd-entry-console] {
+  background: var(--atelier-surface) !important;
+  border: 1px solid var(--atelier-hairline) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%), 0 12px 32px rgb(0 0 0 / 6%) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero] [data-cstd-entry-console] :where(strong, dd, span) {
+  color: var(--atelier-ink);
+}
+
+/* Primary buttons: ink pill. */
+
+html[data-cstd-theme="atelier"] [data-cstd-hero] a[href$="s#result"],
+html[data-cstd-theme="atelier"] [data-cstd-hero] a[data-cstd-hero-primary],
+html[data-cstd-theme="atelier"] [data-cstd-chapter] a.cstd-atelier-primary {
+  background: var(--atelier-ink) !important;
+  color: #ffffff !important;
+  border-radius: 980px !important;
+  border: 0 !important;
+  transition: transform 240ms cubic-bezier(0.25, 0.1, 0.25, 1), opacity 240ms ease;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero] a:hover {
+  opacity: 0.88;
+}
+
+/* Secondary links: accent, quiet. */
+
+html[data-cstd-theme="atelier"] :is(a, button):focus-visible {
+  outline: 2px solid var(--atelier-accent) !important;
+  outline-offset: 3px !important;
+}
+
+/* ---------- Signature encounter (working method) ---------- */
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method {
+  border-block: 1px solid var(--atelier-hairline);
+  background: var(--atelier-surface);
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-header p {
+  color: var(--atelier-muted) !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-header h2 {
+  margin-top: 0.7rem;
+  color: var(--atelier-ink) !important;
+  font-size: clamp(1.9rem, 4vw, 3.4rem);
+  font-weight: 700;
+  letter-spacing: -0.022em;
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+  margin-top: clamp(1.8rem, 4vw, 3rem);
+  border: 1px solid var(--atelier-hairline);
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--atelier-bg);
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-steps button {
+  position: relative;
+  display: grid;
+  gap: 0.5rem;
+  align-content: start;
+  min-height: 10.5rem;
+  border: 0;
+  border-left: 1px solid var(--atelier-hairline);
+  padding: 1.5rem 1.4rem;
+  text-align: left;
+  background: transparent;
+  color: var(--atelier-secondary);
+  cursor: pointer;
+  transition: background 280ms ease, color 280ms ease;
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-steps button:first-child {
+  border-left: 0;
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-steps button:hover {
+  background: rgb(0 102 204 / 4%);
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-steps button[data-cstd-atelier-step-active="true"] {
+  background: var(--atelier-surface);
+  color: var(--atelier-ink);
+  box-shadow: inset 0 -3px var(--atelier-accent);
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-number {
+  color: var(--atelier-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-icon svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-steps strong {
+  font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+  font-weight: 700;
+  letter-spacing: -0.014em;
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-steps small {
+  min-height: 1.1rem;
+  color: var(--atelier-accent);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+html[data-cstd-theme="atelier"] .cstd-atelier-method-detail {
+  margin-top: 1.4rem;
+  border-left: 2px solid var(--atelier-accent);
+  padding: 0.35rem 0 0.35rem 1.1rem;
+  color: var(--atelier-secondary);
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+
+@media (max-width: 860px) {
+  html[data-cstd-theme="atelier"] .cstd-atelier-method-steps {
+    grid-template-columns: 1fr;
+  }
+
+  html[data-cstd-theme="atelier"] .cstd-atelier-method-steps button {
+    border-left: 0;
+    border-top: 1px solid var(--atelier-hairline);
+    min-height: 0;
+  }
+
+  html[data-cstd-theme="atelier"] .cstd-atelier-method-steps button:first-child {
+    border-top: 0;
+  }
+}
+
+/* ---------- Studio twin (capability systems) ---------- */
+
+html[data-cstd-theme="atelier"] [data-cstd-chapter="systems"],
+html[data-cstd-theme="atelier"] [data-cstd-studio-twin] {
+  background: var(--atelier-bg) !important;
+  border-color: var(--atelier-hairline) !important;
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-studio-twin] > img,
+html[data-cstd-theme="atelier"] [data-cstd-studio-twin] > div[aria-hidden="true"]:first-of-type {
+  opacity: 0.05 !important;
+  filter: grayscale(1);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-studio-twin] :where(h2, h3, strong) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-studio-twin] p {
+  color: var(--atelier-secondary) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-studio-twin] [data-cstd-observatory-deployment] {
+  border-color: var(--atelier-hairline) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-studio-district-option] {
+  border-color: transparent !important;
+  color: var(--atelier-muted) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-studio-district-option]:hover {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-system-active="true"] {
+  background: var(--atelier-surface) !important;
+  color: var(--atelier-ink) !important;
+  box-shadow: inset 3px 0 var(--atelier-accent) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-system-visual] {
+  border-color: var(--atelier-hairline) !important;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--atelier-surface) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-system-visual] img {
+  filter: saturate(0.95) contrast(1.02) brightness(1.02);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-studio-district-option][data-cstd-system-active="true"] {
+  background: var(--atelier-surface) !important;
+  border-color: var(--atelier-hairline) !important;
+}
+
+/* ---------- Proof (selected work) ---------- */
+
+html[data-cstd-theme="atelier"] [data-cstd-chapter="proof"] {
+  background: var(--atelier-surface) !important;
+  border-bottom-color: var(--atelier-hairline) !important;
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-chapter="proof"] [data-cstd-chapter-header] p {
+  border-color: var(--atelier-hairline) !important;
+  color: var(--atelier-muted) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-chapter="proof"] [data-cstd-chapter-header] :where(h2, span) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-proof-grid] article {
+  border-color: var(--atelier-hairline) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 5%), 0 18px 44px rgb(0 0 0 / 8%) !important;
+  transition: transform 480ms cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 480ms ease;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-proof-grid] article:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 6%), 0 28px 64px rgb(0 0 0 / 12%) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-evidence-chain] {
+  border: 1px solid var(--atelier-hairline) !important;
+  border-radius: 18px !important;
+  background: var(--atelier-bg) !important;
+  color: var(--atelier-ink) !important;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-evidence-chain-header] :where(p, span, a) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-evidence-chain-header] > div > p,
+html[data-cstd-theme="atelier"] [data-cstd-evidence-signal] {
+  color: var(--atelier-accent) !important;
+}
+
+html[data-cstd-theme="atelier"] :where(
+  [data-cstd-evidence-project-tabs],
+  [data-cstd-evidence-panel],
+  [data-cstd-evidence-project-tabs] button,
+  [data-cstd-evidence-phase-tabs]
+) {
+  border-color: var(--atelier-hairline) !important;
+  color: var(--atelier-secondary);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-evidence-project-active="true"] {
+  background: var(--atelier-ink) !important;
+  color: #ffffff !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-evidence-project-active="true"] :where(span, small) {
+  color: #ffffff !important;
+}
+
+/* ---------- Knowledge lens ---------- */
+
+html[data-cstd-theme="atelier"] [data-cstd-chapter="path"],
+html[data-cstd-theme="atelier"] [data-cstd-knowledge-lens] {
+  background: var(--atelier-bg) !important;
+  border-color: var(--atelier-hairline) !important;
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-knowledge-lens] > img,
+html[data-cstd-theme="atelier"] [data-cstd-knowledge-lens] > div[aria-hidden="true"] {
+  opacity: 0.04 !important;
+  filter: grayscale(1);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-knowledge-lens] :where(h2) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-knowledge-card] {
+  border-color: var(--atelier-hairline) !important;
+  border-radius: 14px;
+  transition: background 240ms ease, transform 240ms ease, border-color 240ms ease;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-knowledge-card] :where(h3, strong) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-knowledge-card] p,
+html[data-cstd-theme="atelier"] [data-cstd-knowledge-card] span {
+  color: var(--atelier-secondary) !important;
+}
+
+@media (hover: hover) {
+  html[data-cstd-theme="atelier"] [data-cstd-knowledge-card]:hover {
+    background: var(--atelier-surface);
+    border-color: rgb(0 102 204 / 32%) !important;
+    transform: translateX(0.35rem);
+  }
+}
+
+/* ---------- Finale ---------- */
+
+html[data-cstd-theme="atelier"] [data-cstd-chapter="finale"],
+html[data-cstd-theme="atelier"] [data-cstd-finale] {
+  background: var(--atelier-bg) !important;
+  border-color: var(--atelier-hairline) !important;
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-finale] :where(h2, strong) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-finale-layout] > div:last-child {
+  border-color: var(--atelier-hairline) !important;
+  background: var(--atelier-surface) !important;
+  border-radius: 18px;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-finale] > div > [aria-hidden="true"] {
+  opacity: 0.06 !important;
+  filter: grayscale(1);
+}
+
+/* ---------- Deep pages (work, notes, about, resume) ---------- */
+
+html[data-cstd-theme="atelier"] [data-cstd-deep-shell] {
+  background: var(--atelier-bg);
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-page-hero] {
+  background: var(--atelier-bg) !important;
+  border-color: var(--atelier-hairline) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-page-hero-image] {
+  opacity: 0.1 !important;
+  filter: grayscale(1) contrast(1.02);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-page-hero-title],
+html[data-cstd-theme="atelier"] [data-cstd-page-hero] :where(h1, h2) {
+  color: var(--atelier-ink) !important;
+  letter-spacing: -0.026em;
+  text-shadow: none !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-page-hero] p {
+  color: var(--atelier-secondary) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-page-hero-content] > div:first-child {
+  border-left-color: var(--atelier-ink) !important;
+}
+
+/* Case film stays cinematic; frame it instead of re-theming it. */
+
+html[data-cstd-theme="atelier"] [data-cstd-case-film] {
+  border-color: var(--atelier-hairline) !important;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* ---------- Scene rail ---------- */
+
+html[data-cstd-theme="atelier"] [data-cstd-theme-scene-rail] {
+  border-left-color: var(--atelier-hairline) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-theme-scene-rail] > div > a {
+  color: rgb(29 29 31 / 56%) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-theme-scene-rail] [data-cstd-theme-scene-active="true"] > a {
+  border-color: rgb(0 102 204 / 36%) !important;
+  background: rgb(0 102 204 / 8%) !important;
+  color: var(--atelier-accent) !important;
+  box-shadow: inset 3px 0 var(--atelier-accent) !important;
+}
+
+/* ---------- Mobile rail polish ---------- */
+
+@media (max-width: 1023px) {
+  html[data-cstd-theme="atelier"] [data-cstd-theme-scene-rail] {
+    border-left: 0 !important;
+  }
+}
+
+/* ---------- Second pass: yellows become formal, dark islands become light ---------- */
+
+/* Any brand-yellow text inside atelier chapters reads as the accent. */
+html[data-cstd-theme="atelier"] :is([data-cstd-chapter], [data-cstd-deep-shell], [data-cstd-executable-evidence]) [class*="f4d431"]:not([data-cstd-hero-actions] a):not([data-cstd-header-mark]) {
+  color: var(--atelier-accent) !important;
+}
+
+html[data-cstd-theme="atelier"] :is([data-cstd-chapter], [data-cstd-deep-shell]) [style*="f4d431"],
+html[data-cstd-theme="atelier"] [data-cstd-hero] [style*="#f4d431"] {
+  color: var(--atelier-accent) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-hero] span[aria-hidden="true"][class*="f4d431"] {
+  background: var(--atelier-ink) !important;
+}
+
+/* Studio twin metrics read in ink. */
+html[data-cstd-theme="atelier"] [data-cstd-studio-twin] dd,
+html[data-cstd-theme="atelier"] [data-cstd-studio-twin] [data-cstd-system-metric-label] + dd {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-studio-twin] [data-cstd-system-metric-label] {
+  color: var(--atelier-muted) !important;
+}
+
+/* Evidence phase states. */
+html[data-cstd-theme="atelier"] [data-cstd-proof-footer-link] {
+  color: var(--atelier-accent) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-proof-footer-link]:hover {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-evidence-actions] a {
+  color: var(--atelier-accent) !important;
+  border-bottom-color: rgb(0 102 204 / 36%) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-evidence-actions] a:hover {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-evidence-phase-active="true"] {
+  color: var(--atelier-ink) !important;
+  box-shadow: inset 3px 0 var(--atelier-accent);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-evidence-phase-active="true"] i {
+  border-color: var(--atelier-accent) !important;
+  background: var(--atelier-accent) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Executable evidence: a light lab bench. */
+html[data-cstd-theme="atelier"] [data-cstd-executable-evidence],
+html[data-cstd-theme="atelier"] [data-cstd-chapter="evidence"] {
+  background: var(--atelier-surface) !important;
+  border-color: var(--atelier-hairline) !important;
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-executable-evidence] :where(h2, h3, strong) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-executable-evidence] p,
+html[data-cstd-theme="atelier"] [data-cstd-executable-evidence] span:not([data-cstd-worker-meta]) {
+  color: var(--atelier-secondary) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] {
+  background: var(--atelier-bg) !important;
+  border-color: var(--atelier-hairline) !important;
+  border-radius: 18px;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] :where(h3) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] p {
+  color: var(--atelier-secondary) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] button[class*="f4d431"] {
+  background: var(--atelier-ink) !important;
+  color: #ffffff !important;
+  border-radius: 980px !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] button[class*="f4d431"]:hover {
+  background: var(--atelier-accent) !important;
+  color: #ffffff !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] input[type="range"] {
+  accent-color: var(--atelier-accent) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] .text-white {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] .text-\[\#3dff8f\] {
+  color: #0a7d3b !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-depth-tabs] {
+  border-color: var(--atelier-hairline) !important;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-depth-tabs] button {
+  border-color: var(--atelier-hairline) !important;
+  color: var(--atelier-muted) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-depth-tabs] button[aria-selected="true"],
+html[data-cstd-theme="atelier"] [data-cstd-depth-tabs] button[data-cstd-depth-active="true"] {
+  background: var(--atelier-ink) !important;
+  color: #ffffff !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-entry-console] [data-cstd-boot-track] i {
+  background: var(--atelier-hairline) !important;
+}

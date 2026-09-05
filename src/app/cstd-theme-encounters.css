@@ -6,6 +6,7 @@
   overflow: hidden;
 }
 
+[data-cstd-theme="atelier"] [data-cstd-theme-encounter-theme="atelier"],
 [data-cstd-theme="neon-district"] [data-cstd-theme-encounter-theme="neon-district"],
 [data-cstd-theme="underworld-forge"] [data-cstd-theme-encounter-theme="underworld-forge"],
 [data-cstd-theme="astral-covenant"] [data-cstd-theme-encounter-theme="astral-covenant"] {

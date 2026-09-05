@@ -25,6 +25,7 @@ export const cstdExperienceContract = {
   ],
   motionLayers: ["ambient", "narrative", "interactive"] as const,
   themeGrammars: {
+    "atelier": "read-expand-verify",
     "neon-district": "breach-scan-extract",
     "underworld-forge": "choose-boon-descend-return",
     "astral-covenant": "gather-roll-inscribe",

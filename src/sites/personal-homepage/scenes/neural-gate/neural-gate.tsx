@@ -23,13 +23,15 @@ type HeroThemeCopy = Readonly<{
   description: string;
 }>;
 
-const heroCopy: Record<CstdLocale, Record<"neon" | "underworld" | "astral", HeroThemeCopy>> = {
+const heroCopy: Record<CstdLocale, Record<"atelier" | "neon" | "underworld" | "astral", HeroThemeCopy>> = {
   zh: {
+    atelier: { kicker: "CSTD / 个人工作室", role: "数据科学研究生 · 分析、系统与产品", thesis: "把问题拆开、", accent: "把答案做实。", description: "我用 R、Python 和 SQL 做可复现的分析，也把分析做成能上线的产品。这个站是作品、取舍与验证过程的完整记录。" },
     neon: { kicker: "CSTD / PERSONAL STUDIO", role: "DATA SCIENCE POSTGRADUATE / ANALYSIS THAT SHIPS", thesis: "我把问题拆开，", accent: "直到它能在现实里运行。", description: "我做分析，也做分析背后的系统。数据、界面、AI 和发布都要经得住真实使用，而不是只在演示里好看。" },
     underworld: { kicker: "冥府档案 / 造物者 017", role: "数据科学研究生 / 分析铸造者", thesis: "困难的系统，", accent: "要经得住一次次归返。", description: "我把分析、AI、数据和发布放进同一座工坊：先锻出形，再过试炼，最后带着证据回到现实。" },
     astral: { kicker: "星界旅记 / 冒险者 017", role: "数据科学研究生 / 分析策士", thesis: "复杂系统，", accent: "也是一场由选择写成的冒险。", description: "我把问题、数据、代码和发布摊开在同一张冒险桌上：看清局势，组成工具，做出选择，再带着证据继续前进。" },
   },
   en: {
+    atelier: { kicker: "CSTD / PERSONAL STUDIO", role: "DATA SCIENCE POSTGRADUATE · ANALYSIS, SYSTEMS, PRODUCTS", thesis: "Take the problem apart,", accent: "make the answer hold up.", description: "I run reproducible analysis in R, Python, and SQL, then ship it as products that actually run. This site keeps the work, the trade-offs, and the verification." },
     neon: { kicker: "CSTD / PERSONAL STUDIO", role: "DATA SCIENCE POSTGRADUATE / ANALYSIS THAT SHIPS", thesis: "I take problems apart", accent: "until they work in the real world.", description: "I build analysis and the systems behind it. Data, interfaces, AI, and release all have to survive real use, not just a polished demo." },
     underworld: { kicker: "UNDERWORLD ARCHIVE / MAKER 017", role: "DATA SCIENCE POSTGRADUATE / ANALYSIS ARTIFICER", thesis: "Difficult systems are forged", accent: "through trial and return.", description: "I bring analysis, AI, data, and release into one workshop: shape the method, put it through trial, then return it to the real world with evidence intact." },
     astral: { kicker: "ASTRAL JOURNAL / ADVENTURER 017", role: "DATA SCIENCE POSTGRADUATE / ANALYSIS TACTICIAN", thesis: "Complex systems are adventures", accent: "written by choices.", description: "I spread questions, data, code, and release across one campaign table: read the situation, assemble the tools, choose a route, and keep the evidence for what comes next." },
@@ -59,6 +61,7 @@ export function NeuralGate({ narrativeMode, locale }: { narrativeMode: CstdNarra
           <p className="flex items-center gap-3 font-mono text-[11px] font-black text-[#f4d431] md:text-xs">
             <span aria-hidden="true" className="h-px w-10 bg-[#f4d431]" />
             <ThemeChapterLabel
+              atelier={copy.atelier.kicker}
               neon={copy.neon.kicker}
               underworld={copy.underworld.kicker}
               astral={copy.astral.kicker}
@@ -75,6 +78,7 @@ export function NeuralGate({ narrativeMode, locale }: { narrativeMode: CstdNarra
           </h1>
           <p data-cstd-hero-role className="mt-4 font-mono text-sm font-black leading-tight text-[#24e0ff] md:text-lg">
             <ThemeCopy
+              atelier={copy.atelier.role}
               neon={copy.neon.role}
               underworld={copy.underworld.role}
               astral={copy.astral.role}
@@ -87,6 +91,7 @@ export function NeuralGate({ narrativeMode, locale }: { narrativeMode: CstdNarra
             className="mt-10 max-w-3xl text-3xl font-semibold leading-[1.08] text-[#f2efe7] md:text-[2.8rem] lg:text-[3.1rem]"
           >
             <ThemeCopy
+              atelier={<>{copy.atelier.thesis}<span className="block">{copy.atelier.accent}</span></>}
               neon={<>{copy.neon.thesis}<span className="block text-[#f4d431]">{copy.neon.accent}</span></>}
               underworld={<>{copy.underworld.thesis}<span className="block text-[#f4d431]">{copy.underworld.accent}</span></>}
               astral={<>{copy.astral.thesis}<span className="block text-[#f4d431]">{copy.astral.accent}</span></>}
@@ -94,6 +99,7 @@ export function NeuralGate({ narrativeMode, locale }: { narrativeMode: CstdNarra
           </p>
           <p data-cstd-hero-description className="mt-5 max-w-xl text-base leading-7 text-[#aeb8bb] md:text-lg md:leading-8">
             <ThemeCopy
+              atelier={copy.atelier.description}
               neon={copy.neon.description}
               underworld={copy.underworld.description}
               astral={copy.astral.description}

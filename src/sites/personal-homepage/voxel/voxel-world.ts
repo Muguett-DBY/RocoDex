@@ -1,5 +1,5 @@
 import type { CstdThemeId } from "../experience/theme-store";
-import { getVoxelThemeLayout, type VoxelExhibitId, type VoxelLandmarkSpec } from "./voxel-landmarks";
+import { getVoxelThemeLayout, resolveVoxelTheme, type VoxelExhibitId, type VoxelLandmarkSpec, type VoxelThemeId } from "./voxel-landmarks";
 
 export const voxelBlockKinds = ["turf", "soil", "stone", "timber", "crystal", "neon", "magma", "gold"] as const;
 
@@ -456,7 +456,7 @@ function createAstralIsles(seed: number) {
   return blocks;
 }
 
-function clearSpawnPocket(blocks: Map<string, VoxelBlockKind>, theme: CstdThemeId) {
+function clearSpawnPocket(blocks: Map<string, VoxelBlockKind>, theme: VoxelThemeId) {
   if (theme === "astral-covenant") return; // the hub island is already clear
   const [spawnX, spawnZ] = getVoxelThemeLayout(theme).spawn;
   const groundY = theme === "neon-district" ? 5 : 9; // highest natural terrain step
@@ -470,13 +470,14 @@ function clearSpawnPocket(blocks: Map<string, VoxelBlockKind>, theme: CstdThemeI
 }
 
 export function createVoxelWorld(theme: CstdThemeId, seed: number): VoxelWorld {
+  const voxelTheme = resolveVoxelTheme(theme);
   const normalizedSeed = Math.abs(Math.trunc(seed)) || 1;
-  const blocks = theme === "neon-district"
+  const blocks = voxelTheme === "neon-district"
     ? createNightCity(normalizedSeed)
-    : theme === "underworld-forge"
+    : voxelTheme === "underworld-forge"
       ? createUnderworld(normalizedSeed)
       : createAstralIsles(normalizedSeed);
-  clearSpawnPocket(blocks, theme);
+  clearSpawnPocket(blocks, voxelTheme);
   return { seed: normalizedSeed, shards: 0, blocks, base: new Map(blocks) };
 }
 

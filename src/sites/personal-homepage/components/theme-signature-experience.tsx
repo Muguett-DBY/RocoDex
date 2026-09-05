@@ -5,7 +5,9 @@ import {
   Check,
   Dices,
   Eye,
+  FlaskConical,
   Flame,
+  PenLine,
   RadioTower,
   RotateCcw,
   ScrollText,
@@ -16,7 +18,7 @@ import {
 } from "lucide-react";
 import type { CstdLocale } from "../content/content-types";
 
-function emitSignatureMetric(name: "breach" | "boon" | "roll") {
+function emitSignatureMetric(name: "breach" | "boon" | "roll" | "method") {
   window.dispatchEvent(new CustomEvent("cstd:metric", { detail: { name: `signature_${name}`, value: 1 } }));
 }
 
@@ -233,9 +235,61 @@ function AstralRoll({ locale }: { locale: CstdLocale }) {
   );
 }
 
+function AtelierMethod({ locale }: { locale: CstdLocale }) {
+  const steps = locale === "zh"
+    ? [
+        { id: "deconstruct", icon: Terminal, title: "拆解", detail: "把问题拆成可验证的小问题：数据在哪、口径是什么、约束有哪些。", signal: "先对齐事实，再谈方案" },
+        { id: "build", icon: FlaskConical, title: "构建", detail: "用最少的合适技术把解法做出来——一条管线、一个界面或一个系统。", signal: "技术为问题服务" },
+        { id: "verify", icon: Check, title: "验证", detail: "用证据收尾：可复算的结果、可重跑的流程、可访问的产品。", signal: "结论带着来路" },
+      ] as const
+    : [
+        { id: "deconstruct", icon: Terminal, title: "Deconstruct", detail: "Split the problem into checkable pieces: where the data lives, what the definitions are, which constraints hold.", signal: "Facts before plans" },
+        { id: "build", icon: FlaskConical, title: "Build", detail: "Ship the solution with the least suitable technology — a pipeline, an interface, or a system.", signal: "Technology serves the question" },
+        { id: "verify", icon: Check, title: "Verify", detail: "Close with evidence: results that recompute, pipelines that rerun, products anyone can use.", signal: "Conclusions carry lineage" },
+      ] as const;
+  const [active, setActive] = useState(0);
+
+  return (
+    <section data-cstd-theme-encounter data-cstd-theme-encounter-theme="atelier" data-cstd-atelier-method={steps[active].id} aria-labelledby="cstd-atelier-method-title" className="cstd-theme-encounter cstd-atelier-method">
+      <div className="cstd-encounter-inner">
+        <header className="cstd-atelier-method-header">
+          <p><PenLine aria-hidden="true" /> {locale === "zh" ? "工作室 / 工作方式" : "ATELIER / WORKING METHOD"}</p>
+          <h2 id="cstd-atelier-method-title">{locale === "zh" ? "三步，把一件事做完。" : "Three steps. One finished thing."}</h2>
+        </header>
+        <div role="tablist" aria-label={locale === "zh" ? "工作方式三步" : "Three working steps"} className="cstd-atelier-method-steps">
+          {steps.map((step, index) => {
+            const Icon = step.icon;
+            const activeStep = active === index;
+            return (
+              <button
+                key={step.id}
+                type="button"
+                role="tab"
+                aria-selected={activeStep}
+                data-cstd-atelier-step={step.id}
+                data-cstd-atelier-step-active={activeStep ? "true" : "false"}
+                onClick={() => { setActive(index); emitSignatureMetric("method"); }}
+              >
+                <span className="cstd-atelier-method-number">{String(index + 1).padStart(2, "0")}</span>
+                <span className="cstd-atelier-method-icon" aria-hidden="true"><Icon /></span>
+                <strong>{step.title}</strong>
+                <small>{activeStep ? step.signal : ""}</small>
+              </button>
+            );
+          })}
+        </div>
+        <div className="cstd-atelier-method-detail" role="tabpanel" aria-live="polite">
+          <p>{steps[active].detail}</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function ThemeSignatureExperience({ locale }: { locale: CstdLocale }) {
   return (
     <>
+      <AtelierMethod locale={locale} />
       <NeonBreach locale={locale} />
       <UnderworldBoon locale={locale} />
       <AstralRoll locale={locale} />

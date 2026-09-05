@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
 import type { CstdThemeId } from "../experience/theme-store";
-import { getVoxelThemeLayout, type VoxelExhibitId, type VoxelThemeLayout } from "./voxel-landmarks";
+import { getVoxelThemeLayout, resolveVoxelTheme, type VoxelExhibitId, type VoxelThemeId, type VoxelThemeLayout } from "./voxel-landmarks";
 import {
   createVoxelSnapshot,
   createVoxelWorld,
@@ -34,7 +34,7 @@ export type VoxelGameState = {
 
 type VoxelEngineOptions = {
   mount: HTMLElement;
-  theme: CstdThemeId;
+  theme: VoxelThemeId;
   seed: number;
   snapshot: VoxelWorldSnapshot | null;
   canvasLabel: string;
@@ -77,7 +77,7 @@ type VoxelPalette = {
   blocks: Record<VoxelBlockKind, { base: number; fleck: number; emissive?: number; metalness?: number }>;
 };
 
-const palettes: Record<CstdThemeId, VoxelPalette> = {
+const palettes: Record<ReturnType<typeof resolveVoxelTheme>, VoxelPalette> = {
   "neon-district": {
     sky: 0x030609,
     fog: 0x0a1219,
@@ -238,7 +238,7 @@ function createTitleSprite(title: string, accent: number) {
 
 export class VoxelGameEngine {
   private readonly mount: HTMLElement;
-  private readonly theme: CstdThemeId;
+  private readonly theme: ReturnType<typeof resolveVoxelTheme>;
   private readonly layout: VoxelThemeLayout;
   private readonly palette: VoxelPalette;
   private readonly scene = new THREE.Scene();
@@ -292,8 +292,9 @@ export class VoxelGameEngine {
   constructor(options: VoxelEngineOptions) {
     this.mount = options.mount;
     this.theme = options.theme;
-    this.layout = getVoxelThemeLayout(options.theme);
-    this.palette = palettes[options.theme];
+    this.theme = resolveVoxelTheme(options.theme);
+    this.layout = getVoxelThemeLayout(this.theme);
+    this.palette = palettes[this.theme];
     this.exhibitTitleMap = options.exhibitTitles;
     this.onReady = options.onReady;
     this.onState = options.onState;

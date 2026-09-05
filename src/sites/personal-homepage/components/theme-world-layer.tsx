@@ -7,23 +7,25 @@ import { cstdThemeWorldAssets } from "../media/asset-manifest";
 import type { CstdLocale, LocalizedText } from "../content/content-types";
 import { CstdChapterLink } from "./site/cstd-chapter-link";
 
-const sceneCopy: Record<CstdSceneId, { neon: LocalizedText; underworld: LocalizedText; astral: LocalizedText }> = {
-  hero: { neon: { zh: "入侵", en: "BREACH" }, underworld: { zh: "门庭", en: "GATE" }, astral: { zh: "启程", en: "VENTURE" } },
-  systems: { neon: { zh: "装载", en: "LOADOUT" }, underworld: { zh: "锻造", en: "FORGE" }, astral: { zh: "法术书", en: "SPELLBOOK" } },
-  proof: { neon: { zh: "追踪", en: "TRACE" }, underworld: { zh: "试炼", en: "TRIALS" }, astral: { zh: "判定", en: "ROLL" } },
-  path: { neon: { zh: "记忆", en: "MEMORY" }, underworld: { zh: "神谕", en: "ORACLE" }, astral: { zh: "编年史", en: "CHRONICLE" } },
-  finale: { neon: { zh: "撤离", en: "EXIT" }, underworld: { zh: "归返", en: "RETURN" }, astral: { zh: "传承", en: "LEGACY" } },
+const sceneCopy: Record<CstdSceneId, { atelier: LocalizedText; neon: LocalizedText; underworld: LocalizedText; astral: LocalizedText }> = {
+  hero: { atelier: { zh: "开始", en: "START" }, neon: { zh: "入侵", en: "BREACH" }, underworld: { zh: "门庭", en: "GATE" }, astral: { zh: "启程", en: "VENTURE" } },
+  systems: { atelier: { zh: "方法", en: "METHOD" }, neon: { zh: "装载", en: "LOADOUT" }, underworld: { zh: "锻造", en: "FORGE" }, astral: { zh: "法术书", en: "SPELLBOOK" } },
+  proof: { atelier: { zh: "作品", en: "WORK" }, neon: { zh: "追踪", en: "TRACE" }, underworld: { zh: "试炼", en: "TRIALS" }, astral: { zh: "判定", en: "ROLL" } },
+  path: { atelier: { zh: "笔记", en: "NOTES" }, neon: { zh: "记忆", en: "MEMORY" }, underworld: { zh: "神谕", en: "ORACLE" }, astral: { zh: "编年史", en: "CHRONICLE" } },
+  finale: { atelier: { zh: "联络", en: "CONTACT" }, neon: { zh: "撤离", en: "EXIT" }, underworld: { zh: "归返", en: "RETURN" }, astral: { zh: "传承", en: "LEGACY" } },
 };
 
 const visualWorldThemes = ["underworld-forge", "astral-covenant"] as const;
 
 function getSceneLabel(theme: CstdThemeId, sceneId: CstdSceneId, locale: CstdLocale) {
+  if (theme === "atelier") return sceneCopy[sceneId].atelier[locale];
   if (theme === "underworld-forge") return sceneCopy[sceneId].underworld[locale];
   if (theme === "astral-covenant") return sceneCopy[sceneId].astral[locale];
   return sceneCopy[sceneId].neon[locale];
 }
 
 export function ThemeWorldLayer({ theme, activeSceneId, locale }: { theme: CstdThemeId; activeSceneId: CstdSceneId; locale: CstdLocale }) {
+  if (theme === "atelier") return null;
   const meta = getCstdThemeMeta(theme);
 
   return (
