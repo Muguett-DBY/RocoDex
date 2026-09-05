@@ -43,10 +43,14 @@ export function getPersonalHomepageStructuredData(locale: CstdLocale) {
       "@type": "Person",
       name: locale === "zh" ? "奶黄包" : "Custard",
       alternateName: locale === "zh" ? "Custard" : "奶黄包",
-      jobTitle: locale === "zh" ? "产品工程师与创作工具、研究系统构建者" : "Product engineer building creative tools and research systems",
+      jobTitle: locale === "zh" ? "数据科学研究生，把分析、数据系统和产品一起交付" : "Data science postgraduate delivering analysis, data systems, and products together",
       knowsAbout: locale === "zh"
-        ? ["产品工程", "证据优先 AI", "数据系统", "量化研究", "浏览器视觉工程"]
-        : ["Product engineering", "Evidence-first AI", "Data systems", "Quantitative research", "Visual engineering"],
+        ? ["数据科学", "数据分析", "数据可视化", "统计建模", "开放数据分析", "SQL", "R", "Python", "证据优先 AI", "产品工程", "浏览器视觉工程"]
+        : ["Data science", "Data analysis", "Data visualisation", "Statistical modelling", "Open-data analysis", "SQL", "R", "Python", "Evidence-first AI", "Product engineering", "Browser visual engineering"],
+      alumniOf: [
+        { "@type": "CollegeOrUniversity", name: "Monash University" },
+        { "@type": "CollegeOrUniversity", name: "The University of Sydney" },
+      ],
       sameAs: ["https://github.com/Muguett-DBY"],
     },
   },

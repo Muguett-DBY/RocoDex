@@ -14,7 +14,7 @@ describe("CSTD publishing CLI", () => {
 
   test("verifies current proof, assets, links, and bilingual coverage", async () => {
     await expect(verifyCstdContent(new Date("2026-08-09T12:00:00Z"))).resolves.toMatchObject({
-      cases: 6,
+      cases: 7,
       notes: 8,
       status: "verified",
     });

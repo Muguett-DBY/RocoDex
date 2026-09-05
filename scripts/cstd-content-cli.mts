@@ -162,6 +162,7 @@ export async function verifyCstdContent(now = new Date()) {
     ...notes.map((entry) => `/notes/${entry.slug}`),
     ...cstdLabs.map((entry) => `/lab/${entry.slug}`),
     ...cstdTopics.map((entry) => `/topics/${entry.slug}`),
+    ...(await readdir(path.join(process.cwd(), "public", "cstd-archive"))).map((name) => `/cstd-archive/${name}`),
   ]);
   const issues: string[] = [];
   let artifacts = 0;

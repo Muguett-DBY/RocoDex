@@ -8,7 +8,7 @@ export const cstdExperienceContract = {
   identity: {
     zh: "奶黄包",
     en: "Custard",
-    role: "PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER",
+    role: "DATA SCIENCE POSTGRADUATE / ANALYSIS THAT SHIPS",
     systemCodename: "CSTD://PERSONAL ENGINEERING UNIVERSE",
   },
   acts: cstdSceneManifest.map((scene) => ({

@@ -12,7 +12,7 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1, name: "奶黄包" })).toBeVisible();
-  await expect(page.getByText("我做产品，也做背后的系统", { exact: false })).toBeVisible();
+  await expect(page.getByText("我做分析，也做分析背后的系统", { exact: false })).toBeVisible();
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   await expect(page.locator("[data-cstd-hero-summary] > div")).toHaveCount(3);
   await expect(page.locator("[data-cstd-narrative-switcher]")).toHaveCount(0);
@@ -28,7 +28,7 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   await expect(page.locator("[data-cstd-replay-option]")).toHaveCount(0);
   await expect(page.locator('[data-cstd-home-replay="alpha-race"]')).toHaveCount(1);
   await expect(page.locator("[data-cstd-knowledge-lens]")).toHaveCount(1);
-  await expect(page.locator("[data-cstd-knowledge-card]")).toHaveCount(3);
+  await expect(page.locator("[data-cstd-knowledge-card]")).toHaveCount(4);
   await expect(page.locator("[data-cstd-content-health]")).toHaveAttribute("data-cstd-content-health-score", "100");
   await expect(page.locator("[data-cstd-scene-director]")).toHaveCount(0);
   await expect(page.locator("[data-cstd-global-hud]")).toHaveCount(0);
@@ -159,7 +159,7 @@ test("CSTD runs one deterministic worker example and keeps notes directly readab
 
   const knowledge = page.locator("[data-cstd-knowledge-lens]");
   await knowledge.scrollIntoViewIfNeeded();
-  await expect(knowledge.locator("[data-cstd-knowledge-card]")).toHaveCount(3);
+  await expect(knowledge.locator("[data-cstd-knowledge-card]")).toHaveCount(4);
   await expect(knowledge.getByRole("heading", { name: "AI 研究如何避免幻觉？" })).toBeVisible();
   await expect(knowledge.getByRole("button")).toHaveCount(0);
 

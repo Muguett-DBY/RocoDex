@@ -1,3 +1,6 @@
+import { readdirSync } from "node:fs";
+import path from "node:path";
+
 import { describe, expect, test } from "vitest";
 import { cstdCaseStudies } from "../content/case-studies";
 import { cstdKnowledgeGraph } from "../content/knowledge-graph";
@@ -6,8 +9,10 @@ import { cstdTechnicalNotes } from "../content/technical-notes";
 
 function publicRoutes() {
   const stable = ["/", "/work", "/notes", "/lab", "/voxel", "/map", "/about", "/now", "/resume", "/resume.json", "/proof.json", "/observatory.json", "/content-health.json", "/performance.json", "/experience.json"];
+  const archiveAssets = readdirSync(path.join(process.cwd(), "public", "cstd-archive")).map((name) => `/cstd-archive/${name}`);
   const zh = [
     ...stable,
+    ...archiveAssets,
     ...cstdCaseStudies.map((entry) => `/work/${entry.slug}`),
     ...cstdTechnicalNotes.map((entry) => `/notes/${entry.slug}`),
     ...cstdLabs.map((entry) => `/lab/${entry.slug}`),

@@ -112,7 +112,7 @@ describe("CSTD host routing", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-universe/cstd-broadcast-nexus-v1.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-universe/cstd-departure-city-v1.webp")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-districts/ai-creation-v1.webp")).toEqual({ kind: "next" });
-    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-resume.pdf")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-resume.pdf")).toEqual({ kind: "not-found" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-case-worker.js")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/favicon.ico")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/robots.txt")).toEqual({ kind: "next" });

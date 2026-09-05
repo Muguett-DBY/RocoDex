@@ -22,6 +22,15 @@ export const cstdTimeline: readonly CstdTimelineEntry[] = [
     evidence: { zh: "/about", en: "/en/about" },
   },
   {
+    id: "melbourne-open-data",
+    date: "2026-06-30",
+    kind: "education",
+    title: { zh: "用 147 万行开放数据回答城市问题", en: "Answering urban questions with 1.47M rows of open data" },
+    summary: { zh: "FIT5147 数据探索项目：清洗、空间连接并建模墨尔本 CBD 的行人与微气候数据，产出可一键重跑的分析管线。", en: "The FIT5147 exploration project: wrangling, spatially joining, and modelling Melbourne CBD pedestrian and microclimate data into a rerunnable pipeline." },
+    capabilityIds: ["research-models", "data-systems"],
+    evidence: { zh: "/work/melbourne-pedestrian-microclimate", en: "/en/work/melbourne-pedestrian-microclimate" },
+  },
+  {
     id: "data-interface",
     date: "2024-03-01",
     kind: "education",

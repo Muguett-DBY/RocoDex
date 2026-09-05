@@ -10,8 +10,8 @@ import { StudioEntryConsole } from "../../components/stage/studio-entry-console"
 import { ThemeStageVisual } from "../../components/stage/theme-stage-visual";
 
 const signatureSignals = [
-  { value: "01", label: { zh: "产品工程", en: "Product engineering" } },
-  { value: "02", label: { zh: "AI 与数据系统", en: "AI and data systems" } },
+  { value: "01", label: { zh: "数据分析", en: "Data analysis" } },
+  { value: "02", label: { zh: "数据系统与产品", en: "Data systems and products" } },
   { value: "03", label: { zh: "发布与验证", en: "Release and verification" } },
 ] as const;
 
@@ -25,14 +25,14 @@ type HeroThemeCopy = Readonly<{
 
 const heroCopy: Record<CstdLocale, Record<"neon" | "underworld" | "astral", HeroThemeCopy>> = {
   zh: {
-    neon: { kicker: "CSTD / PERSONAL STUDIO", role: "PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER", thesis: "我把问题拆开，", accent: "直到它能在现实里运行。", description: "我做产品，也做背后的系统。界面、AI、数据和发布都要经得住真实使用，而不是只在演示里好看。" },
-    underworld: { kicker: "冥府档案 / 造物者 017", role: "产品工程师 / 系统铸造者", thesis: "困难的系统，", accent: "要经得住一次次归返。", description: "我把产品、AI、数据和发布放进同一座工坊：先锻出形，再过试炼，最后带着证据回到现实。" },
-    astral: { kicker: "星界旅记 / 冒险者 017", role: "产品工程师 / 系统策士", thesis: "复杂系统，", accent: "也是一场由选择写成的冒险。", description: "我把需求、代码、数据和发布摊开在同一张冒险桌上：看清局势，组成工具，做出选择，再带着证据继续前进。" },
+    neon: { kicker: "CSTD / PERSONAL STUDIO", role: "DATA SCIENCE POSTGRADUATE / ANALYSIS THAT SHIPS", thesis: "我把问题拆开，", accent: "直到它能在现实里运行。", description: "我做分析，也做分析背后的系统。数据、界面、AI 和发布都要经得住真实使用，而不是只在演示里好看。" },
+    underworld: { kicker: "冥府档案 / 造物者 017", role: "数据科学研究生 / 分析铸造者", thesis: "困难的系统，", accent: "要经得住一次次归返。", description: "我把分析、AI、数据和发布放进同一座工坊：先锻出形，再过试炼，最后带着证据回到现实。" },
+    astral: { kicker: "星界旅记 / 冒险者 017", role: "数据科学研究生 / 分析策士", thesis: "复杂系统，", accent: "也是一场由选择写成的冒险。", description: "我把问题、数据、代码和发布摊开在同一张冒险桌上：看清局势，组成工具，做出选择，再带着证据继续前进。" },
   },
   en: {
-    neon: { kicker: "CSTD / PERSONAL STUDIO", role: "PRODUCT ENGINEER / CREATIVE SYSTEMS BUILDER", thesis: "I take problems apart", accent: "until they work in the real world.", description: "I build products and the systems behind them. Interfaces, AI, data, and release all have to survive real use, not just a polished demo." },
-    underworld: { kicker: "UNDERWORLD ARCHIVE / MAKER 017", role: "PRODUCT ENGINEER / SYSTEMS ARTIFICER", thesis: "Difficult systems are forged", accent: "through trial and return.", description: "I bring product, AI, data, and release into one workshop: shape the system, put it through trial, then return it to the real world with evidence intact." },
-    astral: { kicker: "ASTRAL JOURNAL / ADVENTURER 017", role: "PRODUCT ENGINEER / SYSTEMS TACTICIAN", thesis: "Complex systems are adventures", accent: "written by choices.", description: "I spread product, code, data, and release across one campaign table: read the situation, assemble the tools, choose a route, and keep the evidence for what comes next." },
+    neon: { kicker: "CSTD / PERSONAL STUDIO", role: "DATA SCIENCE POSTGRADUATE / ANALYSIS THAT SHIPS", thesis: "I take problems apart", accent: "until they work in the real world.", description: "I build analysis and the systems behind it. Data, interfaces, AI, and release all have to survive real use, not just a polished demo." },
+    underworld: { kicker: "UNDERWORLD ARCHIVE / MAKER 017", role: "DATA SCIENCE POSTGRADUATE / ANALYSIS ARTIFICER", thesis: "Difficult systems are forged", accent: "through trial and return.", description: "I bring analysis, AI, data, and release into one workshop: shape the method, put it through trial, then return it to the real world with evidence intact." },
+    astral: { kicker: "ASTRAL JOURNAL / ADVENTURER 017", role: "DATA SCIENCE POSTGRADUATE / ANALYSIS TACTICIAN", thesis: "Complex systems are adventures", accent: "written by choices.", description: "I spread questions, data, code, and release across one campaign table: read the situation, assemble the tools, choose a route, and keep the evidence for what comes next." },
   },
 };
 
