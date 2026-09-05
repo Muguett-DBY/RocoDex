@@ -122,6 +122,7 @@ test.describe("CSTD technical archive", () => {
 
   test("renders motion under reduced-motion emulation without horizontal overflow", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/cstd/work");
     await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
     for (const path of ["/cstd/work", "/cstd/notes", "/cstd/lab", "/cstd/topics", "/cstd/map", "/cstd/about", "/cstd/resume"]) {
       await page.goto(path);
