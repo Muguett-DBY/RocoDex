@@ -75,7 +75,6 @@ const PERSONAL_SITE_ALLOWED_PATHS = new Set([
   "/cstd-mascot.svg",
   "/cstd-og.svg",
   "/cstd-og-v2.webp",
-  "/cstd-resume.pdf",
   "/favicon.ico",
   "/robots.txt",
   "/rss.xml",

@@ -12,7 +12,7 @@ describe("CSTD living studio snapshot", () => {
     expect(snapshot.provenance.digest).toMatch(/^fnv1a32:[a-f0-9]{8}$/);
     expect(snapshot.provenance.sources.map((source) => source.href)).toEqual(["/proof.json", "/graph.json", "/releases.json"]);
     expect(snapshot.districts).toHaveLength(5);
-    expect(snapshot.totals.projects).toBe(6);
+    expect(snapshot.totals.projects).toBe(7);
     expect(snapshot.totals.artifacts).toBeGreaterThanOrEqual(20);
     expect(snapshot.districts.every((district) => district.evidenceCount > 0)).toBe(true);
     expect(snapshot.districts.every((district) => district.state === "online")).toBe(true);

@@ -9,7 +9,7 @@ test.describe("CSTD technical archive", () => {
     await page.goto("/cstd/work");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("作品不是截图");
     await expect(page.locator('a[href="/work/rocodex-platform"]')).toBeVisible();
-    await expect(page.locator("main article")).toHaveCount(6);
+    await expect(page.locator("main article")).toHaveCount(7);
 
     await page.goto("/cstd/work/alpha-research-system");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("CSTD Alpha");
@@ -46,10 +46,10 @@ test.describe("CSTD technical archive", () => {
     await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
     const lens = page.locator("[data-cstd-knowledge-lens]");
     await expect(lens).toBeVisible();
-    await expect(lens.locator("[data-cstd-knowledge-card]")).toHaveCount(3);
+    await expect(lens.locator("[data-cstd-knowledge-card]")).toHaveCount(4);
     await expect(lens.getByRole("heading", { name: "你的双站架构怎么隔离？" })).toBeVisible();
     await expect(lens).toContainText("互不越界");
-    await expect(lens.getByText("SOURCE LINKED", { exact: true })).toHaveCount(3);
+    await expect(lens.getByText("SOURCE LINKED", { exact: true })).toHaveCount(4);
     await expect(lens.getByRole("link", { name: "阅读来源" }).first()).toHaveAttribute("href", "/work/rocodex-platform");
     await expect(lens.getByRole("button")).toHaveCount(0);
     await expect(lens.getByRole("textbox")).toHaveCount(0);
@@ -187,7 +187,7 @@ test.describe("CSTD technical archive", () => {
     expect(proofResponse.headers()["content-type"]).toContain("application/json");
     const proof = await proofResponse.json();
     expect(proof.release).toBe("CSTD-17.0");
-    expect(proof.entries).toHaveLength(6);
+    expect(proof.entries).toHaveLength(7);
     expect(proof.totals.artifacts).toBeGreaterThanOrEqual(20);
 
     const graphResponse = await request.get("/graph.json", { headers });

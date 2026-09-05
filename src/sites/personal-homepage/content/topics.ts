@@ -53,7 +53,7 @@ export const cstdTopics: readonly CstdTopic[] = [
     summary: { zh: "从数据整理、DCF 确定性核心到缓存性能剖析，形成可解释研究流水线。", en: "Move from data wrangling and deterministic DCF cores to cache profiling in an explainable research pipeline." },
     image: { src: "/cstd-world/cstd-data-loom-v2.webp", alt: { zh: "数据曲线与分析织机", en: "A data curve and analysis loom" }, position: "50% 50%" },
     accent: "#3dff8f",
-    caseSlugs: ["dcf-quantum", "alpha-research-system"],
+    caseSlugs: ["melbourne-pedestrian-microclimate", "dcf-quantum", "alpha-research-system"],
     noteSlugs: ["observable-dcf-pipeline", "data-wrangling-as-product-design"],
     labSlugs: ["data-lens", "proof-museum"],
   },

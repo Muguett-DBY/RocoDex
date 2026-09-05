@@ -16,6 +16,29 @@ export function serializeCstdResume(locale: CstdLocale) {
       location: cstdProfile.location[locale],
       summary: cstdProfile.intro[locale],
     },
+    education: cstdProfile.education.map((entry) => ({
+      period: entry.period,
+      school: entry.school,
+      degree: entry.degree[locale],
+      detail: entry.detail[locale],
+    })),
+    skills: [
+      {
+        group: { zh: "数据分析与建模", en: "Data analysis and modelling" },
+        items: locale === "zh"
+          ? ["R（data.table、ggplot2、可复现报告）", "Python（pandas、探索性分析）", "统计建模与回归", "SQL（关系建模、约束、查询）", "Tableau 与报表"]
+          : ["R (data.table, ggplot2, reproducible reports)", "Python (pandas, exploratory analysis)", "Statistical modelling and regression", "SQL (relational modelling, constraints, queries)", "Tableau and reporting"],
+      },
+      {
+        group: { zh: "数据系统与交付", en: "Data systems and delivery" },
+        items: locale === "zh"
+          ? ["Next.js / React / TypeScript", "Cloudflare Workers · D1 · R2 · Supabase", "FastAPI · Pydantic · 数据接口", "确定性计算与运行清单", "测试、CI/CD 与线上观测"]
+          : ["Next.js / React / TypeScript", "Cloudflare Workers · D1 · R2 · Supabase", "FastAPI · Pydantic · data APIs", "Deterministic computation and run manifests", "Testing, CI/CD, and production observability"],
+      },
+    ],
+    languages: locale === "zh"
+      ? [{ name: "中文", level: "母语" }, { name: "英语", level: "专业工作水平" }]
+      : [{ name: "Mandarin", level: "Native" }, { name: "English", level: "Full professional proficiency" }],
     capabilities: cstdSystems.map((system) => ({
       id: system.id,
       title: system.title[locale],

@@ -2,45 +2,58 @@ import type { LocalizedText } from "./content-types";
 
 export const cstdProfile = {
   name: { zh: "奶黄包", en: "Custard" },
-  title: { zh: "产品工程师 / 创作工具与研究系统构建者", en: "Product engineer / builder of creative tools and research systems" },
-  location: { zh: "悉尼 / 南京", en: "Sydney / Nanjing" },
-  availability: { zh: "正在做独立产品，也在整理做产品的方法", en: "Building independent products and writing down how they get made" },
+  title: { zh: "数据科学研究生 · 把分析、数据系统和产品一起交付的人", en: "Data science postgraduate · delivering analysis, data systems, and products together" },
+  location: { zh: "墨尔本", en: "Melbourne, Australia" },
+  availability: { zh: "在莫纳什读数据科学硕士，同时持续构建个人产品", en: "Studying data science at Monash while continuously building personal products" },
   intro: {
-    zh: "我做产品，也做产品背后的系统：界面、数据、AI、研究和发布都要对真实使用负责。这个站不是技能清单，放在这里的是作品、取舍，以及它们后来怎么被验证。",
-    en: "I build products and the systems behind them: interfaces, data, AI, research, and release all have to answer to real use. This site is not a skills list; it keeps the work, the trade-offs, and how they were checked.",
+    zh: "我在莫纳什读数据科学硕士；本科在悉尼大学从化学与生物分子工程转入数据科学。不管是在 R 里清洗 147 万行开放数据，还是把分析做成能上线的产品，我的工作方式都一样：问题是真实的，数据是可核验的，结论能复算，产品能交付。这个站不是技能清单，放的是作品、取舍，以及它们后来怎么被验证。",
+    en: "I am finishing a Master of Data Science at Monash; my undergraduate path at the University of Sydney moved from chemical and biomolecular engineering into data science. Whether I am wrangling 1.47 million rows of open data in R or turning an analysis into a shipped product, the working method stays the same: real questions, verifiable data, reproducible conclusions, and products that actually run. This site is not a skills list; it keeps the work, the trade-offs, and how they were checked.",
   },
   now: {
-    updatedAt: "2026-08-27",
+    updatedAt: "2026-09-06",
     focus: {
-      zh: "把 CSTD 17.0 做成一个能慢慢长大的个人档案：先让人看见我在做什么，再把作品、方法和验证过程连起来。",
-      en: "Making CSTD 17.0 into a personal archive that can grow: show what I am making first, then connect the work to its methods and checks.",
+      zh: "把数据科学的训练和多年的产品构建接起来：用开放数据做经得起复算的分析，再把分析长成可用的产品。",
+      en: "Connecting formal data science training with years of product building: open-data analysis that survives rechecking, then grows into usable products.",
     },
     building: [
-      { zh: "证据优先的公司研究与确定性估值工具。", en: "Evidence-first company research and deterministic valuation tools." },
-      { zh: "把真实产品案例整理为带决策与复盘的长期档案。", en: "Turning shipped products into durable archives of decisions and postmortems." },
-      { zh: "在不牺牲性能与无障碍的前提下探索浏览器视觉叙事。", en: "Exploring browser-native visual storytelling without sacrificing performance or accessibility." },
+      { zh: "墨尔本开放数据的行人与微气候分析，以及同源数据上的产品实验。", en: "Melbourne open-data pedestrian and microclimate analysis, plus product experiments on the same data." },
+      { zh: "面向澳洲劳动力市场与城市生活场景的数据产品。", en: "Data products aimed at the Australian labour market and urban life." },
+      { zh: "证据优先的研究工具与确定性计算。", en: "Evidence-first research tools and deterministic computation." },
     ] satisfies readonly LocalizedText[],
     learning: [
-      { zh: "Monash：数据探索与可视化、统计建模、大数据处理。", en: "Monash: data exploration and visualization, statistical modeling, and big-data processing." },
-      { zh: "把化工的边界、守恒与实验直觉迁移到软件系统。", en: "Translating chemical-engineering intuition about boundaries, balances, and experiments into software." },
+      { zh: "统计建模、大数据处理与生物信息学把产品直觉补成方法论。", en: "Statistical modelling, big-data processing, and bioinformatics turning product instinct into method." },
+      { zh: "把化工的边界、守恒与实验直觉迁移到数据工作流。", en: "Translating chemical-engineering intuition about boundaries, balances, and experiments into data workflows." },
     ] satisfies readonly LocalizedText[],
   },
   education: [
     {
       period: "2025—2026",
       school: "Monash University",
-      detail: { zh: "数据库、Python、网络、数据科学、数据清洗、统计建模、可视化与大数据处理。", en: "Databases, Python, networks, data science, wrangling, statistical modeling, visualization, and big-data processing." },
+      degree: { zh: "数据科学硕士（Master of Data Science）", en: "Master of Data Science" },
+      detail: {
+        zh: "数据清洗、数据科学基础、探索性分析与可视化、统计建模、大数据处理、数据库、Python、计算机网络与生物信息学。",
+        en: "Data wrangling, foundations of data science, exploration and visualisation, statistical modelling, big-data processing, databases, Python, computer architecture and networks, and bioinformatics.",
+      },
     },
     {
       period: "2020—2024",
       school: "The University of Sydney",
-      detail: { zh: "化学工程、化学、数学、算法与数据科学；从能量衡算与传递过程走向系统工程。", en: "Chemical engineering, chemistry, mathematics, algorithms, and data science, moving from balances and transport to systems engineering." },
+      degree: { zh: "理学学士 — 数据科学主修，化学辅修", en: "Bachelor of Science — Data Science major, Chemistry minor" },
+      detail: {
+        zh: "从化学与生物分子工程转入数据科学：数学、统计与算法打底，把化工的边界与守恒思维带进数据系统。",
+        en: "Moved from chemical and biomolecular engineering into data science: mathematics, statistics, and algorithms, carrying chemical-engineering thinking about boundaries and balances into data systems.",
+      },
     },
-  ],
+  ] satisfies readonly {
+    period: string;
+    school: string;
+    degree: LocalizedText;
+    detail: LocalizedText;
+  }[],
   capabilities: [
+    { label: { zh: "数据分析与建模", en: "Data analysis and modelling" }, value: "R · Python · SQL · pandas · data.table · ggplot2 · Statistical modelling" },
     { label: { zh: "产品与前端", en: "Product and frontend" }, value: "React · Next.js · TypeScript · UX · Three.js" },
-    { label: { zh: "边缘与数据", en: "Edge and data" }, value: "Cloudflare · D1 · R2 · Hono · SQL · Python" },
-    { label: { zh: "研究与 AI", en: "Research and AI" }, value: "Evidence pipelines · Agents · DCF · Data science" },
-    { label: { zh: "质量与交付", en: "Quality and delivery" }, value: "Vitest · Playwright · CI/CD · RUM · Release acceptance" },
+    { label: { zh: "边缘与数据工程", en: "Edge and data engineering" }, value: "Cloudflare · D1 · R2 · Supabase · Hono · SQL" },
+    { label: { zh: "研究与 AI", en: "Research and AI" }, value: "Evidence pipelines · Agents · DCF · Open-data analysis" },
   ],
 } as const;

@@ -1198,6 +1198,338 @@ export const generatedCstdCaseStudies = [
   },
   {
     "publicationStatus": "published",
+    "revision": 1,
+    "publishedAt": "2026-09-06",
+    "updatedAt": "2026-09-06",
+    "slug": "melbourne-pedestrian-microclimate",
+    "projectId": "melbourne-open-data",
+    "year": "2026",
+    "title": {
+      "zh": "墨尔本行人 × 微气候",
+      "en": "Melbourne Pedestrians × Microclimate"
+    },
+    "kicker": {
+      "zh": "开放数据分析 / 可复现 R 管线",
+      "en": "Open-data analysis / reproducible R pipeline"
+    },
+    "summary": {
+      "zh": "把墨尔本 CBD 三个官方开放数据源清洗、空间连接并建模成一条可复现的分析管线：147 万行行人记录，在 150 米匹配规则下遇见微气候。",
+      "en": "Three official City of Melbourne open datasets, cleaned, spatially joined, and modelled into one reproducible pipeline: 1.47 million pedestrian records meet the microclimate under a 150-metre matching rule."
+    },
+    "film": {
+      "durationSeconds": 102,
+      "logline": {
+        "zh": "同一段城市人流，换一种问法，就能回答三个不同的问题。",
+        "en": "The same urban foot traffic, asked properly, answers three different questions."
+      },
+      "beats": [
+        {
+          "id": "urban-questions",
+          "phase": "problem",
+          "title": {
+            "zh": "城市在动，但判断缺少语境",
+            "en": "The city moves, but judgement lacks context"
+          },
+          "detail": {
+            "zh": "热浪和烟霾会改变人们怎么使用城市，而多数结论仍靠直觉。墨尔本市政府的开放数据里有更好的原料。",
+            "en": "Heatwaves and smoke change how people use the city, yet most conclusions still run on intuition. The City of Melbourne's open data holds better raw material."
+          },
+          "signal": {
+            "zh": "从公开数据开始",
+            "en": "Start from public data"
+          }
+        },
+        {
+          "id": "three-sources",
+          "phase": "constraint",
+          "title": {
+            "zh": "三个数据源，三种口径",
+            "en": "Three sources, three definitions"
+          },
+          "detail": {
+            "zh": "行人计数、传感器位置与微气候各自按不同的频率、字段和坐标方式发布；不做口径对齐就合并，会得到看起来漂亮但站不住的结论。",
+            "en": "Counts, sensor locations, and microclimate each ship with their own frequency, fields, and coordinate handling. Merging without aligning definitions produces conclusions that look fine and hold nothing."
+          },
+          "signal": {
+            "zh": "先对齐口径",
+            "en": "Align definitions first"
+          }
+        },
+        {
+          "id": "pipeline-first",
+          "phase": "decision",
+          "title": {
+            "zh": "先建管线，再谈模型",
+            "en": "Pipeline first, model later"
+          },
+          "detail": {
+            "zh": "四段式 R 管线负责下载、清洗、成图与报告：时区归一、活跃传感器过滤、按小时聚合。147 万行原始记录收敛为 17 万行可分析数据。",
+            "en": "A four-stage R pipeline handles download, cleaning, figures, and reporting: time zones normalised, active sensors filtered, hourly aggregation applied. 1.47 million raw rows converge into 170 thousand analysable ones."
+          },
+          "signal": {
+            "zh": "每一步都可重跑",
+            "en": "Every step reruns"
+          }
+        },
+        {
+          "id": "match-mismatch",
+          "phase": "failure",
+          "title": {
+            "zh": "最近邻不等于街道等价",
+            "en": "Nearest is not street-equivalent"
+          },
+          "detail": {
+            "zh": "微气候设备与行人计数器的安装高度和暴露并不相同；150 米是可辩护但仍是研究者选定的规则。缺失值不插补，建模子集因此变小。",
+            "en": "Microclimate devices and pedestrian counters are not mounted at the same height or exposure; 150 metres is defensible but still a researcher-chosen rule. Missing values stay missing, and the modelled subset is smaller because of it."
+          },
+          "signal": {
+            "zh": "限制写在明处",
+            "en": "Limits stay visible"
+          }
+        },
+        {
+          "id": "conditional-signal",
+          "phase": "evidence",
+          "title": {
+            "zh": "控制节奏之后，环境信号仍在",
+            "en": "After controlling for rhythm, the environmental signal remains"
+          },
+          "detail": {
+            "zh": "以 log(1+count) 建模并控制小时、星期与位置后，温度、PM2.5 与风仍与活动相关；地点级敏感度在工作日与周末并不相同。",
+            "en": "Modelling log(1+count) with hour, weekday, and location controls, temperature, PM2.5, and wind stay associated with activity; location-level sensitivity differs between weekdays and weekends."
+          },
+          "signal": {
+            "zh": "关联，不是因果",
+            "en": "Association, not causation"
+          }
+        },
+        {
+          "id": "reproducible-output",
+          "phase": "outcome",
+          "title": {
+            "zh": "产出是一条可以重跑的管线",
+            "en": "The output is a pipeline you can rerun"
+          },
+          "detail": {
+            "zh": "七张出版级图表与完整报告由脚本一键再生；同一份墨尔本开放数据后来也成了城市数据产品的实验场。",
+            "en": "Seven publication-grade figures and the full report regenerate from scripts; the same Melbourne open data later became the testing ground for urban data products."
+          },
+          "signal": {
+            "zh": "分析可以被继承",
+            "en": "The analysis is inheritable"
+          }
+        }
+      ]
+    },
+    "role": {
+      "zh": "独立完成：问题定义、数据清洗、空间连接、建模、可视化与报告",
+      "en": "End to end: question design, wrangling, spatial joins, modelling, visualisation, and reporting"
+    },
+    "image": {
+      "src": "/cstd-archive/cstd-archive-melbourne-heatmap-v1.webp",
+      "alt": {
+        "zh": "墨尔本 CBD 行人活动的星期×小时热力图",
+        "en": "Weekday-by-hour heatmap of pedestrian activity across the Melbourne CBD"
+      },
+      "position": "50% 50%"
+    },
+    "technologies": [
+      "R",
+      "data.table",
+      "ggplot2",
+      "Spatial joins",
+      "Linear regression",
+      "rmarkdown"
+    ],
+    "metrics": [
+      {
+        "value": "1.47M",
+        "label": {
+          "zh": "行原始行人记录",
+          "en": "raw pedestrian records"
+        }
+      },
+      {
+        "value": "591K",
+        "label": {
+          "zh": "行微气候观测",
+          "en": "microclimate observations"
+        }
+      },
+      {
+        "value": "170K",
+        "label": {
+          "zh": "行联表小时数据",
+          "en": "joined hourly rows"
+        }
+      }
+    ],
+    "evidence": [
+      {
+        "label": {
+          "zh": "口径",
+          "en": "Basis"
+        },
+        "detail": {
+          "zh": "三个官方数据源在同一段时间窗口内对齐：2024-05-30 至 2026-03-16。",
+          "en": "Three official sources aligned on one window: 30 May 2024 to 16 March 2026."
+        }
+      },
+      {
+        "label": {
+          "zh": "匹配",
+          "en": "Matching"
+        },
+        "detail": {
+          "zh": "150 米最近邻规则保留 14 个行人传感器，中位匹配距离 99.7 米；250 米只作敏感性基准。",
+          "en": "A 150-metre nearest-neighbour rule keeps 14 pedestrian sensors at a median 99.7 metres; 250 metres appears only as a sensitivity benchmark."
+        }
+      },
+      {
+        "label": {
+          "zh": "诚实",
+          "en": "Honesty"
+        },
+        "detail": {
+          "zh": "缺失环境读数不插补；观察性结论明确不当作因果效应。",
+          "en": "Missing readings are not imputed, and observational findings are never dressed up as causal effects."
+        }
+      }
+    ],
+    "capabilityIds": [
+      "research-models",
+      "data-systems"
+    ],
+    "relatedNoteSlugs": [
+      "data-wrangling-as-product-design"
+    ],
+    "relatedLabSlugs": [
+      "data-lens"
+    ],
+    "artifacts": [
+      {
+        "kind": "note",
+        "label": {
+          "zh": "方法记录 / 数据整理即产品设计",
+          "en": "Method note / data wrangling as product design"
+        },
+        "detail": {
+          "zh": "本文沉淀的清洗与口径对齐方法，同样约束着这条分析管线。",
+          "en": "The wrangling and alignment method recorded in this note also governs this pipeline."
+        },
+        "href": {
+          "zh": "/notes/data-wrangling-as-product-design",
+          "en": "/en/notes/data-wrangling-as-product-design"
+        },
+        "verifiedAt": "2026-09-06"
+      },
+      {
+        "kind": "production",
+        "label": {
+          "zh": "图 02 / 星期×小时活动热力图",
+          "en": "Figure 02 / weekday-by-hour activity heatmap"
+        },
+        "detail": {
+          "zh": "合并后分析表的时间结构总览。",
+          "en": "The temporal structure of the joined analysis table."
+        },
+        "href": {
+          "zh": "/cstd-archive/cstd-archive-melbourne-heatmap-v1.webp",
+          "en": "/cstd-archive/cstd-archive-melbourne-heatmap-v1.webp"
+        },
+        "verifiedAt": "2026-09-06"
+      },
+      {
+        "kind": "production",
+        "label": {
+          "zh": "图 04 / 环境项回归系数",
+          "en": "Figure 04 / environmental regression coefficients"
+        },
+        "detail": {
+          "zh": "控制时间与位置后，温度、PM2.5 与风的条件关联及 95% 置信区间。",
+          "en": "Conditional associations for temperature, PM2.5, and wind with 95% intervals after controls."
+        },
+        "href": {
+          "zh": "/cstd-archive/cstd-archive-melbourne-coefficients-v1.webp",
+          "en": "/cstd-archive/cstd-archive-melbourne-coefficients-v1.webp"
+        },
+        "verifiedAt": "2026-09-06"
+      },
+      {
+        "kind": "production",
+        "label": {
+          "zh": "图 06 / 高温敏感度地图",
+          "en": "Figure 06 / heat sensitivity map"
+        },
+        "detail": {
+          "zh": "分传感器的温度斜率，工作日与周末分别估计。",
+          "en": "Per-sensor temperature slopes, estimated separately for weekdays and weekends."
+        },
+        "href": {
+          "zh": "/cstd-archive/cstd-archive-melbourne-heat-sensitivity-v1.webp",
+          "en": "/cstd-archive/cstd-archive-melbourne-heat-sensitivity-v1.webp"
+        },
+        "verifiedAt": "2026-09-06"
+      },
+      {
+        "kind": "production",
+        "label": {
+          "zh": "图 07 / PM2.5 敏感度地图",
+          "en": "Figure 07 / PM2.5 sensitivity map"
+        },
+        "detail": {
+          "zh": "同一逻辑应用于颗粒物，空间形态与高温并不相同。",
+          "en": "The same logic applied to particulates; the spatial pattern differs from heat."
+        },
+        "href": {
+          "zh": "/cstd-archive/cstd-archive-melbourne-pm25-sensitivity-v1.webp",
+          "en": "/cstd-archive/cstd-archive-melbourne-pm25-sensitivity-v1.webp"
+        },
+        "verifiedAt": "2026-09-06"
+      }
+    ],
+    "toc": [
+      {
+        "id": "questions",
+        "eyebrow": {
+          "zh": "01 / 问题",
+          "en": "01 / Questions"
+        },
+        "title": {
+          "zh": "三个问题，一条开放数据链。",
+          "en": "Three questions, one open-data chain."
+        }
+      },
+      {
+        "id": "pipeline",
+        "eyebrow": {
+          "zh": "02 / 管线",
+          "en": "02 / Pipeline"
+        },
+        "title": {
+          "zh": "先可复现，再可解释。",
+          "en": "Reproducible first, interpretable second."
+        }
+      },
+      {
+        "id": "findings",
+        "eyebrow": {
+          "zh": "03 / 发现",
+          "en": "03 / Findings"
+        },
+        "title": {
+          "zh": "环境信号存在，但长在城市节奏之上。",
+          "en": "The environmental signal exists, but it grows on top of the urban rhythm."
+        }
+      }
+    ],
+    "status": {
+      "zh": "可复现分析管线",
+      "en": "Reproducible analysis pipeline"
+    }
+  },
+  {
+    "publicationStatus": "published",
     "revision": 2,
     "publishedAt": "2026-01-01",
     "updatedAt": "2026-08-27",
@@ -1953,7 +2285,8 @@ export const generatedCstdTechnicalNotes = [
     },
     "relatedCaseSlugs": [
       "alpha-research-system",
-      "dcf-quantum"
+      "dcf-quantum",
+      "melbourne-pedestrian-microclimate"
     ],
     "tags": [
       "Data wrangling",
@@ -2482,6 +2815,27 @@ export const generatedCstdProofMesh = [
       "test"
     ],
     "coverageScore": 80,
+    "status": "verified"
+  },
+  {
+    "id": "proof:melbourne-pedestrian-microclimate",
+    "caseSlug": "melbourne-pedestrian-microclimate",
+    "projectId": "melbourne-open-data",
+    "title": {
+      "zh": "墨尔本行人 × 微气候",
+      "en": "Melbourne Pedestrians × Microclimate"
+    },
+    "capabilityIds": [
+      "research-models",
+      "data-systems"
+    ],
+    "verifiedAt": "2026-09-06",
+    "artifactCount": 5,
+    "artifactKinds": [
+      "note",
+      "production"
+    ],
+    "coverageScore": 72,
     "status": "verified"
   },
   {

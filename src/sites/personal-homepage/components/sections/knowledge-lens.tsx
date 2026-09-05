@@ -24,6 +24,11 @@ const lenses = [
     source: "system:research-models",
     target: "note:deterministic-core-ai-edge",
   },
+  {
+    question: { zh: "147 万行开放数据怎么变成可分析？", en: "How do 1.47 million rows of open data become analysable?" },
+    source: "system:data-systems",
+    target: "case:melbourne-pedestrian-microclimate",
+  },
 ] as const;
 
 export function KnowledgeLens({ observatory, locale }: { observatory: CstdHomepageObservatory; locale: CstdLocale }) {

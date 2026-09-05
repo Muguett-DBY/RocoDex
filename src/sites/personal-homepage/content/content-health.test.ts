@@ -13,7 +13,7 @@ describe("CSTD content health", () => {
     expect(snapshot.coverage).toEqual({ bilingualPercent: 100, topicPercent: 100, relationPercent: 100 });
     expect(snapshot.issues.brokenRelations).toEqual([]);
     expect(snapshot.issues.orphanedEntries).toEqual([]);
-    expect(snapshot.totals.cases).toBe(6);
+    expect(snapshot.totals.cases).toBe(7);
     expect(snapshot.totals.notes).toBe(8);
     expect(snapshot.totals.labs).toBe(5);
   });
