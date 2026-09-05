@@ -23,7 +23,7 @@ describe("CSTD media manifest", () => {
   });
 
   test("ships one dedicated, generated stage asset for every visual world", () => {
-    expect(Object.keys(cstdThemeStageAssets)).toEqual(["neon-district", "underworld-forge", "astral-covenant"]);
+    expect(Object.keys(cstdThemeStageAssets)).toEqual(["atelier", "neon-district", "underworld-forge", "astral-covenant"]);
     for (const asset of Object.values(cstdThemeStageAssets)) {
       const filePath = path.join(process.cwd(), "public", asset.src.slice(1));
       expect(asset.src).toMatch(/^\/cstd-stage\/.+-v[12]\.webp$/);
@@ -54,8 +54,8 @@ describe("CSTD media manifest", () => {
   });
 
   test("keeps every theme foundation asset versioned, deployable, and budgeted", () => {
-    expect(Object.keys(cstdThemeMaterialAssets)).toEqual(["neon-district", "underworld-forge", "astral-covenant"]);
-    expect(Object.keys(cstdThemeFontAssets)).toEqual(["neon-district", "underworld-forge", "astral-covenant"]);
+    expect(Object.keys(cstdThemeMaterialAssets)).toEqual(["atelier", "neon-district", "underworld-forge", "astral-covenant"]);
+    expect(Object.keys(cstdThemeFontAssets)).toEqual(["atelier", "neon-district", "underworld-forge", "astral-covenant"]);
 
     for (const asset of Object.values(cstdThemeMaterialAssets)) {
       const filePath = path.join(process.cwd(), "public", asset.slice(1));

@@ -45,6 +45,21 @@ html[data-cstd-theme="neon-district"] body { background: #07090b; }
   display: contents;
 }
 
+html[data-cstd-theme="atelier"] [data-cstd-theme-meta-copy="atelier"],
+html[data-cstd-theme="atelier"] [data-cstd-theme-mark-copy="atelier"],
+html[data-cstd-theme="atelier"] [data-cstd-theme-world-copy="atelier"],
+html[data-cstd-theme="atelier"] [data-cstd-theme-scene-copy="atelier"],
+html[data-cstd-theme="atelier"] [data-cstd-theme-label-option="atelier"] {
+  display: inline;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-theme-world-copy]:not([data-cstd-theme-world-copy="atelier"]),
+html[data-cstd-theme="atelier"] [data-cstd-theme-scene-copy]:not([data-cstd-theme-scene-copy="atelier"]),
+html[data-cstd-theme="atelier"] [data-cstd-theme-meta-copy]:not([data-cstd-theme-meta-copy="atelier"]),
+html[data-cstd-theme="atelier"] [data-cstd-theme-mark-copy]:not([data-cstd-theme-mark-copy="atelier"]) {
+  display: none !important;
+}
+
 [data-cstd-theme="neon-district"] [data-cstd-theme-world-copy="neon-district"],
 [data-cstd-theme-scene-rail="neon-district"] [data-cstd-theme-scene-copy="neon-district"] {
   display: inline;

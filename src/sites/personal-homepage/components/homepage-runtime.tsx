@@ -175,7 +175,7 @@ export function HomepageRuntime({
 
       <MemoizedWorldBackdrop activeSceneId={activeSceneId} />
       <ThemeWorldLayer theme={theme} activeSceneId={activeSceneId} locale={locale} />
-      <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" />
+      {theme !== "atelier" ? <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" /> : null}
       {immersiveSceneEnabled ? (
         <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
           <MemoizedSceneRuntime {...sceneProps} profile={renderedProfile} enabled />

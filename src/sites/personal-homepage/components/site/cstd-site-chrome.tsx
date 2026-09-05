@@ -135,14 +135,14 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
     <div suppressHydrationWarning data-cstd-deep-shell data-cstd-locale={locale} data-cstd-theme={theme} data-cstd-theme-kind={themeMeta.kind} data-cstd-controls-ready={controlsReady ? "true" : "false"} data-cstd-visual-mode={visualMode} data-cstd-reading-mode={readingSurface ? readingMode : "studio"} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
       <a href="#cstd-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:bg-white focus:px-4 focus:py-3 focus:text-black">{locale === "zh" ? "跳到主要内容" : "Skip to content"}</a>
       {!immersive ? <SignalField mode={visualMode} active={!(readingSurface && readingMode === "quiet")} /> : null}
-      {!immersive ? <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" /> : null}
+      {!immersive && theme !== "atelier" ? <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" /> : null}
       {!immersive ? <div data-cstd-shell-overlay aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(7,9,11,0.18),rgba(7,9,11,0.82)_80%)]" /> : null}
       <div aria-hidden="true" className="cstd-route-progress fixed inset-x-0 top-0 z-[80] h-0.5 origin-left bg-[#f4d431] shadow-[0_0_16px_rgba(244,212,49,0.6)]" />
 
       <header className="sticky top-0 z-50 border-b border-white/12 bg-[#07090b]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[1540px] items-center gap-4 px-4 md:px-8 lg:px-12">
           <CstdLink href={getLocalizedCstdHref("/", locale)} className="group flex shrink-0 items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]" title={copy.back}>
-            <span className="flex h-9 w-9 items-center justify-center bg-[#f4d431] font-mono text-[11px] font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">CS</span>
+            <span data-cstd-header-mark className="flex h-9 w-9 items-center justify-center bg-[#f4d431] font-mono text-[11px] font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">CS</span>
             <span className="hidden sm:block">
               <span data-cstd-deep-brand className="block font-mono text-xs font-black text-white">
                 {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.brand[locale]}</span>)}

@@ -1,5 +1,11 @@
 import type { CstdThemeId } from "../experience/theme-store";
 
+export type VoxelThemeId = Exclude<CstdThemeId, "atelier">;
+
+export function resolveVoxelTheme(theme: CstdThemeId): VoxelThemeId {
+  return theme === "atelier" ? "neon-district" : theme;
+}
+
 export const voxelCaseStudyIds = [
   "alpha-research-system",
   "cfzzs-crm",
@@ -42,7 +48,7 @@ function landmark(
   return { id, x, z, radius: tier === "primary" ? 6.4 : 5.8, tier };
 }
 
-const layouts: Record<CstdThemeId, VoxelThemeLayout> = {
+const layouts: Record<VoxelThemeId, VoxelThemeLayout> = {
   // Night City: exhibits sit on the street grid and the ring boulevard.
   "neon-district": {
     mapRadius: 26,
@@ -94,9 +100,9 @@ const layouts: Record<CstdThemeId, VoxelThemeLayout> = {
 };
 
 export function getVoxelThemeLayout(theme: CstdThemeId) {
-  return layouts[theme];
+  return layouts[resolveVoxelTheme(theme)];
 }
 
 export function getVoxelLandmark(theme: CstdThemeId, id: VoxelExhibitId) {
-  return layouts[theme].landmarks.find((entry) => entry.id === id);
+  return layouts[resolveVoxelTheme(theme)].landmarks.find((entry) => entry.id === id);
 }

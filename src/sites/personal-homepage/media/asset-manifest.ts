@@ -70,6 +70,11 @@ export const cstdThemeWorldAssets = {
 } as const;
 
 export const cstdThemeStageAssets = {
+  "atelier": {
+    src: "/cstd-stage/cstd-atelier-studio-v1.webp",
+    alt: { zh: "柔和自然光下的安静工作室台面", en: "A quiet studio desk under soft natural light" },
+    position: "center center",
+  },
   "neon-district": {
     src: "/cstd-stage/cstd-neon-observatory-v2.webp",
     alt: { zh: "雨夜工程观测舱中的奶油色计算核心", en: "A custard compute core inside a rain-lit engineering observatory" },
@@ -88,12 +93,17 @@ export const cstdThemeStageAssets = {
 } as const satisfies Record<CstdThemeId, { src: string; alt: LocalizedText; position: string }>;
 
 export const cstdThemeMaterialAssets = {
+  "atelier": "/cstd-materials/neon-alloy-v1.webp",
   "neon-district": "/cstd-materials/neon-alloy-v1.webp",
   "underworld-forge": "/cstd-materials/underworld-basalt-v1.webp",
   "astral-covenant": "/cstd-materials/astral-vellum-v1.webp",
 } as const satisfies Record<CstdThemeId, string>;
 
 export const cstdThemeFontAssets = {
+  "atelier": {
+    zh: [],
+    en: [],
+  },
   "neon-district": {
     zh: ["/fonts/cstd/neon-display-v1.woff2"],
     en: ["/fonts/cstd/neon-latin-v1.woff2"],

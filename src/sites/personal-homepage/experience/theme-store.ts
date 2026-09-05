@@ -3,8 +3,8 @@
 import { useSyncExternalStore } from "react";
 import type { LocalizedText } from "../content/content-types";
 
-export type CstdThemeId = "neon-district" | "underworld-forge" | "astral-covenant";
-export type CstdThemeKind = "cyberpunk" | "mythic-underworld" | "fantasy-codex";
+export type CstdThemeId = "atelier" | "neon-district" | "underworld-forge" | "astral-covenant";
+export type CstdThemeKind = "editorial-studio" | "cyberpunk" | "mythic-underworld" | "fantasy-codex";
 
 export type CstdThemeMeta = Readonly<{
   id: CstdThemeId;
@@ -24,6 +24,19 @@ const cstdThemeStorageKey = "cstd-world-theme";
 const cstdThemeEvent = "cstd-world-theme-change";
 
 export const cstdThemes: readonly CstdThemeMeta[] = [
+  {
+    id: "atelier",
+    kind: "editorial-studio",
+    label: "ATELIER",
+    zhLabel: "工作室",
+    description: "A quiet, editorial studio view: typography, whitespace, and the work in front of you.",
+    zhDescription: "安静、正式的编辑式工作室视图：排版、留白，以及摆在眼前作品本身。",
+    swatch: "#1d1d1f",
+    signal: "#0066cc",
+    brand: { zh: "奶黄包 · 工作室", en: "CUSTARD / ATELIER" },
+    compactBrand: { zh: "奶黄包", en: "CUSTARD" },
+    edition: { zh: "分析 / 系统 / 交付", en: "ANALYSIS / SYSTEMS / DELIVERY" },
+  },
   {
     id: "neon-district",
     kind: "cyberpunk",
@@ -65,20 +78,21 @@ export const cstdThemes: readonly CstdThemeMeta[] = [
   },
 ] as const;
 
-let volatileTheme: CstdThemeId = "neon-district";
+let volatileTheme: CstdThemeId = "atelier";
 let transitionTimer: number | undefined;
 
 export function normalizeTheme(value: string | null): CstdThemeId | null {
   if (
-    value === "neon-district"
+    value === "atelier"
+    || value === "neon-district"
     || value === "underworld-forge"
     || value === "astral-covenant"
   ) {
     return value;
   }
-  // Retired visual worlds migrate to the default game world without breaking a saved preference.
+  // Retired visual worlds migrate to the default studio view without breaking a saved preference.
   if (value === "solar-lab" || value === "ink-protocol" || value === "press-room" || value === "pixel-quest") {
-    return "neon-district";
+    return "atelier";
   }
   return null;
 }
@@ -107,7 +121,7 @@ function getSnapshot(): CstdThemeId {
 function getServerSnapshot(): CstdThemeId {
   // Keep hydration identical to the static HTML. The head bootstrap applies the
   // persisted world before paint; the live snapshot takes over after hydration.
-  return "neon-district";
+  return "atelier";
 }
 
 export function useCstdTheme() {
