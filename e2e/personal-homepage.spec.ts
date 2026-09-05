@@ -182,8 +182,11 @@ test("CSTD embeds the matching executable replay in deep cases", async ({ page }
   expect(response?.ok()).toBe(true);
   const film = page.locator("[data-cstd-case-film]");
   await expect(film).toHaveAttribute("data-cstd-case-film-active-beat", "routing-contract");
-  await film.getByRole("button", { name: "下一镜" }).click();
-  await expect(page).toHaveURL(/\?act=tests-as-walls$/);
+  // On slow CI runners the click can land before the island hydrates; retry until the URL follows.
+  await expect(async () => {
+    await film.getByRole("button", { name: "下一镜" }).click();
+    await expect(page).toHaveURL(/\?act=tests-as-walls$/);
+  }).toPass({ timeout: 15_000 });
   const replay = page.locator('[data-cstd-case-replay="host-boundaries"]');
   await replay.scrollIntoViewIfNeeded();
   await expect(replay).toHaveAttribute("data-cstd-worker-ready", "true");
