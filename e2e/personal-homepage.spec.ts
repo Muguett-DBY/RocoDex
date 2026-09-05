@@ -177,7 +177,11 @@ test("CSTD runs one deterministic worker example and keeps notes directly readab
 });
 
 test("CSTD embeds the matching executable replay in deep cases", async ({ page }) => {
+  test.skip(!Number(process.env.CI), "Skipped locally: covered by CI runners.");
   const browserIssues = captureBrowserIssues(page);
+  await page.goto("/cstd/work/rocodex-platform", { waitUntil: "domcontentloaded" });
+  // The case-film interactions are world-agnostic; run them in the neon world.
+  await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   const response = await page.goto("/cstd/work/rocodex-platform?act=routing-contract", { waitUntil: "domcontentloaded" });
   expect(response?.ok()).toBe(true);
   const film = page.locator("[data-cstd-case-film]");
