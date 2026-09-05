@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
-import type { CstdThemeId } from "../experience/theme-store";
 import { getVoxelThemeLayout, resolveVoxelTheme, type VoxelExhibitId, type VoxelThemeId, type VoxelThemeLayout } from "./voxel-landmarks";
 import {
   createVoxelSnapshot,
