@@ -214,3 +214,48 @@ html[data-cstd-theme-transition]::after {
   28% { opacity: 0.82; }
   100% { opacity: 0; transform: scaleX(1); transform-origin: right; }
 }
+
+
+/* Night City evidence dossier: keep act 04 light but read it as a cool
+   blueprint sheet instead of plain paper, so the neon city keeps its voice. */
+[data-cstd-theme="neon-district"] [data-cstd-chapter="proof"] {
+  background:
+    linear-gradient(rgb(0 126 146 / 4.5%) 1px, transparent 1px) 0 0 / 44px 44px,
+    linear-gradient(90deg, rgb(0 126 146 / 4.5%) 1px, transparent 1px) 0 0 / 44px 44px,
+    #e8ecee;
+  border-top: 2px solid rgb(36 224 255 / 42%);
+}
+
+[data-cstd-theme="neon-district"] [data-cstd-chapter="proof"] [data-cstd-chapter-header] > div:first-child::before {
+  display: block;
+  width: 5.5rem;
+  margin-bottom: 1.1rem;
+  border-top: 4px solid #f4d431;
+  border-bottom: 1px solid rgb(0 126 146 / 65%);
+  content: "";
+}
+
+[data-cstd-theme="neon-district"] [data-cstd-proof-grid] article {
+  border-color: rgb(0 126 146 / 42%) !important;
+  box-shadow: 8px 10px 0 rgb(0 126 146 / 10%) !important;
+  outline: 1px solid rgb(244 212 49 / 22%);
+  outline-offset: -5px;
+}
+
+/* Base interactive feedback for knowledge cards (neon default). */
+[data-cstd-knowledge-card] {
+  transition: background 220ms ease, transform 220ms ease, border-color 220ms ease;
+}
+
+@media (hover: hover) {
+  [data-cstd-knowledge-card]:hover {
+    background: linear-gradient(90deg, rgb(36 224 255 / 7%), transparent 62%);
+    transform: translateX(0.3rem);
+  }
+}
+
+/* Display headings balance their last line instead of leaving orphans. */
+[data-cstd-chapter-header] h2,
+[data-cstd-page-hero-title] {
+  text-wrap: balance;
+}

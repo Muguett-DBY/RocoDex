@@ -492,7 +492,7 @@ html[data-cstd-theme="astral-covenant"] {
 }
 
 [data-cstd-theme="astral-covenant"] [data-cstd-system-visual] img {
-  filter: saturate(0.68) hue-rotate(14deg) contrast(1.04);
+  filter: saturate(0.92) hue-rotate(10deg) contrast(1.04) brightness(1.85);
 }
 
 [data-cstd-theme="astral-covenant"] [data-cstd-proof-grid] article {
