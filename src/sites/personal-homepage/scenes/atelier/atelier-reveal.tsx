@@ -14,7 +14,7 @@ export function AtelierReveal({ children, delay = 0, className = "" }: { childre
     const node = ref.current;
     if (!node) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setVisible(true);
+      node.dataset.cstdAtelierReveal = "visible";
       return;
     }
     const observer = new IntersectionObserver((entries) => {
