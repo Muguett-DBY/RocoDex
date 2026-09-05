@@ -327,7 +327,7 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
       engineRef.current = null;
       engine?.destroy();
     };
-  }, [discoveryKey, exhibitById, exhibitTitles, storageKey, theme, ui.canvas, ui.unavailable]);
+  }, [discoveryKey, exhibitById, exhibitTitles, storageKey, voxelTheme, ui.canvas, ui.unavailable]);
 
   useEffect(() => {
     if (!directoryOpen) return;
@@ -336,18 +336,6 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
     };
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [directoryOpen]);
-
-  useEffect(() => {
-    const openOnM = (event: KeyboardEvent) => {
-      if (event.code === "KeyM" && !event.repeat && !directoryOpen) {
-        const target = event.target as HTMLElement | null;
-        if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA") return;
-        openDirectory();
-      }
-    };
-    window.addEventListener("keydown", openOnM);
-    return () => window.removeEventListener("keydown", openOnM);
   }, [directoryOpen]);
 
   useEffect(() => () => {
@@ -398,6 +386,18 @@ export function VoxelSandbox({ locale, portfolio }: { locale: CstdLocale; portfo
     engineRef.current?.pause();
     setDirectoryOpen(true);
   }
+
+  useEffect(() => {
+    const openOnM = (event: KeyboardEvent) => {
+      if (event.code === "KeyM" && !event.repeat && !directoryOpen) {
+        const target = event.target as HTMLElement | null;
+        if (target?.tagName === "INPUT" || target?.tagName === "TEXTAREA") return;
+        openDirectory();
+      }
+    };
+    window.addEventListener("keydown", openOnM);
+    return () => window.removeEventListener("keydown", openOnM);
+  }, [directoryOpen]);
 
   function travelTo(id: VoxelExhibitId) {
     const engine = engineRef.current;
