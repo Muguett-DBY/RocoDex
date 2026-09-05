@@ -515,7 +515,7 @@ html[data-cstd-theme="underworld-forge"] {
 }
 
 [data-cstd-theme="underworld-forge"] [data-cstd-system-visual] img {
-  filter: sepia(0.38) saturate(0.72) contrast(1.12);
+  filter: sepia(0.32) saturate(0.85) contrast(1.08) brightness(1.55);
 }
 
 [data-cstd-theme="underworld-forge"] #cstd-system-detail > div:nth-child(2) {
@@ -612,8 +612,12 @@ html[data-cstd-theme="underworld-forge"] {
 }
 
 [data-cstd-theme="underworld-forge"] [data-cstd-knowledge-card]::before {
+  position: absolute;
+  top: 50%;
+  left: 0.15rem;
   width: 0.55rem;
   height: 0.55rem;
+  margin-top: -0.275rem;
   border: 1px solid #7d5e2e;
   content: "";
   transform: rotate(45deg);
@@ -726,7 +730,7 @@ html[data-cstd-theme="underworld-forge"] {
 }
 
 [data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-image] {
-  filter: sepia(0.34) saturate(0.7) contrast(1.12) brightness(0.72);
+  filter: sepia(0.2) saturate(0.88) contrast(1.05) brightness(0.98);
 }
 
 [data-cstd-deep-shell][data-cstd-theme="underworld-forge"] [data-cstd-page-hero-overlay] {
