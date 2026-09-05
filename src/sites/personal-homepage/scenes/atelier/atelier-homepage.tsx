@@ -28,17 +28,16 @@ function SectionHeading({ index, label, title }: { index: string; label: string;
 }
 
 export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
-  const featured = cstdCaseStudies.filter((entry) => ["rocodex-platform", "melbourne-pedestrian-microclimate", "alpha-research-system"].includes(entry.slug));
   const latestNotes = [...cstdTechnicalNotes].sort((left, right) => right.publishedAt.localeCompare(left.publishedAt)).slice(0, 3);
   const isZh = locale === "zh";
 
   const workTitle = isZh ? "把分析、系统与产品，做成可核验的作品。" : "Analysis, systems, and products you can verify.";
   const workCases = [
-    { slug: "melbourne-pedestrian-microclimate", size: "wide" },
-    { slug: "rocodex-platform", size: "tall" },
-    { slug: "alpha-research-system", size: "tall" },
+    { slug: "melbourne-pedestrian-microclimate", wide: true },
+    { slug: "rocodex-platform", wide: false },
+    { slug: "alpha-research-system", wide: false },
   ]
-    .map(({ slug, size }) => ({ entry: cstdCaseStudies.find((candidate) => candidate.slug === slug)!, size }))
+    .map(({ slug, wide }) => ({ entry: cstdCaseStudies.find((candidate) => candidate.slug === slug)!, wide }))
     .filter((item) => Boolean(item.entry));
 
   const melbourne = cstdCaseStudies.find((entry) => entry.slug === "melbourne-pedestrian-microclimate")!;
@@ -122,8 +121,8 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
             <SectionHeading index="02" label={isZh ? "精选作品" : "Selected work"} title={workTitle} />
           </AtelierReveal>
           <div className="mt-14 grid gap-6 md:grid-cols-2">
-            {workCases.map(({ entry, size }, index) => (
-              <AtelierReveal key={entry.slug} delay={index * 70} className={index === 0 && size === "wide" ? "md:col-span-2" : ""}>
+            {workCases.map(({ entry, wide }, index) => (
+              <AtelierReveal key={entry.slug} delay={index * 70} className={index === 0 && wide ? "md:col-span-2" : ""}>
                 <CstdLink
                   href={getCaseStudyPath(entry, locale)}
                   className="group relative block h-[22rem] overflow-hidden rounded-2xl border border-[#1d1d1f]/8 bg-[#e8eaee] md:h-[26rem]"
