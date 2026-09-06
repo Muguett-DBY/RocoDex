@@ -66,7 +66,7 @@ export function HomepageHeader({
           </span>
         </CstdChapterLink>
 
-        <VoxelNavLink locale={locale} className="mx-3 hidden xl:inline-flex" />
+        {theme !== "atelier" ? <VoxelNavLink locale={locale} className="mx-3 hidden xl:inline-flex" /> : null}
 
         <div className="ml-auto flex shrink-0 items-center gap-1.5 min-[360px]:gap-2 md:gap-4">
           <nav aria-label={locale === "zh" ? "首页导航" : "Homepage navigation"} className="hidden items-center gap-0.5 text-[12px] font-semibold text-[#9ca5a8] md:flex">

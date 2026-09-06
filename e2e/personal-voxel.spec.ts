@@ -23,6 +23,8 @@ async function expectRenderedVoxelCanvas(page: Page) {
 
 test("CSTD exposes a themed voxel-world invitation from its navigation", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
+  // The voxel invitation belongs to the three game worlds; the formal atelier default hides it.
+  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.goto(isMobile ? "/cstd/about" : "/cstd", { waitUntil: "domcontentloaded" });
   const invitation = page.locator("[data-cstd-voxel-nav]:visible").first();
   await expect(invitation).toBeVisible();

@@ -154,7 +154,7 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
             </span>
           </CstdLink>
 
-          <VoxelNavLink locale={locale} className="ml-auto hidden xl:inline-flex" />
+          {theme !== "atelier" ? <VoxelNavLink locale={locale} className="ml-auto hidden xl:inline-flex" /> : null}
 
           <nav aria-label={locale === "zh" ? "主导航" : "Primary navigation"} className="ml-auto hidden items-center gap-1 lg:flex xl:ml-2">
             {navItems.map((item) => {
@@ -188,7 +188,7 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
           {navItems.map((item) => (
             <CstdLink key={item.href} href={localizedHref(item.href, locale)} className="shrink-0 px-3 py-2 font-mono text-[11px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{item.label[locale]}</CstdLink>
           ))}
-          <VoxelNavLink locale={locale} compact className="shrink-0" />
+          {theme !== "atelier" ? <VoxelNavLink locale={locale} compact className="shrink-0" /> : null}
           <CstdLink href={localizedHref("/now", locale)} className="shrink-0 px-3 py-2 font-mono text-[11px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{copy.now}</CstdLink>
         </nav>
       </header>
