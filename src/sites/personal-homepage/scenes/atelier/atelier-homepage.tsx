@@ -128,7 +128,7 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
                   className="group relative block h-[22rem] overflow-hidden rounded-2xl border border-[#1d1d1f]/8 bg-[#e8eaee] md:h-[26rem]"
                 >
                   <Image src={entry.image.src} alt={entry.image.alt[locale]} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.035]" style={{ objectPosition: entry.image.position ?? "50% 50%" }} />
-                  <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,9,0)_38%,rgba(5,7,9,0.82)_86%)]" />
+                  <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0)_0%,rgba(29,29,31,0.92)_72%)]" />
                   <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-6 md:p-8">
                     <div>
                       <p className="font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-white/70">{entry.year} · {entry.kicker[locale]}</p>

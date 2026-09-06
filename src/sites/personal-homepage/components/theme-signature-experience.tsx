@@ -7,7 +7,6 @@ import {
   Eye,
   FlaskConical,
   Flame,
-  PenLine,
   RadioTower,
   RotateCcw,
   ScrollText,
@@ -250,13 +249,8 @@ export function AtelierMethod({ locale }: { locale: CstdLocale }) {
   const [active, setActive] = useState(0);
 
   return (
-    <section data-cstd-theme-encounter data-cstd-theme-encounter-theme="atelier" data-cstd-atelier-method={steps[active].id} aria-labelledby="cstd-atelier-method-title" className="cstd-theme-encounter cstd-atelier-method">
-      <div className="cstd-encounter-inner">
-        <header className="cstd-atelier-method-header">
-          <p><PenLine aria-hidden="true" /> {locale === "zh" ? "工作室 / 工作方式" : "ATELIER / WORKING METHOD"}</p>
-          <h2 id="cstd-atelier-method-title">{locale === "zh" ? "三步，把一件事做完。" : "Three steps. One finished thing."}</h2>
-        </header>
-        <div role="tablist" aria-label={locale === "zh" ? "工作方式三步" : "Three working steps"} className="cstd-atelier-method-steps">
+    <div data-cstd-theme-encounter data-cstd-theme-encounter-theme="atelier" data-cstd-atelier-method={steps[active].id} className="cstd-atelier-method">
+      <div role="tablist" aria-label={locale === "zh" ? "工作方式三步" : "Three working steps"} className="cstd-atelier-method-steps">
           {steps.map((step, index) => {
             const Icon = step.icon;
             const activeStep = active === index;
@@ -278,11 +272,10 @@ export function AtelierMethod({ locale }: { locale: CstdLocale }) {
             );
           })}
         </div>
-        <div className="cstd-atelier-method-detail" role="tabpanel" aria-live="polite">
-          <p>{steps[active].detail}</p>
-        </div>
+      <div className="cstd-atelier-method-detail" role="tabpanel" aria-live="polite">
+        <p>{steps[active].detail}</p>
       </div>
-    </section>
+    </div>
   );
 }
 
