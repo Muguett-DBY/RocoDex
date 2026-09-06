@@ -97,7 +97,7 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
       </section>
 
       {/* Method — the quiet three-step interaction */}
-      <section id="method" data-cstd-scene="systems" className="border-b border-[#1d1d1f]/10 bg-[#f5f5f7] px-6 py-24 md:px-10 lg:px-16">
+      <section id="method" data-cstd-scene="systems" data-cstd-atelier-section="method" className="border-b border-[#1d1d1f]/10 bg-[#f5f5f7] px-6 py-24 md:px-10 lg:px-16">
         <div className="mx-auto w-full max-w-[1200px]">
           <AtelierReveal>
             <SectionHeading index="01" label={isZh ? "工作方式" : "Working method"} title={isZh ? "三步，把一件事做完" : "Three steps, one finished thing"} />
@@ -115,7 +115,7 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
       </section>
 
       {/* Selected work */}
-      <section id="work" data-cstd-scene="proof" className="bg-white px-6 py-24 md:px-10 lg:px-16">
+      <section id="work" data-cstd-scene="proof" data-cstd-atelier-section="work" className="bg-white px-6 py-24 md:px-10 lg:px-16">
         <div className="mx-auto w-full max-w-[1200px]">
           <AtelierReveal>
             <SectionHeading index="02" label={isZh ? "精选作品" : "Selected work"} title={workTitle} />
@@ -154,7 +154,7 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
       </section>
 
       {/* Data feature: Melbourne */}
-      <section className="border-y border-[#1d1d1f]/10 bg-[#f5f5f7] px-6 py-24 md:px-10 lg:px-16">
+      <section data-cstd-atelier-section="data" className="border-y border-[#1d1d1f]/10 bg-[#f5f5f7] px-6 py-24 md:px-10 lg:px-16">
         <div className="mx-auto grid w-full max-w-[1200px] items-center gap-12 lg:grid-cols-2">
           <AtelierReveal>
             <p className="flex items-center gap-3 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-[#6e6e73]">
@@ -187,7 +187,7 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
       </section>
 
       {/* Notes */}
-      <section id="notes" data-cstd-scene="path" className="bg-white px-6 py-24 md:px-10 lg:px-16">
+      <section id="notes" data-cstd-scene="path" data-cstd-atelier-section="notes" className="bg-white px-6 py-24 md:px-10 lg:px-16">
         <div className="mx-auto w-full max-w-[1200px]">
           <AtelierReveal>
             <SectionHeading index="03" label={isZh ? "技术札记" : "Technical notes"} title={isZh ? "把判断写下来，让它们可查。" : "Write the judgement down. Keep it checkable."} />
@@ -238,7 +238,7 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
       </section>
 
       {/* Contact / finale */}
-      <section id="contact" data-cstd-scene="finale" className="bg-white px-6 pb-28 pt-24 md:px-10 lg:px-16">
+      <section id="contact" data-cstd-scene="finale" data-cstd-atelier-section="contact" className="bg-white px-6 pb-28 pt-24 md:px-10 lg:px-16">
         <div className="mx-auto w-full max-w-[1200px]">
           <AtelierReveal>
             <SectionHeading index="04" label={isZh ? "开放联络" : "Open contact"} title={isZh ? "如果你在找一个会把分析做成产品的人。" : "If you are looking for someone who ships analysis as products."} />

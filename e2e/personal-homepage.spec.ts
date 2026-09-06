@@ -12,10 +12,10 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1, name: "奶黄包" })).toBeVisible();
-  await expect(page.locator('[data-cstd-theme-copy="atelier"]', { hasText: "我用 R、Python 和 SQL 做可复现的分析" }).first()).toBeVisible();
+  await expect(page.locator("[data-cstd-hero-description]")).toContainText("我用 R、Python 和 SQL 做可复现的分析");
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
-  await expect(page.locator("[data-cstd-home-atelier]")).toHaveAttribute("data-cstd-atelier-section", "hero");
-  await expect(page.locator("[data-cstd-home-atelier] [data-cstd-atelier-section]")).toHaveCount(5);
+  await expect(page.locator('[data-cstd-home-atelier] [data-cstd-atelier-section="hero"]')).toBeVisible();
+  await expect(page.locator("[data-cstd-home-atelier] [data-cstd-atelier-section]")).toHaveCount(6);
   await expect(page.locator("[data-cstd-narrative-switcher]")).toHaveCount(0);
 
   // The game five-act composition lives behind the theme switch; neon asserts its counts.
@@ -23,7 +23,7 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-hero-summary] > div")).toHaveCount(3);
 
-  await expect(page.locator("[data-cstd-scene]")).toHaveCount(5);
+  await expect(page.locator("[data-cstd-home-game] [data-cstd-scene]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-studio-twin]")).toHaveCount(1);
   await expect(page.locator("[data-cstd-studio-district-option]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-release-replay]")).toHaveCount(0);
@@ -102,7 +102,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   await expect(root).toHaveAttribute("data-cstd-locale", "en");
   await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("I take problems apart");
-  await expect(page.locator("[data-cstd-scene]")).toHaveCount(5);
+  await expect(page.locator("[data-cstd-home-game] [data-cstd-scene]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-knowledge-list]")).not.toContainText("[object Object]");
   const englishCopy = stripPermittedEnglishAutonyms((await root.innerText()) ?? "");
   expect(englishCopy).not.toMatch(/[\p{Script=Han}]/u);
@@ -156,7 +156,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
 
 test("CSTD runs one deterministic worker example and keeps notes directly readable", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
-  await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
+  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
 
@@ -282,6 +282,7 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
 });
 
 test("CSTD visual contracts keep identity, summary, and quiet reading coherent", async ({ page, isMobile }) => {
+  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.addInitScript(() => {
     window.sessionStorage.setItem("cstd:identity-boot-seen", "true");
     window.localStorage.setItem("cstd-motion-mode", "calm");
@@ -533,6 +534,7 @@ test("CSTD applies a persisted visual world before the React runtime loads", asy
 });
 
 test("CSTD exposes a five-act stage, useful depth routes, and an inspectable evidence chain", async ({ page }) => {
+  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
 
   const actNavigation = page.getByRole("navigation", { name: "五幕主页导航" });
@@ -572,6 +574,7 @@ test("CSTD follows system motion preference until the visitor chooses an explici
 });
 
 test("CSTD header anchors land immediately without a stalled view transition", async ({ page, isMobile }) => {
+  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   test.skip(Boolean(isMobile), "The compact mobile header exposes the primary work shortcut instead of the desktop rail.");
   const transitionErrors: string[] = [];
   page.on("console", (message) => {
@@ -629,6 +632,7 @@ test("CSTD reading navigation prewarms the route and responds inside the click f
 
 test("CSTD reaches its tailored finale without a scroll trap", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
+  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   const metrics = await page.evaluate(() => ({
@@ -687,16 +691,20 @@ test("CSTD primary and deep surfaces pass automated WCAG A/AA checks in every vi
   for (const theme of ["atelier", "neon-district", "underworld-forge", "astral-covenant"] as const) {
     await page.goto("/cstd", { waitUntil: "domcontentloaded" });
     await page.evaluate((nextTheme) => window.localStorage.setItem("cstd-world-theme", nextTheme), theme);
+    await page.reload({ waitUntil: "domcontentloaded" });
 
     for (const path of ["/cstd", "/cstd/work/rocodex-platform"]) {
       await page.goto(path, { waitUntil: "domcontentloaded" });
       const themedRoot = path === "/cstd" ? page.locator("[data-cstd-kinetic-world]") : page.locator("[data-cstd-deep-shell]");
       await expect(themedRoot).toHaveAttribute("data-cstd-theme", theme);
-      if (path === "/cstd") {
+      if (path === "/cstd" && theme === "neon-district") {
         await expect(themedRoot).toHaveAttribute("data-cstd-enhancements-ready", "true");
         for (const heading of ["#proof-heading", "#executable-evidence-heading"]) {
           await expect(page.locator(heading)).toHaveCSS("opacity", "1");
         }
+      }
+      if (path === "/cstd" && theme === "atelier") {
+        await expect(page.locator("[data-cstd-home-atelier] [data-cstd-atelier-section]")).toHaveCount(6);
       }
       const results = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])

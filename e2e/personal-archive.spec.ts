@@ -42,6 +42,7 @@ test.describe("CSTD technical archive", () => {
   });
 
   test("keeps the source-constrained knowledge lens grounded and inspectable", async ({ page }) => {
+    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
     await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
     await page.goto("/cstd", { waitUntil: "domcontentloaded" });
     await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
