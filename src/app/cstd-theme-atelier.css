@@ -573,6 +573,13 @@ html[data-cstd-theme="atelier"] [data-cstd-deep-shell] {
   color: var(--atelier-ink);
 }
 
+/* Case pages are self-contained cinematic compositions; they keep their dark
+   stage under every theme so the film and evidence columns stay as designed. */
+html[data-cstd-theme="atelier"] [data-cstd-deep-shell][data-cstd-case-page="true"] {
+  background: #050709;
+  color: #f2efe7;
+}
+
 html[data-cstd-theme="atelier"] [data-cstd-page-hero] {
   background: var(--atelier-bg) !important;
   border-color: var(--atelier-hairline) !important;
@@ -634,14 +641,7 @@ html[data-cstd-theme="atelier"] [data-cstd-theme-scene-rail] [data-cstd-theme-sc
 /* ---------- Second pass: yellows become formal, dark islands become light ---------- */
 
 /* Any brand-yellow text inside atelier chapters reads as the accent. */
-html[data-cstd-theme="atelier"] :is([data-cstd-chapter], [data-cstd-deep-shell], [data-cstd-executable-evidence]) [class*="f4d431"]:not([data-cstd-hero-actions] a):not([data-cstd-header-mark]) {
-  color: var(--atelier-accent) !important;
-}
 
-html[data-cstd-theme="atelier"] :is([data-cstd-chapter], [data-cstd-deep-shell]) [style*="f4d431"],
-html[data-cstd-theme="atelier"] [data-cstd-hero] [style*="#f4d431"] {
-  color: var(--atelier-accent) !important;
-}
 
 html[data-cstd-theme="atelier"] [data-cstd-hero] span[aria-hidden="true"][class*="f4d431"] {
   background: var(--atelier-ink) !important;
@@ -729,6 +729,24 @@ html[data-cstd-theme="atelier"] [data-cstd-case-replay] button[class*="f4d431"]:
   color: #ffffff !important;
 }
 
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] label,
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] [class*="7b878c"] {
+  color: var(--atelier-secondary) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] {
+  background: var(--atelier-surface);
+  color: var(--atelier-ink);
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] :where(h3, strong) {
+  color: var(--atelier-ink) !important;
+}
+
+html[data-cstd-theme="atelier"] [data-cstd-case-replay] :where(p, span, small, label, [class*="f4d431"], [class*="9aa6aa"], [class*="7b878c"]) {
+  color: var(--atelier-secondary) !important;
+}
+
 html[data-cstd-theme="atelier"] [data-cstd-case-replay] input[type="range"] {
   accent-color: var(--atelier-accent) !important;
 }
@@ -762,38 +780,23 @@ html[data-cstd-theme="atelier"] [data-cstd-entry-console] [data-cstd-boot-track]
   background: var(--atelier-hairline) !important;
 }
 
-/* Deep case pages under atelier: the film column keeps its cinema, the
-   surrounding editorial elements switch to ink-on-paper. */
-html[data-cstd-theme="atelier"] [data-cstd-case-film] [data-cstd-film-beat] h3 {
-  color: var(--atelier-ink) !important;
-}
+/* The deep case page keeps its designed dark cinematic presentation under atelier; only the shell chrome lightens. */
 
-html[data-cstd-theme="atelier"] [data-cstd-case-film] [data-cstd-film-beat] > button > span,
-html[data-cstd-theme="atelier"] [data-cstd-case-film] [data-cstd-film-beat] p {
-  color: var(--atelier-secondary) !important;
-}
-
-html[data-cstd-theme="atelier"] [data-cstd-case-film] [data-cstd-film-beat] {
-  border-color: var(--atelier-hairline) !important;
-}
-
-html[data-cstd-theme="atelier"] [data-cstd-dossier-tab] {
-  border-color: var(--atelier-hairline) !important;
-  color: var(--atelier-secondary) !important;
+/* Inside the cinematic case film, accents lighten for the dark stage. */
+html[data-cstd-theme="atelier"] [data-cstd-case-film] [class*="f4d431"] {
+  color: #8fc7ff !important;
 }
 
 html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"] {
   background: var(--atelier-ink) !important;
 }
 
-html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"],
-html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"] > span,
-html[data-cstd-theme="atelier"] [data-cstd-dossier-tab="architecture"] > span,
-html[data-cstd-theme="atelier"] [data-cstd-dossier-tab] > span {
-  color: var(--atelier-ink) !important;
-}
-
-html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"],
-html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"] > span {
+html[data-cstd-theme="atelier"] [data-cstd-dossier-tab][aria-selected="true"] :where(span, svg) {
   color: #ffffff !important;
 }
+
+
+
+
+
+

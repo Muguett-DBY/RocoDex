@@ -65,6 +65,7 @@ function localizedHref(href: string, locale: CstdLocale) {
 }
 
 export function CstdSiteChrome({ locale, page, children, immersive = false }: { locale: CstdLocale; page: string; children: React.ReactNode; immersive?: boolean }) {
+  const casePage = page.startsWith("work-") && page !== "work-index";
   const visualMode = useSyncExternalStore(subscribeVisualMode, getVisualModeSnapshot, getVisualModeServerSnapshot);
   const theme = useCstdTheme();
   const themeMeta = getCstdThemeMeta(theme);
@@ -132,7 +133,7 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
 
   return <>
     <CstdDocumentLocale locale={locale} />
-    <div suppressHydrationWarning data-cstd-deep-shell data-cstd-locale={locale} data-cstd-theme={theme} data-cstd-theme-kind={themeMeta.kind} data-cstd-controls-ready={controlsReady ? "true" : "false"} data-cstd-visual-mode={visualMode} data-cstd-reading-mode={readingSurface ? readingMode : "studio"} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
+    <div suppressHydrationWarning data-cstd-deep-shell data-cstd-case-page={casePage ? "true" : undefined} data-cstd-locale={locale} data-cstd-theme={theme} data-cstd-theme-kind={themeMeta.kind} data-cstd-controls-ready={controlsReady ? "true" : "false"} data-cstd-visual-mode={visualMode} data-cstd-reading-mode={readingSurface ? readingMode : "studio"} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
       <a href="#cstd-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:bg-white focus:px-4 focus:py-3 focus:text-black">{locale === "zh" ? "跳到主要内容" : "Skip to content"}</a>
       {!immersive ? <SignalField mode={visualMode} active={!(readingSurface && readingMode === "quiet")} /> : null}
       {!immersive && theme !== "atelier" ? <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" /> : null}
