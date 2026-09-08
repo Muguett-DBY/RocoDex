@@ -13,10 +13,12 @@ const cstdImmutableAssetRoots = [
 ] as const;
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 2_678_400,
+    unoptimized: true,
   },
   async headers() {
     return cstdImmutableAssetRoots.map((root) => ({
