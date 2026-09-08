@@ -1,0 +1,10 @@
+var R=require("../../../chunks/[turbopack]_runtime.js")("server/app/api/cstd-vitals/route.js")
+R.c("server/chunks/[root-of-the-server]__0wl4nlq._.js")
+R.c("server/chunks/src_sites_personal-homepage_08udu0o._.js")
+R.c("server/chunks/src_sites_personal-homepage_1mkuiqg._.js")
+R.c("server/chunks/node_modules_next_1zc5q0a._.js")
+R.c("server/chunks/[root-of-the-server]__15bjnu5._.js")
+R.c("server/chunks/node_modules_@upstash_redis_nodejs_mjs_12fr2l8._.js")
+R.c("server/chunks/_next-internal_server_app_api_cstd-vitals_route_actions_1n9x0i1.js")
+R.m(31249)
+module.exports=R.m(31249).exports

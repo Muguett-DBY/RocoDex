@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 320" role="img" aria-labelledby="title desc">
+  <title id="title">RocoDex placeholder</title>
+  <desc id="desc">统一风格的精灵图片占位图</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#d1fae5"/>
+      <stop offset="48%" stop-color="#e0f2fe"/>
+      <stop offset="100%" stop-color="#fef3c7"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="320" rx="28" fill="url(#bg)"/>
+  <circle cx="160" cy="145" r="72" fill="#ffffff" opacity=".86"/>
+  <path fill="#10b981" d="M160 76c35 0 63 29 63 64 0 44-42 82-63 100-21-18-63-56-63-100 0-35 28-64 63-64Zm0 42c-16 0-29 13-29 29s13 29 29 29 29-13 29-29-13-29-29-29Z"/>
+  <path fill="#334155" d="M89 256c0-14 11-25 25-25h92c14 0 25 11 25 25v7H89v-7Z" opacity=".75"/>
+  <text x="160" y="286" text-anchor="middle" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#0f172a">RocoDex</text>
+</svg>

@@ -1,0 +1,10 @@
+var R=require("../../chunks/[turbopack]_runtime.js")("server/app/sitemap.xml/route.js")
+R.c("server/chunks/[root-of-the-server]__0iry5_t._.js")
+R.c("server/chunks/node_modules_@upstash_redis_nodejs_mjs_12fr2l8._.js")
+R.c("server/chunks/src_sites_personal-homepage_1mkuiqg._.js")
+R.c("server/chunks/_0xl2xhd._.js")
+R.c("server/chunks/[root-of-the-server]__15bjnu5._.js")
+R.c("server/chunks/src_sites_personal-homepage_08udu0o._.js")
+R.c("server/chunks/_next-internal_server_app_sitemap_xml_route_actions_05l5km9.js")
+R.m(9774)
+module.exports=R.m(9774).exports

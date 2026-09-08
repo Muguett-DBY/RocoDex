@@ -1,0 +1,3 @@
+module.exports=[91824,a=>{"use strict";a.i(7997),a.i(99475),a.i(65423);var b=a.i(52425);let c={alt:"CSTD engineering case study",contentType:"image/png",size:{width:1200,height:630}};async function d(a){let{__metadata_id__:d,...e}=await a.params,f=(0,b.fillMetadataSegment)("/(personal)/cstd/work/[slug]",e,"opengraph-image",!1);return[function(a){let b={alt:a.alt,type:a.contentType||"image/png",url:f+"?5752c0d96f38878a"},{size:c}=a;return c&&(b.width=c.width,b.height=c.height),b}(c)]}a.s(["default",0,d],91824)},36793,function(a){a.n(a.i(91824))}];
+
+//# sourceMappingURL=src_app_%28personal%29_cstd_work_%5Bslug%5D_opengraph-image--metadata_0659m9o.js.map

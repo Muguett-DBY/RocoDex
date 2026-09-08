@@ -1,0 +1,26 @@
+/cstd-archive/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/cstd-districts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/cstd-materials/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/cstd-persona/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/cstd-stage/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/cstd-themes/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/cstd-universe/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/cstd-world/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/fonts/cstd/*
+  Cache-Control: public, max-age=31536000, immutable
