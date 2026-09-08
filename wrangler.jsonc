@@ -7,9 +7,31 @@
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
     "directory": ".open-next/assets",
-    "binding": "ASSETS"
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/*",
+      "!/_next/static/*",
+      "!/cstd-archive/*",
+      "!/cstd-districts/*",
+      "!/cstd-materials/*",
+      "!/cstd-persona/*",
+      "!/cstd-projects/*",
+      "!/cstd-stage/*",
+      "!/cstd-themes/*",
+      "!/cstd-universe/*",
+      "!/cstd-world/*",
+      "!/fonts/*",
+      "!/images/*"
+    ]
   },
   "observability": {
     "enabled": true
-  }
+  },
+  "vars": {
+    "AUTH_TRUST_HOST": "true"
+  },
+  "routes": [
+    { "pattern": "custard.top", "custom_domain": true },
+    { "pattern": "rocodex.custard.top", "custom_domain": true }
+  ]
 }

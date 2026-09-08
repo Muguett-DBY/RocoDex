@@ -44,7 +44,7 @@
     "verify:live-registration": "node --experimental-strip-types scripts/verify-live-registration.mts",
     "verify:live:cstd": "node scripts/verify-cstd-production.mjs",
     "cf:build": "node scripts/patch-opennext-win.mjs && opennextjs-cloudflare build 2> output/cf-build-stderr.log; node scripts/cf-post-build.mjs",
-    "cf:deploy": "node scripts/patch-opennext-win.mjs && opennextjs-cloudflare build && node scripts/cf-post-build.mjs && opennextjs-cloudflare deploy",
+    "cf:deploy": "node scripts/patch-opennext-win.mjs && opennextjs-cloudflare build && node scripts/cf-post-build.mjs && wrangler deploy",
     "cf:preview": "node scripts/patch-opennext-win.mjs && opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "ci:local": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"& './scripts/stop-local-next.ps1'; npm ci\""
   },
