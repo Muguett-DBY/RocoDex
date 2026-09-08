@@ -1,3 +1,0 @@
-module.exports=[20242,a=>{"use strict";a.i(7997),a.i(99475),a.i(65423);var b=a.i(52425);let c={alt:"CSTD technical note",contentType:"image/png",size:{width:1200,height:630}};async function d(a){let{__metadata_id__:d,...e}=await a.params,f=(0,b.fillMetadataSegment)("/(personal)/cstd/notes/[slug]",e,"opengraph-image",!1);return[function(a){let b={alt:a.alt,type:a.contentType||"image/png",url:f+"?09a9e447fd79e46e"},{size:c}=a;return c&&(b.width=c.width,b.height=c.height),b}(c)]}a.s(["default",0,d],20242)},75522,function(a){a.n(a.i(20242))}];
-
-//# sourceMappingURL=src_app_%28personal%29_cstd_notes_%5Bslug%5D_opengraph-image--metadata_1jyugvb.js.map

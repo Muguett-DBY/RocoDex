@@ -102,3 +102,7 @@ skill_plugin_*
 
 # opencode
 .opencode/
+
+# Cloudflare Workers build artifacts
+.open-next/
+.wrangler/
