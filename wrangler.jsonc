@@ -32,6 +32,7 @@
   },
   "routes": [
     { "pattern": "custard.top", "custom_domain": true },
-    { "pattern": "rocodex.custard.top", "custom_domain": true }
+    { "pattern": "rocodex.custard.top", "custom_domain": true },
+    { "pattern": "www.custard.top", "custom_domain": true }
   ]
 }
