@@ -80,7 +80,7 @@ test("RocoDex navigation finishes while a noncritical optimized image is delayed
 
   // Since the Cloudflare migration, images ship pre-optimized (no /_next/image);
   // delay the creature artwork itself to test the same navigation guarantee.
-  await page.route("**/*.webp", async (route) => {
+  await page.route("**/*.png", async (route) => {
     markImageRequested();
     await imagesReleased;
     await route.abort();
