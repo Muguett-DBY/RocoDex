@@ -1,10 +1,27 @@
-# RocoDex
+<!-- Project artwork created for this repository. -->
+<p align="center">
+  <img src="./docs/assets/readme-banner.svg" width="100%" alt="RocoDex — Explore the data. Find a build. Keep a favourite." />
+</p>
+
+<h1 align="center">RocoDex</h1>
+
+<p align="center">
+  <img src="./docs/assets/readme-badges.svg" alt="Maintenance · Next.js · React · TypeScript · Cloudflare Workers" />
+</p>
 
 **A searchable Roco Kingdom creature guide, with builds, teams, and a personal collection.**
 
+<p align="center"><a href="#what-is-here">What is here</a> &nbsp; · &nbsp; <a href="#run-locally">Run locally</a> &nbsp; · &nbsp; <a href="#find-your-way-around">Find your way around</a></p>
+
 [Open RocoDex](https://rocodex.custard.top) · [Architecture](docs/architecture.md) · [Data sources](docs/guide_sources.md)
 
-`Next.js` · `React` · `TypeScript` · `Cloudflare Workers`
+
+<p align="center">
+  <img src="./docs/assets/interface.png" width="100%" alt="Live RocoDex interface, captured on 2026-10-10. The app is primarily Chinese." />
+</p>
+
+<sub>Live RocoDex interface, captured on 2026-10-10. The app is primarily Chinese.</sub>
+
 
 ## What is here
 
