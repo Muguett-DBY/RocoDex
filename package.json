@@ -57,7 +57,6 @@
     "bcryptjs": "^3.0.3",
     "clsx": "^2.1.1",
     "framer-motion": "^13.4.4",
-    "gray-matter": "^4.0.3",
     "lucide-react": "^1.48.0",
     "next": "16.3.8",
     "next-auth": "5.0.0-beta.32",
@@ -71,7 +70,9 @@
     "shiki": "^4.4.3",
     "tailwind-merge": "^3.7.0",
     "three": "0.185.1",
-    "zod": "^4.6.5"
+    "zod": "^4.6.5",
+    "vfile": "^6.0.3",
+    "vfile-matter": "^5.0.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

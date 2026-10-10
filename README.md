@@ -3,17 +3,17 @@
   <img src="./docs/assets/readme-banner.svg" width="100%" alt="RocoDex — Explore the data. Find a build. Keep a favourite." />
 </p>
 
-<h1 align="center">RocoDex</h1>
+<h1 align="center">Custard Web Platform</h1>
 
 <p align="center">
   <img src="./docs/assets/readme-badges.svg" alt="Maintenance · Next.js · React · TypeScript · Cloudflare Workers" />
 </p>
 
-**A searchable Roco Kingdom creature guide, with builds, teams, and a personal collection.**
+**My personal website and engineering workspace, with the RocoDex game guide retained in the same deployment.**
 
 <p align="center"><a href="#what-is-here">What is here</a> &nbsp; · &nbsp; <a href="#run-locally">Run locally</a> &nbsp; · &nbsp; <a href="#find-your-way-around">Find your way around</a></p>
 
-[Open RocoDex](https://rocodex.custard.top) · [Architecture](docs/architecture.md) · [Data sources](docs/guide_sources.md)
+[Personal website](https://custard.top) · [RocoDex](https://rocodex.custard.top) · [Architecture](docs/architecture.md) · [Data sources](docs/guide_sources.md)
 
 
 <p align="center">
@@ -25,11 +25,11 @@
 
 ## What is here
 
-- Creature data, search, and filters.
-- Build guides, PvP teams, and locally saved favorites.
-- A separate personal website in the same deployment. Its routes and product code stay separate from RocoDex.
+- **Primary surface:** the personal website, with projects, engineering notes, and interactive experiments.
+- **Retained surface:** RocoDex, with creature data, search, builds, teams, and saved favourites.
+- The two sites share a deployment while their routes and product code stay separate.
 
-RocoDex is in maintenance: the focus is reliability, compatibility, and fixes.
+The personal website is the main maintenance focus. RocoDex is retained for reliability and compatibility; it is not the primary product-development track.
 
 The live sites share the `custard-web-platform` Cloudflare Worker, built with OpenNext. `rocodex.custard.top` serves RocoDex; `custard.top` and `www.custard.top` serve the personal site.
 
@@ -57,3 +57,5 @@ Open `http://localhost:3000` for RocoDex or `/cstd` for the separate personal si
 Use `npm run verify` for the main checks and `npm run test:e2e:rocodex` for the RocoDex browser tests.
 
 This is an unofficial fan project. See the [disclaimer](DISCLAIMER.md), [data gaps](docs/data_gaps.md), and [PvP sources](docs/pvp_sources.md).
+
+Original code is available for noncommercial use under [PolyForm Noncommercial 1.0.0](LICENSE). See [license scope and third-party assets](docs/LICENSE_SCOPE.md).

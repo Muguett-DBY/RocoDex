@@ -1,7 +1,7 @@
 import { access, mkdir, readFile, readdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import matter from "gray-matter";
+import { parseContentDocument } from "../src/sites/personal-homepage/content/parse-content-document";
 import { caseDocumentSchema, noteDocumentSchema } from "../src/sites/personal-homepage/content/content-schema";
 import { createCstdContentHealth } from "../src/sites/personal-homepage/content/content-health";
 import { cstdLabs } from "../src/sites/personal-homepage/content/labs";
@@ -148,7 +148,7 @@ async function readDocuments(kind: "cases" | "notes"): Promise<ParsedDocument[]>
   const files = (await readdir(directory)).filter((file) => file.endsWith(".mdx")).sort();
   return Promise.all(files.map(async (file) => {
     const source = await readFile(path.join(directory, file), "utf8");
-    return { file: `${kind}/${file}`, source, data: matter(source).data };
+    return { file: `${kind}/${file}`, source, data: parseContentDocument(source).data };
   }));
 }
 

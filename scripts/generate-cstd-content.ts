@@ -1,6 +1,6 @@
 import { readFile, readdir, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import matter from "gray-matter";
+import { parseContentDocument } from "../src/sites/personal-homepage/content/parse-content-document";
 import {
   caseDocumentSchema,
   noteDocumentSchema,
@@ -18,7 +18,7 @@ async function readDocuments<T>(directory: "cases" | "notes", parse: (value: unk
   const names = (await readdir(directoryPath)).filter((name) => name.endsWith(".mdx")).sort();
   return Promise.all(names.map(async (name) => {
     const source = await readFile(path.join(directoryPath, name), "utf8");
-    const document = matter(source);
+    const document = parseContentDocument(source);
     const metadata = parse(document.data);
     if (/\b[a-zA-Z][a-zA-Z0-9]*=\{"/.test(document.content)) {
       throw new Error(`${directory}/${name} uses an MDX expression for a string prop; use quoted attributes instead`);

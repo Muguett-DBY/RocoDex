@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
-import matter from "gray-matter";
+import { parseContentDocument } from "./parse-content-document";
 import { compileMDX } from "next-mdx-remote/rsc";
 import rehypePrettyCode from "rehype-pretty-code";
 import rehypeSlug from "rehype-slug";
@@ -70,7 +70,7 @@ export const loadCstdContentDocument = cache(async (
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) throw new Error("Invalid CSTD content slug");
   const sourcePath = path.join(process.cwd(), "src", "sites", "personal-homepage", "content", "documents", kind, `${slug}.mdx`);
   const source = await readFile(sourcePath, "utf8");
-  const document = matter(source);
+  const document = parseContentDocument(source);
   const result = await compileMDX({
     source: document.content,
     components: createComponents(locale, kind === "cases" ? "case" : "note"),
