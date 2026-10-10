@@ -4,7 +4,7 @@
 
 [Open RocoDex](https://rocodex.custard.top) · [Architecture](docs/architecture.md) · [Data sources](docs/guide_sources.md)
 
-`Next.js` · `React` · `TypeScript` · `Vercel`
+`Next.js` · `React` · `TypeScript` · `Cloudflare Workers`
 
 ## What is here
 
@@ -13,6 +13,8 @@
 - A separate personal website in the same deployment. Its routes and product code stay separate from RocoDex.
 
 RocoDex is in maintenance: the focus is reliability, compatibility, and fixes.
+
+The live sites share the `custard-web-platform` Cloudflare Worker, built with OpenNext. `rocodex.custard.top` serves RocoDex; `custard.top` and `www.custard.top` serve the personal site.
 
 ## Run locally
 

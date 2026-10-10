@@ -2,7 +2,7 @@
 
 # Custard Web Platform
 
-这个仓库是两个独立网站共用的 Next.js / Vercel 部署容器。它们共享构建、域名分发和少量 SEO 基础设施，但不共享产品逻辑。
+This repository hosts two independent Next.js sites on the `custard-web-platform` Cloudflare Worker through OpenNext. They share the build and host routing, while their product code stays separate.
 
 | 产品 | 生产域名 | Next 路由 | 主要代码 | 浏览器回归 |
 | --- | --- | --- | --- | --- |
@@ -41,7 +41,7 @@ src/
 
 ## 本地开发
 
-工具链固定为 Node.js 24 LTS 与 npm 12.0.2。Vercel、GitHub Actions 和本地版本文件使用同一 Node 主版本，避免构建环境漂移。
+Use Node.js 24 LTS and npm 12.0.2 for local builds and GitHub Actions. Cloudflare runs the OpenNext Worker output using the compatibility flags in `wrangler.jsonc`.
 
 ```bash
 npm ci
@@ -87,6 +87,8 @@ RocoDex 当前处于稳定维护期：继续作为核心项目在线运行并接
 
 ## 部署
 
-仓库继续由一个 Vercel 项目部署。路由组不改变 URL，目录迁移不需要修改 DNS、Vercel 域名或现有外链。`main` 推送后应同时检查 GitHub Actions、Vercel 状态、`custard.top` 和 `rocodex.custard.top`。
+The live deployment is the `custard-web-platform` Cloudflare Worker. Its custom domains are `custard.top`, `www.custard.top`, and `rocodex.custard.top`, verified against Cloudflare on 2026-10-10. Do not remove the Wrangler or OpenNext configuration while those domains use this Worker.
+
+`npm run cf:deploy` builds the application with OpenNext and deploys the Worker. Run the verification commands first, then check both sites after an intentional release. The GitHub CI workflow runs checks; a successful push alone does not prove that a new Worker version is live. Retained Vercel configuration is historical and does not describe the verified domain bindings.
 
 本项目不是《洛克王国世界》官方网站，也不隶属于其运营方。完整声明见 `DISCLAIMER.md`。

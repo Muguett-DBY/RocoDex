@@ -41,7 +41,7 @@ describe("toolchain version policy", () => {
     expect(packageJson.devDependencies.vitest).toBe("4.1.11");
     expect(packageJson.overrides).toMatchObject({
       postcss: "8.5.26",
-      sharp: "0.35.4",
+      sharp: "0.35.5",
     });
     expect(packageLock.packages["node_modules/next"]?.version).toBe("16.3.8");
     expect(packageLock.packages["node_modules/next-auth"]?.version).toBe("5.0.0-beta.32");
@@ -66,7 +66,7 @@ describe("toolchain version policy", () => {
     expect(packageLock.packages["node_modules/tailwindcss"]?.version).toBe("4.3.3");
     expect(packageLock.packages["node_modules/vitest"]?.version).toBe("4.1.11");
     expect(packageLock.packages["node_modules/postcss"]?.version).toBe("8.5.26");
-    expect(packageLock.packages["node_modules/sharp"]?.version).toBe("0.35.4");
+    expect(packageLock.packages["node_modules/sharp"]?.version).toBe("0.35.5");
   });
 
   test("pins approved install scripts for native tooling used by Next and ESLint", () => {
@@ -76,7 +76,7 @@ describe("toolchain version policy", () => {
 
     expect(packageJson.allowScripts).toMatchObject({
       "esbuild@0.28.2": true,
-      "sharp@0.35.4": true,
+      "sharp@0.35.5": true,
       "unrs-resolver@1.12.2": true,
     });
   });
