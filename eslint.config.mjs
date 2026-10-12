@@ -26,6 +26,9 @@ const eslintConfig = defineConfig([
     ".open-next/**",
     ".playwright-cli/**",
     ".wrangler/**",
+    // 工作流引擎的草稿与运行产物（.zcode/，运行日志本身已被其内层 .gitignore 忽略），
+    // 属会话工具输出，不属于本仓库 lint 管辖。
+    ".zcode/**",
     "output/**",
     "out/**",
     "build/**",

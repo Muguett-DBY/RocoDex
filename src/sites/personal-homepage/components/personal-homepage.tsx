@@ -51,6 +51,8 @@ function editorialData(locale: CstdLocale) {
     profile: { name: cstdProfile.name[locale], summary: cstdProfile.summary[locale] },
     works,
     notes,
+    /* 普查计数走内容注册表，组件不硬编码：当前 7 个已发布案例 */
+    census: { cases: cstdCaseStudies.length },
   };
 }
 

@@ -12,8 +12,9 @@ import { ThemeSwitcher } from "../theme-switcher";
 /* ============================================================================
    CSTD Editorial · 默认主页（atelier 主题槽位）的正式滚动版式。
    Chaptered editorial grammar（scroll-craft）：纸面章节、入场落位、页边批注、
-   folio 页码导航；唯一 flow act 驱动 147 万计数与图表揭示。
-   零视频、零滚动劫持：全部动效为 transform/opacity，原生文档流滚动。
+   folio 页码导航；每章一个 flow act，把引擎发布的 --sc-p 接给页面 CSS——
+   铜线绘制、编号落墨、札记入档、图表揭示与 147 万计数均随滚动位置擦洗。
+   零视频、零滚动劫持：全部动效为 transform/opacity/clip-path，原生文档流滚动。
 
    内容数据由服务端（personal-homepage.tsx）准备好以 props 传入，内容注册表
    不进客户端包。独立 HTML 原型与验证留档：/cstd-scroll/prototype.html 与
@@ -49,6 +50,7 @@ const NOSCRIPT_FALLBACK_CSS = `
 [data-cstd-home-editorial] [data-sc-in],[data-cstd-home-editorial] [data-sc-stagger]>*{opacity:1!important;transform:none!important}
 [data-cstd-home-editorial] [data-sc-reveal]{clip-path:none!important}
 [data-cstd-home-editorial] .mnote{opacity:1!important;transform:none!important}
+[data-cstd-home-editorial] .folio{display:none!important}
 `;
 
 type FolioItem = { id: string; mark: { zh: string; en: string }; label: { zh: string; en: string } };
@@ -83,6 +85,8 @@ type EditorialCopy = {
   workH2: string;
   workLede: string;
   workNote: React.ReactNode;
+  censusCases: string;
+  censusLabel: string;
   viewCase: string;
   countUnitZh: string;
   countHead: React.ReactNode;
@@ -151,6 +155,8 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     ) : (
       <>Every script behind Work 01 reruns end to end: download, clean, model, plot. {noteLink("/work", "All projects")}</>
     ),
+    censusCases: zh ? "个已发布案例" : "published cases",
+    censusLabel: zh ? "作品普查" : "Work census",
     viewCase: zh ? "查看案例" : "View case",
     countUnitZh: zh ? "行开放数据，" : "rows of open data,",
     countHead: zh ? <>让城市的节奏可见。</> : <>a city, made legible.</>,
@@ -206,11 +212,13 @@ export function CstdEditorialHomepage({
   profile,
   works,
   notes,
+  census,
 }: {
   locale?: CstdLocale;
   profile: EditorialProfile;
   works: readonly EditorialWork[];
   notes: readonly EditorialNote[];
+  census: { cases: number };
 }) {
   const copy = useMemo(() => editorialCopy(locale), [locale]);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -233,7 +241,9 @@ export function CstdEditorialHomepage({
     document.documentElement.classList.add("ed-ready");
     cleanups.push(() => document.documentElement.classList.remove("ed-ready"));
 
-    /* ---- 页边批注：随所属段落进入视口而落位，一次性 ---- */
+    /* ---- 页边批注：随所属段落进入视口而落位，一次性 ----
+       触发线保持浅（-6% / 0.05）：页尾章节剩余滚动余量少，触发过深会让
+       快速滚到底的读者完全看不到落位过程。 */
     const notes = Array.from(root.querySelectorAll<HTMLElement>("[data-mnote]"));
     if (reduce || !("IntersectionObserver" in window)) {
       notes.forEach((n) => n.classList.add("is-set"));
@@ -247,7 +257,7 @@ export function CstdEditorialHomepage({
             }
           });
         },
-        { rootMargin: "0px 0px -15% 0px", threshold: 0.2 },
+        { rootMargin: "0px 0px -6% 0px", threshold: 0.05 },
       );
       notes.forEach((n) => noteIO.observe(n));
       cleanups.push(() => noteIO.disconnect());
@@ -309,6 +319,16 @@ export function CstdEditorialHomepage({
       update();
     }
 
+    /* ---- stagger 入场残留清理：引擎把 transitionDelay 内联写进直接子元素且从不清除，
+       会拖慢链接的 hover 反馈（.work 链接 240ms、.note 箭头 120ms）。入场过渡结束后
+       清掉内联延迟——运行中的过渡不受影响，延迟的唯一职责就是这次入场。 ---- */
+    const onTransitionEnd = (event: TransitionEvent) => {
+      const target = event.target;
+      if (target instanceof HTMLElement && target.style.transitionDelay) target.style.transitionDelay = "";
+    };
+    root.addEventListener("transitionend", onTransitionEnd);
+    cleanups.push(() => root.removeEventListener("transitionend", onTransitionEnd));
+
     /* ---- 装载引擎（scrollcraft.js 不改动）；游戏主题激活时卸载，回默认时重挂 ---- */
     const isEditorialTheme = () => {
       const attr = document.documentElement.getAttribute("data-cstd-theme");
@@ -318,9 +338,14 @@ export function CstdEditorialHomepage({
     let booted = false;
     let api: { destroy: () => void } | null = null;
     let engineLoaded = Boolean(window.ScrollCraft);
+    /* 引擎脚本加载失败（网络故障/拦截）时，scrollcraft.css 仍会把入场元素压在
+       opacity:0——JS 开启但引擎缺席的场景 noscript 兜底覆盖不到。失败即挂
+       ed-fallback 强制呈现；引擎迟到则摘除并照常入场。 */
+    const dropFallback = () => document.documentElement.classList.remove("ed-fallback");
     const boot = () => {
       if (destroyed || booted || !engineLoaded || !isEditorialTheme()) return;
       booted = true;
+      dropFallback();
       api = window.ScrollCraft!.mount(document.body);
       (window as { __sc?: unknown }).__sc = api;
     };
@@ -342,8 +367,19 @@ export function CstdEditorialHomepage({
         engineLoaded = true;
         boot();
       });
+      script.addEventListener("error", () => {
+        if (!window.ScrollCraft) document.documentElement.classList.add("ed-fallback");
+      });
       document.head.appendChild(script);
-      cleanups.push(() => script.remove());
+      /* 既不 load 也不 error 的悬置（长超时、被代理掐断）：超时兜底直接呈现 */
+      const engineWatch = window.setTimeout(() => {
+        if (!window.ScrollCraft) document.documentElement.classList.add("ed-fallback");
+      }, 4000);
+      cleanups.push(() => {
+        window.clearTimeout(engineWatch);
+        script.remove();
+        dropFallback();
+      });
     }
     const themeObserver = new MutationObserver(() => {
       const editorial = isEditorialTheme();
@@ -416,28 +452,30 @@ export function CstdEditorialHomepage({
 
       <div id="top">
         {/* 扉 · title page */}
-        <section className="chapter ch-title" id="ch-title">
+        <section className="chapter ch-title" id="ch-title" data-sc-act="flow">
           <div className="ch-wrap">
-            <div className="sc-stack title-stack" data-sc-in data-sc-stagger="80">
-              <h1 className="ed-display-xl">
-                {profile.name}<span className="ed-fullstop" aria-hidden="true">.</span>
-              </h1>
-              <p className="ed-statement">{copy.statement}</p>
-              <p className="ed-summary">{profile.summary}</p>
-              <p className="title-actions">
-                <CstdChapterLink href="#ch-work" className="ed-button">{copy.exploreWork}</CstdChapterLink>
-                <CstdLink href={getLocalizedCstdHref("/about", locale)} className="ed-textlink">
-                  {copy.aboutMe}<span aria-hidden="true"> →</span>
-                </CstdLink>
-              </p>
-              <p className="title-role"><span>{copy.roleField}</span><span>{copy.roleCraft}</span></p>
+            <div className="title-lift" data-sc-parallax="-0.3">
+              <div className="sc-stack title-stack" data-sc-in data-sc-stagger="80">
+                <h1 className="ed-display-xl">
+                  {profile.name}<span className="ed-fullstop" aria-hidden="true">.</span>
+                </h1>
+                <p className="ed-statement">{copy.statement}</p>
+                <p className="ed-summary">{profile.summary}</p>
+                <p className="title-actions">
+                  <CstdChapterLink href="#ch-work" className="ed-button">{copy.exploreWork}</CstdChapterLink>
+                  <CstdLink href={getLocalizedCstdHref("/about", locale)} className="ed-textlink">
+                    {copy.aboutMe}<span aria-hidden="true"> →</span>
+                  </CstdLink>
+                </p>
+                <p className="title-role"><span>{copy.roleField}</span><span>{copy.roleCraft}</span></p>
+              </div>
             </div>
             <p className="title-foot">{copy.titleFoot}</p>
           </div>
         </section>
 
         {/* 壹 · 方法 */}
-        <section className="chapter ch-method" id="ch-method">
+        <section className="chapter ch-method" id="ch-method" data-sc-act="flow">
           <div className="ch-wrap">
             <div className="sc-stack" data-sc-in data-sc-stagger="70">
               <h2 className="ed-display-lg">{copy.methodH2}</h2>
@@ -458,8 +496,8 @@ export function CstdEditorialHomepage({
           </div>
         </section>
 
-        {/* 贰 · 作品（峰） */}
-        <section className="chapter ch-work" id="ch-work">
+        {/* 贰 · 作品（峰）：整章一个 flow act，计数/揭示/视差按章 p 擦洗 */}
+        <section className="chapter ch-work" id="ch-work" data-sc-act="flow">
           <div className="ch-wrap">
             <div className="sc-stack ch-head" data-sc-in data-sc-stagger="70">
               <h2 className="ed-display-lg">{copy.workH2}</h2>
@@ -467,6 +505,9 @@ export function CstdEditorialHomepage({
                 <p className="ed-lede">{copy.workLede}</p>
                 <aside className="mnote" data-mnote><p>{copy.workNote}</p></aside>
               </div>
+              <p className="work-census" aria-label={copy.censusLabel}>
+                <span data-sc-count="0 7" data-sc-count-at="0.06 0.26">{census.cases}</span> {copy.censusCases}
+              </p>
             </div>
 
             {featured ? (
@@ -496,16 +537,18 @@ export function CstdEditorialHomepage({
             </div>
 
             {featured ? (
-              <div className="data-spread" data-sc-act="flow">
+              /* data-spread 自身不再挂 act：章级 act 会与嵌套 act 双收集同一批设备，
+                 内层后写胜出会静默维持旧窗口（引擎按 querySelectorAll 含后代收集） */
+              <div className="data-spread">
                 <div className="data-copy">
                   <h3 className="ed-display-md">
-                    <span className="sc-nums" data-sc-count="0 1,470,000" data-sc-count-at="0.04 0.5" data-sc-count-ms="1500">1,470,000</span>
+                    <span className="sc-nums" data-sc-count="0 1,470,000" data-sc-count-at="0.50 0.74">1,470,000</span>
                     <br />{copy.countUnitZh}<br />{copy.countHead}
                   </h3>
                   <p>{copy.dataBody}</p>
                   <p className="data-tools" aria-label={copy.dataToolsLabel}>{featured.technologies.join(" · ")}</p>
                 </div>
-                <figure className="data-figure" data-sc-reveal="left" data-sc-reveal-at="0.08 0.5">
+                <figure className="data-figure" data-sc-reveal="left" data-sc-reveal-at="0.48 0.70">
                   <div className="data-figure-inner" data-sc-parallax="-0.4">
                     <Image
                       src="/cstd-archive/cstd-archive-melbourne-coefficients-v1.webp"
@@ -524,7 +567,7 @@ export function CstdEditorialHomepage({
         </section>
 
         {/* 叁 · 札记 */}
-        <section className="chapter ch-notes" id="ch-notes">
+        <section className="chapter ch-notes" id="ch-notes" data-sc-act="flow">
           <div className="ch-wrap">
             <div className="sc-stack ch-head" data-sc-in data-sc-stagger="70">
               <h2 className="ed-display-lg">{copy.notesH2}</h2>
@@ -537,7 +580,7 @@ export function CstdEditorialHomepage({
               {notes.map((note) => (
                 <CstdLink key={note.slug} href={note.path} className="note sc-stack" data-sc-in data-sc-stagger="60">
                   <time dateTime={note.publishedAt}>{note.dateLabel}</time>
-                  <div><h3>{note.title}</h3><p>{note.summary}</p></div>
+                  <div data-ed-drift><h3>{note.title}</h3><p>{note.summary}</p></div>
                   <span aria-hidden="true">↗</span>
                 </CstdLink>
               ))}
@@ -545,12 +588,12 @@ export function CstdEditorialHomepage({
           </div>
         </section>
 
-        {/* 肆 · 实验室 */}
-        <section className="chapter ch-lab" id="ch-lab">
+        {/* 肆 · 实验室：h2 交给引擎按章 p 扫擦揭示（替代一次性入场） */}
+        <section className="chapter ch-lab" id="ch-lab" data-sc-act="flow">
           <div className="ch-wrap">
-            <div className="sc-stack" data-sc-in data-sc-stagger="70">
-              <h2 className="ed-display-lg">{copy.labH2}</h2>
-              <div className="anno">
+            <div className="sc-stack">
+              <h2 className="ed-display-lg" data-sc-reveal="up" data-sc-reveal-at="0.05 0.34">{copy.labH2}</h2>
+              <div className="anno" data-sc-in data-sc-stagger="70">
                 <p className="ed-lede">{copy.labLede}</p>
                 <aside className="mnote" data-mnote><p>{copy.labNote}</p></aside>
               </div>
@@ -559,7 +602,7 @@ export function CstdEditorialHomepage({
         </section>
 
         {/* 末 · 版权页 */}
-        <section className="chapter ch-colophon" id="ch-colophon" data-colophon>
+        <section className="chapter ch-colophon" id="ch-colophon" data-colophon data-sc-act="flow">
           <div className="ch-wrap">
             <div className="sc-stack" data-sc-in data-sc-stagger="70">
               <p className="colophon-brand">{copy.colophonBrand}</p>

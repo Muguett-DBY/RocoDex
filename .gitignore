@@ -133,3 +133,6 @@ secret-scan.json
 scrollcraft/builds/*/out/
 scrollcraft/builds/*/lab/
 scrollcraft/builds/*/assets/
+
+# Windows reserved name accidentally created by 2>nul style redirects in Git Bash
+nul
