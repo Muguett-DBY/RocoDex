@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 
 const cstdImmutableAssetRoots = [
   "cstd-atelier",
+  "cstd-flight",
   "cstd-archive",
   "cstd-districts",
   "cstd-materials",

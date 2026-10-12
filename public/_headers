@@ -4,6 +4,9 @@
 /cstd-archive/*
   Cache-Control: public, max-age=31536000, immutable
 
+/cstd-flight/*
+  Cache-Control: public, max-age=31536000, immutable
+
 /cstd-districts/*
   Cache-Control: public, max-age=31536000, immutable
 

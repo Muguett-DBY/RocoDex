@@ -15,6 +15,7 @@ const assets = path.join(root, ".open-next", "assets");
 const requiredMediaRoots = [
   "_next/static",
   "cstd-atelier",
+  "cstd-flight",
   "cstd-archive",
   "cstd-districts",
   "cstd-materials",

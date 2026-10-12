@@ -85,7 +85,7 @@ const PERSONAL_SITE_ALLOWED_PATHS = new Set([
 ]);
 
 export const PERSONAL_SITE_SECURITY_HEADERS = {
-  "content-security-policy": "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self'; font-src 'self' data:; connect-src 'self' https://*.vercel-insights.com https://cloudflareinsights.com; worker-src 'self'; manifest-src 'self'; frame-src 'none'; upgrade-insecure-requests",
+  "content-security-policy": "default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; form-action 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self' data:; connect-src 'self' https://*.vercel-insights.com https://cloudflareinsights.com; worker-src 'self'; manifest-src 'self'; frame-src 'none'; upgrade-insecure-requests",
   "cross-origin-opener-policy": "same-origin",
   "cross-origin-resource-policy": "same-origin",
   "permissions-policy": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), xr-spatial-tracking=(), browsing-topics=()",

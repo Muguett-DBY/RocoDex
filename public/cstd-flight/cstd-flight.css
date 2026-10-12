@@ -1,3 +1,11 @@
+@font-face{font-family:'Archivo';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/archivo-500.woff2') format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:700;font-display:swap;src:url('fonts/archivo-700.woff2') format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:800;font-display:swap;src:url('fonts/archivo-800.woff2') format('woff2')}
+@font-face{font-family:'Archivo';font-style:normal;font-weight:900;font-display:swap;src:url('fonts/archivo-900.woff2') format('woff2')}
+@font-face{font-family:'Geist';font-style:normal;font-weight:400;font-display:swap;src:url('fonts/geist-400.woff2') format('woff2')}
+@font-face{font-family:'Geist';font-style:normal;font-weight:500;font-display:swap;src:url('fonts/geist-500.woff2') format('woff2')}
+@font-face{font-family:'Geist';font-style:normal;font-weight:600;font-display:swap;src:url('fonts/geist-600.woff2') format('woff2')}
+
 /* ============================================================================
    cstd-flight · 页面自绘部分（引擎文件不改动）
    世界：暗夜精密工程城（Neural Industrialism 续篇），maximalist。
@@ -27,7 +35,14 @@ main#top { display: contents; }
 
 /* 与站点主题机制互斥：默认(atelier)显示飞行页；游戏主题显示原旅程；
    无 JS（无 data-cstd-theme）时只显示飞行页的可读回退。 */
-[data-cstd-home-flight] { display: block; }
+/* contents：包装盒不进入文档流，worldflight 的流内元素只剩 spacer。
+   同时重述 color/font：atelier 主题以 html[attr] body 特异性覆盖引擎的
+   body 规则（浅墨/Geist），继承会穿透到本子树，必须在此重申。 */
+[data-cstd-home-flight] {
+  display: contents;
+  color: var(--sc-ink);
+  font-family: var(--sc-font-text);
+}
 [data-cstd-home-shell] { display: none; }
 html[data-cstd-theme]:not([data-cstd-theme="atelier"]) [data-cstd-home-flight] { display: none; }
 html[data-cstd-theme]:not([data-cstd-theme="atelier"]) [data-cstd-home-shell] { display: block; }

@@ -507,9 +507,7 @@ export function CstdFlightHomepage({ locale = "zh" }: { locale?: CstdLocale }) {
 
   return (
     <div data-cstd-home-flight className="flight">
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link rel="stylesheet" precedence="sc-engine" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Geist:wght@400;500;600&display=swap" />
+      {/* 字体自托管于 /cstd-flight/fonts（见 cstd-flight.css 的 @font-face），不引入第三方域 */}
       <link rel="stylesheet" precedence="sc-engine" href="/cstd-flight/scrollcraft.css" />
       <link rel="stylesheet" precedence="sc-page" href="/cstd-flight/cstd-flight.css" />
       <noscript>
