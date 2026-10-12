@@ -128,3 +128,8 @@ secret-scan.json
 
 # Local state and private artifacts
 !scripts/check_repository_hygiene.py
+
+# scroll-craft 构建工作区：保留设计文档与源，生成物不入库（公开资产在 public/cstd-flight）
+scrollcraft/builds/*/out/
+scrollcraft/builds/*/lab/
+scrollcraft/builds/*/assets/

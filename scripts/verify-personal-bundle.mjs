@@ -89,12 +89,14 @@ const highQualityAssets = readdirSync(path.join(nextRoot, "static/chunks"))
     return source.includes("ChromaticAberration") && source.includes("mipmapBlur");
   });
 const highQualityBytes = bytesFor(highQualityAssets);
-const atelierShaderAssets = readdirSync(path.join(nextRoot, "static/chunks"))
-  .filter((asset) => asset.endsWith(".js"))
-  .map((asset) => `static/chunks/${asset}`)
-  .filter((asset) => readFileSync(assetPath(asset), "utf8").includes("atelier-material-canvas"));
-const atelierShaderBytes = bytesFor(atelierShaderAssets);
 const fullWebglBytes = webglBytes + highQualityBytes;
+// FLIGHT（默认 worldflight 主页）资产：全部惰性 fetch，不入包，但仍需总量约束。
+const flightAssetBudget = 96 * 1024 * 1024;
+const flightClipBudget = 16 * 1024 * 1024;
+const flightAssetRoot = path.resolve("public/cstd-flight/assets");
+const flightAssets = readdirSync(flightAssetRoot).filter((asset) => /\.(mp4|webp)$/.test(asset));
+const flightAssetBytes = flightAssets.reduce((total, asset) => total + statSync(path.join(flightAssetRoot, asset)).size, 0);
+const oversizedFlightAsset = flightAssets.find((asset) => statSync(path.join(flightAssetRoot, asset)).size > flightClipBudget);
 const originalVisuals = readdirSync(path.resolve("public/cstd-universe"))
   .filter((asset) => asset.endsWith(".webp"))
   .map((asset) => `public/cstd-universe/${asset}`);
@@ -103,12 +105,6 @@ const oversizedOriginalVisual = originalVisuals.find((asset) => statSync(path.re
 
 if (initialContainsThree) {
   throw new Error("Three.js code is present in the personal homepage initial entry");
-}
-if (atelierShaderAssets.length === 0) {
-  throw new Error("Could not find the optional ATELIER shader chunk");
-}
-if (atelierShaderAssets.some((asset) => startupAssets.includes(asset))) {
-  throw new Error("The ATELIER material is loading before the visitor opts in");
 }
 if (initialBytes > initialBudget) {
   console.error(JSON.stringify({ initialBytes, initialBudget, initialAssets: initialAssetReport }, null, 2));
@@ -160,7 +156,16 @@ if (originalVisualBytes > originalVisualBudget) {
 if (oversizedOriginalVisual) {
   throw new Error(`CSTD 17.0 universe visual ${oversizedOriginalVisual} exceeds ${originalVisualFileBudget} bytes`);
 }
+if (flightAssets.length === 0) {
+  throw new Error("Could not find the FLIGHT worldflight assets under public/cstd-flight/assets");
+}
+if (flightAssetBytes > flightAssetBudget) {
+  throw new Error(`FLIGHT worldflight assets total ${flightAssetBytes} bytes; budget is ${flightAssetBudget}`);
+}
+if (oversizedFlightAsset) {
+  throw new Error(`FLIGHT asset ${oversizedFlightAsset} exceeds ${flightClipBudget} bytes`);
+}
 
 console.log(
-  `Personal homepage bundle OK: ${initialBytes} entry bytes, ${startupBytes} eager startup bytes, ${atelierShaderBytes} optional ATELIER shader bytes, ${liteWebglBytes} lite WebGL bytes, ${webgpuBytes} WebGPU bytes, ${webglBytes} base WebGL bytes, ${highQualityBytes} conditional postprocessing bytes, ${fullWebglBytes} full WebGL bytes, ${originalVisualBytes} original visual bytes.`,
+  `Personal homepage bundle OK: ${initialBytes} entry bytes, ${startupBytes} eager startup bytes, ${liteWebglBytes} lite WebGL bytes, ${webgpuBytes} WebGPU bytes, ${webglBytes} base WebGL bytes, ${highQualityBytes} conditional postprocessing bytes, ${fullWebglBytes} full WebGL bytes, ${originalVisualBytes} original visual bytes, ${flightAssetBytes} lazy FLIGHT asset bytes.`,
 );

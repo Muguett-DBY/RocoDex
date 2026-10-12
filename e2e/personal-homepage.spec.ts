@@ -11,11 +11,12 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   expect(response?.ok()).toBe(true);
 
-  await expect(page.getByRole("heading", { level: 1, name: "奶黄包" })).toBeVisible();
-  await expect(page.locator(".atelier-hero-intro")).toContainText("用 R、Python 和 SQL 分析真实数据");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("工程城市");
+  await expect(page.locator("[data-cstd-home-flight] .fx-role").first()).toContainText("人工智能博 0");
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
-  await expect(page.locator('[data-cstd-home-atelier] [data-cstd-atelier-section="hero"]')).toBeVisible();
-  await expect(page.locator("[data-cstd-home-atelier] [data-cstd-atelier-section]")).toHaveCount(6);
+  await expect(page.locator("[data-cstd-home-flight] [data-sc-segment]")).toHaveCount(9);
+  await expect(page.locator("[data-cstd-home-flight] .grid-rail__leg button")).toHaveCount(9);
+  await expect(page.locator("[data-cstd-home-flight] .ledger")).toBeVisible();
   await expect(page.locator("[data-cstd-narrative-switcher]")).toHaveCount(0);
 
   // The game five-act composition lives behind the theme switch; neon asserts its counts.
@@ -100,7 +101,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
   await expect(page.locator("html")).toHaveAttribute("data-cstd-locale", "en");
   await expect(root).toHaveAttribute("data-cstd-locale", "en");
-  await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("engineering city");
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("I take problems apart");
   await expect(page.locator("[data-cstd-home-game] [data-cstd-scene]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-knowledge-list]")).not.toContainText("[object Object]");
@@ -704,7 +705,8 @@ test("CSTD primary and deep surfaces pass automated WCAG A/AA checks in every vi
         }
       }
       if (path === "/cstd" && theme === "atelier") {
-        await expect(page.locator("[data-cstd-home-atelier] [data-cstd-atelier-section]")).toHaveCount(6);
+        await expect(page.locator("[data-cstd-home-flight] [data-sc-segment]")).toHaveCount(9);
+        await expect(page.locator("[data-cstd-home-flight]")).toBeVisible();
       }
       const results = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
