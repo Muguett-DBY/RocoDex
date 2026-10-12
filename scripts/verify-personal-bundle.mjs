@@ -89,6 +89,11 @@ const highQualityAssets = readdirSync(path.join(nextRoot, "static/chunks"))
     return source.includes("ChromaticAberration") && source.includes("mipmapBlur");
   });
 const highQualityBytes = bytesFor(highQualityAssets);
+const atelierShaderAssets = readdirSync(path.join(nextRoot, "static/chunks"))
+  .filter((asset) => asset.endsWith(".js"))
+  .map((asset) => `static/chunks/${asset}`)
+  .filter((asset) => readFileSync(assetPath(asset), "utf8").includes("atelier-material-canvas"));
+const atelierShaderBytes = bytesFor(atelierShaderAssets);
 const fullWebglBytes = webglBytes + highQualityBytes;
 const originalVisuals = readdirSync(path.resolve("public/cstd-universe"))
   .filter((asset) => asset.endsWith(".webp"))
@@ -98,6 +103,12 @@ const oversizedOriginalVisual = originalVisuals.find((asset) => statSync(path.re
 
 if (initialContainsThree) {
   throw new Error("Three.js code is present in the personal homepage initial entry");
+}
+if (atelierShaderAssets.length === 0) {
+  throw new Error("Could not find the optional ATELIER shader chunk");
+}
+if (atelierShaderAssets.some((asset) => startupAssets.includes(asset))) {
+  throw new Error("The ATELIER material is loading before the visitor opts in");
 }
 if (initialBytes > initialBudget) {
   console.error(JSON.stringify({ initialBytes, initialBudget, initialAssets: initialAssetReport }, null, 2));
@@ -151,5 +162,5 @@ if (oversizedOriginalVisual) {
 }
 
 console.log(
-  `Personal homepage bundle OK: ${initialBytes} entry bytes, ${startupBytes} eager startup bytes, ${liteWebglBytes} lite WebGL bytes, ${webgpuBytes} WebGPU bytes, ${webglBytes} base WebGL bytes, ${highQualityBytes} conditional postprocessing bytes, ${fullWebglBytes} full WebGL bytes, ${originalVisualBytes} original visual bytes.`,
+  `Personal homepage bundle OK: ${initialBytes} entry bytes, ${startupBytes} eager startup bytes, ${atelierShaderBytes} optional ATELIER shader bytes, ${liteWebglBytes} lite WebGL bytes, ${webgpuBytes} WebGPU bytes, ${webglBytes} base WebGL bytes, ${highQualityBytes} conditional postprocessing bytes, ${fullWebglBytes} full WebGL bytes, ${originalVisualBytes} original visual bytes.`,
 );

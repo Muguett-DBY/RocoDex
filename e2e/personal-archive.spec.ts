@@ -7,13 +7,13 @@ test.describe("CSTD technical archive", () => {
     page.on("pageerror", (error) => errors.push(error.message));
 
     await page.goto("/cstd/work");
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("作品不是截图");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("做过的事");
     await expect(page.locator('a[href="/work/rocodex-platform"]')).toBeVisible();
     await expect(page.locator("main article")).toHaveCount(7);
 
     await page.goto("/cstd/work/alpha-research-system");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("CSTD Alpha");
-    await expect(page.getByText("PROOF LEDGER / 交付证据")).toBeVisible();
+    await expect(page.getByText("交付与验证", { exact: true })).toBeVisible();
     await expect(page.locator("[data-cstd-case-film]")).toBeVisible();
     await expect(page.locator("[data-cstd-film-beat]")).toHaveCount(5);
     await page.locator("[data-cstd-film-beat]").nth(2).getByRole("button").click();
@@ -37,7 +37,7 @@ test.describe("CSTD technical archive", () => {
     await page.goto("/cstd/en");
     await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
     await expect(page.locator("[data-cstd-home-atelier]")).toBeVisible();
-    await expect(page.getByRole("link", { name: "See the work" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Explore the work", exact: true })).toBeVisible();
     expect(errors).toEqual([]);
   });
 

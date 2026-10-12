@@ -2,24 +2,23 @@ import { cstdCaseStudies, getCaseStudyPath } from "../content/case-studies";
 import type { CstdLocale } from "../content/content-types";
 import { cstdProfile } from "../content/profile";
 import { cstdSystems } from "../content/systems";
-import { cstdTimeline } from "../content/timeline";
+import { CSTD_TIMELINE_REVIEWED_AT, cstdTimeline } from "../content/timeline";
+import { cstdTimelineDetails } from "../content/timeline-details";
 
 export function serializeCstdResume(locale: CstdLocale) {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     locale,
     canonicalUrl: `https://custard.top${locale === "en" ? "/en/resume.json" : "/resume.json"}`,
     updatedAt: cstdProfile.now.updatedAt,
     person: {
       name: cstdProfile.name[locale],
       title: cstdProfile.title[locale],
-      location: cstdProfile.location[locale],
       summary: cstdProfile.intro[locale],
     },
     education: cstdProfile.education.map((entry) => ({
-      period: entry.period,
-      school: entry.school,
-      degree: entry.degree[locale],
+      stage: entry.stage[locale],
+      field: entry.field[locale],
       detail: entry.detail[locale],
     })),
     skills: [
@@ -55,9 +54,18 @@ export function serializeCstdResume(locale: CstdLocale) {
       verifiedAt: entry.updatedAt,
     })),
     timeline: cstdTimeline.map((entry) => ({
+      id: entry.id,
       date: entry.date,
+      datePrecision: entry.datePrecision,
+      reviewedAt: CSTD_TIMELINE_REVIEWED_AT,
       kind: entry.kind,
+      recordType: entry.recordType,
       title: entry.title[locale],
+      summary: entry.summary[locale],
+      technologies: entry.technologies,
+      learning: cstdTimelineDetails[entry.id].learning[locale],
+      practice: cstdTimelineDetails[entry.id].practice[locale],
+      outputs: cstdTimelineDetails[entry.id].outputs.map((output) => output[locale]),
       evidence: entry.evidence[locale],
     })),
   };

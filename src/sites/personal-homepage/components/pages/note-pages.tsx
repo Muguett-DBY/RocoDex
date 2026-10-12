@@ -28,14 +28,14 @@ function formatDate(value: string, locale: CstdLocale) {
 export function CstdNotesIndexPage({ locale }: { locale: CstdLocale }) {
   const copy = locale === "zh" ? {
     eyebrow: "02 / FIELD NOTES",
-    title: "把实现写成可以复用的工程判断。",
-    summary: "不是新闻流，也不是工具清单。这里记录真实项目里关于边界、证据、性能、数据、动效与跨学科系统思维的长期笔记。",
+    title: "做过之后，再想明白。",
+    summary: "开发时做过的选择、遇到的问题，以及后来想通的道理。写下来，下次用得上，也欢迎你来讨论。",
     read: "阅读全文",
     min: "分钟",
   } : {
     eyebrow: "02 / FIELD NOTES",
-    title: "Turn implementation into reusable engineering judgment.",
-    summary: "Not a news feed or a tool list. These durable notes document boundaries, evidence, performance, data, motion, and interdisciplinary systems thinking from real projects.",
+    title: "Build it. Think it through.",
+    summary: "Decisions made, problems met, and lessons kept from real projects. Notes to return to, and ideas worth discussing.",
     read: "Read note",
     min: "min",
   };
@@ -44,7 +44,7 @@ export function CstdNotesIndexPage({ locale }: { locale: CstdLocale }) {
     <CstdSiteChrome locale={locale} page="notes-index">
       <main id="cstd-main">
         <CstdPageHero locale={locale} eyebrow={copy.eyebrow} title={copy.title} summary={copy.summary} image={notesHero} compact />
-        <section className="border-b border-white/12 bg-[#080a0c]/92 px-5 py-16 md:px-10 lg:px-16 lg:py-24">
+        <section data-cstd-notes-index className="border-b border-white/12 bg-[#080a0c]/92 px-5 py-16 md:px-10 lg:px-16 lg:py-24">
           <div className="mx-auto max-w-[1320px]">
             {cstdTechnicalNotes.map((note, index) => (
               <article key={note.slug} className="group border-t border-white/15 first:border-t-0">
@@ -157,7 +157,7 @@ export async function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLoca
           </div>
         </article>
 
-        <section className="border-b border-white/12 bg-[#080a0c] px-5 py-20 md:px-10 lg:px-16">
+        <section data-cstd-note-related className="border-b border-white/12 bg-[#080a0c] px-5 py-20 md:px-10 lg:px-16">
           <div className="mx-auto max-w-[1320px]">
             <div className="flex items-center gap-3 font-mono text-[11px] font-black text-[#24e0ff]"><Link2 aria-hidden="true" className="h-4 w-4" /> {copy.related.toUpperCase()}</div>
             <p className="mt-5 max-w-2xl text-2xl font-semibold text-white md:text-3xl">{copy.relatedSummary}</p>
@@ -172,7 +172,7 @@ export async function CstdTechnicalNotePage({ locale, slug }: { locale: CstdLoca
           </div>
         </section>
 
-        <CstdLink href={getTechnicalNotePath(nextNote, locale)} className="group block bg-[#f4d431] px-5 py-16 text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-black md:px-10 lg:px-16">
+        <CstdLink data-cstd-next-note href={getTechnicalNotePath(nextNote, locale)} className="group block bg-[#f4d431] px-5 py-16 text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-inset focus-visible:outline-black md:px-10 lg:px-16">
           <div className="mx-auto flex max-w-[1320px] items-end justify-between gap-8">
             <div><p className="font-mono text-[11px] font-black">{copy.next.toUpperCase()}</p><p className="mt-4 text-3xl font-semibold leading-tight md:text-5xl">{nextNote.title[locale]}</p></div>
             <ArrowUpRight aria-hidden="true" className="h-8 w-8 shrink-0 transition-transform group-hover:-translate-y-2 group-hover:translate-x-2" />

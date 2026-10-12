@@ -1198,9 +1198,9 @@ export const generatedCstdCaseStudies = [
   },
   {
     "publicationStatus": "published",
-    "revision": 1,
+    "revision": 2,
     "publishedAt": "2026-09-06",
-    "updatedAt": "2026-09-06",
+    "updatedAt": "2026-10-11",
     "slug": "melbourne-pedestrian-microclimate",
     "projectId": "melbourne-open-data",
     "year": "2026",
@@ -1213,8 +1213,8 @@ export const generatedCstdCaseStudies = [
       "en": "Open-data analysis / reproducible R pipeline"
     },
     "summary": {
-      "zh": "把墨尔本 CBD 三个官方开放数据源清洗、空间连接并建模成一条可复现的分析管线：147 万行行人记录，在 150 米匹配规则下遇见微气候。",
-      "en": "Three official City of Melbourne open datasets, cleaned, spatially joined, and modelled into one reproducible pipeline: 1.47 million pedestrian records meet the microclimate under a 150-metre matching rule."
+      "zh": "用 R 整理墨尔本三份官方开放数据，把 147 万行行人记录与 150 米内的微气候观测对齐，分析人流与温度、风、空气质量的关系。下载、清洗、建模和绘图都可以重新运行。",
+      "en": "An R pipeline brings together three official Melbourne datasets, matching 1.47 million pedestrian records with microclimate observations within 150 metres to study how activity relates to temperature, wind, and air quality. Downloading, cleaning, modelling, and plotting all rerun from scripts."
     },
     "film": {
       "durationSeconds": 102,

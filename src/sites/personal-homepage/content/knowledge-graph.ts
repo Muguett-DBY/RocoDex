@@ -4,7 +4,7 @@ import type { CstdLocale, LocalizedText } from "./content-types";
 import { cstdLabs, getLabPath } from "./labs";
 import { cstdSystems, type CstdSystem } from "./systems";
 import { cstdTechnicalNotes, getTechnicalNotePath } from "./technical-notes";
-import { cstdTimeline } from "./timeline";
+import { CSTD_TIMELINE_REVIEWED_AT, cstdTimeline } from "./timeline";
 
 export type CstdKnowledgeNodeType = "system" | "case" | "note" | "lab" | "moment";
 
@@ -86,7 +86,7 @@ const momentNodes: readonly CstdKnowledgeNode[] = cstdTimeline.map((entry, index
   summary: entry.summary,
   href: entry.evidence,
   capabilityIds: entry.capabilityIds,
-  updatedAt: entry.date,
+  updatedAt: CSTD_TIMELINE_REVIEWED_AT,
 }));
 
 const edges: CstdKnowledgeEdge[] = [];

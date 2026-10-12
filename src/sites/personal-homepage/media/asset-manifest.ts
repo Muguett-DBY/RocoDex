@@ -101,8 +101,8 @@ export const cstdThemeMaterialAssets = {
 
 export const cstdThemeFontAssets = {
   "atelier": {
-    zh: [],
-    en: [],
+    zh: ["/fonts/cstd/press-serif-v1.woff2"],
+    en: ["/fonts/cstd/press-serif-v1.woff2"],
   },
   "neon-district": {
     zh: ["/fonts/cstd/neon-display-v1.woff2"],

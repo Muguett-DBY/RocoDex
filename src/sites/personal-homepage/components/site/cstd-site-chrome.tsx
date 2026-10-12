@@ -12,6 +12,7 @@ import { CstdDocumentLocale } from "./cstd-document-locale";
 import { CstdLanguageSwitcher } from "./cstd-language-switcher";
 import { getLocalizedCstdHref } from "../../infrastructure/i18n";
 import { VoxelNavLink } from "../../voxel/voxel-nav-link";
+import { CstdBrandMark } from "./cstd-brand-mark";
 
 const visualModeKey = "cstd-visual-budget";
 const visualModeEvent = "cstd-visual-budget-change";
@@ -78,7 +79,7 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
     now: "现在",
     resume: "履历",
     statement: "产品 · 数据 · AI · 研究 · 视觉工程",
-    back: "返回电影化主页",
+    back: "返回主页",
     reading: "安静阅读",
   } : {
     guide: "Technical guide",
@@ -86,7 +87,7 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
     now: "Now",
     resume: "Resume",
     statement: "Product · Data · AI · Research · Visual engineering",
-    back: "Return to cinematic home",
+    back: "Back to the homepage",
     reading: "Quiet reading",
   }, [locale]);
 
@@ -135,15 +136,15 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
     <CstdDocumentLocale locale={locale} />
     <div suppressHydrationWarning data-cstd-deep-shell data-cstd-case-page={casePage ? "true" : undefined} data-cstd-locale={locale} data-cstd-theme={theme} data-cstd-theme-kind={themeMeta.kind} data-cstd-controls-ready={controlsReady ? "true" : "false"} data-cstd-visual-mode={visualMode} data-cstd-reading-mode={readingSurface ? readingMode : "studio"} className="relative isolate min-h-screen overflow-x-clip bg-[#07090b] text-[#f2efe7]">
       <a href="#cstd-main" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[110] focus:bg-white focus:px-4 focus:py-3 focus:text-black">{locale === "zh" ? "跳到主要内容" : "Skip to content"}</a>
-      {!immersive ? <SignalField mode={visualMode} active={!(readingSurface && readingMode === "quiet")} /> : null}
+      {!immersive && theme !== "atelier" ? <SignalField mode={visualMode} active={!(readingSurface && readingMode === "quiet")} /> : null}
       {!immersive && theme !== "atelier" ? <div aria-hidden="true" data-cstd-theme-atmosphere className="cstd-theme-atmosphere" /> : null}
-      {!immersive ? <div data-cstd-shell-overlay aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(7,9,11,0.18),rgba(7,9,11,0.82)_80%)]" /> : null}
+      {!immersive && theme !== "atelier" ? <div data-cstd-shell-overlay aria-hidden="true" className="pointer-events-none fixed inset-0 z-[1] bg-[linear-gradient(180deg,rgba(7,9,11,0.18),rgba(7,9,11,0.82)_80%)]" /> : null}
       <div aria-hidden="true" className="cstd-route-progress fixed inset-x-0 top-0 z-[80] h-0.5 origin-left bg-[#f4d431] shadow-[0_0_16px_rgba(244,212,49,0.6)]" />
 
       <header className="sticky top-0 z-50 border-b border-white/12 bg-[#07090b]/90 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-[1540px] items-center gap-4 px-4 md:px-8 lg:px-12">
           <CstdLink href={getLocalizedCstdHref("/", locale)} className="group flex shrink-0 items-center gap-3 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f4d431]" title={copy.back}>
-            <span data-cstd-header-mark className="flex h-9 w-9 items-center justify-center bg-[#f4d431] font-mono text-[11px] font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">CS</span>
+            <span data-cstd-header-mark className="flex h-9 w-9 items-center justify-center bg-[#f4d431] font-mono text-[11px] font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">{theme === "atelier" ? <CstdBrandMark /> : "CS"}</span>
             <span className="hidden sm:block">
               <span data-cstd-deep-brand className="block font-mono text-xs font-black text-white">
                 {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-meta-copy={candidate.id}>{candidate.brand[locale]}</span>)}
@@ -160,7 +161,7 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
-                <CstdLink key={item.href} href={localizedHref(item.href, locale)} className="flex h-9 items-center gap-2 px-3 font-mono text-[11px] font-black text-[#9aa4a8] transition-colors hover:bg-white/5 hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]">
+                <CstdLink key={item.href} href={localizedHref(item.href, locale)} aria-current={page === item.href.slice(1) || page.startsWith(`${item.href.slice(1)}-`) ? "page" : undefined} className="flex h-9 items-center gap-2 px-3 font-mono text-[11px] font-black text-[#9aa4a8] transition-colors hover:bg-white/5 hover:text-[#f4d431] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]">
                   <Icon aria-hidden="true" className="h-3.5 w-3.5" /> {item.label[locale]}
                 </CstdLink>
               );
@@ -175,18 +176,20 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
             ) : null}
             <CstdLanguageSwitcher locale={locale} compact />
             <ThemeSwitcher locale={locale} />
+            {theme !== "atelier" ? <>
             <button type="button" disabled={!controlsReady} onClick={cycleVisualMode} aria-label={`${copy.mode}: ${visualMode}`} title={`${copy.mode}: ${visualMode}`} className="flex h-9 w-9 items-center justify-center border border-white/15 text-[#9aa4a8] transition-colors hover:border-[#f4d431] hover:text-[#f4d431] disabled:cursor-wait disabled:opacity-45 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]">
               <Gauge aria-hidden="true" className="h-4 w-4" />
             </button>
             <CstdLink href={localizedHref("/map", locale)} aria-label={copy.guide} title={copy.guide} className="flex h-9 w-9 items-center justify-center border border-[#24e0ff]/45 bg-[#24e0ff]/10 text-[#24e0ff] transition-colors hover:bg-[#24e0ff] hover:text-[#050709] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#24e0ff]">
               <Network aria-hidden="true" className="h-4 w-4" />
             </CstdLink>
+            </> : null}
           </div>
         </div>
 
         <nav aria-label={locale === "zh" ? "移动导航" : "Mobile navigation"} className="flex h-11 items-center gap-1 overflow-x-auto overscroll-x-contain border-t border-white/8 px-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:hidden">
           {navItems.map((item) => (
-            <CstdLink key={item.href} href={localizedHref(item.href, locale)} className="shrink-0 px-3 py-2 font-mono text-[11px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{item.label[locale]}</CstdLink>
+            <CstdLink key={item.href} href={localizedHref(item.href, locale)} aria-current={page === item.href.slice(1) || page.startsWith(`${item.href.slice(1)}-`) ? "page" : undefined} className="shrink-0 px-3 py-2 font-mono text-[11px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{item.label[locale]}</CstdLink>
           ))}
           {theme !== "atelier" ? <VoxelNavLink locale={locale} compact className="shrink-0" /> : null}
           <CstdLink href={localizedHref("/now", locale)} className="shrink-0 px-3 py-2 font-mono text-[11px] font-black text-[#9aa4a8] hover:text-[#f4d431]">{copy.now}</CstdLink>
@@ -198,7 +201,7 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
       {!immersive ? <footer className="relative z-10 border-t border-white/12 bg-[#050709]/90 px-5 py-12 md:px-10 lg:px-16">
         <div className="mx-auto grid max-w-[1540px] gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div>
-            <p className="font-mono text-[11px] font-black text-[#24e0ff]">CSTD / SYDNEY NODE / 2026</p>
+            <p className="cstd-studio-footer-signature font-mono text-[11px] font-black text-[#24e0ff]">{theme === "atelier" ? <CstdBrandMark /> : null}CUSTARD / MELBOURNE</p>
             <p className="mt-3 max-w-2xl text-xl font-semibold text-[#dce1e2]">{copy.statement}</p>
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-3 font-mono text-[11px] font-black text-[#8f9ba0]">

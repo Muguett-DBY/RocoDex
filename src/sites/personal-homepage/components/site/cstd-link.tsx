@@ -18,7 +18,7 @@ function getLocalDevelopmentHref(href: string) {
   return href === "/" ? "/cstd" : `/cstd${href}`;
 }
 
-function resolveCstdHref(href: string) {
+export function resolveCstdHref(href: string) {
   const host = window.location.hostname.toLowerCase();
   return host === "custard.top" || host === "www.custard.top" ? href : getLocalDevelopmentHref(href);
 }

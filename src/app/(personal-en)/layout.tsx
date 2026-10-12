@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function PersonalEnglishRootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-AU" dir="ltr" className="h-full antialiased" suppressHydrationWarning>
+    <html lang="en-AU" dir="ltr" data-cstd-theme="atelier" data-cstd-theme-kind="editorial-studio" className="h-full antialiased" suppressHydrationWarning>
       <head>
         <CstdThemeBootstrapScript locale="en" />
       </head>

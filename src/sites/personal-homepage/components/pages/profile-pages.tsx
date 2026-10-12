@@ -1,8 +1,8 @@
-import { ArrowUpRight, BookOpen, FileJson2, FlaskConical, MapPin, Radio, Sparkles } from "lucide-react";
+import { ArrowUpRight, BookOpen, FileJson2, FlaskConical, Radio, Sparkles } from "lucide-react";
 import type { CstdLocale } from "../../content/content-types";
 import { cstdCaseStudies } from "../../content/case-studies";
 import { cstdProfile } from "../../content/profile";
-import { cstdTimeline } from "../../content/timeline";
+import { cstdTimeline, getCstdTimelineDateLabel } from "../../content/timeline";
 import { CstdCapabilityTimeline } from "../site/capability-timeline";
 import { CstdLink } from "../site/cstd-link";
 import { CstdSiteChrome } from "../site/cstd-site-chrome";
@@ -28,40 +28,42 @@ function localePath(path: string, locale: CstdLocale) {
 
 export function CstdAboutPage({ locale }: { locale: CstdLocale }) {
   const copy = locale === "zh" ? {
-    eyebrow: "04 / OPERATOR PROFILE",
-    title: "在研究、产品与视觉之间，保持同一套工程诚实。",
+    eyebrow: "04 / ABOUT ME",
+    title: "你好，我是奶黄包。",
     summary: cstdProfile.intro.zh,
-    trajectory: "学习与系统轨迹",
-    trajectoryBody: "化工训练提供边界、守恒和实验直觉；数据科学与软件工程把它们变成可运行产品。",
-    capability: "正在使用的能力面",
+    background: "学习与研究",
+    trajectory: "从数据出发，走向人工智能。",
+    trajectoryBody: "数据科学让我习惯先弄清问题、检查数据，再谈模型。做产品时也一样：先做出能用的东西，再根据真实反馈改进。",
+    capability: "平时用什么做事",
     principle: "工作原则",
-    timeline: "能力如何一步步形成",
+    timeline: "一路做过来的事",
     principles: ["先确认事实与边界，再选择工具。", "确定性内核负责结论，AI 负责解释和探索。", "动效服从性能预算，发布必须有端到端证据。"],
   } : {
-    eyebrow: "04 / OPERATOR PROFILE",
-    title: "The same engineering honesty across research, product, and visual systems.",
+    eyebrow: "04 / ABOUT ME",
+    title: "Hello, I’m Custard.",
     summary: cstdProfile.intro.en,
-    trajectory: "Learning and systems trajectory",
-    trajectoryBody: "Chemical engineering supplied intuition about boundaries, balances, and experiments; data science and software engineering turned it into running products.",
-    capability: "Current capability surface",
+    background: "Study and research",
+    trajectory: "From data science towards AI.",
+    trajectoryBody: "Data science taught me to understand the question and check the data before choosing a model. I take the same approach to products: build something useful, then improve it with real feedback.",
+    capability: "Tools I work with",
     principle: "Working principles",
-    timeline: "How the capability surface evolved",
+    timeline: "The work along the way",
     principles: ["Confirm facts and boundaries before choosing tools.", "Deterministic cores own conclusions; AI explains and explores.", "Motion obeys a performance budget, and releases require end-to-end evidence."],
   };
 
   return (
     <CstdSiteChrome locale={locale} page="about">
-      <main id="cstd-main">
+      <main id="cstd-main" data-cstd-profile-page>
         <CstdPageHero locale={locale} eyebrow={copy.eyebrow} title={copy.title} summary={copy.summary} image={aboutHero} compact />
         <section className="border-b border-black/15 bg-[#f1eee5] px-5 py-20 text-[#0a0c0e] md:px-10 lg:px-16 lg:py-24">
           <div className="mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
             <div>
-              <div className="flex items-center gap-3 font-mono text-[11px] font-black text-[#0b6473]"><MapPin aria-hidden="true" className="h-4 w-4" /> {cstdProfile.location[locale].toUpperCase()}</div>
+              <div className="flex items-center gap-3 font-mono text-[11px] font-black text-[#0b6473]"><BookOpen aria-hidden="true" className="h-4 w-4" /> {copy.background.toUpperCase()}</div>
               <h2 className="mt-5 text-4xl font-semibold leading-tight md:text-5xl">{copy.trajectory}</h2>
               <p className="mt-5 text-base leading-8 text-black/65">{copy.trajectoryBody}</p>
             </div>
             <div className="border-t border-black/20">
-              {cstdProfile.education.map((entry) => <div key={entry.period} className="grid gap-4 border-b border-black/20 py-6 md:grid-cols-[8rem_14rem_1fr]"><span className="font-mono text-[11px] font-black text-black/75">{entry.period}</span><strong className="text-sm">{entry.school}</strong><p className="text-sm leading-7 text-black/65"><span className="font-semibold text-black/85">{entry.degree[locale]}</span> · {entry.detail[locale]}</p></div>)}
+              {cstdProfile.education.map((entry) => <div key={entry.id} className="grid gap-4 border-b border-black/20 py-6 md:grid-cols-[12rem_1fr]"><span className="font-mono text-[11px] font-black text-black/75">{entry.stage[locale]}</span><div><h3 className="text-sm font-semibold">{entry.field[locale]}</h3><p className="mt-2 text-sm leading-7 text-black/65">{entry.detail[locale]}</p></div></div>)}
             </div>
           </div>
         </section>
@@ -75,7 +77,7 @@ export function CstdAboutPage({ locale }: { locale: CstdLocale }) {
           </div>
         </section>
 
-        <section className="border-b border-white/12 bg-[#050709] px-5 py-20 md:px-10 lg:px-16 lg:py-24">
+        <section id="capability-timeline" className="scroll-mt-28 border-b border-white/12 bg-[#050709] px-5 py-20 md:px-10 lg:px-16 lg:py-24">
           <div className="mx-auto max-w-[1320px]"><p className="font-mono text-[11px] font-black text-[#3dff8f]">06 / CAPABILITY TIMELINE</p><h2 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight text-white md:text-5xl">{copy.timeline}</h2><div className="mt-10"><CstdCapabilityTimeline locale={locale} /></div></div>
         </section>
 
@@ -83,7 +85,7 @@ export function CstdAboutPage({ locale }: { locale: CstdLocale }) {
           <div className="mx-auto grid max-w-[1320px] gap-10 lg:grid-cols-[0.65fr_1.35fr]"><div><div className="flex items-center gap-3 font-mono text-[11px] font-black"><Sparkles aria-hidden="true" className="h-4 w-4" /> {copy.principle.toUpperCase()}</div></div><ol className="border-t border-black/30">{copy.principles.map((principle, index) => <li key={principle} className="grid grid-cols-[3rem_1fr] border-b border-black/30 py-5"><span className="font-mono text-[11px] font-black text-black/75">0{index + 1}</span><span className="text-xl font-semibold leading-8 md:text-2xl">{principle}</span></li>)}</ol></div>
         </section>
       </main>
-      <StructuredData value={{ "@context": "https://schema.org", "@type": "ProfilePage", name: cstdProfile.name[locale], url: `https://custard.top${localePath("/about", locale)}`, mainEntity: { "@type": "Person", name: cstdProfile.name[locale], jobTitle: cstdProfile.title[locale], description: cstdProfile.intro[locale], homeLocation: { "@type": "Place", name: cstdProfile.location[locale] }, knowsAbout: cstdProfile.capabilities.map((entry) => entry.value) } }} />
+      <StructuredData value={{ "@context": "https://schema.org", "@type": "ProfilePage", name: cstdProfile.name[locale], url: `https://custard.top${localePath("/about", locale)}`, mainEntity: { "@type": "Person", name: cstdProfile.name[locale], jobTitle: cstdProfile.title[locale], description: cstdProfile.intro[locale], knowsAbout: cstdProfile.capabilities.map((entry) => entry.value) } }} />
     </CstdSiteChrome>
   );
 }
@@ -111,7 +113,7 @@ export function CstdNowPage({ locale }: { locale: CstdLocale }) {
 }
 
 export function CstdResumePage({ locale }: { locale: CstdLocale }) {
-  const copy = locale === "zh" ? { title: "奶黄包 / 技术履历", summary: "数据科学研究生、产品构建者。用 R、Python 与 SQL 做可复现的分析，把数据系统、证据优先 AI 与可运行产品一起交付。", print: "打印 / 保存 PDF", work: "代表项目", education: "教育与学习", timeline: "能力轨迹", capabilities: "能力", evidence: "详细案例与技术证据", json: "机器可读 JSON" } : { title: "Custard / Technical resume", summary: "Data science postgraduate and product builder. Reproducible analysis in R, Python, and SQL, delivered together with data systems, evidence-first AI, and products that run.", print: "Print / save PDF", work: "Selected work", education: "Education and learning", timeline: "Capability timeline", capabilities: "Capabilities", evidence: "Detailed cases and technical evidence", json: "Machine-readable JSON" };
+  const copy = locale === "zh" ? { title: "奶黄包 / 技术履历", summary: cstdProfile.summary.zh, print: "打印 / 保存 PDF", work: "代表项目", education: "专业与研究方向", timeline: "能力轨迹", capabilities: "能力", evidence: "详细案例与技术证据", json: "机器可读 JSON" } : { title: "Custard / Technical resume", summary: cstdProfile.summary.en, print: "Print / save PDF", work: "Selected work", education: "Study and research interests", timeline: "Capability timeline", capabilities: "Capabilities", evidence: "Detailed cases and technical evidence", json: "Machine-readable JSON" };
   return (
     <CstdSiteChrome locale={locale} page="resume">
       <main id="cstd-main" className="cstd-resume bg-[#f1eee5] px-5 py-16 text-[#0a0c0e] md:px-10 lg:px-16 lg:py-20">
@@ -127,9 +129,9 @@ export function CstdResumePage({ locale }: { locale: CstdLocale }) {
 
           <section className="cstd-resume-section grid gap-8 border-b border-black/20 py-10 md:grid-cols-[13rem_1fr]"><h2 className="font-mono text-[11px] font-black text-[#0b6473]">{copy.work.toUpperCase()}</h2><div>{cstdCaseStudies.slice(0, 5).map((entry) => <div key={entry.slug} className="cstd-resume-entry grid gap-2 border-t border-black/15 py-5 first:border-t-0 first:pt-0 sm:grid-cols-[7rem_1fr]"><span className="font-mono text-[11px] font-black text-black/75">{entry.year}</span><div><h3 className="text-lg font-semibold">{entry.title[locale]}</h3><p className="mt-2 text-sm leading-7 text-black/65">{entry.summary[locale]}</p><p className="mt-2 font-mono text-[11px] text-[#0b6473]">{entry.technologies.join(" · ")}</p></div></div>)}</div></section>
 
-          <section className="cstd-resume-section grid gap-8 border-b border-black/20 py-10 md:grid-cols-[13rem_1fr]"><h2 className="font-mono text-[11px] font-black text-[#0b6473]">{copy.education.toUpperCase()}</h2><div>{cstdProfile.education.map((entry) => <div key={entry.period} className="cstd-resume-entry grid gap-2 border-t border-black/15 py-5 first:border-t-0 first:pt-0 sm:grid-cols-[7rem_12rem_1fr]"><span className="font-mono text-[11px] font-black text-black/75">{entry.period}</span><strong className="text-sm">{entry.school}</strong><p className="text-sm leading-7 text-black/65"><span className="font-semibold text-black/85">{entry.degree[locale]}</span> · {entry.detail[locale]}</p></div>)}</div></section>
+          <section className="cstd-resume-section grid gap-8 border-b border-black/20 py-10 md:grid-cols-[13rem_1fr]"><h2 className="font-mono text-[11px] font-black text-[#0b6473]">{copy.education.toUpperCase()}</h2><div>{cstdProfile.education.map((entry) => <div key={entry.id} className="cstd-resume-entry grid gap-2 border-t border-black/15 py-5 first:border-t-0 first:pt-0 sm:grid-cols-[12rem_1fr]"><span className="font-mono text-[11px] font-black text-black/75">{entry.stage[locale]}</span><div><h3 className="text-sm font-semibold">{entry.field[locale]}</h3><p className="mt-2 text-sm leading-7 text-black/65">{entry.detail[locale]}</p></div></div>)}</div></section>
 
-          <section className="cstd-resume-section grid gap-8 border-b border-black/20 py-10 md:grid-cols-[13rem_1fr]"><h2 className="font-mono text-[11px] font-black text-[#0b6473]">{copy.timeline.toUpperCase()}</h2><div>{cstdTimeline.slice(-4).map((entry) => <div key={entry.id} className="cstd-resume-entry grid gap-2 border-t border-black/15 py-5 first:border-t-0 first:pt-0 sm:grid-cols-[7rem_1fr]"><span className="font-mono text-[11px] font-black text-black/75">{entry.date}</span><div><h3 className="text-sm font-semibold">{entry.title[locale]}</h3><p className="mt-2 text-sm leading-7 text-black/65">{entry.summary[locale]}</p></div></div>)}</div></section>
+          <section className="cstd-resume-section grid gap-8 border-b border-black/20 py-10 md:grid-cols-[13rem_1fr]"><h2 className="font-mono text-[11px] font-black text-[#0b6473]">{copy.timeline.toUpperCase()}</h2><div>{cstdTimeline.slice(-4).map((entry) => <div key={entry.id} className="cstd-resume-entry grid gap-2 border-t border-black/15 py-5 first:border-t-0 first:pt-0 sm:grid-cols-[7rem_1fr]"><span className="font-mono text-[11px] font-black text-black/75">{getCstdTimelineDateLabel(entry, locale)}</span><div><h3 className="text-sm font-semibold">{entry.title[locale]}</h3><p className="mt-2 text-sm leading-7 text-black/65">{entry.summary[locale]}</p></div></div>)}</div></section>
 
           <footer className="flex flex-wrap items-center justify-between gap-5 pt-8"><p className="font-mono text-[11px] font-black text-black/75">custard.top · Melbourne</p><div className="flex flex-wrap gap-5"><CstdLink href={locale === "en" ? "/en/resume.json" : "/resume.json"} className="inline-flex items-center gap-2 font-mono text-[11px] font-black text-[#0b6473] hover:text-black"><FileJson2 aria-hidden="true" className="h-4 w-4" />{copy.json}</CstdLink><CstdLink href={localePath("/work", locale)} className="inline-flex items-center gap-2 font-mono text-[11px] font-black text-[#0b6473] hover:text-black"><FlaskConical aria-hidden="true" className="h-4 w-4" />{copy.evidence}</CstdLink></div></footer>
         </div>

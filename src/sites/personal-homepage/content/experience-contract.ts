@@ -1,5 +1,6 @@
 import { cstdSceneManifest } from "../experience/scene-manifest";
 import { cstdPerformanceContract } from "./performance-contract";
+import { cstdProfile } from "./profile";
 import { CSTD_RELEASE } from "./release";
 
 export const cstdExperienceContract = {
@@ -8,7 +9,7 @@ export const cstdExperienceContract = {
   identity: {
     zh: "奶黄包",
     en: "Custard",
-    role: "DATA SCIENCE POSTGRADUATE / ANALYSIS THAT SHIPS",
+    role: cstdProfile.title.en,
     systemCodename: "CSTD://PERSONAL ENGINEERING UNIVERSE",
   },
   acts: cstdSceneManifest.map((scene) => ({

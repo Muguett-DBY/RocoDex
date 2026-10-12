@@ -237,14 +237,14 @@ function AstralRoll({ locale }: { locale: CstdLocale }) {
 export function AtelierMethod({ locale }: { locale: CstdLocale }) {
   const steps = locale === "zh"
     ? [
-        { id: "deconstruct", icon: Terminal, title: "拆解", detail: "把问题拆成可验证的小问题：数据在哪、口径是什么、约束有哪些。", signal: "先对齐事实，再谈方案" },
-        { id: "build", icon: FlaskConical, title: "构建", detail: "用最少的合适技术把解法做出来——一条管线、一个界面或一个系统。", signal: "技术为问题服务" },
-        { id: "verify", icon: Check, title: "验证", detail: "用证据收尾：可复算的结果、可重跑的流程、可访问的产品。", signal: "结论带着来路" },
+        { id: "deconstruct", icon: Terminal, title: "拆解", detail: "先把问题问清楚：数据从哪来，数字怎么算，哪些限制必须考虑。", signal: "先弄清事实，再谈方案" },
+        { id: "build", icon: FlaskConical, title: "构建", detail: "选合适的工具，把解法做出来：一段分析脚本、一个界面，或者一套完整的系统。", signal: "工具跟着问题走" },
+        { id: "verify", icon: Check, title: "验证", detail: "把结果重新算一遍，把流程再跑一遍，再检查产品是否真的好用。做到了什么，还有哪些不足，都说清楚。", signal: "结果要经得起检查" },
       ] as const
     : [
         { id: "deconstruct", icon: Terminal, title: "Deconstruct", detail: "Split the problem into checkable pieces: where the data lives, what the definitions are, which constraints hold.", signal: "Facts before plans" },
-        { id: "build", icon: FlaskConical, title: "Build", detail: "Ship the solution with the least suitable technology — a pipeline, an interface, or a system.", signal: "Technology serves the question" },
-        { id: "verify", icon: Check, title: "Verify", detail: "Close with evidence: results that recompute, pipelines that rerun, products anyone can use.", signal: "Conclusions carry lineage" },
+        { id: "build", icon: FlaskConical, title: "Build", detail: "Use the simplest suitable tools to build the solution: a pipeline, an interface, or a system.", signal: "Tools serve the question" },
+        { id: "verify", icon: Check, title: "Verify", detail: "Recompute the result, rerun the process, and check that the product works well. Be clear about what holds up and what still needs work.", signal: "Results you can check" },
       ] as const;
   const [active, setActive] = useState(0);
 

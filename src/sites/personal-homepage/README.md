@@ -18,6 +18,18 @@
 
 Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器加载；Lite WebGL 和原生 WebGPU 信号层保持独立 chunk。首页默认只渲染版本化静态主视觉，用户主动开启增强视觉后才按 `full / lite / image` 能力挂载 GPU 运行时；文档隐藏时必须停止连续帧循环。不要把 GPU 包静态导入页面、深度页面或共享布局。
 
+## ATELIER 正式主题
+
+`scenes/atelier/atelier-homepage.tsx` 保持服务端排版，使用本地衬线字体、暖白与香槟金配色，以及已有案例的真实图表和产品截图。中英文根布局直接声明默认主题；禁用 JavaScript 时仍显示完整首页。
+
+`atelier-material.tsx` 只在访客点击“让光影流动”后导入 `atelier-shader.tsx`。后者使用 [Shaders](https://github.com/shader-effects-inc/shaders) 的 MIT 版 `Shader` / `Satin` 组件，并关闭库的遥测。静态 SVG 始终保留；离开视口、隐藏文档、切换主题或进入平静模式时卸载 GPU 渲染器，加载失败则保留静态画面。
+
+排版、层次、文案与动效取舍直接参考 [Impeccable](https://github.com/pbakaus/impeccable) 的设计指南，无须安装 Codex skill、插件或 hook。技术栈从案例真源投影，不为装饰添加未经证实的经历。此次视觉验收记录见 `docs/personal-homepage/atelier-studio-2026-10-11.md`。
+
+`components/site/atelier-project-cover.tsx` 围绕原始产品截图和图表组织封面，不生成虚构界面。`cstd-brand-mark.tsx`、标签页图标及分享封面沿用折带 C；分享封面可用 `node scripts/generate-atelier-share.mjs` 从本地 SVG 重建。作品、案例、关于和札记共用正式主题的阅读排版；案例先展示正文，随后保留交互演示和技术证据。
+
+Cloudflare 的 asset-first 路由、媒体构建检查和 apex Host 路由都必须包含 `cstd-atelier/`。发布后检查真实域名上的 SVG、mask、PNG、字体和异步 shader chunk，不能只以本地预览或部署命令成功作为验收。
+
 ## CSTD 17.0 架构
 
 - `content/observatory.ts` 是完整工程观测站契约；首页只接收 `cstdHomepageObservatory` 的精简服务端投影，避免把发布账本和证据全集发送到浏览器。
@@ -36,7 +48,9 @@ Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器�
 
 - `/api/cstd-vitals` 由 `infrastructure/telemetry-store.ts` 支撑：配置了 `CSTD_TELEMETRY_REDIS_URL`/`CSTD_TELEMETRY_REDIS_TOKEN`（或复用 `UPSTASH_REDIS_REST_*`）时用 Upstash Redis 做 30 次/分限流与 LCP/INP/CLS 按日、按设备的价值桶聚合；未配置时自动退化为进程内限流，仅保留结构化日志。
 - `.github/workflows/cstd-vitals-audit.yml` 每周运行 `scripts/audit-cstd-vitals.mjs`，把 28 天现场数据对照 `performance-contract.json` 的 `rumAudit` 阈值并公布结论；阈值与桶边界由 `verify:cstd:performance-contract` 保证一致。
-- 首页入口在无 `cstd-locale` cookie 时按 `Accept-Language` 协商中英文（`parseCstdAcceptLanguage`）；代理边缘 404 与 React not-found 页共用 `infrastructure/not-found.ts` 的同一份文案。
+- 首页入口在无 `cstd-locale` cookie 时按浏览器 `Accept-Language` 的权重协商中英文，兼容中文脚本和英文地区变体；缺少可用语言时回退中文。手动选择优先，显式中英文链接保持原语言。入口响应使用 `Vary: Accept-Language, Cookie` 与 `private, no-store`，避免串用其他访客的语言；切换后完整导航，避免预加载恢复旧语言。
+- 公开个人资料以 `content/profile.ts` 为唯一来源，仅保留昵称、专业、研究兴趣与项目能力。学校、个人所在地和就读年份不进入页面、搜索结构化数据或 `resume.json`。履历 JSON schema 2 使用 `stage` / `field` 表达专业阶段，不发布学校、就读区间或所在地；博 0 明确表示准备博士阶段。
+- 代理边缘 404 与 React not-found 页共用 `infrastructure/not-found.ts` 的同一份文案。
 
 ## 体素作品世界
 
@@ -52,6 +66,7 @@ Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器�
 个人主站资源保留在以下公开路径：
 
 - `public/cstd-world/`
+- `public/cstd-atelier/`
 - `public/cstd-universe/`
 - `public/cstd-stage/`
 - `public/cstd-themes/`
@@ -66,6 +81,8 @@ Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器�
 这些名称是线上 URL，不是代码归属目录。状态必须来自构建时证据，不能伪装成实时外部数据。设计验收记录在 `docs/personal-homepage/design-qa.md`。
 
 ## 验证
+
+Cloudflare 构建后的 `scripts/cf-post-build.mjs` 会把 Next 16.3 的不可变页面缓存同时放到原始路径与带来源模块哈希的路径。新的键直接取自构建产物 `meta.routeCache`，并验证来源哈希；不要在运行时去掉这个哈希，否则不同路由模块可能读到彼此的页面。案例、专题及中英文深层路由需在 Wrangler 预览中检查，再部署。
 
 ```bash
 npm run content:check

@@ -116,15 +116,17 @@ export function parseCstdAcceptLanguage(header: string | undefined | null): "zh"
     .split(",")
     .map((part) => {
       const [tag, ...params] = part.trim().split(";");
-      const qualityParam = params.find((param) => param.trim().startsWith("q="));
-      const quality = qualityParam ? Number.parseFloat(qualityParam.trim().slice(2)) : 1;
-      return { tag: (tag ?? "").trim().toLowerCase(), quality: Number.isFinite(quality) ? quality : 0 };
+      const qualityParam = params.find((param) => /^q=/i.test(param.trim()));
+      const qualityValue = qualityParam?.trim().slice(2);
+      const quality = qualityValue === undefined ? 1
+        : /^(?:0(?:\.\d{0,3})?|1(?:\.0{0,3})?)$/.test(qualityValue) ? Number(qualityValue) : 0;
+      return { tag: (tag ?? "").trim().toLowerCase(), quality };
     })
     .filter((candidate) => candidate.tag.length > 0 && candidate.quality > 0);
   let winner: { language: "zh" | "en"; quality: number } | null = null;
   for (const candidate of candidates) {
-    const language = candidate.tag === "*" || candidate.tag.startsWith("zh") ? "zh"
-      : candidate.tag.startsWith("en") ? "en"
+    const language = candidate.tag === "*" || candidate.tag === "zh" || candidate.tag.startsWith("zh-") ? "zh"
+      : candidate.tag === "en" || candidate.tag.startsWith("en-") ? "en"
       : null;
     if (!language) continue;
     if (!winner || candidate.quality > winner.quality) {
@@ -165,6 +167,7 @@ function isPublicPersonalPagePath(path: string) {
 
 function isAllowedPersonalSitePath(path: string) {
   return PERSONAL_SITE_ALLOWED_PATHS.has(path)
+    || path.startsWith("/cstd-atelier/")
     || path.startsWith("/cstd-projects/")
     || path.startsWith("/cstd-archive/")
     || path.startsWith("/cstd-materials/")

@@ -7,12 +7,14 @@
 // run_worker_first rules in wrangler.jsonc.
 import { cpSync, existsSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
+import { copyScopedRouteCacheEntries } from "./cf-cache-layout.mjs";
 
 const root = process.cwd();
 const assets = path.join(root, ".open-next", "assets");
 
 const requiredMediaRoots = [
   "_next/static",
+  "cstd-atelier",
   "cstd-archive",
   "cstd-districts",
   "cstd-materials",
@@ -38,6 +40,7 @@ if (!existsSync(cacheSource)) {
   throw new Error("[cf-post-build] missing .open-next/cache from the OpenNext build");
 }
 cpSync(cacheSource, cacheDir, { recursive: true });
+const scopedEntries = copyScopedRouteCacheEntries(cacheSource, cacheDir);
 
 let cacheEntries = 0;
 function countEntries(dir) {
@@ -63,5 +66,5 @@ if (strays.length > 0) {
 }
 
 console.log(
-  `[cf-post-build] bundle OK: ${requiredMediaRoots.length} media roots, ${cacheEntries} incremental cache entries, assets clean of prerendered HTML`,
+  `[cf-post-build] bundle OK: ${requiredMediaRoots.length} media roots, ${cacheEntries} incremental cache entries (${scopedEntries} scoped route seeds), assets clean of prerendered HTML`,
 );

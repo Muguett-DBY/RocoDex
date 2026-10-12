@@ -11,6 +11,7 @@ import type { CstdLocale } from "../content/content-types";
 import { getLocalizedCstdHref } from "../infrastructure/i18n";
 import { CstdLanguageSwitcher } from "./site/cstd-language-switcher";
 import { VoxelNavLink } from "../voxel/voxel-nav-link";
+import { CstdBrandMark } from "./site/cstd-brand-mark";
 
 const homepageLinks = cstdSceneManifest.filter((scene) => scene.id === "systems" || scene.id === "proof" || scene.id === "path");
 
@@ -47,11 +48,11 @@ export function HomepageHeader({
     >
       <div className="pointer-events-auto relative mx-auto flex h-14 w-full max-w-[1320px] items-center overflow-hidden rounded-[7px] border border-white/10 bg-[#050709]/95 px-2.5 shadow-[0_16px_48px_rgba(0,0,0,0.3)] md:px-3">
         <CstdChapterLink
-          href="#top"
+          href={theme === "atelier" ? "#atelier-top" : "#top"}
           className="flex min-w-0 flex-1 items-center gap-2.5 overflow-hidden focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f4d431]"
         >
           <span data-cstd-header-mark className="flex h-9 w-9 shrink-0 items-center justify-center bg-[#f4d431] text-sm font-black text-[#050709] [clip-path:polygon(0_0,100%_0,100%_72%,72%_100%,0_100%)]">
-            {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-mark-copy={candidate.id}>{getThemeMark(candidate.id, locale)}</span>)}
+            {cstdThemes.map((candidate) => <span key={candidate.id} data-cstd-theme-mark-copy={candidate.id}>{candidate.id === "atelier" ? <CstdBrandMark /> : getThemeMark(candidate.id, locale)}</span>)}
           </span>
           <span className="min-w-0 overflow-hidden">
             <span data-cstd-header-brand className="hidden truncate text-sm font-black sm:block">
@@ -70,12 +71,12 @@ export function HomepageHeader({
 
         <div className="ml-auto flex shrink-0 items-center gap-1.5 min-[360px]:gap-2 md:gap-4">
           <nav aria-label={locale === "zh" ? "首页导航" : "Homepage navigation"} className="hidden items-center gap-0.5 text-[12px] font-semibold text-[#9ca5a8] md:flex">
-            {homepageLinks.map((link) => {
+            {homepageLinks.filter((link) => theme !== "atelier" || link.id !== "path").map((link) => {
               const active = activeSceneId === link.id;
               return (
                 <CstdChapterLink
                   key={link.shareHref}
-                  href={link.shareHref}
+                  href={theme === "atelier" ? `#atelier-${link.elementId}` : link.shareHref}
                   aria-current={active ? "location" : undefined}
                   data-cstd-nav-active={active ? "true" : "false"}
                   className={clsx(
@@ -83,7 +84,9 @@ export function HomepageHeader({
                     active ? "text-[#f4d431]" : "hover:text-white",
                   )}
                 >
-                  {link.navLabel[locale]}
+                  {theme === "atelier"
+                    ? ({ systems: { zh: "方法", en: "Method" }, proof: { zh: "作品", en: "Work" }, path: { zh: "札记", en: "Writing" } } as const)[link.id as "systems" | "proof" | "path"][locale]
+                    : link.navLabel[locale]}
                 </CstdChapterLink>
               );
             })}
@@ -95,8 +98,8 @@ export function HomepageHeader({
               {locale === "zh" ? "关于" : "About"}
             </CstdLink>
           </nav>
-          <CstdChapterLink href="#proof" className="mr-1 hidden font-mono text-xs font-semibold text-[#f4d431] min-[360px]:inline-flex md:hidden">
-            {locale === "zh" ? "证据" : "Evidence"}
+          <CstdChapterLink href={theme === "atelier" ? "#atelier-proof" : "#proof"} className="mr-1 hidden font-mono text-xs font-semibold text-[#f4d431] min-[360px]:inline-flex md:hidden">
+            {theme === "atelier" ? (locale === "zh" ? "作品" : "Work") : (locale === "zh" ? "证据" : "Evidence")}
           </CstdChapterLink>
           <ThemeSwitcher locale={locale} />
           <CstdLanguageSwitcher locale={locale} compact />

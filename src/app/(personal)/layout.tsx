@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function PersonalChineseRootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="zh-CN" dir="ltr" className="h-full antialiased" suppressHydrationWarning>
+    <html lang="zh-CN" dir="ltr" data-cstd-theme="atelier" data-cstd-theme-kind="editorial-studio" className="h-full antialiased" suppressHydrationWarning>
       <head>
         <CstdThemeBootstrapScript locale="zh" />
       </head>

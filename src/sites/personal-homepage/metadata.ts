@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+export { CstdSocialImage } from "./social-image";
 
 import type { CstdLocale } from "./content/content-types";
 import { cstdContentHealth } from "./content/content-health";
+import { cstdProfile } from "./content/profile";
 import { getCstdCaseStudy } from "./content/case-studies";
 import { getCstdLab } from "./content/labs";
 import { getCstdTechnicalNote } from "./content/technical-notes";
@@ -15,9 +17,9 @@ export function getPersonalHomepageMetadata(locale: CstdLocale): Metadata {
   return createCstdMetadata({
     locale,
     path: locale === "en" ? "/en" : "/",
-    title: locale === "zh" ? "奶黄包 / Custard | 产品工程师与创作工具、研究系统构建者" : "Custard | Product engineer building creative tools and research systems",
-    description: locale === "zh" ? "奶黄包的独立技术工作室：把产品、数据、AI、研究与边缘系统编译成真正运行的作品。" : "Custard's independent engineering studio, compiling product, data, AI, research, and edge systems into work that actually runs.",
-    image: "/cstd-og-v2.webp",
+    title: locale === "zh" ? "奶黄包 / Custard | 数据分析与产品开发" : "Custard | Data analysis and product development",
+    description: cstdProfile.summary[locale],
+    image: "/cstd-atelier/studio-share-v1.png",
     type: "profile",
   });
 }
@@ -31,7 +33,7 @@ export function getPersonalHomepageStructuredData(locale: CstdLocale) {
     name: "Custard / CSTD",
     url: `${CSTD_SITE_ORIGIN}${prefix || "/"}`,
     inLanguage: cstdLocaleConfig[locale].htmlLang,
-    description: locale === "zh" ? "奶黄包的个人工程工作室，展示已交付产品、证据优先 AI、数据系统、研究与视觉工程。" : "Custard's personal engineering studio for shipped products, evidence-first AI, data systems, research, and visual engineering.",
+    description: locale === "zh" ? "奶黄包的个人作品集：数据分析、Web 产品和 AI 研究系统，以及它们如何从想法变成实际作品。" : "Custard's portfolio of data analysis, web products, and AI research systems, with the thinking and work behind each project.",
   },
   {
     "@context": "https://schema.org",
@@ -43,14 +45,10 @@ export function getPersonalHomepageStructuredData(locale: CstdLocale) {
       "@type": "Person",
       name: locale === "zh" ? "奶黄包" : "Custard",
       alternateName: locale === "zh" ? "Custard" : "奶黄包",
-      jobTitle: locale === "zh" ? "数据科学研究生，把分析、数据系统和产品一起交付" : "Data science postgraduate delivering analysis, data systems, and products together",
+      jobTitle: cstdProfile.title[locale],
       knowsAbout: locale === "zh"
         ? ["数据科学", "数据分析", "数据可视化", "统计建模", "开放数据分析", "SQL", "R", "Python", "证据优先 AI", "产品工程", "浏览器视觉工程"]
         : ["Data science", "Data analysis", "Data visualisation", "Statistical modelling", "Open-data analysis", "SQL", "R", "Python", "Evidence-first AI", "Product engineering", "Browser visual engineering"],
-      alumniOf: [
-        { "@type": "CollegeOrUniversity", name: "Monash University" },
-        { "@type": "CollegeOrUniversity", name: "The University of Sydney" },
-      ],
       sameAs: ["https://github.com/Muguett-DBY"],
     },
   },
@@ -101,7 +99,7 @@ export function createCstdMetadata({
   description,
   path,
   locale,
-  image = "/cstd-og-v2.webp",
+  image = "/cstd-atelier/studio-share-v1.png",
   type = "website",
   publishedAt,
 }: CstdMetadataInput): Metadata {
@@ -124,6 +122,7 @@ export function createCstdMetadata({
       },
     },
     manifest: locale === "en" ? "/en/manifest.webmanifest" : "/manifest.webmanifest",
+    icons: { icon: [{ url: "/cstd-atelier/mark-v1.svg", type: "image/svg+xml" }] },
     other: { "content-language": config.htmlLang },
     openGraph: {
       type,
@@ -150,8 +149,7 @@ export function getCstdWorkMetadata(locale: CstdLocale) {
     locale,
     path: locale === "en" ? "/en/work" : "/work",
     title: locale === "zh" ? "作品档案" : "Work archive",
-    description: locale === "zh" ? "奶黄包的真实产品案例：问题、约束、架构、证据与复盘。" : "Shipped product cases by Custard, including problems, constraints, architecture, evidence, and lessons.",
-    image: "/cstd-universe/cstd-broadcast-nexus-v1.webp",
+    description: locale === "zh" ? "从城市数据分析到产品开发，记录我做过的作品、技术选择和验证结果。" : "From city data analysis to product development: my projects, technical choices, and the results behind them.",
   });
 }
 
@@ -174,7 +172,6 @@ export function getCstdNotesMetadata(locale: CstdLocale) {
     path: locale === "en" ? "/en/notes" : "/notes",
     title: locale === "zh" ? "技术札记" : "Technical notes",
     description: locale === "zh" ? "关于系统边界、证据优先 AI、确定性计算、数据与浏览器视觉工程的长期技术札记。" : "Durable technical notes on system boundaries, evidence-first AI, deterministic computation, data, and browser visual engineering.",
-    image: "/cstd-archive/cstd-archive-notebook-v1.webp",
   });
 }
 
@@ -259,7 +256,7 @@ export function getCstdProfileMetadata(page: "about" | "now" | "resume", locale:
     resume: {
       title: locale === "zh" ? "技术履历" : "Technical resume",
       description: locale === "zh" ? "奶黄包的产品工程、数据、AI、研究与视觉工程履历。" : "Custard's product engineering, data, AI, research, and visual engineering resume.",
-      image: "/cstd-og-v2.webp",
+      image: "/cstd-atelier/studio-share-v1.png",
       type: "profile" as const,
     },
   }[page];

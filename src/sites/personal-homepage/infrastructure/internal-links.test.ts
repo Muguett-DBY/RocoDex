@@ -6,6 +6,7 @@ import { cstdCaseStudies } from "../content/case-studies";
 import { cstdKnowledgeGraph } from "../content/knowledge-graph";
 import { cstdLabs } from "../content/labs";
 import { cstdTechnicalNotes } from "../content/technical-notes";
+import { cstdTimeline } from "../content/timeline";
 
 function publicRoutes() {
   const stable = ["/", "/work", "/notes", "/lab", "/voxel", "/map", "/about", "/now", "/resume", "/resume.json", "/proof.json", "/observatory.json", "/content-health.json", "/performance.json", "/experience.json"];
@@ -16,6 +17,8 @@ function publicRoutes() {
     ...cstdCaseStudies.map((entry) => `/work/${entry.slug}`),
     ...cstdTechnicalNotes.map((entry) => `/notes/${entry.slug}`),
     ...cstdLabs.map((entry) => `/lab/${entry.slug}`),
+    "/about#capability-timeline",
+    ...cstdTimeline.map((entry) => `/about#timeline-${entry.id}`),
   ];
   return new Set([...zh, ...zh.map((path) => path === "/" ? "/en" : `/en${path}`)]);
 }

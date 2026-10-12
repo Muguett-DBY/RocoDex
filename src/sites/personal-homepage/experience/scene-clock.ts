@@ -69,7 +69,8 @@ export function useCstdSceneClock({
     const refreshMetrics = () => {
       viewportHeight = window.innerHeight;
       sceneMetrics = cstdSceneManifest.flatMap((scene) => {
-        const element = document.getElementById(scene.elementId);
+        const elementId = rootRef.current?.dataset.cstdTheme === "atelier" ? `atelier-${scene.elementId}` : scene.elementId;
+        const element = document.getElementById(elementId);
         if (!element) return [];
         const bounds = element.getBoundingClientRect();
         return [{ id: scene.id, top: bounds.top + window.scrollY, height: element.offsetHeight }];

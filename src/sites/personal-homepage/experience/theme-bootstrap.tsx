@@ -47,7 +47,7 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
   }
 
   const homepagePath = window.location.pathname.replace(/\/+$/, "");
-  if (["", "/cstd", "/en", "/cstd/en"].includes(homepagePath)) {
+  if (theme !== "atelier" && ["", "/cstd", "/en", "/cstd/en"].includes(homepagePath)) {
     const stagePreload = document.createElement("link");
     stagePreload.rel = "preload";
     stagePreload.as = "image";

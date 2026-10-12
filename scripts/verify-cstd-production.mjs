@@ -3,6 +3,7 @@ import path from "node:path";
 
 const origin = (process.env.CSTD_ORIGIN ?? "https://custard.top").replace(/\/$/, "");
 const timeoutMs = 15_000;
+const schoolNames = /monash|莫纳什|university of sydney|悉尼大学|FIT\d{4}/i;
 const performanceContract = JSON.parse(
   readFileSync(path.resolve("src/sites/personal-homepage/content/performance-contract.json"), "utf8"),
 );
@@ -19,10 +20,16 @@ async function get(path) {
 
 const htmlSurfaces = [
   { path: "/", language: "zh-CN", marker: "奶黄包" },
+  { path: "/about", language: "zh-CN", marker: "人工智能博 0" },
+  { path: "/resume", language: "zh-CN", marker: "数据科学本硕背景" },
+  { path: "/now", language: "zh-CN", marker: "人工智能博 0" },
   { path: "/topics", language: "zh-CN", marker: "CSTD" },
   { path: "/lab/proof-museum", language: "zh-CN", marker: "CSTD" },
   { path: "/voxel", language: "zh-CN", marker: "作品城 77" },
   { path: "/en", language: "en-AU", marker: "Custard" },
+  { path: "/en/about", language: "en-AU", marker: "PhD Year 0" },
+  { path: "/en/resume", language: "en-AU", marker: "PhD Year 0" },
+  { path: "/en/now", language: "en-AU", marker: "PhD Year 0" },
   { path: "/en/notes/host-boundaries-in-one-next-deployment", language: "en-AU", marker: "Next.js" },
   { path: "/en/for/research", language: "en-AU", marker: "Research" },
   { path: "/en/voxel", language: "en-AU", marker: "PORTFOLIO//CITY 77" },
@@ -35,7 +42,40 @@ for (const { path, language, marker } of htmlSurfaces) {
   if (response.headers.get("content-language") !== language) throw new Error(`${path} has the wrong Content-Language`);
   if (!new RegExp(`<html[^>]*\\blang=["']${language}["']`, "i").test(body)) throw new Error(`${path} has the wrong server-rendered html lang`);
   if (!body.includes(marker)) throw new Error(`${path} is missing the expected localized identity`);
+  if (schoolNames.test(body) || /"(?:alumniOf|homeLocation)"\s*:/.test(body)) throw new Error(`${path} exposes school or residence details`);
   htmlResponses.set(path, response);
+}
+
+const languageCases = [
+  { header: "zh-CN,zh;q=0.9,en;q=0.8", language: "zh-CN", status: 200 },
+  { header: "zh-Hant-TW,zh;q=0.9,en;q=0.8", language: "zh-CN", status: 200 },
+  { header: "en-AU,en;q=0.9", language: "en-AU", status: 307 },
+  { header: "zh;q=0.5,en;q=0.9", language: "en-AU", status: 307 },
+  { header: "en-AU", saved: "zh", language: "zh-CN", status: 200 },
+  { header: "zh-CN", saved: "en", language: "en-AU", status: 307 },
+];
+for (const entry of languageCases) {
+  const response = await fetch(`${origin}/`, {
+    redirect: "manual",
+    headers: { "accept-language": entry.header, ...(entry.saved ? { cookie: `cstd-locale=${entry.saved}` } : {}) },
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  if (response.status !== entry.status || response.headers.get("content-language") !== entry.language) throw new Error(`Root language selection failed for ${entry.header}, saved=${entry.saved ?? "none"}`);
+  const vary = response.headers.get("vary") ?? "";
+  if (!/accept-language/i.test(vary) || !/cookie/i.test(vary) || !response.headers.get("cache-control")?.includes("no-store")) throw new Error("Root language selection is not isolated from shared caches");
+  if (entry.status === 307 && new URL(response.headers.get("location"), origin).pathname !== "/en") throw new Error("English entry redirect is invalid");
+  await response.body?.cancel();
+}
+
+for (const [locale, prefix] of [["zh", ""], ["en", "/en"]]) {
+  const resume = await (await get(`${prefix}/resume.json`)).json();
+  if (resume.schemaVersion !== 2 || resume.locale !== locale) throw new Error(`${locale} public resume schema is invalid`);
+  if (schoolNames.test(JSON.stringify(resume)) || "location" in resume.person || resume.education.some((entry) => "school" in entry || "period" in entry)) throw new Error(`${locale} public resume discloses private profile details`);
+  if (!resume.person.title.includes(locale === "zh" ? "人工智能博 0" : "AI PhD Year 0")) throw new Error(`${locale} public resume has an outdated identity`);
+  if (resume.timeline.length !== 74 || new Set(resume.timeline.map((entry) => entry.date.slice(0, 4))).size !== 7) throw new Error(`${locale} timeline is incomplete`);
+  if (resume.timeline.some((entry) => !entry.datePrecision || !entry.learning || !entry.practice || !entry.outputs?.length)) throw new Error(`${locale} timeline lacks detailed records`);
+  if (!resume.timeline.some((entry) => entry.id === "agent-reliability-plan" && entry.recordType === "research-plan")) throw new Error(`${locale} timeline has the wrong research status`);
+  if (/31378714|500519943|ysuu0054|yiping su|苏一平/i.test(JSON.stringify(resume.timeline))) throw new Error(`${locale} timeline exposes a private identifier`);
 }
 
 const homepage = htmlResponses.get("/");
@@ -101,4 +141,4 @@ if (!sitemapBody.includes('hreflang="zh-CN"') || !sitemapBody.includes('hreflang
 const worker = await get("/cstd-case-worker.js");
 if (!(await worker.text()).includes('"crm-lock"')) throw new Error("Production Worker is missing the CRM lock capsule");
 
-console.log(`CSTD production smoke OK: ${origin}, ${htmlSurfaces.length} bilingual HTML surfaces, ${jsonEndpoints.length} public contracts, localized manifests/feed/sitemap, 5 experience acts, 5 topics, 4 proof capsules, content health 100.`);
+console.log(`CSTD production smoke OK: ${origin}, ${htmlSurfaces.length} bilingual HTML surfaces, ${jsonEndpoints.length} public contracts, ${languageCases.length} browser-language cases, 2 private-detail-free resumes with 74 detailed timeline entries, localized manifests/feed/sitemap, 5 experience acts, 5 topics, 4 proof capsules, content health 100.`);

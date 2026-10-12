@@ -12,7 +12,7 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1, name: "奶黄包" })).toBeVisible();
-  await expect(page.locator("[data-cstd-hero-description]")).toContainText("我用 R、Python 和 SQL 做可复现的分析");
+  await expect(page.locator(".atelier-hero-intro")).toContainText("用 R、Python 和 SQL 分析真实数据");
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   await expect(page.locator('[data-cstd-home-atelier] [data-cstd-atelier-section="hero"]')).toBeVisible();
   await expect(page.locator("[data-cstd-home-atelier] [data-cstd-atelier-section]")).toHaveCount(6);
@@ -45,7 +45,7 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-scene-mode", "image");
   await expect(page.locator("[data-cstd-webgl]")).toHaveCount(0);
 
-  // The GPU opt-in belongs to the neon game world; atelier stays a static editorial view.
+  // The neon game's GPU opt-in is independent of the atelier material control.
   await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-render-policy", "balanced");

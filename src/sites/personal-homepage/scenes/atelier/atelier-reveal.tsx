@@ -1,37 +1,22 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
+import { useCstdMotionMode } from "../../experience/motion-store";
 
-/**
- * Reveals children with a quiet fade-and-rise once they enter the viewport.
- * One shared IntersectionObserver per element; disabled under reduced motion.
- */
-export function AtelierReveal({ children, delay = 0, className = "" }: { children: ReactNode; delay?: number; className?: string }) {
+export function AtelierReveal({ children, className = "" }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
+  const motion = useCstdMotionMode();
 
   useEffect(() => {
     const node = ref.current;
-    if (!node) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      node.dataset.cstdAtelierReveal = "visible";
-      return;
-    }
-    const observer = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      }
-    }, { rootMargin: "0px 0px -12% 0px" });
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
+    if (!node || motion === "calm") return;
+    // Content is visible in the server HTML; motion never gates reading the page.
+    const animation = node.animate(
+      [{ opacity: 0.65, transform: "translateY(12px)" }, { opacity: 1, transform: "none" }],
+      { duration: 720, easing: "cubic-bezier(0.16, 1, 0.3, 1)" },
+    );
+    return () => animation.cancel();
+  }, [motion]);
 
-  return (
-    <div ref={ref} data-cstd-atelier-reveal={visible ? "visible" : "hidden"} style={{ transitionDelay: `${delay}ms` }} className={className}>
-      {children}
-    </div>
-  );
+  return <div ref={ref} className={className}>{children}</div>;
 }

@@ -25,7 +25,7 @@ function createComponents(locale: CstdLocale, variant: ContentVariant) {
   return {
     LocaleBlock: ({ locale: blockLocale, children }: { locale: CstdLocale; children: ReactNode }) => blockLocale === locale ? children : null,
     ArchiveSection: ({ id, eyebrow, title, children }: { id: string; eyebrow?: string; title: string; children: ReactNode }) => dark ? (
-      <section id={id} className="scroll-mt-24 border-b border-white/12 px-5 py-20 md:px-10 lg:px-16 lg:py-28">
+      <section id={id} data-cstd-archive-section className="scroll-mt-24 border-b border-white/12 px-5 py-20 md:px-10 lg:px-16 lg:py-28">
         <div className="mx-auto grid max-w-[1320px] gap-10 lg:grid-cols-[15rem_minmax(0,1fr)] lg:gap-20">
       <div><p className="font-mono text-[11px] font-black text-[#f4d431]">{eyebrow ?? id.toUpperCase()}</p><span aria-hidden="true" className="mt-5 block h-px w-16 bg-[#24e0ff]" /></div>
           <div><h2 className="max-w-4xl text-4xl font-semibold leading-[1.02] text-white md:text-6xl">{title}</h2><div className="cstd-mdx-prose cstd-mdx-prose-dark">{children}</div></div>

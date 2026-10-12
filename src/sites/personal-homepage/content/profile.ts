@@ -2,18 +2,21 @@ import type { LocalizedText } from "./content-types";
 
 export const cstdProfile = {
   name: { zh: "奶黄包", en: "Custard" },
-  title: { zh: "数据科学研究生 · 把分析、数据系统和产品一起交付的人", en: "Data science postgraduate · delivering analysis, data systems, and products together" },
-  location: { zh: "墨尔本", en: "Melbourne, Australia" },
-  availability: { zh: "在莫纳什读数据科学硕士，同时持续构建个人产品", en: "Studying data science at Monash while continuously building personal products" },
+  title: { zh: "人工智能博 0 · 数据科学与产品开发", en: "AI PhD Year 0 · Data science and product development" },
+  availability: { zh: "准备迈入人工智能博士阶段，继续做分析、研究工具和个人产品", en: "Preparing for doctoral study in AI while building analyses, research tools, and personal products" },
+  summary: {
+    zh: "数据科学本硕背景，现在是人工智能博 0。用 R、Python 和 SQL 分析真实数据，也用 React、Next.js 把想法做成能用的产品。这里放着我的作品，以及每一步怎么做、为什么这么做。",
+    en: "My background is in data science at bachelor's and master's level. Now at PhD Year 0 in AI, I use R, Python, and SQL to explore real data, and React and Next.js to build useful products. Here is the work and the thinking behind it.",
+  },
   intro: {
-    zh: "我在莫纳什读数据科学硕士；本科在悉尼大学从化学与生物分子工程转入数据科学。不管是在 R 里清洗 147 万行开放数据，还是把分析做成能上线的产品，我的工作方式都一样：问题是真实的，数据是可核验的，结论能复算，产品能交付。这个站不是技能清单，放的是作品、取舍，以及它们后来怎么被验证。",
-    en: "I am finishing a Master of Data Science at Monash; my undergraduate path at the University of Sydney moved from chemical and biomolecular engineering into data science. Whether I am wrangling 1.47 million rows of open data in R or turning an analysis into a shipped product, the working method stays the same: real questions, verifiable data, reproducible conclusions, and products that actually run. This site is not a skills list; it keeps the work, the trade-offs, and how they were checked.",
+    zh: "我的本硕背景是数据科学，现在是人工智能博 0，正在为博士阶段做准备。我用 R、Python 和 SQL 做数据分析、统计建模与可视化，也用 React、Next.js 和 Cloudflare 构建产品。最近关注 AI Agent、可靠性评估与可复现研究。这里有我对 147 万行墨尔本开放数据的分析、正在维护的产品，以及开发时的选择、踩过的坑和验证结果。",
+    en: "My bachelor's and master's studies are in data science. I'm now at PhD Year 0 in artificial intelligence, preparing for doctoral study. I use R, Python, and SQL for data analysis, statistical modelling, and visualisation, and React, Next.js, and Cloudflare to build products. My current interests include AI agents, reliability evaluation, and reproducible research. Here you can explore my analysis of 1.47 million Melbourne open-data records, the products I maintain, and what I learned while building them.",
   },
   now: {
-    updatedAt: "2026-09-06",
+    updatedAt: "2026-10-11",
     focus: {
-      zh: "把数据科学的训练和多年的产品构建接起来：用开放数据做经得起复算的分析，再把分析长成可用的产品。",
-      en: "Connecting formal data science training with years of product building: open-data analysis that survives rechecking, then grows into usable products.",
+      zh: "人工智能博 0：准备博士阶段的研究，同时继续做开放数据分析和能用的产品。最近在琢磨 AI Agent 的可靠性，以及怎样把实验做得可复现。",
+      en: "At PhD Year 0 in AI, I'm preparing for doctoral research while continuing to analyse open data and build useful products. Lately, I've been exploring AI agent reliability and reproducible experiments.",
     },
     building: [
       { zh: "墨尔本开放数据的行人与微气候分析，以及同源数据上的产品实验。", en: "Melbourne open-data pedestrian and microclimate analysis, plus product experiments on the same data." },
@@ -21,33 +24,33 @@ export const cstdProfile = {
       { zh: "证据优先的研究工具与确定性计算。", en: "Evidence-first research tools and deterministic computation." },
     ] satisfies readonly LocalizedText[],
     learning: [
-      { zh: "统计建模、大数据处理与生物信息学把产品直觉补成方法论。", en: "Statistical modelling, big-data processing, and bioinformatics turning product instinct into method." },
-      { zh: "把化工的边界、守恒与实验直觉迁移到数据工作流。", en: "Translating chemical-engineering intuition about boundaries, balances, and experiments into data workflows." },
+      { zh: "机器学习、统计建模与实验设计，让判断有依据。", en: "Machine learning, statistical modelling, and experimental design to make better-supported decisions." },
+      { zh: "AI Agent 的评估方法：先说清任务，再检查结果能否重复。", en: "AI agent evaluation: define the task clearly, then check whether the results hold up across repeated runs." },
     ] satisfies readonly LocalizedText[],
   },
   education: [
     {
-      period: "2025—2026",
-      school: "Monash University",
-      degree: { zh: "数据科学硕士（Master of Data Science）", en: "Master of Data Science" },
+      id: "ai-year-zero",
+      stage: { zh: "当前 · 博 0", en: "Now · PhD Year 0" },
+      field: { zh: "人工智能", en: "Artificial Intelligence" },
       detail: {
-        zh: "数据清洗、数据科学基础、探索性分析与可视化、统计建模、大数据处理、数据库、Python、计算机网络与生物信息学。",
-        en: "Data wrangling, foundations of data science, exploration and visualisation, statistical modelling, big-data processing, databases, Python, computer architecture and networks, and bioinformatics.",
+        zh: "正在为博士阶段做准备，关注 AI Agent、可靠性评估与可复现研究。",
+        en: "Preparing for doctoral study, with an interest in AI agents, reliability evaluation, and reproducible research.",
       },
     },
     {
-      period: "2020—2024",
-      school: "The University of Sydney",
-      degree: { zh: "理学学士 — 数据科学主修，化学辅修", en: "Bachelor of Science — Data Science major, Chemistry minor" },
+      id: "data-science",
+      stage: { zh: "本硕背景", en: "Bachelor's & master's study" },
+      field: { zh: "数据科学", en: "Data Science" },
       detail: {
-        zh: "从化学与生物分子工程转入数据科学：数学、统计与算法打底，把化工的边界与守恒思维带进数据系统。",
-        en: "Moved from chemical and biomolecular engineering into data science: mathematics, statistics, and algorithms, carrying chemical-engineering thinking about boundaries and balances into data systems.",
+        zh: "数学、统计与算法打底，做数据清洗、探索性分析、建模、可视化与数据产品。",
+        en: "A foundation in mathematics, statistics, and algorithms, applied to data wrangling, exploration, modelling, visualisation, and data products.",
       },
     },
   ] satisfies readonly {
-    period: string;
-    school: string;
-    degree: LocalizedText;
+    id: string;
+    stage: LocalizedText;
+    field: LocalizedText;
     detail: LocalizedText;
   }[],
   capabilities: [

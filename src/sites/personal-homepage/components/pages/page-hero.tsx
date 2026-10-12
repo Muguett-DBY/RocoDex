@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { ContentImage, ContentMetric, CstdLocale } from "../../content/content-types";
 
 export function CstdPageHero({
@@ -12,6 +12,7 @@ export function CstdPageHero({
   metrics = [],
   compact = false,
   transitionName = "cstd-page-hero",
+  atelierVisual,
 }: {
   locale: CstdLocale;
   eyebrow: string;
@@ -21,14 +22,17 @@ export function CstdPageHero({
   metrics?: readonly ContentMetric[];
   compact?: boolean;
   transitionName?: string;
+  atelierVisual?: ReactNode;
 }) {
   return (
     <header
       data-cstd-page-hero
+      data-cstd-page-hero-custom-art={atelierVisual ? "true" : undefined}
       className={`relative flex overflow-hidden border-b border-white/15 ${compact ? "min-h-[68svh]" : "min-h-[82svh]"}`}
       style={{ viewTransitionName: transitionName } as CSSProperties}
     >
-      <Image
+      <div data-cstd-page-hero-visual className="absolute inset-0">
+        <Image
         data-cstd-page-hero-image
         src={image.src}
         alt={image.alt[locale]}
@@ -37,7 +41,9 @@ export function CstdPageHero({
         sizes="100vw"
         className="object-cover"
         style={{ objectPosition: image.position ?? "50% 50%" }}
-      />
+        />
+      </div>
+      {atelierVisual ? <div className="cstd-atelier-hero-artwork">{atelierVisual}</div> : null}
       <div data-cstd-page-hero-overlay aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,7,9,0.96)_0%,rgba(5,7,9,0.78)_46%,rgba(5,7,9,0.18)_100%)]" />
       <div data-cstd-page-hero-grid aria-hidden="true" className="absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,0.09)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.09)_1px,transparent_1px)] [background-size:64px_64px]" />
       <div data-cstd-page-hero-material aria-hidden="true" className="pointer-events-none absolute inset-0" />

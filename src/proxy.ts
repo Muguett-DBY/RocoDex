@@ -12,12 +12,12 @@ export function proxy(request: NextRequest) {
   const preferredLocale = localeCookie === "en" || localeCookie === "zh" ? localeCookie : undefined;
   const acceptLanguage = preferredLocale ? undefined : request.headers.get("accept-language") ?? undefined;
   const cstdRouteDecision = getPersonalSiteRouteDecision(host, path, preferredLocale, acceptLanguage);
-  const varyAcceptLanguage = Boolean(acceptLanguage) && CSTD_ENTRY_PATHS.has(path) && isPersonalSiteHost(host);
+  const negotiatedLocale = CSTD_ENTRY_PATHS.has(path) && isPersonalSiteHost(host);
 
   if (cstdRouteDecision.kind === "rewrite") {
     const rewriteUrl = request.nextUrl.clone();
     rewriteUrl.pathname = cstdRouteDecision.path;
-    return withSiteSecurityHeaders(NextResponse.rewrite(rewriteUrl), host, path, { varyAcceptLanguage });
+    return withSiteSecurityHeaders(NextResponse.rewrite(rewriteUrl), host, path, { negotiatedLocale });
   }
 
   if (cstdRouteDecision.kind === "redirect") {
@@ -30,7 +30,7 @@ export function proxy(request: NextRequest) {
   if (cstdRouteDecision.kind === "redirect-path") {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = cstdRouteDecision.path;
-    return withSiteSecurityHeaders(NextResponse.redirect(redirectUrl, 307), host, cstdRouteDecision.path, { varyAcceptLanguage });
+    return withSiteSecurityHeaders(NextResponse.redirect(redirectUrl, 307), host, cstdRouteDecision.path, { negotiatedLocale });
   }
 
   if (cstdRouteDecision.kind === "not-found") {
@@ -47,7 +47,7 @@ export function proxy(request: NextRequest) {
   return withSiteSecurityHeaders(NextResponse.next(), host, path);
 }
 
-function withSiteSecurityHeaders(response: NextResponse, host: string, path: string, options: { varyAcceptLanguage?: boolean } = {}) {
+function withSiteSecurityHeaders(response: NextResponse, host: string, path: string, options: { negotiatedLocale?: boolean } = {}) {
   const headers = isPersonalSiteHost(host)
     ? PERSONAL_SITE_SECURITY_HEADERS
     : isRocoDexSiteHost(host)
@@ -55,7 +55,11 @@ function withSiteSecurityHeaders(response: NextResponse, host: string, path: str
       : null;
   if (!headers) return response;
   for (const [name, value] of Object.entries(headers)) response.headers.set(name, value);
-  if (options.varyAcceptLanguage) response.headers.append("vary", "Accept-Language");
+  if (options.negotiatedLocale) {
+    response.headers.append("vary", "Accept-Language, Cookie");
+    // The same entry URL can select a different language for each visitor.
+    response.headers.set("cache-control", "private, no-store");
+  }
   if (isPersonalSiteHost(host)) response.headers.set("content-language", cstdLocaleConfig[getCstdLocaleFromPathname(path)].htmlLang);
   return response;
 }

@@ -3,7 +3,7 @@ import type { CstdLocale, LocalizedText } from "../../content/content-types";
 import { cstdLabs, getLabPath } from "../../content/labs";
 import { cstdSystems } from "../../content/systems";
 import { cstdTechnicalNotes, getTechnicalNotePath } from "../../content/technical-notes";
-import { cstdTimeline } from "../../content/timeline";
+import { CSTD_TIMELINE_REVIEWED_AT, cstdTimeline } from "../../content/timeline";
 import { cstdTopics, getCstdTopicPath } from "../../content/topics";
 
 export type GuideSourceType = "case" | "note" | "capability" | "lab" | "topic" | "moment";
@@ -91,8 +91,8 @@ const momentEntries: readonly GuideKnowledgeEntry[] = cstdTimeline.map((entry, i
   title: entry.title,
   summary: entry.summary,
   href: entry.evidence,
-  keywords: [entry.kind, entry.date, ...entry.capabilityIds],
-  updatedAt: entry.date,
+  keywords: [entry.kind, entry.date, ...entry.technologies, ...entry.capabilityIds],
+  updatedAt: CSTD_TIMELINE_REVIEWED_AT,
   relatedIds: entry.capabilityIds.map((id) => `capability:${id}`),
 }));
 

@@ -41,6 +41,23 @@ describe("CSTD host routing", () => {
     expect(parseCstdAcceptLanguage(null)).toBe("zh");
   });
 
+  test("recognizes Chinese scripts and English regions, ignoring invalid weights and tags", () => {
+    expect(parseCstdAcceptLanguage("zh-Hant-TW,zh;q=0.9,en;q=0.8")).toBe("zh");
+    expect(parseCstdAcceptLanguage("de-DE,en-AU;q=0.9,zh;q=0.7")).toBe("en");
+    expect(parseCstdAcceptLanguage("zh;q=0,en-GB;q=0.8")).toBe("en");
+    expect(parseCstdAcceptLanguage("zh;q=2,en;q=0.8")).toBe("en");
+    expect(parseCstdAcceptLanguage("zh;q=1garbage,en;q=0.8")).toBe("en");
+    expect(parseCstdAcceptLanguage("english,zh;q=0.8")).toBe("zh");
+    expect(parseCstdAcceptLanguage("zhuang,en;q=0.8")).toBe("en");
+    expect(parseCstdAcceptLanguage("zh;Q=0,en;q=0.8")).toBe("en");
+  });
+
+  test("keeps explicit language URLs stable regardless of the visitor preference", () => {
+    expect(getPersonalSiteRouteDecision("custard.top", "/en", "zh", "zh-CN")).toEqual({ kind: "rewrite", path: "/cstd/en" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/about", "en", "en-AU")).toEqual({ kind: "rewrite", path: "/cstd/about" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/", "en", "zh-CN")).toEqual({ kind: "redirect-path", path: "/en" });
+  });
+
   test("serves the CSTD landing route on both canonical and explicit CSTD paths", () => {
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd/work/rocodex-platform")).toEqual({ kind: "next" });
@@ -94,6 +111,10 @@ describe("CSTD host routing", () => {
   });
 
   test("allows CSTD assets and SEO endpoints on the apex domain", () => {
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-atelier/fold-study-v1.svg")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-atelier/fold-mask-v1.svg")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-atelier/mark-v1.svg")).toEqual({ kind: "next" });
+    expect(getPersonalSiteRouteDecision("custard.top", "/cstd-atelier/studio-share-v1.png")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-mascot.svg")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-og.svg")).toEqual({ kind: "next" });
     expect(getPersonalSiteRouteDecision("custard.top", "/cstd-og-v2.webp")).toEqual({ kind: "next" });
