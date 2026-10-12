@@ -33,7 +33,7 @@ const eslintConfig = defineConfig([
     "playwright-report/**",
     "test-results/**",
     // 逐字节保留的第三方滚动引擎与 scroll-craft 构建工作区，不属于本仓库 lint 管辖。
-    "public/cstd-flight/scrollcraft.js",
+    "public/cstd-scroll/scrollcraft.js",
     "scrollcraft/**",
   ]),
 ]);

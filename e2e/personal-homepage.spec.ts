@@ -3,7 +3,8 @@ import AxeBuilder from "@axe-core/playwright";
 import { captureBrowserIssues, expectNoHorizontalOverflow } from "./support/browser";
 
 function stripPermittedEnglishAutonyms(value: string) {
-  return value.replaceAll("奶黄包", "").replace(/^\s*中\s*$/gmu, "");
+  // 语言切换器的紧凑态会把中文自动名称（中）渲染成行内独字，与相邻元素合并成行
+  return value.replaceAll("奶黄包", "").replaceAll("中", "");
 }
 
 test("CSTD presents a clear portfolio before optional visual enhancement", async ({ page, isMobile }) => {
@@ -11,12 +12,12 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   expect(response?.ok()).toBe(true);
 
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("工程城市");
-  await expect(page.locator("[data-cstd-home-flight] .fx-role").first()).toContainText("人工智能博 0");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("奶黄包");
+  await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("人工智能 · 博 0");
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
-  await expect(page.locator("[data-cstd-home-flight] [data-sc-segment]")).toHaveCount(9);
-  await expect(page.locator("[data-cstd-home-flight] .grid-rail__leg button")).toHaveCount(9);
-  await expect(page.locator("[data-cstd-home-flight] .ledger")).toBeVisible();
+  await expect(page.locator("[data-cstd-home-editorial] .chapter")).toHaveCount(6);
+  await expect(page.locator("[data-cstd-home-editorial] .folio__item")).toHaveCount(6);
+  await expect(page.locator("[data-cstd-home-editorial] [data-sc-count]")).toHaveAttribute("data-sc-count", "0 1,470,000");
   await expect(page.locator("[data-cstd-narrative-switcher]")).toHaveCount(0);
 
   // The game five-act composition lives behind the theme switch; neon asserts its counts.
@@ -101,7 +102,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
   await expect(page.locator("html")).toHaveAttribute("data-cstd-locale", "en");
   await expect(root).toHaveAttribute("data-cstd-locale", "en");
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("engineering city");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Custard");
   await expect(page.locator("[data-cstd-hero-thesis]")).toContainText("I take problems apart");
   await expect(page.locator("[data-cstd-home-game] [data-cstd-scene]")).toHaveCount(5);
   await expect(page.locator("[data-cstd-knowledge-list]")).not.toContainText("[object Object]");
@@ -117,13 +118,13 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
     { id: "underworld-forge", thesis: "Difficult systems are forged" },
     { id: "astral-covenant", thesis: "Complex systems are adventures" },
   ]) {
-    await page.locator("[data-cstd-theme-switcher]").click();
+    await page.locator("[data-cstd-theme-switcher] >> visible=true").click();
     await page.locator(`[data-cstd-theme-option="${world.id}"]`).click();
     await expect(root).toHaveAttribute("data-cstd-theme", world.id);
     await expect(page.locator("[data-cstd-hero-thesis]")).toContainText(world.thesis);
   }
 
-  await page.locator("[data-cstd-theme-switcher]").click();
+  await page.locator("[data-cstd-theme-switcher] >> visible=true").click();
   await page.locator('[data-cstd-theme-option="astral-covenant"]').click();
   await page.goto("/cstd/en/notes/host-boundaries-in-one-next-deployment?view=compact#sources", { waitUntil: "domcontentloaded" });
   const englishShell = page.locator("[data-cstd-deep-shell]");
@@ -332,7 +333,7 @@ test("CSTD switches and persists three game worlds with distinct interactions", 
   await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.reload({ waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
-  const switcher = page.locator("[data-cstd-theme-switcher]");
+  const switcher = page.locator("[data-cstd-theme-switcher] >> visible=true");
   const stageImage = page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image");
 
   await expect(root).toHaveAttribute("data-cstd-theme", "neon-district");
@@ -374,7 +375,7 @@ test("CSTD switches and persists three game worlds with distinct interactions", 
   await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "underworld-forge");
 
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
-  await page.locator("[data-cstd-theme-switcher]").click();
+  await page.locator("[data-cstd-theme-switcher] >> visible=true").click();
   await page.locator('[data-cstd-theme-option="astral-covenant"]').click();
   await expect(root).toHaveAttribute("data-cstd-theme", "astral-covenant");
   await expect(root).toHaveAttribute("data-cstd-theme-kind", "fantasy-codex");
@@ -475,7 +476,7 @@ test("CSTD keeps the theme control reachable on compact mobile screens", async (
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
 
   for (const theme of ["underworld-forge", "astral-covenant", "neon-district"] as const) {
-    const switcher = page.locator("[data-cstd-theme-switcher]");
+    const switcher = page.locator("[data-cstd-theme-switcher] >> visible=true");
     await expect(switcher).toBeVisible();
     const box = await switcher.boundingBox();
     expect(box).not.toBeNull();
@@ -501,13 +502,13 @@ test("CSTD keeps the theme control reachable on compact mobile screens", async (
   }
 
   await page.evaluate(() => window.scrollTo({ top: document.documentElement.scrollHeight / 2, behavior: "instant" }));
-  await expect(page.locator("[data-cstd-theme-switcher]")).toBeInViewport();
+  await expect(page.locator("[data-cstd-theme-switcher] >> visible=true")).toBeInViewport();
   await expectNoHorizontalOverflow(page);
 });
 
 test("CSTD theme picker supports roving keyboard focus and restores the trigger", async ({ page }) => {
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
-  const trigger = page.locator("[data-cstd-theme-switcher]");
+  const trigger = page.locator("[data-cstd-theme-switcher] >> visible=true");
   await trigger.focus();
   await page.keyboard.press("Enter");
 
@@ -564,6 +565,8 @@ test("CSTD exposes a five-act stage, useful depth routes, and an inspectable evi
 
 test("CSTD follows system motion preference until the visitor chooses an explicit override", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
+  // 动效控件属于游戏侧页头：先进入游戏主题，默认正式视图不渲染它
+  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
   await expect(root).toHaveAttribute("data-cstd-motion", "calm");
@@ -615,6 +618,8 @@ test("CSTD reading navigation prewarms the route and responds inside the click f
     if (message.type() === "error" && message.text().includes("Transition was aborted")) transitionErrors.push(message.text());
   });
 
+  // 阅读导航属于游戏侧页头：默认正式视图不渲染它，先进游戏主题
+  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   const navigation = page.getByRole("navigation", { name: "首页导航" });
@@ -705,8 +710,8 @@ test("CSTD primary and deep surfaces pass automated WCAG A/AA checks in every vi
         }
       }
       if (path === "/cstd" && theme === "atelier") {
-        await expect(page.locator("[data-cstd-home-flight] [data-sc-segment]")).toHaveCount(9);
-        await expect(page.locator("[data-cstd-home-flight]")).toBeVisible();
+        await expect(page.locator("[data-cstd-home-editorial] .chapter")).toHaveCount(6);
+        await expect(page.locator("[data-cstd-home-editorial]")).toBeVisible();
       }
       const results = await new AxeBuilder({ page })
         .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])

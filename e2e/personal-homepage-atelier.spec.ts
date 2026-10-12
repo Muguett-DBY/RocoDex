@@ -2,94 +2,107 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { captureBrowserIssues, expectNoHorizontalOverflow } from "./support/browser";
 
-test.describe("FLIGHT without JavaScript", () => {
+test.describe("EDITORIAL without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
-  test("serves the readable city narrative without any runtime", async ({ page }) => {
+  test("serves the complete formal homepage as a readable document", async ({ page }) => {
     await page.goto("/cstd", { waitUntil: "load" });
-    await expect(page.getByRole("heading", { level: 1 })).toContainText("工程城市");
-    await expect(page.locator("[data-cstd-home-flight] .fx-role").first()).toContainText("人工智能博 0");
-    await expect(page.locator("[data-cstd-home-flight] [data-sc-copy]")).toHaveCount(11);
-    await expect(page.locator("[data-cstd-home-flight] [data-sc-copy] h2").first()).toBeVisible();
-    await expect(page.locator("[data-cstd-home-flight] canvas")).toHaveCount(0);
-    await expect(page.locator("[data-cstd-home-flight] .fx-cta")).toHaveAttribute("href", /^mailto:cstd@custard\.top/);
-    await expect(page.locator("[data-cstd-home-flight] .grid-rail")).toBeHidden();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("奶黄包");
+    await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("人工智能 · 博 0");
+    await expect(page.locator("[data-cstd-home-editorial] .chapter")).toHaveCount(6);
+    await expect(page.locator("[data-cstd-home-editorial] .work")).toHaveCount(3);
+    await expect(page.locator("[data-cstd-home-editorial] .note")).toHaveCount(3);
+    const summaryOpacity = await page.locator("[data-cstd-home-editorial] .title-stack .ed-summary").evaluate((el) => getComputedStyle(el).opacity);
+    expect(summaryOpacity).toBe("1");
+    const counterText = await page.locator("[data-cstd-home-editorial] [data-sc-count]").textContent();
+    expect(counterText).toContain("1,470,000");
     await expectNoHorizontalOverflow(page);
   });
 });
 
-test("FLIGHT mounts the continuous world and every district stays reachable", async ({ page }) => {
+test("EDITORIAL mounts the scroll engine and the whole journey settles", async ({ page }) => {
   const issues = captureBrowserIssues(page);
   await page.addInitScript(() => Object.defineProperty(navigator, "gpu", { value: undefined, configurable: true }));
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveClass(/sc-ready/, { timeout: 20_000 });
-  await expect(page.locator("[data-cstd-home-flight] [data-sc-segment]")).toHaveCount(9);
-  await expect(page.locator("[data-cstd-home-flight] .grid-rail__leg button")).toHaveCount(9);
 
-  const track = await page.locator("[data-cstd-home-flight] [data-sc-spacer]").evaluate((spacer) => spacer.getBoundingClientRect().height);
-  expect(track).toBeGreaterThan(9 * page.viewportSize()!.height);
+  // 扉页在落地视口内即完成入场
+  await expect(page.locator("[data-cstd-home-editorial] .title-stack .ed-summary")).toHaveClass(/sc-in/, { timeout: 10_000 });
 
-  const lastNode = page.locator("[data-cstd-home-flight] .grid-rail__leg button").nth(8);
-  await lastNode.click();
-  await expect(page.locator("[data-cstd-home-flight] .grid-rail__pct")).toHaveText(/9[0-9]%/, { timeout: 10_000 });
-  await expect(page.getByRole("heading", { level: 2, name: /这座城建好了/ })).toBeVisible();
-  await expect(page.locator("[data-cstd-home-flight] canvas")).toHaveCount(0);
+  // 跳到作品章：峰值计数与图表抵达
+  await page.evaluate(() => document.getElementById("ch-work")?.scrollIntoView());
+  await expect(page.locator("[data-cstd-home-editorial] [data-sc-count]")).toHaveText("1,470,000", { timeout: 10_000 });
+  await expect(page.locator("[data-cstd-home-editorial] .data-figure img")).toBeVisible();
+
+  // 通读全页：每条页边批注落位，尾章为当前章（每步等一帧，避免合成滚动越过观察窗口）
+  await page.evaluate(async () => {
+    const height = document.documentElement.scrollHeight;
+    const frame = () => new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
+    for (let y = 0; y <= height; y += 300) {
+      window.scrollTo(0, y);
+      await frame();
+    }
+  });
+  await expect(page.locator("[data-cstd-home-editorial] .mnote.is-set")).toHaveCount(4, { timeout: 10_000 });
+  await expect(page.locator('[data-cstd-home-editorial] .folio__item[data-folio="ch-colophon"].is-active')).toHaveCount(1);
+  await expect(page.locator("[data-cstd-home-editorial] .folio")).toHaveClass(/is-dark/);
+  await expect(page.locator("[data-cstd-home-editorial] canvas")).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
   expect(issues).toEqual([]);
 });
 
-test("FLIGHT never fetches a clip under reduced motion and the ledger still settles", async ({ page }) => {
+test("EDITORIAL stays instant and complete under reduced motion with zero media fetches", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  const clipRequests: string[] = [];
+  const mediaRequests: string[] = [];
   page.on("request", (request) => {
-    if (request.url().endsWith(".mp4")) clipRequests.push(request.url());
+    if (/\.(mp4|webm)(\?|$)/.test(request.url())) mediaRequests.push(request.url());
   });
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveClass(/sc-ready/, { timeout: 20_000 });
 
-  await page.evaluate(() => scrollTo(0, 5.1 * innerHeight));
-  await expect(page.locator("[data-cstd-home-flight] .ledger__line")).toHaveCount(11, { timeout: 10_000 });
-  await expect(page.locator("[data-cstd-home-flight] .ledger__line.is-close")).toHaveCount(0);
-
-  await page.evaluate(() => scrollTo(0, document.body.scrollHeight));
-  await expect(page.locator("[data-cstd-home-flight] .ledger__line.is-close")).toHaveCount(1, { timeout: 10_000 });
-  await expect(page.locator("[data-cstd-home-flight] .ledger__line")).toHaveCount(15);
-  expect(clipRequests).toEqual([]);
+  await page.evaluate(() => {
+    document.querySelector(".data-spread")?.scrollIntoView({ block: "center" });
+    scrollBy(0, innerHeight * 0.6);
+  });
+  await expect(page.locator("[data-cstd-home-editorial] [data-sc-count]")).toHaveText("1,470,000", { timeout: 10_000 });
+  await expect(page.locator("[data-cstd-home-editorial] .mnote.is-set")).toHaveCount(4, { timeout: 10_000 });
+  await expect(page.locator("[data-cstd-home-editorial] [data-sc-reveal]")).toHaveCSS("clip-path", /none|inset\(0px 0(%|px)/);
+  expect(mediaRequests).toEqual([]);
   expect(errors).toEqual([]);
 });
 
-test("FLIGHT hands the homepage to the game worlds and takes it back", async ({ page }) => {
+test("EDITORIAL hands the homepage to the game worlds and takes it back", async ({ page }) => {
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveClass(/sc-ready/, { timeout: 20_000 });
-  await expect(page.locator("[data-cstd-home-flight]")).toBeVisible();
+  await expect(page.locator("[data-cstd-home-editorial]")).toBeVisible();
   await expect(page.locator("[data-cstd-home-shell]")).toBeHidden();
 
   await page.locator('[data-cstd-theme-switcher] >> visible=true').click();
   await page.locator('[data-cstd-theme-option="neon-district"]').click();
   await expect(page.locator("[data-cstd-home-game]")).toBeVisible();
-  await expect(page.locator("[data-cstd-home-flight]")).toBeHidden();
+  await expect(page.locator("[data-cstd-home-editorial]")).toBeHidden();
   await expect(page.locator("html")).not.toHaveClass(/sc-ready/, { timeout: 10_000 });
 
   await page.locator('[data-cstd-theme-switcher] >> visible=true').click();
   await page.locator('[data-cstd-theme-option="atelier"]').click();
-  await expect(page.locator("[data-cstd-home-flight]")).toBeVisible();
+  await expect(page.locator("[data-cstd-home-editorial]")).toBeVisible();
   await expect(page.locator("html")).toHaveClass(/sc-ready/, { timeout: 10_000 });
   await expectNoHorizontalOverflow(page);
 });
 
-test("FLIGHT keeps the English city readable on a narrow phone", async ({ page }) => {
+test("EDITORIAL keeps the English page readable on a narrow phone", async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 740 });
   await page.goto("/cstd/en", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveClass(/sc-ready/, { timeout: 20_000 });
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("engineering city");
-  await expect(page.locator("[data-cstd-home-flight] .fx-role").first()).toContainText("PhD Year 0");
-  await expect(page.locator("[data-cstd-home-flight] .fx-bar__cta")).toContainText("Start a collaboration");
-  await expect(page.locator("[data-cstd-home-flight] canvas")).toHaveCount(0);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Custard");
+  await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("PhD Year 0");
+  await expect(page.locator("[data-cstd-home-editorial] .ed-bar__cta")).toContainText("Start a collaboration");
+  await expect(page.locator("[data-cstd-home-editorial] canvas")).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
-  await page.evaluate(() => scrollTo(0, 5.1 * innerHeight));
-  await expect(page.getByRole("heading", { name: "DCF Quantum" })).toBeVisible({ timeout: 10_000 });
+  await page.evaluate(() => document.querySelector(".data-spread")?.scrollIntoView({ block: "center" }));
+  await expect(page.locator("[data-cstd-home-editorial] [data-sc-count]")).toHaveText("1,470,000", { timeout: 10_000 });
   await expectNoHorizontalOverflow(page);
 });
 

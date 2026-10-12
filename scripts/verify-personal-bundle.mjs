@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, statSync } from "node:fs";
 import path from "node:path";
 import vm from "node:vm";
 
@@ -53,14 +53,8 @@ if (!routeManifest?.entryJSFiles) {
 const initialAssets = unique(Object.values(routeManifest.entryJSFiles).flat());
 const initialBytes = bytesFor(initialAssets);
 const initialAssetReport = initialAssets.map((asset) => ({ asset, bytes: statSync(assetPath(asset)).size }));
-const prerenderedHtmlPath = path.join(nextRoot, "server/app/cstd.html");
-if (!existsSync(prerenderedHtmlPath)) {
-  throw new Error(`Missing prerendered personal homepage HTML at ${prerenderedHtmlPath}`);
-}
-const prerenderedHtml = readFileSync(prerenderedHtmlPath, "utf8");
-const htmlJavascriptAssets = [...prerenderedHtml.matchAll(/(?:src|href)=["']\/_next\/([^"']+?\.js)(?:\?[^"']*)?["']/g)]
-  .map((match) => match[1]);
-const startupAssets = unique([...initialAssets, ...htmlJavascriptAssets]);
+// 入口页按访客做语言协商（proxy 设 no-store），force-dynamic 渲染，无预渲染 HTML 可查。
+const startupAssets = unique(initialAssets);
 const startupBytes = bytesFor(startupAssets);
 const startupAssetReport = startupAssets.map((asset) => ({ asset, bytes: statSync(assetPath(asset)).size }));
 const initialContainsThree = initialAssets.some((asset) => {
@@ -90,13 +84,11 @@ const highQualityAssets = readdirSync(path.join(nextRoot, "static/chunks"))
   });
 const highQualityBytes = bytesFor(highQualityAssets);
 const fullWebglBytes = webglBytes + highQualityBytes;
-// FLIGHT（默认 worldflight 主页）资产：全部惰性 fetch，不入包，但仍需总量约束。
-const flightAssetBudget = 96 * 1024 * 1024;
-const flightClipBudget = 16 * 1024 * 1024;
-const flightAssetRoot = path.resolve("public/cstd-flight/assets");
-const flightAssets = readdirSync(flightAssetRoot).filter((asset) => /\.(mp4|webp)$/.test(asset));
-const flightAssetBytes = flightAssets.reduce((total, asset) => total + statSync(path.join(flightAssetRoot, asset)).size, 0);
-const oversizedFlightAsset = flightAssets.find((asset) => statSync(path.join(flightAssetRoot, asset)).size > flightClipBudget);
+// SCROLL（默认正式滚动主页）静态资产：引擎与页面样式，总量约束。
+const scrollAssetBudget = 512 * 1024;
+const scrollAssetRoot = path.resolve("public/cstd-scroll");
+const scrollAssets = readdirSync(scrollAssetRoot).filter((asset) => /\.(js|css)$/.test(asset));
+const scrollAssetBytes = scrollAssets.reduce((total, asset) => total + statSync(path.join(scrollAssetRoot, asset)).size, 0);
 const originalVisuals = readdirSync(path.resolve("public/cstd-universe"))
   .filter((asset) => asset.endsWith(".webp"))
   .map((asset) => `public/cstd-universe/${asset}`);
@@ -156,16 +148,13 @@ if (originalVisualBytes > originalVisualBudget) {
 if (oversizedOriginalVisual) {
   throw new Error(`CSTD 17.0 universe visual ${oversizedOriginalVisual} exceeds ${originalVisualFileBudget} bytes`);
 }
-if (flightAssets.length === 0) {
-  throw new Error("Could not find the FLIGHT worldflight assets under public/cstd-flight/assets");
+if (scrollAssets.length < 3) {
+  throw new Error("Could not find the SCROLL editorial engine assets under public/cstd-scroll");
 }
-if (flightAssetBytes > flightAssetBudget) {
-  throw new Error(`FLIGHT worldflight assets total ${flightAssetBytes} bytes; budget is ${flightAssetBudget}`);
-}
-if (oversizedFlightAsset) {
-  throw new Error(`FLIGHT asset ${oversizedFlightAsset} exceeds ${flightClipBudget} bytes`);
+if (scrollAssetBytes > scrollAssetBudget) {
+  throw new Error(`SCROLL editorial assets total ${scrollAssetBytes} bytes; budget is ${scrollAssetBudget}`);
 }
 
 console.log(
-  `Personal homepage bundle OK: ${initialBytes} entry bytes, ${startupBytes} eager startup bytes, ${liteWebglBytes} lite WebGL bytes, ${webgpuBytes} WebGPU bytes, ${webglBytes} base WebGL bytes, ${highQualityBytes} conditional postprocessing bytes, ${fullWebglBytes} full WebGL bytes, ${originalVisualBytes} original visual bytes, ${flightAssetBytes} lazy FLIGHT asset bytes.`,
+  `Personal homepage bundle OK: ${initialBytes} entry bytes, ${startupBytes} eager startup bytes, ${liteWebglBytes} lite WebGL bytes, ${webgpuBytes} WebGPU bytes, ${webglBytes} base WebGL bytes, ${highQualityBytes} conditional postprocessing bytes, ${fullWebglBytes} full WebGL bytes, ${originalVisualBytes} original visual bytes, ${scrollAssetBytes} editorial scroll asset bytes.`,
 );

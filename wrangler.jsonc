@@ -12,7 +12,7 @@
       "/*",
       "!/_next/static/*",
       "!/cstd-atelier/*",
-      "!/cstd-flight/*",
+      "!/cstd-scroll/*",
       "!/cstd-archive/*",
       "!/cstd-districts/*",
       "!/cstd-materials/*",
