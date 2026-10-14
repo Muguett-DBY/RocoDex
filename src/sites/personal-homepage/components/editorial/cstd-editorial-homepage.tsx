@@ -428,6 +428,10 @@ export function CstdEditorialHomepage({
       {/* 引擎脚本声明式预载：预载扫描器在解析期即开拉，水合后的 createElement
           执行注入直接命中暖缓存——fetch 时点从“水合后”提前到“首屏解析”。 */}
       <link rel="preload" as="script" href="/cstd-scroll/scrollcraft.js" />
+      {/* 首屏衬线字体声明式预载（可变字重，覆盖全部标题/正文强调）：
+          font-display:swap 下 LCP 记录的是字体换绘后的重绘时刻，慢 4G 上
+          原本要等 CSS→引擎链路才发现字体请求；预载让它与 CSS 并行到达。 */}
+      <link rel="preload" href="/fonts/cstd/press-serif-v1.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       <noscript>
         <style dangerouslySetInnerHTML={{ __html: NOSCRIPT_FALLBACK_CSS }} />
       </noscript>
