@@ -45,6 +45,13 @@ export type EditorialProfile = {
   summary: string;
 };
 
+/* 作品界面图版（图 04/05）：与案例页 VERIFIED SURFACE 同源的本项目自有生产界面截图；
+   slug 不匹配则不渲染（内容注册表变更时优雅降级为纯文字卡） */
+const WORK_PLATES: Record<string, { src: string; width: number; height: number; plate: keyof EditorialCopy["plates"] }> = {
+  "rocodex-platform": { src: "/cstd-projects/rocodex.png", width: 1280, height: 800, plate: "rocodex" },
+  "alpha-research-system": { src: "/cstd-projects/alpha.png", width: 1280, height: 800, plate: "alpha" },
+};
+
 const NOSCRIPT_FALLBACK_CSS = `
 [data-cstd-home-editorial] [data-sc-in],[data-cstd-home-editorial] [data-sc-stagger]>*{opacity:1!important;transform:none!important}
 [data-cstd-home-editorial] [data-sc-reveal]{clip-path:none!important}
@@ -55,13 +62,20 @@ const NOSCRIPT_FALLBACK_CSS = `
 type FolioItem = { id: string; mark: { zh: string; en: string }; label: { zh: string; en: string } };
 
 const FOLIO: readonly FolioItem[] = [
-  { id: "ch-title", mark: { zh: "扉", en: "·" }, label: { zh: "扉页", en: "Title" } },
+  { id: "ch-title", mark: { zh: "扉", en: "0" }, label: { zh: "扉页", en: "Title" } },
   { id: "ch-method", mark: { zh: "壹", en: "I" }, label: { zh: "方法", en: "Method" } },
   { id: "ch-work", mark: { zh: "贰", en: "II" }, label: { zh: "作品", en: "Work" } },
   { id: "ch-notes", mark: { zh: "叁", en: "III" }, label: { zh: "札记", en: "Notes" } },
   { id: "ch-lab", mark: { zh: "肆", en: "IV" }, label: { zh: "实验室", en: "Labs" } },
   { id: "ch-colophon", mark: { zh: "末", en: "V" }, label: { zh: "版权页", en: "Colophon" } },
 ];
+
+export type EditorialPlate = {
+  no: string;
+  caption: string;
+  source: string;
+  alt: string;
+};
 
 type EditorialCopy = {
   mailto: string;
@@ -94,7 +108,10 @@ type EditorialCopy = {
   countHead: React.ReactNode;
   dataBody: string;
   dataToolsLabel: string;
+  figureNo: string;
   figureCaption: string;
+  figureSource: string;
+  plates: { heatmap: EditorialPlate; sensitivity: EditorialPlate; rocodex: EditorialPlate; alpha: EditorialPlate };
   insideAnalysis: string;
   notesH2: string;
   notesLede: string;
@@ -103,7 +120,10 @@ type EditorialCopy = {
   labH2: React.ReactNode;
   labLede: string;
   labNote: React.ReactNode;
+  labInstruments: { name: string; line: string }[];
   colophonBrand: string;
+  colophonMark: string;
+  colophonDomain: string;
   colophonH2: React.ReactNode;
   colophonLede: React.ReactNode;
   colophonCta: string;
@@ -169,7 +189,23 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
       ? "行人如何穿过墨尔本？温度、风和空气质量又怎样参与其中？三份官方开放数据，经过清洗、空间连接与建模，形成一条可以重跑的分析管线。"
       : "How do people move through Melbourne? What changes with temperature, wind, and air quality? Three official open datasets, cleaned, spatially joined, and modelled into one rerunnable pipeline.",
     dataToolsLabel: zh ? "分析工具" : "Analysis tools",
+    figureNo: zh ? "图 01" : "FIG. 01",
     figureCaption: zh ? "墨尔本 CBD · 环境因素与行人活动的回归分析" : "Melbourne CBD · regression analysis of environment and pedestrian activity",
+    figureSource: zh ? "数据源：City of Melbourne 开放数据" : "Source: City of Melbourne open data",
+    /* 图版条目（图 02–05）：全部为本项目自有真实资产——作品 01 的分析副图与 02/03 的生产界面实录 */
+    plates: zh
+      ? {
+          heatmap: { no: "图 02", caption: "墨尔本 CBD · 行人活动的空间密度", source: "数据源：City of Melbourne 开放数据", alt: "墨尔本 CBD 行人活动空间密度热力图" },
+          sensitivity: { no: "图 03", caption: "行人流量对温度区间的敏感性", source: "数据源：City of Melbourne 开放数据", alt: "行人流量对温度区间的敏感性分析图" },
+          rocodex: { no: "图 04", caption: "RocoDex · 双站平台界面", source: "界面实录：本项目生产环境", alt: "RocoDex 双站平台的生产界面" },
+          alpha: { no: "图 05", caption: "CSTD Alpha · 研究系统界面", source: "界面实录：本项目生产环境", alt: "CSTD Alpha 公司研究系统的生产界面" },
+        }
+      : {
+          heatmap: { no: "FIG. 02", caption: "Melbourne CBD · spatial density of pedestrian activity", source: "Source: City of Melbourne open data", alt: "Spatial density heatmap of pedestrian activity in Melbourne CBD" },
+          sensitivity: { no: "FIG. 03", caption: "Temperature sensitivity of pedestrian flow", source: "Source: City of Melbourne open data", alt: "Sensitivity analysis of pedestrian flow across temperature bands" },
+          rocodex: { no: "FIG. 04", caption: "RocoDex · dual-site platform interface", source: "Interface capture: this project in production", alt: "RocoDex dual-site platform production interface" },
+          alpha: { no: "FIG. 05", caption: "CSTD Alpha · research system interface", source: "Interface capture: this project in production", alt: "CSTD Alpha research system production interface" },
+        },
     insideAnalysis: zh ? "走进这份分析" : "Inside the analysis",
     notesH2: zh ? "思考，留下来。" : "Thinking, kept.",
     notesLede: zh ? "关于系统、数据和做事方式的技术札记。" : "Notes on systems, data, and the way the work gets done.",
@@ -188,7 +224,20 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     ) : (
       <>Every model in the lab takes your inputs and shows its work. {noteLink("/lab", "Explore the labs")}</>
     ),
+    labInstruments: zh
+      ? [
+          { name: "DCF 估值模型", line: "改一组假设，看估值怎么动" },
+          { name: "故障演练", line: "把系统摁坏，练一次恢复" },
+          { name: "回归实验台", line: "系数重算，图表重画" },
+        ]
+      : [
+          { name: "DCF valuation model", line: "Change an assumption, watch the valuation move" },
+          { name: "Failure drills", line: "Break the system on purpose, practice the recovery" },
+          { name: "Regression bench", line: "Recompute the coefficients, redraw the charts" },
+        ],
     colophonBrand: zh ? "奶黄包 · 个人工作室" : "CUSTARD · PERSONAL STUDIO",
+    colophonMark: zh ? "奶黄包" : "CUSTARD",
+    colophonDomain: "custard.top",
     colophonH2: zh ? <>好的想法，<br />值得被做出来。</> : <>Good ideas deserve<br />to become real.</>,
     colophonLede: zh ? (
       <>如果你在找一个能把分析做成产品的人，可以从这里继续认识我。</>
@@ -418,6 +467,24 @@ export function CstdEditorialHomepage({
     { href: getLocalizedCstdHref("/map", locale), label: copy.navMap },
   ];
 
+  const renderWorkPlate = (slug: string) => {
+    const spec = WORK_PLATES[slug];
+    if (!spec) return null;
+    const meta = copy.plates[spec.plate];
+    return (
+      <figure className="plate">
+        {/* images.unoptimized 下 next/image 不产出 srcset；单档 1280w 源对栏内 ~460px 显示约 2.8x DPR 覆盖 */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={spec.src} alt={meta.alt} width={spec.width} height={spec.height} loading="lazy" decoding="async" className="plate-img" />
+        <figcaption>
+          <span className="fig-no">{meta.no}</span>
+          {meta.caption}
+          <span className="fig-source">{meta.source}</span>
+        </figcaption>
+      </figure>
+    );
+  };
+
   return (
     <div ref={rootRef} data-cstd-home-editorial className="ed">
       {/* 手工样式表链接是有意为之：React precedence 提升保证引擎 CSS 先于页面 CSS（无 next/css 参与的零构建链路） */}
@@ -490,9 +557,7 @@ export function CstdEditorialHomepage({
                 <p className="ed-summary">{profile.summary}</p>
                 <p className="title-actions">
                   <CstdChapterLink href="#ch-work" className="ed-button">{copy.exploreWork}</CstdChapterLink>
-                  <CstdLink href={getLocalizedCstdHref("/about", locale)} className="ed-textlink">
-                    {copy.aboutMe}<span aria-hidden="true"> →</span>
-                  </CstdLink>
+                  <CstdLink href={getLocalizedCstdHref("/about", locale)} className="ed-textlink">{copy.aboutMe}</CstdLink>
                 </p>
                 <p className="title-role"><span>{copy.roleField}</span><span>{copy.roleCraft}</span></p>
               </div>
@@ -541,26 +606,31 @@ export function CstdEditorialHomepage({
 
             {featured ? (
               <article className="work work--featured sc-stack" data-sc-in data-sc-stagger="60">
-                <p className="work-kicker">{featured.kicker}</p>
+                <p className="work-kicker">
+                  <span className="work-no">{String(works.indexOf(featured) + 1).padStart(2, "0")}</span>
+                  {featured.kicker}
+                </p>
                 <h3 className="work-title">{featured.title}</h3>
-                <p className="work-meta"><span>{featured.year}</span><span>{featured.technologies.join(" · ")}</span></p>
+                <p className="work-meta"><span>{featured.year}</span>{featured.technologies.map((technology) => <span key={technology}>{technology}</span>)}</p>
                 <p className="work-summary">{featured.summary}</p>
-                <CstdLink href={featured.path} className="ed-textlink">
-                  {copy.insideAnalysis}<span aria-hidden="true"> →</span>
-                </CstdLink>
+                <CstdLink href={featured.path} className="ed-textlink">{copy.insideAnalysis}</CstdLink>
               </article>
             ) : null}
 
             <div className="work-duo">
               {works.filter((work) => work !== featured).map((work) => (
                 <article key={work.slug} className="work sc-stack" data-sc-in data-sc-stagger="60">
-                  <p className="work-kicker">{work.kicker}</p>
+                  <p className="work-kicker">
+                    <span className="work-no">{String(works.indexOf(work) + 1).padStart(2, "0")}</span>
+                    {work.kicker}
+                  </p>
                   <h3 className="work-title">{work.title}</h3>
-                  <p className="work-meta"><span>{work.year}</span><span>{work.technologies.join(" · ")}</span></p>
+                  <p className="work-meta"><span>{work.year}</span>{work.technologies.map((technology) => <span key={technology}>{technology}</span>)}</p>
                   <p className="work-summary">{work.summary}</p>
                   <CstdLink href={work.path} className="ed-textlink">
                     {copy.viewCase}<span aria-hidden="true"> →</span>
                   </CstdLink>
+                  {renderWorkPlate(work.slug)}
                 </article>
               ))}
             </div>
@@ -570,18 +640,20 @@ export function CstdEditorialHomepage({
                  内层后写胜出会静默维持旧窗口（引擎按 querySelectorAll 含后代收集） */
               <div className="data-spread">
                 <div className="data-copy">
-                  <h3 className="ed-display-md">
+                  {/* 数据时刻拆两档：数字独占一行大字（引擎计数原样），量词句降档续行 */}
+                  <h3 className="data-count">
                     <span className="sr-only">1,470,000 </span>
                     <span className="sc-nums" aria-hidden="true" data-sc-count="0 1,470,000" data-sc-count-at="0.50 0.74">1,470,000</span>
-                    <br />{copy.countUnitZh}<br />{copy.countHead}
                   </h3>
+                  <p className="data-count-line">{copy.countUnitZh}{copy.countHead}</p>
                   <p>{copy.dataBody}</p>
                   <p className="data-tools" aria-label={copy.dataToolsLabel}>{featured.technologies.join(" · ")}</p>
                 </div>
                 <figure className="data-figure" data-sc-reveal="left" data-sc-reveal-at="0.48 0.70">
                   <div className="data-figure-inner" data-sc-parallax="-0.4">
                     {/* images.unoptimized 下 next/image 不产出 srcset；手工分档（960/1536/2580）
-                        让手机按视口取小图，width/height 兜住布局抖动，lazy 保持折下加载 */}
+                        让手机按视口取小图，width/height 兜住布局抖动，lazy 保持折下加载。
+                        图版满内容宽后桌面显示宽约 988px：1536w≈1.55x、2580w 覆盖 2x DPR。 */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src="/cstd-archive/cstd-archive-melbourne-coefficients-v1.webp"
@@ -590,7 +662,7 @@ export function CstdEditorialHomepage({
                         "/cstd-archive/cstd-archive-melbourne-coefficients-v1-1536w.webp 1536w",
                         "/cstd-archive/cstd-archive-melbourne-coefficients-v1.webp 2580w",
                       ].join(", ")}
-                      sizes="(min-width: 1100px) 44vw, 92vw"
+                      sizes="(min-width: 1100px) 68vw, 92vw"
                       width={2580}
                       height={1380}
                       loading="lazy"
@@ -599,8 +671,30 @@ export function CstdEditorialHomepage({
                       className="data-figure-img"
                     />
                   </div>
-                  <figcaption>{copy.figureCaption}</figcaption>
+                  <figcaption>
+                    <span className="fig-no">{copy.figureNo}</span>
+                    {copy.figureCaption}
+                    <span className="fig-source">{copy.figureSource}</span>
+                  </figcaption>
                 </figure>
+                {/* 副图对（图 02/03）：同一分析管线的真实产物，主图给整体回归、副图给空间与敏感性两面证据 */}
+                <div className="data-pair" data-sc-in data-sc-stagger="60">
+                  {[
+                    { src: "/cstd-archive/cstd-archive-melbourne-heatmap-v1.webp", width: 2700, height: 1440, meta: copy.plates.heatmap },
+                    { src: "/cstd-archive/cstd-archive-melbourne-heat-sensitivity-v1.webp", width: 2700, height: 1560, meta: copy.plates.sensitivity },
+                  ].map((entry) => (
+                    <figure key={entry.src} className="plate">
+                      {/* 科学图版不裁切：各自自然比例、顶对齐，轴标完整 */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={entry.src} alt={entry.meta.alt} width={entry.width} height={entry.height} loading="lazy" decoding="async" className="plate-img" />
+                      <figcaption>
+                        <span className="fig-no">{entry.meta.no}</span>
+                        {entry.meta.caption}
+                        <span className="fig-source">{entry.meta.source}</span>
+                      </figcaption>
+                    </figure>
+                  ))}
+                </div>
               </div>
             ) : null}
           </div>
@@ -638,6 +732,18 @@ export function CstdEditorialHomepage({
                 <aside className="mnote" data-mnote><p>{copy.labNote}</p></aside>
               </div>
             </div>
+            {/* 仪器目录：『动手试一试』的实物索引。编号列（LAB 01…）与名称下的刻度线
+                构成账行以外的第二视觉维度，与叁章纯文字账行拉开密度 */}
+            <div className="lab-list" data-sc-in data-sc-stagger="60">
+              {copy.labInstruments.map((instrument, index) => (
+                <CstdLink key={instrument.name} href={getLocalizedCstdHref("/lab", locale)} className="lab-row">
+                  <span className="lab-no">{`LAB ${String(index + 1).padStart(2, "0")}`}</span>
+                  <span className="lab-name"><b>{instrument.name}</b><i aria-hidden="true" /></span>
+                  <span>{instrument.line}</span>
+                  <span aria-hidden="true">→</span>
+                </CstdLink>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -652,13 +758,19 @@ export function CstdEditorialHomepage({
                 <CstdLink href={getLocalizedCstdHref("/about", locale)} className="colophon-cta">{copy.colophonCta}</CstdLink>
               </p>
             </div>
+            {/* 名字回归：合卷前的最后一眼落在品牌上（金点收句，域名旁注） */}
+            <p className="colophon-mark">
+              {copy.colophonMark}
+              <span className="colophon-mark__dot" aria-hidden="true">.</span>
+              <span className="colophon-mark__domain">{copy.colophonDomain}</span>
+            </p>
             <footer className="colophon-foot">
               <nav aria-label={copy.navAria}>
                 <CstdLink href={getLocalizedCstdHref("/now", locale)}>{copy.navNow}</CstdLink>
                 <CstdLink href={getLocalizedCstdHref("/resume", locale)}>{copy.navResume}</CstdLink>
                 {/* 内链补口：/voxel 全站仅 sitemap 可达，此处给真实可抓取入口 */}
                 <CstdLink href={getLocalizedCstdHref("/voxel", locale)}>{copy.navVoxel}</CstdLink>
-                <CstdChapterLink href="#top">{copy.backToTop}</CstdChapterLink>
+                <CstdChapterLink href="#top"><span aria-hidden="true">↑ </span>{copy.backToTop}</CstdChapterLink>
               </nav>
               <p className="colophon-small">{copy.colophonSmall}</p>
             </footer>
