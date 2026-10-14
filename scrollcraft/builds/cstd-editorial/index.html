@@ -16,6 +16,8 @@
 <body>
 <div class="ed">
 
+<a class="ed-skip" href="#top">跳到正文</a>
+
 <nav class="folio" aria-label="章节导航" data-folio-nav>
   <a class="folio__item" href="#ch-title" data-folio="title"><b>扉</b><span>扉页</span><i aria-hidden="true"><u></u></i></a>
   <a class="folio__item" href="#ch-method" data-folio="method"><b>壹</b><span>方法</span><i aria-hidden="true"><u></u></i></a>
@@ -25,13 +27,13 @@
   <a class="folio__item" href="#ch-colophon" data-folio="colophon"><b>末</b><span>版权页</span><i aria-hidden="true"><u></u></i></a>
 </nav>
 
-<main id="top">
+<main id="top" tabindex="-1">
 
   <!-- 扉 · title page -->
   <section class="chapter ch-title" id="ch-title" data-sc-act="flow">
     <div class="ch-wrap">
       <div class="title-lift" data-sc-parallax="-0.3">
-        <div class="sc-stack title-stack" data-sc-in data-sc-stagger="80">
+        <div class="sc-stack title-stack" data-ed-enter>
           <h1 class="ed-display-xl">奶黄包<span class="ed-fullstop" aria-hidden="true">。</span></h1>
           <p class="ed-statement">从数据里找到线索，<br>把想法做成产品。</p>
           <p class="ed-summary">数据科学本硕背景，现在是人工智能博 0。用 R、Python 和 SQL 分析真实数据，也用 React、Next.js 把想法做成能用的产品。这里放着我的作品，以及每一步怎么做、为什么这么做。</p>
@@ -89,7 +91,7 @@
             <p>作品 01 的全部脚本可以重跑：下载、清洗、建模、绘图。<a href="/work">全部作品</a></p>
           </aside>
         </div>
-        <p class="work-census" aria-label="作品普查"><span data-sc-count="0 7" data-sc-count-at="0.06 0.26">7</span> 个已发布案例</p>
+        <p class="work-census" aria-label="作品普查"><span aria-hidden="true" data-sc-count="0 7" data-sc-count-at="0.06 0.26">7</span><span class="sr-only">7</span> 个已发布案例</p>
       </div>
 
       <article class="work work--featured sc-stack" data-sc-in data-sc-stagger="60">
@@ -120,13 +122,13 @@
       <!-- data-spread 自身不挂 act：章级 act 与嵌套 act 会双收集同一批设备 -->
       <div class="data-spread">
         <div class="data-copy">
-          <h3 class="ed-display-md"><span class="sc-nums" data-sc-count="0 1,470,000" data-sc-count-at="0.50 0.74">1,470,000</span><br>行开放数据，<br>让城市的节奏可见。</h3>
+          <h3 class="ed-display-md"><span class="sr-only">1,470,000 </span><span class="sc-nums" aria-hidden="true" data-sc-count="0 1,470,000" data-sc-count-at="0.50 0.74">1,470,000</span><br>行开放数据，<br>让城市的节奏可见。</h3>
           <p>行人如何穿过墨尔本？温度、风和空气质量又怎样参与其中？三份官方开放数据，经过清洗、空间连接与建模，形成一条可以重跑的分析管线。</p>
           <p class="data-tools" aria-label="分析工具">R · data.table · ggplot2 · lm</p>
         </div>
         <figure class="data-figure" data-sc-reveal="left" data-sc-reveal-at="0.48 0.70">
           <div class="data-figure-inner" data-sc-parallax="-0.4">
-            <img src="assets/cstd-archive-melbourne-coefficients-v1.webp" width="2580" height="1380" alt="温度、PM2.5、风速和周末因素与墨尔本行人活动的回归系数图">
+            <img src="assets/cstd-archive-melbourne-coefficients-v1.webp" srcset="assets/cstd-archive-melbourne-coefficients-v1-960w.webp 960w, assets/cstd-archive-melbourne-coefficients-v1-1536w.webp 1536w, assets/cstd-archive-melbourne-coefficients-v1.webp 2580w" sizes="(min-width: 1100px) 44vw, 92vw" width="2580" height="1380" loading="lazy" decoding="async" alt="温度、PM2.5、风速和周末因素与墨尔本行人活动的回归系数图">
           </div>
           <figcaption>墨尔本 CBD · 环境因素与行人活动的回归分析</figcaption>
         </figure>
@@ -193,6 +195,8 @@
         <nav aria-label="更多个人信息">
           <a href="/now">现在</a>
           <a href="/resume">履历</a>
+          <a href="/topics">主题</a>
+          <a href="/voxel">作品城</a>
           <a href="#top">回到顶部</a>
         </nav>
         <p class="colophon-small">© 2026 奶黄包 · 本页滚动效果由 ScrollCraft 驱动，无视频。</p>

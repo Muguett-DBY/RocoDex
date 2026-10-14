@@ -8,8 +8,8 @@
 
   if (window.ScrollCraft) window.ScrollCraft.mount(document.body);
 
-  // 页边批注：随所属段落进入视口而落位，一次性。
-  var notes = document.querySelectorAll("[data-mnote]");
+  // 页边批注 + 扉页题签（data-ed-enter，页面自管入场）：随所属段落进入视口而落位，一次性。
+  var notes = document.querySelectorAll("[data-mnote], [data-ed-enter]");
   if (reduced || !("IntersectionObserver" in window)) {
     notes.forEach(function (n) { n.classList.add("is-set"); });
   } else {

@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getLocalizedCstdHref } from "../../infrastructure/i18n";
 import type { CstdLocale } from "../../content/content-types";
@@ -68,9 +67,12 @@ type EditorialCopy = {
   mailto: string;
   navAria: string;
   folioAria: string;
+  skipToContent: string;
   navWork: string;
   navNotes: string;
+  navTopics: string;
   navMap: string;
+  navVoxel: string;
   ctaHeader: string;
   statement: React.ReactNode;
   exploreWork: string;
@@ -120,9 +122,12 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     mailto: "mailto:cstd@custard.top?subject=" + encodeURIComponent(zh ? "CSTD 协作" : "CSTD collaboration"),
     navAria: zh ? "首页直达" : "Homepage shortcuts",
     folioAria: zh ? "章节导航" : "Chapters",
+    skipToContent: zh ? "跳到正文" : "Skip to content",
     navWork: zh ? "作品" : "Work",
     navNotes: zh ? "笔记" : "Notes",
+    navTopics: zh ? "主题" : "Topics",
     navMap: zh ? "星图" : "Map",
+    navVoxel: zh ? "作品城" : "Voxel world",
     ctaHeader: zh ? "谈一次协作" : "Start a collaboration",
     statement: zh ? <>从数据里找到线索，<br />把想法做成产品。</> : <>Find the story in the data.<br />Build something useful.</>,
     exploreWork: zh ? "浏览精选作品" : "Explore the work",
@@ -223,8 +228,9 @@ export function CstdEditorialHomepage({
   const copy = useMemo(() => editorialCopy(locale), [locale]);
   const rootRef = useRef<HTMLDivElement>(null);
   const folioRef = useRef<HTMLElement>(null);
-  /* folio 只属于正式视图：游戏主题激活时卸载（而非仅隐藏），不占 fixed 元素与可访问树 */
-  const [folioMounted, setFolioMounted] = useState(true);
+  /* 正式视图的固定件（skip link 与 folio）：游戏主题激活时卸载（而非仅隐藏），
+     不占 fixed 元素预算、不留可访问树残影 */
+  const [chromeMounted, setChromeMounted] = useState(true);
 
   const featured = works.find((work) => work.featured) ?? works[0];
   const zh = locale === "zh";
@@ -241,12 +247,14 @@ export function CstdEditorialHomepage({
     document.documentElement.classList.add("ed-ready");
     cleanups.push(() => document.documentElement.classList.remove("ed-ready"));
 
-    /* ---- 页边批注：随所属段落进入视口而落位，一次性 ----
+    /* ---- 页边批注 + 扉页题签：随所属段落进入视口而落位，一次性 ----
        触发线保持浅（-6% / 0.05）：页尾章节剩余滚动余量少，触发过深会让
-       快速滚到底的读者完全看不到落位过程。 */
-    const notes = Array.from(root.querySelectorAll<HTMLElement>("[data-mnote]"));
+       快速滚到底的读者完全看不到落位过程。扉页 title-stack 走同一机制
+       （data-ed-enter）：SSR 直出可见（LCP 不等引擎），水合后由页面 IO 落位，
+       reduce 分支同步置终态——任何采样时点都不存在中间透明度。 */
+    const revealables = Array.from(root.querySelectorAll<HTMLElement>("[data-mnote], [data-ed-enter]"));
     if (reduce || !("IntersectionObserver" in window)) {
-      notes.forEach((n) => n.classList.add("is-set"));
+      revealables.forEach((n) => n.classList.add("is-set"));
     } else {
       const noteIO = new IntersectionObserver(
         (entries) => {
@@ -259,7 +267,7 @@ export function CstdEditorialHomepage({
         },
         { rootMargin: "0px 0px -6% 0px", threshold: 0.05 },
       );
-      notes.forEach((n) => noteIO.observe(n));
+      revealables.forEach((n) => noteIO.observe(n));
       cleanups.push(() => noteIO.disconnect());
     }
 
@@ -334,7 +342,7 @@ export function CstdEditorialHomepage({
       const attr = document.documentElement.getAttribute("data-cstd-theme");
       return attr === null || attr === "atelier";
     };
-    setFolioMounted(isEditorialTheme());
+    setChromeMounted(isEditorialTheme());
     let booted = false;
     let api: { destroy: () => void } | null = null;
     let engineLoaded = Boolean(window.ScrollCraft);
@@ -383,7 +391,7 @@ export function CstdEditorialHomepage({
     }
     const themeObserver = new MutationObserver(() => {
       const editorial = isEditorialTheme();
-      setFolioMounted(editorial);
+      setChromeMounted(editorial);
       if (editorial) boot();
       else unboot();
     });
@@ -406,16 +414,27 @@ export function CstdEditorialHomepage({
   const navLinks = [
     { href: getLocalizedCstdHref("/work", locale), label: copy.navWork },
     { href: getLocalizedCstdHref("/notes", locale), label: copy.navNotes },
+    { href: getLocalizedCstdHref("/topics", locale), label: copy.navTopics },
     { href: getLocalizedCstdHref("/map", locale), label: copy.navMap },
   ];
 
   return (
     <div ref={rootRef} data-cstd-home-editorial className="ed">
+      {/* 手工样式表链接是有意为之：React precedence 提升保证引擎 CSS 先于页面 CSS（无 next/css 参与的零构建链路） */}
+      {/* eslint-disable-next-line @next/next/no-css-tags */}
       <link rel="stylesheet" precedence="sc-engine" href="/cstd-scroll/scrollcraft.css" />
+      {/* eslint-disable-next-line @next/next/no-css-tags */}
       <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css" />
+      {/* 引擎脚本声明式预载：预载扫描器在解析期即开拉，水合后的 createElement
+          执行注入直接命中暖缓存——fetch 时点从“水合后”提前到“首屏解析”。 */}
+      <link rel="preload" as="script" href="/cstd-scroll/scrollcraft.js" />
       <noscript>
         <style dangerouslySetInnerHTML={{ __html: NOSCRIPT_FALLBACK_CSS }} />
       </noscript>
+
+      {/* 跳到正文：首枚可聚焦元素，键盘用户免于逐个穿过顶栏控件（样式在 .ed-skip）；
+          随固定件一起在游戏主题下卸载，不占 fixed 预算 */}
+      {chromeMounted ? <a href="#top" className="ed-skip">{copy.skipToContent}</a> : null}
 
       {/* 顶部栏：品牌 + 直达 + 主题/语言切换 + 唯一 CTA */}
       <header className="ed-bar" data-cstd-home-header>
@@ -437,8 +456,8 @@ export function CstdEditorialHomepage({
         </div>
       </header>
 
-      {/* folio 页码导航（章节编辑部的导航；游戏主题激活时卸载） */}
-      {folioMounted ? (
+      {/* folio 页码导航（章节编辑部的导航；游戏主题激活时随固定件卸载） */}
+      {chromeMounted ? (
         <nav className="folio" ref={folioRef} aria-label={copy.folioAria} data-folio-nav>
           {FOLIO.map((item) => (
             <CstdChapterLink key={item.id} href={`#${item.id}`} className="folio__item" data-folio={item.id}>
@@ -450,12 +469,16 @@ export function CstdEditorialHomepage({
         </nav>
       ) : null}
 
-      <div id="top">
+      {/* main 地标：游戏壳内的 <main> 被互斥规则 display:none 移出可访问树，
+          任一时刻页面只暴露一个 main；tabindex=-1 让 skip link 能把焦点真正移交正文 */}
+      <main id="top" tabIndex={-1}>
         {/* 扉 · title page */}
         <section className="chapter ch-title" id="ch-title" data-sc-act="flow">
           <div className="ch-wrap">
             <div className="title-lift" data-sc-parallax="-0.3">
-              <div className="sc-stack title-stack" data-sc-in data-sc-stagger="80">
+              {/* data-ed-enter：扉页入场页面自管（mnote 同机制）——SSR 直出可见，
+                  水合后页面 IO 加 is-set 落位；不挂 data-sc-in，引擎缺席/装载慢都不影响首屏 */}
+              <div className="sc-stack title-stack" data-ed-enter>
                 <h1 className="ed-display-xl">
                   {profile.name}<span className="ed-fullstop" aria-hidden="true">.</span>
                 </h1>
@@ -506,7 +529,9 @@ export function CstdEditorialHomepage({
                 <aside className="mnote" data-mnote><p>{copy.workNote}</p></aside>
               </div>
               <p className="work-census" aria-label={copy.censusLabel}>
-                <span data-sc-count="0 7" data-sc-count-at="0.06 0.26">{census.cases}</span> {copy.censusCases}
+                {/* 滚动计数会把中间值擦写进无障碍名称：动画数字对读屏隐藏，旁挂常驻终值 */}
+                <span aria-hidden="true" data-sc-count="0 7" data-sc-count-at="0.06 0.26">{census.cases}</span>
+                <span className="sr-only">{census.cases}</span> {copy.censusCases}
               </p>
             </div>
 
@@ -542,7 +567,8 @@ export function CstdEditorialHomepage({
               <div className="data-spread">
                 <div className="data-copy">
                   <h3 className="ed-display-md">
-                    <span className="sc-nums" data-sc-count="0 1,470,000" data-sc-count-at="0.50 0.74">1,470,000</span>
+                    <span className="sr-only">1,470,000 </span>
+                    <span className="sc-nums" aria-hidden="true" data-sc-count="0 1,470,000" data-sc-count-at="0.50 0.74">1,470,000</span>
                     <br />{copy.countUnitZh}<br />{copy.countHead}
                   </h3>
                   <p>{copy.dataBody}</p>
@@ -550,12 +576,22 @@ export function CstdEditorialHomepage({
                 </div>
                 <figure className="data-figure" data-sc-reveal="left" data-sc-reveal-at="0.48 0.70">
                   <div className="data-figure-inner" data-sc-parallax="-0.4">
-                    <Image
+                    {/* images.unoptimized 下 next/image 不产出 srcset；手工分档（960/1536/2580）
+                        让手机按视口取小图，width/height 兜住布局抖动，lazy 保持折下加载 */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
                       src="/cstd-archive/cstd-archive-melbourne-coefficients-v1.webp"
-                      alt={zh ? "温度、PM2.5、风速和周末因素与墨尔本行人活动的回归系数图" : "Regression coefficients relating temperature, PM2.5, wind speed, and weekends to Melbourne pedestrian activity"}
+                      srcSet={[
+                        "/cstd-archive/cstd-archive-melbourne-coefficients-v1-960w.webp 960w",
+                        "/cstd-archive/cstd-archive-melbourne-coefficients-v1-1536w.webp 1536w",
+                        "/cstd-archive/cstd-archive-melbourne-coefficients-v1.webp 2580w",
+                      ].join(", ")}
+                      sizes="(min-width: 1100px) 44vw, 92vw"
                       width={2580}
                       height={1380}
-                      sizes="(min-width: 1100px) 44vw, 92vw"
+                      loading="lazy"
+                      decoding="async"
+                      alt={zh ? "温度、PM2.5、风速和周末因素与墨尔本行人活动的回归系数图" : "Regression coefficients relating temperature, PM2.5, wind speed, and weekends to Melbourne pedestrian activity"}
                       className="data-figure-img"
                     />
                   </div>
@@ -616,13 +652,15 @@ export function CstdEditorialHomepage({
               <nav aria-label={copy.navAria}>
                 <CstdLink href={getLocalizedCstdHref("/now", locale)}>{copy.navNow}</CstdLink>
                 <CstdLink href={getLocalizedCstdHref("/resume", locale)}>{copy.navResume}</CstdLink>
+                {/* 内链补口：/voxel 全站仅 sitemap 可达，此处给真实可抓取入口 */}
+                <CstdLink href={getLocalizedCstdHref("/voxel", locale)}>{copy.navVoxel}</CstdLink>
                 <CstdChapterLink href="#top">{copy.backToTop}</CstdChapterLink>
               </nav>
               <p className="colophon-small">{copy.colophonSmall}</p>
             </footer>
           </div>
         </section>
-      </div>
+      </main>
     </div>
   );
 }

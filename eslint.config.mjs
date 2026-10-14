@@ -22,6 +22,9 @@ const eslintConfig = defineConfig([
     },
   },
   globalIgnores([
+    // 代理技能库（vercel-optimize 等，未入 git）：会话工具自带的运行代码，
+    // 与 .zcode/ 同类，不属于本仓库 lint 管辖。
+    ".agents/**",
     ".next/**",
     ".open-next/**",
     ".playwright-cli/**",

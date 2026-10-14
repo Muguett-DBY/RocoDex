@@ -29,8 +29,9 @@ test("EDITORIAL mounts the scroll engine and the whole journey settles", async (
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveClass(/sc-ready/, { timeout: 20_000 });
 
-  // 扉页在落地视口内即完成入场
-  await expect(page.locator("[data-cstd-home-editorial] .title-stack .ed-summary")).toHaveClass(/sc-in/, { timeout: 10_000 });
+  // 扉页在落地视口内即完成入场（页面自管 data-ed-enter：容器落 is-set，
+  // 子元素不经引擎 .sc-in——LCP 不依赖引擎装载）
+  await expect(page.locator("[data-cstd-home-editorial] .title-stack[data-ed-enter]")).toHaveClass(/is-set/, { timeout: 10_000 });
 
   // 跳到作品章：峰值计数与图表抵达。贰章改为整章 act 后计数窗重键为章 p 0.50–0.74，
   // scrollIntoView(#ch-work) 落位 p≈0.3 还在窗外，须深入数据版面再断言终值。
@@ -91,8 +92,55 @@ test("EDITORIAL stays instant and complete under reduced motion with zero media 
   expect(reduceSamples.titleLine).toBe("none");
   expect(reduceSamples.noteDrift).toBe("none");
   expect(reduceSamples.parallax).toBe("none");
+  // 引擎为减速保留的 220ms 温和淡入不再被页面 CSS 压成 0s（硬弹出）；
+  // folio 进度细线是随滚动运动的位移类设备：减速下直接呈现终态（scaleY(1)）。
+  // folio 只在 ≥1200px 渲染，先放宽视口再取样（display:none 下 computed transform 恒 none）
+  await expect(page.locator("[data-cstd-home-editorial] .ch-work .ch-head")).toHaveCSS("transition-duration", "0.22s");
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await expect(page.locator("[data-cstd-home-editorial] .folio__item u").first()).toHaveCSS("transform", "matrix(1, 0, 0, 1, 0, 0)");
   expect(mediaRequests).toEqual([]);
   expect(errors).toEqual([]);
+});
+
+test("EDITORIAL ships the LCP and landmark contract", async ({ page, request }) => {
+  const issues = captureBrowserIssues(page);
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+
+  // LCP：引擎脚本声明式预载（fetch 时点 = 解析期而非水合后）+ 扉页入场页面自管
+  // （html:not(.ed-ready) 直出终态，SSR 首绘即 LCP；无 JS 测试另覆盖可见性）
+  await expect(page.locator('link[rel="preload"][href="/cstd-scroll/scrollcraft.js"]')).toHaveAttribute("as", "script");
+
+  // 地标：editorial 自有 main（游戏壳 main 被互斥规则移出可访问树）+ skip link 同锚
+  await expect(page.locator("[data-cstd-home-editorial] main#top")).toBeVisible();
+  const skip = page.locator("[data-cstd-home-editorial] .ed-skip");
+  await expect(skip).toHaveAttribute("href", "#top");
+  expect(await skip.evaluate((el) => getComputedStyle(el).transform)).not.toBe("none");
+  await skip.focus();
+  await expect(skip).toHaveCSS("transform", "none");
+
+  // 内链补口：/topics 与 /voxel 不再只靠 sitemap 可达
+  await expect(page.locator('[data-cstd-home-editorial] .ed-bar__nav a[href="/topics"]')).toHaveText("主题");
+  await expect(page.locator('[data-cstd-home-editorial] .colophon-foot nav a[href="/voxel"]')).toHaveText("作品城");
+
+  // 计数动画中间值不得进入无障碍名称：动画数字 aria-hidden，旁挂 sr-only 终值
+  await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 7"]')).toHaveAttribute("aria-hidden", "true");
+  await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveAttribute("aria-hidden", "true");
+  await expect(page.locator("[data-cstd-home-editorial] .work-census .sr-only")).toHaveText("7");
+  await expect(page.locator("[data-cstd-home-editorial] .data-copy .sr-only")).toHaveText("1,470,000");
+
+  // 图表分档：srcset 三档 + 衍生资产可达（width/height 兜住布局抖动）
+  const chart = page.locator("[data-cstd-home-editorial] .data-figure img");
+  await expect(chart).toHaveAttribute("srcset", /-960w\.webp 960w/);
+  await expect(chart).toHaveAttribute("srcset", /-1536w\.webp 1536w/);
+  await expect(chart).toHaveAttribute("width", "2580");
+  for (const href of [
+    "/cstd-archive/cstd-archive-melbourne-coefficients-v1-960w.webp",
+    "/cstd-archive/cstd-archive-melbourne-coefficients-v1-1536w.webp",
+  ]) {
+    expect((await request.get(href)).status()).toBe(200);
+  }
+
+  expect(issues).toEqual([]);
 });
 
 test("EDITORIAL hands the homepage to the game worlds and takes it back", async ({ page }) => {

@@ -21,7 +21,7 @@ describe("personal homepage browser language negotiation", () => {
     expect(response.headers.get("content-language")).toBe(expected);
     expect(response.headers.get("vary")).toContain("Accept-Language");
     expect(response.headers.get("vary")).toContain("Cookie");
-    expect(response.headers.get("cache-control")).toBe("private, no-store");
+    expect(response.headers.get("cache-control")).toBe("private, max-age=3600");
     if (status === 307) expect(response.headers.get("location")).toBe("https://custard.top/en");
     else expect(response.headers.get("x-middleware-rewrite")).toBe("https://custard.top/cstd");
   });

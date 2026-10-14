@@ -57,8 +57,11 @@ function withSiteSecurityHeaders(response: NextResponse, host: string, path: str
   for (const [name, value] of Object.entries(headers)) response.headers.set(name, value);
   if (options.negotiatedLocale) {
     response.headers.append("vary", "Accept-Language, Cookie");
-    // The same entry URL can select a different language for each visitor.
-    response.headers.set("cache-control", "private, no-store");
+    // The same entry URL can select a different language for each visitor, so the
+    // cache key carries Vary. A browser's own Accept-Language/cookie pair is stable,
+    // though: private caching (never shared caches) lets repeat visits skip the
+    // negotiation round trip instead of paying it on every entry.
+    response.headers.set("cache-control", "private, max-age=3600");
   }
   if (isPersonalSiteHost(host)) response.headers.set("content-language", cstdLocaleConfig[getCstdLocaleFromPathname(path)].htmlLang);
   return response;
