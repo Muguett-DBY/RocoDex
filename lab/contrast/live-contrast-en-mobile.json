@@ -1,128 +1,2379 @@
 {
  "meta": {
   "variant": "en-mobile",
-  "url": "http://127.0.0.1:4633/en",
+  "url": "https://custard.top/en",
   "locale": "en-AU",
   "viewport": {
    "width": 390,
    "height": 844
   },
-  "docHeight": 844,
-  "steps": 5,
-  "startedAt": "2026-10-15T16:12:28.850Z",
-  "elapsedMs": 5519,
+  "docHeight": 10889,
+  "steps": 48,
+  "startedAt": "2026-10-15T16:46:37.099Z",
+  "elapsedMs": 35264,
   "cssFingerprint": [
+   "/_next/static/chunks/30hmtu1t-yadr.css",
    "/_next/static/chunks/1olprk_st9cm9.css",
-   "/_next/static/chunks/1vgxuk6_qw1an.css"
+   "/_next/static/chunks/1vgxuk6_qw1an.css",
+   "/_next/static/chunks/19niy2evpcjgh.css",
+   "/_next/static/chunks/17rw53n156k17.css",
+   "/cstd-scroll/cstd-editorial.css?v=7"
   ],
   "standard": "WCAG 2.2 SC 1.4.3（正文 4.5:1 / 大字 3:1）；SC 1.4.11 非文本 3:1 仅参考",
   "method": "computed style + 祖先 rgba 逐层合成 + elementFromPoint 实底；违规项复测；媒体衬底为隐藏文字截图采样近似值",
-  "transientDropped": 0
+  "transientDropped": 53
  },
  "summary": {
-  "textElements": 2,
-  "body": 2,
-  "large": 0,
+  "textElements": 139,
+  "body": 117,
+  "large": 22,
   "decorative": 0,
-  "violations": 2,
+  "violations": 0,
   "bodyWorst": {
-   "key": "div.mx-auto.max-w-7xl > div.flex.items-center > a.flex.min-w-0 > span:nth-of-type(1).flex.h-10|RD",
-   "ratio": 1.08,
-   "color": "rgb(255,255,255)",
-   "bg": "rgb(247,246,241)",
-   "fontSize": 14
+   "key": "div:nth-of-type(3).pin-spacer > div.data-spread > div:nth-of-type(1).data-copy > p:nth-of-type(3).data-tools|R · data.table · ggplot2",
+   "ratio": 4.56,
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "fontSize": 13
   },
   "worst3": [
    {
-    "key": "div.mx-auto.max-w-7xl > div.flex.items-center > a.flex.min-w-0 > span:nth-of-type(1).flex.h-10|RD",
-    "ratio": 1.08,
-    "color": "rgb(255,255,255)",
-    "bg": "rgb(247,246,241)",
-    "fontSize": 14
+    "key": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span.ed-word > span.ed-word__in|Work",
+    "ratio": 3.92,
+    "color": "rgb(114,115,108)",
+    "bg": "rgb(239,232,218)",
+    "fontSize": 32
    },
    {
-    "key": "main.mx-auto.flex > div.mt-8.flex > a:nth-of-type(1) > button.inline-flex.h-10|返回首页",
-    "ratio": 1.08,
-    "color": "rgb(255,255,255)",
-    "bg": "rgb(247,246,241)",
-    "fontSize": 14
+    "key": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span.ed-word > span.ed-word__in|Method",
+    "ratio": 4.25,
+    "color": "rgb(119,123,118)",
+    "bg": "rgb(255,253,248)",
+    "fontSize": 32
+   },
+   {
+    "key": "div:nth-of-type(3).pin-spacer > div.data-spread > div:nth-of-type(1).data-copy > p:nth-of-type(3).data-tools|R · data.table · ggplot2",
+    "ratio": 4.56,
+    "color": "rgb(97,107,95)",
+    "bg": "rgb(239,232,218)",
+    "fontSize": 13
    }
   ]
  },
- "violations": [
-  {
-   "selector": "div.mx-auto.max-w-7xl > div.flex.items-center > a.flex.min-w-0 > span:nth-of-type(1).flex.h-10",
-   "chapter": "body",
-   "text": "RD",
-   "category": "body",
-   "color": "rgb(255,255,255)",
-   "bg": "rgb(247,246,241)",
-   "bgUnder": null,
-   "approx": false,
-   "ratio": 1.08,
-   "fontSize": 14,
-   "fontWeight": 700,
-   "opacityFolded": false,
-   "stateLabel": "",
-   "scrollY": 0,
-   "confirmRatio": 1.08
-  },
-  {
-   "selector": "main.mx-auto.flex > div.mt-8.flex > a:nth-of-type(1) > button.inline-flex.h-10",
-   "chapter": "body",
-   "text": "返回首页",
-   "category": "body",
-   "color": "rgb(255,255,255)",
-   "bg": "rgb(247,246,241)",
-   "bgUnder": null,
-   "approx": false,
-   "ratio": 1.08,
-   "fontSize": 14,
-   "fontWeight": 600,
-   "opacityFolded": false,
-   "stateLabel": "",
-   "scrollY": 0,
-   "confirmRatio": 1.08
-  }
- ],
+ "violations": [],
  "decorative": [],
  "allMeasurements": [
   {
-   "selector": "div.mx-auto.max-w-7xl > div.flex.items-center > a.flex.min-w-0 > span:nth-of-type(1).flex.h-10",
-   "chapter": "body",
-   "text": "RD",
-   "category": "body",
-   "color": "rgb(255,255,255)",
-   "bg": "rgb(247,246,241)",
-   "ratio": 1.08,
-   "fontSize": 14,
+   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span.ed-word > span.ed-word__in",
+   "chapter": "ch-work",
+   "text": "Work",
+   "category": "large",
+   "color": "rgb(114,115,108)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 3.92,
+   "fontSize": 32,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(255,255,255)",
-     "bg": "rgb(247,246,241)",
-     "ratio": 1.08,
+     "color": "rgb(114,115,108)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 3.92,
+     "y": 2596,
+     "label": ""
+    },
+    {
+     "color": "rgb(50,56,51)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 9.9,
+     "y": 2832,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.78,
+     "y": 3068,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span.ed-word > span.ed-word__in",
+   "chapter": "ch-method",
+   "text": "Method",
+   "category": "large",
+   "color": "rgb(119,123,118)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.25,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(119,123,118)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.25,
+     "y": 472,
+     "label": ""
+    },
+    {
+     "color": "rgb(51,57,53)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 11.62,
+     "y": 708,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14,
+     "y": 944,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(3).pin-spacer > div.data-spread > div:nth-of-type(1).data-copy > p:nth-of-type(3).data-tools",
+   "chapter": "ch-work",
+   "text": "R · data.table · ggplot2 · Spatial joins · Linea",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 4720,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(3).pin-spacer > div.data-spread > figure.data-figure > figcaption",
+   "chapter": "ch-work",
+   "text": "Melbourne CBD · regression analysis of environme",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 5192,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.data-spread > figure.data-figure > figcaption > span:nth-of-type(2).fig-source",
+   "chapter": "ch-work",
+   "text": "Source: City of Melbourne open data",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 12,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 5192,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.data-spread > figure.data-figure > figcaption > a.ed-textlink.ed-fig-zoom",
+   "chapter": "ch-work",
+   "text": "View full chart",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 5192,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.data-spread > div:nth-of-type(2).data-pair > figure:nth-of-type(1).plate > figcaption",
+   "chapter": "ch-work",
+   "text": "Melbourne CBD · spatial density of pedestrian ac",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 6372,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).data-pair > figure:nth-of-type(1).plate > figcaption > span:nth-of-type(2).fig-source",
+   "chapter": "ch-work",
+   "text": "Source: City of Melbourne open data",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 12,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 6372,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.data-spread > div:nth-of-type(2).data-pair > figure:nth-of-type(2).plate > figcaption",
+   "chapter": "ch-work",
+   "text": "Temperature sensitivity of pedestrian flow",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 6608,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).data-pair > figure:nth-of-type(2).plate > figcaption > span:nth-of-type(2).fig-source",
+   "chapter": "ch-work",
+   "text": "Source: City of Melbourne open data",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 12,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 6608,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "#ch-colophon > div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede",
+   "chapter": "ch-colophon",
+   "text": "Turning analysis into products is what I do. The",
+   "category": "body",
+   "color": "rgb(139,147,137)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 4.57,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(139,147,137)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 4.57,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(177,186,174)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.25,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(184,193,181)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.85,
+     "y": 10384,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.9,
+     "y": 10620,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede > a.colophon-cta",
+   "chapter": "ch-colophon",
+   "text": "About me",
+   "category": "body",
+   "color": "rgb(139,147,137)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 4.57,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(139,147,137)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 4.57,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(177,186,174)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.25,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(184,193,181)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.85,
+     "y": 10384,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.9,
+     "y": 10620,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(1).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "DCF valuation model",
+   "category": "body",
+   "color": "rgb(113,117,112)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.62,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(113,117,112)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.62,
+     "y": 8732,
+     "label": ""
+    },
+    {
+     "color": "rgb(47,53,49)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 12.28,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.09,
+     "y": 9204,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(1).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Change an assumption, watch the valuation move",
+   "category": "body",
+   "color": "rgb(113,117,112)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.62,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(113,117,112)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.62,
+     "y": 8732,
+     "label": ""
+    },
+    {
+     "color": "rgb(47,53,49)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 12.28,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.09,
+     "y": 9204,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack > div.anno > p.ed-lede",
+   "chapter": "ch-method",
+   "text": "Three steps, run on every project.",
+   "category": "body",
+   "color": "rgb(110,117,109)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.67,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(110,117,109)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.67,
+     "y": 708,
+     "label": ""
+    },
+    {
+     "color": "rgb(86,95,87)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.51,
+     "y": 944,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span.ed-word > span.ed-word__in",
+   "chapter": "ch-notes",
+   "text": "Notes",
+   "category": "large",
+   "color": "rgb(111,115,111)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.73,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(111,115,111)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.73,
+     "y": 6844,
+     "label": ""
+    },
+    {
+     "color": "rgb(49,56,52)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 11.89,
+     "y": 7080,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.04,
+     "y": 7316,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 7552,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > div.anno > p.ed-lede",
+   "chapter": "ch-notes",
+   "text": "Longer technical notes on systems, data, and how",
+   "category": "body",
+   "color": "rgb(107,114,107)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.84,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(107,114,107)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.84,
+     "y": 7080,
+     "label": ""
+    },
+    {
+     "color": "rgb(86,95,87)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.55,
+     "y": 7316,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.81,
+     "y": 7552,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > p",
+   "chapter": "ch-method",
+   "text": "Recompute the result, rerun the process, and che",
+   "category": "body",
+   "color": "rgb(104,112,104)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.04,
+   "fontSize": 15.68,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(104,112,104)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.04,
+     "y": 1416,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(85,94,86)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.59,
+     "y": 1652,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.82,
+     "y": 1888,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > p",
+   "chapter": "ch-method",
+   "text": "Split the problem into checkable pieces: where t",
+   "category": "body",
+   "color": "rgb(103,111,103)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.09,
+   "fontSize": 15.68,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(103,111,103)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.09,
+     "y": 944,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(85,94,86)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.6,
+     "y": 1180,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.81,
+     "y": 1416,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.title-lift > div.ed-stack.title-stack > p:nth-of-type(4).title-role > span:nth-of-type(1)",
+   "chapter": "ch-title",
+   "text": "Artificial Intelligence · PhD Year 0",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(248,245,239)",
+   "ratio": 5.11,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 5.11,
      "y": 0,
      "label": ""
     }
    ]
   },
   {
-   "selector": "main.mx-auto.flex > div.mt-8.flex > a:nth-of-type(1) > button.inline-flex.h-10",
-   "chapter": "body",
-   "text": "返回首页",
+   "selector": "div.title-lift > div.ed-stack.title-stack > p:nth-of-type(4).title-role > span:nth-of-type(2)",
+   "chapter": "ch-title",
+   "text": "Analysis · Systems · Delivery",
    "category": "body",
-   "color": "rgb(255,255,255)",
-   "bg": "rgb(247,246,241)",
-   "ratio": 1.08,
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(248,245,239)",
+   "ratio": 5.11,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 5.11,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-title > div.ch-wrap > p.title-foot",
+   "chapter": "ch-title",
+   "text": "Every piece of work here reruns.",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(248,245,239)",
+   "ratio": 5.11,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 5.11,
+     "y": 236,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(2).ed-stack > div > p",
+   "chapter": "ch-method",
+   "text": "Use the simplest suitable tools to build the sol",
+   "category": "body",
+   "color": "rgb(100,108,100)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.32,
+   "fontSize": 15.68,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(100,108,100)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.32,
+     "y": 1180,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(85,94,86)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.59,
+     "y": 1416,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.82,
+     "y": 1652,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > p.work-census > span:nth-of-type(1)",
+   "chapter": "ch-work",
+   "text": "3",
+   "category": "body",
+   "color": "rgb(88,96,88)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.32,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(88,96,88)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.32,
+     "y": 3068,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.data-spread > figure.data-figure > figcaption > span:nth-of-type(1).fig-no",
+   "chapter": "ch-work",
+   "text": "FIG. 01",
+   "category": "body",
+   "color": "rgb(114,88,47)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.46,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(114,88,47)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.46,
+     "y": 5192,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).data-pair > figure:nth-of-type(1).plate > figcaption > span:nth-of-type(1).fig-no",
+   "chapter": "ch-work",
+   "text": "FIG. 02",
+   "category": "body",
+   "color": "rgb(114,88,47)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.46,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(114,88,47)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.46,
+     "y": 6372,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).data-pair > figure:nth-of-type(2).plate > figcaption > span:nth-of-type(1).fig-no",
+   "chapter": "ch-work",
+   "text": "FIG. 03",
+   "category": "body",
+   "color": "rgb(114,88,47)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.46,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(114,88,47)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.46,
+     "y": 6608,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(3).ed-stack > small",
+   "chapter": "ch-method",
+   "text": "Results you can check",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.47,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 2124,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.anno > aside.mnote > p > a",
+   "chapter": "ch-notes",
+   "text": "Open the map",
+   "category": "body",
+   "color": "rgb(125,100,62)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.47,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(125,100,62)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 7316,
+     "label": ""
+    },
+    {
+     "color": "rgb(115,89,49)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.43,
+     "y": 7552,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-colophon > div.ch-wrap > footer.colophon-foot > p.colophon-small",
+   "chapter": "ch-colophon",
+   "text": "© 2026 Custard · Scroll choreography by GSAP Scr",
+   "category": "body",
+   "color": "rgb(154,163,152)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 5.54,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(154,163,152)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 5.54,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(155,164,153)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 5.61,
+     "y": 10148,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(1).ed-stack.ch-head > div.anno > aside.mnote > p",
+   "chapter": "ch-notes",
+   "text": "Notes are indexed by theme on the map; one threa",
+   "category": "body",
+   "color": "rgb(96,104,96)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.66,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(96,104,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.66,
+     "y": 7316,
+     "label": ""
+    },
+    {
+     "color": "rgb(84,93,85)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.69,
+     "y": 7552,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > p.work-census > span:nth-of-type(1)",
+   "chapter": "ch-work",
+   "text": "6",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.68,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.68,
+     "y": 3304,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(3).pin-spacer > div.data-spread > div:nth-of-type(1).data-copy > p:nth-of-type(1).data-count-line",
+   "chapter": "ch-work",
+   "text": "rows of Melbourne pedestrian counts.The data, sc",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.69,
+   "fontSize": 16.8,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.69,
+     "y": 4484,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(3).pin-spacer > div.data-spread > div:nth-of-type(1).data-copy > p:nth-of-type(2)",
+   "chapter": "ch-work",
+   "text": "Pedestrian counts aligned, record by record, wit",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.69,
+   "fontSize": 16,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.69,
+     "y": 4720,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.title-lift > div.ed-stack.title-stack > h1.ed-display-xl > span:nth-of-type(2).ed-fullstop",
+   "chapter": "ch-title",
+   "text": ".",
+   "category": "large",
+   "color": "rgb(114,88,47)",
+   "bg": "rgb(248,245,239)",
+   "ratio": 6.12,
+   "fontSize": 51.2,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(114,88,47)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 6.12,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-colophon > div.ch-wrap > p.colophon-mark > span:nth-of-type(1).colophon-mark__dot",
+   "chapter": "ch-colophon",
+   "text": ".",
+   "category": "large",
+   "color": "rgb(196,166,111)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 6.22,
+   "fontSize": 44.8,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(196,166,111)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 6.22,
+     "y": 9676,
+     "label": ""
+    },
+    {
+     "color": "rgb(201,170,113)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 6.52,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(203,171,114)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 6.61,
+     "y": 10148,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div.title-lift > div.ed-stack.title-stack > p:nth-of-type(2).ed-summary",
+   "chapter": "ch-title",
+   "text": "My bachelor's and master's degrees are in data s",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(248,245,239)",
+   "ratio": 6.38,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 6.38,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > header.ed-bar > div.ed-bar__tools > a:nth-of-type(2).ed-bar__cta",
+   "chapter": "body",
+   "text": "Write me an email",
+   "category": "body",
+   "color": "rgb(114,88,47)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.55,
    "fontSize": 14,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(255,255,255)",
-     "bg": "rgb(247,246,241)",
-     "ratio": 1.08,
+     "color": "rgb(114,88,47)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.55,
      "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > header.ed-bar > nav.ed-bar__nav > a:nth-of-type(1).ed-bar__link",
+   "chapter": "body",
+   "text": "Work",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.83,
+   "fontSize": 14,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.83,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > header.ed-bar > nav.ed-bar__nav > a:nth-of-type(2).ed-bar__link",
+   "chapter": "body",
+   "text": "Notes",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.83,
+   "fontSize": 14,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.83,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > header.ed-bar > nav.ed-bar__nav > a:nth-of-type(3).ed-bar__link",
+   "chapter": "body",
+   "text": "Topics",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.83,
+   "fontSize": 14,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.83,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > header.ed-bar > nav.ed-bar__nav > a:nth-of-type(4).ed-bar__link",
+   "chapter": "body",
+   "text": "Map",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.83,
+   "fontSize": 14,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.83,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(3).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "Regression bench",
+   "category": "body",
+   "color": "rgb(82,87,83)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 7.26,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(82,87,83)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 7.26,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(42,49,45)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.18,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.17,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(3).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Recompute the coefficients, redraw the charts",
+   "category": "body",
+   "color": "rgb(82,87,83)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 7.26,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(82,87,83)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 7.26,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(42,49,45)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.18,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.17,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-colophon > div.ch-wrap > p.colophon-mark > span:nth-of-type(2).colophon-mark__domain",
+   "chapter": "ch-colophon",
+   "text": "custard.top",
+   "category": "body",
+   "color": "rgb(183,192,181)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.77,
+   "fontSize": 12,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(183,192,181)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.77,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.88,
+     "y": 10148,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > footer.colophon-foot > nav > a:nth-of-type(1)",
+   "chapter": "ch-colophon",
+   "text": "Now",
+   "category": "body",
+   "color": "rgb(183,192,181)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.77,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(183,192,181)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.77,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.88,
+     "y": 10148,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > footer.colophon-foot > nav > a:nth-of-type(2)",
+   "chapter": "ch-colophon",
+   "text": "Résumé",
+   "category": "body",
+   "color": "rgb(183,192,181)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.77,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(183,192,181)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.77,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.88,
+     "y": 10148,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > footer.colophon-foot > nav > a:nth-of-type(3)",
+   "chapter": "ch-colophon",
+   "text": "Voxel world",
+   "category": "body",
+   "color": "rgb(183,192,181)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.77,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(183,192,181)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.77,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.88,
+     "y": 10148,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > footer.colophon-foot > nav > a:nth-of-type(4)",
+   "chapter": "ch-colophon",
+   "text": "Back to top",
+   "category": "body",
+   "color": "rgb(183,192,181)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.77,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(183,192,181)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.77,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.88,
+     "y": 10148,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "footer.colophon-foot > nav > a:nth-of-type(4) > span",
+   "chapter": "ch-colophon",
+   "text": "↑",
+   "category": "body",
+   "color": "rgb(183,192,181)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.77,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(183,192,181)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.77,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.88,
+     "y": 10148,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > a.ed-textlink",
+   "chapter": "ch-work",
+   "text": "View case",
+   "category": "body",
+   "color": "rgb(64,69,63)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 8.07,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(64,69,63)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 8.07,
+     "y": 3776,
+     "label": ""
+    },
+    {
+     "color": "rgb(39,46,42)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.4,
+     "y": 4012,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > a.ed-textlink > span",
+   "chapter": "ch-work",
+   "text": "→",
+   "category": "body",
+   "color": "rgb(64,69,63)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 8.07,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(64,69,63)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 8.07,
+     "y": 3776,
+     "label": ""
+    },
+    {
+     "color": "rgb(39,46,42)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.4,
+     "y": 4012,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > a.ed-textlink",
+   "chapter": "ch-work",
+   "text": "View case",
+   "category": "body",
+   "color": "rgb(61,66,61)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 8.44,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(61,66,61)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 8.44,
+     "y": 4484,
+     "label": ""
+    },
+    {
+     "color": "rgb(40,46,42)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.35,
+     "y": 4720,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > a.ed-textlink > span",
+   "chapter": "ch-work",
+   "text": "→",
+   "category": "body",
+   "color": "rgb(61,66,61)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 8.44,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(61,66,61)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 8.44,
+     "y": 4484,
+     "label": ""
+    },
+    {
+     "color": "rgb(40,46,42)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.35,
+     "y": 4720,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > h3.work-title",
+   "chapter": "ch-work",
+   "text": "RocoDex dual-site platform",
+   "category": "large",
+   "color": "rgb(60,65,60)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 8.55,
+   "fontSize": 27.2,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(60,65,60)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 8.55,
+     "y": 3540,
+     "label": ""
+    },
+    {
+     "color": "rgb(39,45,41)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.48,
+     "y": 3776,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.87,
+     "y": 4012,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > h3.work-title",
+   "chapter": "ch-work",
+   "text": "CSTD Alpha research system",
+   "category": "large",
+   "color": "rgb(57,63,58)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 8.89,
+   "fontSize": 27.2,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(57,63,58)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 8.89,
+     "y": 4248,
+     "label": ""
+    },
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.54,
+     "y": 4484,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.87,
+     "y": 4720,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > h3.work-title",
+   "chapter": "ch-work",
+   "text": "Melbourne Pedestrians × Microclimate",
+   "category": "large",
+   "color": "rgb(52,58,53)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 9.54,
+   "fontSize": 30.4,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(52,58,53)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 9.54,
+     "y": 3068,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.75,
+     "y": 3304,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 3540,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "Put AI at the explanation edge, not the decision",
+   "category": "body",
+   "color": "rgb(64,70,66)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 9.55,
+   "fontSize": 19.52,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(64,70,66)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 9.55,
+     "y": 8024,
+     "label": ""
+    },
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.8,
+     "y": 8260,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 8496,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "One Next.js deployment, two genuinely separate w",
+   "category": "body",
+   "color": "rgb(63,69,65)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 9.64,
+   "fontSize": 19.52,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(63,69,65)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 9.64,
+     "y": 7316,
+     "label": ""
+    },
+    {
+     "color": "rgb(40,47,43)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.53,
+     "y": 7552,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.22,
+     "y": 7788,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > h3",
+   "chapter": "ch-method",
+   "text": "Verify",
+   "category": "body",
+   "color": "rgb(63,69,65)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 9.69,
+   "fontSize": 21.6,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(63,69,65)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 9.69,
+     "y": 1416,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(39,46,42)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.69,
+     "y": 1652,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 1888,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "Render Lab",
+   "category": "body",
+   "color": "rgb(63,68,64)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 9.74,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(63,68,64)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 9.74,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(40,47,43)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.54,
+     "y": 9440,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 9676,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Compare three visual budgets live",
+   "category": "body",
+   "color": "rgb(63,68,64)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 9.74,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(63,68,64)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 9.74,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(40,47,43)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.54,
+     "y": 9440,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 9676,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > h3",
+   "chapter": "ch-method",
+   "text": "Deconstruct",
+   "category": "body",
+   "color": "rgb(62,68,64)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 9.83,
+   "fontSize": 21.6,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(62,68,64)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 9.83,
+     "y": 944,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(39,46,42)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.71,
+     "y": 1180,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.22,
+     "y": 1416,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > a.ed-textlink",
+   "chapter": "ch-work",
+   "text": "Inside the analysis",
+   "category": "body",
+   "color": "rgb(49,55,50)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 10.03,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(49,55,50)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 10.03,
+     "y": 3304,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.71,
+     "y": 3540,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 3776,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "Refresh evidence before asking the model to spea",
+   "category": "body",
+   "color": "rgb(60,66,62)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.1,
+   "fontSize": 19.52,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(60,66,62)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.1,
+     "y": 7788,
+     "label": ""
+    },
+    {
+     "color": "rgb(39,46,42)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.61,
+     "y": 8024,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 8260,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "Collaboration",
+   "category": "large",
+   "color": "rgb(217,216,210)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 10.12,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(217,216,210)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 10.12,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(243,241,235)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 12.8,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.28,
+     "y": 10384,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(2).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "starts",
+   "category": "large",
+   "color": "rgb(217,216,210)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 10.12,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(217,216,210)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 10.12,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(243,241,235)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 12.8,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.28,
+     "y": 10384,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(3).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "with",
+   "category": "large",
+   "color": "rgb(217,216,210)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 10.12,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(217,216,210)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 10.12,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(243,241,235)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 12.8,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.28,
+     "y": 10384,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(4).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "a",
+   "category": "large",
+   "color": "rgb(217,216,210)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 10.12,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(217,216,210)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 10.12,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(243,241,235)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 12.8,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.28,
+     "y": 10384,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(5).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "question.",
+   "category": "large",
+   "color": "rgb(217,216,210)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 10.12,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(217,216,210)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 10.12,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(243,241,235)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 12.8,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.28,
+     "y": 10384,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "Failure drills",
+   "category": "body",
+   "color": "rgb(59,65,61)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.31,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(59,65,61)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.31,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.8,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.23,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Break the system on purpose, practice the recove",
+   "category": "body",
+   "color": "rgb(59,65,61)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.31,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(59,65,61)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.31,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.8,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.23,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(2).ed-stack > div > h3",
+   "chapter": "ch-method",
+   "text": "Build",
+   "category": "body",
+   "color": "rgb(58,64,60)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.43,
+   "fontSize": 21.6,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(58,64,60)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.43,
+     "y": 1180,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(39,46,42)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.69,
+     "y": 1416,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 1652,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.data-spread > div:nth-of-type(1).data-copy > h3.data-count > span:nth-of-type(2).ed-nums",
+   "chapter": "ch-work",
+   "text": "0",
+   "category": "large",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 51.2,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 4484,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.data-spread > div:nth-of-type(1).data-copy > h3.data-count > span:nth-of-type(2).ed-nums",
+   "chapter": "ch-work",
+   "text": "2,665",
+   "category": "large",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 51.2,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 5192,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.data-spread > div:nth-of-type(1).data-copy > h3.data-count > span:nth-of-type(2).ed-nums",
+   "chapter": "ch-work",
+   "text": "615,724",
+   "category": "large",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 51.2,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 5428,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.data-spread > div:nth-of-type(1).data-copy > h3.data-count > span:nth-of-type(2).ed-nums",
+   "chapter": "ch-work",
+   "text": "1,398,496",
+   "category": "large",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 51.2,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 5664,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.data-spread > div:nth-of-type(1).data-copy > h3.data-count > span:nth-of-type(2).ed-nums",
+   "chapter": "ch-work",
+   "text": "1,470,000",
+   "category": "large",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 51.2,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 5900,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "#ch-colophon > div.ch-wrap > p.colophon-mark",
+   "chapter": "ch-colophon",
+   "text": "CUSTARD",
+   "category": "large",
+   "color": "rgb(239,237,231)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 12.36,
+   "fontSize": 44.8,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(239,237,231)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 12.36,
+     "y": 9676,
+     "label": ""
+    },
+    {
+     "color": "rgb(246,243,237)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.07,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.27,
+     "y": 10148,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack.title-stack > h1.ed-display-xl > span:nth-of-type(1).ed-word > span.ed-word__in",
+   "chapter": "ch-title",
+   "text": "Custard",
+   "category": "large",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(248,245,239)",
+   "ratio": 13.31,
+   "fontSize": 51.2,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div.title-lift > div.ed-stack.title-stack > p:nth-of-type(1).ed-statement",
+   "chapter": "ch-title",
+   "text": "Data analyses, working systems,and how each one ",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(248,245,239)",
+   "ratio": 13.31,
+   "fontSize": 20,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.title-lift > div.ed-stack.title-stack > p:nth-of-type(3).title-actions > a:nth-of-type(1).ed-button",
+   "chapter": "ch-title",
+   "text": "See three selected works",
+   "category": "body",
+   "color": "rgb(248,245,239)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.31,
+   "fontSize": 15.2,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.title-lift > div.ed-stack.title-stack > p:nth-of-type(3).title-actions > a:nth-of-type(2).ed-textlink",
+   "chapter": "ch-title",
+   "text": "About me",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(248,245,239)",
+   "ratio": 13.31,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "body.min-h-full > div:nth-of-type(2).ed > header.ed-bar > a.ed-bar__mark",
+   "chapter": "body",
+   "text": "CUSTARD",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 14.25,
+   "fontSize": 16.8,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
+   "chapter": "ch-lab",
+   "text": "The",
+   "category": "large",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 14.25,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 8260,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span:nth-of-type(2).ed-word > span.ed-word__in",
+   "chapter": "ch-lab",
+   "text": "lab",
+   "category": "large",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 14.25,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 8260,
      "label": ""
     }
    ]

@@ -390,11 +390,12 @@ export function mountEditorialMotion(root: HTMLElement, locale: CstdLocale): () 
              底缘未离开）才开墨，几何变化即刻自纠，无需任何 settle 兜底。 */
           const setFolioDark = () => {
             const vh = window.innerHeight;
-            const fh = folio.offsetHeight;
-            const bandTop = vh / 2 - fh / 2;
-            const bandBottom = vh / 2 + fh / 2 - 24;
+            const bandCenter = vh / 2;
             const rect = colophon.getBoundingClientRect();
-            const covered = rect.top <= bandTop && rect.bottom >= bandBottom;
+            /* 单类开墨在部分覆盖期必然对一侧错配（板从下缘进入 folio 盒时，
+               全盒门=入口侧深字压墨牌、立即门=出口侧浅字压纸面）。翻转点取
+               盒中心：错配带对称收窄到两侧各半盒，且无卡死态。 */
+            const covered = rect.top <= bandCenter && rect.bottom >= bandCenter;
             if (folio.classList.contains("is-dark") !== covered) folio.classList.toggle("is-dark", covered);
           };
           ScrollTrigger.create({

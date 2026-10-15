@@ -69,7 +69,15 @@ const ENGINE_INSTALL = `(() => {
   const bgOf = (el) => {
     const layers = [];
     let media = null, approx = false;
-    for (let n = el; n && n.nodeType === 1; n = n.parentElement) {
+    /* fixed 子树（如 folio）浮在任意内容之上：祖先链止于 fixed 根，
+       盒内无实底则走 elementFromPoint 探真实衬底——走出 fixed 子树去问
+       DOM 祖先的底色会把纸面误当衬底（曾造成 folio 7 项 1:1 假阳性） */
+    let fixedRoot = null;
+    for (let n = el.parentElement; n && n.nodeType === 1; n = n.parentElement) {
+      if (getComputedStyle(n).position === "fixed") { fixedRoot = n; break; }
+    }
+    const boundary = fixedRoot ? fixedRoot.parentElement : null;
+    for (let n = el; n && n.nodeType === 1 && n !== boundary; n = n.parentElement) {
       const cs = getComputedStyle(n);
       const bi = cs.backgroundImage;
       if (bi && bi !== "none") {
@@ -91,16 +99,24 @@ const ENGINE_INSTALL = `(() => {
     const r = el.getBoundingClientRect();
     const px = Math.min(innerWidth - 1, Math.max(0, r.left + Math.min(r.width / 2, 40)));
     const py = Math.min(innerHeight - 1, Math.max(0, r.top + Math.min(r.height / 2, 12)));
-    const prevPE = el.style.pointerEvents;
-    el.style.pointerEvents = "none";
+    /* 命中需穿过整个 fixed 根（folio 自身包装会接住命中导致白底兜底假阳性） */
+    const peRoot = fixedRoot ?? el;
+    const prevPE = peRoot.style.pointerEvents;
+    peRoot.style.pointerEvents = "none";
     const under = document.elementFromPoint(px, py);
-    el.style.pointerEvents = prevPE;
+    peRoot.style.pointerEvents = prevPE;
     if (under && under !== el && !el.contains(under) && !under.contains(el)) {
       const ut = under.tagName;
       const ucs = getComputedStyle(under);
       if (["IMG","VIDEO","CANVAS","PICTURE"].includes(ut)) return { bg: null, media: { kind: ut.toLowerCase(), host: (under.className && typeof under.className === "string" ? "." + under.className.split(/\\s+/).slice(0, 2).join(".") : under.tagName.toLowerCase()) }, approx: false, under: null };
       if (ucs.backgroundImage && ucs.backgroundImage !== "none") return { bg: null, media: { kind: /url\\(/.test(ucs.backgroundImage) ? "bg-image" : "css-gradient", host: under.tagName.toLowerCase() }, approx: false, under: null };
-      const uc = parse(ucs.backgroundColor);
+      let ubgEl = under;
+      let uc = null;
+      while (ubgEl && ubgEl.nodeType === 1) {
+        const cand = parse(getComputedStyle(ubgEl).backgroundColor);
+        if (cand && cand.a === 1) { uc = cand; break; }
+        ubgEl = ubgEl.parentElement;
+      }
       if (uc && uc.a === 1) {
         let base = uc;
         for (let i = layers.length - 1; i >= 0; i--) base = over(layers[i], base);
@@ -126,6 +142,19 @@ const ENGINE_INSTALL = `(() => {
       if (!isNaN(o)) op *= o;
     }
     if (op < 0.55) return null; /* 入场动画进行中——本步跳过，稍后步再测 */
+    /* 词幕升起等 scrub 中间帧非静息态：transform 存在且纵向位移非零时跳过
+       （GSAP 静息态为 identity 矩阵或 none，两者都保留测量） */
+    {
+      const tf = cs.transform;
+      if (tf && tf !== "none") {
+        const m = tf.match(/^matrix(([^)]+))/);
+        if (m) {
+          const parts = m[1].split(",").map((x) => parseFloat(x.trim()));
+          const ty = parts[5] ?? 0;
+          if (Math.abs(ty) > 0.5) return null;
+        }
+      }
+    }
     let fg = parse(cs.webkitTextFillColor && cs.webkitTextFillColor !== "currentColor" && cs.webkitTextFillColor !== "rgba(0, 0, 0, 0)" ? cs.webkitTextFillColor : cs.color);
     if (!fg) return null;
     if (op < 1) fg = { ...fg, a: fg.a * op };

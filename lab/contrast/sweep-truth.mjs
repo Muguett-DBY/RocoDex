@@ -17,9 +17,8 @@ await page.evaluate(async () => {
     const colophon = document.querySelector("[data-colophon]");
     if (!folio || !colophon) continue;
     const vh = innerHeight, fh = folio.offsetHeight;
-    const bandTop = vh / 2 - fh / 2, bandBottom = vh / 2 + fh / 2 - 24;
     const rect = colophon.getBoundingClientRect();
-    const covered = rect.top <= bandTop && rect.bottom >= bandBottom;
+    const covered = rect.top <= vh / 2 && rect.bottom >= vh / 2;
     const isDark = folio.classList.contains("is-dark");
     window.__sweep.samples += 1;
     if (covered !== isDark) window.__sweep.mismatches += 1;
