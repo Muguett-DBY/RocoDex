@@ -127,6 +127,24 @@ test.describe("EDITORIAL motion", () => {
     expect(issues).toEqual([]);
   });
 
+  test("keeps the folio rail on paper at cold load and flips dark only on the ink plate", async ({ page }) => {
+    // 冷载回归：布局未定型时版权页触发器首帧 onRefresh 曾误翻 .folio.is-dark
+    // （纸白章码压纸面 1.0:1）。开墨窗已对齐 folio 实底 + 组件侧按实底有界
+    // 复核，着陆态必须不暗；底端照旧翻墨（墨牌全盒覆盖 folio 时才成立）。
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/cstd", { waitUntil: "load" });
+    await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
+    await page.waitForTimeout(3000); // 让历史误判窗口（若有）充分暴露
+    await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
+    await pump(page, 4);
+    const darkAtColdLoad = await page.locator("[data-cstd-home-editorial] .folio").evaluate((el) => el.classList.contains("is-dark"));
+    expect(darkAtColdLoad).toBe(false);
+
+    await page.evaluate(() => scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" }));
+    await pump(page, 4);
+    await expect(page.locator("[data-cstd-home-editorial] .folio")).toHaveClass(/is-dark/);
+  });
+
   test("pins the data spread, scrubs both counters, and reveals the figure inside the pin travel", async ({ page }) => {
     await page.goto("/cstd", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
@@ -383,7 +401,7 @@ test.describe("EDITORIAL motion", () => {
     // （/cstd-scroll/* immutable 无哈希，忘升版本 = 老访客永不回源）
     await expect(page.locator('link[rel="preload"][href*="scrollcraft"]')).toHaveCount(0);
     await expect(page.locator('link[rel="stylesheet"][href*="scrollcraft"]')).toHaveCount(0);
-    await expect(page.locator('link[rel="stylesheet"][href="/cstd-scroll/cstd-editorial.css?v=6"]')).toHaveCount(1);
+    await expect(page.locator('link[rel="stylesheet"][href="/cstd-scroll/cstd-editorial.css?v=7"]')).toHaveCount(1);
     await page.waitForTimeout(400);
     expect(scrollJsRequests).toEqual([]);
 

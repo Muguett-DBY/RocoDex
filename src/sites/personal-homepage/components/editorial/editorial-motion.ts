@@ -384,8 +384,18 @@ export function mountEditorialMotion(root: HTMLElement, locale: CstdLocale): () 
         if (colophon) {
           ScrollTrigger.create({
             trigger: colophon,
-            start: "top 60%",
-            end: "bottom 40%",
+            /* 开墨窗对齐 folio 实底几何（对比度修复，非动效改动）：folio 是
+               视口中央 ±半盒高的 fixed 盒，原 "top 60%/bottom 40%" 让版权页
+               顶刚进下沿就翻墨——folio 上半仍压纸面章（纸白字压纸 1.0:1）、
+               对称端提前关墨时 muted 压墨牌仅 2.6:1。开墨线钉在 folio 顶缘
+               （版权页顶升过 folio 顶缘 = 全盒压墨才开墨）、关墨线钉在 folio
+               底缘外 24px（版权页底未离开 folio 底缘不关墨）——is-dark 严格
+               落在全盒覆盖窗内，暗态两侧误窗带消除（本地探针 40px 步进扫窗
+               0 误配帧实证；清单原公式的 ± 方向与它自称的几何恰好相反，会
+               在开墨前留下 ~h+24px 的全盒压纸暗带，已按声明的几何结果纠正）。
+               函数式 start/end 在 refresh 时重量算（视口/字体重排自适应）。 */
+            start: () => `top ${Math.round(innerHeight / 2 - folio.offsetHeight / 2)}px`,
+            end: () => `bottom ${Math.round(innerHeight / 2 + folio.offsetHeight / 2 + 24)}px`,
             onToggle: (self) => folio.classList.toggle("is-dark", self.isActive),
             onRefresh: (self) => folio.classList.toggle("is-dark", self.isActive),
           });

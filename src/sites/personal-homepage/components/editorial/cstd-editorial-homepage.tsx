@@ -228,16 +228,21 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     ) : (
       <>Every model in the lab takes your inputs and shows its work. {noteLink("/lab", "Open the lab")}</>
     ),
+    /* 仪器目录：条目来自实验室注册表（labs.ts）现有条目的收缩文案，注册表外能力零声明 */
     labInstruments: zh
       ? [
           { name: "DCF 估值模型", line: "改一组假设，看估值怎么动" },
           { name: "故障演练", line: "把系统摁坏，练一次恢复" },
           { name: "回归实验台", line: "系数重算，图表重画" },
+          { name: "System Trace", line: "沿一条真实请求穿过路由边界" },
+          { name: "Render Lab", line: "三档视觉预算，实时对比" },
         ]
       : [
           { name: "DCF valuation model", line: "Change an assumption, watch the valuation move" },
           { name: "Failure drills", line: "Break the system on purpose, practice the recovery" },
           { name: "Regression bench", line: "Recompute the coefficients, redraw the charts" },
+          { name: "System Trace", line: "Follow one real request through the routing boundaries" },
+          { name: "Render Lab", line: "Compare three visual budgets live" },
         ],
     colophonBrand: zh ? "奶黄包 · 个人工作室" : "CUSTARD · PERSONAL STUDIO",
     colophonMark: zh ? "奶黄包" : "CUSTARD",
@@ -288,6 +293,7 @@ export function CstdEditorialHomepage({
 
     let cancelled = false;
     let destroyMotion: (() => void) | undefined;
+    let settleOnLoad: (() => void) | undefined;
 
     const isEditorialTheme = () => {
       const attr = document.documentElement.getAttribute("data-cstd-theme");
@@ -297,14 +303,44 @@ export function CstdEditorialHomepage({
     const themeObserver = new MutationObserver(() => setChromeMounted(isEditorialTheme()));
     themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-cstd-theme"] });
 
+    /* 冷载兜底（folio is-dark 假阳性）：布局未定型时版权页触发器的首帧 onRefresh
+       可能把 .folio 误翻成 is-dark 且此后无 refresh 纠正——开墨窗已对齐 folio
+       实底几何（editorial-motion），这里再按实底复核：folio 盒中心命中的真实
+       底面是版权页墨牌才认 is-dark，否则收走。rAF/300ms/1200ms 三次有界即止，
+       滚动期间的状态轨仍由 ScrollTrigger 独占。探测瞬间把 fixed 的 folio 自身
+       visibility:hidden，让 elementFromPoint 穿过导航命中真实底面。 */
+    const settleFolioDark = () => {
+      if (cancelled) return;
+      const folio = root.querySelector<HTMLElement>(".folio");
+      if (!folio || getComputedStyle(folio).display === "none") return;
+      const rect = folio.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const previousVisibility = folio.style.visibility;
+      folio.style.visibility = "hidden";
+      const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      folio.style.visibility = previousVisibility;
+      folio.classList.toggle("is-dark", Boolean(hit?.closest("[data-colophon]")));
+    };
+    const scheduleFolioSettle = () => {
+      requestAnimationFrame(settleFolioDark);
+      setTimeout(settleFolioDark, 300);
+      setTimeout(settleFolioDark, 1200);
+    };
+
     void import("./editorial-motion").then(({ mountEditorialMotion }) => {
       if (cancelled) return;
       destroyMotion = mountEditorialMotion(root, locale);
+      if (document.readyState === "complete") scheduleFolioSettle();
+      else {
+        settleOnLoad = scheduleFolioSettle;
+        window.addEventListener("load", settleOnLoad, { once: true });
+      }
     });
 
     return () => {
       cancelled = true;
       themeObserver.disconnect();
+      if (settleOnLoad) window.removeEventListener("load", settleOnLoad);
       destroyMotion?.();
     };
   }, [locale, chromeMounted]);
@@ -340,7 +376,7 @@ export function CstdEditorialHomepage({
           样式表带版本参数：/cstd-scroll/* 是 immutable 一年缓存且文件名无哈希，
           内容更新必须换版本号强制浏览器回源（见 docs/MAINTENANCE.md）。 */}
       {/* eslint-disable-next-line @next/next/no-css-tags */}
-      <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css?v=6" />
+      <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css?v=7" />
       {/* 首屏衬线字体声明式预载（可变字重，覆盖全部标题/正文强调）：
           font-display:swap 下 LCP 记录的是字体换绘后的重绘时刻，慢 4G 上
           原本要等 CSS 链路才发现字体请求；预载让它与 CSS 并行到达。 */}
@@ -497,7 +533,9 @@ export function CstdEditorialHomepage({
                   </h3>
                   <p className="data-count-line">{copy.countUnitZh}{copy.countHead}</p>
                   <p>{copy.dataBody}</p>
-                  <p className="data-tools" aria-label={copy.dataToolsLabel}>{featured.technologies.join(" · ")}</p>
+                  {/* NBSP 绑死「·」与前词：唯一可断点移到「· 」后的普通空格，
+                      窄容器折行不再以孤立「·」领起第二行（单行渲染与普通空格逐像素一致） */}
+                  <p className="data-tools" aria-label={copy.dataToolsLabel}>{featured.technologies.join("\u00A0\u00B7 ")}</p>
                 </div>
                 <figure className="data-figure">
                   <div className="data-figure-inner">
@@ -525,6 +563,16 @@ export function CstdEditorialHomepage({
                     <span className="fig-no">{copy.figureNo}</span>
                     {copy.figureCaption}
                     <span className="fig-source">{copy.figureSource}</span>
+                    {/* 回归系数图轴标小屏难辨：移动端（≤720px）图注下给原档入口，
+                        .ed-fig-zoom 桌面默认 display:none、版面零变化 */}
+                    <a
+                      className="ed-textlink ed-fig-zoom"
+                      href="/cstd-archive/cstd-archive-melbourne-coefficients-v1.webp"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {zh ? "查看大图" : "View full chart"}
+                    </a>
                   </figcaption>
                 </figure>
                 {/* 副图对（图 02/03）：同一分析管线的真实产物，主图给整体回归、副图给空间与敏感性两面证据 */}

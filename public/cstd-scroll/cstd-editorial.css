@@ -165,6 +165,10 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
    主题的近隐形边框与霓虹 hover）：接管回纸面语法——细边、方角、hover 青铜 */
 .ed .ed-bar .cstd-theme-switcher-trigger,
 .ed .ed-bar .cstd-locale-switcher { color: var(--ed-soft) !important; border-color: var(--ed-hairline) !important; border-radius: 2px !important; }
+/* 触达面积：Tailwind h-9/min-w-9（36px）过 AA 最小档但低于 44px 推荐档；
+   min-width/min-height 以 !important 压过 utility（min-* 不被 h-9 的 height 覆盖） */
+.ed .ed-bar .cstd-theme-switcher-trigger,
+.ed .ed-bar .cstd-locale-switcher { min-width: 2.75rem !important; min-height: 2.75rem !important; }
 .ed .ed-bar .cstd-theme-switcher-trigger:hover,
 .ed .ed-bar .cstd-locale-switcher:hover { color: var(--ed-accent) !important; border-color: var(--ed-accent) !important; }
 .ed .ed-bar .cstd-theme-switcher-copy { letter-spacing: 0.08em; font-weight: 500 !important; }
@@ -274,7 +278,9 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
   grid-template-columns: minmax(0, 1fr); /* 显式 1fr 轨道：隐式 auto 轨道按 max-content 收窄居中，会把内容盒拽离 72rem 章格（实测 zh 950/en 1036 vs 1152） */
   align-content: center;
   position: relative;
-  padding-block: clamp(5rem, 12vh, 8rem) clamp(6rem, 14vh, 9rem);
+  /* 顶垫升一档、底垫降一档：h1 独占五行的构图重心下移，扉页不再头重（不动
+     min-height/align-content，避开与 pin/folio 的量算耦合） */
+  padding-block: clamp(6rem, 14vh, 9rem) clamp(5rem, 12vh, 8rem);
 }
 .title-stack { max-width: 64rem; }
 .title-stack .ed-statement { margin-top: clamp(1.8rem, 4vh, 2.6rem); }
@@ -323,6 +329,10 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
 /* 青铜收束：扉页动作行的主示能是那枚按钮，文字链默认墨、悬停才让铜 */
 .title-actions .ed-textlink { color: var(--ed-ink); }
 .title-actions .ed-textlink:hover { color: var(--ed-accent); }
+/* 主行动升格实底墨钮：与次级文字链拉开一眼可读的主次（常态纸字压墨 13.3:1、
+   hover 青铜底 6.6:1，同为既有 token；过渡/按压沿用 .ed-button 既有规则） */
+.title-actions .ed-button { background: var(--ed-ink); border-color: var(--ed-ink); color: var(--ed-paper); }
+.title-actions .ed-button:hover { background: var(--ed-accent); border-color: var(--ed-accent); color: var(--ed-accent-ink); }
 
 /* ---------- 页边批注（签名动作）---------- */
 .anno {
@@ -433,8 +443,8 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   align-items: start;
-  margin-top: clamp(3rem, 8vh, 5rem);
-  padding-top: clamp(2.5rem, 7vh, 4.5rem);
+  margin-top: clamp(1.75rem, 4vh, 2.75rem);
+  padding-top: clamp(1.75rem, 5vh, 3.25rem);
   border-top: 1px solid var(--ed-hairline-strong);
 }
 .data-copy { max-width: 58ch; }
@@ -460,14 +470,16 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
 .data-figure { margin: 2.5rem 0 0; }
 .data-figure-inner { background: var(--ed-surface); border: 1px solid var(--ed-hairline); }
 .data-figure-img { display: block; width: 100% !important; height: auto !important; }
-.data-figure figcaption { margin-top: 0.75rem; color: var(--ed-muted); font-size: var(--ed-note); letter-spacing: var(--ed-track); }
+.data-figure figcaption { margin-top: 0.9rem; color: var(--ed-muted); font-size: var(--ed-note); line-height: 1.55; letter-spacing: var(--ed-track); }
 .fig-no { font-variant-numeric: tabular-nums; letter-spacing: 0.08em; color: var(--ed-accent); margin-right: 0.75em; }
 .fig-source { display: block; margin-top: 0.35rem; font-family: var(--ed-mono); font-size: var(--ed-caption); color: var(--ed-muted); }
+/* 看大图入口：默认全断点隐藏，仅 ≤720px 由移动段开启（图注排印不混入链接行） */
+.ed-fig-zoom { display: none; }
 
 /* 图版（作品界面实录/数据副图）：与数据版面同族的 figure 语法，类名独立避开 .data-figure（e2e 作用域） */
 .plate { margin: 2rem 0 0; }
 .plate-img { display: block; width: 100%; height: auto; background: var(--ed-surface); border: 1px solid var(--ed-hairline); }
-.plate figcaption { margin-top: 0.6rem; color: var(--ed-muted); font-size: var(--ed-note); letter-spacing: var(--ed-track); }
+.plate figcaption { margin-top: 0.9rem; color: var(--ed-muted); font-size: var(--ed-note); line-height: 1.55; letter-spacing: var(--ed-track); }
 /* 副图对：主图之后的半宽并排证据面（科学图不裁切，各自自然比例、顶对齐） */
 .data-pair {
   display: grid;
@@ -602,7 +614,7 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
   justify-content: space-between;
 }
 .colophon-foot .ed-rule { background: var(--ed-gold); }
-.colophon-foot nav { display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; }
+.colophon-foot nav { display: flex; flex-wrap: wrap; gap: 0.75rem 2.5rem; }
 .colophon-foot nav a { color: var(--ed-plate-soft); text-decoration: none; font-size: 0.92rem; transition: color 160ms var(--ed-ease-out); }
 .colophon-foot nav a:hover { color: var(--ed-gold); }
 .colophon-small { margin: 0; color: var(--ed-plate-soft); font-size: var(--ed-note); letter-spacing: var(--ed-track); opacity: 0.8; }
@@ -684,16 +696,27 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
   .note { grid-template-columns: minmax(0, 1fr); }
   .note-list { grid-template-columns: minmax(0, 1fr); }
   .note time { padding: 0; }
-  /* 触屏示能：无 hover 可达——箭头保留降调、标题常驻细下划线、按压有反馈 */
-  .note > span { display: block; font-size: 0.9rem; opacity: 0.55; }
+  /* 触屏示能：无 hover 可达——标题常驻细下划线、按压有反馈。箭头不再降透明度：
+     0.55 的 opacity 合成后仅 2.25:1（低于示能 3:1 下限），方位示能由字号档（0.9rem）
+     与同段 h3 细下划线承担，颜色回到 muted 墨阶（5.47:1） */
+  .note > span { display: block; font-size: 0.9rem; }
   .note h3 { text-decoration: underline; text-decoration-color: var(--ed-hairline); text-decoration-thickness: 1px; text-underline-offset: 0.25em; }
   .note:active { background: rgb(58 66 49 / 5%); }
+  /* 顶栏触达：钮间缝放宽一档；CTA 文本链正向 padding 撑触达、负 margin 抵扣
+     版面高度（按钮 44px 定高，CTA 触达 ~35px 不再撑高顶栏） */
+  .ed-bar__tools { gap: 1rem; }
+  .ed-bar__cta { padding-block: 0.55rem; margin-block: -0.55rem; }
   .title-actions { gap: 1.1rem; }
   .title-role { display: flex; flex-direction: column; gap: 0.45rem; margin-top: 1.4rem; }
   .title-role span + span::before { content: none; }
   /* 三卡目录化：首卡 featured 保持全解剖，其余两卡作目录行 */
   .work-duo .work-summary { display: none; }
   .work-duo .work-meta span + span { display: none; }
+  /* featured meta 7 项在窄屏折行常留孤立尾项：留 year + 前两项技术（完整清单
+     在案例页，卡内「走进这份分析」直达）；与上面 duo 卡收敛同型同语法 */
+  .work--featured .work-meta span:nth-child(n + 4) { display: none; }
+  /* 回归系数图轴标小屏难辨：图注下给「查看大图」原档入口（桌面隐藏，零变化） */
+  .ed-fig-zoom { display: inline-block; margin-top: 0.6rem; }
   .data-tools { font-size: var(--ed-note); }
   .colophon-foot { flex-direction: column; }
 }
