@@ -769,3 +769,17 @@ html.ed-fallback [data-cstd-home-editorial] [data-sc-stagger] > * { opacity: 1 !
   /* 悬停微动效（作品行铜线/顶栏金点/仪器箭头）减速下不过渡：状态即达 */
   .work::before, .ed-bar__mark::after, .lab-row span:last-child { transition: none; }
 }
+
+/* ---------- GSAP 词幕（章题/扉页名的逐字升幕掩码；无 JS 时为普通内联文本） ---------- */
+.ed-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  /* 借正负 padding/margin 给降部留高度，不改变行盒布局 */
+  padding-block: 0.08em 0.16em;
+  margin-block: -0.08em -0.16em;
+}
+.ed-word__in { display: inline-block; will-change: transform; }
+@media (prefers-reduced-motion: reduce) {
+  .ed-word { padding-block: 0; margin-block: 0; overflow: visible; }
+}

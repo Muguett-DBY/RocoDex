@@ -460,6 +460,144 @@ export function CstdEditorialHomepage({
     };
   }, []);
 
+  /* ---- GSAP ScrollTrigger 滚动编排（与引擎互补，按元素划分唯一驱动者）----
+     引擎继续拥有既有 --sc-p 窗口编排；GSAP 负责：扉页入场时间线、章题逐词
+     升幕 scrub、方法章/数据版面的 pin 住整屏擦洗（pinType:transform 保证引擎
+     的几何采样在 pin 期间照常推进）、版权页收束。动效仅 transform/clip-path；
+     动态导入进异步 chunk，不进首屏；减速运动下整组不启用（元素保持可见）。 */
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+
+    let cancelled = false;
+    let context: { revert: () => void } | null = null;
+    let scrollTriggers: { disable: (revert?: boolean) => void; enable: (reset?: boolean) => void; refresh: (reset?: boolean) => void }[] = [];
+    const cleanupQueue: (() => void)[] = [];
+
+    const splitIntoMasks = (el: HTMLElement, unit: "char" | "word") => {
+      if (el.dataset.edSplit) return;
+      el.dataset.edSplit = "1";
+      /* 读屏完整性：视觉分字后逐字朗读会破碎语义，掩码整体隐藏、原文进 aria-label */
+      const fullText = (el.textContent ?? "").trim();
+      const fragment = document.createDocumentFragment();
+      el.childNodes.forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          const text = node.textContent ?? "";
+          const units = unit === "char"
+            ? text.match(/[\u4e00-\u9fff\u3400-\u4dbf\u3000-\u303f\uff00-\uffef]+|[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*|\s+|[^\s]/g) ?? [text]
+            : text.split(/(\s+)/);
+          for (const piece of units) {
+            if (!piece) continue;
+            if (!piece.trim()) {
+              fragment.appendChild(document.createTextNode(piece));
+              continue;
+            }
+            const mask = document.createElement("span");
+            mask.className = "ed-word";
+            mask.setAttribute("aria-hidden", "true");
+            const inner = document.createElement("span");
+            inner.className = "ed-word__in";
+            inner.textContent = piece;
+            mask.appendChild(inner);
+            fragment.appendChild(mask);
+          }
+        } else {
+          const clone = node.cloneNode(true);
+          if (clone instanceof HTMLElement) clone.setAttribute("aria-hidden", "true");
+          fragment.appendChild(clone);
+        }
+      });
+      el.textContent = "";
+      el.appendChild(fragment);
+      el.setAttribute("aria-label", fullText);
+    };
+
+    (async () => {
+      const [{ gsap }, { ScrollTrigger }] = await Promise.all([import("gsap"), import("gsap/ScrollTrigger")]);
+      if (cancelled) return;
+      gsap.registerPlugin(ScrollTrigger);
+      await (document.fonts?.ready ?? Promise.resolve());
+      if (cancelled) return;
+
+      context = gsap.context(() => {
+        const mm = gsap.matchMedia();
+        mm.add("(prefers-reduced-motion: no-preference)", () => {
+          /* 扉页入场时间线（不触碰 .ed-summary：LCP 元素随首帧绘制） */
+          const h1 = root.querySelector<HTMLElement>(".ch-title h1");
+          if (h1) {
+            splitIntoMasks(h1, locale === "zh" ? "char" : "word");
+            gsap.fromTo(h1.querySelectorAll(".ed-word__in"),
+              { yPercent: 118 },
+              { yPercent: 0, duration: 0.9, ease: "power4.out", stagger: locale === "zh" ? 0.05 : 0.06, delay: 0.15 });
+          }
+          const actions = root.querySelector<HTMLElement>(".title-actions");
+          if (actions) gsap.fromTo(actions, { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, ease: "power3.out", delay: 0.55 });
+          const role = root.querySelector<HTMLElement>(".title-role");
+          if (role) gsap.fromTo(role, { y: 12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, ease: "power3.out", delay: 0.7 });
+          const foot = root.querySelector<HTMLElement>(".title-foot");
+          if (foot) gsap.fromTo(foot, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "power3.inOut", delay: 0.45 });
+
+          /* 章题逐词升幕（scrub 可逆；CJK 按字、拉丁按词） */
+          root.querySelectorAll<HTMLElement>(".chapter:not(.ch-title) h2.ed-display-lg").forEach((h2) => {
+            splitIntoMasks(h2, locale === "zh" ? "char" : "word");
+            gsap.fromTo(h2.querySelectorAll(".ed-word__in"),
+              { yPercent: 120 },
+              {
+                yPercent: 0, ease: "none", stagger: 0.04,
+                scrollTrigger: { trigger: h2, start: "top 88%", end: "top 42%", scrub: 0.6 },
+              });
+          });
+
+          /* 方法章与数据版面 pin 住整屏擦洗：
+             内部编排仍由引擎 --sc-p 窗口驱动（pin spacer 拉长几何，窗口随 pin 逐屏展开），
+             pinType:transform 让元素的 rect 在 pin 期间继续随滚动移动，引擎采样不冻结。 */
+          const methodList = root.querySelector<HTMLElement>("#ch-method .method-list");
+          if (methodList) {
+            ScrollTrigger.create({ trigger: methodList, start: "top 14%", end: "+=105%", pin: true, pinType: "transform", anticipatePin: 1 });
+          }
+          const dataSpread = root.querySelector<HTMLElement>(".data-spread");
+          if (dataSpread) {
+            ScrollTrigger.create({ trigger: dataSpread, start: "top 12%", end: "+=95%", pin: true, pinType: "transform", anticipatePin: 1 });
+          }
+
+          /* 版权页收束：整块随进入从微缩放落定 */
+          const colophonWrap = root.querySelector<HTMLElement>(".ch-colophon .ch-wrap");
+          if (colophonWrap) {
+            gsap.fromTo(colophonWrap, { scale: 0.985, autoAlpha: 0.92 },
+              { scale: 1, autoAlpha: 1, ease: "none", scrollTrigger: { trigger: ".ch-colophon", start: "top 90%", end: "top 30%", scrub: 0.6 } });
+          }
+        });
+      }, root);
+      if (cancelled) {
+        context.revert();
+        context = null;
+        return;
+      }
+      scrollTriggers = ScrollTrigger.getAll();
+
+      /* 游戏主题激活时挂起触发器（editorial 整树 display:none），返回时恢复并重新量算 */
+      const isEditorial = () => {
+        const attr = document.documentElement.getAttribute("data-cstd-theme");
+        return attr === null || attr === "atelier";
+      };
+      const onTheme = () => {
+        if (isEditorial()) scrollTriggers.forEach((t) => { t.enable(); t.refresh(); });
+        else scrollTriggers.forEach((t) => t.disable(false));
+      };
+      const themeObserver = new MutationObserver(onTheme);
+      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-cstd-theme"] });
+      onTheme();
+      cleanupQueue.push(() => themeObserver.disconnect());
+    })();
+
+    return () => {
+      cancelled = true;
+      while (cleanupQueue.length) cleanupQueue.pop()!();
+      context?.revert();
+      scrollTriggers = [];
+    };
+  }, [locale]);
+
   const navLinks = [
     { href: getLocalizedCstdHref("/work", locale), label: copy.navWork },
     { href: getLocalizedCstdHref("/notes", locale), label: copy.navNotes },
@@ -726,7 +864,7 @@ export function CstdEditorialHomepage({
         <section className="chapter ch-lab" id="ch-lab" data-sc-act="flow">
           <div className="ch-wrap">
             <div className="sc-stack">
-              <h2 className="ed-display-lg" data-sc-reveal="up" data-sc-reveal-at="0.05 0.34">{copy.labH2}</h2>
+              <h2 className="ed-display-lg">{copy.labH2}</h2>
               <div className="anno" data-sc-in data-sc-stagger="70">
                 <p className="ed-lede">{copy.labLede}</p>
                 <aside className="mnote" data-mnote><p>{copy.labNote}</p></aside>

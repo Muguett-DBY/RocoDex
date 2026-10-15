@@ -33,12 +33,16 @@ test("EDITORIAL mounts the scroll engine and the whole journey settles", async (
   // 子元素不经引擎 .sc-in——LCP 不依赖引擎装载）
   await expect(page.locator("[data-cstd-home-editorial] .title-stack[data-ed-enter]")).toHaveClass(/is-set/, { timeout: 10_000 });
 
-  // 跳到作品章：峰值计数与图表抵达。贰章改为整章 act 后计数窗重键为章 p 0.50–0.74，
-  // scrollIntoView(#ch-work) 落位 p≈0.3 还在窗外，须深入数据版面再断言终值。
+  // 跳到作品章：峰值计数与图表抵达。数据版面被 GSAP pin 住，须滚到 pin 段末尾
+  // （含 pin-spacer 高度）让计数窗（章 p 0.50–0.74）在 pin 期间走完。
   await page.evaluate(() => document.getElementById("ch-work")?.scrollIntoView());
   await page.evaluate(() => {
-    document.querySelector(".data-spread")?.scrollIntoView({ block: "center" });
-    scrollBy(0, innerHeight * 0.6);
+    const el = document.querySelector(".data-spread");
+    if (el) {
+      const box = (el.closest(".pin-spacer") as HTMLElement | null) ?? (el as HTMLElement);
+      // 落在 pin 段末端稍靠内：元素仍可见（避免一次性越界导致计数复位）、章 p≈0.97、终值成立
+      scrollTo(0, box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, { behavior: "instant" });
+    }
   });
   await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveText("1,470,000", { timeout: 10_000 });
   await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 7"]')).toHaveText("7", { timeout: 10_000 });
@@ -73,15 +77,21 @@ test("EDITORIAL stays instant and complete under reduced motion with zero media 
   await expect(page.locator("html")).toHaveClass(/sc-ready/, { timeout: 20_000 });
 
   await page.evaluate(() => {
-    document.querySelector(".data-spread")?.scrollIntoView({ block: "center" });
-    scrollBy(0, innerHeight * 0.6);
+    // 数据版面已被 GSAP pin 住：滚到 pin 段末尾（含 pin-spacer 高度）确保计数窗口走完
+    const el = document.querySelector(".data-spread");
+    if (el) {
+      const box = (el.closest(".pin-spacer") as HTMLElement | null) ?? (el as HTMLElement);
+      // 落在 pin 段末端稍靠内：元素仍可见（避免一次性越界导致计数复位）、章 p≈0.97、终值成立
+      scrollTo(0, box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, { behavior: "instant" });
+    }
   });
   await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveText("1,470,000", { timeout: 10_000 });
   await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 7"]')).toHaveText("7", { timeout: 10_000 });
   await expect(page.locator("[data-cstd-home-editorial] .mnote.is-set")).toHaveCount(4, { timeout: 10_000 });
-  // 页面出现第二个 [data-sc-reveal]（肆章 h2），断言按节点收窄
+  // 页面出现第二个 [data-sc-reveal]（数据图版），断言按节点收窄
   await expect(page.locator("[data-cstd-home-editorial] .data-figure[data-sc-reveal]")).toHaveCSS("clip-path", /none|inset\(0px 0(%|px)/);
-  await expect(page.locator("[data-cstd-home-editorial] .ch-lab h2[data-sc-reveal]")).toHaveCSS("clip-path", "none");
+  // 章题升幕已移交 GSAP：减速下不切分不隐藏，标题直接可见
+  await expect(page.locator("[data-cstd-home-editorial] .ch-lab h2")).toBeVisible();
   // 页面自管滚动设备的减速冒烟：编号直接全墨、扉页铜线与札记漂移直接呈现
   await expect(page.locator("[data-cstd-home-editorial] .method-no").first()).toHaveCSS("clip-path", "none");
   const reduceSamples = await page.locator("[data-cstd-home-editorial]").evaluate((root) => ({
@@ -212,7 +222,8 @@ test("EDITORIAL scrubs the per-chapter devices from scroll position", async ({ p
   const lineAfterScroll = await titleLineScale();
   expect(lineAfterScroll).toBeGreaterThan(lineAtRest);
 
-  // 壹章编号『落墨』随滚动填充（第三行窗口 0.38–0.54）：章首未启，下滚后增长
+  // 壹章编号『落墨』随滚动填充（第三行窗口 0.38–0.54）：章首未启，滚入 pin 段后增长。
+  // 方法列表被 GSAP pin 住（+=105% 视口），章 p 随 pin 段逐屏推进——轮询滚动直到越过窗口。
   const thirdInk = () => page.locator("[data-cstd-home-editorial] .method-list li:nth-child(3) .method-no").evaluate((el) => {
     const m = getComputedStyle(el).clipPath.match(/inset\(\s*([\d.]+)%/);
     return m ? parseFloat(m[1]) : Number.NaN;
@@ -221,10 +232,60 @@ test("EDITORIAL scrubs the per-chapter devices from scroll position", async ({ p
   await frame();
   const inkAtChapterHead = await thirdInk();
   expect(Number.isFinite(inkAtChapterHead)).toBe(true);
-  await page.evaluate(() => scrollBy({ top: innerHeight * 0.6, behavior: "instant" }));
+  await page.evaluate(async () => {
+    const el = document.querySelector("#ch-method .method-list");
+    const target = el ? (el as HTMLElement).offsetTop + (el as HTMLElement).offsetHeight + innerHeight * 0.8 : scrollY + innerHeight * 1.8;
+    for (let y = scrollY; y <= Math.min(target, document.documentElement.scrollHeight); y += innerHeight * 0.35) {
+      scrollTo(0, y);
+      await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)));
+    }
+  });
   await frame();
   const inkAfterScroll = await thirdInk();
   expect(inkAfterScroll).toBeLessThan(inkAtChapterHead);
+});
+
+test("EDITORIAL pins the method list and data spread with GSAP scroll choreography", async ({ page }) => {
+  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("html")).toHaveClass(/sc-ready/, { timeout: 20_000 });
+  // GSAP 异步 chunk 装载后创建 pin：pin-spacer 出现即证明编排已挂
+  await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
+
+  // 章题升幕：扉页 h1 已分字（减速或无 JS 时不切分）
+  await expect(page.locator("[data-cstd-home-editorial] .ch-title h1 .ed-word__in").first()).toBeAttached();
+  await page.waitForTimeout(1600);
+  const h1UnitTy = await page.locator("[data-cstd-home-editorial] .ch-title h1 .ed-word__in").first().evaluate((el) => {
+    const t = getComputedStyle(el).transform;
+    if (t === "none") return 0;
+    const m = t.match(/^matrix\(([^)]+)\)/);
+    return m ? parseFloat(m[1].split(",")[5] ?? "0") : Number.NaN;
+  });
+  // 入场时间线收尾：单元回位（GSAP 收在 identity 矩阵而非 none）
+  expect(Number.isFinite(h1UnitTy)).toBe(true);
+  expect(Math.abs(h1UnitTy)).toBeLessThan(0.5);
+
+  // pin 行为：数据版面在 pin 段内滚动 0.5 视口，其 rect.top 几乎不动
+  await page.evaluate(() => {
+    const el = document.querySelector(".data-spread");
+    if (el) scrollTo(0, (el as HTMLElement).getBoundingClientRect().top + scrollY + 24);
+  });
+  await page.waitForTimeout(300);
+  const topAtPinStart = await page.locator("[data-cstd-home-editorial] .data-spread").evaluate((el) => el.getBoundingClientRect().top);
+  await page.evaluate(() => scrollBy({ top: innerHeight * 0.5, behavior: "instant" }));
+  await page.waitForTimeout(300);
+  const topMidPin = await page.locator("[data-cstd-home-editorial] .data-spread").evaluate((el) => el.getBoundingClientRect().top);
+  expect(Math.abs(topMidPin - topAtPinStart)).toBeLessThan(80);
+
+  // 滚到 pin 段末端稍靠内（元素仍可见），计数到达终值
+  await page.evaluate(() => {
+    const el = document.querySelector(".data-spread");
+    if (el) {
+      const box = (el.closest(".pin-spacer") as HTMLElement | null) ?? (el as HTMLElement);
+      scrollTo(0, box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, { behavior: "instant" });
+    }
+  });
+  await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveText("1,470,000", { timeout: 10_000 });
+  await expectNoHorizontalOverflow(page);
 });
 
 test("ATELIER keeps its inner pages readable, accessible, and free of decorative renderers", async ({ page }) => {
