@@ -484,7 +484,7 @@ export function CstdEditorialHomepage({
         if (node.nodeType === Node.TEXT_NODE) {
           const text = node.textContent ?? "";
           const units = unit === "char"
-            ? text.match(/[\u4e00-\u9fff\u3400-\u4dbf\u3000-\u303f\uff00-\uffef]+|[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*|\s+|[^\s]/g) ?? [text]
+            ? text.match(/[\u4e00-\u9fff\u3400-\u4dbf]|[\u3000-\u303f\uff00-\uffef]+|[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*|\s+|[^\s]/g) ?? [text]
             : text.split(/(\s+)/);
           for (const piece of units) {
             if (!piece) continue;
@@ -781,13 +781,13 @@ export function CstdEditorialHomepage({
                   {/* 数据时刻拆两档：数字独占一行大字（引擎计数原样），量词句降档续行 */}
                   <h3 className="data-count">
                     <span className="sr-only">1,470,000 </span>
-                    <span className="sc-nums" aria-hidden="true" data-sc-count="0 1,470,000" data-sc-count-at="0.50 0.74">1,470,000</span>
+                    <span className="sc-nums" aria-hidden="true" data-sc-count="0 1,470,000" data-sc-count-at="0.88 0.985">1,470,000</span>
                   </h3>
                   <p className="data-count-line">{copy.countUnitZh}{copy.countHead}</p>
                   <p>{copy.dataBody}</p>
                   <p className="data-tools" aria-label={copy.dataToolsLabel}>{featured.technologies.join(" · ")}</p>
                 </div>
-                <figure className="data-figure" data-sc-reveal="left" data-sc-reveal-at="0.48 0.70">
+                <figure className="data-figure" data-sc-reveal="left" data-sc-reveal-at="0.87 0.97">
                   <div className="data-figure-inner" data-sc-parallax="-0.4">
                     {/* images.unoptimized 下 next/image 不产出 srcset；手工分档（960/1536/2580）
                         让手机按视口取小图，width/height 兜住布局抖动，lazy 保持折下加载。

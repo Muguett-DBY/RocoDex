@@ -35,13 +35,18 @@ test("EDITORIAL mounts the scroll engine and the whole journey settles", async (
 
   // 跳到作品章：峰值计数与图表抵达。数据版面被 GSAP pin 住，须滚到 pin 段末尾
   // （含 pin-spacer 高度）让计数窗（章 p 0.50–0.74）在 pin 期间走完。
-  await page.evaluate(() => document.getElementById("ch-work")?.scrollIntoView());
-  await page.evaluate(() => {
+  await page.evaluate(async () => {
     const el = document.querySelector(".data-spread");
     if (el) {
+      // 步进扫过计数窗（pin 与非 pin 形态都稳健：一次越界跳滚会触发引擎越界复位）
       const box = (el.closest(".pin-spacer") as HTMLElement | null) ?? (el as HTMLElement);
-      // 落在 pin 段末端稍靠内：元素仍可见（避免一次性越界导致计数复位）、章 p≈0.97、终值成立
-      scrollTo({ top: box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, behavior: "instant" });
+      const start = box.getBoundingClientRect().top + scrollY - innerHeight * 0.5;
+      const end = start + box.offsetHeight + innerHeight * 1.6;
+      const max = document.documentElement.scrollHeight;
+      for (let y = Math.max(0, start); y <= Math.min(end, max); y += innerHeight * 0.3) {
+        scrollTo({ top: y, behavior: "instant" });
+        await new Promise((r) => requestAnimationFrame(() => setTimeout(r, 0)));
+      }
     }
   });
   await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveText("1,470,000", { timeout: 10_000 });
@@ -76,13 +81,18 @@ test("EDITORIAL stays instant and complete under reduced motion with zero media 
   await page.goto("/cstd", { waitUntil: "domcontentloaded" });
   await expect(page.locator("html")).toHaveClass(/sc-ready/, { timeout: 20_000 });
 
-  await page.evaluate(() => {
-    // 数据版面已被 GSAP pin 住：滚到 pin 段末尾（含 pin-spacer 高度）确保计数窗口走完
+  await page.evaluate(async () => {
+    // 步进扫过计数窗（pin 与非 pin 形态都稳健：一次越界跳滚会触发引擎越界复位）
     const el = document.querySelector(".data-spread");
     if (el) {
       const box = (el.closest(".pin-spacer") as HTMLElement | null) ?? (el as HTMLElement);
-      // 落在 pin 段末端稍靠内：元素仍可见（避免一次性越界导致计数复位）、章 p≈0.97、终值成立
-      scrollTo({ top: box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, behavior: "instant" });
+      const start = box.getBoundingClientRect().top + scrollY - innerHeight * 0.5;
+      const end = start + box.offsetHeight + innerHeight * 1.6;
+      const max = document.documentElement.scrollHeight;
+      for (let y = Math.max(0, start); y <= Math.min(end, max); y += innerHeight * 0.3) {
+        scrollTo({ top: y, behavior: "instant" });
+        await new Promise((r) => requestAnimationFrame(() => setTimeout(r, 0)));
+      }
     }
   });
   await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveText("1,470,000", { timeout: 10_000 });
@@ -276,12 +286,18 @@ test("EDITORIAL pins the method list and data spread with GSAP scroll choreograp
   const topMidPin = await page.locator("[data-cstd-home-editorial] .data-spread").evaluate((el) => el.getBoundingClientRect().top);
   expect(Math.abs(topMidPin - topAtPinStart)).toBeLessThan(80);
 
-  // 滚到 pin 段末端稍靠内（元素仍可见），计数到达终值
-  await page.evaluate(() => {
+  // 步进扫到 pin 段末端稍靠内（元素仍可见），计数到达终值
+  await page.evaluate(async () => {
     const el = document.querySelector(".data-spread");
     if (el) {
       const box = (el.closest(".pin-spacer") as HTMLElement | null) ?? (el as HTMLElement);
-      scrollTo({ top: box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, behavior: "instant" });
+      const start = box.getBoundingClientRect().top + scrollY - innerHeight * 0.4;
+      const end = start + box.offsetHeight + innerHeight * 1.2;
+      const max = document.documentElement.scrollHeight;
+      for (let y = Math.max(0, start); y <= Math.min(end, max); y += innerHeight * 0.3) {
+        scrollTo({ top: y, behavior: "instant" });
+        await new Promise((r) => requestAnimationFrame(() => setTimeout(r, 0)));
+      }
     }
   });
   await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveText("1,470,000", { timeout: 10_000 });
