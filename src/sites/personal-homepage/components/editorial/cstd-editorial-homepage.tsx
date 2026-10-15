@@ -627,9 +627,11 @@ export function CstdEditorialHomepage({
     <div ref={rootRef} data-cstd-home-editorial className="ed">
       {/* 手工样式表链接是有意为之：React precedence 提升保证引擎 CSS 先于页面 CSS（无 next/css 参与的零构建链路） */}
       {/* eslint-disable-next-line @next/next/no-css-tags */}
+      {/* 样式表带版本参数：/cstd-scroll/* 是 immutable 一年缓存且文件名无哈希，
+          内容更新必须换版本号强制浏览器回源（见 docs/MAINTENANCE.md）。 */}
       <link rel="stylesheet" precedence="sc-engine" href="/cstd-scroll/scrollcraft.css" />
       {/* eslint-disable-next-line @next/next/no-css-tags */}
-      <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css" />
+      <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css?v=5" />
       {/* 引擎脚本声明式预载：预载扫描器在解析期即开拉，水合后的 createElement
           执行注入直接命中暖缓存——fetch 时点从“水合后”提前到“首屏解析”。 */}
       <link rel="preload" as="script" href="/cstd-scroll/scrollcraft.js" />
