@@ -41,7 +41,7 @@ test("EDITORIAL mounts the scroll engine and the whole journey settles", async (
     if (el) {
       const box = (el.closest(".pin-spacer") as HTMLElement | null) ?? (el as HTMLElement);
       // 落在 pin 段末端稍靠内：元素仍可见（避免一次性越界导致计数复位）、章 p≈0.97、终值成立
-      scrollTo(0, box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, { behavior: "instant" });
+      scrollTo({ top: box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, behavior: "instant" });
     }
   });
   await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveText("1,470,000", { timeout: 10_000 });
@@ -82,7 +82,7 @@ test("EDITORIAL stays instant and complete under reduced motion with zero media 
     if (el) {
       const box = (el.closest(".pin-spacer") as HTMLElement | null) ?? (el as HTMLElement);
       // 落在 pin 段末端稍靠内：元素仍可见（避免一次性越界导致计数复位）、章 p≈0.97、终值成立
-      scrollTo(0, box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, { behavior: "instant" });
+      scrollTo({ top: box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, behavior: "instant" });
     }
   });
   await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveText("1,470,000", { timeout: 10_000 });
@@ -281,7 +281,7 @@ test("EDITORIAL pins the method list and data spread with GSAP scroll choreograp
     const el = document.querySelector(".data-spread");
     if (el) {
       const box = (el.closest(".pin-spacer") as HTMLElement | null) ?? (el as HTMLElement);
-      scrollTo(0, box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, { behavior: "instant" });
+      scrollTo({ top: box.getBoundingClientRect().top + scrollY + box.offsetHeight - innerHeight * 1.05, behavior: "instant" });
     }
   });
   await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveText("1,470,000", { timeout: 10_000 });
