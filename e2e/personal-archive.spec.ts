@@ -38,7 +38,7 @@ test.describe("CSTD technical archive", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
     // 默认正式主页已由 atelier 场景换为 chaptered editorial（data-cstd-home-editorial）
     await expect(page.locator("[data-cstd-home-editorial]")).toBeVisible();
-    await expect(page.getByRole("link", { name: "Explore the work", exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "See three selected works", exact: true })).toBeVisible();
     expect(errors).toEqual([]);
   });
 

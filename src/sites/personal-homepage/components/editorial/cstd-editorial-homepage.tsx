@@ -44,7 +44,6 @@ export type EditorialNote = {
 
 export type EditorialProfile = {
   name: string;
-  summary: string;
 };
 
 /* 作品界面图版（图 04/05）：与案例页 VERIFIED SURFACE 同源的本项目自有生产界面截图；
@@ -90,6 +89,7 @@ type EditorialCopy = {
   navVoxel: string;
   ctaHeader: string;
   statement: React.ReactNode;
+  intro: string;
   exploreWork: string;
   aboutMe: string;
   roleField: string;
@@ -149,15 +149,18 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     navTopics: zh ? "主题" : "Topics",
     navMap: zh ? "星图" : "Map",
     navVoxel: zh ? "作品城" : "Voxel world",
-    ctaHeader: zh ? "谈一次协作" : "Start a collaboration",
-    statement: zh ? <>从数据里找到线索，<br />把想法做成产品。</> : <>Find the story in the data.<br />Build something useful.</>,
-    exploreWork: zh ? "浏览精选作品" : "Explore the work",
-    aboutMe: zh ? "认识我" : "A little about me",
+    ctaHeader: zh ? "写邮件给我" : "Write me an email",
+    statement: zh ? <>数据分析、做出来的系统，<br />和做它们的方法，都收在这里。</> : <>Data analyses, working systems,<br />and how each one was built.</>,
+    intro: zh
+      ? "本硕读数据科学，现在读人工智能博士（博 0）。用 R、Python 和 SQL 做分析，用 React 和 Next.js 把结果做成能用的产品；每件作品的脚本和验证过程都放在站上。"
+      : "My bachelor's and master's degrees are in data science; I am now in year zero of an AI PhD. I analyse with R, Python, and SQL, and ship products with React and Next.js. The scripts and verification behind every piece of work are on this site.",
+    exploreWork: zh ? "看三件代表作" : "See three selected works",
+    aboutMe: zh ? "关于我" : "About me",
     roleField: zh ? "人工智能 · 博 0" : "Artificial Intelligence · PhD Year 0",
     roleCraft: zh ? "分析 · 系统 · 交付" : "Analysis · Systems · Delivery",
-    titleFoot: zh ? "真实问题。清晰思考。可验证的作品。" : "Real questions. Clear thinking. Verifiable work.",
-    methodH2: zh ? <>复杂的问题，<br />清楚地做。</> : <>Complex questions.<br />Clear work.</>,
-    methodLede: zh ? "从对齐事实开始，以可以检验的结果收尾。" : "Start with the facts. Finish with something you can check.",
+    titleFoot: zh ? "站上每件作品都可以重跑。" : "Every piece of work here reruns.",
+    methodH2: zh ? "方法" : "Method",
+    methodLede: zh ? "三个步骤，每个项目都走一遍。" : "Three steps, run on every project.",
     methodSteps: zh
       ? [
           { title: "拆解", detail: "先把问题问清楚：数据从哪来，数字怎么算，哪些限制必须考虑。", signal: "先弄清事实，再谈方案" },
@@ -174,8 +177,8 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     ) : (
       <>The method comes from chemical engineering: draw the boundary, balance the system, keep the lab record. {noteLink("/notes/chemical-engineering-to-software-systems", "Read the note")}</>
     ),
-    workH2: zh ? "用作品说话。" : "The work speaks.",
-    workLede: zh ? "一份城市数据分析，两个产品系统。可以看结果，也可以看过程。" : "An urban data study and two product systems. Explore the results and the work behind them.",
+    workH2: zh ? "作品" : "Work",
+    workLede: zh ? "三件选出来的：一份城市数据分析，两个在运行的系统。" : "Three picks: one urban data study and two systems in production.",
     workNote: zh ? (
       <>作品 01 的全部脚本可以重跑：下载、清洗、建模、绘图。{noteLink("/work", "全部作品")}</>
     ) : (
@@ -183,12 +186,12 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     ),
     censusCases: zh ? "个已发布案例" : "published cases",
     censusLabel: zh ? "作品普查" : "Work census",
-    viewCase: zh ? "查看案例" : "View case",
-    countUnitZh: zh ? "行开放数据，" : "rows of open data,",
-    countHead: zh ? <>让城市的节奏可见。</> : <>a city, made legible.</>,
+    viewCase: zh ? "看案例" : "View case",
+    countUnitZh: zh ? "行墨尔本行人计数。" : "rows of Melbourne pedestrian counts.",
+    countHead: zh ? <>数据、脚本和图，整段可重跑。</> : <>The data, scripts, and charts rerun end to end.</>,
     dataBody: zh
-      ? "行人如何穿过墨尔本？温度、风和空气质量又怎样参与其中？三份官方开放数据，经过清洗、空间连接与建模，形成一条可以重跑的分析管线。"
-      : "How do people move through Melbourne? What changes with temperature, wind, and air quality? Three official open datasets, cleaned, spatially joined, and modelled into one rerunnable pipeline.",
+      ? "行人计数与同一时刻的温度、风速、空气质量逐条对齐。三份官方开放数据，清洗、空间连接、建模都写成脚本，从下载到出图可以整段重跑。"
+      : "Pedestrian counts aligned, record by record, with temperature, wind, and air quality at the same moments. Three official open datasets, with cleaning, spatial joins, and modelling scripted so the whole run repeats from download to chart.",
     dataToolsLabel: zh ? "分析工具" : "Analysis tools",
     figureNo: zh ? "图 01" : "FIG. 01",
     figureCaption: zh ? "墨尔本 CBD · 环境因素与行人活动的回归分析" : "Melbourne CBD · regression analysis of environment and pedestrian activity",
@@ -208,22 +211,22 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
           alpha: { no: "FIG. 05", caption: "CSTD Alpha · research system interface", source: "Interface capture: this project in production", alt: "CSTD Alpha research system production interface" },
         },
     insideAnalysis: zh ? "走进这份分析" : "Inside the analysis",
-    notesH2: zh ? "思考，留下来。" : "Thinking, kept.",
-    notesLede: zh ? "关于系统、数据和做事方式的技术札记。" : "Notes on systems, data, and the way the work gets done.",
+    notesH2: zh ? "札记" : "Notes",
+    notesLede: zh ? "写得比较长的技术笔记：系统、数据，和做事的方式。" : "Longer technical notes on systems, data, and how the work gets done.",
     notesNote: zh ? (
-      <>札记按主题收在星图里，可以顺着线索读。{noteLink("/map", "去看星图")}</>
+      <>札记按主题收在星图里，顺着一条线索能读下去。{noteLink("/map", "打开星图")}</>
     ) : (
-      <>Notes are indexed by theme on the map; follow a thread. {noteLink("/map", "Open the map")}</>
+      <>Notes are indexed by theme on the map; one thread leads to the next. {noteLink("/map", "Open the map")}</>
     ),
     allNotes: zh ? "全部札记" : "All notes",
-    labH2: zh ? <>让结论，<br />经得起再运行。</> : <>A conclusion worth<br />putting to the test.</>,
+    labH2: zh ? "实验室" : "The lab",
     labLede: zh
-      ? "估值怎么算，系统出了问题怎么处理？在实验室里动手试一试：从 DCF 模型到故障演练，看看输入变化后，结果为什么会变。"
-      : "How does a valuation change? What happens when a system fails? Try a DCF model or a failure drill, change the inputs, and see why the result moves.",
+      ? "几个能直接上手的东西：改一改 DCF 模型的假设看估值怎么动，触发一次故障演练看系统怎么恢复。输入变了，结果为什么变，自己试。"
+      : "Things you can operate: change the assumptions of a DCF model and watch the valuation move, or trigger a failure drill and watch the system recover. Change an input and see why the result moves.",
     labNote: zh ? (
-      <>实验室里的每个模型都可以改输入、看输出。{noteLink("/lab", "探索实验室")}</>
+      <>实验室里的每个模型都能改输入、看输出。{noteLink("/lab", "打开实验室")}</>
     ) : (
-      <>Every model in the lab takes your inputs and shows its work. {noteLink("/lab", "Explore the labs")}</>
+      <>Every model in the lab takes your inputs and shows its work. {noteLink("/lab", "Open the lab")}</>
     ),
     labInstruments: zh
       ? [
@@ -239,13 +242,13 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     colophonBrand: zh ? "奶黄包 · 个人工作室" : "CUSTARD · PERSONAL STUDIO",
     colophonMark: zh ? "奶黄包" : "CUSTARD",
     colophonDomain: "custard.top",
-    colophonH2: zh ? <>好的想法，<br />值得被做出来。</> : <>Good ideas deserve<br />to become real.</>,
+    colophonH2: zh ? <>合作，<br />从一个问题开始。</> : <>Collaboration starts<br />with a question.</>,
     colophonLede: zh ? (
-      <>如果你在找一个能把分析做成产品的人，可以从这里继续认识我。</>
+      <>把分析做成产品，是我一直在做的事。关于页和履历都在下面，合适就写封邮件。</>
     ) : (
-      <>If you are looking for someone who turns analysis into products, there is more to the story.</>
+      <>Turning analysis into products is what I do. The about page and résumé are below; if the fit is right, write.</>
     ),
-    colophonCta: zh ? "继续认识我" : "More about me",
+    colophonCta: zh ? "关于我" : "About me",
     navNow: zh ? "现在" : "Now",
     navResume: zh ? "履历" : "Résumé",
     backToTop: zh ? "回到顶部" : "Back to top",
@@ -397,7 +400,7 @@ export function CstdEditorialHomepage({
                   {profile.name}<span className="ed-fullstop" aria-hidden="true">.</span>
                 </h1>
                 <p className="ed-statement">{copy.statement}</p>
-                <p className="ed-summary">{profile.summary}</p>
+                <p className="ed-summary">{copy.intro}</p>
                 <p className="title-actions">
                   <CstdChapterLink href="#ch-work" className="ed-button">{copy.exploreWork}</CstdChapterLink>
                   <CstdLink href={getLocalizedCstdHref("/about", locale)} className="ed-textlink">{copy.aboutMe}</CstdLink>

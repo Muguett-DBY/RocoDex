@@ -454,7 +454,7 @@ test.describe("EDITORIAL motion", () => {
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Custard");
     await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("PhD Year 0");
-    await expect(page.locator("[data-cstd-home-editorial] .ed-bar__cta")).toContainText("Start a collaboration");
+    await expect(page.locator("[data-cstd-home-editorial] .ed-bar__cta")).toContainText("Write me an email");
     await expect(page.locator("[data-cstd-home-editorial] canvas")).toHaveCount(0);
     await expectNoHorizontalOverflow(page);
     await page.evaluate(() => {
