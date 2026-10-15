@@ -376,7 +376,7 @@ export function CstdEditorialHomepage({
           样式表带版本参数：/cstd-scroll/* 是 immutable 一年缓存且文件名无哈希，
           内容更新必须换版本号强制浏览器回源（见 docs/MAINTENANCE.md）。 */}
       {/* eslint-disable-next-line @next/next/no-css-tags */}
-      <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css?v=7" />
+      <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css?v=8" />
       {/* 首屏衬线字体声明式预载（可变字重，覆盖全部标题/正文强调）：
           font-display:swap 下 LCP 记录的是字体换绘后的重绘时刻，慢 4G 上
           原本要等 CSS 链路才发现字体请求；预载让它与 CSS 并行到达。 */}

@@ -9,8 +9,8 @@
   },
   "docHeight": 10889,
   "steps": 48,
-  "startedAt": "2026-10-15T16:46:37.099Z",
-  "elapsedMs": 35264,
+  "startedAt": "2026-10-15T16:58:55.435Z",
+  "elapsedMs": 28461,
   "cssFingerprint": [
    "/_next/static/chunks/30hmtu1t-yadr.css",
    "/_next/static/chunks/1olprk_st9cm9.css",
@@ -21,39 +21,39 @@
   ],
   "standard": "WCAG 2.2 SC 1.4.3（正文 4.5:1 / 大字 3:1）；SC 1.4.11 非文本 3:1 仅参考",
   "method": "computed style + 祖先 rgba 逐层合成 + elementFromPoint 实底；违规项复测；媒体衬底为隐藏文字截图采样近似值",
-  "transientDropped": 53
+  "transientDropped": 25
  },
  "summary": {
-  "textElements": 139,
-  "body": 117,
-  "large": 22,
+  "textElements": 133,
+  "body": 114,
+  "large": 19,
   "decorative": 0,
   "violations": 0,
   "bodyWorst": {
-   "key": "div:nth-of-type(3).pin-spacer > div.data-spread > div:nth-of-type(1).data-copy > p:nth-of-type(3).data-tools|R · data.table · ggplot2",
-   "ratio": 4.56,
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(239,232,218)",
-   "fontSize": 13
+   "key": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > p|In company research, sta",
+   "ratio": 4.5,
+   "color": "rgb(111,120,109)",
+   "bg": "rgb(255,253,248)",
+   "fontSize": 14.72
   },
   "worst3": [
    {
-    "key": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span.ed-word > span.ed-word__in|Work",
-    "ratio": 3.92,
-    "color": "rgb(114,115,108)",
-    "bg": "rgb(239,232,218)",
-    "fontSize": 32
-   },
-   {
-    "key": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span.ed-word > span.ed-word__in|Method",
-    "ratio": 4.25,
-    "color": "rgb(119,123,118)",
+    "key": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > p|In company research, sta",
+    "ratio": 4.5,
+    "color": "rgb(111,120,109)",
     "bg": "rgb(255,253,248)",
-    "fontSize": 32
+    "fontSize": 14.72
    },
    {
-    "key": "div:nth-of-type(3).pin-spacer > div.data-spread > div:nth-of-type(1).data-copy > p:nth-of-type(3).data-tools|R · data.table · ggplot2",
-    "ratio": 4.56,
+    "key": "div.anno > aside.mnote > p > a|Read the note",
+    "ratio": 4.51,
+    "color": "rgb(136,114,79)",
+    "bg": "rgb(255,253,248)",
+    "fontSize": 13
+   },
+   {
+    "key": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > p:nth-of-type(1).work-kicker|Domain boundaries / cont",
+    "ratio": 4.53,
     "color": "rgb(97,107,95)",
     "bg": "rgb(239,232,218)",
     "fontSize": 13
@@ -64,69 +64,156 @@
  "decorative": [],
  "allMeasurements": [
   {
-   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span.ed-word > span.ed-word__in",
-   "chapter": "ch-work",
-   "text": "Work",
-   "category": "large",
-   "color": "rgb(114,115,108)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 3.92,
-   "fontSize": 32,
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > p",
+   "chapter": "ch-notes",
+   "text": "In company research, stale facts, duplicate jobs",
+   "category": "body",
+   "color": "rgb(111,120,109)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.5,
+   "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(114,115,108)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 3.92,
-     "y": 2596,
+     "color": "rgb(111,120,109)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.5,
+     "y": 7788,
      "label": ""
     },
     {
-     "color": "rgb(50,56,51)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 9.9,
-     "y": 2832,
+     "color": "rgb(98,108,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.41,
+     "y": 8024,
      "label": ""
     },
     {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.78,
-     "y": 3068,
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 8260,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span.ed-word > span.ed-word__in",
+   "selector": "div.anno > aside.mnote > p > a",
    "chapter": "ch-method",
-   "text": "Method",
-   "category": "large",
-   "color": "rgb(119,123,118)",
+   "text": "Read the note",
+   "category": "body",
+   "color": "rgb(136,114,79)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.25,
-   "fontSize": 32,
+   "ratio": 4.51,
+   "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(119,123,118)",
+     "color": "rgb(136,114,79)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.25,
-     "y": 472,
-     "label": ""
-    },
-    {
-     "color": "rgb(51,57,53)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 11.62,
+     "ratio": 4.51,
      "y": 708,
      "label": ""
     },
     {
-     "color": "rgb(37,44,40)",
+     "color": "rgb(116,91,50)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14,
+     "ratio": 6.3,
      "y": 944,
+     "label": ""
+    },
+    {
+     "color": "rgb(114,88,47)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.54,
+     "y": 1180,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > p:nth-of-type(1).work-kicker",
+   "chapter": "ch-work",
+   "text": "Domain boundaries / content product",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.53,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.53,
+     "y": 3776,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > p:nth-of-type(1).work-kicker",
+   "chapter": "ch-work",
+   "text": "Open-data analysis / reproducible R pipeline",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.55,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.55,
+     "y": 3304,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > p:nth-of-type(1).work-kicker",
+   "chapter": "ch-work",
+   "text": "Evidence pipeline / decision workspace",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.55,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.55,
+     "y": 4484,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > div.anno > p.ed-lede",
+   "chapter": "ch-work",
+   "text": "Three picks: one urban data study and two system",
+   "category": "body",
+   "color": "rgb(99,106,98)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(99,106,98)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 2832,
+     "label": ""
+    },
+    {
+     "color": "rgb(84,93,85)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.59,
+     "y": 3068,
      "label": ""
     }
    ]
@@ -292,83 +379,35 @@
    ]
   },
   {
-   "selector": "#ch-colophon > div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede",
-   "chapter": "ch-colophon",
-   "text": "Turning analysis into products is what I do. The",
+   "selector": "div:nth-of-type(1).ed-stack > div.anno > aside.mnote > p",
+   "chapter": "ch-method",
+   "text": "The method comes from chemical engineering: draw",
    "category": "body",
-   "color": "rgb(139,147,137)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 4.57,
-   "fontSize": 16,
+   "color": "rgb(110,118,110)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.62,
+   "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(139,147,137)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 4.57,
-     "y": 9912,
+     "color": "rgb(110,118,110)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.62,
+     "y": 708,
      "label": ""
     },
     {
-     "color": "rgb(177,186,174)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.25,
-     "y": 10148,
+     "color": "rgb(86,95,87)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.55,
+     "y": 944,
      "label": ""
     },
     {
-     "color": "rgb(184,193,181)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.85,
-     "y": 10384,
-     "label": ""
-    },
-    {
-     "color": "rgb(185,194,182)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.9,
-     "y": 10620,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede > a.colophon-cta",
-   "chapter": "ch-colophon",
-   "text": "About me",
-   "category": "body",
-   "color": "rgb(139,147,137)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 4.57,
-   "fontSize": 16,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(139,147,137)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 4.57,
-     "y": 9912,
-     "label": ""
-    },
-    {
-     "color": "rgb(177,186,174)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.25,
-     "y": 10148,
-     "label": ""
-    },
-    {
-     "color": "rgb(184,193,181)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.85,
-     "y": 10384,
-     "label": ""
-    },
-    {
-     "color": "rgb(185,194,182)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.9,
-     "y": 10620,
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.81,
+     "y": 1180,
      "label": ""
     }
    ]
@@ -392,16 +431,16 @@
      "label": ""
     },
     {
-     "color": "rgb(47,53,49)",
+     "color": "rgb(43,50,46)",
      "bg": "rgb(255,253,248)",
-     "ratio": 12.28,
+     "ratio": 12.97,
      "y": 8968,
      "label": ""
     },
     {
-     "color": "rgb(37,44,40)",
+     "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.09,
+     "ratio": 14.21,
      "y": 9204,
      "label": ""
     }
@@ -426,186 +465,281 @@
      "label": ""
     },
     {
-     "color": "rgb(47,53,49)",
+     "color": "rgb(43,50,46)",
      "bg": "rgb(255,253,248)",
-     "ratio": 12.28,
+     "ratio": 12.97,
      "y": 8968,
      "label": ""
     },
     {
-     "color": "rgb(37,44,40)",
+     "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.09,
+     "ratio": 14.21,
      "y": 9204,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack > div.anno > p.ed-lede",
-   "chapter": "ch-method",
-   "text": "Three steps, run on every project.",
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(1).lab-no",
+   "chapter": "ch-lab",
+   "text": "LAB 02",
    "category": "body",
-   "color": "rgb(110,117,109)",
+   "color": "rgb(108,117,106)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.67,
-   "fontSize": 16,
+   "ratio": 4.71,
+   "fontSize": 12,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(110,117,109)",
+     "color": "rgb(108,117,106)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.67,
-     "y": 708,
+     "ratio": 4.71,
+     "y": 8968,
      "label": ""
     },
     {
-     "color": "rgb(86,95,87)",
+     "color": "rgb(98,107,96)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.51,
-     "y": 944,
+     "ratio": 5.43,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 9440,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span.ed-word > span.ed-word__in",
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(4)",
+   "chapter": "ch-lab",
+   "text": "→",
+   "category": "body",
+   "color": "rgb(108,117,106)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.71,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(108,117,106)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.71,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(98,107,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.43,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > p",
    "chapter": "ch-notes",
-   "text": "Notes",
-   "category": "large",
-   "color": "rgb(111,115,111)",
+   "text": "How one repository and one deployment can still ",
+   "category": "body",
+   "color": "rgb(107,117,105)",
    "bg": "rgb(255,253,248)",
    "ratio": 4.73,
-   "fontSize": 32,
+   "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(111,115,111)",
+     "color": "rgb(107,117,105)",
      "bg": "rgb(255,253,248)",
      "ratio": 4.73,
-     "y": 6844,
-     "label": ""
-    },
-    {
-     "color": "rgb(49,56,52)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 11.89,
-     "y": 7080,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.04,
      "y": 7316,
      "label": ""
     },
     {
-     "color": "rgb(36,43,39)",
+     "color": "rgb(98,108,96)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
+     "ratio": 5.4,
      "y": 7552,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 7788,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > div.anno > p.ed-lede",
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > div > p",
    "chapter": "ch-notes",
-   "text": "Longer technical notes on systems, data, and how",
+   "text": "Let AI organize and explain while testable code ",
    "category": "body",
-   "color": "rgb(107,114,107)",
+   "color": "rgb(107,116,105)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.84,
+   "ratio": 4.77,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(107,116,105)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.77,
+     "y": 8024,
+     "label": ""
+    },
+    {
+     "color": "rgb(98,108,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.42,
+     "y": 8260,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 8496,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(1).lab-no",
+   "chapter": "ch-lab",
+   "text": "LAB 05",
+   "category": "body",
+   "color": "rgb(106,115,103)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.86,
+   "fontSize": 12,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(106,115,103)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.86,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(98,108,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.42,
+     "y": 9440,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 9676,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(4)",
+   "chapter": "ch-lab",
+   "text": "→",
+   "category": "body",
+   "color": "rgb(106,115,103)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.86,
    "fontSize": 16,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(107,114,107)",
+     "color": "rgb(106,115,103)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.84,
-     "y": 7080,
+     "ratio": 4.86,
+     "y": 9204,
      "label": ""
     },
     {
-     "color": "rgb(86,95,87)",
+     "color": "rgb(98,108,96)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.55,
-     "y": 7316,
+     "ratio": 5.42,
+     "y": 9440,
      "label": ""
     },
     {
-     "color": "rgb(83,92,84)",
+     "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.81,
-     "y": 7552,
+     "ratio": 5.47,
+     "y": 9676,
      "label": ""
     }
    ]
   },
   {
-   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > p",
+   "selector": "ol.method-list > li:nth-of-type(2).ed-stack > div > p",
    "chapter": "ch-method",
-   "text": "Recompute the result, rerun the process, and che",
+   "text": "Use the simplest suitable tools to build the sol",
    "category": "body",
-   "color": "rgb(104,112,104)",
+   "color": "rgb(106,114,106)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.04,
+   "ratio": 4.9,
    "fontSize": 15.68,
    "stateLabel": "pin 段",
    "states": [
     {
-     "color": "rgb(104,112,104)",
+     "color": "rgb(106,114,106)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.04,
-     "y": 1416,
+     "ratio": 4.9,
+     "y": 1180,
      "label": "pin 段"
     },
     {
-     "color": "rgb(85,94,86)",
+     "color": "rgb(86,94,87)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.59,
-     "y": 1652,
+     "ratio": 6.56,
+     "y": 1416,
      "label": "pin 段"
     },
     {
      "color": "rgb(83,92,84)",
      "bg": "rgb(255,253,248)",
      "ratio": 6.82,
-     "y": 1888,
+     "y": 1652,
      "label": "pin 段"
     }
    ]
   },
   {
-   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > p",
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(1).ed-stack > small",
    "chapter": "ch-method",
-   "text": "Split the problem into checkable pieces: where t",
+   "text": "Facts before plans",
    "category": "body",
-   "color": "rgb(103,111,103)",
+   "color": "rgb(102,112,100)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.09,
-   "fontSize": 15.68,
+   "ratio": 5.08,
+   "fontSize": 13,
    "stateLabel": "pin 段",
    "states": [
     {
-     "color": "rgb(103,111,103)",
+     "color": "rgb(102,112,100)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.09,
-     "y": 944,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(85,94,86)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 6.6,
+     "ratio": 5.08,
      "y": 1180,
      "label": "pin 段"
     },
     {
-     "color": "rgb(83,92,84)",
+     "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.81,
+     "ratio": 5.45,
      "y": 1416,
      "label": "pin 段"
     }
@@ -672,36 +806,293 @@
    ]
   },
   {
-   "selector": "ol.method-list > li:nth-of-type(2).ed-stack > div > p",
-   "chapter": "ch-method",
-   "text": "Use the simplest suitable tools to build the sol",
+   "selector": "div.ch-wrap > div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > time",
+   "chapter": "ch-notes",
+   "text": "2026 / 08",
    "category": "body",
-   "color": "rgb(100,108,100)",
+   "color": "rgb(102,111,100)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.32,
-   "fontSize": 15.68,
-   "stateLabel": "pin 段",
+   "ratio": 5.11,
+   "fontSize": 13,
+   "stateLabel": "",
    "states": [
     {
-     "color": "rgb(100,108,100)",
+     "color": "rgb(102,111,100)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.32,
-     "y": 1180,
-     "label": "pin 段"
+     "ratio": 5.11,
+     "y": 7316,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.45,
+     "y": 7552,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack > div.anno > p.ed-lede",
+   "chapter": "ch-method",
+   "text": "Three steps, run on every project.",
+   "category": "body",
+   "color": "rgb(103,111,103)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.13,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(103,111,103)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.13,
+     "y": 708,
+     "label": ""
     },
     {
      "color": "rgb(85,94,86)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.59,
+     "ratio": 6.61,
+     "y": 944,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > time",
+   "chapter": "ch-notes",
+   "text": "2026 / 08",
+   "category": "body",
+   "color": "rgb(102,111,99)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.14,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(102,111,99)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.14,
+     "y": 8024,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.46,
+     "y": 8260,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > p",
+   "chapter": "ch-method",
+   "text": "Recompute the result, rerun the process, and che",
+   "category": "body",
+   "color": "rgb(102,110,103)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.16,
+   "fontSize": 15.68,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(102,110,103)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.16,
      "y": 1416,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(84,93,85)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.7,
+     "y": 1652,
      "label": "pin 段"
     },
     {
      "color": "rgb(83,92,84)",
      "bg": "rgb(255,253,248)",
      "ratio": 6.82,
+     "y": 1888,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > p",
+   "chapter": "ch-method",
+   "text": "Split the problem into checkable pieces: where t",
+   "category": "body",
+   "color": "rgb(101,109,101)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.28,
+   "fontSize": 15.68,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(101,109,101)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.28,
+     "y": 944,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(85,94,86)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.58,
+     "y": 1180,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.82,
+     "y": 1416,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede > a.colophon-cta",
+   "chapter": "ch-colophon",
+   "text": "About me",
+   "category": "body",
+   "color": "rgb(151,160,150)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 5.36,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(151,160,150)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 5.36,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(182,191,179)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.67,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.9,
+     "y": 10384,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > p:nth-of-type(3).work-summary",
+   "chapter": "ch-work",
+   "text": "An R pipeline brings together three official Mel",
+   "category": "body",
+   "color": "rgb(87,96,87)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.37,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(87,96,87)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.37,
+     "y": 3304,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.68,
+     "y": 3540,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(1).ed-stack > span.method-no",
+   "chapter": "ch-method",
+   "text": "01",
+   "category": "body",
+   "color": "rgb(98,108,96)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.4,
+   "fontSize": 16.8,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(98,108,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.4,
+     "y": 1180,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 1416,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(2).ed-stack > span.method-no",
+   "chapter": "ch-method",
+   "text": "02",
+   "category": "body",
+   "color": "rgb(98,108,96)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.4,
+   "fontSize": 16.8,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(98,108,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.4,
+     "y": 1416,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
      "y": 1652,
      "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > p.work-census",
+   "chapter": "ch-work",
+   "text": "published cases",
+   "category": "body",
+   "color": "rgb(87,95,87)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.4,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(87,95,87)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.4,
+     "y": 3068,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.69,
+     "y": 3304,
+     "label": ""
     }
    ]
   },
@@ -710,18 +1101,78 @@
    "chapter": "ch-work",
    "text": "3",
    "category": "body",
-   "color": "rgb(88,96,88)",
+   "color": "rgb(87,95,87)",
    "bg": "rgb(239,232,218)",
-   "ratio": 5.32,
+   "ratio": 5.4,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(88,96,88)",
+     "color": "rgb(87,95,87)",
      "bg": "rgb(239,232,218)",
-     "ratio": 5.32,
+     "ratio": 5.4,
      "y": 3068,
      "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(3).ed-stack > span.method-no",
+   "chapter": "ch-method",
+   "text": "03",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.44,
+   "fontSize": 16.8,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.44,
+     "y": 1652,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > time",
+   "chapter": "ch-notes",
+   "text": "2026 / 08",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.45,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.45,
+     "y": 8024,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(2).ed-stack > small",
+   "chapter": "ch-method",
+   "text": "Tools serve the question",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.46,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.46,
+     "y": 1652,
+     "label": "pin 段"
     }
    ]
   },
@@ -806,82 +1257,28 @@
    ]
   },
   {
-   "selector": "div.anno > aside.mnote > p > a",
-   "chapter": "ch-notes",
-   "text": "Open the map",
-   "category": "body",
-   "color": "rgb(125,100,62)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 5.47,
-   "fontSize": 13,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(125,100,62)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 7316,
-     "label": ""
-    },
-    {
-     "color": "rgb(115,89,49)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 6.43,
-     "y": 7552,
-     "label": ""
-    }
-   ]
-  },
-  {
    "selector": "#ch-colophon > div.ch-wrap > footer.colophon-foot > p.colophon-small",
    "chapter": "ch-colophon",
    "text": "© 2026 Custard · Scroll choreography by GSAP Scr",
    "category": "body",
    "color": "rgb(154,163,152)",
    "bg": "rgb(36,43,39)",
-   "ratio": 5.54,
+   "ratio": 5.55,
    "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(154,163,152)",
      "bg": "rgb(36,43,39)",
-     "ratio": 5.54,
+     "ratio": 5.55,
      "y": 9912,
      "label": ""
     },
     {
      "color": "rgb(155,164,153)",
      "bg": "rgb(36,43,39)",
-     "ratio": 5.61,
+     "ratio": 5.62,
      "y": 10148,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(1).ed-stack.ch-head > div.anno > aside.mnote > p",
-   "chapter": "ch-notes",
-   "text": "Notes are indexed by theme on the map; one threa",
-   "category": "body",
-   "color": "rgb(96,104,96)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 5.66,
-   "fontSize": 13,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(96,104,96)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.66,
-     "y": 7316,
-     "label": ""
-    },
-    {
-     "color": "rgb(84,93,85)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 6.69,
-     "y": 7552,
      "label": ""
     }
    ]
@@ -893,14 +1290,14 @@
    "category": "body",
    "color": "rgb(83,92,84)",
    "bg": "rgb(239,232,218)",
-   "ratio": 5.68,
+   "ratio": 5.69,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(83,92,84)",
      "bg": "rgb(239,232,218)",
-     "ratio": 5.68,
+     "ratio": 5.69,
      "y": 3304,
      "label": ""
     }
@@ -947,6 +1344,74 @@
    ]
   },
   {
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(4).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "System Trace",
+   "category": "body",
+   "color": "rgb(98,102,98)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.74,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(98,102,98)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.74,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(41,48,44)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.26,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.19,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(4).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Follow one real request through the routing boun",
+   "category": "body",
+   "color": "rgb(98,102,98)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.74,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(98,102,98)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.74,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(41,48,44)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.26,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.19,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
    "selector": "div.title-lift > div.ed-stack.title-stack > h1.ed-display-xl > span:nth-of-type(2).ed-fullstop",
    "chapter": "ch-title",
    "text": ".",
@@ -967,34 +1432,61 @@
    ]
   },
   {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > div.anno > p.ed-lede",
+   "chapter": "ch-notes",
+   "text": "Longer technical notes on systems, data, and how",
+   "category": "body",
+   "color": "rgb(90,99,91)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.13,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(90,99,91)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.13,
+     "y": 7080,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.8,
+     "y": 7316,
+     "label": ""
+    }
+   ]
+  },
+  {
    "selector": "#ch-colophon > div.ch-wrap > p.colophon-mark > span:nth-of-type(1).colophon-mark__dot",
    "chapter": "ch-colophon",
    "text": ".",
    "category": "large",
    "color": "rgb(196,166,111)",
    "bg": "rgb(36,43,39)",
-   "ratio": 6.22,
+   "ratio": 6.24,
    "fontSize": 44.8,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(196,166,111)",
      "bg": "rgb(36,43,39)",
-     "ratio": 6.22,
+     "ratio": 6.24,
      "y": 9676,
      "label": ""
     },
     {
      "color": "rgb(201,170,113)",
      "bg": "rgb(36,43,39)",
-     "ratio": 6.52,
+     "ratio": 6.53,
      "y": 9912,
      "label": ""
     },
     {
      "color": "rgb(203,171,114)",
      "bg": "rgb(36,43,39)",
-     "ratio": 6.61,
+     "ratio": 6.62,
      "y": 10148,
      "label": ""
     }
@@ -1036,6 +1528,26 @@
      "bg": "rgb(255,253,248)",
      "ratio": 6.55,
      "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack > div.anno > p.ed-lede",
+   "chapter": "ch-lab",
+   "text": "Things you can operate: change the assumptions o",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.79,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.79,
+     "y": 8732,
      "label": ""
     }
    ]
@@ -1121,69 +1633,28 @@
    ]
   },
   {
-   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(3).lab-row > span:nth-of-type(2).lab-name > b",
-   "chapter": "ch-lab",
-   "text": "Regression bench",
+   "selector": "#ch-colophon > div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede",
+   "chapter": "ch-colophon",
+   "text": "Turning analysis into products is what I do. The",
    "category": "body",
-   "color": "rgb(82,87,83)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 7.26,
-   "fontSize": 21.6,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(82,87,83)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 7.26,
-     "y": 8968,
-     "label": ""
-    },
-    {
-     "color": "rgb(42,49,45)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.18,
-     "y": 9204,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.17,
-     "y": 9440,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(3).lab-row > span:nth-of-type(3)",
-   "chapter": "ch-lab",
-   "text": "Recompute the coefficients, redraw the charts",
-   "category": "body",
-   "color": "rgb(82,87,83)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 7.26,
+   "color": "rgb(182,191,179)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.67,
    "fontSize": 16,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(82,87,83)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 7.26,
-     "y": 8968,
+     "color": "rgb(182,191,179)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.67,
+     "y": 10148,
      "label": ""
     },
     {
-     "color": "rgb(42,49,45)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.18,
-     "y": 9204,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.17,
-     "y": 9440,
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.9,
+     "y": 10384,
      "label": ""
     }
    ]
@@ -1193,23 +1664,23 @@
    "chapter": "ch-colophon",
    "text": "custard.top",
    "category": "body",
-   "color": "rgb(183,192,181)",
+   "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.77,
+   "ratio": 7.78,
    "fontSize": 12,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(183,192,181)",
+     "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.77,
+     "ratio": 7.78,
      "y": 9912,
      "label": ""
     },
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.88,
+     "ratio": 7.89,
      "y": 10148,
      "label": ""
     }
@@ -1220,23 +1691,23 @@
    "chapter": "ch-colophon",
    "text": "Now",
    "category": "body",
-   "color": "rgb(183,192,181)",
+   "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.77,
+   "ratio": 7.78,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(183,192,181)",
+     "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.77,
+     "ratio": 7.78,
      "y": 9912,
      "label": ""
     },
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.88,
+     "ratio": 7.89,
      "y": 10148,
      "label": ""
     }
@@ -1247,23 +1718,23 @@
    "chapter": "ch-colophon",
    "text": "Résumé",
    "category": "body",
-   "color": "rgb(183,192,181)",
+   "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.77,
+   "ratio": 7.78,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(183,192,181)",
+     "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.77,
+     "ratio": 7.78,
      "y": 9912,
      "label": ""
     },
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.88,
+     "ratio": 7.89,
      "y": 10148,
      "label": ""
     }
@@ -1274,23 +1745,23 @@
    "chapter": "ch-colophon",
    "text": "Voxel world",
    "category": "body",
-   "color": "rgb(183,192,181)",
+   "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.77,
+   "ratio": 7.78,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(183,192,181)",
+     "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.77,
+     "ratio": 7.78,
      "y": 9912,
      "label": ""
     },
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.88,
+     "ratio": 7.89,
      "y": 10148,
      "label": ""
     }
@@ -1301,23 +1772,23 @@
    "chapter": "ch-colophon",
    "text": "Back to top",
    "category": "body",
-   "color": "rgb(183,192,181)",
+   "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.77,
+   "ratio": 7.78,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(183,192,181)",
+     "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.77,
+     "ratio": 7.78,
      "y": 9912,
      "label": ""
     },
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.88,
+     "ratio": 7.89,
      "y": 10148,
      "label": ""
     }
@@ -1328,51 +1799,44 @@
    "chapter": "ch-colophon",
    "text": "↑",
    "category": "body",
-   "color": "rgb(183,192,181)",
+   "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.77,
+   "ratio": 7.78,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(183,192,181)",
+     "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.77,
+     "ratio": 7.78,
      "y": 9912,
      "label": ""
     },
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.88,
+     "ratio": 7.89,
      "y": 10148,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > a.ed-textlink",
-   "chapter": "ch-work",
-   "text": "View case",
+   "selector": "#ch-colophon > div.ch-wrap > div.ed-stack > p:nth-of-type(1).colophon-brand",
+   "chapter": "ch-colophon",
+   "text": "CUSTARD · PERSONAL STUDIO",
    "category": "body",
-   "color": "rgb(64,69,63)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 8.07,
-   "fontSize": 16,
+   "color": "rgb(185,194,182)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.87,
+   "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(64,69,63)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 8.07,
-     "y": 3776,
-     "label": ""
-    },
-    {
-     "color": "rgb(39,46,42)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.4,
-     "y": 4012,
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.87,
+     "y": 10148,
      "label": ""
     }
    ]
@@ -1382,52 +1846,127 @@
    "chapter": "ch-work",
    "text": "→",
    "category": "body",
-   "color": "rgb(64,69,63)",
+   "color": "rgb(57,63,58)",
    "bg": "rgb(239,232,218)",
-   "ratio": 8.07,
+   "ratio": 8.89,
    "fontSize": 16,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(64,69,63)",
+     "color": "rgb(57,63,58)",
      "bg": "rgb(239,232,218)",
-     "ratio": 8.07,
+     "ratio": 8.89,
      "y": 3776,
      "label": ""
     },
     {
-     "color": "rgb(39,46,42)",
+     "color": "rgb(38,45,41)",
      "bg": "rgb(239,232,218)",
-     "ratio": 11.4,
+     "ratio": 11.62,
      "y": 4012,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > a.ed-textlink",
-   "chapter": "ch-work",
-   "text": "View case",
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(3).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "Regression bench",
    "category": "body",
-   "color": "rgb(61,66,61)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 8.44,
+   "color": "rgb(67,73,69)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 9.11,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(67,73,69)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 9.11,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.84,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(3).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Recompute the coefficients, redraw the charts",
+   "category": "body",
+   "color": "rgb(67,73,69)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 9.11,
    "fontSize": 16,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(61,66,61)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 8.44,
-     "y": 4484,
+     "color": "rgb(67,73,69)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 9.11,
+     "y": 8968,
      "label": ""
     },
     {
-     "color": "rgb(40,46,42)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.35,
-     "y": 4720,
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.84,
+     "y": 9204,
      "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(2).ed-stack > div > h3",
+   "chapter": "ch-method",
+   "text": "Build",
+   "category": "body",
+   "color": "rgb(66,71,67)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 9.31,
+   "fontSize": 21.6,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(66,71,67)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 9.31,
+     "y": 1180,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(39,46,42)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.62,
+     "y": 1416,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 1652,
+     "label": "pin 段"
     }
    ]
   },
@@ -1436,194 +1975,24 @@
    "chapter": "ch-work",
    "text": "→",
    "category": "body",
-   "color": "rgb(61,66,61)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 8.44,
-   "fontSize": 16,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(61,66,61)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 8.44,
-     "y": 4484,
-     "label": ""
-    },
-    {
-     "color": "rgb(40,46,42)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.35,
-     "y": 4720,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > h3.work-title",
-   "chapter": "ch-work",
-   "text": "RocoDex dual-site platform",
-   "category": "large",
-   "color": "rgb(60,65,60)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 8.55,
-   "fontSize": 27.2,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(60,65,60)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 8.55,
-     "y": 3540,
-     "label": ""
-    },
-    {
-     "color": "rgb(39,45,41)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.48,
-     "y": 3776,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.87,
-     "y": 4012,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > h3.work-title",
-   "chapter": "ch-work",
-   "text": "CSTD Alpha research system",
-   "category": "large",
-   "color": "rgb(57,63,58)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 8.89,
-   "fontSize": 27.2,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(57,63,58)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 8.89,
-     "y": 4248,
-     "label": ""
-    },
-    {
-     "color": "rgb(38,45,41)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.54,
-     "y": 4484,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.87,
-     "y": 4720,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > h3.work-title",
-   "chapter": "ch-work",
-   "text": "Melbourne Pedestrians × Microclimate",
-   "category": "large",
    "color": "rgb(52,58,53)",
    "bg": "rgb(239,232,218)",
    "ratio": 9.54,
-   "fontSize": 30.4,
+   "fontSize": 16,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(52,58,53)",
      "bg": "rgb(239,232,218)",
      "ratio": 9.54,
-     "y": 3068,
+     "y": 4484,
      "label": ""
     },
     {
-     "color": "rgb(37,44,40)",
+     "color": "rgb(38,44,40)",
      "bg": "rgb(239,232,218)",
-     "ratio": 11.75,
-     "y": 3304,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.88,
-     "y": 3540,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > div > h3",
-   "chapter": "ch-notes",
-   "text": "Put AI at the explanation edge, not the decision",
-   "category": "body",
-   "color": "rgb(64,70,66)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 9.55,
-   "fontSize": 19.52,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(64,70,66)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 9.55,
-     "y": 8024,
-     "label": ""
-    },
-    {
-     "color": "rgb(38,45,41)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.8,
-     "y": 8260,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 8496,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > h3",
-   "chapter": "ch-notes",
-   "text": "One Next.js deployment, two genuinely separate w",
-   "category": "body",
-   "color": "rgb(63,69,65)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 9.64,
-   "fontSize": 19.52,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(63,69,65)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 9.64,
-     "y": 7316,
-     "label": ""
-    },
-    {
-     "color": "rgb(40,47,43)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.53,
-     "y": 7552,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.22,
-     "y": 7788,
+     "ratio": 11.64,
+     "y": 4720,
      "label": ""
     }
    ]
@@ -1633,23 +2002,23 @@
    "chapter": "ch-method",
    "text": "Verify",
    "category": "body",
-   "color": "rgb(63,69,65)",
+   "color": "rgb(61,67,63)",
    "bg": "rgb(255,253,248)",
-   "ratio": 9.69,
+   "ratio": 10.01,
    "fontSize": 21.6,
    "stateLabel": "pin 段",
    "states": [
     {
-     "color": "rgb(63,69,65)",
+     "color": "rgb(61,67,63)",
      "bg": "rgb(255,253,248)",
-     "ratio": 9.69,
+     "ratio": 10.01,
      "y": 1416,
      "label": "pin 段"
     },
     {
-     "color": "rgb(39,46,42)",
+     "color": "rgb(38,45,41)",
      "bg": "rgb(255,253,248)",
-     "ratio": 13.69,
+     "ratio": 13.96,
      "y": 1652,
      "label": "pin 段"
     },
@@ -1663,104 +2032,327 @@
    ]
   },
   {
-   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(2).lab-name > b",
-   "chapter": "ch-lab",
-   "text": "Render Lab",
-   "category": "body",
-   "color": "rgb(63,68,64)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 9.74,
-   "fontSize": 21.6,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(63,68,64)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 9.74,
-     "y": 9204,
-     "label": ""
-    },
-    {
-     "color": "rgb(40,47,43)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.54,
-     "y": 9440,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 9676,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(3)",
-   "chapter": "ch-lab",
-   "text": "Compare three visual budgets live",
-   "category": "body",
-   "color": "rgb(63,68,64)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 9.74,
-   "fontSize": 16,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(63,68,64)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 9.74,
-     "y": 9204,
-     "label": ""
-    },
-    {
-     "color": "rgb(40,47,43)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.54,
-     "y": 9440,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 9676,
-     "label": ""
-    }
-   ]
-  },
-  {
    "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > h3",
    "chapter": "ch-method",
    "text": "Deconstruct",
    "category": "body",
-   "color": "rgb(62,68,64)",
+   "color": "rgb(59,65,61)",
    "bg": "rgb(255,253,248)",
-   "ratio": 9.83,
+   "ratio": 10.31,
    "fontSize": 21.6,
    "stateLabel": "pin 段",
    "states": [
     {
-     "color": "rgb(62,68,64)",
+     "color": "rgb(59,65,61)",
      "bg": "rgb(255,253,248)",
-     "ratio": 9.83,
+     "ratio": 10.31,
      "y": 944,
      "label": "pin 段"
     },
     {
      "color": "rgb(39,46,42)",
      "bg": "rgb(255,253,248)",
-     "ratio": 13.71,
+     "ratio": 13.66,
      "y": 1180,
      "label": "pin 段"
     },
     {
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.22,
+     "ratio": 14.23,
      "y": 1416,
      "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "Refresh evidence before asking the model to spea",
+   "category": "body",
+   "color": "rgb(56,62,58)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.8,
+   "fontSize": 19.52,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(56,62,58)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.8,
+     "y": 7788,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.04,
+     "y": 8024,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 8260,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "Collaboration",
+   "category": "large",
+   "color": "rgb(226,224,218)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 10.95,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(226,224,218)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 10.95,
+     "y": 9912,
+     "label": ""
+    },
+    {
+     "color": "rgb(247,244,238)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.16,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 10384,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "Failure drills",
+   "category": "body",
+   "color": "rgb(51,57,53)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 11.56,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(51,57,53)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 11.56,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.11,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Break the system on purpose, practice the recove",
+   "category": "body",
+   "color": "rgb(51,57,53)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 11.56,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(51,57,53)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 11.56,
+     "y": 8968,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.11,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 9440,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > h3.work-title",
+   "chapter": "ch-work",
+   "text": "RocoDex dual-site platform",
+   "category": "large",
+   "color": "rgb(38,45,41)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.6,
+   "fontSize": 27.2,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.6,
+     "y": 3776,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 4012,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > a.ed-textlink",
+   "chapter": "ch-work",
+   "text": "View case",
+   "category": "body",
+   "color": "rgb(38,45,41)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.62,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.62,
+     "y": 4012,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > a.ed-textlink",
+   "chapter": "ch-work",
+   "text": "View case",
+   "category": "body",
+   "color": "rgb(38,44,40)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.64,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(38,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.64,
+     "y": 4720,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "One Next.js deployment, two genuinely separate w",
+   "category": "body",
+   "color": "rgb(51,57,53)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 11.65,
+   "fontSize": 19.52,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(51,57,53)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 11.65,
+     "y": 7316,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.01,
+     "y": 7552,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 7788,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > h3.work-title",
+   "chapter": "ch-work",
+   "text": "CSTD Alpha research system",
+   "category": "large",
+   "color": "rgb(37,44,40)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.69,
+   "fontSize": 27.2,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.69,
+     "y": 4484,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 4720,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > h3.work-title",
+   "chapter": "ch-work",
+   "text": "Melbourne Pedestrians × Microclimate",
+   "category": "large",
+   "color": "rgb(37,44,40)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.77,
+   "fontSize": 30.4,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.77,
+     "y": 3304,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 3540,
+     "label": ""
     }
    ]
   },
@@ -1769,23 +2361,16 @@
    "chapter": "ch-work",
    "text": "Inside the analysis",
    "category": "body",
-   "color": "rgb(49,55,50)",
+   "color": "rgb(37,44,40)",
    "bg": "rgb(239,232,218)",
-   "ratio": 10.03,
+   "ratio": 11.77,
    "fontSize": 16,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(49,55,50)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 10.03,
-     "y": 3304,
-     "label": ""
-    },
-    {
      "color": "rgb(37,44,40)",
      "bg": "rgb(239,232,218)",
-     "ratio": 11.71,
+     "ratio": 11.77,
      "y": 3540,
      "label": ""
     },
@@ -1799,308 +2384,36 @@
    ]
   },
   {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > h3",
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > div > h3",
    "chapter": "ch-notes",
-   "text": "Refresh evidence before asking the model to spea",
+   "text": "Put AI at the explanation edge, not the decision",
    "category": "body",
-   "color": "rgb(60,66,62)",
+   "color": "rgb(50,56,52)",
    "bg": "rgb(255,253,248)",
-   "ratio": 10.1,
+   "ratio": 11.8,
    "fontSize": 19.52,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(60,66,62)",
+     "color": "rgb(50,56,52)",
      "bg": "rgb(255,253,248)",
-     "ratio": 10.1,
-     "y": 7788,
-     "label": ""
-    },
-    {
-     "color": "rgb(39,46,42)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.61,
+     "ratio": 11.8,
      "y": 8024,
      "label": ""
     },
     {
-     "color": "rgb(36,43,39)",
+     "color": "rgb(37,44,40)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
+     "ratio": 14.09,
      "y": 8260,
      "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "Collaboration",
-   "category": "large",
-   "color": "rgb(217,216,210)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 10.12,
-   "fontSize": 32,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(217,216,210)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 10.12,
-     "y": 9912,
-     "label": ""
-    },
-    {
-     "color": "rgb(243,241,235)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 12.8,
-     "y": 10148,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.28,
-     "y": 10384,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(2).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "starts",
-   "category": "large",
-   "color": "rgb(217,216,210)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 10.12,
-   "fontSize": 32,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(217,216,210)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 10.12,
-     "y": 9912,
-     "label": ""
-    },
-    {
-     "color": "rgb(243,241,235)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 12.8,
-     "y": 10148,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.28,
-     "y": 10384,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(3).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "with",
-   "category": "large",
-   "color": "rgb(217,216,210)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 10.12,
-   "fontSize": 32,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(217,216,210)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 10.12,
-     "y": 9912,
-     "label": ""
-    },
-    {
-     "color": "rgb(243,241,235)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 12.8,
-     "y": 10148,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.28,
-     "y": 10384,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(4).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "a",
-   "category": "large",
-   "color": "rgb(217,216,210)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 10.12,
-   "fontSize": 32,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(217,216,210)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 10.12,
-     "y": 9912,
-     "label": ""
-    },
-    {
-     "color": "rgb(243,241,235)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 12.8,
-     "y": 10148,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.28,
-     "y": 10384,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(5).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "question.",
-   "category": "large",
-   "color": "rgb(217,216,210)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 10.12,
-   "fontSize": 32,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(217,216,210)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 10.12,
-     "y": 9912,
-     "label": ""
-    },
-    {
-     "color": "rgb(243,241,235)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 12.8,
-     "y": 10148,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.28,
-     "y": 10384,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(2).lab-name > b",
-   "chapter": "ch-lab",
-   "text": "Failure drills",
-   "category": "body",
-   "color": "rgb(59,65,61)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.31,
-   "fontSize": 21.6,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(59,65,61)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.31,
-     "y": 8968,
-     "label": ""
-    },
-    {
-     "color": "rgb(38,45,41)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.8,
-     "y": 9204,
-     "label": ""
     },
     {
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.23,
-     "y": 9440,
+     "ratio": 14.25,
+     "y": 8496,
      "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(3)",
-   "chapter": "ch-lab",
-   "text": "Break the system on purpose, practice the recove",
-   "category": "body",
-   "color": "rgb(59,65,61)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.31,
-   "fontSize": 16,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(59,65,61)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.31,
-     "y": 8968,
-     "label": ""
-    },
-    {
-     "color": "rgb(38,45,41)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.8,
-     "y": 9204,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.23,
-     "y": 9440,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "ol.method-list > li:nth-of-type(2).ed-stack > div > h3",
-   "chapter": "ch-method",
-   "text": "Build",
-   "category": "body",
-   "color": "rgb(58,64,60)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.43,
-   "fontSize": 21.6,
-   "stateLabel": "pin 段",
-   "states": [
-    {
-     "color": "rgb(58,64,60)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.43,
-     "y": 1180,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(39,46,42)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.69,
-     "y": 1416,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 1652,
-     "label": "pin 段"
     }
    ]
   },
@@ -2205,35 +2518,184 @@
    ]
   },
   {
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "Render Lab",
+   "category": "body",
+   "color": "rgb(48,54,50)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 12.1,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(48,54,50)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 12.1,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.07,
+     "y": 9440,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 9676,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Compare three visual budgets live",
+   "category": "body",
+   "color": "rgb(48,54,50)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 12.1,
+   "fontSize": 16,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(48,54,50)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 12.1,
+     "y": 9204,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.07,
+     "y": 9440,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 9676,
+     "label": ""
+    }
+   ]
+  },
+  {
    "selector": "#ch-colophon > div.ch-wrap > p.colophon-mark",
    "chapter": "ch-colophon",
    "text": "CUSTARD",
    "category": "large",
-   "color": "rgb(239,237,231)",
+   "color": "rgb(240,237,231)",
    "bg": "rgb(36,43,39)",
-   "ratio": 12.36,
+   "ratio": 12.4,
    "fontSize": 44.8,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(239,237,231)",
+     "color": "rgb(240,237,231)",
      "bg": "rgb(36,43,39)",
-     "ratio": 12.36,
+     "ratio": 12.4,
      "y": 9676,
      "label": ""
     },
     {
      "color": "rgb(246,243,237)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.07,
+     "ratio": 13.09,
      "y": 9912,
      "label": ""
     },
     {
      "color": "rgb(248,245,239)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.27,
+     "ratio": 13.29,
      "y": 10148,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(2).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "starts",
+   "category": "large",
+   "color": "rgb(247,244,238)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.16,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(247,244,238)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.16,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 10384,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(3).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "with",
+   "category": "large",
+   "color": "rgb(247,244,238)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.16,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(247,244,238)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.16,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 10384,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(4).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "a",
+   "category": "large",
+   "color": "rgb(247,244,238)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.16,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(247,244,238)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.16,
+     "y": 10148,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 10384,
      "label": ""
     }
    ]
@@ -2319,6 +2781,26 @@
    ]
   },
   {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(5).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "question.",
+   "category": "large",
+   "color": "rgb(248,245,239)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.31,
+   "fontSize": 32,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 10384,
+     "label": ""
+    }
+   ]
+  },
+  {
    "selector": "body.min-h-full > div:nth-of-type(2).ed > header.ed-bar > a.ed-bar__mark",
    "chapter": "body",
    "text": "CUSTARD",
@@ -2353,7 +2835,7 @@
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
      "ratio": 14.25,
-     "y": 8260,
+     "y": 8968,
      "label": ""
     }
    ]
@@ -2373,7 +2855,7 @@
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
      "ratio": 14.25,
-     "y": 8260,
+     "y": 8968,
      "label": ""
     }
    ]

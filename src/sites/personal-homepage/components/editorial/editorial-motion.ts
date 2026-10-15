@@ -390,13 +390,17 @@ export function mountEditorialMotion(root: HTMLElement, locale: CstdLocale): () 
              底缘未离开）才开墨，几何变化即刻自纠，无需任何 settle 兜底。 */
           const setFolioDark = () => {
             const vh = window.innerHeight;
-            const bandCenter = vh / 2;
             const rect = colophon.getBoundingClientRect();
-            /* 单类开墨在部分覆盖期必然对一侧错配（板从下缘进入 folio 盒时，
-               全盒门=入口侧深字压墨牌、立即门=出口侧浅字压纸面）。翻转点取
-               盒中心：错配带对称收窄到两侧各半盒，且无卡死态。 */
-            const covered = rect.top <= bandCenter && rect.bottom >= bandCenter;
-            if (folio.classList.contains("is-dark") !== covered) folio.classList.toggle("is-dark", covered);
+            /* 逐项开墨：每个章码按自己视口纵位下的实际衬底独立翻色——
+               墨牌边界穿过 folio 盒的任何滚动位置都不再有色/底错配
+               （nav 级 is-dark 保留，供整列暗态选择器与既有断言）。 */
+            folio.classList.toggle("is-dark", rect.top <= vh / 2 && rect.bottom >= vh / 2);
+            folio.querySelectorAll<HTMLElement>(".folio__item").forEach((item) => {
+              const r = item.getBoundingClientRect();
+              const cy = r.top + r.height / 2;
+              const onPlate = rect.top <= cy && rect.bottom >= cy;
+              if (item.classList.contains("is-dark") !== onPlate) item.classList.toggle("is-dark", onPlate);
+            });
           };
           ScrollTrigger.create({
             trigger: document.documentElement,

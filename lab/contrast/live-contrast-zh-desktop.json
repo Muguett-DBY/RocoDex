@@ -9,8 +9,8 @@
   },
   "docHeight": 9026,
   "steps": 37,
-  "startedAt": "2026-10-15T16:44:47.191Z",
-  "elapsedMs": 38939,
+  "startedAt": "2026-10-15T16:57:25.050Z",
+  "elapsedMs": 33328,
   "cssFingerprint": [
    "/_next/static/chunks/30hmtu1t-yadr.css",
    "/_next/static/chunks/1olprk_st9cm9.css",
@@ -21,592 +21,193 @@
   ],
   "standard": "WCAG 2.2 SC 1.4.3（正文 4.5:1 / 大字 3:1）；SC 1.4.11 非文本 3:1 仅参考",
   "method": "computed style + 祖先 rgba 逐层合成 + elementFromPoint 实底；违规项复测；媒体衬底为隐藏文字截图采样近似值",
-  "transientDropped": 60
+  "transientDropped": 47
  },
  "summary": {
-  "textElements": 196,
-  "body": 161,
-  "large": 35,
+  "textElements": 189,
+  "body": 157,
+  "large": 32,
   "decorative": 0,
-  "violations": 5,
+  "violations": 2,
   "bodyWorst": {
-   "key": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > b|末",
-   "ratio": 1,
-   "color": "rgb(36,43,39)",
-   "bg": "rgb(36,43,39)",
+   "key": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(1).folio__item > b|扉",
+   "ratio": 1.04,
+   "color": "rgb(251,249,243)",
+   "bg": "rgb(255,253,248)",
    "fontSize": 14.72
   },
   "worst3": [
    {
-    "key": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > b|末",
-    "ratio": 1,
-    "color": "rgb(36,43,39)",
-    "bg": "rgb(36,43,39)",
+    "key": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(1).folio__item > b|扉",
+    "ratio": 1.04,
+    "color": "rgb(251,249,243)",
+    "bg": "rgb(255,253,248)",
     "fontSize": 14.72
    },
    {
-    "key": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > span|版权页",
-    "ratio": 1,
-    "color": "rgb(36,43,39)",
-    "bg": "rgb(36,43,39)",
-    "fontSize": 13
+    "key": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(2).folio__item > b|壹",
+    "ratio": 1.04,
+    "color": "rgb(251,249,243)",
+    "bg": "rgb(255,253,248)",
+    "fontSize": 14.72
    },
    {
-    "key": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(3).folio__item > b|贰",
-    "ratio": 2.6,
+    "key": "#ch-work > div.ch-wrap > article.work.work--featured > p:nth-of-type(1).work-kicker|开放数据分析 / 可复现 R 管线",
+    "ratio": 4.53,
     "color": "rgb(97,107,95)",
-    "bg": "rgb(36,43,39)",
-    "fontSize": 14.72
+    "bg": "rgb(239,232,218)",
+    "fontSize": 13
    }
   ]
  },
  "violations": [
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > b",
+   "selector": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(1).folio__item > b",
    "chapter": "body",
-   "text": "末",
+   "text": "扉",
    "category": "body",
-   "color": "rgb(36,43,39)",
-   "bg": "rgb(36,43,39)",
-   "bgUnder": "rgb(36,43,39)",
+   "color": "rgb(251,249,243)",
+   "bg": "rgb(255,253,248)",
+   "bgUnder": "rgb(255,253,248)",
    "approx": false,
-   "ratio": 1,
+   "ratio": 1.04,
    "fontSize": 14.72,
    "fontWeight": 450,
    "opacityFolded": false,
-   "stateLabel": "folio",
+   "stateLabel": "folio is-dark",
    "scrollY": 7812,
-   "confirmRatio": 1
+   "confirmRatio": 1.04
   },
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > span",
+   "selector": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(2).folio__item > b",
    "chapter": "body",
-   "text": "版权页",
+   "text": "壹",
    "category": "body",
-   "color": "rgb(36,43,39)",
-   "bg": "rgb(36,43,39)",
-   "bgUnder": "rgb(36,43,39)",
+   "color": "rgb(251,249,243)",
+   "bg": "rgb(255,253,248)",
+   "bgUnder": "rgb(255,253,248)",
    "approx": false,
-   "ratio": 1,
-   "fontSize": 13,
-   "fontWeight": 400,
-   "opacityFolded": false,
-   "stateLabel": "folio",
-   "scrollY": 7812,
-   "confirmRatio": 1
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(3).folio__item > b",
-   "chapter": "body",
-   "text": "贰",
-   "category": "body",
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(36,43,39)",
-   "bgUnder": "rgb(36,43,39)",
-   "approx": false,
-   "ratio": 2.6,
+   "ratio": 1.04,
    "fontSize": 14.72,
    "fontWeight": 450,
    "opacityFolded": false,
-   "stateLabel": "folio",
+   "stateLabel": "folio is-dark",
    "scrollY": 7812,
-   "confirmRatio": 2.6
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(4).folio__item > b",
-   "chapter": "body",
-   "text": "叁",
-   "category": "body",
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(36,43,39)",
-   "bgUnder": "rgb(36,43,39)",
-   "approx": false,
-   "ratio": 2.6,
-   "fontSize": 14.72,
-   "fontWeight": 450,
-   "opacityFolded": false,
-   "stateLabel": "folio",
-   "scrollY": 7812,
-   "confirmRatio": 2.6
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(5).folio__item > b",
-   "chapter": "body",
-   "text": "肆",
-   "category": "body",
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(36,43,39)",
-   "bgUnder": "rgb(36,43,39)",
-   "approx": false,
-   "ratio": 2.6,
-   "fontSize": 14.72,
-   "fontWeight": 450,
-   "opacityFolded": false,
-   "stateLabel": "folio",
-   "scrollY": 7812,
-   "confirmRatio": 2.6
+   "confirmRatio": 1.04
   }
  ],
  "decorative": [],
  "allMeasurements": [
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > b",
+   "selector": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(1).folio__item > b",
    "chapter": "body",
-   "text": "末",
+   "text": "扉",
    "category": "body",
-   "color": "rgb(36,43,39)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 1,
+   "color": "rgb(251,249,243)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 1.04,
    "fontSize": 14.72,
-   "stateLabel": "folio",
+   "stateLabel": "folio is-dark",
    "states": [
     {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(248,245,239)",
-     "ratio": 13.31,
-     "y": 0,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(36,43,39)",
+     "color": "rgb(251,249,243)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 504,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.88,
-     "y": 2268,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 1,
+     "ratio": 1.04,
      "y": 7812,
-     "label": "folio"
+     "label": "folio is-dark"
+    },
+    {
+     "color": "rgb(153,154,149)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 5.11,
+     "y": 8064,
+     "label": "folio is-dark"
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > span",
+   "selector": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(2).folio__item > b",
    "chapter": "body",
-   "text": "版权页",
+   "text": "壹",
    "category": "body",
-   "color": "rgb(36,43,39)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 1,
+   "color": "rgb(251,249,243)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 1.04,
+   "fontSize": 14.72,
+   "stateLabel": "folio is-dark",
+   "states": [
+    {
+     "color": "rgb(251,249,243)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 1.04,
+     "y": 7812,
+     "label": "folio is-dark"
+    },
+    {
+     "color": "rgb(153,154,149)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 5.11,
+     "y": 8064,
+     "label": "folio is-dark"
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > p:nth-of-type(1).work-kicker",
+   "chapter": "ch-work",
+   "text": "开放数据分析 / 可复现 R 管线",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.53,
    "fontSize": 13,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(248,245,239)",
-     "ratio": 13.31,
-     "y": 0,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 504,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.88,
-     "y": 2268,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 1,
-     "y": 7812,
-     "label": "folio"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(3).folio__item > b",
-   "chapter": "body",
-   "text": "贰",
-   "category": "body",
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 2.6,
-   "fontSize": 14.72,
-   "stateLabel": "folio",
+   "stateLabel": "",
    "states": [
     {
      "color": "rgb(97,107,95)",
      "bg": "rgb(239,232,218)",
-     "ratio": 4.56,
-     "y": 5544,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 6300,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 2.6,
-     "y": 7812,
-     "label": "folio"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(4).folio__item > b",
-   "chapter": "body",
-   "text": "叁",
-   "category": "body",
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 2.6,
-   "fontSize": 14.72,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 7056,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 2.6,
-     "y": 7812,
-     "label": "folio"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(5).folio__item > b",
-   "chapter": "body",
-   "text": "肆",
-   "category": "body",
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 2.6,
-   "fontSize": 14.72,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 2.6,
-     "y": 7812,
-     "label": "folio"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
-   "chapter": "ch-method",
-   "text": "方",
-   "category": "large",
-   "color": "rgb(118,122,117)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.31,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(118,122,117)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.31,
-     "y": 504,
-     "label": ""
-    },
-    {
-     "color": "rgb(48,54,50)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 12.13,
-     "y": 756,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.07,
-     "y": 1008,
+     "ratio": 4.53,
+     "y": 3024,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span:nth-of-type(2).ed-word > span.ed-word__in",
-   "chapter": "ch-method",
-   "text": "法",
-   "category": "large",
-   "color": "rgb(118,122,117)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.31,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(118,122,117)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.31,
-     "y": 504,
-     "label": ""
-    },
-    {
-     "color": "rgb(48,54,50)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 12.13,
-     "y": 756,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.07,
-     "y": 1008,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > p:nth-of-type(1).work-kicker",
    "chapter": "ch-work",
-   "text": "作",
-   "category": "large",
-   "color": "rgb(106,108,101)",
+   "text": "领域边界 / 内容产品",
+   "category": "body",
+   "color": "rgb(97,107,95)",
    "bg": "rgb(239,232,218)",
-   "ratio": 4.37,
-   "fontSize": 48,
+   "ratio": 4.55,
+   "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(106,108,101)",
+     "color": "rgb(97,107,95)",
      "bg": "rgb(239,232,218)",
-     "ratio": 4.37,
-     "y": 2268,
-     "label": ""
-    },
-    {
-     "color": "rgb(41,48,43)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.14,
-     "y": 2520,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.86,
-     "y": 2772,
+     "ratio": 4.55,
+     "y": 3276,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span:nth-of-type(2).ed-word > span.ed-word__in",
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > p:nth-of-type(1).work-kicker",
    "chapter": "ch-work",
-   "text": "品",
-   "category": "large",
-   "color": "rgb(106,108,101)",
+   "text": "证据管线 / 决策工作台",
+   "category": "body",
+   "color": "rgb(97,107,95)",
    "bg": "rgb(239,232,218)",
-   "ratio": 4.37,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(106,108,101)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 4.37,
-     "y": 2268,
-     "label": ""
-    },
-    {
-     "color": "rgb(41,48,43)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.14,
-     "y": 2520,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.86,
-     "y": 2772,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(1).lab-no",
-   "chapter": "ch-lab",
-   "text": "LAB 02",
-   "category": "body",
-   "color": "rgb(111,120,108)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.52,
-   "fontSize": 12,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(111,120,108)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.52,
-     "y": 7308,
-     "label": ""
-    },
-    {
-     "color": "rgb(98,108,96)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.39,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 7812,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(4)",
-   "chapter": "ch-lab",
-   "text": "→",
-   "category": "body",
-   "color": "rgb(111,120,108)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.52,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(111,120,108)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.52,
-     "y": 7308,
-     "label": ""
-    },
-    {
-     "color": "rgb(98,108,96)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.39,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 7812,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > div > p",
-   "chapter": "ch-notes",
-   "text": "让 AI 帮忙整理和解释，但把估值公式、现金流、折现和版本决定权留给能测试的代码。",
-   "category": "body",
-   "color": "rgb(110,119,108)",
-   "bg": "rgb(255,253,248)",
    "ratio": 4.55,
-   "fontSize": 14.72,
+   "fontSize": 13,
    "stateLabel": "",
    "states": [
-    {
-     "color": "rgb(110,119,108)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.55,
-     "y": 6804,
-     "label": ""
-    },
-    {
-     "color": "rgb(98,108,96)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.39,
-     "y": 7056,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(1).lab-no",
-   "chapter": "ch-lab",
-   "text": "LAB 05",
-   "category": "body",
-   "color": "rgb(110,119,108)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.55,
-   "fontSize": 12,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(110,119,108)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.55,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(98,108,96)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.39,
-     "y": 7812,
-     "label": ""
-    },
     {
      "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 8064,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(4)",
-   "chapter": "ch-lab",
-   "text": "→",
-   "category": "body",
-   "color": "rgb(110,119,108)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.55,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(110,119,108)",
-     "bg": "rgb(255,253,248)",
+     "bg": "rgb(239,232,218)",
      "ratio": 4.55,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(98,108,96)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.39,
-     "y": 7812,
-     "label": ""
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 8064,
+     "y": 3276,
      "label": ""
     }
    ]
@@ -662,6 +263,33 @@
      "ratio": 4.56,
      "y": 2520,
      "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > div.anno > p.ed-lede",
+   "chapter": "ch-work",
+   "text": "三件选出来的：一份城市数据分析，两个在运行的系统。",
+   "category": "body",
+   "color": "rgb(99,106,98)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(99,106,98)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 2520,
+     "label": ""
+    },
+    {
+     "color": "rgb(85,93,85)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.56,
+     "y": 2772,
+     "label": ""
     }
    ]
   },
@@ -722,6 +350,33 @@
      "ratio": 4.56,
      "y": 5292,
      "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(3).folio__item > b",
+   "chapter": "body",
+   "text": "贰",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 14.72,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 5544,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 6300,
+     "label": "folio"
     }
    ]
   },
@@ -806,27 +461,54 @@
    ]
   },
   {
-   "selector": "div.anno > aside.mnote > p > a",
-   "chapter": "ch-notes",
-   "text": "打开星图",
+   "selector": "div:nth-of-type(1).ed-stack > div.anno > aside.mnote > p",
+   "chapter": "ch-method",
+   "text": "这套方法源自化工训练：先画边界，再做衡算，实验记录优先。",
    "category": "body",
-   "color": "rgb(136,113,78)",
+   "color": "rgb(111,118,111)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.56,
+   "ratio": 4.58,
    "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(136,113,78)",
+     "color": "rgb(111,118,111)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.56,
+     "ratio": 4.58,
+     "y": 756,
+     "label": ""
+    },
+    {
+     "color": "rgb(86,95,87)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.54,
+     "y": 1008,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.anno > aside.mnote > p > a",
+   "chapter": "ch-notes",
+   "text": "打开星图",
+   "category": "body",
+   "color": "rgb(135,112,77)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.62,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(135,112,77)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.62,
      "y": 6300,
      "label": ""
     },
     {
-     "color": "rgb(115,89,49)",
+     "color": "rgb(116,91,50)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.42,
+     "ratio": 6.32,
      "y": 6552,
      "label": ""
     },
@@ -840,157 +522,69 @@
    ]
   },
   {
-   "selector": "div.anno > aside.mnote > p > a",
-   "chapter": "ch-work",
-   "text": "全部作品",
-   "category": "body",
-   "color": "rgb(125,100,61)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 4.58,
-   "fontSize": 13,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(125,100,61)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 4.58,
-     "y": 2520,
-     "label": ""
-    },
-    {
-     "color": "rgb(114,89,48)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 5.42,
-     "y": 2772,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(4).lab-row > span:nth-of-type(2).lab-name > b",
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(1).lab-no",
    "chapter": "ch-lab",
-   "text": "System Trace",
+   "text": "LAB 05",
    "category": "body",
-   "color": "rgb(113,117,112)",
+   "color": "rgb(109,118,106)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.62,
-   "fontSize": 21.6,
+   "ratio": 4.66,
+   "fontSize": 12,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(113,117,112)",
+     "color": "rgb(109,118,106)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.62,
-     "y": 7308,
-     "label": ""
-    },
-    {
-     "color": "rgb(45,51,47)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 12.66,
+     "ratio": 4.66,
      "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.17,
-     "y": 7812,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(4).lab-row > span:nth-of-type(3)",
-   "chapter": "ch-lab",
-   "text": "沿一条真实请求穿过路由边界",
-   "category": "body",
-   "color": "rgb(113,117,112)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.62,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(113,117,112)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.62,
-     "y": 7308,
-     "label": ""
-    },
-    {
-     "color": "rgb(45,51,47)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 12.66,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.17,
-     "y": 7812,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > p",
-   "chapter": "ch-notes",
-   "text": "一个仓库、一次部署，如何让 custard.top 和 RocoDex 仍然像两套真正独立的产品",
-   "category": "body",
-   "color": "rgb(108,118,106)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.67,
-   "fontSize": 14.72,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(108,118,106)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.67,
-     "y": 6552,
      "label": ""
     },
     {
      "color": "rgb(98,108,96)",
      "bg": "rgb(255,253,248)",
      "ratio": 5.41,
-     "y": 6804,
+     "y": 7812,
      "label": ""
     },
     {
      "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
      "ratio": 5.47,
-     "y": 7056,
+     "y": 8064,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > p",
-   "chapter": "ch-notes",
-   "text": "公司研究最贵的往往不是 token，而是过期事实、重复任务和说不清来路的结论。",
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(4)",
+   "chapter": "ch-lab",
+   "text": "→",
    "category": "body",
-   "color": "rgb(108,118,106)",
+   "color": "rgb(109,118,106)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.67,
-   "fontSize": 14.72,
+   "ratio": 4.66,
+   "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(108,118,106)",
+     "color": "rgb(109,118,106)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.67,
-     "y": 6552,
+     "ratio": 4.66,
+     "y": 7560,
      "label": ""
     },
     {
      "color": "rgb(98,108,96)",
      "bg": "rgb(255,253,248)",
      "ratio": 5.41,
-     "y": 6804,
+     "y": 7812,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 8064,
      "label": ""
     }
    ]
@@ -1000,23 +594,23 @@
    "chapter": "ch-notes",
    "text": "札记按主题收在星图里，顺着一条线索能读下去。",
    "category": "body",
-   "color": "rgb(109,117,109)",
+   "color": "rgb(108,116,108)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.69,
+   "ratio": 4.75,
    "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(109,117,109)",
+     "color": "rgb(108,116,108)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.69,
+     "ratio": 4.75,
      "y": 6300,
      "label": ""
     },
     {
-     "color": "rgb(84,93,85)",
+     "color": "rgb(86,94,87)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.68,
+     "ratio": 6.57,
      "y": 6552,
      "label": ""
     },
@@ -1030,217 +624,27 @@
    ]
   },
   {
-   "selector": "div:nth-of-type(1).ed-stack.ch-head > div.anno > aside.mnote > p",
-   "chapter": "ch-work",
-   "text": "作品 01 的全部脚本可以重跑：下载、清洗、建模、绘图。",
-   "category": "body",
-   "color": "rgb(96,104,95)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 4.73,
-   "fontSize": 13,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(96,104,95)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 4.73,
-     "y": 2520,
-     "label": ""
-    },
-    {
-     "color": "rgb(84,92,84)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 5.65,
-     "y": 2772,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
-   "chapter": "ch-notes",
-   "text": "札",
-   "category": "large",
-   "color": "rgb(110,114,109)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.84,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(110,114,109)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.84,
-     "y": 6048,
-     "label": ""
-    },
-    {
-     "color": "rgb(46,53,49)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 12.37,
-     "y": 6300,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.18,
-     "y": 6552,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span:nth-of-type(2).ed-word > span.ed-word__in",
-   "chapter": "ch-notes",
-   "text": "记",
-   "category": "large",
-   "color": "rgb(110,114,109)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.84,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(110,114,109)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.84,
-     "y": 6048,
-     "label": ""
-    },
-    {
-     "color": "rgb(46,53,49)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 12.37,
-     "y": 6300,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.18,
-     "y": 6552,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "#ch-colophon > div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede",
-   "chapter": "ch-colophon",
-   "text": "把分析做成产品，是我一直在做的事。关于页和履历都在下面，合适就写封邮件。",
-   "category": "body",
-   "color": "rgb(144,152,143)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 4.9,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(144,152,143)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 4.9,
-     "y": 8064,
-     "label": ""
-    },
-    {
-     "color": "rgb(181,190,178)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.53,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(185,194,182)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.9,
-     "y": 8568,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede > a.colophon-cta",
-   "chapter": "ch-colophon",
-   "text": "关于我",
-   "category": "body",
-   "color": "rgb(144,152,143)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 4.9,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(144,152,143)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 4.9,
-     "y": 8064,
-     "label": ""
-    },
-    {
-     "color": "rgb(181,190,178)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.53,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(185,194,182)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.9,
-     "y": 8568,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > div.anno > p.ed-lede",
-   "chapter": "ch-work",
-   "text": "三件选出来的：一份城市数据分析，两个在运行的系统。",
-   "category": "body",
-   "color": "rgb(93,101,92)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 4.97,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(93,101,92)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 4.97,
-     "y": 2520,
-     "label": ""
-    },
-    {
-     "color": "rgb(83,92,84)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 5.65,
-     "y": 2772,
-     "label": ""
-    }
-   ]
-  },
-  {
    "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack > div.anno > p.ed-lede",
    "chapter": "ch-method",
    "text": "三个步骤，每个项目都走一遍。",
    "category": "body",
-   "color": "rgb(105,112,105)",
+   "color": "rgb(103,111,103)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.01,
+   "ratio": 5.09,
    "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(105,112,105)",
+     "color": "rgb(103,111,103)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.01,
+     "ratio": 5.09,
      "y": 756,
      "label": ""
     },
     {
      "color": "rgb(85,94,86)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.58,
+     "ratio": 6.6,
      "y": 1008,
      "label": ""
     }
@@ -1307,46 +711,6 @@
    ]
   },
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(1).folio__item > b",
-   "chapter": "body",
-   "text": "扉",
-   "category": "body",
-   "color": "rgb(153,154,149)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 5.11,
-   "fontSize": 14.72,
-   "stateLabel": "folio is-dark",
-   "states": [
-    {
-     "color": "rgb(153,154,149)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 5.11,
-     "y": 8064,
-     "label": "folio is-dark"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(2).folio__item > b",
-   "chapter": "body",
-   "text": "壹",
-   "category": "body",
-   "color": "rgb(153,154,149)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 5.11,
-   "fontSize": 14.72,
-   "stateLabel": "folio is-dark",
-   "states": [
-    {
-     "color": "rgb(153,154,149)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 5.11,
-     "y": 8064,
-     "label": "folio is-dark"
-    }
-   ]
-  },
-  {
    "selector": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(3).folio__item > b",
    "chapter": "body",
    "text": "贰",
@@ -1361,7 +725,7 @@
      "color": "rgb(153,154,149)",
      "bg": "rgb(36,43,39)",
      "ratio": 5.11,
-     "y": 8064,
+     "y": 7812,
      "label": "folio is-dark"
     }
    ]
@@ -1381,7 +745,7 @@
      "color": "rgb(153,154,149)",
      "bg": "rgb(36,43,39)",
      "ratio": 5.11,
-     "y": 8064,
+     "y": 7812,
      "label": "folio is-dark"
     }
    ]
@@ -1401,41 +765,88 @@
      "color": "rgb(153,154,149)",
      "bg": "rgb(36,43,39)",
      "ratio": 5.11,
-     "y": 8064,
+     "y": 7812,
      "label": "folio is-dark"
     }
    ]
   },
   {
-   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > p",
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(2).ed-stack > small",
    "chapter": "ch-method",
-   "text": "先把问题问清楚：数据从哪来，数字怎么算，哪些限制必须考虑。",
+   "text": "工具跟着问题走",
    "category": "body",
-   "color": "rgb(102,110,102)",
+   "color": "rgb(101,111,99)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.18,
-   "fontSize": 15.68,
+   "ratio": 5.14,
+   "fontSize": 13,
    "stateLabel": "pin 段",
    "states": [
     {
-     "color": "rgb(102,110,102)",
+     "color": "rgb(101,111,99)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.18,
-     "y": 756,
+     "ratio": 5.14,
+     "y": 1260,
      "label": "pin 段"
     },
     {
-     "color": "rgb(85,94,86)",
+     "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.62,
+     "ratio": 5.45,
+     "y": 1512,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(1).ed-stack > small",
+   "chapter": "ch-method",
+   "text": "先弄清事实，再谈方案",
+   "category": "body",
+   "color": "rgb(101,111,99)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.15,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(101,111,99)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.15,
      "y": 1008,
      "label": "pin 段"
     },
     {
-     "color": "rgb(83,92,84)",
+     "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.82,
+     "ratio": 5.45,
      "y": 1260,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(3).ed-stack > small",
+   "chapter": "ch-method",
+   "text": "结果要经得起检查",
+   "category": "body",
+   "color": "rgb(101,111,99)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.16,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(101,111,99)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.16,
+     "y": 1512,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.46,
+     "y": 1764,
      "label": "pin 段"
     }
    ]
@@ -1445,23 +856,23 @@
    "chapter": "ch-notes",
    "text": "写得比较长的技术笔记：系统、数据，和做事的方式。",
    "category": "body",
-   "color": "rgb(102,110,102)",
+   "color": "rgb(102,109,102)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.18,
+   "ratio": 5.23,
    "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(102,110,102)",
+     "color": "rgb(102,109,102)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.18,
+     "ratio": 5.23,
      "y": 6300,
      "label": ""
     },
     {
-     "color": "rgb(84,93,85)",
+     "color": "rgb(85,94,86)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.71,
+     "ratio": 6.62,
      "y": 6552,
      "label": ""
     }
@@ -1472,23 +883,23 @@
    "chapter": "ch-method",
    "text": "选合适的工具，把解法做出来：一段分析脚本、一个界面，或者一套完整的系统。",
    "category": "body",
-   "color": "rgb(102,110,102)",
+   "color": "rgb(101,109,101)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.21,
+   "ratio": 5.24,
    "fontSize": 15.68,
    "stateLabel": "pin 段",
    "states": [
     {
-     "color": "rgb(102,110,102)",
+     "color": "rgb(101,109,101)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.21,
+     "ratio": 5.24,
      "y": 1008,
      "label": "pin 段"
     },
     {
-     "color": "rgb(85,93,86)",
+     "color": "rgb(85,94,86)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.67,
+     "ratio": 6.63,
      "y": 1260,
      "label": "pin 段"
     },
@@ -1502,20 +913,135 @@
    ]
   },
   {
+   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > p",
+   "chapter": "ch-method",
+   "text": "先把问题问清楚：数据从哪来，数字怎么算，哪些限制必须考虑。",
+   "category": "body",
+   "color": "rgb(101,109,101)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.26,
+   "fontSize": 15.68,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(101,109,101)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.26,
+     "y": 756,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(85,94,86)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.63,
+     "y": 1008,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.82,
+     "y": 1260,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > p",
+   "chapter": "ch-method",
+   "text": "把结果重新算一遍，把流程再跑一遍，再检查产品是否真的好用。做到了什么，还有哪些不足，都说清楚。",
+   "category": "body",
+   "color": "rgb(101,109,101)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.28,
+   "fontSize": 15.68,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(101,109,101)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.28,
+     "y": 1260,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(85,94,86)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.64,
+     "y": 1512,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.82,
+     "y": 1764,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > p.work-census",
+   "chapter": "ch-work",
+   "text": "个已发布案例",
+   "category": "body",
+   "color": "rgb(88,96,88)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.33,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(88,96,88)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.33,
+     "y": 2772,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.67,
+     "y": 3024,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > p.work-census > span:nth-of-type(1)",
+   "chapter": "ch-work",
+   "text": "5",
+   "category": "body",
+   "color": "rgb(88,96,88)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.33,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(88,96,88)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.33,
+     "y": 2772,
+     "label": ""
+    }
+   ]
+  },
+  {
    "selector": "article:nth-of-type(1).work.ed-stack > figure.plate > figcaption > span:nth-of-type(1).fig-no",
    "chapter": "ch-work",
    "text": "图 04",
    "category": "body",
-   "color": "rgb(116,90,49)",
+   "color": "rgb(115,89,49)",
    "bg": "rgb(239,232,218)",
-   "ratio": 5.32,
+   "ratio": 5.35,
    "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(116,90,49)",
+     "color": "rgb(115,89,49)",
      "bg": "rgb(239,232,218)",
-     "ratio": 5.32,
+     "ratio": 5.35,
      "y": 3528,
      "label": ""
     },
@@ -1533,16 +1059,16 @@
    "chapter": "ch-work",
    "text": "图 05",
    "category": "body",
-   "color": "rgb(116,90,49)",
+   "color": "rgb(115,89,49)",
    "bg": "rgb(239,232,218)",
-   "ratio": 5.32,
+   "ratio": 5.35,
    "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(116,90,49)",
+     "color": "rgb(115,89,49)",
      "bg": "rgb(239,232,218)",
-     "ratio": 5.32,
+     "ratio": 5.35,
      "y": 3528,
      "label": ""
     },
@@ -1551,6 +1077,201 @@
      "bg": "rgb(239,232,218)",
      "ratio": 5.46,
      "y": 3780,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > p:nth-of-type(3).work-summary",
+   "chapter": "ch-work",
+   "text": "个人主站和 RocoDex 共用一个 Next.js 部署，但域名、认证、内容模块和回归测试各自",
+   "category": "body",
+   "color": "rgb(87,96,88)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.37,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(87,96,88)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.37,
+     "y": 3276,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.68,
+     "y": 3528,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > p:nth-of-type(3).work-summary",
+   "chapter": "ch-work",
+   "text": "把“问一句出一篇报告”拆成可回看的研究流程：来源、异步任务、估值版本和反证条件都跟着结果保存。",
+   "category": "body",
+   "color": "rgb(87,96,88)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.37,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(87,96,88)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.37,
+     "y": 3276,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.68,
+     "y": 3528,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(1).ed-stack > span.method-no",
+   "chapter": "ch-method",
+   "text": "01",
+   "category": "body",
+   "color": "rgb(98,108,96)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.42,
+   "fontSize": 16.8,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(98,108,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.42,
+     "y": 1008,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 1260,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(2).ed-stack > span.method-no",
+   "chapter": "ch-method",
+   "text": "02",
+   "category": "body",
+   "color": "rgb(98,108,96)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.42,
+   "fontSize": 16.8,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(98,108,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.42,
+     "y": 1260,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 1512,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(3).ed-stack > span.method-no",
+   "chapter": "ch-method",
+   "text": "03",
+   "category": "body",
+   "color": "rgb(98,108,96)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.42,
+   "fontSize": 16.8,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(98,108,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.42,
+     "y": 1512,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 1764,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > time",
+   "chapter": "ch-notes",
+   "text": "2026 / 08",
+   "category": "body",
+   "color": "rgb(98,107,95)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.43,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(98,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.43,
+     "y": 6804,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > time",
+   "chapter": "ch-notes",
+   "text": "2026 / 08",
+   "category": "body",
+   "color": "rgb(98,107,95)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.43,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(98,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.43,
+     "y": 6804,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > time",
+   "chapter": "ch-notes",
+   "text": "2026 / 08",
+   "category": "body",
+   "color": "rgb(98,107,96)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.43,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(98,107,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.43,
+     "y": 7056,
      "label": ""
     }
    ]
@@ -1636,55 +1357,55 @@
    ]
   },
   {
-   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > p",
-   "chapter": "ch-method",
-   "text": "把结果重新算一遍，把流程再跑一遍，再检查产品是否真的好用。做到了什么，还有哪些不足，都说清楚。",
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(4).folio__item > b",
+   "chapter": "body",
+   "text": "叁",
    "category": "body",
-   "color": "rgb(98,106,99)",
+   "color": "rgb(97,107,95)",
    "bg": "rgb(255,253,248)",
    "ratio": 5.47,
-   "fontSize": 15.68,
-   "stateLabel": "pin 段",
+   "fontSize": 14.72,
+   "stateLabel": "folio",
    "states": [
     {
-     "color": "rgb(98,106,99)",
+     "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
      "ratio": 5.47,
-     "y": 1260,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(84,93,85)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 6.74,
-     "y": 1512,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(83,92,84)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 6.83,
-     "y": 1764,
-     "label": "pin 段"
+     "y": 7056,
+     "label": "folio"
     }
    ]
   },
   {
-   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > p.work-census > span:nth-of-type(1)",
-   "chapter": "ch-work",
-   "text": "5",
+   "selector": "div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede > a.colophon-cta",
+   "chapter": "ch-colophon",
+   "text": "关于我",
    "category": "body",
-   "color": "rgb(85,93,85)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 5.56,
-   "fontSize": 14.72,
+   "color": "rgb(153,161,151)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 5.47,
+   "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(85,93,85)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 5.56,
-     "y": 2772,
+     "color": "rgb(153,161,151)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 5.47,
+     "y": 8064,
+     "label": ""
+    },
+    {
+     "color": "rgb(181,190,178)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.55,
+     "y": 8316,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.88,
+     "y": 8568,
      "label": ""
     }
    ]
@@ -1694,16 +1415,16 @@
    "chapter": "ch-colophon",
    "text": "© 2026 奶黄包 · 滚动编排由 GSAP ScrollTrigger 驱动，无视频。",
    "category": "body",
-   "color": "rgb(154,163,152)",
+   "color": "rgb(154,163,153)",
    "bg": "rgb(36,43,39)",
-   "ratio": 5.56,
+   "ratio": 5.57,
    "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(154,163,152)",
+     "color": "rgb(154,163,153)",
      "bg": "rgb(36,43,39)",
-     "ratio": 5.56,
+     "ratio": 5.57,
      "y": 8064,
      "label": ""
     },
@@ -1723,15 +1444,35 @@
    "category": "body",
    "color": "rgb(83,92,84)",
    "bg": "rgb(239,232,218)",
-   "ratio": 5.69,
+   "ratio": 5.67,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(83,92,84)",
      "bg": "rgb(239,232,218)",
-     "ratio": 5.69,
+     "ratio": 5.67,
      "y": 3024,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > p:nth-of-type(3).work-summary",
+   "chapter": "ch-work",
+   "text": "用 R 整理墨尔本三份官方开放数据，把 147 万行行人记录与 150 米内的微气候观测对齐，分",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.67,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.67,
+     "y": 3276,
      "label": ""
     }
    ]
@@ -1801,23 +1542,23 @@
    "chapter": "ch-colophon",
    "text": ".",
    "category": "large",
-   "color": "rgb(197,167,111)",
+   "color": "rgb(198,167,112)",
    "bg": "rgb(36,43,39)",
-   "ratio": 6.29,
+   "ratio": 6.3,
    "fontSize": 72,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(197,167,111)",
+     "color": "rgb(198,167,112)",
      "bg": "rgb(36,43,39)",
-     "ratio": 6.29,
+     "ratio": 6.3,
      "y": 7812,
      "label": ""
     },
     {
      "color": "rgb(202,170,113)",
      "bg": "rgb(36,43,39)",
-     "ratio": 6.54,
+     "ratio": 6.55,
      "y": 8064,
      "label": ""
     },
@@ -1886,6 +1627,26 @@
      "bg": "rgb(255,253,248)",
      "ratio": 6.55,
      "y": 7560,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack > div.anno > p.ed-lede",
+   "chapter": "ch-lab",
+   "text": "几个能直接上手的东西：改一改 DCF 模型的假设看估值怎么动，触发一次故障演练看系统怎么恢复。输",
+   "category": "body",
+   "color": "rgb(83,92,84)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.78,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.78,
+     "y": 7308,
      "label": ""
     }
    ]
@@ -1991,20 +1752,115 @@
    ]
   },
   {
+   "selector": "#ch-colophon > div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede",
+   "chapter": "ch-colophon",
+   "text": "把分析做成产品，是我一直在做的事。关于页和履历都在下面，合适就写封邮件。",
+   "category": "body",
+   "color": "rgb(181,190,178)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.55,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(181,190,178)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.55,
+     "y": 8316,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.88,
+     "y": 8568,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(3).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "回归实验台",
+   "category": "body",
+   "color": "rgb(77,83,79)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 7.76,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(77,83,79)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 7.76,
+     "y": 7308,
+     "label": ""
+    },
+    {
+     "color": "rgb(39,46,42)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.65,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 7812,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(3).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "系数重算，图表重画",
+   "category": "body",
+   "color": "rgb(77,83,79)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 7.76,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(77,83,79)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 7.76,
+     "y": 7308,
+     "label": ""
+    },
+    {
+     "color": "rgb(39,46,42)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.65,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 7812,
+     "label": ""
+    }
+   ]
+  },
+  {
    "selector": "#ch-colophon > div.ch-wrap > p.colophon-mark > span:nth-of-type(2).colophon-mark__domain",
    "chapter": "ch-colophon",
    "text": "custard.top",
    "category": "body",
    "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.8,
+   "ratio": 7.81,
    "fontSize": 12,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.8,
+     "ratio": 7.81,
      "y": 8064,
      "label": ""
     },
@@ -2024,14 +1880,14 @@
    "category": "body",
    "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.8,
+   "ratio": 7.81,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.8,
+     "ratio": 7.81,
      "y": 8064,
      "label": ""
     },
@@ -2051,14 +1907,14 @@
    "category": "body",
    "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.8,
+   "ratio": 7.81,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.8,
+     "ratio": 7.81,
      "y": 8064,
      "label": ""
     },
@@ -2078,14 +1934,14 @@
    "category": "body",
    "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.8,
+   "ratio": 7.81,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.8,
+     "ratio": 7.81,
      "y": 8064,
      "label": ""
     },
@@ -2105,14 +1961,14 @@
    "category": "body",
    "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.8,
+   "ratio": 7.81,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.8,
+     "ratio": 7.81,
      "y": 8064,
      "label": ""
     },
@@ -2132,14 +1988,14 @@
    "category": "body",
    "color": "rgb(184,193,181)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.8,
+   "ratio": 7.81,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(184,193,181)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.8,
+     "ratio": 7.81,
      "y": 8064,
      "label": ""
     },
@@ -2153,198 +2009,82 @@
    ]
   },
   {
-   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(3).lab-row > span:nth-of-type(2).lab-name > b",
-   "chapter": "ch-lab",
-   "text": "回归实验台",
+   "selector": "#ch-colophon > div.ch-wrap > div.ed-stack > p:nth-of-type(1).colophon-brand",
+   "chapter": "ch-colophon",
+   "text": "奶黄包 · 个人工作室",
    "category": "body",
-   "color": "rgb(75,81,76)",
+   "color": "rgb(184,193,181)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.86,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(184,193,181)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.86,
+     "y": 8316,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.9,
+     "y": 8568,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "一个 Next.js 部署，两个真正独立的网站",
+   "category": "body",
+   "color": "rgb(61,67,63)",
    "bg": "rgb(255,253,248)",
-   "ratio": 8.04,
-   "fontSize": 21.6,
+   "ratio": 10.01,
+   "fontSize": 19.52,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(75,81,76)",
+     "color": "rgb(61,67,63)",
      "bg": "rgb(255,253,248)",
-     "ratio": 8.04,
-     "y": 7308,
+     "ratio": 10.01,
+     "y": 6552,
      "label": ""
     },
     {
-     "color": "rgb(40,47,43)",
+     "color": "rgb(38,45,41)",
      "bg": "rgb(255,253,248)",
-     "ratio": 13.54,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 7812,
+     "ratio": 13.86,
+     "y": 6804,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(3).lab-row > span:nth-of-type(3)",
-   "chapter": "ch-lab",
-   "text": "系数重算，图表重画",
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "先刷新证据，再让模型说话",
    "category": "body",
-   "color": "rgb(75,81,76)",
+   "color": "rgb(61,67,63)",
    "bg": "rgb(255,253,248)",
-   "ratio": 8.04,
-   "fontSize": 17,
+   "ratio": 10.01,
+   "fontSize": 19.52,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(75,81,76)",
+     "color": "rgb(61,67,63)",
      "bg": "rgb(255,253,248)",
-     "ratio": 8.04,
-     "y": 7308,
+     "ratio": 10.01,
+     "y": 6552,
      "label": ""
     },
     {
-     "color": "rgb(40,47,43)",
+     "color": "rgb(38,45,41)",
      "bg": "rgb(255,253,248)",
-     "ratio": 13.54,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 7812,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > h3.work-title",
-   "chapter": "ch-work",
-   "text": "RocoDex 双站平台",
-   "category": "large",
-   "color": "rgb(50,56,51)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 9.82,
-   "fontSize": 27.2,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(50,56,51)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 9.82,
-     "y": 3024,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.74,
-     "y": 3276,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.88,
-     "y": 3528,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > h3.work-title",
-   "chapter": "ch-work",
-   "text": "CSTD Alpha 研究系统",
-   "category": "large",
-   "color": "rgb(50,56,51)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 9.82,
-   "fontSize": 27.2,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(50,56,51)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 9.82,
-     "y": 3024,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.74,
-     "y": 3276,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.88,
-     "y": 3528,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > h3.work-title",
-   "chapter": "ch-work",
-   "text": "墨尔本行人 × 微气候",
-   "category": "large",
-   "color": "rgb(50,56,51)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 9.87,
-   "fontSize": 36,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(50,56,51)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 9.87,
-     "y": 2772,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.78,
-     "y": 3024,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > a.ed-textlink",
-   "chapter": "ch-work",
-   "text": "看案例",
-   "category": "body",
-   "color": "rgb(49,56,51)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 9.92,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(49,56,51)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 9.92,
-     "y": 3276,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.75,
-     "y": 3528,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.88,
-     "y": 3780,
+     "ratio": 13.86,
+     "y": 6804,
      "label": ""
     }
    ]
@@ -2354,57 +2094,23 @@
    "chapter": "ch-work",
    "text": "→",
    "category": "body",
-   "color": "rgb(49,56,51)",
+   "color": "rgb(48,54,49)",
    "bg": "rgb(239,232,218)",
-   "ratio": 9.92,
+   "ratio": 10.14,
    "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(49,56,51)",
+     "color": "rgb(48,54,49)",
      "bg": "rgb(239,232,218)",
-     "ratio": 9.92,
+     "ratio": 10.14,
      "y": 3276,
      "label": ""
     },
     {
      "color": "rgb(37,44,40)",
      "bg": "rgb(239,232,218)",
-     "ratio": 11.75,
-     "y": 3528,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.88,
-     "y": 3780,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > a.ed-textlink",
-   "chapter": "ch-work",
-   "text": "看案例",
-   "category": "body",
-   "color": "rgb(49,56,51)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 9.92,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(49,56,51)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 9.92,
-     "y": 3276,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.75,
+     "ratio": 11.77,
      "y": 3528,
      "label": ""
     },
@@ -2422,23 +2128,23 @@
    "chapter": "ch-work",
    "text": "→",
    "category": "body",
-   "color": "rgb(49,56,51)",
+   "color": "rgb(48,54,49)",
    "bg": "rgb(239,232,218)",
-   "ratio": 9.92,
+   "ratio": 10.14,
    "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(49,56,51)",
+     "color": "rgb(48,54,49)",
      "bg": "rgb(239,232,218)",
-     "ratio": 9.92,
+     "ratio": 10.14,
      "y": 3276,
      "label": ""
     },
     {
      "color": "rgb(37,44,40)",
      "bg": "rgb(239,232,218)",
-     "ratio": 11.75,
+     "ratio": 11.77,
      "y": 3528,
      "label": ""
     },
@@ -2452,61 +2158,27 @@
    ]
   },
   {
-   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > h3",
-   "chapter": "ch-method",
-   "text": "拆解",
-   "category": "body",
-   "color": "rgb(60,66,62)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.05,
-   "fontSize": 21.6,
-   "stateLabel": "pin 段",
-   "states": [
-    {
-     "color": "rgb(60,66,62)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.05,
-     "y": 756,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(39,46,42)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.75,
-     "y": 1008,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 1260,
-     "label": "pin 段"
-    }
-   ]
-  },
-  {
    "selector": "ol.method-list > li:nth-of-type(2).ed-stack > div > h3",
    "chapter": "ch-method",
    "text": "构建",
    "category": "body",
-   "color": "rgb(60,66,62)",
+   "color": "rgb(59,65,61)",
    "bg": "rgb(255,253,248)",
-   "ratio": 10.14,
+   "ratio": 10.23,
    "fontSize": 21.6,
    "stateLabel": "pin 段",
    "states": [
     {
-     "color": "rgb(60,66,62)",
+     "color": "rgb(59,65,61)",
      "bg": "rgb(255,253,248)",
-     "ratio": 10.14,
+     "ratio": 10.23,
      "y": 1008,
      "label": "pin 段"
     },
     {
-     "color": "rgb(38,45,41)",
+     "color": "rgb(39,45,41)",
      "bg": "rgb(255,253,248)",
-     "ratio": 13.88,
+     "ratio": 13.78,
      "y": 1260,
      "label": "pin 段"
     },
@@ -2520,28 +2192,164 @@
    ]
   },
   {
-   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > a.ed-textlink",
-   "chapter": "ch-work",
-   "text": "走进这份分析",
+   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > h3",
+   "chapter": "ch-method",
+   "text": "拆解",
    "category": "body",
-   "color": "rgb(47,53,48)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 10.3,
-   "fontSize": 17,
+   "color": "rgb(59,65,61)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.27,
+   "fontSize": 21.6,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(59,65,61)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.27,
+     "y": 756,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.79,
+     "y": 1008,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 1260,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > h3",
+   "chapter": "ch-method",
+   "text": "验证",
+   "category": "body",
+   "color": "rgb(59,65,61)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.31,
+   "fontSize": 21.6,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(59,65,61)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.31,
+     "y": 1260,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.8,
+     "y": 1512,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 1764,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "AI 放在解释层，公式留在决策层",
+   "category": "body",
+   "color": "rgb(57,63,59)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.6,
+   "fontSize": 19.52,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(47,53,48)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 10.3,
-     "y": 3024,
+     "color": "rgb(57,63,59)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.6,
+     "y": 6804,
+     "label": ""
+    },
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.85,
+     "y": 7056,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "故障演练",
+   "category": "body",
+   "color": "rgb(56,63,58)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.68,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(56,63,58)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.68,
+     "y": 7308,
      "label": ""
     },
     {
      "color": "rgb(37,44,40)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.79,
-     "y": 3276,
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.03,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 7812,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "把系统摁坏，练一次恢复",
+   "category": "body",
+   "color": "rgb(56,63,58)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.68,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(56,63,58)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.68,
+     "y": 7308,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.03,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 7812,
      "label": ""
     }
    ]
@@ -2551,23 +2359,23 @@
    "chapter": "ch-colophon",
    "text": "合",
    "category": "large",
-   "color": "rgb(221,219,214)",
+   "color": "rgb(227,225,219)",
    "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
+   "ratio": 11.08,
    "fontSize": 48,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(221,219,214)",
+     "color": "rgb(227,225,219)",
      "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
+     "ratio": 11.08,
      "y": 8064,
      "label": ""
     },
     {
      "color": "rgb(246,243,237)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
+     "ratio": 13.06,
      "y": 8316,
      "label": ""
     },
@@ -2585,23 +2393,23 @@
    "chapter": "ch-colophon",
    "text": "作",
    "category": "large",
-   "color": "rgb(221,219,214)",
+   "color": "rgb(227,225,219)",
    "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
+   "ratio": 11.08,
    "fontSize": 48,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(221,219,214)",
+     "color": "rgb(227,225,219)",
      "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
+     "ratio": 11.08,
      "y": 8064,
      "label": ""
     },
     {
      "color": "rgb(246,243,237)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
+     "ratio": 13.06,
      "y": 8316,
      "label": ""
     },
@@ -2619,23 +2427,23 @@
    "chapter": "ch-colophon",
    "text": "，",
    "category": "large",
-   "color": "rgb(221,219,214)",
+   "color": "rgb(227,225,219)",
    "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
+   "ratio": 11.08,
    "fontSize": 48,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(221,219,214)",
+     "color": "rgb(227,225,219)",
      "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
+     "ratio": 11.08,
      "y": 8064,
      "label": ""
     },
     {
      "color": "rgb(246,243,237)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
+     "ratio": 13.06,
      "y": 8316,
      "label": ""
     },
@@ -2653,23 +2461,23 @@
    "chapter": "ch-colophon",
    "text": "从",
    "category": "large",
-   "color": "rgb(221,219,214)",
+   "color": "rgb(227,225,219)",
    "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
+   "ratio": 11.08,
    "fontSize": 48,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(221,219,214)",
+     "color": "rgb(227,225,219)",
      "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
+     "ratio": 11.08,
      "y": 8064,
      "label": ""
     },
     {
      "color": "rgb(246,243,237)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
+     "ratio": 13.06,
      "y": 8316,
      "label": ""
     },
@@ -2687,23 +2495,23 @@
    "chapter": "ch-colophon",
    "text": "一",
    "category": "large",
-   "color": "rgb(221,219,214)",
+   "color": "rgb(227,225,219)",
    "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
+   "ratio": 11.08,
    "fontSize": 48,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(221,219,214)",
+     "color": "rgb(227,225,219)",
      "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
+     "ratio": 11.08,
      "y": 8064,
      "label": ""
     },
     {
      "color": "rgb(246,243,237)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
+     "ratio": 13.06,
      "y": 8316,
      "label": ""
     },
@@ -2721,23 +2529,23 @@
    "chapter": "ch-colophon",
    "text": "个",
    "category": "large",
-   "color": "rgb(221,219,214)",
+   "color": "rgb(227,225,219)",
    "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
+   "ratio": 11.08,
    "fontSize": 48,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(221,219,214)",
+     "color": "rgb(227,225,219)",
      "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
+     "ratio": 11.08,
      "y": 8064,
      "label": ""
     },
     {
      "color": "rgb(246,243,237)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
+     "ratio": 13.06,
      "y": 8316,
      "label": ""
     },
@@ -2755,23 +2563,23 @@
    "chapter": "ch-colophon",
    "text": "问",
    "category": "large",
-   "color": "rgb(221,219,214)",
+   "color": "rgb(227,225,219)",
    "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
+   "ratio": 11.08,
    "fontSize": 48,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(221,219,214)",
+     "color": "rgb(227,225,219)",
      "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
+     "ratio": 11.08,
      "y": 8064,
      "label": ""
     },
     {
      "color": "rgb(246,243,237)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
+     "ratio": 13.06,
      "y": 8316,
      "label": ""
     },
@@ -2780,271 +2588,6 @@
      "bg": "rgb(36,43,39)",
      "ratio": 13.31,
      "y": 8568,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(8).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "题",
-   "category": "large",
-   "color": "rgb(221,219,214)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(221,219,214)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
-     "y": 8064,
-     "label": ""
-    },
-    {
-     "color": "rgb(246,243,237)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.31,
-     "y": 8568,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(9).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "开",
-   "category": "large",
-   "color": "rgb(221,219,214)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(221,219,214)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
-     "y": 8064,
-     "label": ""
-    },
-    {
-     "color": "rgb(246,243,237)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.31,
-     "y": 8568,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(10).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "始",
-   "category": "large",
-   "color": "rgb(221,219,214)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(221,219,214)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
-     "y": 8064,
-     "label": ""
-    },
-    {
-     "color": "rgb(246,243,237)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.31,
-     "y": 8568,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(11).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "。",
-   "category": "large",
-   "color": "rgb(221,219,214)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 10.49,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(221,219,214)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 10.49,
-     "y": 8064,
-     "label": ""
-    },
-    {
-     "color": "rgb(246,243,237)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.05,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.31,
-     "y": 8568,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > h3",
-   "chapter": "ch-method",
-   "text": "验证",
-   "category": "body",
-   "color": "rgb(55,62,58)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.83,
-   "fontSize": 21.6,
-   "stateLabel": "pin 段",
-   "states": [
-    {
-     "color": "rgb(55,62,58)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.83,
-     "y": 1260,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.05,
-     "y": 1512,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 1764,
-     "label": "pin 段"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(2).lab-name > b",
-   "chapter": "ch-lab",
-   "text": "故障演练",
-   "category": "body",
-   "color": "rgb(55,61,57)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.87,
-   "fontSize": 21.6,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(55,61,57)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.87,
-     "y": 7308,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.98,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 7812,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(3)",
-   "chapter": "ch-lab",
-   "text": "把系统摁坏，练一次恢复",
-   "category": "body",
-   "color": "rgb(55,61,57)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.87,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(55,61,57)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.87,
-     "y": 7308,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.98,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 7812,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > div > h3",
-   "chapter": "ch-notes",
-   "text": "AI 放在解释层，公式留在决策层",
-   "category": "body",
-   "color": "rgb(55,61,57)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.98,
-   "fontSize": 19.52,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(55,61,57)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.98,
-     "y": 6804,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.99,
-     "y": 7056,
      "label": ""
     }
    ]
@@ -3054,30 +2597,30 @@
    "chapter": "ch-lab",
    "text": "Render Lab",
    "category": "body",
-   "color": "rgb(55,61,57)",
+   "color": "rgb(52,58,54)",
    "bg": "rgb(255,253,248)",
-   "ratio": 10.98,
+   "ratio": 11.4,
    "fontSize": 21.6,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(55,61,57)",
+     "color": "rgb(52,58,54)",
      "bg": "rgb(255,253,248)",
-     "ratio": 10.98,
+     "ratio": 11.4,
      "y": 7560,
      "label": ""
     },
     {
      "color": "rgb(37,44,40)",
      "bg": "rgb(255,253,248)",
-     "ratio": 13.99,
+     "ratio": 14.04,
      "y": 7812,
      "label": ""
     },
     {
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
+     "ratio": 14.25,
      "y": 8064,
      "label": ""
     }
@@ -3088,85 +2631,199 @@
    "chapter": "ch-lab",
    "text": "三档视觉预算，实时对比",
    "category": "body",
-   "color": "rgb(55,61,57)",
+   "color": "rgb(52,58,54)",
    "bg": "rgb(255,253,248)",
-   "ratio": 10.98,
+   "ratio": 11.4,
    "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(55,61,57)",
+     "color": "rgb(52,58,54)",
      "bg": "rgb(255,253,248)",
-     "ratio": 10.98,
+     "ratio": 11.4,
      "y": 7560,
      "label": ""
     },
     {
      "color": "rgb(37,44,40)",
      "bg": "rgb(255,253,248)",
-     "ratio": 13.99,
+     "ratio": 14.04,
      "y": 7812,
      "label": ""
     },
     {
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
+     "ratio": 14.25,
      "y": 8064,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > h3",
-   "chapter": "ch-notes",
-   "text": "一个 Next.js 部署，两个真正独立的网站",
-   "category": "body",
-   "color": "rgb(52,58,54)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 11.43,
-   "fontSize": 19.52,
+   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > h3.work-title",
+   "chapter": "ch-work",
+   "text": "墨尔本行人 × 微气候",
+   "category": "large",
+   "color": "rgb(38,45,41)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.6,
+   "fontSize": 36,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(52,58,54)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 11.43,
-     "y": 6552,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.04,
-     "y": 6804,
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.6,
+     "y": 3024,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > h3",
-   "chapter": "ch-notes",
-   "text": "先刷新证据，再让模型说话",
+   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > a.ed-textlink",
+   "chapter": "ch-work",
+   "text": "走进这份分析",
    "category": "body",
-   "color": "rgb(52,58,54)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 11.43,
-   "fontSize": 19.52,
+   "color": "rgb(37,44,40)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.73,
+   "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(52,58,54)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 11.43,
-     "y": 6552,
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.73,
+     "y": 3276,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > h3.work-title",
+   "chapter": "ch-work",
+   "text": "RocoDex 双站平台",
+   "category": "large",
+   "color": "rgb(37,44,40)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.76,
+   "fontSize": 27.2,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.76,
+     "y": 3276,
      "label": ""
     },
     {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 3528,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > h3.work-title",
+   "chapter": "ch-work",
+   "text": "CSTD Alpha 研究系统",
+   "category": "large",
+   "color": "rgb(37,44,40)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.76,
+   "fontSize": 27.2,
+   "stateLabel": "",
+   "states": [
+    {
      "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.04,
-     "y": 6804,
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.76,
+     "y": 3276,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 3528,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > a.ed-textlink",
+   "chapter": "ch-work",
+   "text": "看案例",
+   "category": "body",
+   "color": "rgb(37,44,40)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.77,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.77,
+     "y": 3528,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 3780,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > a.ed-textlink",
+   "chapter": "ch-work",
+   "text": "看案例",
+   "category": "body",
+   "color": "rgb(37,44,40)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.77,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.77,
+     "y": 3528,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 3780,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
+   "chapter": "ch-work",
+   "text": "作",
+   "category": "large",
+   "color": "rgb(37,44,40)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.79,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.79,
+     "y": 2772,
      "label": ""
     }
    ]
@@ -3376,6 +3033,74 @@
    ]
   },
   {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > b",
+   "chapter": "body",
+   "text": "末",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 14.72,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 504,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 2268,
+     "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > span",
+   "chapter": "body",
+   "text": "版权页",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 13,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 504,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 2268,
+     "label": "folio"
+    }
+   ]
+  },
+  {
    "selector": "div.data-spread > div:nth-of-type(1).data-copy > h3.data-count > span:nth-of-type(2).ed-nums",
    "chapter": "ch-work",
    "text": "0",
@@ -3482,21 +3207,21 @@
    "category": "large",
    "color": "rgb(241,238,232)",
    "bg": "rgb(36,43,39)",
-   "ratio": 12.53,
+   "ratio": 12.54,
    "fontSize": 72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(241,238,232)",
      "bg": "rgb(36,43,39)",
-     "ratio": 12.53,
+     "ratio": 12.54,
      "y": 7812,
      "label": ""
     },
     {
-     "color": "rgb(246,243,237)",
+     "color": "rgb(246,244,238)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.12,
+     "ratio": 13.14,
      "y": 8064,
      "label": ""
     },
@@ -3505,6 +3230,87 @@
      "bg": "rgb(36,43,39)",
      "ratio": 13.29,
      "y": 8316,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(8).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "题",
+   "category": "large",
+   "color": "rgb(246,243,237)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.06,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(246,243,237)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.06,
+     "y": 8316,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 8568,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(9).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "开",
+   "category": "large",
+   "color": "rgb(246,243,237)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.06,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(246,243,237)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.06,
+     "y": 8316,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 8568,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(10).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "始",
+   "category": "large",
+   "color": "rgb(246,243,237)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.06,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(246,243,237)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.06,
+     "y": 8316,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 8568,
      "label": ""
     }
    ]
@@ -3738,7 +3544,7 @@
      "color": "rgb(248,245,239)",
      "bg": "rgb(36,43,39)",
      "ratio": 13.31,
-     "y": 8064,
+     "y": 7812,
      "label": "folio is-dark"
     }
    ]
@@ -3758,8 +3564,68 @@
      "color": "rgb(248,245,239)",
      "bg": "rgb(36,43,39)",
      "ratio": 13.31,
-     "y": 8064,
+     "y": 7812,
      "label": "folio is-dark"
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(11).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "。",
+   "category": "large",
+   "color": "rgb(248,245,239)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.31,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 8568,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
+   "chapter": "ch-method",
+   "text": "方",
+   "category": "large",
+   "color": "rgb(37,44,40)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 14.09,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.09,
+     "y": 1008,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
+   "chapter": "ch-notes",
+   "text": "札",
+   "category": "large",
+   "color": "rgb(37,44,40)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 14.11,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.11,
+     "y": 6552,
+     "label": ""
     }
    ]
   },
@@ -3818,7 +3684,7 @@
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
      "ratio": 14.25,
-     "y": 6804,
+     "y": 7308,
      "label": ""
     }
    ]
@@ -3838,7 +3704,7 @@
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
      "ratio": 14.25,
-     "y": 6804,
+     "y": 7560,
      "label": ""
     }
    ]
@@ -3858,7 +3724,7 @@
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
      "ratio": 14.25,
-     "y": 6804,
+     "y": 7560,
      "label": ""
     }
    ]

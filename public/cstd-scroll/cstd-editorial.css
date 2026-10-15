@@ -673,14 +673,14 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
   .folio__item:hover span { opacity: 1; transform: none; }
 }
 .folio__item.is-active { color: var(--ed-ink); }
-.folio.is-dark .folio__item { color: rgb(248 245 239 / 55%); }
-.folio.is-dark .folio__item.is-active { color: var(--ed-plate-ink); }
-.folio.is-dark .folio__item i { background: var(--ed-plate-hairline); }
-.folio.is-dark .folio__item u { background: var(--ed-gold); }
+.folio.is-dark .folio__item, .folio .folio__item.is-dark { color: rgb(248 245 239 / 55%); }
+.folio.is-dark .folio__item.is-active, .folio .folio__item.is-dark.is-active { color: var(--ed-plate-ink); }
+.folio.is-dark .folio__item i, .folio .folio__item.is-dark i { background: var(--ed-plate-hairline); }
+.folio.is-dark .folio__item u, .folio .folio__item.is-dark u { background: var(--ed-gold); }
 /* 页码悬停升墨（不抢活动章；墨色版牌上走纸白向） */
 @media (hover: hover) and (pointer: fine) {
   .folio .folio__item:hover:not(.is-active) { color: var(--ed-soft); }
-  .folio.is-dark .folio__item:hover:not(.is-active) { color: var(--ed-plate-ink); }
+  .folio.is-dark .folio__item:hover:not(.is-active), .folio .folio__item.is-dark:hover:not(.is-active) { color: var(--ed-plate-ink); }
 }
 
 /* ---------- 响应式 ---------- */

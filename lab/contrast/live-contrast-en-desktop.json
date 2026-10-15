@@ -9,8 +9,8 @@
   },
   "docHeight": 9379,
   "steps": 39,
-  "startedAt": "2026-10-15T16:45:26.896Z",
-  "elapsedMs": 39700,
+  "startedAt": "2026-10-15T16:57:58.343Z",
+  "elapsedMs": 33287,
   "cssFingerprint": [
    "/_next/static/chunks/30hmtu1t-yadr.css",
    "/_next/static/chunks/1olprk_st9cm9.css",
@@ -21,505 +21,298 @@
   ],
   "standard": "WCAG 2.2 SC 1.4.3（正文 4.5:1 / 大字 3:1）；SC 1.4.11 非文本 3:1 仅参考",
   "method": "computed style + 祖先 rgba 逐层合成 + elementFromPoint 实底；违规项复测；媒体衬底为隐藏文字截图采样近似值",
-  "transientDropped": 68
+  "transientDropped": 43
  },
  "summary": {
-  "textElements": 180,
-  "body": 158,
-  "large": 22,
+  "textElements": 173,
+  "body": 155,
+  "large": 18,
   "decorative": 0,
-  "violations": 1,
+  "violations": 2,
   "bodyWorst": {
-   "key": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item > b|V",
-   "ratio": 2.6,
-   "color": "rgb(97,107,95)",
+   "key": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > b|V",
+   "ratio": 1,
+   "color": "rgb(36,43,39)",
    "bg": "rgb(36,43,39)",
    "fontSize": 14.72
   },
   "worst3": [
    {
-    "key": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item > b|V",
-    "ratio": 2.6,
-    "color": "rgb(97,107,95)",
+    "key": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > b|V",
+    "ratio": 1,
+    "color": "rgb(36,43,39)",
     "bg": "rgb(36,43,39)",
     "fontSize": 14.72
    },
    {
-    "key": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span.ed-word > span.ed-word__in|Notes",
-    "ratio": 4.1,
-    "color": "rgb(122,125,121)",
-    "bg": "rgb(255,253,248)",
-    "fontSize": 48
+    "key": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > span|Colophon",
+    "ratio": 1,
+    "color": "rgb(36,43,39)",
+    "bg": "rgb(36,43,39)",
+    "fontSize": 13
    },
    {
-    "key": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span.ed-word > span.ed-word__in|Method",
-    "ratio": 4.31,
-    "color": "rgb(118,122,117)",
-    "bg": "rgb(255,253,248)",
-    "fontSize": 48
+    "key": "article:nth-of-type(1).work.ed-stack > figure.plate > figcaption > span:nth-of-type(1).fig-no|FIG. 04",
+    "ratio": 4.52,
+    "color": "rgb(125,101,63)",
+    "bg": "rgb(239,232,218)",
+    "fontSize": 13
    }
   ]
  },
  "violations": [
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item > b",
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > b",
    "chapter": "body",
    "text": "V",
    "category": "body",
-   "color": "rgb(97,107,95)",
+   "color": "rgb(36,43,39)",
    "bg": "rgb(36,43,39)",
    "bgUnder": "rgb(36,43,39)",
    "approx": false,
-   "ratio": 2.6,
+   "ratio": 1,
    "fontSize": 14.72,
    "fontWeight": 450,
    "opacityFolded": false,
    "stateLabel": "folio",
    "scrollY": 8064,
-   "confirmRatio": 2.6
+   "confirmRatio": null
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > span",
+   "chapter": "body",
+   "text": "Colophon",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(36,43,39)",
+   "bgUnder": "rgb(36,43,39)",
+   "approx": false,
+   "ratio": 1,
+   "fontSize": 13,
+   "fontWeight": 400,
+   "opacityFolded": false,
+   "stateLabel": "folio",
+   "scrollY": 8064,
+   "confirmRatio": null
   }
  ],
  "decorative": [],
  "allMeasurements": [
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item > b",
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > b",
    "chapter": "body",
    "text": "V",
    "category": "body",
-   "color": "rgb(97,107,95)",
+   "color": "rgb(36,43,39)",
    "bg": "rgb(36,43,39)",
-   "ratio": 2.6,
+   "ratio": 1,
    "fontSize": 14.72,
    "stateLabel": "folio",
    "states": [
     {
-     "color": "rgb(97,107,95)",
+     "color": "rgb(36,43,39)",
      "bg": "rgb(248,245,239)",
-     "ratio": 5.11,
+     "ratio": 13.31,
      "y": 0,
      "label": "folio"
     },
     {
-     "color": "rgb(97,107,95)",
+     "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
+     "ratio": 14.25,
      "y": 504,
      "label": "folio"
     },
     {
-     "color": "rgb(97,107,95)",
+     "color": "rgb(36,43,39)",
      "bg": "rgb(239,232,218)",
-     "ratio": 4.56,
+     "ratio": 11.88,
      "y": 2520,
      "label": "folio"
     },
     {
-     "color": "rgb(97,107,95)",
+     "color": "rgb(36,43,39)",
      "bg": "rgb(36,43,39)",
-     "ratio": 2.6,
+     "ratio": 1,
      "y": 8064,
      "label": "folio"
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span.ed-word > span.ed-word__in",
-   "chapter": "ch-notes",
-   "text": "Notes",
-   "category": "large",
-   "color": "rgb(122,125,121)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.1,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(122,125,121)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.1,
-     "y": 6300,
-     "label": ""
-    },
-    {
-     "color": "rgb(46,52,48)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 12.47,
-     "y": 6552,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.2,
-     "y": 6804,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span.ed-word > span.ed-word__in",
-   "chapter": "ch-method",
-   "text": "Method",
-   "category": "large",
-   "color": "rgb(118,122,117)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.31,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(118,122,117)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.31,
-     "y": 504,
-     "label": ""
-    },
-    {
-     "color": "rgb(48,54,50)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 12.15,
-     "y": 756,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.08,
-     "y": 1008,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(1).ed-stack.ch-head > h2.ed-display-lg > span.ed-word > span.ed-word__in",
-   "chapter": "ch-work",
-   "text": "Work",
-   "category": "large",
-   "color": "rgb(104,107,99)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 4.47,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(104,107,99)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 4.47,
-     "y": 2268,
-     "label": ""
-    },
-    {
-     "color": "rgb(45,52,47)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 10.5,
-     "y": 2520,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.83,
-     "y": 2772,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(1).ed-stack > div.anno > aside.mnote > p",
-   "chapter": "ch-method",
-   "text": "The method comes from chemical engineering: draw",
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(6).folio__item.is-active > span",
+   "chapter": "body",
+   "text": "Colophon",
    "category": "body",
-   "color": "rgb(112,119,112)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.5,
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 1,
+   "fontSize": 13,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 504,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 2520,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 1,
+     "y": 8064,
+     "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "article:nth-of-type(1).work.ed-stack > figure.plate > figcaption > span:nth-of-type(1).fig-no",
+   "chapter": "ch-work",
+   "text": "FIG. 04",
+   "category": "body",
+   "color": "rgb(125,101,63)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.52,
    "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(112,119,112)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.5,
-     "y": 756,
+     "color": "rgb(125,101,63)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.52,
+     "y": 3528,
      "label": ""
     },
     {
-     "color": "rgb(86,95,87)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 6.52,
-     "y": 1008,
+     "color": "rgb(114,89,48)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.42,
+     "y": 3780,
+     "label": ""
+    },
+    {
+     "color": "rgb(114,88,47)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.46,
+     "y": 4032,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(1).lab-no",
-   "chapter": "ch-lab",
-   "text": "LAB 02",
+   "selector": "article:nth-of-type(2).work.ed-stack > figure.plate > figcaption > span:nth-of-type(1).fig-no",
+   "chapter": "ch-work",
+   "text": "FIG. 05",
+   "category": "body",
+   "color": "rgb(125,101,63)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.52,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(125,101,63)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.52,
+     "y": 3528,
+     "label": ""
+    },
+    {
+     "color": "rgb(114,89,48)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.42,
+     "y": 3780,
+     "label": ""
+    },
+    {
+     "color": "rgb(114,88,47)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.46,
+     "y": 4032,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > p",
+   "chapter": "ch-notes",
+   "text": "How one repository and one deployment can still ",
    "category": "body",
    "color": "rgb(111,120,108)",
    "bg": "rgb(255,253,248)",
    "ratio": 4.52,
-   "fontSize": 12,
+   "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(111,120,108)",
      "bg": "rgb(255,253,248)",
      "ratio": 4.52,
-     "y": 7560,
+     "y": 6804,
      "label": ""
     },
     {
      "color": "rgb(98,108,96)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.39,
-     "y": 7812,
+     "ratio": 5.43,
+     "y": 7056,
      "label": ""
     },
     {
      "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
      "ratio": 5.47,
-     "y": 8064,
+     "y": 7308,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(4)",
-   "chapter": "ch-lab",
-   "text": "→",
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > p",
+   "chapter": "ch-notes",
+   "text": "In company research, stale facts, duplicate jobs",
    "category": "body",
    "color": "rgb(111,120,108)",
    "bg": "rgb(255,253,248)",
    "ratio": 4.52,
-   "fontSize": 17,
+   "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(111,120,108)",
      "bg": "rgb(255,253,248)",
      "ratio": 4.52,
-     "y": 7560,
+     "y": 6804,
      "label": ""
     },
     {
      "color": "rgb(98,108,96)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.39,
-     "y": 7812,
+     "ratio": 5.43,
+     "y": 7056,
      "label": ""
     },
     {
      "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
      "ratio": 5.47,
-     "y": 8064,
+     "y": 7308,
      "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(1).lab-no",
-   "chapter": "ch-lab",
-   "text": "LAB 05",
-   "category": "body",
-   "color": "rgb(110,119,108)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.55,
-   "fontSize": 12,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(110,119,108)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.55,
-     "y": 7812,
-     "label": ""
-    },
-    {
-     "color": "rgb(98,108,96)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.39,
-     "y": 8064,
-     "label": ""
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 8316,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(4)",
-   "chapter": "ch-lab",
-   "text": "→",
-   "category": "body",
-   "color": "rgb(110,119,108)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.55,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(110,119,108)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.55,
-     "y": 7812,
-     "label": ""
-    },
-    {
-     "color": "rgb(98,108,96)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.39,
-     "y": 8064,
-     "label": ""
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 8316,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(2).folio__item > b",
-   "chapter": "body",
-   "text": "I",
-   "category": "body",
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 4.56,
-   "fontSize": 14.72,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(248,245,239)",
-     "ratio": 5.11,
-     "y": 0,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 1512,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 4.56,
-     "y": 2520,
-     "label": "folio"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(3).folio__item > b",
-   "chapter": "body",
-   "text": "II",
-   "category": "body",
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 4.56,
-   "fontSize": 14.72,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(248,245,239)",
-     "ratio": 5.11,
-     "y": 0,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 756,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 4.56,
-     "y": 5544,
-     "label": "folio"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(4).folio__item > b",
-   "chapter": "body",
-   "text": "III",
-   "category": "body",
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 4.56,
-   "fontSize": 14.72,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(248,245,239)",
-     "ratio": 5.11,
-     "y": 0,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 504,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 4.56,
-     "y": 2520,
-     "label": "folio"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(5).folio__item > b",
-   "chapter": "body",
-   "text": "IV",
-   "category": "body",
-   "color": "rgb(97,107,95)",
-   "bg": "rgb(239,232,218)",
-   "ratio": 4.56,
-   "fontSize": 14.72,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(248,245,239)",
-     "ratio": 5.11,
-     "y": 0,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 504,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 4.56,
-     "y": 2520,
-     "label": "folio"
     }
    ]
   },
@@ -551,6 +344,107 @@
    ]
   },
   {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(2).folio__item > b",
+   "chapter": "body",
+   "text": "I",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 14.72,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 1512,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 2520,
+     "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > div.anno > p.ed-lede",
+   "chapter": "ch-work",
+   "text": "Three picks: one urban data study and two system",
+   "category": "body",
+   "color": "rgb(99,106,98)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(99,106,98)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 2520,
+     "label": ""
+    },
+    {
+     "color": "rgb(84,93,85)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.61,
+     "y": 2772,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.69,
+     "y": 3024,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > p:nth-of-type(1).work-kicker",
+   "chapter": "ch-work",
+   "text": "Domain boundaries / content product",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 3528,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > p:nth-of-type(1).work-kicker",
+   "chapter": "ch-work",
+   "text": "Evidence pipeline / decision workspace",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 3528,
+     "label": ""
+    }
+   ]
+  },
+  {
    "selector": "div:nth-of-type(3).pin-spacer > div.data-spread > div:nth-of-type(1).data-copy > p:nth-of-type(3).data-tools",
    "chapter": "ch-work",
    "text": "R · data.table · ggplot2 · Spatial joins · Linea",
@@ -567,6 +461,33 @@
      "ratio": 4.56,
      "y": 4032,
      "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(3).folio__item > b",
+   "chapter": "body",
+   "text": "II",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 4.56,
+   "fontSize": 14.72,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 4.56,
+     "y": 5544,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 6552,
+     "label": "folio"
     }
    ]
   },
@@ -691,69 +612,28 @@
    ]
   },
   {
-   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(4).lab-row > span:nth-of-type(2).lab-name > b",
-   "chapter": "ch-lab",
-   "text": "System Trace",
+   "selector": "div:nth-of-type(1).ed-stack > div.anno > aside.mnote > p",
+   "chapter": "ch-method",
+   "text": "The method comes from chemical engineering: draw",
    "category": "body",
-   "color": "rgb(113,117,112)",
+   "color": "rgb(111,118,111)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.62,
-   "fontSize": 21.6,
+   "ratio": 4.58,
+   "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(113,117,112)",
+     "color": "rgb(111,118,111)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.62,
-     "y": 7560,
+     "ratio": 4.58,
+     "y": 756,
      "label": ""
     },
     {
-     "color": "rgb(45,51,47)",
+     "color": "rgb(86,95,87)",
      "bg": "rgb(255,253,248)",
-     "ratio": 12.66,
-     "y": 7812,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.17,
-     "y": 8064,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(4).lab-row > span:nth-of-type(3)",
-   "chapter": "ch-lab",
-   "text": "Follow one real request through the routing boun",
-   "category": "body",
-   "color": "rgb(113,117,112)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.62,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(113,117,112)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.62,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(45,51,47)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 12.66,
-     "y": 7812,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.17,
-     "y": 8064,
+     "ratio": 6.54,
+     "y": 1008,
      "label": ""
     }
    ]
@@ -763,24 +643,146 @@
    "chapter": "ch-notes",
    "text": "Open the map",
    "category": "body",
-   "color": "rgb(135,112,76)",
+   "color": "rgb(133,110,74)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.64,
+   "ratio": 4.78,
    "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(135,112,76)",
+     "color": "rgb(133,110,74)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.64,
+     "ratio": 4.78,
      "y": 6552,
      "label": ""
     },
     {
-     "color": "rgb(115,89,48)",
+     "color": "rgb(115,90,49)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.45,
+     "ratio": 6.4,
      "y": 6804,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(1).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "DCF valuation model",
+   "category": "body",
+   "color": "rgb(110,114,110)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.78,
+   "fontSize": 21.6,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(110,114,110)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.78,
+     "y": 7308,
+     "label": ""
+    },
+    {
+     "color": "rgb(41,48,44)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.27,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.21,
+     "y": 7812,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(1).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Change an assumption, watch the valuation move",
+   "category": "body",
+   "color": "rgb(110,114,110)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.78,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(110,114,110)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.78,
+     "y": 7308,
+     "label": ""
+    },
+    {
+     "color": "rgb(41,48,44)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.27,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.21,
+     "y": 7812,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(1).lab-no",
+   "chapter": "ch-lab",
+   "text": "LAB 02",
+   "category": "body",
+   "color": "rgb(105,115,103)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.86,
+   "fontSize": 12,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(105,115,103)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.86,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.43,
+     "y": 7812,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(4)",
+   "chapter": "ch-lab",
+   "text": "→",
+   "category": "body",
+   "color": "rgb(105,115,103)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 4.86,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(105,115,103)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 4.86,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.43,
+     "y": 7812,
      "label": ""
     }
    ]
@@ -790,31 +792,24 @@
    "chapter": "ch-notes",
    "text": "Let AI organize and explain while testable code ",
    "category": "body",
-   "color": "rgb(107,116,105)",
+   "color": "rgb(105,115,103)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.76,
+   "ratio": 4.87,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(107,116,105)",
+     "color": "rgb(105,115,103)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.76,
+     "ratio": 4.87,
      "y": 7056,
-     "label": ""
-    },
-    {
-     "color": "rgb(98,108,96)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.42,
-     "y": 7308,
      "label": ""
     },
     {
      "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.47,
-     "y": 7560,
+     "ratio": 5.46,
+     "y": 7308,
      "label": ""
     }
    ]
@@ -824,23 +819,23 @@
    "chapter": "ch-notes",
    "text": "Notes are indexed by theme on the map; one threa",
    "category": "body",
-   "color": "rgb(108,116,108)",
+   "color": "rgb(106,113,106)",
    "bg": "rgb(255,253,248)",
-   "ratio": 4.77,
+   "ratio": 4.92,
    "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(108,116,108)",
+     "color": "rgb(106,113,106)",
      "bg": "rgb(255,253,248)",
-     "ratio": 4.77,
+     "ratio": 4.92,
      "y": 6552,
      "label": ""
     },
     {
-     "color": "rgb(84,93,85)",
+     "color": "rgb(85,94,86)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.72,
+     "ratio": 6.66,
      "y": 6804,
      "label": ""
     },
@@ -854,81 +849,27 @@
    ]
   },
   {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > p",
-   "chapter": "ch-notes",
-   "text": "How one repository and one deployment can still ",
-   "category": "body",
-   "color": "rgb(107,116,104)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.79,
-   "fontSize": 14.72,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(107,116,104)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.79,
-     "y": 6804,
-     "label": ""
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.45,
-     "y": 7056,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > p",
-   "chapter": "ch-notes",
-   "text": "In company research, stale facts, duplicate jobs",
-   "category": "body",
-   "color": "rgb(107,116,104)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 4.79,
-   "fontSize": 14.72,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(107,116,104)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 4.79,
-     "y": 6804,
-     "label": ""
-    },
-    {
-     "color": "rgb(97,107,95)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 5.45,
-     "y": 7056,
-     "label": ""
-    }
-   ]
-  },
-  {
    "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack > div.anno > p.ed-lede",
    "chapter": "ch-method",
    "text": "Three steps, run on every project.",
    "category": "body",
-   "color": "rgb(104,112,104)",
+   "color": "rgb(103,111,103)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.02,
+   "ratio": 5.09,
    "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(104,112,104)",
+     "color": "rgb(103,111,103)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.02,
+     "ratio": 5.09,
      "y": 756,
      "label": ""
     },
     {
      "color": "rgb(85,94,86)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.59,
+     "ratio": 6.6,
      "y": 1008,
      "label": ""
     }
@@ -1095,36 +1036,83 @@
    ]
   },
   {
-   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > p",
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(2).ed-stack > small",
    "chapter": "ch-method",
-   "text": "Split the problem into checkable pieces: where t",
+   "text": "Tools serve the question",
    "category": "body",
-   "color": "rgb(102,110,102)",
+   "color": "rgb(102,111,99)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.19,
-   "fontSize": 15.68,
+   "ratio": 5.14,
+   "fontSize": 13,
    "stateLabel": "pin 段",
    "states": [
     {
-     "color": "rgb(102,110,102)",
+     "color": "rgb(102,111,99)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.19,
-     "y": 756,
+     "ratio": 5.14,
+     "y": 1260,
      "label": "pin 段"
     },
     {
-     "color": "rgb(85,94,86)",
+     "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.62,
+     "ratio": 5.46,
+     "y": 1512,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(1).ed-stack > small",
+   "chapter": "ch-method",
+   "text": "Facts before plans",
+   "category": "body",
+   "color": "rgb(101,111,99)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.15,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(101,111,99)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.15,
      "y": 1008,
      "label": "pin 段"
     },
     {
-     "color": "rgb(83,92,84)",
+     "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.82,
+     "ratio": 5.45,
      "y": 1260,
      "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > time",
+   "chapter": "ch-notes",
+   "text": "2026 / 08",
+   "category": "body",
+   "color": "rgb(101,110,99)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.19,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(101,110,99)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.19,
+     "y": 7056,
+     "label": ""
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 7308,
+     "label": ""
     }
    ]
   },
@@ -1133,23 +1121,23 @@
    "chapter": "ch-method",
    "text": "Use the simplest suitable tools to build the sol",
    "category": "body",
-   "color": "rgb(102,109,102)",
+   "color": "rgb(102,110,102)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.23,
+   "ratio": 5.21,
    "fontSize": 15.68,
    "stateLabel": "pin 段",
    "states": [
     {
-     "color": "rgb(102,109,102)",
+     "color": "rgb(102,110,102)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.23,
+     "ratio": 5.21,
      "y": 1008,
      "label": "pin 段"
     },
     {
-     "color": "rgb(85,93,85)",
+     "color": "rgb(85,94,86)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.67,
+     "ratio": 6.62,
      "y": 1260,
      "label": "pin 段"
     },
@@ -1163,28 +1151,251 @@
    ]
   },
   {
-   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > div.anno > p.ed-lede",
-   "chapter": "ch-notes",
-   "text": "Longer technical notes on systems, data, and how",
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(3).ed-stack > small",
+   "chapter": "ch-method",
+   "text": "Results you can check",
+   "category": "body",
+   "color": "rgb(100,110,98)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.21,
+   "fontSize": 13,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(100,110,98)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.21,
+     "y": 1512,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.46,
+     "y": 1764,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > p",
+   "chapter": "ch-method",
+   "text": "Recompute the result, rerun the process, and che",
+   "category": "body",
+   "color": "rgb(102,109,102)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.23,
+   "fontSize": 15.68,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(102,109,102)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.23,
+     "y": 1260,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(85,93,85)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.67,
+     "y": 1512,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.82,
+     "y": 1764,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > p",
+   "chapter": "ch-method",
+   "text": "Split the problem into checkable pieces: where t",
    "category": "body",
    "color": "rgb(101,109,101)",
    "bg": "rgb(255,253,248)",
-   "ratio": 5.24,
-   "fontSize": 17,
-   "stateLabel": "",
+   "ratio": 5.26,
+   "fontSize": 15.68,
+   "stateLabel": "pin 段",
    "states": [
     {
      "color": "rgb(101,109,101)",
      "bg": "rgb(255,253,248)",
-     "ratio": 5.24,
+     "ratio": 5.26,
+     "y": 756,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(85,94,86)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.63,
+     "y": 1008,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.82,
+     "y": 1260,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > article.work.work--featured > p:nth-of-type(3).work-summary",
+   "chapter": "ch-work",
+   "text": "An R pipeline brings together three official Mel",
+   "category": "body",
+   "color": "rgb(88,96,88)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.33,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(88,96,88)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.33,
+     "y": 3024,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.67,
+     "y": 3276,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > div.anno > p.ed-lede",
+   "chapter": "ch-notes",
+   "text": "Longer technical notes on systems, data, and how",
+   "category": "body",
+   "color": "rgb(100,108,100)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.37,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(100,108,100)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.37,
      "y": 6552,
      "label": ""
     },
     {
      "color": "rgb(84,93,85)",
      "bg": "rgb(255,253,248)",
-     "ratio": 6.74,
+     "ratio": 6.7,
      "y": 6804,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(1).ed-stack > span.method-no",
+   "chapter": "ch-method",
+   "text": "01",
+   "category": "body",
+   "color": "rgb(98,108,96)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.42,
+   "fontSize": 16.8,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(98,108,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.42,
+     "y": 1008,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 1260,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(2).ed-stack > span.method-no",
+   "chapter": "ch-method",
+   "text": "02",
+   "category": "body",
+   "color": "rgb(98,108,96)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.42,
+   "fontSize": 16.8,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(98,108,96)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.42,
+     "y": 1260,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.47,
+     "y": 1512,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).pin-spacer > ol.method-list > li:nth-of-type(3).ed-stack > span.method-no",
+   "chapter": "ch-method",
+   "text": "03",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.43,
+   "fontSize": 16.8,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.43,
+     "y": 1512,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "#ch-work > div.ch-wrap > div:nth-of-type(1).ed-stack.ch-head > p.work-census",
+   "chapter": "ch-work",
+   "text": "published cases",
+   "category": "body",
+   "color": "rgb(86,95,87)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.46,
+   "fontSize": 14.72,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(86,95,87)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.46,
+     "y": 2772,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.68,
+     "y": 3024,
      "label": ""
     }
    ]
@@ -1196,15 +1407,69 @@
    "category": "body",
    "color": "rgb(86,95,87)",
    "bg": "rgb(239,232,218)",
-   "ratio": 5.44,
+   "ratio": 5.46,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(86,95,87)",
      "bg": "rgb(239,232,218)",
-     "ratio": 5.44,
+     "ratio": 5.46,
      "y": 2772,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > p:nth-of-type(3).work-summary",
+   "chapter": "ch-work",
+   "text": "The portfolio and RocoDex share one Next.js depl",
+   "category": "body",
+   "color": "rgb(86,95,87)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.46,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(86,95,87)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.46,
+     "y": 3528,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.69,
+     "y": 3780,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > p:nth-of-type(3).work-summary",
+   "chapter": "ch-work",
+   "text": "A research workflow instead of a one-shot report",
+   "category": "body",
+   "color": "rgb(86,95,87)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 5.46,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(86,95,87)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.46,
+     "y": 3528,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 5.69,
+     "y": 3780,
      "label": ""
     }
    ]
@@ -1270,6 +1535,46 @@
    ]
   },
   {
+   "selector": "div.ch-wrap > div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > time",
+   "chapter": "ch-notes",
+   "text": "2026 / 08",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.46,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.46,
+     "y": 7056,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > time",
+   "chapter": "ch-notes",
+   "text": "2026 / 08",
+   "category": "body",
+   "color": "rgb(97,107,95)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 5.46,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(97,107,95)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 5.46,
+     "y": 7056,
+     "label": ""
+    }
+   ]
+  },
+  {
    "selector": "div:nth-of-type(2).ed > header.ed-bar > a.ed-bar__mark > span.ed-bar__host",
    "chapter": "body",
    "text": "custard.top",
@@ -1290,104 +1595,22 @@
    ]
   },
   {
-   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > p",
-   "chapter": "ch-method",
-   "text": "Recompute the result, rerun the process, and che",
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(4).folio__item > b",
+   "chapter": "body",
+   "text": "III",
    "category": "body",
-   "color": "rgb(98,106,99)",
+   "color": "rgb(97,107,95)",
    "bg": "rgb(255,253,248)",
    "ratio": 5.47,
-   "fontSize": 15.68,
-   "stateLabel": "pin 段",
+   "fontSize": 14.72,
+   "stateLabel": "folio",
    "states": [
     {
-     "color": "rgb(98,106,99)",
+     "color": "rgb(97,107,95)",
      "bg": "rgb(255,253,248)",
      "ratio": 5.47,
-     "y": 1260,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(84,93,85)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 6.74,
-     "y": 1512,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(83,92,84)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 6.83,
-     "y": 1764,
-     "label": "pin 段"
-    }
-   ]
-  },
-  {
-   "selector": "#ch-colophon > div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede",
-   "chapter": "ch-colophon",
-   "text": "Turning analysis into products is what I do. The",
-   "category": "body",
-   "color": "rgb(153,162,151)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 5.48,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(153,162,151)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 5.48,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(182,191,179)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.68,
-     "y": 8568,
-     "label": ""
-    },
-    {
-     "color": "rgb(185,194,182)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.9,
-     "y": 8820,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede > a.colophon-cta",
-   "chapter": "ch-colophon",
-   "text": "About me",
-   "category": "body",
-   "color": "rgb(153,162,151)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 5.48,
-   "fontSize": 17,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(153,162,151)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 5.48,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(182,191,179)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.68,
-     "y": 8568,
-     "label": ""
-    },
-    {
-     "color": "rgb(185,194,182)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 7.9,
-     "y": 8820,
-     "label": ""
+     "y": 7308,
+     "label": "folio"
     }
    ]
   },
@@ -1398,14 +1621,14 @@
    "category": "body",
    "color": "rgb(155,164,153)",
    "bg": "rgb(36,43,39)",
-   "ratio": 5.62,
+   "ratio": 5.61,
    "fontSize": 13,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(155,164,153)",
      "bg": "rgb(36,43,39)",
-     "ratio": 5.62,
+     "ratio": 5.61,
      "y": 8568,
      "label": ""
     }
@@ -1472,6 +1695,40 @@
    ]
   },
   {
+   "selector": "div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede > a.colophon-cta",
+   "chapter": "ch-colophon",
+   "text": "About me",
+   "category": "body",
+   "color": "rgb(156,165,155)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 5.71,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(156,165,155)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 5.71,
+     "y": 8316,
+     "label": ""
+    },
+    {
+     "color": "rgb(182,191,179)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.66,
+     "y": 8568,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.9,
+     "y": 8820,
+     "label": ""
+    }
+   ]
+  },
+  {
    "selector": "div.title-lift > div.ed-stack.title-stack > h1.ed-display-xl > span:nth-of-type(2).ed-fullstop",
    "chapter": "ch-title",
    "text": ".",
@@ -1507,6 +1764,33 @@
      "bg": "rgb(248,245,239)",
      "ratio": 6.38,
      "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(1).ed-stack > div.anno > p.ed-lede",
+   "chapter": "ch-lab",
+   "text": "Things you can operate: change the assumptions o",
+   "category": "body",
+   "color": "rgb(87,96,88)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.42,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(87,96,88)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.42,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(83,92,84)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.81,
+     "y": 7812,
      "label": ""
     }
    ]
@@ -1639,27 +1923,149 @@
    ]
   },
   {
-   "selector": "#ch-colophon > div.ch-wrap > p.colophon-mark > span:nth-of-type(2).colophon-mark__domain",
-   "chapter": "ch-colophon",
-   "text": "custard.top",
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(4).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "System Trace",
    "category": "body",
-   "color": "rgb(183,192,180)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 7.75,
-   "fontSize": 12,
+   "color": "rgb(85,90,86)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.91,
+   "fontSize": 21.6,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(183,192,180)",
+     "color": "rgb(85,90,86)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.91,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(41,48,44)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.33,
+     "y": 7812,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.21,
+     "y": 8064,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(4).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Follow one real request through the routing boun",
+   "category": "body",
+   "color": "rgb(85,90,86)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 6.91,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(85,90,86)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 6.91,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(41,48,44)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.33,
+     "y": 7812,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.21,
+     "y": 8064,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-colophon > div.ch-wrap > div.ed-stack > p:nth-of-type(1).colophon-brand",
+   "chapter": "ch-colophon",
+   "text": "CUSTARD · PERSONAL STUDIO",
+   "category": "body",
+   "color": "rgb(179,187,176)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.36,
+   "fontSize": 13,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(179,187,176)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.75,
+     "ratio": 7.36,
      "y": 8316,
      "label": ""
     },
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.89,
+     "ratio": 7.87,
+     "y": 8568,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-colophon > div.ch-wrap > div.ed-stack > p:nth-of-type(2).ed-lede",
+   "chapter": "ch-colophon",
+   "text": "Turning analysis into products is what I do. The",
+   "category": "body",
+   "color": "rgb(182,191,179)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.66,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(182,191,179)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.66,
+     "y": 8568,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.9,
+     "y": 8820,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "#ch-colophon > div.ch-wrap > p.colophon-mark > span:nth-of-type(2).colophon-mark__domain",
+   "chapter": "ch-colophon",
+   "text": "custard.top",
+   "category": "body",
+   "color": "rgb(183,192,180)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 7.76,
+   "fontSize": 12,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(183,192,180)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.76,
+     "y": 8316,
+     "label": ""
+    },
+    {
+     "color": "rgb(185,194,182)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 7.88,
      "y": 8568,
      "label": ""
     }
@@ -1672,14 +2078,14 @@
    "category": "body",
    "color": "rgb(185,194,182)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.89,
+   "ratio": 7.88,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.89,
+     "ratio": 7.88,
      "y": 8568,
      "label": ""
     }
@@ -1692,14 +2098,14 @@
    "category": "body",
    "color": "rgb(185,194,182)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.89,
+   "ratio": 7.88,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.89,
+     "ratio": 7.88,
      "y": 8568,
      "label": ""
     }
@@ -1712,14 +2118,14 @@
    "category": "body",
    "color": "rgb(185,194,182)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.89,
+   "ratio": 7.88,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.89,
+     "ratio": 7.88,
      "y": 8568,
      "label": ""
     }
@@ -1732,14 +2138,14 @@
    "category": "body",
    "color": "rgb(185,194,182)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.89,
+   "ratio": 7.88,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.89,
+     "ratio": 7.88,
      "y": 8568,
      "label": ""
     }
@@ -1752,14 +2158,14 @@
    "category": "body",
    "color": "rgb(185,194,182)",
    "bg": "rgb(36,43,39)",
-   "ratio": 7.89,
+   "ratio": 7.88,
    "fontSize": 14.72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(185,194,182)",
      "bg": "rgb(36,43,39)",
-     "ratio": 7.89,
+     "ratio": 7.88,
      "y": 8568,
      "label": ""
     }
@@ -1770,30 +2176,30 @@
    "chapter": "ch-lab",
    "text": "Regression bench",
    "category": "body",
-   "color": "rgb(75,81,76)",
+   "color": "rgb(60,66,62)",
    "bg": "rgb(255,253,248)",
-   "ratio": 8.04,
+   "ratio": 10.05,
    "fontSize": 21.6,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(75,81,76)",
+     "color": "rgb(60,66,62)",
      "bg": "rgb(255,253,248)",
-     "ratio": 8.04,
+     "ratio": 10.05,
      "y": 7560,
      "label": ""
     },
     {
-     "color": "rgb(40,47,43)",
+     "color": "rgb(38,45,41)",
      "bg": "rgb(255,253,248)",
-     "ratio": 13.54,
+     "ratio": 13.87,
      "y": 7812,
      "label": ""
     },
     {
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.23,
+     "ratio": 14.24,
      "y": 8064,
      "label": ""
     }
@@ -1804,31 +2210,241 @@
    "chapter": "ch-lab",
    "text": "Recompute the coefficients, redraw the charts",
    "category": "body",
-   "color": "rgb(75,81,76)",
+   "color": "rgb(60,66,62)",
    "bg": "rgb(255,253,248)",
-   "ratio": 8.04,
+   "ratio": 10.05,
    "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(75,81,76)",
+     "color": "rgb(60,66,62)",
      "bg": "rgb(255,253,248)",
-     "ratio": 8.04,
+     "ratio": 10.05,
      "y": 7560,
      "label": ""
     },
     {
-     "color": "rgb(40,47,43)",
+     "color": "rgb(38,45,41)",
      "bg": "rgb(255,253,248)",
-     "ratio": 13.54,
+     "ratio": 13.87,
      "y": 7812,
      "label": ""
     },
     {
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
-     "ratio": 14.23,
+     "ratio": 14.24,
      "y": 8064,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(2).ed-stack > div > h3",
+   "chapter": "ch-method",
+   "text": "Build",
+   "category": "body",
+   "color": "rgb(60,66,62)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.14,
+   "fontSize": 21.6,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(60,66,62)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.14,
+     "y": 1008,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(39,46,42)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.76,
+     "y": 1260,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 1512,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > h3",
+   "chapter": "ch-method",
+   "text": "Verify",
+   "category": "body",
+   "color": "rgb(60,66,62)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.18,
+   "fontSize": 21.6,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(60,66,62)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.18,
+     "y": 1260,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.89,
+     "y": 1512,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 1764,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > h3",
+   "chapter": "ch-method",
+   "text": "Deconstruct",
+   "category": "body",
+   "color": "rgb(59,65,61)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.27,
+   "fontSize": 21.6,
+   "stateLabel": "pin 段",
+   "states": [
+    {
+     "color": "rgb(59,65,61)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.27,
+     "y": 756,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(38,45,41)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 13.79,
+     "y": 1008,
+     "label": "pin 段"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.24,
+     "y": 1260,
+     "label": "pin 段"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > a.ed-textlink > span",
+   "chapter": "ch-work",
+   "text": "→",
+   "category": "body",
+   "color": "rgb(45,51,47)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 10.58,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(45,51,47)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 10.58,
+     "y": 3528,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.84,
+     "y": 3780,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > a.ed-textlink > span",
+   "chapter": "ch-work",
+   "text": "→",
+   "category": "body",
+   "color": "rgb(45,51,47)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 10.58,
+   "fontSize": 17,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(45,51,47)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 10.58,
+     "y": 3528,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.84,
+     "y": 3780,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "One Next.js deployment, two genuinely separate w",
+   "category": "body",
+   "color": "rgb(55,61,57)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.87,
+   "fontSize": 19.52,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(55,61,57)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.87,
+     "y": 6804,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.1,
+     "y": 7056,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "Refresh evidence before asking the model to spea",
+   "category": "body",
+   "color": "rgb(55,61,57)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 10.87,
+   "fontSize": 19.52,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(55,61,57)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 10.87,
+     "y": 6804,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.1,
+     "y": 7056,
      "label": ""
     }
    ]
@@ -1838,23 +2454,16 @@
    "chapter": "ch-work",
    "text": "Melbourne Pedestrians × Microclimate",
    "category": "large",
-   "color": "rgb(50,56,51)",
+   "color": "rgb(37,44,40)",
    "bg": "rgb(239,232,218)",
-   "ratio": 9.87,
+   "ratio": 11.75,
    "fontSize": 36,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(50,56,51)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 9.87,
-     "y": 2772,
-     "label": ""
-    },
-    {
      "color": "rgb(37,44,40)",
      "bg": "rgb(239,232,218)",
-     "ratio": 11.74,
+     "ratio": 11.75,
      "y": 3024,
      "label": ""
     },
@@ -1872,93 +2481,25 @@
    "chapter": "ch-work",
    "text": "Inside the analysis",
    "category": "body",
-   "color": "rgb(49,55,51)",
+   "color": "rgb(37,44,40)",
    "bg": "rgb(239,232,218)",
-   "ratio": 9.94,
+   "ratio": 11.76,
    "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(49,55,51)",
+     "color": "rgb(37,44,40)",
      "bg": "rgb(239,232,218)",
-     "ratio": 9.94,
-     "y": 3024,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.82,
+     "ratio": 11.76,
      "y": 3276,
      "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "ol.method-list > li:nth-of-type(1).ed-stack > div > h3",
-   "chapter": "ch-method",
-   "text": "Deconstruct",
-   "category": "body",
-   "color": "rgb(60,66,62)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.1,
-   "fontSize": 21.6,
-   "stateLabel": "pin 段",
-   "states": [
-    {
-     "color": "rgb(60,66,62)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.1,
-     "y": 756,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(39,46,42)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.76,
-     "y": 1008,
-     "label": "pin 段"
     },
     {
      "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 1260,
-     "label": "pin 段"
-    }
-   ]
-  },
-  {
-   "selector": "ol.method-list > li:nth-of-type(2).ed-stack > div > h3",
-   "chapter": "ch-method",
-   "text": "Build",
-   "category": "body",
-   "color": "rgb(60,66,62)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.18,
-   "fontSize": 21.6,
-   "stateLabel": "pin 段",
-   "states": [
-    {
-     "color": "rgb(60,66,62)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.18,
-     "y": 1008,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(38,45,41)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.88,
-     "y": 1260,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 1512,
-     "label": "pin 段"
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 3528,
+     "label": ""
     }
    ]
   },
@@ -1967,23 +2508,16 @@
    "chapter": "ch-work",
    "text": "RocoDex dual-site platform",
    "category": "large",
-   "color": "rgb(47,54,49)",
+   "color": "rgb(36,43,39)",
    "bg": "rgb(239,232,218)",
-   "ratio": 10.22,
+   "ratio": 11.81,
    "fontSize": 27.2,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(47,54,49)",
+     "color": "rgb(36,43,39)",
      "bg": "rgb(239,232,218)",
-     "ratio": 10.22,
-     "y": 3276,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.74,
+     "ratio": 11.81,
      "y": 3528,
      "label": ""
     }
@@ -1994,499 +2528,57 @@
    "chapter": "ch-work",
    "text": "CSTD Alpha research system",
    "category": "large",
-   "color": "rgb(47,54,49)",
+   "color": "rgb(36,43,39)",
    "bg": "rgb(239,232,218)",
-   "ratio": 10.22,
+   "ratio": 11.81,
    "fontSize": 27.2,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(47,54,49)",
+     "color": "rgb(36,43,39)",
      "bg": "rgb(239,232,218)",
-     "ratio": 10.22,
-     "y": 3276,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.74,
+     "ratio": 11.81,
      "y": 3528,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(3).folio__item.is-active > span",
-   "chapter": "body",
-   "text": "Work",
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(1).work.ed-stack > a.ed-textlink",
+   "chapter": "ch-work",
+   "text": "View case",
    "category": "body",
-   "color": "rgb(46,52,48)",
+   "color": "rgb(36,43,39)",
    "bg": "rgb(239,232,218)",
-   "ratio": 10.41,
-   "fontSize": 13,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(46,52,48)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 10.41,
-     "y": 2520,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(239,232,218)",
-     "ratio": 11.88,
-     "y": 2772,
-     "label": "folio"
-    }
-   ]
-  },
-  {
-   "selector": "ol.method-list > li:nth-of-type(3).ed-stack > div > h3",
-   "chapter": "ch-method",
-   "text": "Verify",
-   "category": "body",
-   "color": "rgb(55,62,58)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.83,
-   "fontSize": 21.6,
-   "stateLabel": "pin 段",
-   "states": [
-    {
-     "color": "rgb(55,62,58)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.83,
-     "y": 1260,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.04,
-     "y": 1512,
-     "label": "pin 段"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 1764,
-     "label": "pin 段"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(5).folio__item.is-active > span",
-   "chapter": "body",
-   "text": "Labs",
-   "category": "body",
-   "color": "rgb(55,61,57)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.87,
-   "fontSize": 13,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(55,61,57)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.87,
-     "y": 7308,
-     "label": "folio"
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 7560,
-     "label": "folio"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(2).lab-name > b",
-   "chapter": "ch-lab",
-   "text": "Failure drills",
-   "category": "body",
-   "color": "rgb(55,61,57)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.87,
-   "fontSize": 21.6,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(55,61,57)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.87,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.98,
-     "y": 7812,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 8064,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(3)",
-   "chapter": "ch-lab",
-   "text": "Break the system on purpose, practice the recove",
-   "category": "body",
-   "color": "rgb(55,61,57)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.87,
+   "ratio": 11.84,
    "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(55,61,57)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.87,
-     "y": 7560,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.98,
-     "y": 7812,
-     "label": ""
-    },
-    {
      "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.24,
-     "y": 8064,
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.84,
+     "y": 3780,
      "label": ""
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(2).lab-name > b",
-   "chapter": "ch-lab",
-   "text": "Render Lab",
+   "selector": "div.ch-wrap > div:nth-of-type(2).work-duo > article:nth-of-type(2).work.ed-stack > a.ed-textlink",
+   "chapter": "ch-work",
+   "text": "View case",
    "category": "body",
-   "color": "rgb(55,61,57)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.98,
-   "fontSize": 21.6,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(55,61,57)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.98,
-     "y": 7812,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.99,
-     "y": 8064,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 8316,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(5).lab-row > span:nth-of-type(3)",
-   "chapter": "ch-lab",
-   "text": "Compare three visual budgets live",
-   "category": "body",
-   "color": "rgb(55,61,57)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 10.98,
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.84,
    "fontSize": 17,
    "stateLabel": "",
    "states": [
     {
-     "color": "rgb(55,61,57)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 10.98,
-     "y": 7812,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 13.99,
-     "y": 8064,
-     "label": ""
-    },
-    {
      "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 8316,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "Collaboration",
-   "category": "large",
-   "color": "rgb(227,225,219)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 11.05,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(227,225,219)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 11.05,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(247,244,238)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.16,
-     "y": 8568,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.31,
-     "y": 8820,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(2).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "starts",
-   "category": "large",
-   "color": "rgb(227,225,219)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 11.05,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(227,225,219)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 11.05,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(247,244,238)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.16,
-     "y": 8568,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.31,
-     "y": 8820,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(3).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "with",
-   "category": "large",
-   "color": "rgb(227,225,219)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 11.05,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(227,225,219)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 11.05,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(247,244,238)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.16,
-     "y": 8568,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.31,
-     "y": 8820,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(4).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "a",
-   "category": "large",
-   "color": "rgb(227,225,219)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 11.05,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(227,225,219)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 11.05,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(247,244,238)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.16,
-     "y": 8568,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.31,
-     "y": 8820,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(5).ed-word > span.ed-word__in",
-   "chapter": "ch-colophon",
-   "text": "question.",
-   "category": "large",
-   "color": "rgb(227,225,219)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 11.05,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(227,225,219)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 11.05,
-     "y": 8316,
-     "label": ""
-    },
-    {
-     "color": "rgb(247,244,238)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.16,
-     "y": 8568,
-     "label": ""
-    },
-    {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.31,
-     "y": 8820,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > div > h3",
-   "chapter": "ch-notes",
-   "text": "Put AI at the explanation edge, not the decision",
-   "category": "body",
-   "color": "rgb(50,56,52)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 11.77,
-   "fontSize": 19.52,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(50,56,52)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 11.77,
-     "y": 7056,
-     "label": ""
-    },
-    {
-     "color": "rgb(37,44,40)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.09,
-     "y": 7308,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(1).note.ed-stack > div > h3",
-   "chapter": "ch-notes",
-   "text": "One Next.js deployment, two genuinely separate w",
-   "category": "body",
-   "color": "rgb(49,56,52)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 11.86,
-   "fontSize": 19.52,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(49,56,52)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 11.86,
-     "y": 6804,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.17,
-     "y": 7056,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(2).note.ed-stack > div > h3",
-   "chapter": "ch-notes",
-   "text": "Refresh evidence before asking the model to spea",
-   "category": "body",
-   "color": "rgb(49,56,52)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 11.86,
-   "fontSize": 19.52,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(49,56,52)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 11.86,
-     "y": 6804,
-     "label": ""
-    },
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.17,
-     "y": 7056,
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.84,
+     "y": 3780,
      "label": ""
     }
    ]
@@ -2502,6 +2594,190 @@
    "fontSize": 14.72,
    "stateLabel": "folio",
    "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 756,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 2520,
+     "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(3).folio__item.is-active > span",
+   "chapter": "body",
+   "text": "Work",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 13,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 756,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 2520,
+     "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(4).folio__item.is-active > b",
+   "chapter": "body",
+   "text": "III",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 14.72,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 504,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 2520,
+     "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(4).folio__item.is-active > span",
+   "chapter": "body",
+   "text": "Notes",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 13,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 504,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 2520,
+     "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(5).folio__item.is-active > b",
+   "chapter": "body",
+   "text": "IV",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 14.72,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 504,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(239,232,218)",
+     "ratio": 11.88,
+     "y": 2520,
+     "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(5).folio__item.is-active > span",
+   "chapter": "body",
+   "text": "Labs",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(239,232,218)",
+   "ratio": 11.88,
+   "fontSize": 13,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 504,
+     "label": "folio"
+    },
     {
      "color": "rgb(36,43,39)",
      "bg": "rgb(239,232,218)",
@@ -2592,83 +2868,97 @@
    ]
   },
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(6).folio__item.is-active > span",
-   "chapter": "body",
-   "text": "Colophon",
+   "selector": "div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(2).lab-name > b",
+   "chapter": "ch-lab",
+   "text": "Failure drills",
    "category": "body",
-   "color": "rgb(238,235,229)",
-   "bg": "rgb(36,43,39)",
-   "ratio": 12.17,
-   "fontSize": 13,
-   "stateLabel": "folio is-dark",
+   "color": "rgb(48,54,50)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 12.13,
+   "fontSize": 21.6,
+   "stateLabel": "",
    "states": [
     {
-     "color": "rgb(238,235,229)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 12.17,
-     "y": 8316,
-     "label": "folio is-dark"
+     "color": "rgb(48,54,50)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 12.13,
+     "y": 7560,
+     "label": ""
     },
     {
-     "color": "rgb(248,245,239)",
-     "bg": "rgb(36,43,39)",
-     "ratio": 13.31,
-     "y": 8568,
-     "label": "folio is-dark"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(2).folio__item.is-active > span",
-   "chapter": "body",
-   "text": "Method",
-   "category": "body",
-   "color": "rgb(47,53,49)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 12.3,
-   "fontSize": 13,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(47,53,49)",
+     "color": "rgb(37,44,40)",
      "bg": "rgb(255,253,248)",
-     "ratio": 12.3,
-     "y": 756,
-     "label": "folio"
+     "ratio": 14.12,
+     "y": 7812,
+     "label": ""
     },
     {
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
      "ratio": 14.25,
-     "y": 1008,
-     "label": "folio"
+     "y": 8064,
+     "label": ""
     }
    ]
   },
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(4).folio__item.is-active > span",
-   "chapter": "body",
-   "text": "Notes",
+   "selector": "div.ch-wrap > div:nth-of-type(2).lab-list > a:nth-of-type(2).lab-row > span:nth-of-type(3)",
+   "chapter": "ch-lab",
+   "text": "Break the system on purpose, practice the recove",
    "category": "body",
-   "color": "rgb(47,53,49)",
+   "color": "rgb(48,54,50)",
    "bg": "rgb(255,253,248)",
-   "ratio": 12.3,
-   "fontSize": 13,
-   "stateLabel": "folio",
+   "ratio": 12.13,
+   "fontSize": 17,
+   "stateLabel": "",
    "states": [
     {
-     "color": "rgb(47,53,49)",
+     "color": "rgb(48,54,50)",
      "bg": "rgb(255,253,248)",
-     "ratio": 12.3,
-     "y": 6552,
-     "label": "folio"
+     "ratio": 12.13,
+     "y": 7560,
+     "label": ""
+    },
+    {
+     "color": "rgb(37,44,40)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.12,
+     "y": 7812,
+     "label": ""
     },
     {
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
      "ratio": 14.25,
-     "y": 6804,
-     "label": "folio"
+     "y": 8064,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).note-list > a:nth-of-type(3).note.ed-stack > div > h3",
+   "chapter": "ch-notes",
+   "text": "Put AI at the explanation edge, not the decision",
+   "category": "body",
+   "color": "rgb(48,54,50)",
+   "bg": "rgb(255,253,248)",
+   "ratio": 12.15,
+   "fontSize": 19.52,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(48,54,50)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 12.15,
+     "y": 7056,
+     "label": ""
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.2,
+     "y": 7308,
+     "label": ""
     }
    ]
   },
@@ -2679,14 +2969,14 @@
    "category": "large",
    "color": "rgb(246,243,237)",
    "bg": "rgb(36,43,39)",
-   "ratio": 13.03,
+   "ratio": 13.05,
    "fontSize": 72,
    "stateLabel": "",
    "states": [
     {
      "color": "rgb(246,243,237)",
      "bg": "rgb(36,43,39)",
-     "ratio": 13.03,
+     "ratio": 13.05,
      "y": 8316,
      "label": ""
     },
@@ -2695,6 +2985,87 @@
      "bg": "rgb(36,43,39)",
      "ratio": 13.28,
      "y": 8568,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "Collaboration",
+   "category": "large",
+   "color": "rgb(246,244,238)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.14,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(246,244,238)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.14,
+     "y": 8568,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 8820,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(2).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "starts",
+   "category": "large",
+   "color": "rgb(246,244,238)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.14,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(246,244,238)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.14,
+     "y": 8568,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 8820,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(3).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "with",
+   "category": "large",
+   "color": "rgb(246,244,238)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.14,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(246,244,238)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.14,
+     "y": 8568,
+     "label": ""
+    },
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 8820,
      "label": ""
     }
    ]
@@ -2735,6 +3106,60 @@
      "bg": "rgb(248,245,239)",
      "ratio": 13.31,
      "y": 0,
+     "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(2).folio__item.is-active > b",
+   "chapter": "body",
+   "text": "I",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(248,245,239)",
+   "ratio": 13.31,
+   "fontSize": 14.72,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 756,
+     "label": "folio"
+    }
+   ]
+  },
+  {
+   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(2).folio__item.is-active > span",
+   "chapter": "body",
+   "text": "Method",
+   "category": "body",
+   "color": "rgb(36,43,39)",
+   "bg": "rgb(248,245,239)",
+   "ratio": 13.31,
+   "fontSize": 13,
+   "stateLabel": "folio",
+   "states": [
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(248,245,239)",
+     "ratio": 13.31,
+     "y": 0,
+     "label": "folio"
+    },
+    {
+     "color": "rgb(36,43,39)",
+     "bg": "rgb(255,253,248)",
+     "ratio": 14.25,
+     "y": 756,
      "label": "folio"
     }
    ]
@@ -2840,6 +3265,66 @@
    ]
   },
   {
+   "selector": "div:nth-of-type(2).ed > nav.folio.is-dark > a:nth-of-type(6).folio__item.is-active > span",
+   "chapter": "body",
+   "text": "Colophon",
+   "category": "body",
+   "color": "rgb(248,245,239)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.31,
+   "fontSize": 13,
+   "stateLabel": "folio is-dark",
+   "states": [
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 8316,
+     "label": "folio is-dark"
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(4).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "a",
+   "category": "large",
+   "color": "rgb(248,245,239)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.31,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 8820,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.ed-stack > h2.ed-display-lg > span:nth-of-type(5).ed-word > span.ed-word__in",
+   "chapter": "ch-colophon",
+   "text": "question.",
+   "category": "large",
+   "color": "rgb(248,245,239)",
+   "bg": "rgb(36,43,39)",
+   "ratio": 13.31,
+   "fontSize": 48,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(248,245,239)",
+     "bg": "rgb(36,43,39)",
+     "ratio": 13.31,
+     "y": 8820,
+     "label": ""
+    }
+   ]
+  },
+  {
    "selector": "body.min-h-full > div:nth-of-type(2).ed > header.ed-bar > a.ed-bar__mark",
    "chapter": "body",
    "text": "CUSTARD",
@@ -2880,46 +3365,6 @@
    ]
   },
   {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(2).folio__item.is-active > b",
-   "chapter": "body",
-   "text": "I",
-   "category": "body",
-   "color": "rgb(36,43,39)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 14.25,
-   "fontSize": 14.72,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 756,
-     "label": "folio"
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(4).folio__item.is-active > b",
-   "chapter": "body",
-   "text": "III",
-   "category": "body",
-   "color": "rgb(36,43,39)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 14.25,
-   "fontSize": 14.72,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 6552,
-     "label": "folio"
-    }
-   ]
-  },
-  {
    "selector": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span:nth-of-type(1).ed-word > span.ed-word__in",
    "chapter": "ch-lab",
    "text": "The",
@@ -2934,48 +3379,8 @@
      "color": "rgb(36,43,39)",
      "bg": "rgb(255,253,248)",
      "ratio": 14.25,
-     "y": 7056,
+     "y": 7812,
      "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(1).ed-stack > h2.ed-display-lg > span:nth-of-type(2).ed-word > span.ed-word__in",
-   "chapter": "ch-lab",
-   "text": "lab",
-   "category": "large",
-   "color": "rgb(36,43,39)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 14.25,
-   "fontSize": 48,
-   "stateLabel": "",
-   "states": [
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 7056,
-     "label": ""
-    }
-   ]
-  },
-  {
-   "selector": "div:nth-of-type(2).ed > nav.folio > a:nth-of-type(5).folio__item.is-active > b",
-   "chapter": "body",
-   "text": "IV",
-   "category": "body",
-   "color": "rgb(36,43,39)",
-   "bg": "rgb(255,253,248)",
-   "ratio": 14.25,
-   "fontSize": 14.72,
-   "stateLabel": "folio",
-   "states": [
-    {
-     "color": "rgb(36,43,39)",
-     "bg": "rgb(255,253,248)",
-     "ratio": 14.25,
-     "y": 7308,
-     "label": "folio"
     }
    ]
   }
