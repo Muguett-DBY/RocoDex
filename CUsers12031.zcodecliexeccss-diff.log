@@ -1,0 +1,595 @@
+diff --git a/public/cstd-scroll/cstd-editorial.css b/public/cstd-scroll/cstd-editorial.css
+index a8100e8..2b047ef 100644
+--- a/public/cstd-scroll/cstd-editorial.css
++++ b/public/cstd-scroll/cstd-editorial.css
+@@ -1,14 +1,11 @@
+ /* cstd-editorial — 正式版个人主页 · Chaptered editorial
+    基调：atelier 纸白/墨/青铜；衬线大字；细线；无视频、无科幻 HUD。
+-   作用域 .ed（生产为组件根 div，原型为包裹 div）；引擎不改动。 */
++   作用域 .ed（生产为组件根 div）。动效体系为 GSAP（editorial-motion.ts）：
++   本文件只做视觉与状态（hover 过渡、focus），不消费任何滚动驱动变量。
++   token 四段：色 / 字 / 距 / 线与动效——值沿用已验收基准，重构不重绘。 */
+ 
+ :root {
+-  --sc-canvas: #f8f5ef;
+-  --sc-surface: #fffdf8;
+-  --sc-ink: #242b27;
+-  --sc-ink-soft: #535c54;
+-  --sc-accent: #72582f;
+-  --sc-accent-ink: #fffdf8;
++  /* ---- 色 ---- */
+   --ed-paper: #f8f5ef;
+   --ed-paper-deep: #efe8da;
+   --ed-surface: #fffdf8;
+@@ -17,11 +14,14 @@
+   --ed-muted: #616b5f; /* 对 #efe8da 沉纸 ≥4.5:1（4.54）的最浅灰绿：层级仍在 soft 与纸面之间 */
+   --ed-hairline: rgb(58 66 49 / 18%);
+   --ed-hairline-strong: rgb(58 66 49 / 26%);
+-  --ed-ink-plate: #242b27;
++  --ed-accent: #72582f; /* 青铜：只属于正在绘制的线与强调 */
++  --ed-accent-ink: #fffdf8;
++  --ed-ink-plate: #242b27; /* 版权页墨色版牌 */
+   --ed-plate-ink: #f8f5ef;
+   --ed-plate-soft: #b9c2b6;
+   --ed-plate-hairline: rgb(248 245 239 / 16%);
+   --ed-gold: #cbab72;
++  /* ---- 字 ---- */
+   --ed-serif: "CSTD Press Serif", "Noto Serif SC", Georgia, "Times New Roman", serif;
+   --ed-sans: "Segoe UI", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+   --ed-mono: "Cascadia Mono", "SFMono-Regular", Consolas, ui-monospace, monospace;
+@@ -31,9 +31,12 @@
+   --ed-nav: 0.875rem;
+   --ed-track: 0.06em;
+   --ed-track-wide: 0.12em;
+-  --sc-font-display: var(--ed-serif);
+-  --sc-font-text: var(--ed-sans);
+-  --sc-gutter: clamp(1.25rem, 4vw, 3rem);
++  /* ---- 距 ---- */
++  --ed-gutter: clamp(1.25rem, 4vw, 3rem);
++  --ed-measure: 58ch;
++  /* ---- 线与动效（CSS 只做状态过渡；滚动动效在 GSAP） ---- */
++  --ed-rule-width: 1px;
++  --ed-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+ }
+ 
+ /* ---------- 与游戏主题壳的互斥（默认视图 = 无主题或 atelier） ---------- */
+@@ -41,7 +44,25 @@
+ html[data-cstd-theme]:not([data-cstd-theme="atelier"]) [data-cstd-home-editorial] { display: none; }
+ html[data-cstd-theme]:not([data-cstd-theme="atelier"]) [data-cstd-home-shell] { display: block; }
+ 
+-html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
++/* 页面自有的 html 级规则（引擎 CSS 退役后在此作用域补齐，与原加载行为等价） */
++html:has([data-cstd-home-editorial]) {
++  background: var(--ed-paper);
++  scroll-behavior: smooth;
++  -webkit-text-size-adjust: 100%;
++}
++html:has([data-cstd-home-editorial]) body { margin: 0; overflow-x: clip; }
++@supports (scrollbar-color: auto) {
++  html:has([data-cstd-home-editorial]) {
++    scrollbar-color: rgb(36 43 39 / 35%) transparent;
++    scrollbar-width: thin;
++  }
++}
++/* 退役引擎样式表曾全局提供的最小复位：收窄到本页作用域，值不变 */
++html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::before, html:has([data-cstd-home-editorial]) *::after { box-sizing: border-box; }
++.ed img, .ed video, .ed canvas, .ed svg { display: block; max-width: 100%; }
++.ed :where(a) { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
++.ed :where(.ed-nums, [data-ed-count]) { font-variant-numeric: tabular-nums; }
++.ed button, .ed input, .ed select, .ed textarea { font: inherit; color: inherit; }
+ 
+ /* ---------- 根 ---------- */
+ .ed {
+@@ -54,7 +75,7 @@ html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
+   min-height: 100vh;
+ }
+ .ed ::selection { background: #e7d6ae; color: var(--ed-ink); }
+-.ed :focus-visible { outline: 2px solid var(--sc-accent); outline-offset: 3px; border-radius: 1px; }
++.ed :focus-visible { outline: 2px solid var(--ed-accent); outline-offset: 3px; border-radius: 1px; }
+ .ed a { color: inherit; }
+ /* 触点即应：去掉 300ms 双击缩放等待与系统点按高亮（示能由页面自己的按压反馈承担） */
+ .ed a, .ed button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+@@ -68,7 +89,7 @@ html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
+   padding: 0.7rem 1.2rem;
+   background: var(--ed-surface);
+   color: var(--ed-ink);
+-  border: 1px solid var(--sc-accent);
++  border: 1px solid var(--ed-accent);
+   text-decoration: none;
+   font-size: var(--ed-nav);
+   transform: translateY(calc(-100% - 2rem)); /* 离屏待命：不占版面，键盘可达 */
+@@ -97,7 +118,7 @@ html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
+   display: flex;
+   align-items: center;
+   gap: clamp(1rem, 3vw, 2.5rem);
+-  padding: 0.85rem var(--sc-gutter);
++  padding: 0.85rem var(--ed-gutter);
+   background: var(--ed-surface); /* 实色纸面：刊物顶栏不做玻璃产品窗 */
+   border-bottom: 1px solid var(--ed-hairline);
+ }
+@@ -112,7 +133,7 @@ html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
+   gap: 0.6rem;
+   white-space: nowrap;
+ }
+-.ed-bar__mark::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--sc-accent); align-self: center; transition: transform 160ms var(--sc-ease-out); }
++.ed-bar__mark::after { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--ed-accent); align-self: center; transition: transform 160ms var(--ed-ease-out); }
+ .ed-bar__host { font-family: var(--ed-sans); font-size: var(--ed-note); letter-spacing: var(--ed-track); color: var(--ed-muted); }
+ .ed-bar__nav { display: flex; gap: clamp(0.9rem, 2.4vw, 1.8rem); margin-inline: auto; }
+ .ed-bar__link { font-size: var(--ed-nav); color: var(--ed-soft); text-decoration: none; letter-spacing: var(--ed-track); }
+@@ -121,14 +142,14 @@ html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
+ .ed-bar__cta {
+   font-size: var(--ed-nav);
+   letter-spacing: var(--ed-track);
+-  color: var(--sc-accent);
++  color: var(--ed-accent);
+   text-decoration: underline;
+   text-decoration-thickness: 1px;
+   text-underline-offset: 0.3em;
+   white-space: nowrap;
+ }
+ .ed-bar__cta:hover { color: var(--ed-ink); text-decoration-thickness: 2px; }
+-.ed-bar__link, .ed-bar__cta { transition: color 160ms var(--sc-ease-out), text-decoration-thickness 160ms var(--sc-ease-out); }
++.ed-bar__link, .ed-bar__cta { transition: color 160ms var(--ed-ease-out), text-decoration-thickness 160ms var(--ed-ease-out); }
+ 
+ /* atelier.css 会把顶栏整体架空（[data-cstd-home-header] 强贴半透背景+自身
+    边线+blur、:where(a,button,span…) 一律 !important 墨色、hover 一律青铜），
+@@ -138,14 +159,14 @@ html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
+ .ed .ed-bar .ed-bar__host { color: var(--ed-muted) !important; }
+ .ed .ed-bar .ed-bar__link { color: var(--ed-soft) !important; }
+ .ed .ed-bar .ed-bar__link:hover { color: var(--ed-ink) !important; }
+-.ed .ed-bar .ed-bar__cta { color: var(--sc-accent) !important; }
++.ed .ed-bar .ed-bar__cta { color: var(--ed-accent) !important; }
+ .ed .ed-bar .ed-bar__cta:hover { color: var(--ed-ink) !important; }
+ /* 主题/语言切换器同样落进 atelier 的 :where(a,button) 全墨重置（且自带游戏
+    主题的近隐形边框与霓虹 hover）：接管回纸面语法——细边、方角、hover 青铜 */
+ .ed .ed-bar .cstd-theme-switcher-trigger,
+ .ed .ed-bar .cstd-locale-switcher { color: var(--ed-soft) !important; border-color: var(--ed-hairline) !important; border-radius: 2px !important; }
+ .ed .ed-bar .cstd-theme-switcher-trigger:hover,
+-.ed .ed-bar .cstd-locale-switcher:hover { color: var(--sc-accent) !important; border-color: var(--sc-accent) !important; }
++.ed .ed-bar .cstd-locale-switcher:hover { color: var(--ed-accent) !important; border-color: var(--ed-accent) !important; }
+ .ed .ed-bar .cstd-theme-switcher-copy { letter-spacing: 0.08em; font-weight: 500 !important; }
+ 
+ @media (hover: hover) and (pointer: fine) {
+@@ -176,7 +197,7 @@ html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
+   margin: 0;
+   text-wrap: balance;
+ }
+-.ed-fullstop { color: var(--sc-accent); }
++.ed-fullstop { color: var(--ed-accent); }
+ .ed-statement {
+   font-family: var(--ed-serif);
+   font-size: clamp(1.25rem, 2vw, 1.65rem);
+@@ -199,19 +220,34 @@ html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
+   line-height: 1.2; /* 与文字链基线对齐的前提：盒内行高不悬空 */
+   letter-spacing: 0.02em;
+   text-decoration: none;
+-  transition: background-color 160ms var(--sc-ease-out), color 160ms var(--sc-ease-out), transform 160ms var(--sc-ease-out);
++  transition: background-color 160ms var(--ed-ease-out), color 160ms var(--ed-ease-out), transform 160ms var(--ed-ease-out);
+ }
+ .ed-button:hover { background: var(--ed-ink); color: var(--ed-paper); }
+ .ed-button:active { transform: translateY(1px); }
+ .ed-textlink {
+-  color: var(--sc-accent);
++  color: var(--ed-accent);
+   text-decoration: underline;
+   text-decoration-thickness: 1px;
+   text-underline-offset: 0.3em;
+-  transition: text-decoration-thickness 160ms var(--sc-ease-out), color 160ms var(--sc-ease-out);
++  transition: text-decoration-thickness 160ms var(--ed-ease-out), color 160ms var(--ed-ease-out);
+ }
+ .ed-textlink:hover { color: var(--ed-ink); text-decoration-thickness: 2px; }
+ 
++/* ---------- 签名线（.ed-rule）：铜线/金线的真实节点 ----------
++   GSAP 直接 tween 本节点（scaleX/clip-path）；无 JS 时初始即终态（满线）。
++   定位随宿主语境微调（mnote 竖线、版权页金线）。 */
++.ed-rule {
++  position: absolute;
++  display: block;
++  left: 0;
++  right: 0;
++  top: calc(var(--ed-rule-width) * -1);
++  height: var(--ed-rule-width);
++  background: var(--ed-accent);
++  transform-origin: 0 50%;
++  pointer-events: none;
++}
++
+ /* ---------- chapters（合页光学：章底松于章首） ---------- */
+ .chapter { padding-block: clamp(4.5rem, 10vh, 7.5rem) clamp(5.25rem, 12vh, 8.75rem); }
+ .ch-method { background: var(--ed-surface); }
+@@ -222,10 +258,14 @@ html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
+   max-width: 72rem;
+   width: 100%; /* 扉页/版权页是 grid 章：grid item 在 margin-inline:auto 下 auto 宽退化为 fit-content（实测 zh 950/en 1036），显式 100% 拉回 72rem 章格 */
+   margin-inline: auto;
+-  padding-inline: var(--sc-gutter);
++  padding-inline: var(--ed-gutter);
+ }
+ .ch-head { margin-bottom: clamp(2.5rem, 6vh, 4rem); }
+ .ch-head h2 { margin-bottom: 1.1rem; }
++/* 纵向堆叠间距（退役引擎 .sc-stack 的 margin 规则收编为本页 token 语义） */
++.ed-stack > * + * { margin-top: 1rem; }
++.ed-stack > :is(h1, h2, h3) { margin-top: 3rem; }
++.ed-stack > :is(h1, h2, h3):first-child { margin-top: 0; }
+ 
+ /* ---------- 扉页 title page ---------- */
+ .ch-title {
+@@ -237,26 +277,13 @@ html:has([data-cstd-home-editorial]) { background: var(--ed-paper); }
+   padding-block: clamp(5rem, 12vh, 8rem) clamp(6rem, 14vh, 9rem);
+ }
+ .title-stack { max-width: 64rem; }
+-/* 扉页入场页面自管（LCP 关键，mnote 同机制）：引擎 CSS 把 [data-sc-in] 压在
+-   opacity:0 直到水合→装载→.sc-in，慢网络下首屏要等数秒。扉页不走引擎——
+-   无 ed-ready 直出终态（SSR 首次绘制即是 LCP）；ed-ready（组件 useEffect 添加）
+-   后由页面 IO 落位 is-set。隐藏态只在水合后存在，reduce 分支同步置终态，
+-   任何采样时点都不出现中间透明度。以下各章入场仍完全由引擎驱动。 */
+-html.ed-ready .ed [data-ed-enter] > * {
+-  opacity: 0;
+-  transform: translate3d(0, 14px, 0);
+-  transition: opacity 620ms var(--sc-ease-out), transform 620ms var(--sc-ease-out);
+-}
+-html.ed-ready .ed [data-ed-enter].is-set > * { opacity: 1; transform: none; }
+-html.ed-ready .ed [data-ed-enter].is-set > *:nth-child(2) { transition-delay: 80ms; }
+-html.ed-ready .ed [data-ed-enter].is-set > *:nth-child(3) { transition-delay: 160ms; }
+-html.ed-ready .ed [data-ed-enter].is-set > *:nth-child(4) { transition-delay: 240ms; }
+-html.ed-ready .ed [data-ed-enter].is-set > *:nth-child(5) { transition-delay: 320ms; }
+ .title-stack .ed-statement { margin-top: clamp(1.8rem, 4vh, 2.6rem); }
+ .title-stack .ed-summary { margin-top: 1.1rem; }
+ .title-actions { display: flex; flex-wrap: wrap; align-items: first baseline; gap: 1.6rem; margin: clamp(1.8rem, 4vh, 2.4rem) 0 0; }
+ .title-role {
+-  display: flex; flex-wrap: wrap; gap: 0.9rem 1.8rem;
++  display: flex;
++  flex-wrap: wrap;
++  gap: 0.9rem 1.8rem;
+   margin: clamp(2.2rem, 5vh, 3rem) 0 0;
+   color: var(--ed-muted);
+   font-size: var(--ed-note);
+@@ -265,7 +292,7 @@ html.ed-ready .ed [data-ed-enter].is-set > *:nth-child(5) { transition-delay: 32
+ .title-role span + span::before { content: ""; display: inline-block; width: 1px; height: 0.85em; background: var(--ed-hairline); margin-right: 1.8rem; vertical-align: -0.08em; }
+ .title-foot {
+   position: absolute;
+-  inset-inline: var(--sc-gutter);
++  inset-inline: var(--ed-gutter);
+   bottom: clamp(1.6rem, 4vh, 2.6rem);
+   max-width: 72rem;
+   margin-inline: auto;
+@@ -276,9 +303,8 @@ html.ed-ready .ed [data-ed-enter].is-set > *:nth-child(5) { transition-delay: 32
+   letter-spacing: var(--ed-track);
+ }
+ /* 扉页两栏对角构图（≥1100px）：名字居左上、文块居右、角色行左下收底；
+-   <1100px 回落单栏（grid 声明全部收在本媒询内）。引擎 .sc-stack 只有
+-   margin 规则、无 display/gap——覆盖安全，data-ed-enter 逐子入场与
+-   5 个直接子元素结构都不动 */
++   <1100px 回落单栏（grid 声明全部收在本媒询内）。.ed-stack 只有 margin 规则、
++   无 display/gap——覆盖安全，题签逐子入场与 5 个直接子元素结构都不动 */
+ @media (min-width: 1100px) {
+   .title-stack {
+     display: grid;
+@@ -296,7 +322,7 @@ html.ed-ready .ed [data-ed-enter].is-set > *:nth-child(5) { transition-delay: 32
+ }
+ /* 青铜收束：扉页动作行的主示能是那枚按钮，文字链默认墨、悬停才让铜 */
+ .title-actions .ed-textlink { color: var(--ed-ink); }
+-.title-actions .ed-textlink:hover { color: var(--sc-accent); }
++.title-actions .ed-textlink:hover { color: var(--ed-accent); }
+ 
+ /* ---------- 页边批注（签名动作）---------- */
+ .anno {
+@@ -320,29 +346,26 @@ html.ed-ready .ed [data-ed-enter].is-set > *:nth-child(5) { transition-delay: 32
+   width: 1px;
+   background: var(--ed-hairline);
+ }
+-.mnote::after {
+-  content: "";
+-  position: absolute;
+-  left: 0; top: 0.35rem; bottom: 0.35rem;
++/* 批注铜线（真实节点，GSAP scaleY 生长；静态基线为 hairline ::before） */
++.mnote .ed-rule {
++  left: 0;
++  right: auto;
++  top: 0.35rem;
++  bottom: 0.35rem;
++  height: auto;
+   width: 2px;
+-  background: var(--sc-accent);
+-  transform: scaleY(0);
+-  transform-origin: top;
+-  transition: transform 700ms var(--sc-ease-out) 120ms;
++  background: var(--ed-accent);
++  transform-origin: 50% 0%;
+ }
+ .mnote p { margin: 0; }
+ /* 正文链接两轨制：正文 = 下划线 + 变色，导航 = 纯色 + 过渡 */
+-.mnote a { color: var(--sc-accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.3em; }
++.mnote a { color: var(--ed-accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.3em; }
+ .mnote a:hover { color: var(--ed-ink); }
+-html.ed-ready .mnote { opacity: 0; transform: translate3d(0, 10px, 0); transition: opacity 620ms var(--sc-ease-out), transform 620ms var(--sc-ease-out); }
+-html.ed-ready .mnote.is-set { opacity: 1; transform: none; }
+-html.ed-ready .mnote.is-set::after { transform: scaleY(1); }
+-/* 键盘落焦即呈现：批注还在隐藏态时 Tab 进内链，焦点环不能等落位动画 */
+-html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-duration: 0s; }
+ 
+ /* ---------- 壹 · 方法 ---------- */
+ .method-list { list-style: none; margin: clamp(2.5rem, 6vh, 4rem) 0 0; padding: 0; }
+ .method-list li {
++  position: relative; /* .ed-rule 行线的定位宿主 */
+   display: grid;
+   grid-template-columns: 3.4rem minmax(0, 58ch) minmax(9rem, 14rem);
+   gap: clamp(1rem, 3vw, 2.5rem);
+@@ -363,7 +386,7 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+ /* ---------- 贰 · 作品 ---------- */
+ .work { position: relative; border-top: 1px solid var(--ed-hairline); padding-top: clamp(1.6rem, 4vh, 2.4rem); }
+ .work--featured { border-top-color: var(--ed-hairline-strong); } /* 章界强、行界弱 */
+-.work-kicker { margin: 0 0 0.7rem; color: var(--ed-muted); font-size: var(--ed-note); letter-spacing: var(--ed-track); transition: color 160ms var(--sc-ease-out); }
++.work-kicker { margin: 0 0 0.7rem; color: var(--ed-muted); font-size: var(--ed-note); letter-spacing: var(--ed-track); transition: color 160ms var(--ed-ease-out); }
+ .work-no { font-variant-numeric: tabular-nums; margin-right: 0.75em; }
+ .work-title { font-family: var(--ed-serif); font-weight: 450; letter-spacing: -0.015em; margin: 0; font-size: 1.7rem; line-height: 1.35; }
+ /* 首推条目动用可变字重轴（press-serif 已预载）：48(h2)/36/27.2/21.6 果断梯降 */
+@@ -373,17 +396,17 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+ .work--featured { margin-bottom: clamp(2.2rem, 5vh, 3.2rem); }
+ .work-duo { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(2rem, 5vw, 4rem); }
+ .work-duo .work-summary { max-width: 44ch; }
+-/* 行示能『落墨』：青铜只属于正在绘制的行线（与方法章 ::before 同语法）；
++/* 行示能『落墨』：青铜只属于正在绘制的行线（与方法章 .ed-rule 同语法）；
+    kicker 随之升墨。触屏不粘滞——位移/变色 hover 全部 gate 真指针 */
+ .work::before {
+   content: "";
+   position: absolute;
+   top: -1px; left: 0; right: 0;
+   height: 1px;
+-  background: var(--sc-accent);
++  background: var(--ed-accent);
+   transform: scaleX(0);
+   transform-origin: 0 50%;
+-  transition: transform 320ms var(--sc-ease-out);
++  transition: transform 320ms var(--ed-ease-out);
+ }
+ @media (hover: hover) and (pointer: fine) {
+   .work:hover::before { transform: scaleX(1); }
+@@ -399,7 +422,12 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+   font-variant-numeric: tabular-nums;
+ }
+ 
+-/* 数据深挖（计数 + 揭示 + 微视差，作用域属贰章整章 flow act，窗口按章 p 标定）
++/* 滚动擦洗宿主的合成层提示（元素数量固定三枚，不滥用） */
++.title-lift { will-change: transform; }
++.data-figure { will-change: clip-path; }
++.data-figure-inner { will-change: transform; }
++
++/* 数据深挖（计数 + 揭示 + 微视差，作用域属贰章整章 flow，窗口按章 p 标定）
+    图版满幅：全刊最大数据时刻独占内容宽（1440 下 988px，源图 2.6× 缩、轴标可读） */
+ .data-spread {
+   display: grid;
+@@ -412,7 +440,7 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+ .data-copy { max-width: 58ch; }
+ .data-spread .data-copy p { max-width: 46ch; color: var(--ed-soft); margin: 1.2rem 0 0; }
+ .data-count { margin: 0; }
+-.data-count .sc-nums {
++.data-count .ed-nums {
+   display: block;
+   font-family: var(--ed-serif);
+   font-weight: 450;
+@@ -433,7 +461,7 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+ .data-figure-inner { background: var(--ed-surface); border: 1px solid var(--ed-hairline); }
+ .data-figure-img { display: block; width: 100% !important; height: auto !important; }
+ .data-figure figcaption { margin-top: 0.75rem; color: var(--ed-muted); font-size: var(--ed-note); letter-spacing: var(--ed-track); }
+-.fig-no { font-variant-numeric: tabular-nums; letter-spacing: 0.08em; color: var(--sc-accent); margin-right: 0.75em; }
++.fig-no { font-variant-numeric: tabular-nums; letter-spacing: 0.08em; color: var(--ed-accent); margin-right: 0.75em; }
+ .fig-source { display: block; margin-top: 0.35rem; font-family: var(--ed-mono); font-size: var(--ed-caption); color: var(--ed-muted); }
+ 
+ /* 图版（作品界面实录/数据副图）：与数据版面同族的 figure 语法，类名独立避开 .data-figure（e2e 作用域） */
+@@ -460,6 +488,7 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+   align-items: start;
+ }
+ .note {
++  position: relative; /* .ed-rule 行线的定位宿主 */
+   display: grid;
+   grid-template-columns: 6.5rem minmax(0, 1fr) 1.6rem;
+   gap: clamp(1rem, 3vw, 2.2rem);
+@@ -472,9 +501,9 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+ .note time { color: var(--ed-muted); font-size: var(--ed-note); letter-spacing: var(--ed-track); padding-top: 0.42rem; font-variant-numeric: tabular-nums; }
+ .note h3 { font-family: var(--ed-serif); font-size: 1.22rem; font-weight: 500; margin: 0 0 0.3rem; letter-spacing: -0.01em; }
+ .note p { margin: 0; color: var(--ed-muted); font-size: 0.92rem; }
+-.note > span { color: var(--ed-muted); padding-top: 0.42rem; text-align: right; transition: transform 160ms var(--sc-ease-out), color 160ms var(--sc-ease-out); }
+-.note:hover h3 { color: var(--sc-accent); }
+-.note:hover > span { color: var(--sc-accent); }
++.note > span { color: var(--ed-muted); padding-top: 0.42rem; text-align: right; transition: transform 160ms var(--ed-ease-out), color 160ms var(--ed-ease-out); }
++.note:hover h3 { color: var(--ed-accent); }
++.note:hover > span { color: var(--ed-accent); }
+ /* 位移类 hover 只给真指针：触屏点按后的 :hover 粘滞不再拖着箭头 */
+ @media (hover: hover) and (pointer: fine) {
+   .note:hover > span { transform: translate(2px, -2px); }
+@@ -495,7 +524,7 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+ /* 编号列（等宽 tabular）+ 名称下的仪器刻度：账行以外的第二视觉维度 */
+ .lab-no { font-family: var(--ed-mono); font-size: var(--ed-caption); letter-spacing: 0.08em; color: var(--ed-muted); font-variant-numeric: tabular-nums; }
+ .lab-name { display: block; }
+-.lab-name b { display: block; font-family: var(--ed-serif); font-size: 1.35rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; transition: color 160ms var(--sc-ease-out); }
++.lab-name b { display: block; font-family: var(--ed-serif); font-size: 1.35rem; font-weight: 500; letter-spacing: -0.01em; line-height: 1.3; transition: color 160ms var(--ed-ease-out); }
+ .lab-name i {
+   display: block;
+   width: 3.4rem;
+@@ -503,11 +532,11 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+   margin-top: 0.55rem;
+   background: repeating-linear-gradient(90deg, var(--ed-hairline) 0 1px, transparent 1px 7px);
+ }
+-.lab-row span:last-child { color: var(--ed-muted); transition: transform 160ms var(--sc-ease-out); }
++.lab-row span:last-child { color: var(--ed-muted); transition: transform 160ms var(--ed-ease-out); }
+ @media (hover: hover) and (pointer: fine) {
+-  .lab-row:hover b { color: var(--sc-accent); }
++  .lab-row:hover b { color: var(--ed-accent); }
+   .lab-row:hover span:last-child { transform: translate(2px, -2px); }
+-  .lab-row:hover .lab-name i { background: repeating-linear-gradient(90deg, var(--sc-accent) 0 1px, transparent 1px 7px); }
++  .lab-row:hover .lab-name i { background: repeating-linear-gradient(90deg, var(--ed-accent) 0 1px, transparent 1px 7px); }
+ }
+ @media (max-width: 720px) {
+   .lab-row { grid-template-columns: 3rem minmax(0, 1fr) 1rem; row-gap: 0.45rem; }
+@@ -519,8 +548,6 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+ 
+ /* ---------- 末 · 版权页（墨色版牌）---------- */
+ .ch-colophon {
+-  --sc-ink: var(--ed-plate-ink);
+-  --sc-ink-soft: var(--ed-plate-soft);
+   background: var(--ed-ink-plate);
+   color: var(--ed-plate-ink);
+   min-height: 88svh;
+@@ -564,6 +591,7 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+ }
+ .colophon-cta:hover { text-decoration-thickness: 2px; color: var(--ed-plate-ink); }
+ .colophon-foot {
++  position: relative; /* 金线（.ed-rule）的定位宿主 */
+   margin-top: clamp(3rem, 8vh, 5rem);
+   padding-top: 1.4rem;
+   border-top: 1px solid var(--ed-plate-hairline);
+@@ -573,8 +601,9 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+   align-items: baseline;
+   justify-content: space-between;
+ }
++.colophon-foot .ed-rule { background: var(--ed-gold); }
+ .colophon-foot nav { display: flex; flex-wrap: wrap; gap: 0.6rem 2rem; }
+-.colophon-foot nav a { color: var(--ed-plate-soft); text-decoration: none; font-size: 0.92rem; transition: color 160ms var(--sc-ease-out); }
++.colophon-foot nav a { color: var(--ed-plate-soft); text-decoration: none; font-size: 0.92rem; transition: color 160ms var(--ed-ease-out); }
+ .colophon-foot nav a:hover { color: var(--ed-gold); }
+ .colophon-small { margin: 0; color: var(--ed-plate-soft); font-size: var(--ed-note); letter-spacing: var(--ed-track); opacity: 0.8; }
+ 
+@@ -592,9 +621,9 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+ }
+ @media (min-width: 1200px) {
+   .folio { display: flex; }
+-  .ed .ch-wrap, .ed .title-foot { padding-left: calc(var(--sc-gutter) + 4.25rem); }
++  .ed .ch-wrap, .ed .title-foot { padding-left: calc(var(--ed-gutter) + 4.25rem); }
+   /* 收束线两端 = 内容盒两端（48/1152/48 居中），文本缩进由上面的 padding-left 承担 */
+-  .ed .title-foot { inset-inline: var(--sc-gutter); }
++  .ed .title-foot { inset-inline: var(--ed-gutter); }
+ }
+ /* (0,2,0) 压过 .ed a 的 (0,1,1)：muted→ink 的章级层次此前被级联事故抹平 */
+ .folio .folio__item {
+@@ -617,15 +646,14 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+   letter-spacing: var(--ed-track);
+   opacity: 0;
+   transform: translateX(-4px);
+-  transition: opacity 220ms var(--sc-ease-out), transform 220ms var(--sc-ease-out);
++  transition: opacity 220ms var(--ed-ease-out), transform 220ms var(--ed-ease-out);
+   white-space: nowrap;
+ }
+ .folio__item i { position: relative; display: block; width: 1px; height: 1.55rem; background: var(--ed-hairline); }
+ .folio__item u {
+   position: absolute; inset: 0;
+   display: block;
+-  background: var(--sc-accent);
+-  transform: scaleY(var(--fill, 0));
++  background: var(--ed-accent);
+   transform-origin: top;
+ }
+ .folio__item.is-active span { opacity: 1; transform: none; }
+@@ -643,78 +671,6 @@ html.ed-ready .mnote:focus-within { opacity: 1; transform: none; transition-dura
+   .folio.is-dark .folio__item:hover:not(.is-active) { color: var(--ed-plate-ink); }
+ }
+ 
+-/* ---------- 滚动接线：每章一个 flow act，引擎发布 --sc-p，页面 CSS 消费 ----------
+-   窗口一律纯数字 clamp（CSS calc 不允许 length 与 number 混型），乘 100%/10px
+-   得百分比/长度；全部挂 html.sc-ready 前缀——引擎 mount 即加、destroy 即摘：
+-   无 JS 或挂载前规则不生效 = 直接呈现终态，语义不丢。反向滚动可逆复扫。 */
+-
+-/* 扉：标题块微视差（引擎 data-sc-parallax，静息 p≈0.5 位移恰为 0）+ 页脚铜线自左绘制 */
+-.title-lift { will-change: transform; }
+-.title-foot::after {
+-  content: "";
+-  position: absolute;
+-  left: 0;
+-  top: -1px;
+-  height: 1px;
+-  width: 100%;
+-  background: var(--sc-accent);
+-  transform-origin: 0 50%;
+-}
+-html.sc-ready .title-foot::after { transform: scaleX(clamp(0, (var(--sc-p, 1) - 0.5) / 0.42, 1)); }
+-
+-/* 壹：编号『落墨』自下而上填充 + 行线铜色覆盖；三行窗前置于阅读位（读到即全墨） */
+-.method-list li { position: relative; }
+-.method-list li:nth-child(1) { --w0: 0.04; }
+-.method-list li:nth-child(2) { --w0: 0.20; }
+-.method-list li:nth-child(3) { --w0: 0.38; }
+-.method-list li::before {
+-  content: "";
+-  position: absolute;
+-  top: -1px;
+-  left: 0;
+-  right: 0;
+-  height: 1px;
+-  background: var(--sc-accent);
+-  transform-origin: 0 50%;
+-}
+-html.sc-ready .method-list li::before { transform: scaleX(clamp(0, (var(--sc-p, 1) - var(--w0, 0.04)) / 0.16, 1)); }
+-html.sc-ready .method-no { clip-path: inset(calc((1 - clamp(0, (var(--sc-p, 1) - var(--w0, 0.04)) / 0.16, 1)) * 100%) 0 0 0); }
+-
+-/* 叁：札记行『入档』——标题+摘要块随行线铺铜自右向左 10px 落位 */
+-.note { position: relative; --w0: 0.10; }
+-.note-list .note:nth-child(2) { --w0: 0.26; }
+-.note-list .note:nth-child(3) { --w0: 0.42; }
+-.note::before {
+-  content: "";
+-  position: absolute;
+-  top: -1px;
+-  left: 0;
+-  right: 0;
+-  height: 1px;
+-  background: var(--sc-accent);
+-  transform-origin: 0 50%;
+-}
+-html.sc-ready .note::before { transform: scaleX(clamp(0, (var(--sc-p, 1) - var(--w0, 0.1)) / 0.16, 1)); }
+-html.sc-ready .note [data-ed-drift] { transform: translate3d(calc((1 - clamp(0, (var(--sc-p, 1) - var(--w0, 0.1)) / 0.16, 1)) * 10px), 0, 0); }
+-
+-/* 末：墨色版牌页脚金线绘制（正在合卷） */
+-.colophon-foot { position: relative; }
+-.colophon-foot::after {
+-  content: "";
+-  position: absolute;
+-  left: 0;
+-  top: -1px;
+-  height: 1px;
+-  width: 100%;
+-  background: var(--ed-gold);
+-  transform-origin: 0 50%;
+-}
+-html.sc-ready .colophon-foot::after { transform: scaleX(clamp(0, (var(--sc-p, 1) - 0.30) / 0.34, 1)); }
+-
+-/* 引擎脚本失败兜底（JS 开启但 scrollcraft.js 加载失败）：强制呈现，覆盖面与 noscript 对齐 */
+-html.ed-fallback [data-cstd-home-editorial] [data-sc-in],
+-html.ed-fallback [data-cstd-home-editorial] [data-sc-stagger] > * { opacity: 1 !important; transform: none !important; }
+-
+ /* ---------- 响应式 ---------- */
+ @media (max-width: 1100px) {
+   .anno { grid-template-columns: minmax(0, 1fr); }
+@@ -742,30 +698,14 @@ html.ed-fallback [data-cstd-home-editorial] [data-sc-stagger] > * { opacity: 1 !
+   .colophon-foot { flex-direction: column; }
+ }
+ 
+-/* ---------- 减速运动 ---------- */
++/* ---------- 减速运动 ----------
++   GSAP 编排在 no-preference 下才注册（matchMedia 自动 revert），reduce 下
++   零内联样式写入、内容直接呈现；此处只处理 CSS 状态过渡与 folio 细线。 */
+ @media (prefers-reduced-motion: reduce) {
+-  /* [data-sc-in] 入场时长不在此归零：引擎 reduce 块专为减速保留了 220ms 温和淡入
+-     （“Fewer and gentler, not zero”），页面不再以更高特异性把它压成硬弹出。 */
+-  html.ed-ready .mnote, html.ed-ready .mnote.is-set {
+-    opacity: 1; transform: none; transition: none;
+-  }
+-  html.ed-ready .mnote.is-set::after { transition: none; }
+-  /* 扉页题签页面自管入场：减速下同步置终态（is-set 在 effect 里即刻添加），
+-     任何采样时点都恒为满不透明 */
+-  html.ed-ready [data-ed-enter] > *, html.ed-ready [data-ed-enter].is-set > * {
+-    opacity: 1; transform: none; transition: none;
+-  }
++  html:has([data-cstd-home-editorial]) { scroll-behavior: auto; }
+   .folio__item span { transition: none; }
+   /* folio 进度细线随滚动全程运动，属位移类动效：减速下直接呈现终态（满线） */
+   .folio__item u { transform: scaleY(1); }
+-  /* 页面自管滚动设备逐条降级：全部直接呈现终态 */
+-  .title-lift { transform: none !important; }
+-  html.sc-ready .title-foot::after { transform: none; }
+-  html.sc-ready .method-list li::before { transform: none; }
+-  html.sc-ready .method-no { clip-path: none; }
+-  html.sc-ready .note::before { transform: none; }
+-  html.sc-ready .note [data-ed-drift] { transform: none; }
+-  html.sc-ready .colophon-foot::after { transform: none; }
+   /* 悬停微动效（作品行铜线/顶栏金点/仪器箭头）减速下不过渡：状态即达 */
+   .work::before, .ed-bar__mark::after, .lab-row span:last-child { transition: none; }
+ }

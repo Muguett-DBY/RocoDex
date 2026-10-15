@@ -17,8 +17,8 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   await expect(page.locator("[data-cstd-home-editorial] .chapter")).toHaveCount(6);
   await expect(page.locator("[data-cstd-home-editorial] .folio__item")).toHaveCount(6);
-  // 贰章普查行新增了第二个 [data-sc-count]，断言收窄到 147 万计数本尊
-  await expect(page.locator('[data-cstd-home-editorial] [data-sc-count="0 1,470,000"]')).toHaveAttribute("data-sc-count", "0 1,470,000");
+  // 贰章普查行新增了第二个 [data-ed-count]，断言收窄到 147 万计数本尊
+  await expect(page.locator('[data-cstd-home-editorial] [data-ed-count="0 1,470,000"]')).toHaveAttribute("data-ed-count", "0 1,470,000");
   await expect(page.locator("[data-cstd-narrative-switcher]")).toHaveCount(0);
 
   // The game five-act composition lives behind the theme switch; neon asserts its counts.

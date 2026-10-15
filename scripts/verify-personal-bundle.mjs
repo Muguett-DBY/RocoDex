@@ -84,7 +84,7 @@ const highQualityAssets = readdirSync(path.join(nextRoot, "static/chunks"))
   });
 const highQualityBytes = bytesFor(highQualityAssets);
 const fullWebglBytes = webglBytes + highQualityBytes;
-// SCROLL（默认正式滚动主页）静态资产：引擎与页面样式，总量约束。
+// SCROLL（默认正式滚动主页）静态资产：页面样式（动效为 npm gsap 异步 chunk，引擎已退役）。
 const scrollAssetBudget = 512 * 1024;
 const scrollAssetRoot = path.resolve("public/cstd-scroll");
 const scrollAssets = readdirSync(scrollAssetRoot).filter((asset) => /\.(js|css)$/.test(asset));
@@ -148,8 +148,8 @@ if (originalVisualBytes > originalVisualBudget) {
 if (oversizedOriginalVisual) {
   throw new Error(`CSTD 17.0 universe visual ${oversizedOriginalVisual} exceeds ${originalVisualFileBudget} bytes`);
 }
-if (scrollAssets.length < 3) {
-  throw new Error("Could not find the SCROLL editorial engine assets under public/cstd-scroll");
+if (scrollAssets.length < 1) {
+  throw new Error("Could not find the SCROLL editorial page stylesheet under public/cstd-scroll");
 }
 if (scrollAssetBytes > scrollAssetBudget) {
   throw new Error(`SCROLL editorial assets total ${scrollAssetBytes} bytes; budget is ${scrollAssetBudget}`);

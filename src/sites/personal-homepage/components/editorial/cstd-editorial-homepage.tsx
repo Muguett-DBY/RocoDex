@@ -10,14 +10,16 @@ import { ThemeSwitcher } from "../theme-switcher";
 
 /* ============================================================================
    CSTD Editorial · 默认主页（atelier 主题槽位）的正式滚动版式。
-   Chaptered editorial grammar（scroll-craft）：纸面章节、入场落位、页边批注、
-   folio 页码导航；每章一个 flow act，把引擎发布的 --sc-p 接给页面 CSS——
-   铜线绘制、编号落墨、札记入档、图表揭示与 147 万计数均随滚动位置擦洗。
-   零视频、零滚动劫持：全部动效为 transform/opacity/clip-path，原生文档流滚动。
+   Chaptered editorial grammar：纸面章节、入场落位、页边批注、folio 页码
+   导航。动效体系为单一 GSAP 编排（editorial-motion.ts，动态 import 进异步
+   chunk）：扉页/章题升幕、双 pin 擦洗、铜线绘制、编号落墨、计数与图版揭示、
+   folio 页码轨全部由 ScrollTrigger 驱动——本页不挂载任何自制滚动引擎，
+   CSS 不消费滚动驱动变量。零视频、零滚动劫持：全部动效为
+   transform/opacity/clip-path，原生文档流滚动；无 JS 时初始 DOM 即终态。
 
    内容数据由服务端（personal-homepage.tsx）准备好以 props 传入，内容注册表
-   不进客户端包。独立 HTML 原型与验证留档：/cstd-scroll/prototype.html 与
-   scrollcraft/builds/cstd-editorial/。引擎（scrollcraft.js/css）不改动。
+   不进客户端包。历史留档：scrollcraft/builds/cstd-editorial/（引擎时代构建，
+   不部署）。
    ========================================================================== */
 
 export type EditorialWork = {
@@ -52,10 +54,9 @@ const WORK_PLATES: Record<string, { src: string; width: number; height: number; 
   "alpha-research-system": { src: "/cstd-projects/alpha.png", width: 1280, height: 800, plate: "alpha" },
 };
 
+/* 无 JS 兜底：动效隐藏态只由 JS 设置（GSAP from 的起始值），noscript 下内容
+   天然完整可读——唯一要收走的是 folio（页码轨失去滚动跟踪后是死重） */
 const NOSCRIPT_FALLBACK_CSS = `
-[data-cstd-home-editorial] [data-sc-in],[data-cstd-home-editorial] [data-sc-stagger]>*{opacity:1!important;transform:none!important}
-[data-cstd-home-editorial] [data-sc-reveal]{clip-path:none!important}
-[data-cstd-home-editorial] .mnote{opacity:1!important;transform:none!important}
 [data-cstd-home-editorial] .folio{display:none!important}
 `;
 
@@ -248,17 +249,8 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     navNow: zh ? "现在" : "Now",
     navResume: zh ? "履历" : "Résumé",
     backToTop: zh ? "回到顶部" : "Back to top",
-    colophonSmall: zh ? "© 2026 奶黄包 · 本页滚动效果由 ScrollCraft 驱动，无视频。" : "© 2026 Custard · Scroll effects by ScrollCraft. No video.",
+    colophonSmall: zh ? "© 2026 奶黄包 · 滚动编排由 GSAP ScrollTrigger 驱动，无视频。" : "© 2026 Custard · Scroll choreography by GSAP ScrollTrigger. No video.",
   };
-}
-
-declare global {
-  interface Window {
-    ScrollCraft?: {
-      mount: (root: HTMLElement | Document) => { destroy: () => void; clips: unknown[] };
-    };
-    __sc?: unknown;
-  }
 }
 
 export function CstdEditorialHomepage({
@@ -276,7 +268,6 @@ export function CstdEditorialHomepage({
 }) {
   const copy = useMemo(() => editorialCopy(locale), [locale]);
   const rootRef = useRef<HTMLDivElement>(null);
-  const folioRef = useRef<HTMLElement>(null);
   /* 正式视图的固定件（skip link 与 folio）：游戏主题激活时卸载（而非仅隐藏），
      不占 fixed 元素预算、不留可访问树残影 */
   const [chromeMounted, setChromeMounted] = useState(true);
@@ -284,319 +275,36 @@ export function CstdEditorialHomepage({
   const featured = works.find((work) => work.featured) ?? works[0];
   const zh = locale === "zh";
 
-  useEffect(() => {
-    const root = rootRef.current;
-    const folio = folioRef.current;
-    if (!root) return;
-
-    let destroyed = false;
-    const cleanups: (() => void)[] = [];
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    document.documentElement.classList.add("ed-ready");
-    cleanups.push(() => document.documentElement.classList.remove("ed-ready"));
-
-    /* ---- 页边批注 + 扉页题签：随所属段落进入视口而落位，一次性 ----
-       触发线保持浅（-6% / 0.05）：页尾章节剩余滚动余量少，触发过深会让
-       快速滚到底的读者完全看不到落位过程。扉页 title-stack 走同一机制
-       （data-ed-enter）：SSR 直出可见（LCP 不等引擎），水合后由页面 IO 落位，
-       reduce 分支同步置终态——任何采样时点都不存在中间透明度。 */
-    const revealables = Array.from(root.querySelectorAll<HTMLElement>("[data-mnote], [data-ed-enter]"));
-    if (reduce || !("IntersectionObserver" in window)) {
-      revealables.forEach((n) => n.classList.add("is-set"));
-    } else {
-      const noteIO = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-set");
-              noteIO.unobserve(entry.target);
-            }
-          });
-        },
-        { rootMargin: "0px 0px -6% 0px", threshold: 0.05 },
-      );
-      revealables.forEach((n) => noteIO.observe(n));
-      cleanups.push(() => noteIO.disconnect());
-    }
-
-    /* ---- folio：当前章高亮 + 进度细线 + 版权页墨色翻转 ---- */
-    if (folio) {
-      const items: { a: HTMLAnchorElement; chapter: HTMLElement; bar: HTMLElement }[] = [];
-      folio.querySelectorAll<HTMLAnchorElement>(".folio__item").forEach((a) => {
-        const chapter = root.querySelector(a.getAttribute("href") ?? "");
-        const bar = a.querySelector("u");
-        if (chapter instanceof HTMLElement && bar instanceof HTMLElement) items.push({ a, chapter, bar });
-      });
-
-      const colophon = root.querySelector("[data-colophon]");
-      if (colophon && "IntersectionObserver" in window) {
-        const darkIO = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => folio.classList.toggle("is-dark", entry.isIntersecting));
-          },
-          { threshold: 0.4 },
-        );
-        darkIO.observe(colophon);
-        cleanups.push(() => darkIO.disconnect());
-      }
-
-      let ticking = false;
-      let trailing = 0;
-      const update = () => {
-        ticking = false;
-        const vh = window.innerHeight;
-        const center = vh * 0.5;
-        let active: (typeof items)[number] | null = null;
-        items.forEach((item) => {
-          const rect = item.chapter.getBoundingClientRect();
-          let p = (vh - rect.top) / (rect.height + vh);
-          p = Math.min(Math.max(p, 0), 1);
-          (item.bar as HTMLElement).style.setProperty("--fill", p.toFixed(4));
-          if (rect.top <= center && rect.bottom >= center) active = item;
-        });
-        items.forEach((item) => item.a.classList.toggle("is-active", item === active));
-      };
-      const onScroll = () => {
-        if (!ticking) {
-          ticking = true;
-          requestAnimationFrame(update);
-        }
-        // 无渲染帧的环境（如合成滚动后的无头测试）里 rAF 可能不再触发，尾随定时器保证末态确定执行
-        window.clearTimeout(trailing);
-        trailing = window.setTimeout(update, 150);
-      };
-      window.addEventListener("scroll", onScroll, { passive: true });
-      window.addEventListener("resize", onScroll, { passive: true });
-      cleanups.push(() => {
-        window.removeEventListener("scroll", onScroll);
-        window.removeEventListener("resize", onScroll);
-        window.clearTimeout(trailing);
-      });
-      update();
-    }
-
-    /* ---- stagger 入场残留清理：引擎把 transitionDelay 内联写进直接子元素且从不清除，
-       会拖慢链接的 hover 反馈（.work 链接 240ms、.note 箭头 120ms）。入场过渡结束后
-       清掉内联延迟——运行中的过渡不受影响，延迟的唯一职责就是这次入场。 ---- */
-    const onTransitionEnd = (event: TransitionEvent) => {
-      const target = event.target;
-      if (target instanceof HTMLElement && target.style.transitionDelay) target.style.transitionDelay = "";
-    };
-    root.addEventListener("transitionend", onTransitionEnd);
-    cleanups.push(() => root.removeEventListener("transitionend", onTransitionEnd));
-
-    /* ---- 装载引擎（scrollcraft.js 不改动）；游戏主题激活时卸载，回默认时重挂 ---- */
-    const isEditorialTheme = () => {
-      const attr = document.documentElement.getAttribute("data-cstd-theme");
-      return attr === null || attr === "atelier";
-    };
-    setChromeMounted(isEditorialTheme());
-    let booted = false;
-    let api: { destroy: () => void } | null = null;
-    let engineLoaded = Boolean(window.ScrollCraft);
-    /* 引擎脚本加载失败（网络故障/拦截）时，scrollcraft.css 仍会把入场元素压在
-       opacity:0——JS 开启但引擎缺席的场景 noscript 兜底覆盖不到。失败即挂
-       ed-fallback 强制呈现；引擎迟到则摘除并照常入场。 */
-    const dropFallback = () => document.documentElement.classList.remove("ed-fallback");
-    const boot = () => {
-      if (destroyed || booted || !engineLoaded || !isEditorialTheme()) return;
-      booted = true;
-      dropFallback();
-      api = window.ScrollCraft!.mount(document.body);
-      (window as { __sc?: unknown }).__sc = api;
-    };
-    const unboot = () => {
-      if (!booted) return;
-      booted = false;
-      try {
-        api?.destroy();
-      } catch {
-        /* idempotent */
-      }
-      api = null;
-    };
-    if (!engineLoaded) {
-      const script = document.createElement("script");
-      script.src = "/cstd-scroll/scrollcraft.js";
-      script.async = true;
-      script.addEventListener("load", () => {
-        engineLoaded = true;
-        boot();
-      });
-      script.addEventListener("error", () => {
-        if (!window.ScrollCraft) document.documentElement.classList.add("ed-fallback");
-      });
-      document.head.appendChild(script);
-      /* 既不 load 也不 error 的悬置（长超时、被代理掐断）：超时兜底直接呈现 */
-      const engineWatch = window.setTimeout(() => {
-        if (!window.ScrollCraft) document.documentElement.classList.add("ed-fallback");
-      }, 4000);
-      cleanups.push(() => {
-        window.clearTimeout(engineWatch);
-        script.remove();
-        dropFallback();
-      });
-    }
-    const themeObserver = new MutationObserver(() => {
-      const editorial = isEditorialTheme();
-      setChromeMounted(editorial);
-      if (editorial) boot();
-      else unboot();
-    });
-    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-cstd-theme"] });
-    cleanups.push(() => themeObserver.disconnect());
-    boot();
-
-    return () => {
-      destroyed = true;
-      try {
-        api?.destroy();
-      } catch {
-        /* teardown after detach is idempotent */
-      }
-      if ((window as { __sc?: unknown }).__sc === api) (window as { __sc?: unknown }).__sc = undefined;
-      while (cleanups.length) cleanups.pop()!();
-    };
-  }, []);
-
-  /* ---- GSAP ScrollTrigger 滚动编排（与引擎互补，按元素划分唯一驱动者）----
-     引擎继续拥有既有 --sc-p 窗口编排；GSAP 负责：扉页入场时间线、章题逐词
-     升幕 scrub、方法章/数据版面的 pin 住整屏擦洗（pinType:transform 保证引擎
-     的几何采样在 pin 期间照常推进）、版权页收束。动效仅 transform/clip-path；
-     动态导入进异步 chunk，不进首屏；减速运动下整组不启用（元素保持可见）。 */
+  /* ---- 唯一的客户端 effect：固定件互斥 + 动态装载 GSAP 编排 ----
+     editorial-motion 与 gsap 一同落入异步 chunk，不进首屏 entry；装载等
+     字体就位后自建/自回收（gsap.context + matchMedia）。依赖 chromeMounted：
+     folio/skip 随主题切换卸载重挂，固定件重挂后触发器必须重新绑到新节点。 */
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
     let cancelled = false;
-    let context: { revert: () => void } | null = null;
-    let scrollTriggers: { disable: (revert?: boolean) => void; enable: (reset?: boolean) => void; refresh: (reset?: boolean) => void }[] = [];
-    const cleanupQueue: (() => void)[] = [];
+    let destroyMotion: (() => void) | undefined;
 
-    const splitIntoMasks = (el: HTMLElement, unit: "char" | "word") => {
-      if (el.dataset.edSplit) return;
-      el.dataset.edSplit = "1";
-      /* 读屏完整性：视觉分字后逐字朗读会破碎语义，掩码整体隐藏、原文进 aria-label */
-      const fullText = (el.textContent ?? "").trim();
-      const fragment = document.createDocumentFragment();
-      el.childNodes.forEach((node) => {
-        if (node.nodeType === Node.TEXT_NODE) {
-          const text = node.textContent ?? "";
-          const units = unit === "char"
-            ? text.match(/[\u4e00-\u9fff\u3400-\u4dbf]|[\u3000-\u303f\uff00-\uffef]+|[A-Za-z0-9]+(?:['’-][A-Za-z0-9]+)*|\s+|[^\s]/g) ?? [text]
-            : text.split(/(\s+)/);
-          for (const piece of units) {
-            if (!piece) continue;
-            if (!piece.trim()) {
-              fragment.appendChild(document.createTextNode(piece));
-              continue;
-            }
-            const mask = document.createElement("span");
-            mask.className = "ed-word";
-            mask.setAttribute("aria-hidden", "true");
-            const inner = document.createElement("span");
-            inner.className = "ed-word__in";
-            inner.textContent = piece;
-            mask.appendChild(inner);
-            fragment.appendChild(mask);
-          }
-        } else {
-          const clone = node.cloneNode(true);
-          if (clone instanceof HTMLElement) clone.setAttribute("aria-hidden", "true");
-          fragment.appendChild(clone);
-        }
-      });
-      el.textContent = "";
-      el.appendChild(fragment);
-      el.setAttribute("aria-label", fullText);
+    const isEditorialTheme = () => {
+      const attr = document.documentElement.getAttribute("data-cstd-theme");
+      return attr === null || attr === "atelier";
     };
+    setChromeMounted(isEditorialTheme());
+    const themeObserver = new MutationObserver(() => setChromeMounted(isEditorialTheme()));
+    themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-cstd-theme"] });
 
-    (async () => {
-      const [{ gsap }, { ScrollTrigger }] = await Promise.all([import("gsap"), import("gsap/ScrollTrigger")]);
+    void import("./editorial-motion").then(({ mountEditorialMotion }) => {
       if (cancelled) return;
-      gsap.registerPlugin(ScrollTrigger);
-      await (document.fonts?.ready ?? Promise.resolve());
-      if (cancelled) return;
-
-      context = gsap.context(() => {
-        const mm = gsap.matchMedia();
-        mm.add("(prefers-reduced-motion: no-preference)", () => {
-          /* 扉页入场时间线（不触碰 .ed-summary：LCP 元素随首帧绘制） */
-          const h1 = root.querySelector<HTMLElement>(".ch-title h1");
-          if (h1) {
-            splitIntoMasks(h1, locale === "zh" ? "char" : "word");
-            gsap.fromTo(h1.querySelectorAll(".ed-word__in"),
-              { yPercent: 118 },
-              { yPercent: 0, duration: 0.9, ease: "power4.out", stagger: locale === "zh" ? 0.05 : 0.06, delay: 0.15 });
-          }
-          const actions = root.querySelector<HTMLElement>(".title-actions");
-          if (actions) gsap.fromTo(actions, { y: 18, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, ease: "power3.out", delay: 0.55 });
-          const role = root.querySelector<HTMLElement>(".title-role");
-          if (role) gsap.fromTo(role, { y: 12, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.7, ease: "power3.out", delay: 0.7 });
-          const foot = root.querySelector<HTMLElement>(".title-foot");
-          if (foot) gsap.fromTo(foot, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.0, ease: "power3.inOut", delay: 0.45 });
-
-          /* 章题逐词升幕（scrub 可逆；CJK 按字、拉丁按词） */
-          root.querySelectorAll<HTMLElement>(".chapter:not(.ch-title) h2.ed-display-lg").forEach((h2) => {
-            splitIntoMasks(h2, locale === "zh" ? "char" : "word");
-            gsap.fromTo(h2.querySelectorAll(".ed-word__in"),
-              { yPercent: 120 },
-              {
-                yPercent: 0, ease: "none", stagger: 0.04,
-                scrollTrigger: { trigger: h2, start: "top 88%", end: "top 42%", scrub: 0.6 },
-              });
-          });
-
-          /* 方法章与数据版面 pin 住整屏擦洗：
-             内部编排仍由引擎 --sc-p 窗口驱动（pin spacer 拉长几何，窗口随 pin 逐屏展开），
-             pinType:transform 让元素的 rect 在 pin 期间继续随滚动移动，引擎采样不冻结。 */
-          const methodList = root.querySelector<HTMLElement>("#ch-method .method-list");
-          if (methodList) {
-            ScrollTrigger.create({ trigger: methodList, start: "top 14%", end: "+=105%", pin: true, pinType: "transform", anticipatePin: 1 });
-          }
-          const dataSpread = root.querySelector<HTMLElement>(".data-spread");
-          if (dataSpread) {
-            ScrollTrigger.create({ trigger: dataSpread, start: "top 12%", end: "+=95%", pin: true, pinType: "transform", anticipatePin: 1 });
-          }
-
-          /* 版权页收束：整块随进入从微缩放落定 */
-          const colophonWrap = root.querySelector<HTMLElement>(".ch-colophon .ch-wrap");
-          if (colophonWrap) {
-            gsap.fromTo(colophonWrap, { scale: 0.985, autoAlpha: 0.92 },
-              { scale: 1, autoAlpha: 1, ease: "none", scrollTrigger: { trigger: ".ch-colophon", start: "top 90%", end: "top 30%", scrub: 0.6 } });
-          }
-        });
-      }, root);
-      if (cancelled) {
-        context.revert();
-        context = null;
-        return;
-      }
-      scrollTriggers = ScrollTrigger.getAll();
-
-      /* 游戏主题激活时挂起触发器（editorial 整树 display:none），返回时恢复并重新量算 */
-      const isEditorial = () => {
-        const attr = document.documentElement.getAttribute("data-cstd-theme");
-        return attr === null || attr === "atelier";
-      };
-      const onTheme = () => {
-        if (isEditorial()) scrollTriggers.forEach((t) => { t.enable(); t.refresh(); });
-        else scrollTriggers.forEach((t) => t.disable(false));
-      };
-      const themeObserver = new MutationObserver(onTheme);
-      themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ["data-cstd-theme"] });
-      onTheme();
-      cleanupQueue.push(() => themeObserver.disconnect());
-    })();
+      destroyMotion = mountEditorialMotion(root, locale);
+    });
 
     return () => {
       cancelled = true;
-      while (cleanupQueue.length) cleanupQueue.pop()!();
-      context?.revert();
-      scrollTriggers = [];
+      themeObserver.disconnect();
+      destroyMotion?.();
     };
-  }, [locale]);
+  }, [locale, chromeMounted]);
 
   const navLinks = [
     { href: getLocalizedCstdHref("/work", locale), label: copy.navWork },
@@ -625,19 +333,14 @@ export function CstdEditorialHomepage({
 
   return (
     <div ref={rootRef} data-cstd-home-editorial className="ed">
-      {/* 手工样式表链接是有意为之：React precedence 提升保证引擎 CSS 先于页面 CSS（无 next/css 参与的零构建链路） */}
-      {/* eslint-disable-next-line @next/next/no-css-tags */}
-      {/* 样式表带版本参数：/cstd-scroll/* 是 immutable 一年缓存且文件名无哈希，
+      {/* 手工样式表链接是有意为之：React precedence 提升保证加载顺序稳定（无 next/css 参与的零构建链路）。
+          样式表带版本参数：/cstd-scroll/* 是 immutable 一年缓存且文件名无哈希，
           内容更新必须换版本号强制浏览器回源（见 docs/MAINTENANCE.md）。 */}
-      <link rel="stylesheet" precedence="sc-engine" href="/cstd-scroll/scrollcraft.css" />
       {/* eslint-disable-next-line @next/next/no-css-tags */}
-      <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css?v=5" />
-      {/* 引擎脚本声明式预载：预载扫描器在解析期即开拉，水合后的 createElement
-          执行注入直接命中暖缓存——fetch 时点从“水合后”提前到“首屏解析”。 */}
-      <link rel="preload" as="script" href="/cstd-scroll/scrollcraft.js" />
+      <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css?v=6" />
       {/* 首屏衬线字体声明式预载（可变字重，覆盖全部标题/正文强调）：
           font-display:swap 下 LCP 记录的是字体换绘后的重绘时刻，慢 4G 上
-          原本要等 CSS→引擎链路才发现字体请求；预载让它与 CSS 并行到达。 */}
+          原本要等 CSS 链路才发现字体请求；预载让它与 CSS 并行到达。 */}
       <link rel="preload" href="/fonts/cstd/press-serif-v1.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
       <noscript>
         <style dangerouslySetInnerHTML={{ __html: NOSCRIPT_FALLBACK_CSS }} />
@@ -669,7 +372,7 @@ export function CstdEditorialHomepage({
 
       {/* folio 页码导航（章节编辑部的导航；游戏主题激活时随固定件卸载） */}
       {chromeMounted ? (
-        <nav className="folio" ref={folioRef} aria-label={copy.folioAria} data-folio-nav>
+        <nav className="folio" aria-label={copy.folioAria} data-folio-nav>
           {FOLIO.map((item) => (
             <CstdChapterLink key={item.id} href={`#${item.id}`} className="folio__item" data-folio={item.id}>
               <b>{item.mark[locale]}</b>
@@ -684,12 +387,12 @@ export function CstdEditorialHomepage({
           任一时刻页面只暴露一个 main；tabindex=-1 让 skip link 能把焦点真正移交正文 */}
       <main id="top" tabIndex={-1}>
         {/* 扉 · title page */}
-        <section className="chapter ch-title" id="ch-title" data-sc-act="flow">
+        <section className="chapter ch-title" id="ch-title">
           <div className="ch-wrap">
-            <div className="title-lift" data-sc-parallax="-0.3">
-              {/* data-ed-enter：扉页入场页面自管（mnote 同机制）——SSR 直出可见，
-                  水合后页面 IO 加 is-set 落位；不挂 data-sc-in，引擎缺席/装载慢都不影响首屏 */}
-              <div className="sc-stack title-stack" data-ed-enter>
+            <div className="title-lift">
+              {/* 扉页题签：SSR 直出可见（LCP 不等任何脚本），水合后由 GSAP
+                  from 落位——隐藏态只在编排装载后存在 */}
+              <div className="ed-stack title-stack">
                 <h1 className="ed-display-xl">
                   {profile.name}<span className="ed-fullstop" aria-hidden="true">.</span>
                 </h1>
@@ -702,50 +405,54 @@ export function CstdEditorialHomepage({
                 <p className="title-role"><span>{copy.roleField}</span><span>{copy.roleCraft}</span></p>
               </div>
             </div>
-            <p className="title-foot">{copy.titleFoot}</p>
+            <p className="title-foot">
+              {copy.titleFoot}
+              <i className="ed-rule" aria-hidden="true" />
+            </p>
           </div>
         </section>
 
         {/* 壹 · 方法 */}
-        <section className="chapter ch-method" id="ch-method" data-sc-act="flow">
+        <section className="chapter ch-method" id="ch-method">
           <div className="ch-wrap">
-            <div className="sc-stack" data-sc-in data-sc-stagger="70">
+            <div className="ed-stack" data-ed-in="70">
               <h2 className="ed-display-lg">{copy.methodH2}</h2>
               <div className="anno">
                 <p className="ed-lede">{copy.methodLede}</p>
-                <aside className="mnote" data-mnote><p>{copy.methodNote}</p></aside>
+                <aside className="mnote"><i className="ed-rule" aria-hidden="true" /><p>{copy.methodNote}</p></aside>
               </div>
             </div>
             <ol className="method-list">
               {copy.methodSteps.map((step, index) => (
-                <li key={step.title} className="sc-stack" data-sc-in data-sc-stagger="60">
+                <li key={step.title} className="ed-stack" data-ed-in="60">
                   <span className="method-no">{String(index + 1).padStart(2, "0")}</span>
                   <div><h3>{step.title}</h3><p>{step.detail}</p></div>
                   <small>{step.signal}</small>
+                  <i className="ed-rule" aria-hidden="true" />
                 </li>
               ))}
             </ol>
           </div>
         </section>
 
-        {/* 贰 · 作品（峰）：整章一个 flow act，计数/揭示/视差按章 p 擦洗 */}
-        <section className="chapter ch-work" id="ch-work" data-sc-act="flow">
+        {/* 贰 · 作品（峰）：整章一条 flow scrub，计数/揭示/视差按章 p 擦洗 */}
+        <section className="chapter ch-work" id="ch-work">
           <div className="ch-wrap">
-            <div className="sc-stack ch-head" data-sc-in data-sc-stagger="70">
+            <div className="ed-stack ch-head" data-ed-in="70">
               <h2 className="ed-display-lg">{copy.workH2}</h2>
               <div className="anno">
                 <p className="ed-lede">{copy.workLede}</p>
-                <aside className="mnote" data-mnote><p>{copy.workNote}</p></aside>
+                <aside className="mnote"><i className="ed-rule" aria-hidden="true" /><p>{copy.workNote}</p></aside>
               </div>
               <p className="work-census" aria-label={copy.censusLabel}>
                 {/* 滚动计数会把中间值擦写进无障碍名称：动画数字对读屏隐藏，旁挂常驻终值 */}
-                <span aria-hidden="true" data-sc-count="0 7" data-sc-count-at="0.06 0.26">{census.cases}</span>
+                <span aria-hidden="true" data-ed-count="0 7" data-ed-count-at="0.06 0.26">{census.cases}</span>
                 <span className="sr-only">{census.cases}</span> {copy.censusCases}
               </p>
             </div>
 
             {featured ? (
-              <article className="work work--featured sc-stack" data-sc-in data-sc-stagger="60">
+              <article className="work work--featured ed-stack" data-ed-in="60">
                 <p className="work-kicker">
                   <span className="work-no">{String(works.indexOf(featured) + 1).padStart(2, "0")}</span>
                   {featured.kicker}
@@ -759,7 +466,7 @@ export function CstdEditorialHomepage({
 
             <div className="work-duo">
               {works.filter((work) => work !== featured).map((work) => (
-                <article key={work.slug} className="work sc-stack" data-sc-in data-sc-stagger="60">
+                <article key={work.slug} className="work ed-stack" data-ed-in="60">
                   <p className="work-kicker">
                     <span className="work-no">{String(works.indexOf(work) + 1).padStart(2, "0")}</span>
                     {work.kicker}
@@ -776,21 +483,21 @@ export function CstdEditorialHomepage({
             </div>
 
             {featured ? (
-              /* data-spread 自身不再挂 act：章级 act 会与嵌套 act 双收集同一批设备，
-                 内层后写胜出会静默维持旧窗口（引擎按 querySelectorAll 含后代收集） */
               <div className="data-spread">
                 <div className="data-copy">
-                  {/* 数据时刻拆两档：数字独占一行大字（引擎计数原样），量词句降档续行 */}
+                  {/* 数据时刻拆两档：数字独占一行大字（计数原样），量词句降档续行。
+                      计数窗为 .data-spread pin 行程的相对进度（0.1–0.8）：
+                      元素被 pin 钉在屏上，可见性是结构保证 */}
                   <h3 className="data-count">
                     <span className="sr-only">1,470,000 </span>
-                    <span className="sc-nums" aria-hidden="true" data-sc-count="0 1,470,000" data-sc-count-at="0.88 0.985">1,470,000</span>
+                    <span className="ed-nums" aria-hidden="true" data-ed-count="0 1,470,000" data-ed-count-at="0.1 0.8">1,470,000</span>
                   </h3>
                   <p className="data-count-line">{copy.countUnitZh}{copy.countHead}</p>
                   <p>{copy.dataBody}</p>
                   <p className="data-tools" aria-label={copy.dataToolsLabel}>{featured.technologies.join(" · ")}</p>
                 </div>
-                <figure className="data-figure" data-sc-reveal="left" data-sc-reveal-at="0.87 0.97">
-                  <div className="data-figure-inner" data-sc-parallax="-0.4">
+                <figure className="data-figure">
+                  <div className="data-figure-inner">
                     {/* images.unoptimized 下 next/image 不产出 srcset；手工分档（960/1536/2580）
                         让手机按视口取小图，width/height 兜住布局抖动，lazy 保持折下加载。
                         图版满内容宽后桌面显示宽约 988px：1536w≈1.55x、2580w 覆盖 2x DPR。 */}
@@ -818,7 +525,7 @@ export function CstdEditorialHomepage({
                   </figcaption>
                 </figure>
                 {/* 副图对（图 02/03）：同一分析管线的真实产物，主图给整体回归、副图给空间与敏感性两面证据 */}
-                <div className="data-pair" data-sc-in data-sc-stagger="60">
+                <div className="data-pair" data-ed-in="60">
                   {[
                     { src: "/cstd-archive/cstd-archive-melbourne-heatmap-v1.webp", width: 2700, height: 1440, meta: copy.plates.heatmap },
                     { src: "/cstd-archive/cstd-archive-melbourne-heat-sensitivity-v1.webp", width: 2700, height: 1560, meta: copy.plates.sensitivity },
@@ -841,40 +548,41 @@ export function CstdEditorialHomepage({
         </section>
 
         {/* 叁 · 札记 */}
-        <section className="chapter ch-notes" id="ch-notes" data-sc-act="flow">
+        <section className="chapter ch-notes" id="ch-notes">
           <div className="ch-wrap">
-            <div className="sc-stack ch-head" data-sc-in data-sc-stagger="70">
+            <div className="ed-stack ch-head" data-ed-in="70">
               <h2 className="ed-display-lg">{copy.notesH2}</h2>
               <div className="anno">
                 <p className="ed-lede">{copy.notesLede}</p>
-                <aside className="mnote" data-mnote><p>{copy.notesNote}</p></aside>
+                <aside className="mnote"><i className="ed-rule" aria-hidden="true" /><p>{copy.notesNote}</p></aside>
               </div>
             </div>
             <div className="note-list">
               {notes.map((note) => (
-                <CstdLink key={note.slug} href={note.path} className="note sc-stack" data-sc-in data-sc-stagger="60">
+                <CstdLink key={note.slug} href={note.path} className="note ed-stack" data-ed-in="60">
                   <time dateTime={note.publishedAt}>{note.dateLabel}</time>
                   <div data-ed-drift><h3>{note.title}</h3><p>{note.summary}</p></div>
                   <span aria-hidden="true">↗</span>
+                  <i className="ed-rule" aria-hidden="true" />
                 </CstdLink>
               ))}
             </div>
           </div>
         </section>
 
-        {/* 肆 · 实验室：h2 交给引擎按章 p 扫擦揭示（替代一次性入场） */}
-        <section className="chapter ch-lab" id="ch-lab" data-sc-act="flow">
+        {/* 肆 · 实验室：h2 走章题升幕 scrub（替代一次性入场） */}
+        <section className="chapter ch-lab" id="ch-lab">
           <div className="ch-wrap">
-            <div className="sc-stack">
+            <div className="ed-stack">
               <h2 className="ed-display-lg">{copy.labH2}</h2>
-              <div className="anno" data-sc-in data-sc-stagger="70">
+              <div className="anno" data-ed-in="70">
                 <p className="ed-lede">{copy.labLede}</p>
-                <aside className="mnote" data-mnote><p>{copy.labNote}</p></aside>
+                <aside className="mnote"><i className="ed-rule" aria-hidden="true" /><p>{copy.labNote}</p></aside>
               </div>
             </div>
             {/* 仪器目录：『动手试一试』的实物索引。编号列（LAB 01…）与名称下的刻度线
                 构成账行以外的第二视觉维度，与叁章纯文字账行拉开密度 */}
-            <div className="lab-list" data-sc-in data-sc-stagger="60">
+            <div className="lab-list" data-ed-in="60">
               {copy.labInstruments.map((instrument, index) => (
                 <CstdLink key={instrument.name} href={getLocalizedCstdHref("/lab", locale)} className="lab-row">
                   <span className="lab-no">{`LAB ${String(index + 1).padStart(2, "0")}`}</span>
@@ -888,9 +596,9 @@ export function CstdEditorialHomepage({
         </section>
 
         {/* 末 · 版权页 */}
-        <section className="chapter ch-colophon" id="ch-colophon" data-colophon data-sc-act="flow">
+        <section className="chapter ch-colophon" id="ch-colophon" data-colophon>
           <div className="ch-wrap">
-            <div className="sc-stack" data-sc-in data-sc-stagger="70">
+            <div className="ed-stack" data-ed-in="70">
               <p className="colophon-brand">{copy.colophonBrand}</p>
               <h2 className="ed-display-lg">{copy.colophonH2}</h2>
               <p className="ed-lede">
@@ -905,6 +613,7 @@ export function CstdEditorialHomepage({
               <span className="colophon-mark__domain">{copy.colophonDomain}</span>
             </p>
             <footer className="colophon-foot">
+              <i className="ed-rule" aria-hidden="true" />
               <nav aria-label={copy.navAria}>
                 <CstdLink href={getLocalizedCstdHref("/now", locale)}>{copy.navNow}</CstdLink>
                 <CstdLink href={getLocalizedCstdHref("/resume", locale)}>{copy.navResume}</CstdLink>

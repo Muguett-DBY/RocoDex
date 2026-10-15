@@ -31,7 +31,7 @@ src/
 └─ types/                    # RocoDex 类型
 ```
 
-`src/proxy.ts` 是生产 Host 边界：`custard.top/` 重写到 `/cstd`，作品、札记、Lab 与双语公开路径重写到对应 `/cstd/*` 适配器，`www.custard.top` 308 跳转到 apex，其余个人主站域名路径不会泄露 RocoDex 页面。公开资源 URL 继续使用 `public/cstd-*`、`public/cstd-world`、`public/cstd-archive` 和 `public/cstd-projects`，避免部署迁移和缓存失效。默认主页的正式滚动版式（chaptered editorial，无视频）引擎与样式在 `public/cstd-scroll`（含 `run_worker_first` 豁免与 immutable 头，文件名不带哈希：**内容更新必须在组件引用处递增 `?v=` 版本参数**，否则老访客的浏览器会继续用 immutable 缓存的旧样式、且永不回源——2026-10-15 的「线上没动效」事故即此因）。
+`src/proxy.ts` 是生产 Host 边界：`custard.top/` 重写到 `/cstd`，作品、札记、Lab 与双语公开路径重写到对应 `/cstd/*` 适配器，`www.custard.top` 308 跳转到 apex，其余个人主站域名路径不会泄露 RocoDex 页面。公开资源 URL 继续使用 `public/cstd-*`、`public/cstd-world`、`public/cstd-archive` 和 `public/cstd-projects`，避免部署迁移和缓存失效。默认主页的正式滚动版式（chaptered editorial，无视频）样式在 `public/cstd-scroll`（仅页面样式表；动效由 npm `gsap` 经动态 import 进异步 chunk 驱动，源码在 `src/sites/personal-homepage/components/editorial/editorial-motion.ts`，自制滚动引擎已于 2026-10 退役）。目录含 `run_worker_first` 豁免与 immutable 头，文件名不带哈希：**内容更新必须在组件引用处递增 `?v=` 版本参数**，否则老访客的浏览器会继续用 immutable 缓存的旧样式、且永不回源——2026-10-15 的「线上没动效」事故即此因。
 
 架构约束由 `src/sites/site-boundaries.test.ts` 自动验证。个人主站不得导入 `src/components`、`src/data`、`src/hooks`、`src/lib` 或 `src/types` 中的 RocoDex 模块；外部适配器只能通过个人主站的 `index.ts`、`metadata.ts` 和 `server.ts` 访问它。
 

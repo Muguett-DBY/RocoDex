@@ -46,3 +46,36 @@
 ## authored silence
 
 扉页即正文（无loading/HUD）；方法与札记章之间不加过渡动画——翻页就是翻页。
+
+## 2026-10 · GSAP 迁移留档（引擎自本页退役）
+
+生产页面的动效体系已由 ScrollCraft 引擎整体迁至 GSAP ScrollTrigger
+（npm `gsap` 依赖，动态 import 进异步 chunk）。本目录自此为**历史档案，
+不再部署**：
+
+- **退役资产**（自 `public/cstd-scroll/` 删除）：`scrollcraft.js`（62,176B）、
+  `scrollcraft.css`（19,949B）、`prototype.html`（12,160B）。目录静态资产
+  116,224B → 31,212B，仅余页面样式 `cstd-editorial.css`（引用升 `?v=6`，
+  immutable 缓存纪律见 docs/MAINTENANCE.md）。
+- **新动效唯一住所**：`src/sites/personal-homepage/components/editorial/editorial-motion.ts`
+  （`mountEditorialMotion(root, locale)`：gsap.context + matchMedia 全量编排，
+  reduce 零注册、主题互斥挂起/恢复、destroy 干净回收）。
+- **引擎遗留副本**：本目录 `index.html` 与 `cstd-editorial.js` 保持引擎时代
+  冻结原样（历史构建，不部署）；`cstd-editorial.css` 按现行惯例与生产页面
+  样式字节同步。
+- **窗口参数表**：章 flow p 的数学（`clamp01((y+vh−top)/(height+vh))`）与
+  ScrollTrigger `start:'top bottom'/end:'bottom top'` 的 progress 恒等，但引擎
+  量算的章高**不含 GSAP pin spacer**（其 layout 先于 pin 创建）——spacer 计入
+  后，章 p 后段的旧窗口会平移出 pin 行程（引擎时代 1,470,000 @0.88–0.985 /
+  揭示 @0.87–0.97 是无 spacer 几何的标定，直接移植会导致计数在离屏时才走完、
+  图版可见期间始终全闭，2026-10 视觉终审实测否决）。处置：数据章的大计数与
+  图版揭示改挂 `.data-spread` 自己的 pin 行程（与 pin 同 trigger/start 的
+  scrub 时间线，progress 即行程相对进度），计数窗 [0.1, 0.8]、揭示 [0.05, 0.7]
+  ——pin 钉屏=结构保证可见；普查计数 7（@0.06–0.26 章头早期）与行线/落墨/
+  漂移/金线窗口远离 pin 段，原样移植。pin 参数（method `top 14% +=105%`、
+  data-spread `top 12% +=95%`，pinType:transform）逐字保留。含 pin 的章 flow
+  时间线挂 `refreshPriority:-1`——全局 refresh 按 `_sortY` 排序且先 revert
+  全部 pin，不压后会把章量短一个 pin 行程。
+- **基准证据**：`lab/refactor/after/`（2026-10-15 重构后截图，含三张滚动
+  中间态）。引擎时代的中间帧对位工具（diag-resize-snap）思路保留在 e2e
+  注释中：scrub 数值采样一律 resize→refresh 快照对位。
