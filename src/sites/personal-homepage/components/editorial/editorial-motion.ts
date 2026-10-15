@@ -382,23 +382,29 @@ export function mountEditorialMotion(root: HTMLElement, locale: CstdLocale): () 
         });
         const colophon = root.querySelector<HTMLElement>("[data-colophon]");
         if (colophon) {
+          /* 开墨态改为逐帧几何真值（对比度修复的收口，零 tween 改动）：
+             之前的 ScrollTrigger 开墨窗在布局未定型时（pin 占位插入、图片/
+             字体加载改变几何）可能用过期 start/end 误翻 is-dark，且此后无
+             refresh 纠偏——冷载/快滚会留下"纸白字压纸面 1.0:1"的整列不可见。
+             现在每帧用实时 rect 判定：版权页墨牌完整覆盖 folio 盒（顶缘被压过、
+             底缘未离开）才开墨，几何变化即刻自纠，无需任何 settle 兜底。 */
+          const setFolioDark = () => {
+            const vh = window.innerHeight;
+            const fh = folio.offsetHeight;
+            const bandTop = vh / 2 - fh / 2;
+            const bandBottom = vh / 2 + fh / 2 - 24;
+            const rect = colophon.getBoundingClientRect();
+            const covered = rect.top <= bandTop && rect.bottom >= bandBottom;
+            if (folio.classList.contains("is-dark") !== covered) folio.classList.toggle("is-dark", covered);
+          };
           ScrollTrigger.create({
-            trigger: colophon,
-            /* 开墨窗对齐 folio 实底几何（对比度修复，非动效改动）：folio 是
-               视口中央 ±半盒高的 fixed 盒，原 "top 60%/bottom 40%" 让版权页
-               顶刚进下沿就翻墨——folio 上半仍压纸面章（纸白字压纸 1.0:1）、
-               对称端提前关墨时 muted 压墨牌仅 2.6:1。开墨线钉在 folio 顶缘
-               （版权页顶升过 folio 顶缘 = 全盒压墨才开墨）、关墨线钉在 folio
-               底缘外 24px（版权页底未离开 folio 底缘不关墨）——is-dark 严格
-               落在全盒覆盖窗内，暗态两侧误窗带消除（本地探针 40px 步进扫窗
-               0 误配帧实证；清单原公式的 ± 方向与它自称的几何恰好相反，会
-               在开墨前留下 ~h+24px 的全盒压纸暗带，已按声明的几何结果纠正）。
-               函数式 start/end 在 refresh 时重量算（视口/字体重排自适应）。 */
-            start: () => `top ${Math.round(innerHeight / 2 - folio.offsetHeight / 2)}px`,
-            end: () => `bottom ${Math.round(innerHeight / 2 + folio.offsetHeight / 2 + 24)}px`,
-            onToggle: (self) => folio.classList.toggle("is-dark", self.isActive),
-            onRefresh: (self) => folio.classList.toggle("is-dark", self.isActive),
+            trigger: document.documentElement,
+            start: 0,
+            end: "max",
+            onUpdate: setFolioDark,
+            onRefresh: setFolioDark,
           });
+          setFolioDark();
         }
       }
     }, root);

@@ -1,0 +1,120 @@
+{
+ "startedAt": "2026-10-15T15:51:16.230Z",
+ "url": "https://custard.top",
+ "sections": {
+  "zhDesktop": {
+   "structure": {
+    "css": [
+     "/_next/static/chunks/30hmtu1t-yadr.css",
+     "/_next/static/chunks/1olprk_st9cm9.css",
+     "/_next/static/chunks/1vgxuk6_qw1an.css",
+     "/_next/static/chunks/19niy2evpcjgh.css",
+     "/_next/static/chunks/17rw53n156k17.css",
+     "/cstd-scroll/cstd-editorial.css?v=7"
+    ],
+    "theme": "atelier",
+    "chapters": [
+     "ch-title",
+     "ch-method",
+     "ch-work",
+     "ch-notes",
+     "ch-lab",
+     "ch-colophon"
+    ],
+    "folioItems": 6,
+    "spacers": 2,
+    "enhancementsReady": "true",
+    "h1": "奶黄包.",
+    "htmlLang": "zh-CN",
+    "countSpec": "0.1 0.8"
+   },
+   "counter": {
+    "mid": {
+     "y": 4543,
+     "text": "735,921",
+     "pinned": true,
+     "boxTopViewport": -277
+    },
+    "end": {
+     "y": 4988,
+     "text": "1,470,000",
+     "pinned": true,
+     "boxTopViewport": -722
+    }
+   },
+   "raise": {
+    "mid": {
+     "count": 2,
+     "ys": [
+      12,
+      21.6
+     ]
+    },
+    "settled": {
+     "count": 2,
+     "ys": [
+      0,
+      0
+     ]
+    }
+   },
+   "titleRule": "translate3d(0px, 0px, 0px) scale(0.5, 1)",
+   "overflowDesktop": {
+    "scrollWidth": 1440,
+    "clientWidth": 1440
+   },
+   "issues": []
+  },
+  "enDesktop": {
+   "en": {
+    "htmlLang": "en-AU",
+    "h1": "Custard.",
+    "chapters": [
+     "ch-title",
+     "ch-method",
+     "ch-work",
+     "ch-notes",
+     "ch-lab",
+     "ch-colophon"
+    ],
+    "spacers": 2,
+    "methodH2": "Method"
+   },
+   "issues": []
+  },
+  "zhMobile": {
+   "mob": {
+    "chapters": [
+     "ch-title",
+     "ch-method",
+     "ch-work",
+     "ch-notes",
+     "ch-lab",
+     "ch-colophon"
+    ],
+    "spacers": 2,
+    "scrollWidth": 390,
+    "clientWidth": 390,
+    "bodyScrollWidth": 390,
+    "scrollWidthAfterTraversal": 390
+   },
+   "issues": []
+  },
+  "neonTheme": {
+   "neon": {
+    "theme": "neon-district",
+    "themeKind": "cyberpunk",
+    "markText": "奶冥星",
+    "markColor": "rgb(5, 7, 9)",
+    "markBg": "rgb(244, 212, 49)",
+    "markVisible": true,
+    "contrastRatio": 13.75,
+    "overdriveToggle": true,
+    "gameScenes": 5,
+    "editorialHidden": true
+   },
+   "issues": []
+  }
+ },
+ "finishedAt": "2026-10-15T15:51:29.621Z"
+}

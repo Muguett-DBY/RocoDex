@@ -1,0 +1,220 @@
+{
+ "zh-desktop": {
+  "scrollY": 8064,
+  "state": {
+   "folioFound": true,
+   "isDark": true,
+   "folioPosition": "fixed",
+   "folioRect": {
+    "x": 0,
+    "y": 340,
+    "w": 126,
+    "h": 221
+   },
+   "itemColors": [
+    {
+     "text": "扉扉页",
+     "active": false,
+     "color": "rgba(248, 245, 239, 0.55)"
+    },
+    {
+     "text": "壹方法",
+     "active": true,
+     "color": "rgb(248, 245, 239)"
+    },
+    {
+     "text": "贰作品",
+     "active": true,
+     "color": "rgb(248, 245, 239)"
+    },
+    {
+     "text": "叁札记",
+     "active": true,
+     "color": "rgb(248, 245, 239)"
+    },
+    {
+     "text": "肆实验室",
+     "active": true,
+     "color": "rgb(248, 245, 239)"
+    },
+    {
+     "text": "末版权页",
+     "active": true,
+     "color": "rgb(248, 245, 239)"
+    }
+   ],
+   "colophonTop": 170.34375,
+   "viewportH": 900
+  },
+  "under": [
+   {
+    "text": "扉扉页",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   },
+   {
+    "text": "壹方法",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   },
+   {
+    "text": "贰作品",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   },
+   {
+    "text": "叁札记",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   },
+   {
+    "text": "肆实验室",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   },
+   {
+    "text": "末版权页",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   }
+  ],
+  "sample": {
+   "avg": [
+    36,
+    43,
+    39
+   ],
+   "n": 32154
+  },
+  "truths": {
+   "inactiveFgBlended": [
+    153,
+    154,
+    149
+   ],
+   "inactiveRatio": 5.11,
+   "activeFg": [
+    248,
+    245,
+    239
+   ],
+   "activeRatio": 13.31,
+   "plateTheoretical": 13.31
+  }
+ },
+ "en-desktop": {
+  "scrollY": 8316,
+  "state": {
+   "folioFound": true,
+   "isDark": true,
+   "folioPosition": "fixed",
+   "folioRect": {
+    "x": 0,
+    "y": 340,
+    "w": 126,
+    "h": 221
+   },
+   "itemColors": [
+    {
+     "text": "0Title",
+     "active": false,
+     "color": "rgba(248, 245, 239, 0.55)"
+    },
+    {
+     "text": "IMethod",
+     "active": true,
+     "color": "rgb(248, 245, 239)"
+    },
+    {
+     "text": "IIWork",
+     "active": true,
+     "color": "rgb(248, 245, 239)"
+    },
+    {
+     "text": "IIINotes",
+     "active": true,
+     "color": "rgb(248, 245, 239)"
+    },
+    {
+     "text": "IVLabs",
+     "active": true,
+     "color": "rgb(248, 245, 239)"
+    },
+    {
+     "text": "VColophon",
+     "active": true,
+     "color": "rgb(248, 245, 239)"
+    }
+   ],
+   "colophonTop": 271.484375,
+   "viewportH": 900
+  },
+  "under": [
+   {
+    "text": "0Title",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   },
+   {
+    "text": "IMethod",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   },
+   {
+    "text": "IIWork",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   },
+   {
+    "text": "IIINotes",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   },
+   {
+    "text": "IVLabs",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   },
+   {
+    "text": "VColophon",
+    "hitTag": "section.chapter ch-colophon",
+    "inColophon": true,
+    "hitBg": "rgb(36, 43, 39)"
+   }
+  ],
+  "sample": {
+   "avg": [
+    36,
+    43,
+    39
+   ],
+   "n": 32154
+  },
+  "truths": {
+   "inactiveFgBlended": [
+    153,
+    154,
+    149
+   ],
+   "inactiveRatio": 5.11,
+   "activeFg": [
+    248,
+    245,
+    239
+   ],
+   "activeRatio": 13.31,
+   "plateTheoretical": 13.31
+  }
+ }
+}

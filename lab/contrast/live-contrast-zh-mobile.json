@@ -1,0 +1,131 @@
+{
+ "meta": {
+  "variant": "zh-mobile",
+  "url": "http://127.0.0.1:4633/",
+  "locale": "zh-CN",
+  "viewport": {
+   "width": 390,
+   "height": 844
+  },
+  "docHeight": 2953,
+  "steps": 14,
+  "startedAt": "2026-10-15T16:12:23.329Z",
+  "elapsedMs": 6741,
+  "cssFingerprint": [
+   "/_next/static/chunks/1olprk_st9cm9.css",
+   "/_next/static/chunks/1vgxuk6_qw1an.css"
+  ],
+  "standard": "WCAG 2.2 SC 1.4.3（正文 4.5:1 / 大字 3:1）；SC 1.4.11 非文本 3:1 仅参考",
+  "method": "computed style + 祖先 rgba 逐层合成 + elementFromPoint 实底；违规项复测；媒体衬底为隐藏文字截图采样近似值",
+  "transientDropped": 0
+ },
+ "summary": {
+  "textElements": 2,
+  "body": 2,
+  "large": 0,
+  "decorative": 0,
+  "violations": 2,
+  "bodyWorst": {
+   "key": "div:nth-of-type(1).flex.flex-col > div:nth-of-type(1).mt-8.max-w-2xl > form.flex.w-full > button.inline-flex.items-center|搜索图鉴",
+   "ratio": 1,
+   "color": "rgb(255,255,255)",
+   "bg": "rgb(255,255,255)",
+   "fontSize": 14
+  },
+  "worst3": [
+   {
+    "key": "div:nth-of-type(1).flex.flex-col > div:nth-of-type(1).mt-8.max-w-2xl > form.flex.w-full > button.inline-flex.items-center|搜索图鉴",
+    "ratio": 1,
+    "color": "rgb(255,255,255)",
+    "bg": "rgb(255,255,255)",
+    "fontSize": 14
+   },
+   {
+    "key": "div.mx-auto.max-w-7xl > div.flex.items-center > a.flex.min-w-0 > span:nth-of-type(1).flex.h-10|RD",
+    "ratio": 1.08,
+    "color": "rgb(255,255,255)",
+    "bg": "rgb(247,246,241)",
+    "fontSize": 14
+   }
+  ]
+ },
+ "violations": [
+  {
+   "selector": "div:nth-of-type(1).flex.flex-col > div:nth-of-type(1).mt-8.max-w-2xl > form.flex.w-full > button.inline-flex.items-center",
+   "chapter": "section",
+   "text": "搜索图鉴",
+   "category": "body",
+   "color": "rgb(255,255,255)",
+   "bg": "rgb(255,255,255)",
+   "bgUnder": null,
+   "approx": false,
+   "ratio": 1,
+   "fontSize": 14,
+   "fontWeight": 600,
+   "opacityFolded": false,
+   "stateLabel": "",
+   "scrollY": 0,
+   "confirmRatio": 1
+  },
+  {
+   "selector": "div.mx-auto.max-w-7xl > div.flex.items-center > a.flex.min-w-0 > span:nth-of-type(1).flex.h-10",
+   "chapter": "body",
+   "text": "RD",
+   "category": "body",
+   "color": "rgb(255,255,255)",
+   "bg": "rgb(247,246,241)",
+   "bgUnder": null,
+   "approx": false,
+   "ratio": 1.08,
+   "fontSize": 14,
+   "fontWeight": 700,
+   "opacityFolded": false,
+   "stateLabel": "",
+   "scrollY": 0,
+   "confirmRatio": 1.08
+  }
+ ],
+ "decorative": [],
+ "allMeasurements": [
+  {
+   "selector": "div:nth-of-type(1).flex.flex-col > div:nth-of-type(1).mt-8.max-w-2xl > form.flex.w-full > button.inline-flex.items-center",
+   "chapter": "section",
+   "text": "搜索图鉴",
+   "category": "body",
+   "color": "rgb(255,255,255)",
+   "bg": "rgb(255,255,255)",
+   "ratio": 1,
+   "fontSize": 14,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(255,255,255)",
+     "bg": "rgb(255,255,255)",
+     "ratio": 1,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  },
+  {
+   "selector": "div.mx-auto.max-w-7xl > div.flex.items-center > a.flex.min-w-0 > span:nth-of-type(1).flex.h-10",
+   "chapter": "body",
+   "text": "RD",
+   "category": "body",
+   "color": "rgb(255,255,255)",
+   "bg": "rgb(247,246,241)",
+   "ratio": 1.08,
+   "fontSize": 14,
+   "stateLabel": "",
+   "states": [
+    {
+     "color": "rgb(255,255,255)",
+     "bg": "rgb(247,246,241)",
+     "ratio": 1.08,
+     "y": 0,
+     "label": ""
+    }
+   ]
+  }
+ ]
+}
