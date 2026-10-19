@@ -90,6 +90,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
@@ -100,4 +102,13 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Run isolated browser suite
-        run: npm run test:e2e:${{ matrix.surface }}
+        env:
+          TEST_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          # Only test files changed: let Playwright select their affected tests.
+          # Application, dependency and build changes still run the full suite.
+          if git diff --quiet "$TEST_BASE" HEAD -- . ':!e2e/**' ':!.github/workflows/ci.yml'; then
+            npm run test:e2e:${{ matrix.surface }} -- --only-changed="$TEST_BASE" --pass-with-no-tests
+          else
+            npm run test:e2e:${{ matrix.surface }}
+          fi

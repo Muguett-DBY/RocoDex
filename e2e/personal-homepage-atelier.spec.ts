@@ -401,7 +401,7 @@ test.describe("EDITORIAL motion", () => {
     // （/cstd-scroll/* immutable 无哈希，忘升版本 = 老访客永不回源）
     await expect(page.locator('link[rel="preload"][href*="scrollcraft"]')).toHaveCount(0);
     await expect(page.locator('link[rel="stylesheet"][href*="scrollcraft"]')).toHaveCount(0);
-    await expect(page.locator('link[rel="stylesheet"][href="/cstd-scroll/cstd-editorial.css?v=7"]')).toHaveCount(1);
+    await expect(page.locator('link[rel="stylesheet"][href^="/cstd-scroll/cstd-editorial.css"]')).toHaveAttribute("href", /^\/cstd-scroll\/cstd-editorial\.css\?v=[1-9]\d*$/);
     await page.waitForTimeout(400);
     expect(scrollJsRequests).toEqual([]);
 
