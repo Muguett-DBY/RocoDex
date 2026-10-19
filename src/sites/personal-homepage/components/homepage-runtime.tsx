@@ -1,8 +1,6 @@
 "use client";
 
 import {
-  lazy,
-  Suspense,
   useCallback,
   useEffect,
   useMemo,
@@ -31,9 +29,6 @@ import { ThemeSceneNavigator, ThemeWorldLayer } from "./theme-world-layer";
 import { MemoizedWorldBackdrop } from "./world-backdrop";
 import { CstdDocumentLocale } from "./site/cstd-document-locale";
 
-const LazyCstdTelemetry = lazy(() =>
-  import("./site/cstd-telemetry").then((module) => ({ default: module.CstdTelemetry })),
-);
 
 function getRenderedProfile(profile: CstdRuntimeProfile, enhanced: boolean): CstdRuntimeProfile {
   if (enhanced) return profile;
@@ -211,11 +206,6 @@ export function HomepageRuntime({
 
       {children}
 
-      {enhancementsReady ? (
-        <Suspense fallback={null}>
-          <LazyCstdTelemetry page={locale === "zh" ? "home" : "home-en"} />
-        </Suspense>
-      ) : null}
     </main>
   </>;
 }

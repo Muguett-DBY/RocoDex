@@ -1,94 +1,43 @@
-> Detailed reference retained from the previous README. Commands and runtime versions should be checked against the current configuration files.
+# 维护与发布
 
-# Custard Web Platform
+本仓库主要维护 custard.top。RocoDex 以静态存档保留。生产使用 Cloudflare Workers Static Assets 的纯静态托管，没有自定义 Worker 脚本；控制台仍会显示项目名称，但页面请求不运行 Next.js 后台。
 
-This repository hosts two independent Next.js sites on the `custard-web-platform` Cloudflare Worker through OpenNext. They share the build and host routing, while their product code stays separate.
+## 本地
 
-| 产品 | 生产域名 | Next 路由 | 主要代码 | 浏览器回归 |
-| --- | --- | --- | --- | --- |
-| 奶黄包个人主站 / CSTD | `https://custard.top` | 内部重写到 `/cstd` | `src/sites/personal-homepage` | `e2e/personal-homepage.spec.ts` |
-| 洛克图鉴 / RocoDex（核心项目，稳定维护） | `https://rocodex.custard.top` | `/` 及图鉴路由 | `src/app/(rocodex)` 与现有 RocoDex 模块 | `e2e/rocodex.spec.ts` |
+使用 Node.js 24 与 package.json 声明的 npm 版本。
 
-## 架构
-
-```text
-src/
-├─ app/
-│  ├─ (personal)/cstd/       # 个人主站页面适配器；生产公开为 /work、/notes、/lab、/en 等干净 URL
-│  ├─ (rocodex)/             # RocoDex 页面和仅属于它的 AuthProvider
-│  ├─ api/                   # RocoDex 账号 API
-│  ├─ robots.txt/            # 按 Host 分发的共享 HTTP 适配器
-│  ├─ sitemap.xml/           # 按 Host 分发的共享 HTTP 适配器
-│  └─ layout.tsx             # 两站共用的最小 HTML 文档
-├─ sites/
-│  ├─ personal-homepage/     # 个人主站的组件、内容、元数据和 Host 路由
-│  ├─ rocodex/               # RocoDex 元数据、sitemap 和产品边界说明
-│  └─ shared/                # 只放真正跨站点的 SEO 基础设施
-├─ components/               # RocoDex 组件；ui/ 是其本地 UI 基础层
-├─ data/                     # RocoDex 图鉴、攻略和阵容数据
-├─ hooks/                    # RocoDex 浏览器状态 Hook
-├─ lib/                      # RocoDex 领域与服务逻辑
-└─ types/                    # RocoDex 类型
-```
-
-`src/proxy.ts` 是生产 Host 边界：`custard.top/` 重写到 `/cstd`，作品、札记、Lab 与双语公开路径重写到对应 `/cstd/*` 适配器，`www.custard.top` 308 跳转到 apex，其余个人主站域名路径不会泄露 RocoDex 页面。公开资源 URL 继续使用 `public/cstd-*`、`public/cstd-world`、`public/cstd-archive` 和 `public/cstd-projects`，避免部署迁移和缓存失效。默认主页的正式滚动版式（chaptered editorial，无视频）样式在 `public/cstd-scroll`（仅页面样式表；动效由 npm `gsap` 经动态 import 进异步 chunk 驱动，源码在 `src/sites/personal-homepage/components/editorial/editorial-motion.ts`，自制滚动引擎已于 2026-10 退役）。目录含 `run_worker_first` 豁免与 immutable 头，文件名不带哈希：**内容更新必须在组件引用处递增 `?v=` 版本参数**，否则老访客的浏览器会继续用 immutable 缓存的旧样式、且永不回源——2026-10-15 的「线上没动效」事故即此因。
-
-架构约束由 `src/sites/site-boundaries.test.ts` 自动验证。个人主站不得导入 `src/components`、`src/data`、`src/hooks`、`src/lib` 或 `src/types` 中的 RocoDex 模块；外部适配器只能通过个人主站的 `index.ts`、`metadata.ts` 和 `server.ts` 访问它。
-
-详细决策见 `docs/architecture.md`。站点维护入口见 `src/sites/personal-homepage/README.md` 与 `src/sites/rocodex/README.md`。
-
-个人主站内容维护见 `src/sites/personal-homepage/content/README.md`，视觉与运行规范见 `docs/cstd-visual-system.md`、`docs/cstd-operations.md`。
-
-## 本地开发
-
-Use Node.js 24 LTS and npm 12.0.2 for local builds and GitHub Actions. Cloudflare runs the OpenNext Worker output using the compatibility flags in `wrangler.jsonc`.
-
-```bash
+```sh
 npm ci
 npm run dev
+npm run dev:rocodex
 ```
 
-- RocoDex：`http://localhost:3000`
-- 个人主站：`http://localhost:3000/cstd`
+个人主页 localhost:3000，存档 localhost:3001。没有账号、Redis、AUTH_SECRET 等运行配置。
 
-完成生产构建后可用 `npm run start:local` 在后台启动本地生产服务器。脚本会从 3200 起选择空闲端口，并把 PID、端口与日志写入 `output/local-production`；使用 `npm run stop:local` 可结束该仓库的本地 Next 进程。
+## 验证
 
-## 验证命令
-
-```bash
-npm run test:architecture
-npm run test:personal
-npm run test:e2e:personal
-npm run test:e2e:rocodex
-
+```sh
+npm run content:check
+npm run cstd:verify-proof
 npm run lint
 npm run typecheck
 npm test
 npm run build
-npm run verify:personal-bundle
 npm run audit:dependencies
-npm run test:e2e
+npm run test:e2e:personal
+npm run test:e2e:rocodex
 ```
 
-前四条适合站点内快速迭代；其余命令构成推送前的完整仓库门禁。`npm run verify` 会串行执行静态检查、类型检查、单测、生产构建和个人主站包体边界。
+build 分别导出两个站点，检查个人主页资源预算，再写入静态托管规则。浏览器测试针对真实静态托管，覆盖直接访问、深层导航、语言切换与图鉴功能。两个测试配置使用不同端口与报告目录，避免互相覆盖。
 
-## RocoDex 数据维护
+## 发布
 
-- 精灵数据：`src/data/creatures.ts`
-- 数据类型：`src/types/creature.ts`
-- 搜索和筛选：`src/lib/creature-query.ts`
-- PVP 阵容：`src/data/pvp-teams.ts`
-- 攻略数据：`src/data/guide-builds.ts`
-- 本地收藏：`src/lib/creature-collection.ts`
-- 数据缺口：`docs/data_gaps.md`
-- PVP 与攻略来源：`docs/pvp_sources.md`、`docs/guide_sources.md`
+GitHub Actions 运行验证；推送本身不会自动发布。验证通过后执行 npm run cf:deploy，发布个人主页与静态存档。已完成构建时可分别执行 npx wrangler deploy 和 npx wrangler deploy --config archive/rocodex/wrangler.jsonc，避免重复构建。
 
-RocoDex 当前处于稳定维护期：继续作为核心项目在线运行并接受安全、兼容性和故障修复，但不把常规功能迭代与个人主站发布绑定。账号能力依赖 `AUTH_SECRET` 或 `NEXTAUTH_SECRET`；认证上下文只存在于 `(rocodex)` 路由组，访问个人主站不会初始化 NextAuth 会话。
+发布后运行 npm run verify:live:cstd，并检查 rocodex.custard.top 的图鉴详情、查询参数与静态 404。确认两个项目均没有后台脚本、数据库绑定和定时任务。
 
-## 部署
+www.custard.top 的规范域名跳转使用 Cloudflare 域名重定向规则；不为跳转运行 Next.js。/cstd 旧路径兼容在静态 _redirects 中。
 
-The live deployment is the `custard-web-platform` Cloudflare Worker. Its custom domains are `custard.top`, `www.custard.top`, and `rocodex.custard.top`, verified against Cloudflare on 2026-10-10. Do not remove the Wrangler or OpenNext configuration while those domains use this Worker.
+默认主页的正式滚动版式使用 public/cstd-scroll/cstd-editorial.css，动效使用懒加载的 GSAP。没有哈希而缓存一年的样式修改后，要递增组件引用中的 ?v= 版本参数。
 
-`npm run cf:deploy` builds the application with OpenNext and deploys the Worker. Run the verification commands first, then check both sites after an intentional release. The GitHub CI workflow runs checks; a successful push alone does not prove that a new Worker version is live. Retained Vercel configuration is historical and does not describe the verified domain bindings.
-
-本项目不是《洛克王国世界》官方网站，也不隶属于其运营方。完整声明见 `DISCLAIMER.md`。
+内容维护见 src/sites/personal-homepage/content/README.md，视觉约束见 docs/cstd-visual-system.md。历史工程札记可能描述此前的双站共用后台，当前部署以本文与 wrangler 配置为准。

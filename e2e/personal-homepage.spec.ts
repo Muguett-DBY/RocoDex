@@ -9,7 +9,7 @@ function stripPermittedEnglishAutonyms(value: string) {
 
 test("CSTD presents a clear portfolio before optional visual enhancement", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
-  const response = await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  const response = await page.goto("/", { waitUntil: "domcontentloaded" });
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1 })).toContainText("奶黄包");
@@ -92,13 +92,13 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   page.on("pageerror", (error) => pageErrors.push(error.message));
 
   const [rawChineseResponse, rawEnglishResponse] = await Promise.all([
-    page.request.get("/cstd"),
-    page.request.get("/cstd/en"),
+    page.request.get("/"),
+    page.request.get("/en"),
   ]);
   expect(await rawChineseResponse.text()).toMatch(/<html[^>]*\blang="zh-CN"/i);
   expect(await rawEnglishResponse.text()).toMatch(/<html[^>]*\blang="en-AU"/i);
 
-  await page.goto("/cstd/en?view=compact#proof", { waitUntil: "domcontentloaded" });
+  await page.goto("/en?view=compact#proof", { waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
   await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
   await expect(page.locator("html")).toHaveAttribute("data-cstd-locale", "en");
@@ -127,7 +127,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
 
   await page.locator("[data-cstd-theme-switcher] >> visible=true").click();
   await page.locator('[data-cstd-theme-option="astral-covenant"]').click();
-  await page.goto("/cstd/en/notes/host-boundaries-in-one-next-deployment?view=compact#sources", { waitUntil: "domcontentloaded" });
+  await page.goto("/en/notes/host-boundaries-in-one-next-deployment?view=compact#sources", { waitUntil: "domcontentloaded" });
   const englishShell = page.locator("[data-cstd-deep-shell]");
   await expect(englishShell).toHaveAttribute("data-cstd-locale", "en");
   await expect(englishShell).toHaveAttribute("data-cstd-theme", "astral-covenant");
@@ -141,7 +141,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   await expect(toChinese).toHaveAccessibleName("Switch to Chinese");
   await expect(toChinese).toHaveAttribute("href", "/notes/host-boundaries-in-one-next-deployment?view=compact#sources");
   await toChinese.click();
-  await expect(page).toHaveURL(/\/cstd\/notes\/host-boundaries-in-one-next-deployment\?view=compact#sources$/);
+  await expect(page).toHaveURL(/\/notes\/host-boundaries-in-one-next-deployment\?view=compact#sources$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
   await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-locale", "zh");
   await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "astral-covenant");
@@ -151,7 +151,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
   await expect(toEnglish).toHaveAccessibleName("切换到英文");
   await expect(toEnglish).toHaveAttribute("href", "/en/notes/host-boundaries-in-one-next-deployment?view=compact#sources");
   await toEnglish.click();
-  await expect(page).toHaveURL(/\/cstd\/en\/notes\/host-boundaries-in-one-next-deployment\?view=compact#sources$/);
+  await expect(page).toHaveURL(/\/en\/notes\/host-boundaries-in-one-next-deployment\?view=compact#sources$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
   await expectNoHorizontalOverflow(page);
   expect(pageErrors).toEqual([]);
@@ -160,7 +160,7 @@ test("CSTD keeps the complete experience localized across themes and deep-route 
 test("CSTD runs one deterministic worker example and keeps notes directly readable", async ({ page }) => {
   const browserIssues = captureBrowserIssues(page);
   await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
 
   const section = page.locator("[data-cstd-executable-evidence]");
@@ -189,10 +189,10 @@ test("CSTD runs one deterministic worker example and keeps notes directly readab
 test("CSTD embeds the matching executable replay in deep cases", async ({ page }) => {
   test.skip(!Number(process.env.CI), "Skipped locally: covered by CI runners.");
   const browserIssues = captureBrowserIssues(page);
-  await page.goto("/cstd/work/rocodex-platform", { waitUntil: "domcontentloaded" });
+  await page.goto("/work/rocodex-platform", { waitUntil: "domcontentloaded" });
   // The case-film interactions are world-agnostic; run them in the neon world.
   await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-  const response = await page.goto("/cstd/work/rocodex-platform?act=routing-contract", { waitUntil: "domcontentloaded" });
+  const response = await page.goto("/work/rocodex-platform?act=routing-contract", { waitUntil: "domcontentloaded" });
   expect(response?.ok()).toBe(true);
   const film = page.locator("[data-cstd-case-film]");
   await expect(film).toHaveAttribute("data-cstd-case-film-active-beat", "routing-contract");
@@ -224,26 +224,26 @@ test("CSTD embeds the matching executable replay in deep cases", async ({ page }
 
 test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", async ({ page, request }) => {
   test.setTimeout(120_000);
-  const audienceResponse = await page.goto("/cstd/for/research", { waitUntil: "domcontentloaded" });
+  const audienceResponse = await page.goto("/for/research", { waitUntil: "domcontentloaded" });
   expect(audienceResponse?.ok()).toBe(true);
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-narrative-mode", "researcher");
 
   const endpoints = [
-    ["/cstd/proof.json", "application/json"],
-    ["/cstd/graph.json", "application/json"],
-    ["/cstd/status.json", "application/json"],
-    ["/cstd/studio.json", "application/json"],
-    ["/cstd/observatory.json", "application/json"],
-    ["/cstd/content-health.json", "application/json"],
-    ["/cstd/performance.json", "application/json"],
-    ["/cstd/experience.json", "application/json"],
-    ["/cstd/releases.json", "application/json"],
-    ["/cstd/topics.json", "application/json"],
-    ["/cstd/feed.json", "application/json"],
-    ["/cstd/en/feed.json", "application/json"],
-    ["/cstd/llms.txt", "text/plain"],
-    ["/cstd/manifest.webmanifest", "application/manifest+json"],
-    ["/cstd/en/manifest.webmanifest", "application/manifest+json"],
+    ["/proof.json", "application/json"],
+    ["/graph.json", "application/json"],
+    ["/status.json", "application/json"],
+    ["/studio.json", "application/json"],
+    ["/observatory.json", "application/json"],
+    ["/content-health.json", "application/json"],
+    ["/performance.json", "application/json"],
+    ["/experience.json", "application/json"],
+    ["/releases.json", "application/json"],
+    ["/topics.json", "application/json"],
+    ["/feed.json", "application/json"],
+    ["/en/feed.json", "application/json"],
+    ["/llms.txt", "text/plain"],
+    ["/manifest.webmanifest", "application/manifest+json"],
+    ["/en/manifest.webmanifest", "application/manifest+json"],
     ["/.well-known/security.txt", "text/plain"],
     ["/cstd-case-worker.js", "javascript"],
   ] as const;
@@ -260,25 +260,25 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
     endpointBodies.set(url, body);
   }
   const readJson = (url: string) => JSON.parse(endpointBodies.get(url)?.toString("utf8") ?? "null");
-  const status = readJson("/cstd/status.json");
+  const status = readJson("/status.json");
   expect(status.release).toBe("CSTD-17.0");
   expect(status.provenance.contract).toBe("cstd.studio-snapshot/v3");
   expect(status.districts).toHaveLength(5);
-  const graph = readJson("/cstd/graph.json");
+  const graph = readJson("/graph.json");
   expect(graph.nodes.length).toBeGreaterThanOrEqual(29);
-  const observatory = readJson("/cstd/observatory.json");
+  const observatory = readJson("/observatory.json");
   expect(observatory.provenance.contract).toBe("cstd.engineering-observatory/v2");
   expect(observatory.verification).toHaveLength(4);
-  const contentHealth = readJson("/cstd/content-health.json");
+  const contentHealth = readJson("/content-health.json");
   expect(contentHealth).toMatchObject({ status: "healthy", score: 100 });
-  const performance = readJson("/cstd/performance.json");
+  const performance = readJson("/performance.json");
   expect(performance).toMatchObject({
     release: "CSTD-17.0",
     budgets: { initialJavascriptBytes: 200_000, startupJavascriptBytes: 800_000 },
     delivery: { defaultRuntimeTier: "image", enhancedRuntimeTrigger: "explicit-user-action" },
     cacheComponents: { status: "evaluated-not-enabled" },
   });
-  const experience = readJson("/cstd/experience.json");
+  const experience = readJson("/experience.json");
   expect(experience.identity.zh).toBe("奶黄包");
   expect(experience).toMatchObject({ schemaVersion: 2 });
   expect(experience.acts).toHaveLength(5);
@@ -290,7 +290,7 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
     window.sessionStorage.setItem("cstd:identity-boot-seen", "true");
     window.localStorage.setItem("cstd-motion-mode", "calm");
   });
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-stage-visual] .cstd-stage-visual-image")).toBeVisible();
   const titleLocator = page.getByRole("heading", { level: 1, name: "奶黄包" });
   const summaryLocator = page.locator("[data-cstd-hero-summary]");
@@ -317,7 +317,7 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
   expect(heroCapture.byteLength).toBeGreaterThan(isMobile ? 40_000 : 70_000);
   await expectNoHorizontalOverflow(page);
 
-  await page.goto("/cstd/notes/host-boundaries-in-one-next-deployment", { waitUntil: "domcontentloaded" });
+  await page.goto("/notes/host-boundaries-in-one-next-deployment", { waitUntil: "domcontentloaded" });
   const shell = page.locator("[data-cstd-deep-shell]");
   await expect(shell).toHaveAttribute("data-cstd-controls-ready", "true");
   await page.getByRole("button", { name: /安静阅读/ }).click();
@@ -330,7 +330,7 @@ test("CSTD visual contracts keep identity, summary, and quiet reading coherent",
 });
 
 test("CSTD switches and persists three game worlds with distinct interactions", async ({ page, isMobile }) => {
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.reload({ waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
@@ -372,10 +372,10 @@ test("CSTD switches and persists three game worlds with distinct interactions", 
 
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(root).toHaveAttribute("data-cstd-theme", "underworld-forge");
-  await page.goto("/cstd/notes/host-boundaries-in-one-next-deployment", { waitUntil: "domcontentloaded" });
+  await page.goto("/notes/host-boundaries-in-one-next-deployment", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-deep-shell]")).toHaveAttribute("data-cstd-theme", "underworld-forge");
 
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await page.locator("[data-cstd-theme-switcher] >> visible=true").click();
   await page.locator('[data-cstd-theme-option="astral-covenant"]').click();
   await expect(root).toHaveAttribute("data-cstd-theme", "astral-covenant");
@@ -417,9 +417,9 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
   ] as const;
 
   for (const world of worlds) {
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await page.evaluate((theme) => window.localStorage.setItem("cstd-world-theme", theme), world.id);
-    await page.goto("/cstd/work/rocodex-platform", { waitUntil: "networkidle" });
+    await page.goto("/work/rocodex-platform", { waitUntil: "networkidle" });
 
     const shell = page.locator("[data-cstd-deep-shell]");
     const heroTitle = page.locator("[data-cstd-page-hero-title]");
@@ -441,7 +441,7 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
     await expect(page.locator('link[data-cstd-theme-font]')).toHaveCount(0);
     await expectNoHorizontalOverflow(page);
 
-    await page.goto("/cstd/en", { waitUntil: "domcontentloaded" });
+    await page.goto("/en", { waitUntil: "domcontentloaded" });
     const englishRoot = page.locator("[data-cstd-kinetic-world]");
     await expect(englishRoot).toHaveAttribute("data-cstd-locale", "en");
     await expect(englishRoot).toHaveAttribute("data-cstd-theme", world.id);
@@ -461,7 +461,7 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
     }
     await expectNoHorizontalOverflow(page);
 
-    await page.goto("/cstd/en/work/rocodex-platform", { waitUntil: "domcontentloaded" });
+    await page.goto("/en/work/rocodex-platform", { waitUntil: "domcontentloaded" });
     const englishShell = page.locator("[data-cstd-deep-shell]");
     await expect(englishShell).toHaveAttribute("data-cstd-locale", "en");
     await expect(page.locator("[data-cstd-page-hero-title]")).toHaveCSS("font-family", new RegExp(world.font.en));
@@ -474,7 +474,7 @@ test("CSTD loads each world's type, material, and deep-page composition as one c
 test("CSTD keeps the theme control reachable on compact mobile screens", async ({ page, isMobile }) => {
   test.skip(!isMobile, "This contract targets compact mobile header geometry.");
   await page.setViewportSize({ width: 320, height: 640 });
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
 
   for (const theme of ["underworld-forge", "astral-covenant", "neon-district"] as const) {
     const switcher = page.locator("[data-cstd-theme-switcher] >> visible=true");
@@ -508,7 +508,7 @@ test("CSTD keeps the theme control reachable on compact mobile screens", async (
 });
 
 test("CSTD theme picker supports roving keyboard focus and restores the trigger", async ({ page }) => {
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   const trigger = page.locator("[data-cstd-theme-switcher] >> visible=true");
   await trigger.focus();
   await page.keyboard.press("Enter");
@@ -528,7 +528,7 @@ test("CSTD theme picker supports roving keyboard focus and restores the trigger"
 test("CSTD applies a persisted visual world before the React runtime loads", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "astral-covenant"));
   await page.route("**/_next/static/chunks/**", (route) => route.request().resourceType() === "script" ? route.abort() : route.continue());
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
 
   await expect(page.locator("html")).toHaveAttribute("data-cstd-theme", "astral-covenant");
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-theme", "astral-covenant");
@@ -538,7 +538,7 @@ test("CSTD applies a persisted visual world before the React runtime loads", asy
 
 test("CSTD exposes a five-act stage, useful depth routes, and an inspectable evidence chain", async ({ page }) => {
   await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
 
   const actNavigation = page.getByRole("navigation", { name: "五幕主页导航" });
   await expect(actNavigation.getByRole("link")).toHaveCount(5);
@@ -568,7 +568,7 @@ test("CSTD follows system motion preference until the visitor chooses an explici
   await page.emulateMedia({ reducedMotion: "reduce" });
   // 动效控件属于游戏侧页头：先进入游戏主题，默认正式视图不渲染它
   await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   const root = page.locator("[data-cstd-kinetic-world]");
   await expect(root).toHaveAttribute("data-cstd-motion", "calm");
 
@@ -586,7 +586,7 @@ test("CSTD header anchors land immediately without a stalled view transition", a
     if (message.type() === "error" && message.text().includes("Transition was aborted")) transitionErrors.push(message.text());
   });
 
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   const navigation = page.getByRole("navigation", { name: "首页导航" });
   for (const destination of [
@@ -621,7 +621,7 @@ test("CSTD reading navigation prewarms the route and responds inside the click f
 
   // 阅读导航属于游戏侧页头：默认正式视图不渲染它，先进游戏主题
   await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   const navigation = page.getByRole("navigation", { name: "首页导航" });
   const notesLink = navigation.getByRole("link", { name: "札记", exact: true });
@@ -631,8 +631,8 @@ test("CSTD reading navigation prewarms the route and responds inside the click f
   await notesLink.evaluate((element) => (element as HTMLAnchorElement).click());
   expect(Date.now() - routeStarted).toBeLessThan(500);
   await expect(page.locator("html")).toHaveAttribute("data-cstd-navigation-pending", "reading");
-  await expect(page.locator("html")).toHaveAttribute("data-cstd-navigation-target", "/cstd/notes");
-  await expect(page).toHaveURL(/\/cstd\/notes$/, { timeout: 30_000 });
+  await expect(page.locator("html")).toHaveAttribute("data-cstd-navigation-target", "/notes");
+  await expect(page).toHaveURL(/\/notes$/, { timeout: 30_000 });
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible({ timeout: 30_000 });
   expect(transitionErrors).toEqual([]);
 });
@@ -640,7 +640,7 @@ test("CSTD reading navigation prewarms the route and responds inside the click f
 test("CSTD reaches its tailored finale without a scroll trap", async ({ page, isMobile }) => {
   const browserIssues = captureBrowserIssues(page);
   await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   const metrics = await page.evaluate(() => ({
     height: document.documentElement.scrollHeight,
@@ -674,7 +674,7 @@ test("CSTD reaches its tailored finale without a scroll trap", async ({ page, is
 test("CSTD explicit calm mode reduces render cost and survives context loss", async ({ page, isMobile }) => {
   test.skip(Boolean(isMobile), "WebGL is intentionally omitted on touch/mobile profiles.");
   const browserIssues = captureBrowserIssues(page);
-  await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto("/", { waitUntil: "domcontentloaded" });
   await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
   await page.reload({ waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
@@ -696,21 +696,21 @@ test("CSTD primary and deep surfaces pass automated WCAG A/AA checks in every vi
   await page.emulateMedia({ reducedMotion: "reduce" });
 
   for (const theme of ["atelier", "neon-district", "underworld-forge", "astral-covenant"] as const) {
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await page.evaluate((nextTheme) => window.localStorage.setItem("cstd-world-theme", nextTheme), theme);
     await page.reload({ waitUntil: "domcontentloaded" });
 
-    for (const path of ["/cstd", "/cstd/work/rocodex-platform"]) {
+    for (const path of ["/", "/work/rocodex-platform"]) {
       await page.goto(path, { waitUntil: "domcontentloaded" });
-      const themedRoot = path === "/cstd" ? page.locator("[data-cstd-kinetic-world]") : page.locator("[data-cstd-deep-shell]");
+      const themedRoot = path === "/" ? page.locator("[data-cstd-kinetic-world]") : page.locator("[data-cstd-deep-shell]");
       await expect(themedRoot).toHaveAttribute("data-cstd-theme", theme);
-      if (path === "/cstd" && theme === "neon-district") {
+      if (path === "/" && theme === "neon-district") {
         await expect(themedRoot).toHaveAttribute("data-cstd-enhancements-ready", "true");
         for (const heading of ["#proof-heading", "#executable-evidence-heading"]) {
           await expect(page.locator(heading)).toHaveCSS("opacity", "1");
         }
       }
-      if (path === "/cstd" && theme === "atelier") {
+      if (path === "/" && theme === "atelier") {
         await expect(page.locator("[data-cstd-home-editorial] .chapter")).toHaveCount(6);
         await expect(page.locator("[data-cstd-home-editorial]")).toBeVisible();
       }

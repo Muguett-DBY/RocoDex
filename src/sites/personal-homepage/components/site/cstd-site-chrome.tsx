@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import type { CstdLocale } from "../../content/content-types";
 import { cstdThemes, getCstdThemeMeta, useCstdTheme } from "../../experience/theme-store";
 import { CstdLink } from "./cstd-link";
-import { CstdTelemetry } from "./cstd-telemetry";
 import { SignalField, type CstdVisualMode } from "./signal-field";
 import { ThemeSwitcher } from "../theme-switcher";
 import { CstdDocumentLocale } from "./cstd-document-locale";
@@ -208,12 +207,10 @@ export function CstdSiteChrome({ locale, page, children, immersive = false }: { 
             <CstdLink href={localizedHref("/now", locale)} className="hover:text-[#f4d431]">{copy.now}</CstdLink>
             <CstdLink href={localizedHref("/resume", locale)} className="inline-flex items-center gap-2 hover:text-[#f4d431]"><FileText aria-hidden="true" className="h-3.5 w-3.5" /> {copy.resume}</CstdLink>
             <CstdLink href={localizedHref("/map", locale)} className="hover:text-[#24e0ff]">MAP</CstdLink>
-            <a href={locale === "zh" ? "/rss.xml" : "/rss.xml?lang=en"} className="hover:text-[#f4d431]">RSS</a>
+            <a href={locale === "zh" ? "/rss.xml" : "/en/rss.xml"} className="hover:text-[#f4d431]">RSS</a>
           </div>
         </div>
       </footer> : null}
-
-      <CstdTelemetry page={page} />
     </div>
   </>;
 }

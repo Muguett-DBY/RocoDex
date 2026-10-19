@@ -7,8 +7,6 @@ import type { CstdLocale } from "../../content/content-types";
 import { cstdLocaleConfig, getLocalizedCstdHref } from "../../infrastructure/i18n";
 import { CstdLink, resolveCstdHref } from "./cstd-link";
 
-const localeStorageKey = "cstd-locale";
-const localeCookieMaxAge = 60 * 60 * 24 * 365;
 
 function subscribeLocation(onStoreChange: () => void) {
   window.addEventListener("hashchange", onStoreChange);
@@ -40,15 +38,7 @@ export function CstdLanguageSwitcher({ locale, compact = false }: { locale: Cstd
   function rememberLocale(event: MouseEvent<HTMLAnchorElement>) {
     document.documentElement.lang = target.htmlLang;
     document.documentElement.dataset.cstdLocale = targetLocale;
-    const secure = window.location.protocol === "https:" ? "; Secure" : "";
-    document.cookie = `${localeStorageKey}=${targetLocale}; Max-Age=${localeCookieMaxAge}; Path=/; SameSite=Lax${secure}`;
-    try {
-      window.localStorage.setItem(localeStorageKey, targetLocale);
-    } catch {
-      // Navigation remains functional when storage is unavailable.
-    }
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    // Reload after saving the choice so a prefetched root cannot restore the old locale.
     event.preventDefault();
     window.location.assign(resolveCstdHref(href));
   }

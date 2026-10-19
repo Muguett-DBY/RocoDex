@@ -1,4 +1,3 @@
-import { VercelObservability } from "@/sites/shared/vercel-observability";
 import { CstdThemeBootstrapScript } from "@/sites/personal-homepage";
 import type { Metadata } from "next";
 import "../globals.css";
@@ -23,7 +22,6 @@ export default function PersonalChineseRootLayout({ children }: Readonly<{ child
       </head>
       <body className="min-h-full">
         {children}
-        <VercelObservability enabled={process.env.VERCEL === "1"} />
       </body>
     </html>
   );

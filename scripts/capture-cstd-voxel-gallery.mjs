@@ -43,7 +43,7 @@ try {
       });
       page.on("pageerror", (error) => issues.push(`pageerror: ${error.message}`));
 
-      const response = await page.goto(`${baseURL}/cstd/voxel`, { waitUntil: "domcontentloaded", timeout: 30_000 });
+      const response = await page.goto(`${baseURL}/voxel`, { waitUntil: "domcontentloaded", timeout: 30_000 });
       if (!response?.ok()) throw new Error(`Voxel route returned ${response?.status() ?? "no response"}`);
       const stage = page.locator("[data-cstd-voxel-game]");
       await stage.waitFor({ state: "visible" });

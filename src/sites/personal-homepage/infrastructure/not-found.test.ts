@@ -15,7 +15,7 @@ describe("unified CSTD 404 surfaces", () => {
     expect(getCstdNotFoundEntryPath("en")).toBe("/en");
   });
 
-  test("the proxy edge 404 renders the shared copy with the right document language", () => {
+  test("the exported static 404 renders the shared copy with the right document language", () => {
     for (const locale of ["zh", "en"] as const) {
       const html = createCstdNotFoundHtml(locale);
       expect(html).toContain(cstdNotFoundCopy[locale].heading);
@@ -27,12 +27,7 @@ describe("unified CSTD 404 surfaces", () => {
     }
   });
 
-  test("the proxy delegates to the shared module instead of keeping private 404 copy", () => {
-    const proxySource = readFileSync(path.join(repositoryRoot, "src/proxy.ts"), "utf8");
-    expect(proxySource).toContain("createCstdNotFoundHtml");
-    expect(proxySource).not.toContain("PACKET LOSS");
-    expect(proxySource).not.toContain("信号丢失");
-
+  test("the rendered not-found page uses the shared copy", () => {
     const pageSource = readFileSync(
       path.join(repositoryRoot, "src/sites/personal-homepage/components/pages/not-found-page.tsx"),
       "utf8",

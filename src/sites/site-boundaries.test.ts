@@ -7,7 +7,9 @@ const repositoryRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.
 const sourceRoot = path.join(repositoryRoot, "src");
 
 function sourcePath(relativePath: string) {
-  return path.join(sourceRoot, relativePath);
+  return relativePath.startsWith("app/(rocodex)/")
+    ? path.join(repositoryRoot, "archive/rocodex/app", relativePath.slice("app/(rocodex)/".length))
+    : path.join(sourceRoot, relativePath);
 }
 
 function readSource(relativePath: string) {
@@ -24,8 +26,8 @@ function collectSourceFiles(directory: string): string[] {
 
 describe("site architecture boundaries", () => {
   it("keeps each website behind an explicit route group", () => {
-    expect(existsSync(sourcePath("app/(personal)/cstd/page.tsx"))).toBe(true);
-    expect(existsSync(sourcePath("app/(personal-en)/cstd/en/page.tsx"))).toBe(true);
+    expect(existsSync(sourcePath("app/(personal)/page.tsx"))).toBe(true);
+    expect(existsSync(sourcePath("app/(personal-en)/en/page.tsx"))).toBe(true);
     expect(existsSync(sourcePath("app/(personal)/layout.tsx"))).toBe(true);
     expect(existsSync(sourcePath("app/(personal-en)/layout.tsx"))).toBe(true);
     expect(existsSync(sourcePath("app/(rocodex)/page.tsx"))).toBe(true);
@@ -38,14 +40,13 @@ describe("site architecture boundaries", () => {
     expect(readSource("app/(personal)/layout.tsx")).not.toContain("AuthProvider");
     expect(readSource("app/(personal-en)/layout.tsx")).not.toContain("AuthProvider");
     expect(readSource("app/(rocodex)/layout.tsx")).toContain('<html lang="zh-CN"');
-    expect(readSource("app/(rocodex)/layout.tsx")).toContain("AuthProvider");
+    expect(readSource("app/(rocodex)/layout.tsx")).not.toContain("AuthProvider");
     expect(existsSync(sourcePath("app/layout.tsx"))).toBe(false);
   });
 
-  it("keeps unmatched RocoDex paths inside its authenticated root document", () => {
-    expect(readSource("app/(rocodex)/[...not-found]/page.tsx")).toContain("notFound()");
+  it("keeps the archived RocoDex not-found document independent", () => {
     expect(readSource("app/(rocodex)/not-found.tsx")).toContain("RocoDexNotFound");
-    expect(readSource("app/(rocodex)/layout.tsx")).toContain("AuthProvider");
+    expect(readSource("app/(rocodex)/layout.tsx")).not.toContain("AuthProvider");
   });
 
   it("owns personal homepage code inside one site module", () => {
@@ -61,8 +62,8 @@ describe("site architecture boundaries", () => {
       "sites/personal-homepage/content/systems.ts",
       "sites/personal-homepage/infrastructure/routing.ts",
       "sites/personal-homepage/infrastructure/sitemap.ts",
-      "app/(personal)/cstd/llms.txt/route.ts",
-      "app/(personal-en)/cstd/en/llms.txt/route.ts",
+      "app/(personal)/llms.txt/route.ts",
+      "app/(personal-en)/en/llms.txt/route.ts",
       "sites/shared/robots.ts",
       "sites/shared/sitemap.ts",
     ];

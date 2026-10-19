@@ -5,7 +5,7 @@ import { captureBrowserIssues, expectNoHorizontalOverflow } from "./support/brow
 for (const locale of ["zh", "en"] as const) {
   test(`CSTD ${locale} full timeline supports year navigation, native details and bulk expansion`, async ({ page }) => {
     const issues = captureBrowserIssues(page);
-    await page.goto(`${locale === "en" ? "/cstd/en" : "/cstd"}/about`, { waitUntil: "domcontentloaded" });
+    await page.goto(`${locale === "en" ? "/en" : ""}/about`, { waitUntil: "domcontentloaded" });
     const timeline = page.locator('[data-cstd-capability-timeline="full"]');
     await expect(timeline.locator("[data-cstd-timeline-entry]")).toHaveCount(74);
     await expect(timeline.locator(".cstd-timeline-year")).toHaveCount(7);
@@ -30,7 +30,7 @@ for (const locale of ["zh", "en"] as const) {
   test.describe(`CSTD ${locale} static timeline`, () => {
     test.use({ javaScriptEnabled: false });
     test("detailed history remains readable and expandable without JavaScript", async ({ page }) => {
-      await page.goto(`${locale === "en" ? "/cstd/en" : "/cstd"}/about`, { waitUntil: "domcontentloaded" });
+      await page.goto(`${locale === "en" ? "/en" : ""}/about`, { waitUntil: "domcontentloaded" });
       const entry = page.locator('[data-cstd-timeline-entry="agent-reliability-plan"]');
       await entry.locator("summary").click();
       await expect(entry.locator("details")).toHaveAttribute("open", "");

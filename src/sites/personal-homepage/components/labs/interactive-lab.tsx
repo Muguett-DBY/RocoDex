@@ -6,7 +6,7 @@ import type { CstdLocale } from "../../content/content-types";
 import type { CstdLab } from "../../content/labs";
 import { buildCstdDcfSensitivity, calculateCstdDcf } from "../../domain/dcf-model";
 import { detectCstdRuntimeCapabilities, type CstdRuntimeCapabilities } from "../../experience/runtime-capabilities";
-import { getPersonalSiteRouteDecision } from "../../infrastructure/routing";
+
 import { ProofMuseumLab } from "./proof-museum";
 
 type TraceStep = {
@@ -68,21 +68,22 @@ function TraceTimeline({ locale, steps, active, staleFrom }: { locale: CstdLocal
 function SystemTraceLab({ locale }: { locale: CstdLocale }) {
   const [host, setHost] = useState("custard.top");
   const [path, setPath] = useState("/work");
-  const decision = useMemo(() => getPersonalSiteRouteDecision(host, path), [host, path]);
-  const decisionTarget = decision.kind === "rewrite" ? decision.path : decision.kind === "redirect" ? decision.host : decision.kind;
+  const target = host === "www.custard.top" ? "custard.top" : host;
   const steps = useMemo<readonly TraceStep[]>(() => locale === "zh" ? [
-    { label: "接收请求", detail: `读取 ${host}${path}，此时不初始化任何产品运行时。`, signal: "EDGE" },
-    { label: "Host 决策", detail: decision.kind === "redirect" ? `规范域名并重定向到 ${decision.host}。` : decision.kind === "next" ? "该 Host 不属于个人主站，继续交给 RocoDex。" : "命中 custard.top 的独立主站边界。", signal: "PROXY" },
-    { label: "路由所有权", detail: decision.kind === "rewrite" ? `公开路径被内部改写到 ${decision.path}。` : decision.kind === "not-found" ? "未知主站路径在边界处直接返回 404。" : "无需内部改写，沿当前路由继续。", signal: "ROUTE" },
-    { label: "站点模块", detail: decision.kind === "rewrite" ? "(personal) route group 只读取 personal-homepage 公共入口。" : "模块所有权保持不变，不发生跨站 Provider 泄漏。", signal: "MODULE" },
-    { label: "可见结果", detail: `决策 ${decision.kind.toUpperCase()} / ${decisionTarget}，内容优先到达，视觉层随后增强。`, signal: "RENDER" },
+    { label: "接收请求", detail: `浏览器请求 ${host}${path}。`, signal: "HTTP" },
+    { label: "域名分流", detail: `Cloudflare 选择 ${target} 对应的静态站点。`, signal: "DOMAIN" },
+    { label: "静态文件", detail: "直接查找构建时生成的 HTML、导航数据或资源文件。", signal: "ASSETS" },
+    { label: "返回内容", detail: "文件存在就返回内容，否则返回本站的 404 页面。", signal: "CDN" },
+    { label: "浏览器增强", detail: "主题、动画和交互在浏览器执行，不运行后台页面服务。", signal: "BROWSER" },
   ] : [
-    { label: "Receive request", detail: `Read ${host}${path} before any product runtime initializes.`, signal: "EDGE" },
-    { label: "Host decision", detail: decision.kind === "redirect" ? `Canonicalize and redirect to ${decision.host}.` : decision.kind === "next" ? "This host is not the portfolio; continue into RocoDex." : "Match the isolated custard.top boundary.", signal: "PROXY" },
-    { label: "Route ownership", detail: decision.kind === "rewrite" ? `Rewrite the public path internally to ${decision.path}.` : decision.kind === "not-found" ? "Reject the unknown portfolio path at the boundary." : "Continue without an internal rewrite.", signal: "ROUTE" },
-    { label: "Site module", detail: decision.kind === "rewrite" ? "The (personal) group reads only from the portfolio public entry point." : "Module ownership remains unchanged with no cross-site provider leak.", signal: "MODULE" },
-    { label: "Visible result", detail: `Decision ${decision.kind.toUpperCase()} / ${decisionTarget}; content arrives before visual enhancement.`, signal: "RENDER" },
-  ], [decision, decisionTarget, host, locale, path]);
+    { label: "Receive request", detail: `The browser requests ${host}${path}.`, signal: "HTTP" },
+    { label: "Domain routing", detail: `Cloudflare selects the static site for ${target}.`, signal: "DOMAIN" },
+    { label: "Static file", detail: "Look up the exported HTML, navigation payload or asset.", signal: "ASSETS" },
+    { label: "Return content", detail: "Serve the file or the site's static 404 page.", signal: "CDN" },
+    { label: "Browser enhancement", detail: "Themes and interactions run in the browser without a page server.", signal: "BROWSER" },
+  ], [host, locale, path, target]);
+  const decision = { kind: "static-assets" };
+  const decisionTarget = target;
   const [active, setActive] = useState(0);
   const [playing, setPlaying] = useState(false);
 
@@ -107,7 +108,7 @@ function SystemTraceLab({ locale }: { locale: CstdLocale }) {
   return (
     <div data-cstd-lab="system-trace">
       <div className="flex flex-wrap items-center justify-between gap-5">
-        <div><p className="font-mono text-[11px] font-black text-[#24e0ff]">LIVE REQUEST / ROUTING CONTRACT</p><p className="mt-2 text-sm text-[#8f9ba0]">{locale === "zh" ? "修改 Host 与路径，执行真实边界函数。" : "Change host and path, then execute the real boundary function."}</p></div>
+        <div><p className="font-mono text-[11px] font-black text-[#24e0ff]">LIVE REQUEST / ROUTING CONTRACT</p><p className="mt-2 text-sm text-[#8f9ba0]">{locale === "zh" ? "修改域名与路径，查看静态文件的访问过程。" : "Change host and path to explore static delivery."}</p></div>
         <PlaybackControls locale={locale} playing={playing} canAdvance={active < steps.length - 1} onToggle={() => setPlaying((value) => !value)} onReset={() => { setPlaying(false); setActive(0); }} onAdvance={() => setActive((value) => Math.min(steps.length - 1, value + 1))} />
       </div>
       <div className="mt-7 grid gap-px bg-white/12 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_12rem]">

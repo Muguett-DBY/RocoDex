@@ -7,23 +7,18 @@ import {
   Database,
   GitCompare,
   Info,
-  LogIn,
-  LogOut,
   Menu,
   ScrollText,
   Search,
   Shield,
   Sparkles,
   Swords,
-  User,
-  UserPlus,
   X,
   type LucideIcon,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { usePathname } from "next/navigation";
-import { useSession, signOut } from "next-auth/react";
-import { useState, useRef, useEffect, type KeyboardEvent } from "react";
+import { useState, useRef, type KeyboardEvent } from "react";
 import { CollectionNavLink } from "@/components/collection-nav-link";
 import {
   getMobileNavigationSummary,
@@ -49,7 +44,7 @@ const navIcons: Record<string, LucideIcon> = {
   "/about": Info,
 };
 
-export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
+export function SiteHeader() {
   const pathname = usePathname();
   const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
   const [mobileMenuState, setMobileMenuState] = useState<MobileNavigationRouteState>({
@@ -85,7 +80,6 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
             <HeaderNavLinks pathname={pathname} />
             <CollectionNavLink pathname={pathname} />
             <ThemeToggle />
-            {authEnabled ? <AuthControls /> : null}
           </nav>
           <div className="flex items-center gap-2 md:hidden">
             <ThemeToggle />
@@ -130,13 +124,6 @@ export function SiteHeader({ authEnabled }: { authEnabled: boolean }) {
               className="h-11 justify-start px-3"
               onClick={closeMobileMenu}
             />
-            {authEnabled ? (
-              <AuthControls
-                rootClassName="grid gap-2"
-                controlClassName="h-11 justify-start px-3"
-                onNavigate={closeMobileMenu}
-              />
-            ) : null}
           </nav>
         ) : null}
       </div>
@@ -190,89 +177,4 @@ function HeaderNavLinks({
       </Link>
     );
   });
-}
-
-function AuthControls({
-  rootClassName,
-  controlClassName,
-  onNavigate,
-}: {
-  rootClassName?: string;
-  controlClassName?: string;
-  onNavigate?: () => void;
-} = {}) {
-  const { data: session } = useSession();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClick = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, []);
-
-  const handleSignOut = () => {
-    onNavigate?.();
-    signOut({ callbackUrl: "/" });
-  };
-
-  return session?.user ? (
-            <div className={cn("relative", rootClassName)} ref={menuRef}>
-              <button
-                type="button"
-                onClick={() => setMenuOpen((v) => !v)}
-                className={cn(
-                  "inline-flex h-9 items-center gap-2 rounded-md px-3 text-sm font-medium text-slate-700 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white",
-                  controlClassName,
-                )}
-              >
-                <User className="h-4 w-4" />
-                {session.user.name}
-              </button>
-              {menuOpen ? (
-                <div className="absolute right-0 top-full mt-1 w-36 rounded-lg border border-slate-200 bg-white py-1 shadow-lg dark:border-slate-700 dark:bg-slate-900">
-                  <button
-                    type="button"
-                    onClick={handleSignOut}
-                    className={cn(
-                      "flex h-9 w-full items-center gap-2 px-4 text-sm text-slate-700 hover:bg-slate-50 dark:text-slate-300 dark:hover:bg-slate-800",
-                      controlClassName,
-                    )}
-                  >
-                    <LogOut className="h-4 w-4" />
-                    退出登录
-                  </button>
-                </div>
-              ) : null}
-            </div>
-          ) : (
-            <div className={cn("flex items-center gap-1", rootClassName)}>
-              <Link
-                href="/login"
-                onClick={onNavigate}
-                className={cn(
-                  "inline-flex h-9 items-center gap-1.5 rounded-md px-3 text-sm font-medium text-slate-600 transition hover:bg-white hover:text-slate-950 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white",
-                  controlClassName,
-                )}
-              >
-                <LogIn className="h-4 w-4" />
-                登录
-              </Link>
-              <Link
-                href="/register"
-                onClick={onNavigate}
-                className={cn(
-                  "inline-flex h-9 items-center gap-1.5 rounded-md bg-emerald-600 px-3 text-sm font-semibold text-white transition hover:bg-emerald-700",
-                  controlClassName,
-                )}
-              >
-                <UserPlus className="h-4 w-4" />
-                注册
-              </Link>
-            </div>
-          );
 }

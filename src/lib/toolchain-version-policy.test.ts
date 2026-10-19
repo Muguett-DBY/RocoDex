@@ -22,7 +22,6 @@ describe("toolchain version policy", () => {
     expect(packageJson.engines?.node).toBe("24.x");
     expect(packageJson.packageManager).toBe("npm@12.0.2");
     expect(packageJson.dependencies.next).toBe("16.4.2");
-    expect(packageJson.dependencies["next-auth"]).toBe("5.0.0-beta.32");
     expect(packageJson.dependencies.react).toBe("^19.3.0");
     expect(packageJson.dependencies["react-dom"]).toBe("^19.3.0");
     expect(packageJson.dependencies["framer-motion"]).toBe("^13.4.4");
@@ -44,7 +43,6 @@ describe("toolchain version policy", () => {
       sharp: "0.35.5",
     });
     expect(packageLock.packages["node_modules/next"]?.version).toBe("16.4.2");
-    expect(packageLock.packages["node_modules/next-auth"]?.version).toBe("5.0.0-beta.32");
     expect(packageLock.packages["node_modules/react"]?.version).toBe("19.3.0");
     expect(packageLock.packages["node_modules/react-dom"]?.version).toBe("19.3.0");
     expect(packageLock.packages["node_modules/framer-motion"]?.version).toBe("13.4.4");
@@ -96,11 +94,10 @@ describe("toolchain version policy", () => {
 
     expect(packageJson.scripts?.["start:local"]).toContain("start-local-production.ps1");
     expect(packageJson.scripts?.["stop:local"]).toContain("stop-local-next.ps1");
-    expect(launcher).toContain('$env:AUTH_TRUST_HOST = "true"');
     expect(launcher).toContain("-WindowStyle Hidden");
     expect(launcher).toContain('Join-Path $repositoryRoot "output\\local-production"');
     expect(launcher).not.toContain('Join-Path $repositoryRoot ".next"');
-    expect(launcher).toContain('"$baseUrl/cstd"');
+    expect(launcher).toContain('"$baseUrl/"');
     expect(stopLauncher).toContain('Join-Path $repoRoot "output\\local-production"');
     expect(stopLauncher).toContain('"production-server.pid"');
   });

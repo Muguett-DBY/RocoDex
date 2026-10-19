@@ -70,7 +70,7 @@ test.describe("EDITORIAL without JavaScript", () => {
     page.on("request", (request) => {
       if (/\/cstd-scroll\/.*\.js(\?|$)/.test(request.url())) staticRequests.push(request.url());
     });
-    await page.goto("/cstd", { waitUntil: "load" });
+    await page.goto("/", { waitUntil: "load" });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("奶黄包");
     await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("人工智能 · 博 0");
     await expect(page.locator("[data-cstd-home-editorial] .chapter")).toHaveCount(6);
@@ -95,7 +95,7 @@ test.describe("EDITORIAL motion", () => {
   test("mounts the GSAP choreography and settles the whole journey", async ({ page }) => {
     const issues = captureBrowserIssues(page);
     await page.addInitScript(() => Object.defineProperty(navigator, "gpu", { value: undefined, configurable: true }));
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     // GSAP 异步 chunk 装载后创建 pin：pin-spacer ×2 即编排已挂
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
 
@@ -132,7 +132,7 @@ test.describe("EDITORIAL motion", () => {
     // （纸白章码压纸面 1.0:1）。开墨窗已对齐 folio 实底 + 组件侧按实底有界
     // 复核，着陆态必须不暗；底端照旧翻墨（墨牌全盒覆盖 folio 时才成立）。
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto("/cstd", { waitUntil: "load" });
+    await page.goto("/", { waitUntil: "load" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
     await page.waitForTimeout(3000); // 让历史误判窗口（若有）充分暴露
     await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
@@ -146,7 +146,7 @@ test.describe("EDITORIAL motion", () => {
   });
 
   test("pins the data spread, scrubs both counters, and reveals the figure inside the pin travel", async ({ page }) => {
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
 
     // pin 行为：数据版面在 pin 段内滚动 0.5 视口，其 rect.top 几乎不动
@@ -214,7 +214,7 @@ test.describe("EDITORIAL motion", () => {
   });
 
   test("scrubs the per-chapter devices reversibly and tracks the folio rail", async ({ page }) => {
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
     // folio transform 断言需 ≥1200px 视口（desktop-chromium 默认 1280×720 已满足）
 
@@ -357,7 +357,7 @@ test.describe("EDITORIAL motion", () => {
       if (/\.(mp4|webm)(\?|$)/.test(request.url())) mediaRequests.push(request.url());
     });
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
 
     // 整组零注册：无 pin、无分字；计数文本恒为 SSR 终值（扫窗后仍不变）
     await expect(page.locator("[data-cstd-home-editorial] .pin-spacer")).toHaveCount(0);
@@ -395,7 +395,7 @@ test.describe("EDITORIAL motion", () => {
     page.on("request", (request2) => {
       if (/\/cstd-scroll\/.*\.js(\?|$)/.test(request2.url())) scrollJsRequests.push(request2.url());
     });
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
 
     // 引擎已退役：无 scrollcraft 引用（链接/请求双验）；样式表引用必须带新版本参数
     // （/cstd-scroll/* immutable 无哈希，忘升版本 = 老访客永不回源）
@@ -442,7 +442,7 @@ test.describe("EDITORIAL motion", () => {
   });
 
   test("hands the homepage to the game worlds and takes it back", async ({ page }) => {
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
     await expect(page.locator("[data-cstd-home-editorial]")).toBeVisible();
     await expect(page.locator("[data-cstd-home-shell]")).toBeHidden();
@@ -468,7 +468,7 @@ test.describe("EDITORIAL motion", () => {
 
   test("keeps the English page readable on a narrow phone", async ({ page }) => {
     await page.setViewportSize({ width: 320, height: 740 });
-    await page.goto("/cstd/en", { waitUntil: "domcontentloaded" });
+    await page.goto("/en", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Custard");
     await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("PhD Year 0");
@@ -487,7 +487,7 @@ test.describe("EDITORIAL motion", () => {
 test("ATELIER keeps its inner pages readable, accessible, and free of decorative renderers", async ({ page }) => {
   const issues = captureBrowserIssues(page);
   await page.setViewportSize({ width: 390, height: 844 });
-  for (const path of ["/cstd/work", "/cstd/about", "/cstd/notes", "/cstd/notes/evidence-first-ai-research", "/cstd/en/about"]) {
+  for (const path of ["/work", "/about", "/notes", "/notes/evidence-first-ai-research", "/en/about"]) {
     await page.goto(path, { waitUntil: "domcontentloaded" });
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
     await expect(page.locator('[data-cstd-deep-shell]')).toHaveAttribute("data-cstd-theme", "atelier");
@@ -500,7 +500,7 @@ test("ATELIER keeps its inner pages readable, accessible, and free of decorative
 });
 
 test("ATELIER case navigation reaches the readable story and preserves the technical demonstration", async ({ page }) => {
-  await page.goto("/cstd/work/alpha-research-system", { waitUntil: "domcontentloaded" });
+  await page.goto("/work/alpha-research-system", { waitUntil: "domcontentloaded" });
   await expect(page.locator('.cstd-atelier-hero-artwork')).toBeVisible();
   await page.locator('.cstd-case-outline a[href="#pipeline"]').click();
   await expect(page.locator('[data-cstd-case-story] #pipeline')).toBeInViewport();

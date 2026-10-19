@@ -1,45 +1,19 @@
-// Cloudflare Workers deployment for the Custard Web Platform (Next.js via OpenNext).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "custard-web-platform",
-  "main": ".open-next/worker.js",
   "compatibility_date": "2025-09-01",
-  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS",
-    "run_worker_first": [
-      "/*",
-      "!/_next/static/*",
-      "!/cstd-atelier/*",
-      "!/cstd-scroll/*",
-      "!/cstd-archive/*",
-      "!/cstd-districts/*",
-      "!/cstd-materials/*",
-      "!/cstd-persona/*",
-      "!/cstd-projects/*",
-      "!/cstd-stage/*",
-      "!/cstd-themes/*",
-      "!/cstd-universe/*",
-      "!/cstd-world/*",
-      "!/fonts/*",
-      "!/images/*",
-      "!/favicon.ico",
-      "!/cstd-mascot.svg",
-      "!/cstd-og.svg",
-      "!/cstd-og-v2.webp",
-      "!/cstd-case-worker.js"
-    ]
-  },
-  "observability": {
-    "enabled": true
-  },
-  "vars": {
-    "AUTH_TRUST_HOST": "true"
+    "directory": "out",
+    "not_found_handling": "404-page"
   },
   "routes": [
-    { "pattern": "custard.top", "custom_domain": true },
-    { "pattern": "rocodex.custard.top", "custom_domain": true },
-    { "pattern": "www.custard.top", "custom_domain": true }
+    {
+      "pattern": "custard.top",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.custard.top",
+      "custom_domain": true
+    }
   ]
 }

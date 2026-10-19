@@ -30,7 +30,7 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
   const locale = ${serializedLocale};
   const stageAssets = ${serializedThemeStageAssets};
   const fontAssets = ${serializedThemeFontAssets};
-  const voxelGamePaths = ["/cstd/voxel", "/cstd/en/voxel"];
+  const voxelGamePaths = ["/voxel", "/en/voxel"];
   const onVoxelGame = voxelGamePaths.includes(window.location.pathname.replace(/\/+$/, ""));
 
   if (!onVoxelGame) {
@@ -47,7 +47,7 @@ function createCstdThemeBootstrapScript(locale: CstdLocale) {
   }
 
   const homepagePath = window.location.pathname.replace(/\/+$/, "");
-  if (theme !== "atelier" && ["", "/cstd", "/en", "/cstd/en"].includes(homepagePath)) {
+  if (theme !== "atelier" && ["", "/en"].includes(homepagePath)) {
     const stagePreload = document.createElement("link");
     stagePreload.rel = "preload";
     stagePreload.as = "image";

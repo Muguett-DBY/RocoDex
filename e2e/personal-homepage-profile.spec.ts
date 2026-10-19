@@ -6,8 +6,8 @@ const schoolNames = /monash|莫纳什|university of sydney|悉尼大学|FIT\d{4}
 for (const locale of ["zh", "en"] as const) {
   test(`CSTD ${locale} public profile and resume disclose fields of study without schools`, async ({ page, request }) => {
     const issues = captureBrowserIssues(page);
-    const prefix = locale === "en" ? "/cstd/en" : "/cstd";
-    for (const path of [prefix, `${prefix}/about`, `${prefix}/resume`, `${prefix}/now`]) {
+    const prefix = locale === "en" ? "/en" : "";
+    for (const path of [prefix || "/", `${prefix}/about`, `${prefix}/resume`, `${prefix}/now`]) {
       const response = await page.goto(path, { waitUntil: "domcontentloaded" });
       expect(response?.status()).toBe(200);
       const html = await response!.text();
@@ -28,42 +28,26 @@ for (const locale of ["zh", "en"] as const) {
   });
 }
 
-test("CSTD manual language choice survives a prefetched home and overrides browser language", async ({ page }) => {
-  await page.goto("/cstd/en", { waitUntil: "domcontentloaded" });
+test("CSTD language links select static pages while the root remains cacheable", async ({ page }) => {
+  await page.goto("/en", { waitUntil: "domcontentloaded" });
   const switcher = page.getByRole("link", { name: "Switch to Chinese", exact: true });
   await switcher.hover();
   await switcher.click();
   await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
   await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("人工智能 · 博 0");
-    const chinese = await page.request.get("/", { headers: { host: "custard.top", "accept-language": "en-AU" }, maxRedirects: 0 });
-    expect(chinese.status()).toBe(200);
-    expect(chinese.headers()["content-language"]).toBe("zh-CN");
-    // 入口 200 的 private,max-age/Vary 由生产 Worker（OpenNext）在 proxy 层保证（线上已验证）；
-    // 本地 next start 会剥掉中间件对渲染页设置的 cache-control，故不在此断言。
   await page.getByRole("link", { name: "切换到英文", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
-  const english = await page.request.get("/", { headers: { host: "custard.top", "accept-language": "zh-CN" }, maxRedirects: 0 });
-  expect(english.status()).toBe(307);
-  expect(new URL(english.headers().location, english.url()).pathname).toBe("/en");
+  const root = await page.request.get("/", { headers: { "accept-language": "en-AU" }, maxRedirects: 0 });
+  expect(root.status()).toBe(200);
+  expect(root.headers()["content-language"]).toBe("zh-CN");
+  expect(root.headers()["cache-control"]).not.toContain("private");
 });
 
-test("CSTD first visits negotiate weighted browser languages without saving personal details", async ({ request }) => {
-  for (const [language, expected, status] of [
-    ["zh-CN,zh;q=0.9,en;q=0.8", "zh-CN", 200],
-    ["zh-Hant-TW,zh;q=0.9,en;q=0.8", "zh-CN", 200],
-    ["en-AU,en;q=0.9", "en-AU", 307],
-    ["zh;q=0.5,en;q=0.9", "en-AU", 307],
-  ] as const) {
-    const response = await request.get("/", { headers: { host: "custard.top", "accept-language": language }, maxRedirects: 0 });
-    expect(response.status()).toBe(status);
-    expect(response.headers()["content-language"]).toBe(expected);
-    // 协商头（private,max-age + Vary）只在本地可验证的重定向路径断言；
-    // 渲染页的 cache-control 会被 next start 剥掉（生产 Worker 保留，线上已验证）。
-    if (status === 307) {
-      expect(response.headers().vary).toMatch(/accept-language/i);
-      expect(response.headers().vary).toMatch(/cookie/i);
-      expect(response.headers()["cache-control"]).toContain("private, max-age=3600");
-    }
+test("CSTD root serves the same static document for every browser language", async ({ request }) => {
+  for (const language of ["zh-CN,zh;q=0.9,en;q=0.8", "en-AU,en;q=0.9"]) {
+    const response = await request.get("/", { headers: { "accept-language": language }, maxRedirects: 0 });
+    expect(response.status()).toBe(200);
+    expect(response.headers()["content-language"]).toBe("zh-CN");
     expect(response.headers()["set-cookie"]).toBeUndefined();
   }
 });

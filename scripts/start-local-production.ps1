@@ -4,9 +4,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-$nextBuildId = Join-Path $repositoryRoot ".next\BUILD_ID"
+$staticIndex = Join-Path $repositoryRoot "out\index.html"
 
-if (-not (Test-Path -LiteralPath $nextBuildId)) {
+if (-not (Test-Path -LiteralPath $staticIndex)) {
   throw "Missing production build. Run npm run build first."
 }
 
@@ -15,20 +15,17 @@ while (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction Silently
 }
 
 $node = Get-Command node -ErrorAction Stop
-$nextCli = Join-Path $repositoryRoot "node_modules\next\dist\bin\next"
+$nextCli = Join-Path $repositoryRoot "node_modules\wrangler\bin\wrangler.js"
 $logRoot = Join-Path $repositoryRoot "output\local-production"
 New-Item -ItemType Directory -Force -Path $logRoot | Out-Null
 $stdout = Join-Path $logRoot "local-production-$Port.stdout.log"
 $stderr = Join-Path $logRoot "local-production-$Port.stderr.log"
 $baseUrl = "http://127.0.0.1:$Port"
 
-$env:AUTH_SECRET = "rocodex-local-production-secret-with-sufficient-length"
-$env:AUTH_TRUST_HOST = "true"
-$env:NEXTAUTH_URL = $baseUrl
 
 $process = Start-Process `
   -FilePath $node.Source `
-  -ArgumentList @($nextCli, "start", "--hostname", "127.0.0.1", "--port", "$Port") `
+  -ArgumentList @($nextCli, "dev", "--ip", "127.0.0.1", "--port", "$Port") `
   -WorkingDirectory $repositoryRoot `
   -WindowStyle Hidden `
   -RedirectStandardOutput $stdout `
@@ -40,7 +37,7 @@ $ready = $false
 do {
   Start-Sleep -Milliseconds 500
   try {
-    $response = Invoke-WebRequest -UseBasicParsing "$baseUrl/cstd" -TimeoutSec 2
+    $response = Invoke-WebRequest -UseBasicParsing "$baseUrl/" -TimeoutSec 2
     $ready = $response.StatusCode -eq 200
   } catch {
     $ready = $false
@@ -59,6 +56,6 @@ if (-not $ready) {
 Set-Content -LiteralPath (Join-Path $logRoot "production-server.pid") -Value $process.Id
 Set-Content -LiteralPath (Join-Path $logRoot "production-server.port") -Value $Port
 
-Write-Output "Local production server: $baseUrl/cstd"
+Write-Output "Local production server: $baseUrl/"
 Write-Output "PID: $($process.Id)"
 Write-Output "Logs: $stdout | $stderr"

@@ -6,12 +6,12 @@ test.describe("CSTD technical archive", () => {
     const errors: string[] = [];
     page.on("pageerror", (error) => errors.push(error.message));
 
-    await page.goto("/cstd/work");
+    await page.goto("/work");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("做过的事");
     await expect(page.locator('a[href="/work/rocodex-platform"]')).toBeVisible();
     await expect(page.locator("main article")).toHaveCount(7);
 
-    await page.goto("/cstd/work/alpha-research-system");
+    await page.goto("/work/alpha-research-system");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("CSTD Alpha");
     await expect(page.getByText("交付与验证", { exact: true })).toBeVisible();
     await expect(page.locator("[data-cstd-case-film]")).toBeVisible();
@@ -26,15 +26,15 @@ test.describe("CSTD technical archive", () => {
     const structuredValue = JSON.parse((await structuredData.textContent()) ?? "null");
     expect(structuredValue).toHaveLength(2);
 
-    await page.goto("/cstd/notes");
+    await page.goto("/notes");
     await expect(page.locator("main article")).toHaveCount(8);
-    await page.goto("/cstd/notes/host-boundaries-in-one-next-deployment");
+    await page.goto("/notes/host-boundaries-in-one-next-deployment");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("一个 Next.js 部署");
     await expect(page.locator("pre")).toContainText("crossSiteImports");
     await expect(page.getByRole("button", { name: "复制代码" })).toBeVisible();
     await expect(page.getByRole("button", { name: "复制引用" })).toBeVisible();
 
-    await page.goto("/cstd/en");
+    await page.goto("/en");
     await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
     // 默认正式主页已由 atelier 场景换为 chaptered editorial（data-cstd-home-editorial）
     await expect(page.locator("[data-cstd-home-editorial]")).toBeVisible();
@@ -43,9 +43,9 @@ test.describe("CSTD technical archive", () => {
   });
 
   test("keeps the source-constrained knowledge lens grounded and inspectable", async ({ page }) => {
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
     const lens = page.locator("[data-cstd-knowledge-lens]");
     await expect(lens).toBeVisible();
@@ -59,7 +59,7 @@ test.describe("CSTD technical archive", () => {
   });
 
   test("explores the global knowledge graph without dead-end nodes", async ({ page }) => {
-    await page.goto("/cstd/map");
+    await page.goto("/map");
     const graph = page.locator("[data-cstd-knowledge-constellation]");
     await expect(graph).toBeVisible();
     expect(await graph.locator("[data-cstd-graph-node]").count()).toBeGreaterThanOrEqual(25);
@@ -72,7 +72,7 @@ test.describe("CSTD technical archive", () => {
   });
 
   test("runs deterministic data and stale-agent experiments", async ({ page }) => {
-    await page.goto("/cstd/lab/data-lens");
+    await page.goto("/lab/data-lens");
     const values = page.locator('[data-cstd-lab="data-lens"] dl dd');
     const before = await values.allTextContents();
     const growthControl = page.getByRole("slider", { name: "现金流增长" });
@@ -85,7 +85,7 @@ test.describe("CSTD technical archive", () => {
     await expect(page.locator("[data-cstd-dcf-sensitivity] button")).toHaveCount(26);
     await page.locator("[data-cstd-dcf-sensitivity] button").nth(7).click();
 
-    await page.goto("/cstd/lab/agent-replay");
+    await page.goto("/lab/agent-replay");
     await page.getByRole("checkbox", { name: "在综合阶段注入一个更新任务" }).check();
     const next = page.getByRole("button", { name: "下一步" });
     for (let index = 0; index < 4; index += 1) await next.click();
@@ -95,14 +95,14 @@ test.describe("CSTD technical archive", () => {
     await expect(page.locator("[data-cstd-conflict-forge]")).toHaveAttribute("data-cstd-conflict-state", "conflict");
     await expect(page.getByText("409 VERSION CONFLICT", { exact: true })).toBeVisible();
 
-    await page.goto("/cstd/lab/system-trace");
+    await page.goto("/lab/system-trace");
     await page.getByLabel("HOST").fill("rocodex.custard.top");
-    await expect(page.locator("[data-cstd-route-decision]")).toHaveAttribute("data-cstd-route-decision", "next");
+    await expect(page.locator("[data-cstd-route-decision]")).toHaveAttribute("data-cstd-route-decision", "static-assets");
     await page.getByLabel("HOST").fill("custard.top");
     await page.getByLabel("PATH").fill("/work/rocodex-platform");
-    await expect(page.locator("[data-cstd-route-decision]")).toHaveAttribute("data-cstd-route-decision", "rewrite");
+    await expect(page.locator("[data-cstd-route-decision]")).toHaveAttribute("data-cstd-route-decision", "static-assets");
 
-    await page.goto("/cstd/lab/proof-museum");
+    await page.goto("/lab/proof-museum");
     const museum = page.locator("[data-cstd-proof-museum]");
     await expect(museum).toHaveAttribute("data-cstd-capsules", "4");
     await museum.getByRole("tab", { name: /业务记录乐观锁/ }).click();
@@ -113,10 +113,10 @@ test.describe("CSTD technical archive", () => {
   });
 
   test("connects curated topics to cases, notes, and executable labs", async ({ page }) => {
-    await page.goto("/cstd/topics");
+    await page.goto("/topics");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("工程判断");
     await expect(page.locator('a[href="/topics/system-boundaries"]')).toBeVisible();
-    await page.goto("/cstd/topics/system-boundaries");
+    await page.goto("/topics/system-boundaries");
     await expect(page.getByRole("heading", { level: 1 })).toContainText("系统边界");
     await expect(page.getByRole("link", { name: /RocoDex 双站平台/ })).toBeVisible();
     await expect(page.getByRole("link", { name: /Proof Museum/ })).toBeVisible();
@@ -125,16 +125,16 @@ test.describe("CSTD technical archive", () => {
 
   test("renders motion under reduced-motion emulation without horizontal overflow", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/cstd/work");
+    await page.goto("/work");
     await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-    for (const path of ["/cstd/work", "/cstd/notes", "/cstd/lab", "/cstd/topics", "/cstd/map", "/cstd/about", "/cstd/resume"]) {
+    for (const path of ["/work", "/notes", "/lab", "/topics", "/map", "/about", "/resume"]) {
       await page.goto(path);
       await expect(page.locator("[data-cstd-signal-field]")).toBeVisible();
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
       expect(overflow, `${path} should not overflow horizontally`).toBeLessThanOrEqual(1);
     }
 
-    await page.goto("/cstd/lab/render-lab");
+    await page.goto("/lab/render-lab");
     await expect(page.locator("[data-cstd-render-fps]")).not.toHaveText("--");
     await expect(page.locator("[data-cstd-runtime-diagnostics]")).toContainText(/WEBGL|IMAGE/);
     const canvasHasSignal = await page.locator('[data-cstd-lab="render-lab"] canvas').evaluate((canvas: HTMLCanvasElement) => {
@@ -175,7 +175,7 @@ test.describe("CSTD technical archive", () => {
       expect(fontResponse.headers()["cache-control"]).toContain("immutable");
     }
 
-    const rssResponse = await request.get("/rss.xml?lang=en", { headers });
+    const rssResponse = await request.get("/en/rss.xml", { headers });
     expect(rssResponse.status()).toBe(200);
     expect(rssResponse.headers()["content-type"]).toContain("application/rss+xml");
     expect(await rssResponse.text()).toContain("https://custard.top/en/notes/host-boundaries-in-one-next-deployment");

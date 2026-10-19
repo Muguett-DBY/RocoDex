@@ -25,12 +25,12 @@ test("CSTD exposes a themed voxel-world invitation from its navigation", async (
   const browserIssues = captureBrowserIssues(page);
   // The voxel invitation belongs to the three game worlds; the formal atelier default hides it.
   await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-  await page.goto(isMobile ? "/cstd/about" : "/cstd", { waitUntil: "domcontentloaded" });
+  await page.goto(isMobile ? "/about" : "/", { waitUntil: "domcontentloaded" });
   const invitation = page.locator("[data-cstd-voxel-nav]:visible").first();
   await expect(invitation).toBeVisible();
   await expect(invitation).toHaveAccessibleName("算了，玩会我的世界吧");
   await invitation.click();
-  await expect(page).toHaveURL(/\/cstd\/voxel$/);
+  await expect(page).toHaveURL(/\/voxel$/);
   await expect(page.locator("[data-cstd-voxel-game]")).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
   expect(browserIssues).toEqual([]);
 });
@@ -39,9 +39,9 @@ test("CSTD renders three distinct playable voxel biomes without loading a blank 
   test.setTimeout(150_000);
   const browserIssues = captureBrowserIssues(page);
   for (const world of worlds) {
-    await page.goto("/cstd", { waitUntil: "domcontentloaded" });
+    await page.goto("/", { waitUntil: "domcontentloaded" });
     await page.evaluate((theme) => window.localStorage.setItem("cstd-world-theme", theme), world.id);
-    await page.goto("/cstd/voxel", { waitUntil: "domcontentloaded" });
+    await page.goto("/voxel", { waitUntil: "domcontentloaded" });
     const game = page.locator("[data-cstd-voxel-game]");
     await expect(game).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
     await expect(game).toHaveAttribute("data-cstd-voxel-theme", world.id);
@@ -57,7 +57,7 @@ test("CSTD renders three distinct playable voxel biomes without loading a blank 
 test("CSTD voxel world supports movement, block selection, editing, and local save", async ({ page, isMobile }) => {
   test.setTimeout(180_000);
   const browserIssues = captureBrowserIssues(page);
-  await page.goto("/cstd/voxel", { waitUntil: "domcontentloaded" });
+  await page.goto("/voxel", { waitUntil: "domcontentloaded" });
   const game = page.locator("[data-cstd-voxel-game]");
   await expect(game).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
   const before = await game.getAttribute("data-cstd-voxel-block-count");
@@ -100,7 +100,7 @@ test("CSTD voxel world supports movement, block selection, editing, and local sa
 test("CSTD voxel world turns the portfolio directory into navigable landmarks", async ({ page, isMobile }) => {
   test.setTimeout(150_000);
   const browserIssues = captureBrowserIssues(page);
-  await page.goto("/cstd/voxel", { waitUntil: "domcontentloaded" });
+  await page.goto("/voxel", { waitUntil: "domcontentloaded" });
   const game = page.locator("[data-cstd-voxel-game]");
   await expect(game).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
 
@@ -118,12 +118,12 @@ test("CSTD voxel world turns the portfolio directory into navigable landmarks", 
   } else {
     await page.keyboard.press("KeyE");
   }
-  await expect(page).toHaveURL(/\/cstd\/work\/alpha-research-system$/, { timeout: 20_000 });
+  await expect(page).toHaveURL(/\/work\/alpha-research-system$/, { timeout: 20_000 });
   expect(browserIssues).toEqual([]);
 });
 
 test("CSTD voxel world keeps English UI, compact geometry, and WCAG semantics", async ({ page }) => {
-  await page.goto("/cstd/en/voxel", { waitUntil: "domcontentloaded" });
+  await page.goto("/en/voxel", { waitUntil: "domcontentloaded" });
   const game = page.locator("[data-cstd-voxel-game]");
   await expect(game).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
   await expect(page.getByRole("heading", { level: 1, name: "PORTFOLIO//CITY 77" })).toBeVisible();

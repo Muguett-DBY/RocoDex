@@ -5,7 +5,6 @@ import { createCstdJsonFeed } from "./json-feed";
 import { serializeCstdLlms } from "./llms";
 import { CSTD_SECURITY_TXT, createCstdSecurityTxtResponse } from "./security";
 import { getPersonalHomepageSitemapEntries } from "./sitemap";
-import { consumeCstdTelemetryQuota, parseCstdMetric } from "./telemetry";
 
 describe("CSTD publishing infrastructure", () => {
   test("publishes every bilingual deep route in the sitemap", () => {
@@ -55,20 +54,4 @@ describe("CSTD publishing infrastructure", () => {
     expect(getRootSecurityTxt().status).toBe(200);
   });
 
-  test("accepts only bounded anonymous telemetry", () => {
-    const dimensions = { device: "desktop", renderTier: "lite" } as const;
-    expect(parseCstdMetric({ name: "LCP", value: 842.3, page: "home", path: "/", ...dimensions })).toEqual({ name: "LCP", value: 842.3, page: "home", path: "/", ...dimensions });
-    expect(parseCstdMetric({ name: "atlas_district", value: 3, page: "home", path: "/", device: "mobile", renderTier: "image" })).not.toBeNull();
-    expect(parseCstdMetric({ name: "email", value: 1, page: "home", path: "/", ...dimensions })).toBeNull();
-    expect(parseCstdMetric({ name: "CLS", value: Number.NaN, page: "home", path: "/", ...dimensions })).toBeNull();
-    expect(parseCstdMetric({ name: "INP", value: 100, page: "x".repeat(81), path: "/", ...dimensions })).toBeNull();
-    expect(parseCstdMetric({ name: "INP", value: 100, page: "home", path: "/", device: "desktop", renderTier: "unknown" })).toBeNull();
-  });
-
-  test("rate limits telemetry by a non-reversible in-memory identity", () => {
-    expect(consumeCstdTelemetryQuota("203.0.113.10", 1_000, 2).allowed).toBe(true);
-    expect(consumeCstdTelemetryQuota("203.0.113.10", 1_100, 2).allowed).toBe(true);
-    expect(consumeCstdTelemetryQuota("203.0.113.10", 1_200, 2)).toMatchObject({ allowed: false });
-    expect(consumeCstdTelemetryQuota("203.0.113.10", 62_000, 2).allowed).toBe(true);
-  });
 });

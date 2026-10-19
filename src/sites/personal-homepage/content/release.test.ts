@@ -23,13 +23,4 @@ describe("CSTD release identity", () => {
     expect(cstdReleaseLedger.release).toBe(CSTD_RELEASE);
   });
 
-  test("RUM audit budget references resolve inside the shared budgets block", () => {
-    for (const [metricName, config] of Object.entries(cstdPerformanceContract.rumAudit.metrics)) {
-      for (const budgetKey of [config.desktopBudgetKey, config.mobileBudgetKey]) {
-        const threshold = cstdPerformanceContract.budgets[budgetKey as keyof typeof cstdPerformanceContract.budgets];
-        expect(threshold, `${metricName} references unknown budget ${budgetKey}`).toBeGreaterThan(0);
-        expect(cstdPerformanceContract.rumAudit.bucketEdges[metricName as keyof typeof cstdPerformanceContract.rumAudit.bucketEdges]).toContain(threshold);
-      }
-    }
-  });
 });

@@ -1,55 +1,23 @@
-# CSTD operations
+# 个人主页运行说明
 
-## Public and internal routes
+生产站点：https://custard.top；英文：https://custard.top/en。RocoDex 静态存档：https://rocodex.custard.top。
 
-Production exposes clean URLs on `custard.top`:
+## 静态交付
 
-- `/work` and `/work/[slug]`
-- `/notes` and `/notes/[slug]`
-- `/lab` and `/lab/[slug]`
-- `/about`, `/now`, and `/resume`
-- `/en` and corresponding `/en/*` routes
-- `/rss.xml`, `/robots.txt`, and `/sitemap.xml`
+页面、JSON、RSS、站点地图、机器人规则和分享图片均在构建时生成。Cloudflare 根据域名返回对应站点的文件，无 Next.js 后台、OpenNext 缓存层、登录会话、自建指标上报或数据库调用。
 
-`src/proxy.ts` rewrites those paths to internal `/cstd/*` route adapters. Preview and local environments may use the internal paths directly. Unknown paths on the apex host stay behind the CSTD-specific 404 and cannot leak RocoDex pages.
+中文首页固定为 /，英文固定为 /en，使用页面上的语言链接切换。页面不会按 Cookie 或 Accept-Language 改变，同一个 URL 可以直接缓存。安全响应头与媒体缓存由构建生成的 _headers 提供。
 
-## Runtime signals
+## 性能与费用
 
-`CstdTelemetry` collects only LCP, INP, CLS, visual-budget changes, and guide answer/refusal counts. Payloads contain a bounded metric name, numeric value, route label, and path. They contain no question text, user identifier, IP-derived identifier, cookie, or account data.
+- Cloudflare Static Assets 直接处理静态访问，没有自定义 Worker 代码执行与对应 CPU 消耗。控制台的历史 CPU 累计不会因迁移归零。
+- 账户的 Workers 基础套餐仍供 MoovCare、Hireway 等动态服务共用；静态化不会取消其他项目需要的套餐。
+- 首屏与懒加载 3D 包预算保留。默认图片展示，用户主动开启后才加载 GPU 运行时。
+- 已移除自建访问指标 API、Redis 聚合和每周遥测工作流。需要流量观察时使用平台已有统计，不重新搭一套上报后台。
+- CPU 用量是累计计算时间，不是实时 CPU 占用率，也不是网页停留时间。
 
-The browser posts to `/api/cstd-vitals` only in production. The endpoint:
+## 发布验收
 
-- accepts only the personal-site host;
-- rate limits each identity to 30 requests per minute through Upstash Redis when telemetry credentials are configured (per-instance in-memory fallback otherwise);
-- rejects payloads over 2 KiB;
-- validates a closed metric-name set and bounded fields;
-- writes one structured Vercel log line, aggregates LCP/INP/CLS value buckets into Redis, and returns `204`;
-- never persists a user profile.
+沿用 docs/MAINTENANCE.md 的验证和发布命令。生产检查包括中英文 HTML、公开 JSON、语言和安全响应头、站点地图、分享素材、深层导航、错误页面，以及不再请求 /api/auth/session 或 /api/cstd-vitals。
 
-### Field vitals audit (closes the performance contract)
-
-When `CSTD_TELEMETRY_REDIS_URL`/`CSTD_TELEMETRY_REDIS_TOKEN` are present they win; otherwise the sink reuses the first complete pair among the Vercel Marketplace `KV_REST_API_URL`/`KV_REST_API_TOKEN` credentials (the same pair RocoDex account storage prefers, and the only pair the Vercel CLI can pull), then the `UPSTASH_REDIS_REST_*` and `UPSTASH_REDIS_*` variables. With a pair present, the vitals endpoint aggregates daily, per-device value-bucket hashes under `cstd:vitals:<yyyymmdd>:<METRIC>:<device>` with a 40-day TTL. The weekly `CSTD Field Vitals Audit` GitHub Actions workflow runs `node scripts/audit-cstd-vitals.mjs`, which replays the trailing 28 days against the `rumAudit` thresholds published in `performance-contract.json` (LCP 1800 ms desktop / 2500 ms mobile, INP 150 ms, CLS 0.03; at least 75% of samples within budget with at least 30 samples) and fails the run on a breach. The workflow reads the `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` repository secrets; without them the audit exits 0 with a skip notice. `verify:cstd:performance-contract` keeps the thresholds, bucket edges, audit script, and workflow build-linked.
-
-The homepage entry also negotiates the locale from `Accept-Language` when no `cstd-locale` cookie exists (explicit cookie always wins), and the proxy edge 404 and the React not-found page share one copy source in `infrastructure/not-found.ts`. All canonical `https://custard.top` URLs resolve through `infrastructure/origin.ts`, so preview builds can override them with `CSTD_ORIGIN`.
-
-## Release checklist
-
-1. Run `npm run lint`, `npm test`, `npm run build`, and `npm run verify:personal-bundle`.
-2. Run `npm run test:e2e:personal` in desktop and mobile Chromium.
-3. Check dependency audit at high severity.
-4. Push only the intended CSTD changes; never stage `.reasonix/`, Playwright output, or unrelated RocoDex work.
-5. Wait for GitHub Actions, then publish the verified OpenNext bundle with the existing Cloudflare deployment command. Vercel is not the production host.
-6. Verify clean Chinese and English routes, RSS, sitemap, security headers, guide refusal, Lab controls, homepage WebGL, and both production domains.
-7. After telemetry storage is configured, check the latest `CSTD Field Vitals Audit` run summary (`gh run view --workflow "CSTD Field Vitals Audit"`) or trigger it with `gh workflow run "CSTD Field Vitals Audit"`.
-
-## Cloudflare CPU（2026-10-20）
-
-`custard-web-platform` 同时承载个人主站和 RocoDex，不是 MoovCare 的子服务。2026-10-01 至 10-19 17:02 UTC 的 45,114 次调用累计使用约 2,305 秒 CPU，平均每次约 51 ms；这是账号套餐包含 CPU 的约 7.68%，不是服务器持续占用 7.68% CPU。没有 Cron、容器、队列或 Durable Object 绑定。
-
-七天调用日志采用平台抽样（`abr_level: 100`），样本包含公开页面、动态站点地图及扫描器的不存在路径；不能据此声称某一路径占完整月份 CPU 的精确百分比。生产调用栈采样接口在预热后仍返回 `No recent executions`，没有获得生产火焰图。
-
-公开页面原本已预生成，但只有 Next 内部缓存命中，仍需进入 NextServer。现启用 OpenNext 原生 `enableCacheInterception`，缓存命中直接返回 HTML/RSC。适配器升级并锁定至 1.20.12，配套 Next/ESLint 插件 16.4.2；新版包含 Next 16 分段预取循环的官方修复，不自行修补请求协议。`@node-minify/core` 的 `glob` 限定为已修复的 10.5.0，避免构建工具带入已知命令注入漏洞。
-
-图标、分享预览图和浏览器案例 Worker 文件走 Workers Static Assets，不再进入 Next 路由；`public/_headers` 为静态响应保留 `nosniff`。登录、注册、会话和账户写入仍动态处理，不参与页面直返；首页语言选择保留 `private` 缓存和 `Vary: Accept-Language, Cookie`，不进入共享缓存。
-
-真实本地 Worker 验证了两站页面、双语和 Host 隔离、HTML/RSC 类型、`/_tree` 分段预取、登录/注册/会话不命中缓存、390 像素布局以及闲置八秒没有新的 RSC 请求。相同新版本构建、预热两次后六次请求的中位总耗时，札记页约 14.59 → 11.89 ms，项目详情约 19.60 → 15.28 ms；首页约 18.54 → 18.37 ms。数字包含本机模拟器和传输，不是生产 CPU 或全球延迟保证。已发生的套餐累计用量不会因发布而退回。
+参考：[Static Assets 计费](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/)、[Next.js 静态导出](https://nextjs.org/docs/app/guides/static-exports)。

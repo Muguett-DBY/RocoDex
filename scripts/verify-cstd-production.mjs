@@ -46,27 +46,6 @@ for (const { path, language, marker } of htmlSurfaces) {
   htmlResponses.set(path, response);
 }
 
-const languageCases = [
-  { header: "zh-CN,zh;q=0.9,en;q=0.8", language: "zh-CN", status: 200 },
-  { header: "zh-Hant-TW,zh;q=0.9,en;q=0.8", language: "zh-CN", status: 200 },
-  { header: "en-AU,en;q=0.9", language: "en-AU", status: 307 },
-  { header: "zh;q=0.5,en;q=0.9", language: "en-AU", status: 307 },
-  { header: "en-AU", saved: "zh", language: "zh-CN", status: 200 },
-  { header: "zh-CN", saved: "en", language: "en-AU", status: 307 },
-];
-for (const entry of languageCases) {
-  const response = await fetch(`${origin}/`, {
-    redirect: "manual",
-    headers: { "accept-language": entry.header, ...(entry.saved ? { cookie: `cstd-locale=${entry.saved}` } : {}) },
-    signal: AbortSignal.timeout(timeoutMs),
-  });
-  if (response.status !== entry.status || response.headers.get("content-language") !== entry.language) throw new Error(`Root language selection failed for ${entry.header}, saved=${entry.saved ?? "none"}`);
-  const vary = response.headers.get("vary") ?? "";
-  if (!/accept-language/i.test(vary) || !/cookie/i.test(vary) || !/\b(?:private|no-store)\b/i.test(response.headers.get("cache-control") ?? "")) throw new Error("Root language selection is not isolated from shared caches");
-  if (entry.status === 307 && new URL(response.headers.get("location"), origin).pathname !== "/en") throw new Error("English entry redirect is invalid");
-  await response.body?.cancel();
-}
-
 for (const [locale, prefix] of [["zh", ""], ["en", "/en"]]) {
   const resume = await (await get(`${prefix}/resume.json`)).json();
   if (resume.schemaVersion !== 2 || resume.locale !== locale) throw new Error(`${locale} public resume schema is invalid`);
@@ -132,7 +111,7 @@ if (englishManifestPayload.short_name !== "Custard" || englishManifestPayload.la
 const englishFeed = await get("/en/feed.json");
 if (englishFeed.headers.get("content-language") !== "en-AU") throw new Error("English JSON Feed language header is invalid");
 const englishFeedPayload = await englishFeed.json();
-if (englishFeedPayload.language !== "en-AU" || englishFeedPayload.feed_url !== `${origin}/en/feed.json`) throw new Error("English JSON Feed identity is invalid");
+if (englishFeedPayload.language !== "en-AU" || englishFeedPayload.feed_url !== "https://custard.top/en/feed.json") throw new Error("English JSON Feed identity is invalid");
 
 const sitemap = await get("/sitemap.xml");
 const sitemapBody = await sitemap.text();
@@ -141,4 +120,4 @@ if (!sitemapBody.includes('hreflang="zh-CN"') || !sitemapBody.includes('hreflang
 const worker = await get("/cstd-case-worker.js");
 if (!(await worker.text()).includes('"crm-lock"')) throw new Error("Production Worker is missing the CRM lock capsule");
 
-console.log(`CSTD production smoke OK: ${origin}, ${htmlSurfaces.length} bilingual HTML surfaces, ${jsonEndpoints.length} public contracts, ${languageCases.length} browser-language cases, 2 private-detail-free resumes with 74 detailed timeline entries, localized manifests/feed/sitemap, 5 experience acts, 5 topics, 4 proof capsules, content health 100.`);
+console.log(`CSTD production smoke OK: ${origin}, ${htmlSurfaces.length} bilingual HTML surfaces, ${jsonEndpoints.length} public contracts, 0 browser-language cases, 2 private-detail-free resumes with 74 detailed timeline entries, localized manifests/feed/sitemap, 5 experience acts, 5 topics, 4 proof capsules, content health 100.`);

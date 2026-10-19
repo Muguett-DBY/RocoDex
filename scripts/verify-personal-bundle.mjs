@@ -9,14 +9,14 @@ if (process.env.VERCEL === "1") {
 
 const nextRoot = path.resolve(".next");
 const performanceContract = JSON.parse(readFileSync(path.resolve("src/sites/personal-homepage/content/performance-contract.json"), "utf8"));
-const routeKey = "/(personal)/cstd/page";
+const routeKey = "/(personal)/page";
 const clientManifestPath = path.join(
   nextRoot,
-  "server/app/(personal)/cstd/page_client-reference-manifest.js",
+  "server/app/(personal)/page_client-reference-manifest.js",
 );
 const loadableManifestPath = path.join(
   nextRoot,
-  "server/app/(personal)/cstd/page/react-loadable-manifest.json",
+  "server/app/(personal)/page/react-loadable-manifest.json",
 );
 const initialBudget = performanceContract.budgets.initialJavascriptBytes;
 const startupBudget = performanceContract.budgets.startupJavascriptBytes;
@@ -53,7 +53,7 @@ if (!routeManifest?.entryJSFiles) {
 const initialAssets = unique(Object.values(routeManifest.entryJSFiles).flat());
 const initialBytes = bytesFor(initialAssets);
 const initialAssetReport = initialAssets.map((asset) => ({ asset, bytes: statSync(assetPath(asset)).size }));
-// 入口页按访客做语言协商（proxy 设 no-store），force-dynamic 渲染，无预渲染 HTML 可查。
+// 静态导出的首页与客户端增强使用同一份入口资源预算。
 const startupAssets = unique(initialAssets);
 const startupBytes = bytesFor(startupAssets);
 const startupAssetReport = startupAssets.map((asset) => ({ asset, bytes: statSync(assetPath(asset)).size }));

@@ -1,16 +1,9 @@
-# RocoDex
+# RocoDex 静态存档
 
-RocoDex 是仓库的核心图鉴产品，目前处于稳定维护期。它继续在线运行并接受安全、兼容性和故障修复，只是暂不进行常规功能扩展。页面位于 `src/app/(rocodex)`；现有 `src/components`、`src/data`、`src/hooks`、`src/lib` 和 `src/types` 均默认属于 RocoDex。
+RocoDex 已停止功能维护，继续在 https://rocodex.custard.top 提供图鉴、攻略、搜索、对比和浏览器本地收藏。
 
-`(rocodex)` 是 Next.js 路由组，不会改变任何生产 URL。它的布局独占 AuthProvider、RocoDex 元数据和页面底色，因此个人主站不再初始化账号会话。
+页面源码在 archive/rocodex/app，静态导出在 archive/rocodex/out。原有 src/components、data、hooks、lib、types 仍归图鉴使用；本目录只保存元数据、站点地图和静态安全响应头。
 
-本目录只收纳需要明确站点边界的入口级代码，例如 metadata 和 sitemap。稳定的图鉴领域代码不会仅为了目录对称而整体搬迁。
+登录、注册、账号存储、会话与相关接口已删除。收藏仍使用原域名的 localStorage。查询参数在浏览器读取，不再运行后台渲染。
 
-`security.ts` 定义生产 Host 和浏览器安全响应头。注册接口的配额与原子用户名占位位于账号存储层，维护时不得退回查询后覆盖写入。
-
-## 验证
-
-```bash
-npm test
-npm run test:e2e:rocodex
-```
+npm run dev:rocodex 启动存档开发服务器；npm run build 导出两个站点；npm run test:e2e:rocodex 验证存档页面。

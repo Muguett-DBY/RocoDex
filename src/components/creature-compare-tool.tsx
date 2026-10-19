@@ -6,14 +6,16 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select } from "@/components/ui/select";
-import { compareCreatures } from "@/lib/creature-compare";
+import { compareCreatures, parseComparisonIds } from "@/lib/creature-compare";
+import { useSearchParams } from "next/navigation";
 import type { Creature } from "@/types/creature";
 import type { GuideCreatureBuild } from "@/types/guide";
 
-export function CreatureCompareTool({ initialIds = ["001", "005", "008"] }: { initialIds?: string[] }) {
+export function CreatureCompareTool() {
+  const searchParams = useSearchParams();
   const [creatures, setCreatures] = useState<Creature[]>([]);
   const [guideBuilds, setGuideBuilds] = useState<GuideCreatureBuild[]>([]);
-  const [ids, setIds] = useState<string[]>(initialIds);
+  const [ids, setIds] = useState<string[]>([]);
   const comparison = useMemo(() => compareCreatures(creatures, guideBuilds, ids), [creatures, guideBuilds, ids]);
 
   useEffect(() => {
@@ -22,11 +24,13 @@ export function CreatureCompareTool({ initialIds = ["001", "005", "008"] }: { in
       if (!active) return;
       setCreatures(creatureModule.creatures);
       setGuideBuilds(guideModule.guideBuilds);
+      const requested = parseComparisonIds(searchParams.get("ids") ?? undefined, creatureModule.creatures);
+      setIds(requested.length ? requested : ["001", "005", "008"]);
     });
     return () => {
       active = false;
     };
-  }, []);
+  }, [searchParams]);
 
   if (creatures.length === 0 || guideBuilds.length === 0) {
     return (

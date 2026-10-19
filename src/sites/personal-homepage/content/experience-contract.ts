@@ -47,7 +47,7 @@ export const cstdExperienceContract = {
     "interaction-reveals-proof",
     "normal-document-scroll",
     "progressive-visual-runtime",
-    "anonymous-bounded-telemetry",
+    "static-delivery-without-backend",
   ] as const,
 } as const;
 

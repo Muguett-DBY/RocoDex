@@ -1,5 +1,5 @@
-import type { CstdLocale } from "../content/content-types";
-import { cstdLocaleConfig } from "./i18n";
+import type { CstdLocale } from "../content/content-types.ts";
+import { cstdLocaleConfig } from "./i18n.ts";
 
 export const cstdNotFoundCopy: Readonly<Record<CstdLocale, {
   eyebrow: string;

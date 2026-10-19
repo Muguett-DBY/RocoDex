@@ -13,14 +13,8 @@ type CstdLinkProps = Omit<ComponentProps<typeof Link>, "href" | "prefetch"> & {
 const navigationStateKey = "cstd:last-navigation";
 const routeKindMetric = { work: 1, reading: 2, path: 3, execute: 4, district: 5 } as const;
 
-function getLocalDevelopmentHref(href: string) {
-  if (!href.startsWith("/") || href.startsWith("/cstd")) return href;
-  return href === "/" ? "/cstd" : `/cstd${href}`;
-}
-
 export function resolveCstdHref(href: string) {
-  const host = window.location.hostname.toLowerCase();
-  return host === "custard.top" || host === "www.custard.top" ? href : getLocalDevelopmentHref(href);
+  return href;
 }
 
 export function CstdLink({

@@ -21,28 +21,30 @@
     "cls": 0.03,
     "highTierFramesPerSecond": 55
   },
-  "rumAudit": {
-    "schemaVersion": 1,
-    "windowDays": 28,
-    "minimumSamples": 30,
-    "goodFraction": 0.75,
-    "metrics": {
-      "LCP": { "kind": "milliseconds", "desktopBudgetKey": "desktopLcpMilliseconds", "mobileBudgetKey": "mobileLcpMilliseconds" },
-      "INP": { "kind": "milliseconds", "desktopBudgetKey": "inpMilliseconds", "mobileBudgetKey": "inpMilliseconds" },
-      "CLS": { "kind": "unit", "desktopBudgetKey": "cls", "mobileBudgetKey": "cls" }
-    },
-    "bucketEdges": {
-      "LCP": [800, 1800, 2500, 4000],
-      "INP": [50, 150, 200, 500],
-      "CLS": [0.01, 0.03, 0.1, 0.25]
-    }
-  },
   "delivery": {
-    "runtimeFallbackOrder": ["webgpu", "webgl", "image"],
+    "runtimeFallbackOrder": [
+      "webgpu",
+      "webgl",
+      "image"
+    ],
     "defaultRuntimeTier": "image",
     "enhancedRuntimeTrigger": "explicit-user-action",
-    "immutableAssetRoots": ["cstd-atelier", "cstd-archive", "cstd-districts", "cstd-materials", "cstd-persona", "cstd-stage", "cstd-themes", "cstd-universe", "cstd-world", "fonts/cstd"],
-    "imageFormats": ["avif", "webp"],
+    "immutableAssetRoots": [
+      "cstd-atelier",
+      "cstd-archive",
+      "cstd-districts",
+      "cstd-materials",
+      "cstd-persona",
+      "cstd-stage",
+      "cstd-themes",
+      "cstd-universe",
+      "cstd-world",
+      "fonts/cstd"
+    ],
+    "imageFormats": [
+      "avif",
+      "webp"
+    ],
     "imageMinimumCacheTtlSeconds": 2678400
   },
   "cacheComponents": {

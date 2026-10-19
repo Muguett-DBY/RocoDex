@@ -1,10 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const port = Number(process.env.PLAYWRIGHT_PORT ?? 3100);
-const baseURL = `http://127.0.0.1:${port}`;
-const inheritedEnvironment = Object.fromEntries(
-  Object.entries(process.env).filter((entry): entry is [string, string] => typeof entry[1] === "string"),
-);
+const baseURL = `https://127.0.0.1:${port}`;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -13,10 +10,12 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: 1,
   reporter: "line",
+  outputDir: "test-results/personal",
   timeout: 45_000,
   expect: { timeout: 10_000 },
   use: {
     baseURL,
+    ignoreHTTPSErrors: true,
     contextOptions: {
       reducedMotion: process.env.CI ? "reduce" : "no-preference",
     },
@@ -34,19 +33,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npm run build && npm run start -- --hostname 127.0.0.1 --port ${port}`,
-    url: `${baseURL}/cstd/status.json`,
+    command: `npm run build && npx wrangler dev --local-protocol https --port ${port}`,
+    url: `${baseURL}/status.json`,
     reuseExistingServer: !process.env.CI,
+    ignoreHTTPSErrors: true,
     timeout: 300_000,
-    env: {
-      ...inheritedEnvironment,
-      AUTH_SECRET: "rocodex-e2e-only-secret-with-sufficient-length",
-      AUTH_TRUST_HOST: "true",
-      NEXTAUTH_URL: baseURL,
-      UPSTASH_REDIS_REST_TOKEN: "",
-      UPSTASH_REDIS_REST_URL: "",
-      UPSTASH_REDIS_TOKEN: "",
-      UPSTASH_REDIS_URL: "",
-    },
   },
 });

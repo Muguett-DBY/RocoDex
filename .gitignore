@@ -136,3 +136,14 @@ scrollcraft/builds/*/assets/
 
 # Windows reserved name accidentally created by 2>nul style redirects in Git Bash
 nul
+
+/archive/rocodex/.next/
+/archive/rocodex/out/
+/archive/rocodex/public/
+/archive/rocodex/next-env.d.ts
+!archive/rocodex/app/robots.txt/
+!archive/rocodex/app/robots.txt/*.ts
+!src/app/(personal)/llms.txt/
+!src/app/(personal)/llms.txt/route.ts
+!src/app/(personal-en)/en/llms.txt/
+!src/app/(personal-en)/en/llms.txt/route.ts

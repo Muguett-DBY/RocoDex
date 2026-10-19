@@ -1,61 +1,22 @@
-<!-- Project artwork created for this repository. -->
-<p align="center">
-  <img src="./docs/assets/readme-banner.svg" width="100%" alt="RocoDex — Explore the data. Find a build. Keep a favourite." />
-</p>
+# 奶黄包的个人主页
 
-<h1 align="center">Custard Web Platform</h1>
+作品、技术札记、个人履历和一些可以在浏览器里玩的实验。
 
-<p align="center">
-  <img src="./docs/assets/readme-badges.svg" alt="Maintenance · Next.js · React · TypeScript · Cloudflare Workers" />
-</p>
+- [个人主页](https://custard.top) · [English](https://custard.top/en)
+- [RocoDex 静态存档](https://rocodex.custard.top)：停止功能维护，保留图鉴、攻略、搜索和本地收藏。
 
-**My personal website and engineering workspace, with the RocoDex game guide retained in the same deployment.**
+使用 Next.js、React 和 TypeScript。两个站点在构建时生成 HTML、导航数据和静态资源，由 Cloudflare Static Assets 直接提供；没有 Next.js 后台、登录、会话、数据库或自建访问指标接口。
 
-<p align="center"><a href="#what-is-here">What is here</a> &nbsp; · &nbsp; <a href="#run-locally">Run locally</a> &nbsp; · &nbsp; <a href="#find-your-way-around">Find your way around</a></p>
+使用 Node.js 24、npm 12：
 
-[Personal website](https://custard.top) · [RocoDex](https://rocodex.custard.top) · [Architecture](docs/architecture.md) · [Data sources](docs/guide_sources.md)
-
-
-<p align="center">
-  <img src="./docs/assets/interface.png" width="100%" alt="Live RocoDex interface, captured on 2026-10-10. The app is primarily Chinese." />
-</p>
-
-<sub>Live RocoDex interface, captured on 2026-10-10. The app is primarily Chinese.</sub>
-
-
-## What is here
-
-- **Primary surface:** the personal website, with projects, engineering notes, and interactive experiments.
-- **Retained surface:** RocoDex, with creature data, search, builds, teams, and saved favourites.
-- The two sites share a deployment while their routes and product code stay separate.
-
-The personal website is the main maintenance focus. RocoDex is retained for reliability and compatibility; it is not the primary product-development track.
-
-The live sites share the `custard-web-platform` Cloudflare Worker, built with OpenNext. `rocodex.custard.top` serves RocoDex; `custard.top` and `www.custard.top` serve the personal site.
-
-## Run locally
-
-Use Node.js **24.x** and the npm version in `package.json`.
-
-```bash
+```sh
 npm ci
-npm run dev
+npm run dev             # 个人主页 localhost:3000
+npm run dev:rocodex     # 存档 localhost:3001
+npm run build           # 导出两个静态站
+npm run cf:deploy       # 发布两个域名
 ```
 
-Open `http://localhost:3000` for RocoDex or `/cstd` for the separate personal site. Account features require `AUTH_SECRET` or `NEXTAUTH_SECRET`.
+检查与发布说明见 [维护文档](docs/MAINTENANCE.md)，目录边界见 [架构说明](docs/architecture.md)。
 
-## Find your way around
-
-| Area | Location |
-| --- | --- |
-| RocoDex pages | `src/app/(rocodex)/` |
-| Creature, build, and team data | `src/data/` |
-| Personal website | `src/sites/personal-homepage/` |
-| Site boundaries and routing | [Architecture](docs/architecture.md) |
-| Setup, checks, and deployment | [Maintenance reference](docs/MAINTENANCE.md) |
-
-Use `npm run verify` for the main checks and `npm run test:e2e:rocodex` for the RocoDex browser tests.
-
-This is an unofficial fan project. See the [disclaimer](DISCLAIMER.md), [data gaps](docs/data_gaps.md), and [PvP sources](docs/pvp_sources.md).
-
-Original code is available for noncommercial use under [PolyForm Noncommercial 1.0.0](LICENSE). See [license scope and third-party assets](docs/LICENSE_SCOPE.md).
+RocoDex 是非官方爱好者项目，参见 [免责声明](DISCLAIMER.md)、[数据来源](docs/guide_sources.md) 和 [许可范围](docs/LICENSE_SCOPE.md)。原创代码采用 [PolyForm Noncommercial 1.0.0](LICENSE)。

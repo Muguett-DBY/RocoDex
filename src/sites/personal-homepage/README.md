@@ -39,15 +39,13 @@ Cloudflare 的 asset-first 路由、媒体构建检查和 apex Host 路由都必
 - `domain/dcf-model.ts`、`failure-drill.ts` 与 `route-transition.ts` 保存可独立测试的实验、纪录片和导航状态机，交互组件不得复制核心判断。
 - `experience/runtime-capabilities.ts` 依据数据节省、网络、视口像素与设备密度选择增强视觉的 `full / lite / image` 档位；`quality-controller.ts` 在持续低帧率后可解释地降级。
 - 首页保持五幕普通文档流：身份信号、能力系统、作品与可执行证据、技术札记、开放联络。证据幕只投影三项代表作、一条可检查的决策链和一个确定性重放，完整档案进入深层页面。
-- 首页根编排和纯展示章节必须保持服务端组件；`homepage-runtime.tsx` 只负责导航、滚动、指针、遥测与可选 GPU，能力切换和案例 Worker 是独立客户端岛。不要用立即挂载的 `React.lazy` 伪装视口延迟。
+- 首页根编排和纯展示章节必须保持服务端组件；`homepage-runtime.tsx` 只负责导航、滚动、指针与可选 GPU，能力切换和案例 Worker 是独立客户端岛。不要用立即挂载的 `React.lazy` 伪装视口延迟。
 - 首页不得恢复常驻 HUD、场景导演、自动音频、发布重放或知识路径播放器；这些交互会把个人展示页重新推向应用控制台，并增加固定层和持续动画成本。
 
 公开机器契约包括 `observatory.json`、`performance.json`、`experience.json`、`content-health.json`、`studio.json`、`proof.json`、`graph.json`、`releases.json`、`topics.json`、`manifest.webmanifest` 与 `.well-known/security.txt`。中英文入口应保持同一 schema 和发布版本。发布版本以 `content/release.ts` 的 `CSTD_RELEASE` 为唯一真源；生产域名以 `infrastructure/origin.ts` 为唯一真源，preview 构建可用 `CSTD_ORIGIN` 环境变量覆盖。
 
 ## 运行时观测
 
-- `/api/cstd-vitals` 由 `infrastructure/telemetry-store.ts` 支撑：配置了 `CSTD_TELEMETRY_REDIS_URL`/`CSTD_TELEMETRY_REDIS_TOKEN`（或复用 `UPSTASH_REDIS_REST_*`）时用 Upstash Redis 做 30 次/分限流与 LCP/INP/CLS 按日、按设备的价值桶聚合；未配置时自动退化为进程内限流，仅保留结构化日志。
-- `.github/workflows/cstd-vitals-audit.yml` 每周运行 `scripts/audit-cstd-vitals.mjs`，把 28 天现场数据对照 `performance-contract.json` 的 `rumAudit` 阈值并公布结论；阈值与桶边界由 `verify:cstd:performance-contract` 保证一致。
 - 首页入口在无 `cstd-locale` cookie 时按浏览器 `Accept-Language` 的权重协商中英文，兼容中文脚本和英文地区变体；缺少可用语言时回退中文。手动选择优先，显式中英文链接保持原语言。入口响应使用 `Vary: Accept-Language, Cookie` 与 `private, no-store`，避免串用其他访客的语言；切换后完整导航，避免预加载恢复旧语言。
 - 公开个人资料以 `content/profile.ts` 为唯一来源，仅保留昵称、专业、研究兴趣与项目能力。学校、个人所在地和就读年份不进入页面、搜索结构化数据或 `resume.json`。履历 JSON schema 2 使用 `stage` / `field` 表达专业阶段，不发布学校、就读区间或所在地；博 0 明确表示准备博士阶段。
 - 代理边缘 404 与 React not-found 页共用 `infrastructure/not-found.ts` 的同一份文案。
@@ -82,7 +80,7 @@ Cloudflare 的 asset-first 路由、媒体构建检查和 apex Host 路由都必
 
 ## 验证
 
-Cloudflare 构建后的 `scripts/cf-post-build.mjs` 会把 Next 16.3 的不可变页面缓存同时放到原始路径与带来源模块哈希的路径。新的键直接取自构建产物 `meta.routeCache`，并验证来源哈希；不要在运行时去掉这个哈希，否则不同路由模块可能读到彼此的页面。案例、专题及中英文深层路由需在 Wrangler 预览中检查，再部署。
+生产使用 Next.js 静态导出，个人主页公开路径直接对应源码，无 Host 改写或 OpenNext 缓存层。两个站点分别发布静态文件，见 docs/architecture.md。
 
 ```bash
 npm run content:check
@@ -98,4 +96,4 @@ npm run verify:cstd
 npm run verify:cstd:release
 ```
 
-`verify:cstd` 是本地完整质量门；`verify:cstd:release` 在此基础上验证发布候选和线上生产契约。CI 将 Host/模块边界、静态质量与构建、CSTD E2E、RocoDex E2E 分成独立状态。`resume.json` 与 `en/resume.json` 是机器可读履历入口；`/api/cstd-vitals`、Vercel Web Analytics 和 Speed Insights 组成匿名生产观测层。
+`verify:cstd` 是本地完整质量门；`verify:cstd:release` 在此基础上验证发布候选和线上生产契约。CI 将 Host/模块边界、静态质量与构建、CSTD E2E、RocoDex E2E 分成独立状态。`resume.json` 与 `en/resume.json` 是机器可读履历入口；访问统计使用平台现成能力，已移除自建遥测后台。

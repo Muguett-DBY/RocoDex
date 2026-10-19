@@ -9,11 +9,14 @@ import { Button } from "@/components/ui/button";
 import { useCreatureCollection } from "@/hooks/use-creature-collection";
 import { getCollectionGuideHref } from "@/lib/collection-guide-links";
 import { summarizeCollectionInsights } from "@/lib/collection-insights";
-import { buildCollectionCompareHref, buildCollectionShareHref } from "@/lib/creature-collection";
+import { buildCollectionCompareHref, buildCollectionShareHref, parseSharedCollectionIds } from "@/lib/creature-collection";
+import { useSearchParams } from "next/navigation";
 import type { Creature } from "@/types/creature";
 import type { GuideCreatureBuild } from "@/types/guide";
 
-export function CollectionWorkspace({ sharedIds = [] }: { sharedIds?: string[] }) {
+export function CollectionWorkspace() {
+  const searchParams = useSearchParams();
+  const sharedIds = parseSharedCollectionIds(searchParams.get("ids") ?? undefined);
   const { ids, hydrated, addMany, clear } = useCreatureCollection();
   const [creatures, setCreatures] = useState<Creature[]>([]);
   const [guideBuilds, setGuideBuilds] = useState<GuideCreatureBuild[] | null>(null);

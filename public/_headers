@@ -4,6 +4,9 @@
 /_next/static/*
   Cache-Control: public, max-age=31536000, immutable
 
+/cstd-atelier/*
+  Cache-Control: public, max-age=31536000, immutable
+
 /cstd-archive/*
   Cache-Control: public, max-age=31536000, immutable
 
@@ -34,7 +37,7 @@
 /cstd-world/*
   Cache-Control: public, max-age=31536000, immutable
 
-/fonts/*
+/fonts/cstd/*
   Cache-Control: public, max-age=31536000, immutable
 
 /images/*
