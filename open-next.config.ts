@@ -7,4 +7,6 @@ export default defineCloudflareConfig({
   // cache entries are bundled into assets under cdn-cgi/_next_cache and read
   // through the ASSETS binding.
   incrementalCache: staticAssetsIncrementalCache,
+  // Serve prerendered HTML/RSC without loading NextServer on a cache hit.
+  enableCacheInterception: true,
 });

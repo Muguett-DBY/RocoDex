@@ -338,8 +338,8 @@ for (const v of VARIANTS) {
       x: Math.max(0, Math.round(rect.x)), y: Math.max(0, Math.round(rect.y)),
       width: Math.max(4, Math.min(Math.round(rect.w), 520)), height: Math.max(4, Math.min(Math.round(rect.h), 240)),
     };
-    let buf = null;
-    try { buf = await page.screenshot({ clip }); } catch (err) { buf = null; }
+    let buf;
+    try { buf = await page.screenshot({ clip }); } catch { buf = null; }
     await page.evaluate((k) => window.__audit.showText(k), e.key).catch(() => {});
     if (!buf) { e.sample = { note: "截图失败" }; continue; }
     const s = await page.evaluate((b64) => window.__audit.sample(b64), buf.toString("base64"));

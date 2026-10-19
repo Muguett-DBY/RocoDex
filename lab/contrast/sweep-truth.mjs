@@ -3,8 +3,6 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 await page.goto("http://127.0.0.1:4633/cstd", { waitUntil: "domcontentloaded" });
 await page.waitForFunction(() => document.querySelectorAll(".pin-spacer").length >= 2, null, { timeout: 20000 }).catch(() => {});
-let mismatches = 0;
-let samples = 0;
 await page.evaluate(async () => {
   const step = 200;
   const h = document.documentElement.scrollHeight;
@@ -16,7 +14,7 @@ await page.evaluate(async () => {
     const folio = document.querySelector(".folio");
     const colophon = document.querySelector("[data-colophon]");
     if (!folio || !colophon) continue;
-    const vh = innerHeight, fh = folio.offsetHeight;
+    const vh = innerHeight;
     const rect = colophon.getBoundingClientRect();
     const covered = rect.top <= vh / 2 && rect.bottom >= vh / 2;
     const isDark = folio.classList.contains("is-dark");

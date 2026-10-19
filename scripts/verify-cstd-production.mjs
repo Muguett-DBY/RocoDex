@@ -62,7 +62,7 @@ for (const entry of languageCases) {
   });
   if (response.status !== entry.status || response.headers.get("content-language") !== entry.language) throw new Error(`Root language selection failed for ${entry.header}, saved=${entry.saved ?? "none"}`);
   const vary = response.headers.get("vary") ?? "";
-  if (!/accept-language/i.test(vary) || !/cookie/i.test(vary) || !response.headers.get("cache-control")?.includes("no-store")) throw new Error("Root language selection is not isolated from shared caches");
+  if (!/accept-language/i.test(vary) || !/cookie/i.test(vary) || !/\b(?:private|no-store)\b/i.test(response.headers.get("cache-control") ?? "")) throw new Error("Root language selection is not isolated from shared caches");
   if (entry.status === 307 && new URL(response.headers.get("location"), origin).pathname !== "/en") throw new Error("English entry redirect is invalid");
   await response.body?.cancel();
 }

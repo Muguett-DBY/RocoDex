@@ -23,7 +23,12 @@
       "!/cstd-universe/*",
       "!/cstd-world/*",
       "!/fonts/*",
-      "!/images/*"
+      "!/images/*",
+      "!/favicon.ico",
+      "!/cstd-mascot.svg",
+      "!/cstd-og.svg",
+      "!/cstd-og-v2.webp",
+      "!/cstd-case-worker.js"
     ]
   },
   "observability": {

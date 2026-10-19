@@ -38,6 +38,18 @@ The homepage entry also negotiates the locale from `Accept-Language` when no `cs
 2. Run `npm run test:e2e:personal` in desktop and mobile Chromium.
 3. Check dependency audit at high severity.
 4. Push only the intended CSTD changes; never stage `.reasonix/`, Playwright output, or unrelated RocoDex work.
-5. Wait for GitHub Actions and Vercel READY.
+5. Wait for GitHub Actions, then publish the verified OpenNext bundle with the existing Cloudflare deployment command. Vercel is not the production host.
 6. Verify clean Chinese and English routes, RSS, sitemap, security headers, guide refusal, Lab controls, homepage WebGL, and both production domains.
 7. After telemetry storage is configured, check the latest `CSTD Field Vitals Audit` run summary (`gh run view --workflow "CSTD Field Vitals Audit"`) or trigger it with `gh workflow run "CSTD Field Vitals Audit"`.
+
+## Cloudflare CPU（2026-10-20）
+
+`custard-web-platform` 同时承载个人主站和 RocoDex，不是 MoovCare 的子服务。2026-10-01 至 10-19 17:02 UTC 的 45,114 次调用累计使用约 2,305 秒 CPU，平均每次约 51 ms；这是账号套餐包含 CPU 的约 7.68%，不是服务器持续占用 7.68% CPU。没有 Cron、容器、队列或 Durable Object 绑定。
+
+七天调用日志采用平台抽样（`abr_level: 100`），样本包含公开页面、动态站点地图及扫描器的不存在路径；不能据此声称某一路径占完整月份 CPU 的精确百分比。生产调用栈采样接口在预热后仍返回 `No recent executions`，没有获得生产火焰图。
+
+公开页面原本已预生成，但只有 Next 内部缓存命中，仍需进入 NextServer。现启用 OpenNext 原生 `enableCacheInterception`，缓存命中直接返回 HTML/RSC。适配器升级并锁定至 1.20.12，配套 Next/ESLint 插件 16.4.2；新版包含 Next 16 分段预取循环的官方修复，不自行修补请求协议。`@node-minify/core` 的 `glob` 限定为已修复的 10.5.0，避免构建工具带入已知命令注入漏洞。
+
+图标、分享预览图和浏览器案例 Worker 文件走 Workers Static Assets，不再进入 Next 路由；`public/_headers` 为静态响应保留 `nosniff`。登录、注册、会话和账户写入仍动态处理，不参与页面直返；首页语言选择保留 `private` 缓存和 `Vary: Accept-Language, Cookie`，不进入共享缓存。
+
+真实本地 Worker 验证了两站页面、双语和 Host 隔离、HTML/RSC 类型、`/_tree` 分段预取、登录/注册/会话不命中缓存、390 像素布局以及闲置八秒没有新的 RSC 请求。相同新版本构建、预热两次后六次请求的中位总耗时，札记页约 14.59 → 11.89 ms，项目详情约 19.60 → 15.28 ms；首页约 18.54 → 18.37 ms。数字包含本机模拟器和传输，不是生产 CPU 或全球延迟保证。已发生的套餐累计用量不会因发布而退回。

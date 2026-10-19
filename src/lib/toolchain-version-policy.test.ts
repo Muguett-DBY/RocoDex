@@ -21,13 +21,13 @@ describe("toolchain version policy", () => {
 
     expect(packageJson.engines?.node).toBe("24.x");
     expect(packageJson.packageManager).toBe("npm@12.0.2");
-    expect(packageJson.dependencies.next).toBe("16.3.8");
+    expect(packageJson.dependencies.next).toBe("16.4.2");
     expect(packageJson.dependencies["next-auth"]).toBe("5.0.0-beta.32");
     expect(packageJson.dependencies.react).toBe("^19.3.0");
     expect(packageJson.dependencies["react-dom"]).toBe("^19.3.0");
     expect(packageJson.dependencies["framer-motion"]).toBe("^13.4.4");
     expect(packageJson.dependencies.three).toBe("0.185.1");
-    expect(packageJson.devDependencies["@next/eslint-plugin-next"]).toBe("16.3.8");
+    expect(packageJson.devDependencies["@next/eslint-plugin-next"]).toBe("16.4.2");
     expect(packageJson.devDependencies["@playwright/test"]).toBe("1.63.0");
     expect(packageJson.devDependencies["@tailwindcss/postcss"]).toBe("4.3.3");
     expect(packageJson.devDependencies["@types/node"]).toBe("^24.19.0");
@@ -43,14 +43,14 @@ describe("toolchain version policy", () => {
       postcss: "8.5.26",
       sharp: "0.35.5",
     });
-    expect(packageLock.packages["node_modules/next"]?.version).toBe("16.3.8");
+    expect(packageLock.packages["node_modules/next"]?.version).toBe("16.4.2");
     expect(packageLock.packages["node_modules/next-auth"]?.version).toBe("5.0.0-beta.32");
     expect(packageLock.packages["node_modules/react"]?.version).toBe("19.3.0");
     expect(packageLock.packages["node_modules/react-dom"]?.version).toBe("19.3.0");
     expect(packageLock.packages["node_modules/framer-motion"]?.version).toBe("13.4.4");
     expect(packageLock.packages["node_modules/three"]?.version).toBe("0.185.1");
     expect(packageLock.packages["node_modules/@next/eslint-plugin-next"]?.version).toBe(
-      "16.3.8",
+      "16.4.2",
     );
     expect(packageLock.packages["node_modules/@playwright/test"]?.version).toBe("1.63.0");
     expect(packageLock.packages["node_modules/@tailwindcss/node"]?.version).toBe("4.3.3");
