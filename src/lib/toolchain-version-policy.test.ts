@@ -37,7 +37,7 @@ describe("toolchain version policy", () => {
     expect(packageJson.devDependencies["eslint-plugin-react-hooks"]).toBe("7.1.1");
     expect(packageJson.devDependencies["typescript-eslint"]).toBe("8.70.1");
     expect(packageJson.devDependencies.tailwindcss).toBe("4.3.3");
-    expect(packageJson.devDependencies.vitest).toBe("4.1.11");
+    expect(packageJson.devDependencies.vitest).toBe("4.1.12");
     expect(packageJson.overrides).toMatchObject({
       postcss: "8.5.26",
       sharp: "0.35.5",
@@ -62,7 +62,7 @@ describe("toolchain version policy", () => {
     );
     expect(packageLock.packages["node_modules/typescript-eslint"]?.version).toBe("8.70.1");
     expect(packageLock.packages["node_modules/tailwindcss"]?.version).toBe("4.3.3");
-    expect(packageLock.packages["node_modules/vitest"]?.version).toBe("4.1.11");
+    expect(packageLock.packages["node_modules/vitest"]?.version).toBe("4.1.12");
     expect(packageLock.packages["node_modules/postcss"]?.version).toBe("8.5.26");
     expect(packageLock.packages["node_modules/sharp"]?.version).toBe("0.35.5");
   });
@@ -76,6 +76,7 @@ describe("toolchain version policy", () => {
       "esbuild@0.28.2": true,
       "sharp@0.35.5": true,
       "unrs-resolver@1.12.2": true,
+      "workerd@1.20261023.1": true,
     });
   });
 

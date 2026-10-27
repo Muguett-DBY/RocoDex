@@ -69,7 +69,7 @@
     "three": "0.185.1",
     "vfile": "^6.0.3",
     "vfile-matter": "^5.0.1",
-    "zod": "^4.6.5"
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
@@ -91,8 +91,8 @@
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
     "typescript-eslint": "8.70.1",
-    "vitest": "4.1.11",
-    "wrangler": "^4.143.0"
+    "vitest": "4.1.12",
+    "wrangler": "^4.154.0"
   },
   "overrides": {
     "@next/eslint-plugin-next": {
@@ -106,6 +106,6 @@
     "esbuild@0.28.2": true,
     "sharp@0.35.5": true,
     "unrs-resolver@1.12.2": true,
-    "workerd@1.20261006.1": true
+    "workerd@1.20261023.1": true
   }
 }
