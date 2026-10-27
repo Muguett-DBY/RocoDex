@@ -13,7 +13,7 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   expect(response?.ok()).toBe(true);
 
   await expect(page.getByRole("heading", { level: 1 })).toContainText("奶黄包");
-  await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("人工智能 · 博 0");
+  await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("数据科学 · 产品开发");
   await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
   await expect(page.locator("[data-cstd-home-editorial] .chapter")).toHaveCount(6);
   await expect(page.locator("[data-cstd-home-editorial] .folio__item")).toHaveCount(6);

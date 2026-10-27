@@ -47,7 +47,7 @@ Cloudflare 的 asset-first 路由、媒体构建检查和 apex Host 路由都必
 ## 运行时观测
 
 - 首页入口在无 `cstd-locale` cookie 时按浏览器 `Accept-Language` 的权重协商中英文，兼容中文脚本和英文地区变体；缺少可用语言时回退中文。手动选择优先，显式中英文链接保持原语言。入口响应使用 `Vary: Accept-Language, Cookie` 与 `private, no-store`，避免串用其他访客的语言；切换后完整导航，避免预加载恢复旧语言。
-- 公开个人资料以 `content/profile.ts` 为唯一来源，仅保留昵称、专业、研究兴趣与项目能力。学校、个人所在地和就读年份不进入页面、搜索结构化数据或 `resume.json`。履历 JSON schema 2 使用 `stage` / `field` 表达专业阶段，不发布学校、就读区间或所在地；博 0 明确表示准备博士阶段。
+- 公开个人资料以 `content/profile.ts` 为唯一来源，仅保留昵称、专业、研究兴趣与项目能力。学校、个人所在地和就读年份不进入页面、搜索结构化数据或 `resume.json`。履历 JSON schema 2 使用 `stage` / `field` 表达专业背景，不发布学校、就读区间、所在地或博士阶段信息。
 - 代理边缘 404 与 React not-found 页共用 `infrastructure/not-found.ts` 的同一份文案。
 
 ## 体素作品世界

@@ -54,7 +54,7 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
               </CstdLink>
             </div>
             <div className="atelier-hero-location">
-              <span>{isZh ? "人工智能 · 博 0" : "Artificial Intelligence · PhD Year 0"}</span>
+              <span>{isZh ? "数据科学 · 产品开发" : "Data Science · Product Development"}</span>
               <span>{isZh ? "分析 · 系统 · 交付" : "Analysis · Systems · Delivery"}</span>
             </div>
           </AtelierReveal>

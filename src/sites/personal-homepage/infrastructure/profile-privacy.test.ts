@@ -5,6 +5,7 @@ import { getPersonalHomepageMetadata, getPersonalHomepageStructuredData } from "
 import { serializeCstdResume } from "./resume";
 
 const schoolNames = /monash|莫纳什|university of sydney|悉尼大学|FIT\d{4}/i;
+const doctoralStatements = /博士|博\s*0|\bph\.?\s*d\.?\b|doctoral|doctorate|year[\s-]*zero/i;
 
 describe("public personal profile privacy", () => {
   test.each(["zh", "en"] as const)("keeps %s copy, search data, and resume free of school and residence details", (locale) => {
@@ -12,6 +13,7 @@ describe("public personal profile privacy", () => {
     const schema = getPersonalHomepageStructuredData(locale);
     const publicData = JSON.stringify([cstdProfile, resume, schema, cstdExperienceContract, getPersonalHomepageMetadata(locale)]);
     expect(publicData).not.toMatch(schoolNames);
+    expect(publicData).not.toMatch(doctoralStatements);
     expect(resume.person).not.toHaveProperty("location");
     expect(resume.person).not.toHaveProperty("email");
     expect(resume.person).not.toHaveProperty("legalName");
@@ -22,8 +24,8 @@ describe("public personal profile privacy", () => {
     const person = schema.find((entry) => entry["@type"] === "ProfilePage")?.mainEntity;
     expect(person).not.toHaveProperty("alumniOf");
     expect(person).not.toHaveProperty("homeLocation");
-    expect(resume.person.title).toContain(locale === "zh" ? "人工智能博 0" : "AI PhD Year 0");
-    expect(resume.person.summary).toContain(locale === "zh" ? "为博士阶段做准备" : "preparing for doctoral study");
+    expect(resume.person.title).toContain(locale === "zh" ? "数据科学" : "Data science");
+    expect(resume.person.summary).toContain(locale === "zh" ? "数据科学" : "data science");
     expect(resume.education.map((entry) => entry.field)).toContain(locale === "zh" ? "数据科学" : "Data Science");
   });
 });

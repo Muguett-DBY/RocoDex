@@ -2183,8 +2183,8 @@ export const cstdTimeline: readonly CstdTimelineEntry[] = [
     "kind": "research",
     "recordType": "research-plan",
     "title": {
-      "zh": "博 0：把“AI 办好了”变成可验证的问题",
-      "en": "PhD Year 0: making agent completion a testable question"
+      "zh": "研究方向：把“AI 办好了”变成可验证的问题",
+      "en": "Research focus: making agent completion a testable question"
     },
     "summary": {
       "zh": "准备研究计划：网页智能体说完成后，实际状态是否正确，重试有没有带来额外问题。",

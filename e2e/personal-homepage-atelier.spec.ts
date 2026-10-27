@@ -72,7 +72,7 @@ test.describe("EDITORIAL without JavaScript", () => {
     });
     await page.goto("/", { waitUntil: "load" });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("奶黄包");
-    await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("人工智能 · 博 0");
+    await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("数据科学 · 产品开发");
     await expect(page.locator("[data-cstd-home-editorial] .chapter")).toHaveCount(6);
     await expect(page.locator("[data-cstd-home-editorial] .work")).toHaveCount(3);
     await expect(page.locator("[data-cstd-home-editorial] .note")).toHaveCount(3);
@@ -471,7 +471,7 @@ test.describe("EDITORIAL motion", () => {
     await page.goto("/en", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Custard");
-    await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("PhD Year 0");
+    await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("Data Science · Product Development");
     await expect(page.locator("[data-cstd-home-editorial] .ed-bar__cta")).toContainText("Write me an email");
     await expect(page.locator("[data-cstd-home-editorial] canvas")).toHaveCount(0);
     await expectNoHorizontalOverflow(page);
