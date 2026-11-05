@@ -104,8 +104,6 @@
   },
   "allowScripts": {
     "esbuild@0.28.2": true,
-    "sharp@0.35.5": true,
-    "unrs-resolver@1.12.2": true,
-    "workerd@1.20261023.1": true
+    "workerd@1.20261101.1": true
   }
 }
