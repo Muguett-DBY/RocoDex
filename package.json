@@ -72,27 +72,27 @@
     "zod": "^4.6.6"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.13.0",
+    "@axe-core/playwright": "^4.14.0",
     "@eslint/js": "10.0.1",
-    "@next/eslint-plugin-next": "16.4.2",
-    "@playwright/test": "1.63.0",
+    "@next/eslint-plugin-next": "16.4.3",
+    "@playwright/test": "1.64.1",
     "@tailwindcss/postcss": "4.3.3",
-    "@types/node": "^24.19.0",
+    "@types/node": "^24.19.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@types/three": "0.185.4",
     "@webgpu/types": "^0.1.74",
-    "eslint": "10.11.0",
+    "eslint": "10.14.0",
     "eslint-plugin-jsx-a11y-x": "0.2.0",
     "eslint-plugin-react-hooks": "7.1.1",
     "fast-glob": "file:tooling/next-eslint-glob",
-    "globals": "17.12.0",
+    "globals": "17.14.0",
     "tailwindcss": "4.3.3",
     "tsx": "^4.23.15",
     "typescript": "^6.0.3",
-    "typescript-eslint": "8.70.1",
+    "typescript-eslint": "8.72.1",
     "vitest": "4.1.12",
-    "wrangler": "^4.154.0"
+    "wrangler": "^4.156.1"
   },
   "overrides": {
     "@next/eslint-plugin-next": {
@@ -104,8 +104,6 @@
   },
   "allowScripts": {
     "esbuild@0.28.2": true,
-    "sharp@0.35.5": true,
-    "unrs-resolver@1.12.2": true,
-    "workerd@1.20261023.1": true
+    "workerd@1.20261101.1": true
   }
 }

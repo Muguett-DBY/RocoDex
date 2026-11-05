@@ -218,7 +218,7 @@ function AstralRoll({ locale }: { locale: CstdLocale }) {
             ))}
           </div>
 
-          <button type="button" data-cstd-astral-roll aria-label={locale === "zh" ? "掷二十面骰" : "Roll the twenty-sided die"} disabled={rolling} onClick={castDie} className="cstd-astral-d20-button">
+          <button type="button" data-cstd-astral-roll disabled={rolling} onClick={castDie} className="cstd-astral-d20-button">
             <span className="cstd-astral-d20-face"><Dices aria-hidden="true" /><strong>{rolling ? "…" : roll ?? "D20"}</strong></span>
             <small>{locale === "zh" ? "掷骰" : "ROLL"}</small>
           </button>

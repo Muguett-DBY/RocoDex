@@ -15,7 +15,6 @@ export function VoxelNavLink({ locale, compact = false, className }: { locale: C
     <CstdLink
       href={getLocalizedCstdHref("/voxel", locale)}
       data-cstd-voxel-nav
-      aria-label={fullLabel}
       title={fullLabel}
       className={clsx(styles.navLink, className)}
     >

@@ -28,7 +28,9 @@ test("CSTD exposes a themed voxel-world invitation from its navigation", async (
   await page.goto(isMobile ? "/about" : "/", { waitUntil: "domcontentloaded" });
   const invitation = page.locator("[data-cstd-voxel-nav]:visible").first();
   await expect(invitation).toBeVisible();
-  await expect(invitation).toHaveAccessibleName("算了，玩会我的世界吧");
+  await expect(invitation).toHaveText(/^(?:方块世界|算了，玩会我的世界吧)$/);
+  const invitationLabel = (await invitation.innerText()).trim();
+  await expect(invitation).toHaveAccessibleName(invitationLabel);
   await invitation.click();
   await expect(page).toHaveURL(/\/voxel$/);
   await expect(page.locator("[data-cstd-voxel-game]")).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });

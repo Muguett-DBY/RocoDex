@@ -146,17 +146,23 @@ describe("toolchain version policy", () => {
     expect(resolvesCaret("^0.0.1", "0.0.2")).toBe(false);
   });
 
-  test("pins approved install scripts for native tooling used by Next and ESLint", () => {
+  test("pins native install-script approvals to their locked versions", () => {
     const packageJson = readJson("package.json") as {
       allowScripts?: Record<string, boolean>;
     };
+    const packageLock = readJson("package-lock.json") as {
+      packages: Record<string, { version?: string; hasInstallScript?: boolean }>;
+    };
+    const approvedScripts: Record<string, boolean> = {};
 
-    expect(packageJson.allowScripts).toMatchObject({
-      "esbuild@0.28.2": true,
-      "sharp@0.35.5": true,
-      "unrs-resolver@1.12.2": true,
-      "workerd@1.20261023.1": true,
-    });
+    for (const name of ["esbuild", "workerd"]) {
+      const locked = packageLock.packages["node_modules/" + name];
+      expect(locked?.hasInstallScript, name).toBe(true);
+      expect(parseStableVersion(locked?.version), name).not.toBeNull();
+      approvedScripts[`${name}@${locked?.version}`] = true;
+    }
+
+    expect(packageJson.allowScripts).toEqual(approvedScripts);
   });
 
   test("keeps the local production launcher aligned with the hosted runtime", () => {
