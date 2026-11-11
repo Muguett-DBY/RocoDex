@@ -20,7 +20,10 @@ describe("GitHub Actions CI workflow", () => {
     expect(workflow).toContain("npm test");
     expect(workflow).toContain("npm run build");
     expect(workflow).toContain("npm run verify:personal-bundle");
-    expect(workflow).toContain("npx playwright install --with-deps chromium");
+    const packageJson = JSON.parse(readFileSync(join(process.cwd(), "package.json"), "utf8")) as {
+      devDependencies: Record<string, string>;
+    };
+    expect(workflow).toContain(`image: mcr.microsoft.com/playwright:v${packageJson.devDependencies["@playwright/test"]}-noble`);
     expect(workflow).toContain("npm run test:e2e");
   });
 });
