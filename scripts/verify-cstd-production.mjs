@@ -22,15 +22,15 @@ async function get(path) {
 const htmlSurfaces = [
   { path: "/", language: "zh-CN", marker: "奶黄包" },
   { path: "/about", language: "zh-CN", marker: "数据科学" },
-  { path: "/resume", language: "zh-CN", marker: "数据科学本硕背景" },
-  { path: "/now", language: "zh-CN", marker: "数据分析" },
+  { path: "/resume", language: "zh-CN", marker: "博士在读（第一年）" },
+  { path: "/now", language: "zh-CN", marker: "读博期间" },
   { path: "/topics", language: "zh-CN", marker: "CSTD" },
   { path: "/lab/proof-museum", language: "zh-CN", marker: "CSTD" },
   { path: "/voxel", language: "zh-CN", marker: "作品城 77" },
   { path: "/en", language: "en-AU", marker: "Custard" },
   { path: "/en/about", language: "en-AU", marker: "data science" },
   { path: "/en/resume", language: "en-AU", marker: "data science" },
-  { path: "/en/now", language: "en-AU", marker: "data analysis" },
+  { path: "/en/now", language: "en-AU", marker: "Alongside my PhD" },
   { path: "/en/notes/host-boundaries-in-one-next-deployment", language: "en-AU", marker: "Next.js" },
   { path: "/en/for/research", language: "en-AU", marker: "Research" },
   { path: "/en/voxel", language: "en-AU", marker: "PORTFOLIO//CITY 77" },
@@ -45,8 +45,8 @@ for (const { path, language, marker } of htmlSurfaces) {
   if (!body.includes(marker)) throw new Error(`${path} is missing the expected localized identity`);
   if (schoolNames.test(body) || /"(?:alumniOf|homeLocation)"\s*:/.test(body)) throw new Error(`${path} exposes school or residence details`);
   if (outdatedDoctoralStatus.test(body)) throw new Error(`${path} exposes an outdated doctoral status`);
-  if (["/", "/about", "/resume", "/now", "/en", "/en/about", "/en/resume", "/en/now"].includes(path)) {
-    const studyStatus = language === "zh-CN" ? "人工智能博士一年级" : "first-year PhD student in artificial intelligence";
+  if (["/", "/about", "/resume", "/en", "/en/about", "/en/resume"].includes(path)) {
+    const studyStatus = language === "zh-CN" ? "攻读人工智能方向的博士学位" : "pursuing a PhD in artificial intelligence";
     if (!body.includes(studyStatus)) throw new Error(`${path} is missing the current study status`);
   }
   htmlResponses.set(path, response);
@@ -57,7 +57,7 @@ for (const [locale, prefix] of [["zh", ""], ["en", "/en"]]) {
   if (resume.schemaVersion !== 2 || resume.locale !== locale) throw new Error(`${locale} public resume schema is invalid`);
   if (schoolNames.test(JSON.stringify(resume)) || "location" in resume.person || resume.education.some((entry) => "school" in entry || "period" in entry)) throw new Error(`${locale} public resume discloses private profile details`);
   if (outdatedDoctoralStatus.test(JSON.stringify(resume))) throw new Error(`${locale} public resume exposes an outdated doctoral status`);
-  const phdStage = locale === "zh" ? "博士一年级" : "PhD Year 1";
+  const phdStage = locale === "zh" ? "博士在读（第一年）" : "PhD Year 1";
   const phdField = locale === "zh" ? "人工智能" : "Artificial Intelligence";
   if (!resume.education.some((entry) => entry.stage === phdStage && entry.field === phdField)) throw new Error(`${locale} public resume is missing the current doctoral study`);
   if (!resume.person.title.includes(locale === "zh" ? "数据科学" : "Data science")) throw new Error(`${locale} public resume has an outdated identity`);

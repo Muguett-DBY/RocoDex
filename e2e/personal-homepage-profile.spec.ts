@@ -8,7 +8,9 @@ for (const locale of ["zh", "en"] as const) {
   test(`CSTD ${locale} public profile and resume disclose fields of study without schools`, async ({ page, request }) => {
     const issues = captureBrowserIssues(page);
     const prefix = locale === "en" ? "/en" : "";
-    const studyStatus = locale === "zh" ? "人工智能博士一年级" : /first-year PhD student in artificial intelligence|Artificial Intelligence · PhD Year 1/i;
+    const studyStatus = locale === "zh"
+      ? /攻读人工智能方向的博士学位|博士在读（第一年）|读博期间/
+      : /pursuing a PhD in artificial intelligence|Artificial Intelligence · PhD Year 1|Alongside my PhD/i;
     for (const path of [prefix || "/", `${prefix}/about`, `${prefix}/resume`, `${prefix}/now`]) {
       const response = await page.goto(path, { waitUntil: "domcontentloaded" });
       expect(response?.status()).toBe(200);
@@ -28,7 +30,7 @@ for (const locale of ["zh", "en"] as const) {
     expect(JSON.stringify(resume)).not.toMatch(schoolNames);
     expect(JSON.stringify(resume)).not.toMatch(outdatedDoctoralStatus);
     expect(resume.education).toContainEqual(expect.objectContaining({
-      stage: locale === "zh" ? "博士一年级" : "PhD Year 1",
+      stage: locale === "zh" ? "博士在读（第一年）" : "PhD Year 1",
       field: locale === "zh" ? "人工智能" : "Artificial Intelligence",
     }));
     expect(resume.person).not.toHaveProperty("location");
@@ -43,7 +45,7 @@ test("CSTD language links select static pages while the root remains cacheable",
   await switcher.hover();
   await switcher.click();
   await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
-  await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("人工智能博士一年级");
+  await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("人工智能 · 博士在读（第一年）");
   await page.getByRole("link", { name: "切换到英文", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("lang", "en-AU");
   const root = await page.request.get("/", { headers: { "accept-language": "en-AU" }, maxRedirects: 0 });

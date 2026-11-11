@@ -28,9 +28,9 @@ describe("public personal profile privacy", () => {
     expect(resume.person.summary).toContain(locale === "zh" ? "数据科学" : "data science");
     expect(resume.education.map((entry) => entry.field)).toContain(locale === "zh" ? "数据科学" : "Data Science");
     expect(resume.education).toContainEqual(expect.objectContaining({
-      stage: locale === "zh" ? "博士一年级" : "PhD Year 1",
+      stage: locale === "zh" ? "博士在读（第一年）" : "PhD Year 1",
       field: locale === "zh" ? "人工智能" : "Artificial Intelligence",
     }));
-    expect(resume.person.summary).toContain(locale === "zh" ? "人工智能博士一年级" : "first-year PhD student in artificial intelligence");
+    expect(resume.person.summary).toContain(locale === "zh" ? "攻读人工智能方向的博士学位" : "pursuing a PhD in artificial intelligence");
   });
 });

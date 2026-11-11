@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getLocalizedCstdHref } from "../../infrastructure/i18n";
 import type { CstdLocale } from "../../content/content-types";
-import { cstdDoctoralStatus } from "../../content/profile";
+import { cstdDoctoralStatus, cstdEducationIntro } from "../../content/profile";
 import { CstdChapterLink } from "../site/cstd-chapter-link";
 import { CstdLink } from "../site/cstd-link";
 import { CstdLanguageSwitcher } from "../site/cstd-language-switcher";
@@ -153,8 +153,8 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     ctaHeader: zh ? "写邮件给我" : "Write me an email",
     statement: zh ? <>数据分析、做出来的系统，<br />和做它们的方法，都收在这里。</> : <>Data analyses, working systems,<br />and how each one was built.</>,
     intro: zh
-      ? "本硕读数据科学，现在是人工智能博士一年级。用 R、Python 和 SQL 做分析，用 React 和 Next.js 把结果做成能用的产品；每件作品的脚本和验证过程都放在站上。"
-      : "My bachelor's and master's studies are in data science. I'm now a first-year PhD student in artificial intelligence. I analyse with R, Python, and SQL, and ship products with React and Next.js. The scripts and verification behind every piece of work are on this site.",
+      ? `${cstdEducationIntro.zh}我用 R、Python 和 SQL 做分析，也用 React 和 Next.js 开发产品。项目页附有脚本和验证记录。`
+      : `${cstdEducationIntro.en} I use R, Python, and SQL for analysis and build products with React and Next.js. The project pages include scripts and verification notes.`,
     exploreWork: zh ? "看三件代表作" : "See three selected works",
     aboutMe: zh ? "关于我" : "About me",
     roleField: cstdDoctoralStatus[locale],
