@@ -70,9 +70,9 @@ test.describe("EDITORIAL without JavaScript", () => {
     page.on("request", (request) => {
       if (/\/cstd-scroll\/.*\.js(\?|$)/.test(request.url())) staticRequests.push(request.url());
     });
-    await page.goto("/", { waitUntil: "load" });
+    await page.goto("/zh", { waitUntil: "load" });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("奶黄包");
-    await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("人工智能 · 博士在读（第一年）");
+    await expect(page.getByRole("heading", { name: "人工智能博士研究生", exact: true })).toBeVisible();
     await expect(page.locator("[data-cstd-home-editorial] .chapter")).toHaveCount(6);
     await expect(page.locator("[data-cstd-home-editorial] .work")).toHaveCount(3);
     await expect(page.locator("[data-cstd-home-editorial] .note")).toHaveCount(3);
@@ -95,7 +95,7 @@ test.describe("EDITORIAL motion", () => {
   test("mounts the GSAP choreography and settles the whole journey", async ({ page }) => {
     const issues = captureBrowserIssues(page);
     await page.addInitScript(() => Object.defineProperty(navigator, "gpu", { value: undefined, configurable: true }));
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/zh", { waitUntil: "domcontentloaded" });
     // GSAP 异步 chunk 装载后创建 pin：pin-spacer ×2 即编排已挂
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
 
@@ -132,7 +132,7 @@ test.describe("EDITORIAL motion", () => {
     // （纸白章码压纸面 1.0:1）。开墨窗已对齐 folio 实底 + 组件侧按实底有界
     // 复核，着陆态必须不暗；底端照旧翻墨（墨牌全盒覆盖 folio 时才成立）。
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto("/", { waitUntil: "load" });
+    await page.goto("/zh", { waitUntil: "load" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
     await page.waitForTimeout(3000); // 让历史误判窗口（若有）充分暴露
     await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
@@ -146,7 +146,7 @@ test.describe("EDITORIAL motion", () => {
   });
 
   test("pins the data spread, scrubs both counters, and reveals the figure inside the pin travel", async ({ page }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/zh", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
 
     // pin 行为：数据版面在 pin 段内滚动 0.5 视口，其 rect.top 几乎不动
@@ -214,7 +214,7 @@ test.describe("EDITORIAL motion", () => {
   });
 
   test("scrubs the per-chapter devices reversibly and tracks the folio rail", async ({ page }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/zh", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
     // folio transform 断言需 ≥1200px 视口（desktop-chromium 默认 1280×720 已满足）
 
@@ -357,7 +357,7 @@ test.describe("EDITORIAL motion", () => {
       if (/\.(mp4|webm)(\?|$)/.test(request.url())) mediaRequests.push(request.url());
     });
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/zh", { waitUntil: "domcontentloaded" });
 
     // 整组零注册：无 pin、无分字；计数文本恒为 SSR 终值（扫窗后仍不变）
     await expect(page.locator("[data-cstd-home-editorial] .pin-spacer")).toHaveCount(0);
@@ -395,7 +395,7 @@ test.describe("EDITORIAL motion", () => {
     page.on("request", (request2) => {
       if (/\/cstd-scroll\/.*\.js(\?|$)/.test(request2.url())) scrollJsRequests.push(request2.url());
     });
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/zh", { waitUntil: "domcontentloaded" });
 
     // 引擎已退役：无 scrollcraft 引用（链接/请求双验）；样式表引用必须带新版本参数
     // （/cstd-scroll/* immutable 无哈希，忘升版本 = 老访客永不回源）
@@ -442,7 +442,7 @@ test.describe("EDITORIAL motion", () => {
   });
 
   test("hands the homepage to the game worlds and takes it back", async ({ page }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/zh", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
     await expect(page.locator("[data-cstd-home-editorial]")).toBeVisible();
     await expect(page.locator("[data-cstd-home-shell]")).toBeHidden();
@@ -471,7 +471,7 @@ test.describe("EDITORIAL motion", () => {
     await page.goto("/en", { waitUntil: "domcontentloaded" });
     await page.waitForFunction(() => document.querySelectorAll("[data-cstd-home-editorial] .pin-spacer").length >= 2, null, { timeout: 20_000 });
     await expect(page.getByRole("heading", { level: 1 })).toContainText("Custard");
-    await expect(page.locator("[data-cstd-home-editorial] .title-role")).toContainText("Artificial Intelligence · PhD Year 1");
+    await expect(page.getByRole("heading", { name: "PhD Researcher in Artificial Intelligence", exact: true })).toBeVisible();
     await expect(page.locator("[data-cstd-home-editorial] .ed-bar__cta")).toContainText("Write me an email");
     await expect(page.locator("[data-cstd-home-editorial] canvas")).toHaveCount(0);
     await expectNoHorizontalOverflow(page);

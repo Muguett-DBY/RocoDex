@@ -31,19 +31,20 @@ function stripInternalPrefix(pathname: string) {
 }
 
 function stripLocalePrefix(pathname: string) {
-  if (pathname === "/en") return "/";
+  if (pathname === "/zh" || pathname === "/en") return "/";
   return pathname.startsWith("/en/") ? pathname.slice(3) : pathname;
 }
 
 export function getCstdLocaleFromPathname(pathname: string): CstdLocale {
   const publicPathname = stripInternalPrefix(pathname);
+  if (publicPathname === "/") return "en";
   return publicPathname === "/en" || publicPathname.startsWith("/en/") ? "en" : defaultCstdLocale;
 }
 
 export function getLocalizedCstdPathname(pathname: string, locale: CstdLocale) {
   const publicPathname = stripInternalPrefix(pathname || "/");
   const basePathname = stripLocalePrefix(publicPathname);
-  if (locale === "zh") return basePathname || "/";
+  if (locale === "zh") return basePathname === "/" ? "/zh" : basePathname;
   return basePathname === "/" ? "/en" : `/en${basePathname}`;
 }
 
@@ -61,6 +62,6 @@ export function getCstdLanguageAlternates(pathname: string) {
   return {
     "zh-CN": zhPath,
     "en-AU": enPath,
-    "x-default": zhPath,
+    "x-default": enPath,
   } as const;
 }

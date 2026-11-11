@@ -6,7 +6,7 @@ import { getPersonalHomepageSitemapEntries } from "./sitemap";
 
 describe("CSTD localized publishing", () => {
   test.each([
-    ["zh", "https://custard.top/", "zh-CN", "/manifest.webmanifest"],
+    ["zh", "https://custard.top/zh", "zh-CN", "/manifest.webmanifest"],
     ["en", "https://custard.top/en", "en-AU", "/en/manifest.webmanifest"],
   ] as const)("publishes complete %s homepage metadata", (locale, canonical, language, manifest) => {
     const metadata = getPersonalHomepageMetadata(locale);
@@ -30,7 +30,7 @@ describe("CSTD localized publishing", () => {
     expect(JSON.stringify(chineseSchema)).toContain("CSTD 工程观测站");
     expect(englishSchema.every((entry) => entry.inLanguage === "en-AU")).toBe(true);
     expect(JSON.stringify(englishSchema)).toContain("Custard");
-    expect(getPersonalHomepageMetadata("en").title).toBe("Custard | Data analysis and product development | CSTD");
+    expect(getPersonalHomepageMetadata("en").title).toBe("Custard | PhD Researcher in Artificial Intelligence | CSTD");
     expect(englishAudience.alternates?.canonical).toBe("https://custard.top/en/for/research");
     expect(englishAudience.other?.["content-language"]).toBe("en-AU");
   });
@@ -46,10 +46,10 @@ describe("CSTD localized publishing", () => {
     const entries = getPersonalHomepageSitemapEntries();
     const englishAudience = entries.find((entry) => entry.url === "https://custard.top/en/for/research");
 
-    expect(entries.find((entry) => entry.url === "https://custard.top/")?.alternates).toEqual({
-      "zh-CN": "https://custard.top/",
+    expect(entries.find((entry) => entry.url === "https://custard.top/zh")?.alternates).toEqual({
+      "zh-CN": "https://custard.top/zh",
       "en-AU": "https://custard.top/en",
-      "x-default": "https://custard.top/",
+      "x-default": "https://custard.top/en",
     });
     expect(englishAudience?.alternates?.["zh-CN"]).toBe("https://custard.top/for/research");
     expect(entries.every((entry) => entry.alternates?.["zh-CN"] && entry.alternates?.["en-AU"])).toBe(true);

@@ -13,11 +13,11 @@ describe("CSTD i18n routing", () => {
   });
 
   test.each([
-    ["/", "zh"],
+    ["/", "en"],
     ["/work/rocodex-platform", "zh"],
     ["/en", "en"],
     ["/en/notes/evidence-first-ai-research", "en"],
-    ["/cstd", "zh"],
+    ["/cstd", "en"],
     ["/cstd/en/lab/data-lens", "en"],
   ] as const)("detects %s as %s", (pathname, locale) => {
     expect(getCstdLocaleFromPathname(pathname)).toBe(locale);
@@ -25,7 +25,9 @@ describe("CSTD i18n routing", () => {
 
   test("maps public and local-development paths without duplicating prefixes", () => {
     expect(getLocalizedCstdPathname("/", "en")).toBe("/en");
-    expect(getLocalizedCstdPathname("/en", "zh")).toBe("/");
+    expect(getLocalizedCstdPathname("/en", "zh")).toBe("/zh");
+    expect(getLocalizedCstdPathname("/zh", "en")).toBe("/en");
+    expect(getLocalizedCstdHref("/en?view=compact#ch-title", "zh")).toBe("/zh?view=compact#ch-title");
     expect(getLocalizedCstdPathname("/notes/observable-dcf-pipeline", "en")).toBe("/en/notes/observable-dcf-pipeline");
     expect(getLocalizedCstdPathname("/en/work/cfzzs-crm", "zh")).toBe("/work/cfzzs-crm");
     expect(getLocalizedCstdPathname("/cstd/en/work/cfzzs-crm", "zh")).toBe("/work/cfzzs-crm");

@@ -28,24 +28,20 @@ function localePath(path: string, locale: CstdLocale) {
 
 export function CstdAboutPage({ locale }: { locale: CstdLocale }) {
   const copy = locale === "zh" ? {
-    eyebrow: "04 / ABOUT ME",
-    title: "你好，我是奶黄包。",
-    summary: cstdProfile.intro.zh,
-    background: "学习与研究",
-    trajectory: "从数据出发，走向人工智能。",
-    trajectoryBody: "数据科学让我习惯先弄清问题、检查数据，再谈模型。做产品时也一样：先做出能用的东西，再根据真实反馈改进。",
-    capability: "平时用什么做事",
+    eyebrow: "奶黄包 · 个人档案",
+    title: cstdProfile.title.zh,
+    summary: cstdProfile.researchFocus.zh,
+    background: "教育与研究",
+    capability: "专业能力",
     principle: "工作原则",
     timeline: "一路做过来的事",
     principles: ["先确认事实与边界，再选择工具。", "确定性内核负责结论，AI 负责解释和探索。", "动效服从性能预算，发布必须有端到端证据。"],
   } : {
-    eyebrow: "04 / ABOUT ME",
-    title: "Hello, I’m Custard.",
-    summary: cstdProfile.intro.en,
-    background: "Study and research",
-    trajectory: "From data science towards AI.",
-    trajectoryBody: "Data science taught me to understand the question and check the data before choosing a model. I take the same approach to products: build something useful, then improve it with real feedback.",
-    capability: "Tools I work with",
+    eyebrow: "CUSTARD · PROFILE",
+    title: cstdProfile.title.en,
+    summary: cstdProfile.researchFocus.en,
+    background: "Education and research",
+    capability: "Technical expertise",
     principle: "Working principles",
     timeline: "The work along the way",
     principles: ["Confirm facts and boundaries before choosing tools.", "Deterministic cores own conclusions; AI explains and explores.", "Motion obeys a performance budget, and releases require end-to-end evidence."],
@@ -58,9 +54,7 @@ export function CstdAboutPage({ locale }: { locale: CstdLocale }) {
         <section className="border-b border-black/15 bg-[#f1eee5] px-5 py-20 text-[#0a0c0e] md:px-10 lg:px-16 lg:py-24">
           <div className="mx-auto grid max-w-[1320px] gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
             <div>
-              <div className="flex items-center gap-3 font-mono text-[11px] font-black text-[#0b6473]"><BookOpen aria-hidden="true" className="h-4 w-4" /> {copy.background.toUpperCase()}</div>
-              <h2 className="mt-5 text-4xl font-semibold leading-tight md:text-5xl">{copy.trajectory}</h2>
-              <p className="mt-5 text-base leading-8 text-black/65">{copy.trajectoryBody}</p>
+              <h2 className="text-4xl font-semibold leading-tight md:text-5xl">{copy.background}</h2>
             </div>
             <div className="border-t border-black/20">
               {cstdProfile.education.map((entry) => <div key={entry.id} className="grid gap-4 border-b border-black/20 py-6 md:grid-cols-[12rem_1fr]"><span className="font-mono text-[11px] font-black text-black/75">{entry.stage[locale]}</span><div><h3 className="text-sm font-semibold">{entry.field[locale]}</h3><p className="mt-2 text-sm leading-7 text-black/65">{entry.detail[locale]}</p></div></div>)}
@@ -91,7 +85,7 @@ export function CstdAboutPage({ locale }: { locale: CstdLocale }) {
 }
 
 export function CstdNowPage({ locale }: { locale: CstdLocale }) {
-  const copy = locale === "zh" ? { eyebrow: "05 / NOW SIGNAL", title: "此刻正在构建什么。", summary: cstdProfile.now.focus.zh, building: "正在构建", learning: "正在学习", updated: "最后更新", archive: "浏览技术档案", recent: "最近的交付、诊断与研究节点" } : { eyebrow: "05 / NOW SIGNAL", title: "What I am building now.", summary: cstdProfile.now.focus.en, building: "Building", learning: "Learning", updated: "Last updated", archive: "Browse the technical archive", recent: "Recent releases, diagnoses, and research steps" };
+  const copy = locale === "zh" ? { eyebrow: "05 / NOW SIGNAL", title: "研究与开发近况", summary: cstdProfile.now.focus.zh, building: "正在构建", learning: "正在学习", updated: "最后更新", archive: "浏览技术档案", recent: "最近的交付、诊断与研究节点" } : { eyebrow: "05 / NOW SIGNAL", title: "Current research and development", summary: cstdProfile.now.focus.en, building: "Building", learning: "Learning", updated: "Last updated", archive: "Browse the technical archive", recent: "Recent releases, diagnoses, and research steps" };
   return (
     <CstdSiteChrome locale={locale} page="now">
       <main id="cstd-main">
@@ -113,14 +107,18 @@ export function CstdNowPage({ locale }: { locale: CstdLocale }) {
 }
 
 export function CstdResumePage({ locale }: { locale: CstdLocale }) {
-  const copy = locale === "zh" ? { title: "奶黄包 / 技术履历", summary: cstdProfile.summary.zh, print: "打印 / 保存 PDF", work: "代表项目", education: "专业与研究方向", timeline: "能力轨迹", capabilities: "能力", evidence: "详细案例与技术证据", json: "机器可读 JSON" } : { title: "Custard / Technical resume", summary: cstdProfile.summary.en, print: "Print / save PDF", work: "Selected work", education: "Study and research interests", timeline: "Capability timeline", capabilities: "Capabilities", evidence: "Detailed cases and technical evidence", json: "Machine-readable JSON" };
+  const copy = locale === "zh" ? { title: "奶黄包 / 技术履历", print: "打印 / 保存 PDF", work: "代表项目", education: "专业与研究方向", timeline: "能力轨迹", capabilities: "能力", evidence: "详细案例与技术证据", json: "机器可读 JSON" } : { title: "Custard / Technical resume", print: "Print / save PDF", work: "Selected work", education: "Study and research interests", timeline: "Capability timeline", capabilities: "Capabilities", evidence: "Detailed cases and technical evidence", json: "Machine-readable JSON" };
   return (
     <CstdSiteChrome locale={locale} page="resume">
       <main id="cstd-main" className="cstd-resume bg-[#f1eee5] px-5 py-16 text-[#0a0c0e] md:px-10 lg:px-16 lg:py-20">
         <div className="mx-auto max-w-[1080px]">
           <header className="border-b-2 border-black pb-10">
             <div className="flex flex-wrap items-start justify-between gap-8">
-              <div><p className="font-mono text-[11px] font-black text-[#0b6473]">CSTD / RESUME / 2026</p><h1 className="mt-4 text-4xl font-semibold md:text-6xl">{copy.title}</h1><p className="mt-5 max-w-3xl text-base leading-8 text-black/65">{copy.summary}</p></div>
+              <div>
+                <h1 className="text-4xl font-semibold md:text-6xl">{copy.title}</h1>
+                <p className="mt-5 text-xl font-semibold">{cstdProfile.title[locale]}</p>
+                <p className="mt-2 text-base leading-8 text-black/65">{cstdProfile.researchFocus[locale]}</p>
+              </div>
               <PrintButton label={copy.print} />
             </div>
           </header>
@@ -133,7 +131,7 @@ export function CstdResumePage({ locale }: { locale: CstdLocale }) {
 
           <section className="cstd-resume-section grid gap-8 border-b border-black/20 py-10 md:grid-cols-[13rem_1fr]"><h2 className="font-mono text-[11px] font-black text-[#0b6473]">{copy.timeline.toUpperCase()}</h2><div>{cstdTimeline.slice(-4).map((entry) => <div key={entry.id} className="cstd-resume-entry grid gap-2 border-t border-black/15 py-5 first:border-t-0 first:pt-0 sm:grid-cols-[7rem_1fr]"><span className="font-mono text-[11px] font-black text-black/75">{getCstdTimelineDateLabel(entry, locale)}</span><div><h3 className="text-sm font-semibold">{entry.title[locale]}</h3><p className="mt-2 text-sm leading-7 text-black/65">{entry.summary[locale]}</p></div></div>)}</div></section>
 
-          <footer className="flex flex-wrap items-center justify-between gap-5 pt-8"><p className="font-mono text-[11px] font-black text-black/75">custard.top · Melbourne</p><div className="flex flex-wrap gap-5"><CstdLink href={locale === "en" ? "/en/resume.json" : "/resume.json"} className="inline-flex items-center gap-2 font-mono text-[11px] font-black text-[#0b6473] hover:text-black"><FileJson2 aria-hidden="true" className="h-4 w-4" />{copy.json}</CstdLink><CstdLink href={localePath("/work", locale)} className="inline-flex items-center gap-2 font-mono text-[11px] font-black text-[#0b6473] hover:text-black"><FlaskConical aria-hidden="true" className="h-4 w-4" />{copy.evidence}</CstdLink></div></footer>
+          <footer className="flex flex-wrap items-center justify-between gap-5 pt-8"><p className="font-mono text-[11px] font-black text-black/75">custard.top</p><div className="flex flex-wrap gap-5"><CstdLink href={locale === "en" ? "/en/resume.json" : "/resume.json"} className="inline-flex items-center gap-2 font-mono text-[11px] font-black text-[#0b6473] hover:text-black"><FileJson2 aria-hidden="true" className="h-4 w-4" />{copy.json}</CstdLink><CstdLink href={localePath("/work", locale)} className="inline-flex items-center gap-2 font-mono text-[11px] font-black text-[#0b6473] hover:text-black"><FlaskConical aria-hidden="true" className="h-4 w-4" />{copy.evidence}</CstdLink></div></footer>
         </div>
       </main>
     </CstdSiteChrome>

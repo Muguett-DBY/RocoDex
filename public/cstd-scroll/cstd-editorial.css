@@ -204,12 +204,15 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
 .ed-fullstop { color: var(--ed-accent); }
 .ed-statement {
   font-family: var(--ed-serif);
-  font-size: clamp(1.25rem, 2vw, 1.65rem);
-  line-height: 1.6;
+  font-size: clamp(1.65rem, 2.9vw, 2.6rem);
+  font-weight: 500;
+  line-height: 1.16;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
   color: var(--ed-ink);
   margin: 0;
 }
-.ed-summary { max-width: 58ch; color: var(--ed-soft); margin: 0; }
+.ed-summary { color: var(--ed-accent); margin: 0; }
 .ed-lede { color: var(--ed-soft); margin: 0; max-width: 58ch; }
 
 /* ---------- links & buttons ---------- */
@@ -302,11 +305,7 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
   bottom: clamp(1.6rem, 4vh, 2.6rem);
   max-width: 72rem;
   margin-inline: auto;
-  padding-top: 1.1rem;
   border-top: 1px solid var(--ed-hairline);
-  color: var(--ed-muted);
-  font-size: var(--ed-note);
-  letter-spacing: var(--ed-track);
 }
 /* 扉页两栏对角构图（≥1100px）：名字居左上、文块居右、角色行左下收底；
    <1100px 回落单栏（grid 声明全部收在本媒询内）。.ed-stack 只有 margin 规则、
@@ -315,7 +314,7 @@ html:has([data-cstd-home-editorial]) *, html:has([data-cstd-home-editorial]) *::
   .title-stack {
     display: grid;
     max-width: 72rem;
-    grid-template-columns: minmax(0, 1.15fr) minmax(21rem, 36ch);
+    grid-template-columns: minmax(0, 1fr) minmax(22rem, 28rem);
     grid-template-rows: auto auto auto auto;
     column-gap: clamp(2.5rem, 6vw, 5rem);
     row-gap: 0;

@@ -38,14 +38,14 @@ test.describe("CSTD technical archive", () => {
     await expect(page.getByRole("heading", { level: 1, name: "Custard" })).toBeVisible();
     // 默认正式主页已由 atelier 场景换为 chaptered editorial（data-cstd-home-editorial）
     await expect(page.locator("[data-cstd-home-editorial]")).toBeVisible();
-    await expect(page.getByRole("link", { name: "See three selected works", exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Selected work", exact: true })).toBeVisible();
     expect(errors).toEqual([]);
   });
 
   test("keeps the source-constrained knowledge lens grounded and inspectable", async ({ page }) => {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/zh", { waitUntil: "domcontentloaded" });
     await page.evaluate(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/zh", { waitUntil: "domcontentloaded" });
     await expect(page.locator("[data-cstd-kinetic-world]")).toHaveAttribute("data-cstd-enhancements-ready", "true");
     const lens = page.locator("[data-cstd-knowledge-lens]");
     await expect(lens).toBeVisible();

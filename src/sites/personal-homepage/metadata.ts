@@ -16,8 +16,8 @@ import { CSTD_RELEASE } from "./content/release";
 export function getPersonalHomepageMetadata(locale: CstdLocale): Metadata {
   return createCstdMetadata({
     locale,
-    path: locale === "en" ? "/en" : "/",
-    title: locale === "zh" ? "奶黄包 / Custard | 数据分析与产品开发" : "Custard | Data analysis and product development",
+    path: locale === "en" ? "/en" : "/zh",
+    title: `${locale === "zh" ? "奶黄包 / Custard" : "Custard"} | ${cstdProfile.title[locale]}`,
     description: cstdProfile.summary[locale],
     image: "/cstd-atelier/studio-share-v1.png",
     type: "profile",
@@ -31,15 +31,15 @@ export function getPersonalHomepageStructuredData(locale: CstdLocale) {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "Custard / CSTD",
-    url: `${CSTD_SITE_ORIGIN}${prefix || "/"}`,
+    url: `${CSTD_SITE_ORIGIN}${prefix || "/zh"}`,
     inLanguage: cstdLocaleConfig[locale].htmlLang,
-    description: locale === "zh" ? "奶黄包的个人作品集：数据分析、Web 产品和 AI 研究系统，以及它们如何从想法变成实际作品。" : "Custard's portfolio of data analysis, web products, and AI research systems, with the thinking and work behind each project.",
+    description: cstdProfile.summary[locale],
   },
   {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
     name: locale === "zh" ? "奶黄包 / CSTD" : "Custard / CSTD",
-    url: `${CSTD_SITE_ORIGIN}${prefix || "/"}`,
+    url: `${CSTD_SITE_ORIGIN}${prefix || "/zh"}`,
     inLanguage: cstdLocaleConfig[locale].htmlLang,
     mainEntity: {
       "@type": "Person",

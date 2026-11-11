@@ -13,9 +13,9 @@ export function getPersonalHomepageSitemapEntries(): SitemapEntry[] {
     .sort()
     .at(-1) ?? "1970-01-01";
   const createPair = (path: string, changeFrequency: SitemapEntry["changeFrequency"], zhPriority: number, enPriority: number, lastModified = latestContentDate): SitemapEntry[] => {
-    const zhUrl = createCstdUrl(path || "/");
+    const zhUrl = createCstdUrl(path || "/zh");
     const enUrl = createCstdUrl(`/en${path}`);
-    const alternates = { "zh-CN": zhUrl, "en-AU": enUrl, "x-default": zhUrl };
+    const alternates = { "zh-CN": zhUrl, "en-AU": enUrl, "x-default": enUrl };
     return [
       { url: zhUrl, alternates, lastModified, changeFrequency, priority: zhPriority },
       { url: enUrl, alternates, lastModified, changeFrequency, priority: enPriority },
@@ -31,7 +31,7 @@ export function getPersonalHomepageSitemapEntries(): SitemapEntry[] {
   const contentEntries = contentPages.flatMap(({ path, lastModified }) => createPair(path, path === "/now" ? "weekly" : "monthly", path.split("/").length === 2 ? 0.8 : 0.7, path.split("/").length === 2 ? 0.75 : 0.65, lastModified));
 
   return [
-    ...createPair("", "weekly", 1, 0.95),
+    ...createPair("", "weekly", 0.95, 1),
     ...audiencePages.flatMap((path) => createPair(path, "monthly", 0.85, 0.8)),
     ...contentEntries,
   ];

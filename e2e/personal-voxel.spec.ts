@@ -41,7 +41,7 @@ test("CSTD renders three distinct playable voxel biomes without loading a blank 
   test.setTimeout(150_000);
   const browserIssues = captureBrowserIssues(page);
   for (const world of worlds) {
-    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await page.goto("/zh", { waitUntil: "domcontentloaded" });
     await page.evaluate((theme) => window.localStorage.setItem("cstd-world-theme", theme), world.id);
     await page.goto("/voxel", { waitUntil: "domcontentloaded" });
     const game = page.locator("[data-cstd-voxel-game]");

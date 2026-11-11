@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import type { CstdLocale } from "../../content/content-types";
 import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
-import { cstdDoctoralStatus, cstdProfile } from "../../content/profile";
+import { cstdProfile } from "../../content/profile";
 import { cstdTechnicalNotes, getTechnicalNotePath } from "../../content/technical-notes";
 import { CstdChapterLink } from "../../components/site/cstd-chapter-link";
 import { CstdLink } from "../../components/site/cstd-link";
@@ -39,12 +39,8 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
         <div className="atelier-container atelier-hero-layout">
           <AtelierReveal className="atelier-hero-copy">
             <h1>{cstdProfile.name[locale]}<span className="atelier-name-stop" aria-hidden="true">.</span></h1>
-            <p className="atelier-hero-statement">
-              {isZh ? <>从数据里找到线索，<br />把想法做成产品。</> : <>Find the story in the data.<br />Build something useful.</>}
-            </p>
-            <p className="atelier-hero-intro">
-              {cstdProfile.summary[locale]}
-            </p>
+            <h2 className="atelier-hero-statement">{cstdProfile.title[locale]}</h2>
+            <p className="atelier-hero-intro">{cstdProfile.researchFocus[locale]}</p>
             <div className="atelier-actions">
               <CstdChapterLink href="#atelier-proof" className="atelier-button">
                 {isZh ? "浏览精选作品" : "Explore the work"}<ArrowUpRight aria-hidden="true" />
@@ -54,8 +50,7 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
               </CstdLink>
             </div>
             <div className="atelier-hero-location">
-              <span>{cstdDoctoralStatus[locale]}</span>
-              <span>{isZh ? "分析 · 系统 · 交付" : "Analysis · Systems · Delivery"}</span>
+              <span>{cstdProfile.academicBackground[locale]}</span>
             </div>
           </AtelierReveal>
           <AtelierMaterial locale={locale}>

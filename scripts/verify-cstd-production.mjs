@@ -20,21 +20,31 @@ async function get(path) {
 }
 
 const htmlSurfaces = [
-  { path: "/", language: "zh-CN", marker: "奶黄包" },
-  { path: "/about", language: "zh-CN", marker: "数据科学" },
-  { path: "/resume", language: "zh-CN", marker: "博士在读（第一年）" },
-  { path: "/now", language: "zh-CN", marker: "读博期间" },
+  { path: "/zh", language: "zh-CN", marker: "人工智能博士研究生" },
+  { path: "/about", language: "zh-CN", marker: "人工智能博士研究生" },
+  { path: "/resume", language: "zh-CN", marker: "博士在读" },
+  { path: "/now", language: "zh-CN", marker: "智能体可靠性评估" },
   { path: "/topics", language: "zh-CN", marker: "CSTD" },
   { path: "/lab/proof-museum", language: "zh-CN", marker: "CSTD" },
   { path: "/voxel", language: "zh-CN", marker: "作品城 77" },
-  { path: "/en", language: "en-AU", marker: "Custard" },
-  { path: "/en/about", language: "en-AU", marker: "data science" },
-  { path: "/en/resume", language: "en-AU", marker: "data science" },
-  { path: "/en/now", language: "en-AU", marker: "Alongside my PhD" },
+  { path: "/en", language: "en-AU", marker: "PhD Researcher in Artificial Intelligence" },
+  { path: "/en/about", language: "en-AU", marker: "PhD Researcher in Artificial Intelligence" },
+  { path: "/en/resume", language: "en-AU", marker: "PhD research" },
+  { path: "/en/now", language: "en-AU", marker: "AI agent reliability" },
   { path: "/en/notes/host-boundaries-in-one-next-deployment", language: "en-AU", marker: "Next.js" },
   { path: "/en/for/research", language: "en-AU", marker: "Research" },
   { path: "/en/voxel", language: "en-AU", marker: "PORTFOLIO//CITY 77" },
 ];
+for (const language of ["en-AU", "zh-CN"]) {
+  const root = await fetch(`${origin}/`, {
+    redirect: "manual",
+    headers: { "accept-language": language },
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  if (root.status !== 302 || new URL(root.headers.get("location") ?? "/", origin).pathname !== "/en") {
+    throw new Error("The default entry does not select English");
+  }
+}
 const htmlResponses = new Map();
 for (const { path, language, marker } of htmlSurfaces) {
   const response = await get(path);
@@ -45,10 +55,6 @@ for (const { path, language, marker } of htmlSurfaces) {
   if (!body.includes(marker)) throw new Error(`${path} is missing the expected localized identity`);
   if (schoolNames.test(body) || /"(?:alumniOf|homeLocation)"\s*:/.test(body)) throw new Error(`${path} exposes school or residence details`);
   if (outdatedDoctoralStatus.test(body)) throw new Error(`${path} exposes an outdated doctoral status`);
-  if (["/", "/about", "/resume", "/en", "/en/about", "/en/resume"].includes(path)) {
-    const studyStatus = language === "zh-CN" ? "攻读人工智能方向的博士学位" : "pursuing a PhD in artificial intelligence";
-    if (!body.includes(studyStatus)) throw new Error(`${path} is missing the current study status`);
-  }
   htmlResponses.set(path, response);
 }
 
@@ -57,17 +63,18 @@ for (const [locale, prefix] of [["zh", ""], ["en", "/en"]]) {
   if (resume.schemaVersion !== 2 || resume.locale !== locale) throw new Error(`${locale} public resume schema is invalid`);
   if (schoolNames.test(JSON.stringify(resume)) || "location" in resume.person || resume.education.some((entry) => "school" in entry || "period" in entry)) throw new Error(`${locale} public resume discloses private profile details`);
   if (outdatedDoctoralStatus.test(JSON.stringify(resume))) throw new Error(`${locale} public resume exposes an outdated doctoral status`);
-  const phdStage = locale === "zh" ? "博士在读（第一年）" : "PhD Year 1";
+  const phdStage = locale === "zh" ? "博士在读" : "PhD research";
   const phdField = locale === "zh" ? "人工智能" : "Artificial Intelligence";
   if (!resume.education.some((entry) => entry.stage === phdStage && entry.field === phdField)) throw new Error(`${locale} public resume is missing the current doctoral study`);
-  if (!resume.person.title.includes(locale === "zh" ? "数据科学" : "Data science")) throw new Error(`${locale} public resume has an outdated identity`);
+  const title = locale === "zh" ? "人工智能博士研究生" : "PhD Researcher in Artificial Intelligence";
+  if (resume.person.title !== title) throw new Error(`${locale} public resume has an outdated identity`);
   if (resume.timeline.length !== 74 || new Set(resume.timeline.map((entry) => entry.date.slice(0, 4))).size !== 7) throw new Error(`${locale} timeline is incomplete`);
   if (resume.timeline.some((entry) => !entry.datePrecision || !entry.learning || !entry.practice || !entry.outputs?.length)) throw new Error(`${locale} timeline lacks detailed records`);
   if (!resume.timeline.some((entry) => entry.id === "agent-reliability-plan" && entry.recordType === "research-plan")) throw new Error(`${locale} timeline has the wrong research status`);
   if (/31378714|500519943|ysuu0054|yiping su|苏一平/i.test(JSON.stringify(resume.timeline))) throw new Error(`${locale} timeline exposes a private identifier`);
 }
 
-const homepage = htmlResponses.get("/");
+const homepage = htmlResponses.get("/en");
 const requiredHeaders = {
   "content-security-policy": "frame-ancestors 'none'",
   "strict-transport-security": "max-age=63072000",

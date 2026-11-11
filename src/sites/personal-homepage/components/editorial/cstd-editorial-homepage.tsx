@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getLocalizedCstdHref } from "../../infrastructure/i18n";
 import type { CstdLocale } from "../../content/content-types";
-import { cstdDoctoralStatus, cstdEducationIntro } from "../../content/profile";
 import { CstdChapterLink } from "../site/cstd-chapter-link";
 import { CstdLink } from "../site/cstd-link";
 import { CstdLanguageSwitcher } from "../site/cstd-language-switcher";
@@ -45,6 +44,9 @@ export type EditorialNote = {
 
 export type EditorialProfile = {
   name: string;
+  title: string;
+  researchFocus: string;
+  academicBackground: string;
 };
 
 /* 作品界面图版（图 04/05）：与案例页 VERIFIED SURFACE 同源的本项目自有生产界面截图；
@@ -89,13 +91,8 @@ type EditorialCopy = {
   navMap: string;
   navVoxel: string;
   ctaHeader: string;
-  statement: React.ReactNode;
-  intro: string;
   exploreWork: string;
-  aboutMe: string;
-  roleField: string;
-  roleCraft: string;
-  titleFoot: string;
+  about: string;
   methodH2: React.ReactNode;
   methodLede: string;
   methodSteps: { title: string; detail: string; signal: string }[];
@@ -151,15 +148,8 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     navMap: zh ? "星图" : "Map",
     navVoxel: zh ? "作品城" : "Voxel world",
     ctaHeader: zh ? "写邮件给我" : "Write me an email",
-    statement: zh ? <>数据分析、做出来的系统，<br />和做它们的方法，都收在这里。</> : <>Data analyses, working systems,<br />and how each one was built.</>,
-    intro: zh
-      ? `${cstdEducationIntro.zh}我用 R、Python 和 SQL 做分析，也用 React 和 Next.js 开发产品。项目页附有脚本和验证记录。`
-      : `${cstdEducationIntro.en} I use R, Python, and SQL for analysis and build products with React and Next.js. The project pages include scripts and verification notes.`,
-    exploreWork: zh ? "看三件代表作" : "See three selected works",
-    aboutMe: zh ? "关于我" : "About me",
-    roleField: cstdDoctoralStatus[locale],
-    roleCraft: zh ? "分析 · 系统 · 交付" : "Analysis · Systems · Delivery",
-    titleFoot: zh ? "站上每件作品都可以重跑。" : "Every piece of work here reruns.",
+    exploreWork: zh ? "精选作品" : "Selected work",
+    about: zh ? "关于" : "About",
     methodH2: zh ? "方法" : "Method",
     methodLede: zh ? "三个步骤，每个项目都走一遍。" : "Three steps, run on every project.",
     methodSteps: zh
@@ -248,17 +238,13 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     colophonBrand: zh ? "奶黄包 · 个人工作室" : "CUSTARD · PERSONAL STUDIO",
     colophonMark: zh ? "奶黄包" : "CUSTARD",
     colophonDomain: "custard.top",
-    colophonH2: zh ? <>合作，<br />从一个问题开始。</> : <>Collaboration starts<br />with a question.</>,
-    colophonLede: zh ? (
-      <>把分析做成产品，是我一直在做的事。关于页和履历都在下面，合适就写封邮件。</>
-    ) : (
-      <>Turning analysis into products is what I do. The about page and résumé are below; if the fit is right, write.</>
-    ),
-    colophonCta: zh ? "关于我" : "About me",
+    colophonH2: zh ? "研究与合作" : "Research & collaboration",
+    colophonLede: zh ? "研究合作、数据产品与开源项目相关事宜，欢迎邮件联系。" : "For research collaboration, data products or open-source projects, get in touch.",
+    colophonCta: zh ? "发送邮件" : "Email",
     navNow: zh ? "现在" : "Now",
     navResume: zh ? "履历" : "Résumé",
     backToTop: zh ? "回到顶部" : "Back to top",
-    colophonSmall: zh ? "© 2026 奶黄包 · 滚动编排由 GSAP ScrollTrigger 驱动，无视频。" : "© 2026 Custard · Scroll choreography by GSAP ScrollTrigger. No video.",
+    colophonSmall: zh ? "© 2026 奶黄包" : "© 2026 Custard",
   };
 }
 
@@ -377,7 +363,7 @@ export function CstdEditorialHomepage({
           样式表带版本参数：/cstd-scroll/* 是 immutable 一年缓存且文件名无哈希，
           内容更新必须换版本号强制浏览器回源（见 docs/MAINTENANCE.md）。 */}
       {/* eslint-disable-next-line @next/next/no-css-tags */}
-      <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css?v=8" />
+      <link rel="stylesheet" precedence="sc-page" href="/cstd-scroll/cstd-editorial.css?v=9" />
       {/* 首屏衬线字体声明式预载（可变字重，覆盖全部标题/正文强调）：
           font-display:swap 下 LCP 记录的是字体换绘后的重绘时刻，慢 4G 上
           原本要等 CSS 链路才发现字体请求；预载让它与 CSS 并行到达。 */}
@@ -436,19 +422,18 @@ export function CstdEditorialHomepage({
                 <h1 className="ed-display-xl">
                   {profile.name}<span className="ed-fullstop" aria-hidden="true">.</span>
                 </h1>
-                <p className="ed-statement">{copy.statement}</p>
-                <p className="ed-summary">{copy.intro}</p>
+                <h2 className="ed-statement">{profile.title}</h2>
+                <p className="ed-summary">{profile.researchFocus}</p>
                 <p className="title-actions">
                   <CstdChapterLink href="#ch-work" className="ed-button">{copy.exploreWork}</CstdChapterLink>
-                  <CstdLink href={getLocalizedCstdHref("/about", locale)} className="ed-textlink">{copy.aboutMe}</CstdLink>
+                  <CstdLink href={getLocalizedCstdHref("/about", locale)} className="ed-textlink">{copy.about}</CstdLink>
                 </p>
-                <p className="title-role"><span>{copy.roleField}</span><span>{copy.roleCraft}</span></p>
+                <p className="title-role"><span>{profile.academicBackground}</span></p>
               </div>
             </div>
-            <p className="title-foot">
-              {copy.titleFoot}
-              <i className="ed-rule" aria-hidden="true" />
-            </p>
+            <div className="title-foot" aria-hidden="true">
+              <i className="ed-rule" />
+            </div>
           </div>
         </section>
 
@@ -655,7 +640,7 @@ export function CstdEditorialHomepage({
               <h2 className="ed-display-lg">{copy.colophonH2}</h2>
               <p className="ed-lede">
                 {copy.colophonLede}{" "}
-                <CstdLink href={getLocalizedCstdHref("/about", locale)} className="colophon-cta">{copy.colophonCta}</CstdLink>
+                <a href={copy.mailto} className="colophon-cta">{copy.colophonCta}</a>
               </p>
             </div>
             {/* 名字回归：合卷前的最后一眼落在品牌上（金点收句，域名旁注） */}

@@ -8,7 +8,7 @@ function headers(values: Record<string, string>) {
   return "/*\n" + Object.entries(values).map(([key, value]) => `  ${key}: ${value}`).join("\n") + "\n\n";
 }
 
-writeFileSync("out/404.html", createCstdNotFoundHtml("zh"));
+writeFileSync("out/404.html", createCstdNotFoundHtml("en"));
 const assetHeaders = readFileSync("public/_headers", "utf8").replace(/^\/\*\r?\n[^\n]*nosniff\r?\n\r?\n/, "");
 writeFileSync("out/_headers", headers(PERSONAL_SITE_SECURITY_HEADERS) + assetHeaders);
 for (const file of readdirSync("out")) {
@@ -22,7 +22,7 @@ for (const file of readdirSync("out")) {
 }
 appendFileSync("out/_headers", "\n/en/*\n  Content-Language: en-AU\n\n/en\n  Content-Language: en-AU\n");
 appendFileSync("out/_headers", "\n/en/rss.xml\n  Content-Type: application/rss+xml; charset=utf-8\n");
-writeFileSync("out/_redirects", "/cstd / 301\n/cstd/* /:splat 301\n");
+writeFileSync("out/_redirects", "/ /en 302\n/cstd /en 301\n/cstd/* /:splat 301\n");
 writeFileSync("archive/rocodex/out/_headers", headers(ROCODEX_SITE_SECURITY_HEADERS) + "/_next/static/*\n  Cache-Control: public, max-age=31536000, immutable\n\n/images/*\n  Cache-Control: public, max-age=604800\n");
 // Next.js #85374: Windows export leaves nested segment files. Normalize only
 // build artifacts to the same flat names produced by Next on Linux.

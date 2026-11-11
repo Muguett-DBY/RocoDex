@@ -36,6 +36,8 @@ GitHub Actions 运行验证；推送本身不会自动发布。验证通过后�
 
 发布后运行 npm run verify:live:cstd，并检查 rocodex.custard.top 的图鉴详情、查询参数与静态 404。确认两个项目均没有后台脚本、数据库绑定和定时任务。
 
+custard.top 根路径默认跳转至 /en，中文主页位于 /zh。语言切换使用明确的页面地址。
+
 www.custard.top 的规范域名跳转使用 Cloudflare 域名重定向规则；不为跳转运行 Next.js。/cstd 旧路径兼容在静态 _redirects 中。
 
 默认主页的正式滚动版式使用 public/cstd-scroll/cstd-editorial.css，动效使用懒加载的 GSAP。没有哈希而缓存一年的样式修改后，要递增组件引用中的 ?v= 版本参数。

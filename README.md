@@ -2,7 +2,7 @@
 
 作品、技术札记、个人履历和一些可以在浏览器里玩的实验。
 
-- [个人主页](https://custard.top) · [English](https://custard.top/en)
+- [个人主页（默认英文）](https://custard.top) · [中文](https://custard.top/zh)
 - [RocoDex 静态存档](https://rocodex.custard.top)：停止功能维护，保留图鉴、攻略、搜索和本地收藏。
 
 使用 Next.js、React 和 TypeScript。两个站点在构建时生成 HTML、导航数据和静态资源，由 Cloudflare Static Assets 直接提供；没有 Next.js 后台、登录、会话、数据库或自建访问指标接口。

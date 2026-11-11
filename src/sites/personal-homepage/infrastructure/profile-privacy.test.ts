@@ -24,13 +24,15 @@ describe("public personal profile privacy", () => {
     const person = schema.find((entry) => entry["@type"] === "ProfilePage")?.mainEntity;
     expect(person).not.toHaveProperty("alumniOf");
     expect(person).not.toHaveProperty("homeLocation");
-    expect(resume.person.title).toContain(locale === "zh" ? "数据科学" : "Data science");
+    const title = locale === "zh" ? "人工智能博士研究生" : "PhD Researcher in Artificial Intelligence";
+    expect(resume.person.title).toBe(title);
+    expect(person?.jobTitle).toBe(title);
     expect(resume.person.summary).toContain(locale === "zh" ? "数据科学" : "data science");
     expect(resume.education.map((entry) => entry.field)).toContain(locale === "zh" ? "数据科学" : "Data Science");
     expect(resume.education).toContainEqual(expect.objectContaining({
-      stage: locale === "zh" ? "博士在读（第一年）" : "PhD Year 1",
+      stage: locale === "zh" ? "博士在读" : "PhD research",
       field: locale === "zh" ? "人工智能" : "Artificial Intelligence",
     }));
-    expect(resume.person.summary).toContain(locale === "zh" ? "攻读人工智能方向的博士学位" : "pursuing a PhD in artificial intelligence");
+    expect(resume.person.summary).toContain(locale === "zh" ? "智能体可靠性评估" : "AI agent reliability");
   });
 });

@@ -1,35 +1,31 @@
 import type { LocalizedText } from "./content-types";
 
-export const cstdDoctoralStatus = {
-  zh: "人工智能 · 博士在读（第一年）",
-  en: "Artificial Intelligence · PhD Year 1",
-} as const satisfies LocalizedText;
-
-export const cstdEducationIntro = {
-  zh: "我在攻读人工智能方向的博士学位，本科和硕士都读的是数据科学。",
-  en: "I'm pursuing a PhD in artificial intelligence. I studied data science for both my bachelor's and master's degrees.",
+const doctoralStage = { zh: "博士在读", en: "PhD research" } as const satisfies LocalizedText;
+const researchFocus = {
+  zh: "智能体可靠性评估 · 可复现研究",
+  en: "AI agent reliability · Reproducible research",
 } as const satisfies LocalizedText;
 
 export const cstdProfile = {
   name: { zh: "奶黄包", en: "Custard" },
-  title: {
-    zh: `${cstdDoctoralStatus.zh} · 数据科学与产品开发`,
-    en: `${cstdDoctoralStatus.en} · Data science and product development`,
-  },
+  title: { zh: "人工智能博士研究生", en: "PhD Researcher in Artificial Intelligence" },
+  researchFocus,
+  doctoralStage,
+  academicBackground: { zh: "数据科学本硕", en: "Bachelor’s & Master’s in Data Science" },
   availability: { zh: "持续做数据分析、研究工具和个人产品", en: "Building data analyses, research tools, and personal products" },
   summary: {
-    zh: `${cstdEducationIntro.zh}平时用 R、Python 和 SQL 分析数据，也用 React 和 Next.js 做产品。这里记录了我的作品和背后的取舍。`,
-    en: `${cstdEducationIntro.en} I analyse data with R, Python, and SQL and build products with React and Next.js. This site collects my work and the decisions behind it.`,
+    zh: "人工智能博士研究生，研究兴趣为智能体可靠性评估与可复现研究。",
+    en: "PhD researcher in artificial intelligence. Research interests include AI agent reliability and reproducible research.",
   },
   intro: {
-    zh: `${cstdEducationIntro.zh}我用 R、Python 和 SQL 做数据分析、统计建模与可视化，也用 React、Next.js 和 Cloudflare 构建产品。最近关注 AI Agent、可靠性评估与可复现研究。这里有我对 147 万行墨尔本开放数据的分析、正在维护的产品，以及开发时的选择、踩过的坑和验证结果。`,
-    en: `${cstdEducationIntro.en} I use R, Python, and SQL for data analysis, statistical modelling, and visualisation, and React, Next.js, and Cloudflare to build products. My current interests include AI agents, reliability evaluation, and reproducible research. Here you can explore my analysis of 1.47 million Melbourne open-data records, the products I maintain, and what I learned while building them.`,
+    zh: "人工智能博士研究生，本科及硕士专业为数据科学。研究兴趣为智能体可靠性评估与可复现研究。代表项目包括城市开放数据分析、数据产品与研究工具。",
+    en: "PhD researcher in artificial intelligence, with bachelor’s and master’s degrees in data science. Research interests include AI agent reliability and reproducible research. Selected projects span urban open-data analysis, data products and research tools.",
   },
   now: {
-    updatedAt: "2026-11-11",
+    updatedAt: "2026-11-12",
     focus: {
-      zh: "读博期间，我也在继续做数据分析和产品开发。最近关注 AI Agent 的可靠性，以及怎样设计可以复现的实验。",
-      en: "Alongside my PhD, I continue to analyse data and build products. I'm interested in how to assess AI agent reliability and make experiments reproducible.",
+      zh: "智能体可靠性评估、可复现实验设计，以及数据分析与产品开发。",
+      en: "AI agent reliability, reproducible experimental design, and ongoing work in data analysis and product development.",
     },
     building: [
       { zh: "墨尔本开放数据的行人与微气候分析，以及同源数据上的产品实验。", en: "Melbourne open-data pedestrian and microclimate analysis, plus product experiments on the same data." },
@@ -44,12 +40,9 @@ export const cstdProfile = {
   education: [
     {
       id: "ai-phd",
-      stage: { zh: "博士在读（第一年）", en: "PhD Year 1" },
+      stage: doctoralStage,
       field: { zh: "人工智能", en: "Artificial Intelligence" },
-      detail: {
-        zh: "关注 AI Agent、可靠性评估与可复现研究。",
-        en: "Research interests include AI agents, reliability evaluation, and reproducible research.",
-      },
+      detail: researchFocus,
     },
     {
       id: "data-science",
