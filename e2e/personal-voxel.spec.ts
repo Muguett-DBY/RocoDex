@@ -21,21 +21,30 @@ async function expectRenderedVoxelCanvas(page: Page) {
   expect(signal.lit).toBeGreaterThan(signal.samples * 0.08);
 }
 
-test("CSTD exposes a themed voxel-world invitation from its navigation", async ({ page, isMobile }) => {
-  const browserIssues = captureBrowserIssues(page);
-  // The voxel invitation belongs to the three game worlds; the formal atelier default hides it.
-  await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-  await page.goto(isMobile ? "/about" : "/zh", { waitUntil: "domcontentloaded" });
-  const invitation = page.locator("[data-cstd-voxel-nav]:visible").first();
-  await expect(invitation).toBeVisible();
-  await expect(invitation).toHaveText(/^(?:方块世界|算了，玩会我的世界吧)$/);
-  const invitationLabel = (await invitation.innerText()).trim();
-  await expect(invitation).toHaveAccessibleName(invitationLabel);
-  await invitation.click();
-  await expect(page).toHaveURL(/\/voxel$/);
-  await expect(page.locator("[data-cstd-voxel-game]")).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
-  expect(browserIssues).toEqual([]);
-});
+for (const locale of ["zh", "en"] as const) {
+  test(`CSTD ${locale} exposes a themed voxel-world invitation from its navigation`, async ({ page, isMobile }) => {
+    const browserIssues = captureBrowserIssues(page);
+    // The voxel invitation belongs to the game worlds; the formal atelier default hides it.
+    await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
+    const home = locale === "zh" ? "/zh" : "/";
+    const about = locale === "zh" ? "/about" : "/en/about";
+    const destination = locale === "zh" ? "/voxel" : "/en/voxel";
+    await page.goto(isMobile ? about : home, { waitUntil: "domcontentloaded" });
+    await expect(page.locator("html")).toHaveAttribute("lang", locale === "zh" ? "zh-CN" : "en-AU");
+    const invitation = page.locator("[data-cstd-voxel-nav]:visible").first();
+    await expect(invitation).toBeVisible();
+    await expect(invitation).toHaveText(locale === "zh"
+      ? /^(?:方块世界|算了，玩会我的世界吧)$/
+      : /^(?:Voxel world|Never mind\. Let's mine a while\.)$/);
+    await expect(invitation).toHaveAttribute("href", destination);
+    const invitationLabel = (await invitation.innerText()).trim();
+    await expect(invitation).toHaveAccessibleName(invitationLabel);
+    await invitation.click();
+    await expect(page).toHaveURL(new RegExp(`${destination}$`));
+    await expect(page.locator("[data-cstd-voxel-game]")).toHaveAttribute("data-cstd-voxel-ready", "true", { timeout: 20_000 });
+    expect(browserIssues).toEqual([]);
+  });
+}
 
 test("CSTD renders three distinct playable voxel biomes without loading a blank canvas", async ({ page }) => {
   test.setTimeout(150_000);

@@ -99,6 +99,10 @@ jobs:
     name: E2E / ${{ matrix.surface }}
     needs: [boundaries, quality, install_policy]
     runs-on: ubuntu-latest
+    container:
+      # Keep this version aligned with @playwright/test in package.json.
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --user 1001 --shm-size=1g
     timeout-minutes: 25
     strategy:
       fail-fast: false
@@ -116,8 +120,6 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
       - name: Run isolated browser suite
         env:
           TEST_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
