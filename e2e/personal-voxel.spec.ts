@@ -25,7 +25,7 @@ test("CSTD exposes a themed voxel-world invitation from its navigation", async (
   const browserIssues = captureBrowserIssues(page);
   // The voxel invitation belongs to the three game worlds; the formal atelier default hides it.
   await page.addInitScript(() => window.localStorage.setItem("cstd-world-theme", "neon-district"));
-  await page.goto(isMobile ? "/about" : "/", { waitUntil: "domcontentloaded" });
+  await page.goto(isMobile ? "/about" : "/zh", { waitUntil: "domcontentloaded" });
   const invitation = page.locator("[data-cstd-voxel-nav]:visible").first();
   await expect(invitation).toBeVisible();
   await expect(invitation).toHaveText(/^(?:方块世界|算了，玩会我的世界吧)$/);
