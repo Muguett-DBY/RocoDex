@@ -3,7 +3,7 @@ import Image from "next/image";
 
 import type { CstdLocale } from "../../content/content-types";
 import { cstdCaseStudies, getCaseStudyPath } from "../../content/case-studies";
-import { cstdProfile } from "../../content/profile";
+import { cstdDoctoralStatus, cstdProfile } from "../../content/profile";
 import { cstdTechnicalNotes, getTechnicalNotePath } from "../../content/technical-notes";
 import { CstdChapterLink } from "../../components/site/cstd-chapter-link";
 import { CstdLink } from "../../components/site/cstd-link";
@@ -54,7 +54,7 @@ export function AtelierHomepage({ locale }: { locale: CstdLocale }) {
               </CstdLink>
             </div>
             <div className="atelier-hero-location">
-              <span>{isZh ? "数据科学 · 产品开发" : "Data Science · Product Development"}</span>
+              <span>{cstdDoctoralStatus[locale]}</span>
               <span>{isZh ? "分析 · 系统 · 交付" : "Analysis · Systems · Delivery"}</span>
             </div>
           </AtelierReveal>

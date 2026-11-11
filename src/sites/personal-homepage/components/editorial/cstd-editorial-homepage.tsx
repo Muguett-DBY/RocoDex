@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { getLocalizedCstdHref } from "../../infrastructure/i18n";
 import type { CstdLocale } from "../../content/content-types";
+import { cstdDoctoralStatus } from "../../content/profile";
 import { CstdChapterLink } from "../site/cstd-chapter-link";
 import { CstdLink } from "../site/cstd-link";
 import { CstdLanguageSwitcher } from "../site/cstd-language-switcher";
@@ -152,11 +153,11 @@ function editorialCopy(locale: CstdLocale): EditorialCopy {
     ctaHeader: zh ? "写邮件给我" : "Write me an email",
     statement: zh ? <>数据分析、做出来的系统，<br />和做它们的方法，都收在这里。</> : <>Data analyses, working systems,<br />and how each one was built.</>,
     intro: zh
-      ? "本硕读数据科学。用 R、Python 和 SQL 做分析，用 React 和 Next.js 把结果做成能用的产品；每件作品的脚本和验证过程都放在站上。"
-      : "My bachelor's and master's studies are in data science. I analyse with R, Python, and SQL, and ship products with React and Next.js. The scripts and verification behind every piece of work are on this site.",
+      ? "本硕读数据科学，现在是人工智能博士一年级。用 R、Python 和 SQL 做分析，用 React 和 Next.js 把结果做成能用的产品；每件作品的脚本和验证过程都放在站上。"
+      : "My bachelor's and master's studies are in data science. I'm now a first-year PhD student in artificial intelligence. I analyse with R, Python, and SQL, and ship products with React and Next.js. The scripts and verification behind every piece of work are on this site.",
     exploreWork: zh ? "看三件代表作" : "See three selected works",
     aboutMe: zh ? "关于我" : "About me",
-    roleField: zh ? "数据科学 · 产品开发" : "Data Science · Product Development",
+    roleField: cstdDoctoralStatus[locale],
     roleCraft: zh ? "分析 · 系统 · 交付" : "Analysis · Systems · Delivery",
     titleFoot: zh ? "站上每件作品都可以重跑。" : "Every piece of work here reruns.",
     methodH2: zh ? "方法" : "Method",

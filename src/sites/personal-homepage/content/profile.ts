@@ -1,22 +1,30 @@
 import type { LocalizedText } from "./content-types";
 
+export const cstdDoctoralStatus = {
+  zh: "人工智能博士一年级",
+  en: "Artificial Intelligence · PhD Year 1",
+} as const satisfies LocalizedText;
+
 export const cstdProfile = {
   name: { zh: "奶黄包", en: "Custard" },
-  title: { zh: "数据科学与产品开发", en: "Data science and product development" },
+  title: {
+    zh: `${cstdDoctoralStatus.zh} · 数据科学与产品开发`,
+    en: `${cstdDoctoralStatus.en} · Data science and product development`,
+  },
   availability: { zh: "持续做数据分析、研究工具和个人产品", en: "Building data analyses, research tools, and personal products" },
   summary: {
-    zh: "数据科学本硕背景。用 R、Python 和 SQL 分析真实数据，也用 React、Next.js 把想法做成能用的产品。这里放着我的作品，以及每一步怎么做、为什么这么做。",
-    en: "My background is in data science at bachelor's and master's level. I use R, Python, and SQL to explore real data, and React and Next.js to build useful products. Here is the work and the thinking behind it.",
+    zh: "数据科学本硕背景。现在是人工智能博士一年级。用 R、Python 和 SQL 分析真实数据，也用 React、Next.js 把想法做成能用的产品。这里放着我的作品，以及每一步怎么做、为什么这么做。",
+    en: "My background is in data science at bachelor's and master's level. I'm now a first-year PhD student in artificial intelligence. I use R, Python, and SQL to explore real data, and React and Next.js to build useful products. Here is the work and the thinking behind it.",
   },
   intro: {
-    zh: "我的本硕背景是数据科学。我用 R、Python 和 SQL 做数据分析、统计建模与可视化，也用 React、Next.js 和 Cloudflare 构建产品。最近关注 AI Agent、可靠性评估与可复现研究。这里有我对 147 万行墨尔本开放数据的分析、正在维护的产品，以及开发时的选择、踩过的坑和验证结果。",
-    en: "My bachelor's and master's studies are in data science. I use R, Python, and SQL for data analysis, statistical modelling, and visualisation, and React, Next.js, and Cloudflare to build products. My current interests include AI agents, reliability evaluation, and reproducible research. Here you can explore my analysis of 1.47 million Melbourne open-data records, the products I maintain, and what I learned while building them.",
+    zh: "我的本硕背景是数据科学，现在是人工智能博士一年级。我用 R、Python 和 SQL 做数据分析、统计建模与可视化，也用 React、Next.js 和 Cloudflare 构建产品。最近关注 AI Agent、可靠性评估与可复现研究。这里有我对 147 万行墨尔本开放数据的分析、正在维护的产品，以及开发时的选择、踩过的坑和验证结果。",
+    en: "My bachelor's and master's studies are in data science. I'm now a first-year PhD student in artificial intelligence. I use R, Python, and SQL for data analysis, statistical modelling, and visualisation, and React, Next.js, and Cloudflare to build products. My current interests include AI agents, reliability evaluation, and reproducible research. Here you can explore my analysis of 1.47 million Melbourne open-data records, the products I maintain, and what I learned while building them.",
   },
   now: {
-    updatedAt: "2026-10-11",
+    updatedAt: "2026-11-11",
     focus: {
-      zh: "持续做数据分析和能用的产品。最近在琢磨 AI Agent 的可靠性，以及怎样把实验做得可复现。",
-      en: "I work on data analysis and useful products. Lately, I've been exploring AI agent reliability and reproducible experiments.",
+      zh: "人工智能博士一年级，继续做数据分析和能用的产品。最近在琢磨 AI Agent 的可靠性，以及怎样把实验做得可复现。",
+      en: "I'm a first-year PhD student in artificial intelligence. I work on data analysis and useful products. Lately, I've been exploring AI agent reliability and reproducible experiments.",
     },
     building: [
       { zh: "墨尔本开放数据的行人与微气候分析，以及同源数据上的产品实验。", en: "Melbourne open-data pedestrian and microclimate analysis, plus product experiments on the same data." },
@@ -29,6 +37,15 @@ export const cstdProfile = {
     ] satisfies readonly LocalizedText[],
   },
   education: [
+    {
+      id: "ai-phd",
+      stage: { zh: "博士一年级", en: "PhD Year 1" },
+      field: { zh: "人工智能", en: "Artificial Intelligence" },
+      detail: {
+        zh: "关注 AI Agent、可靠性评估与可复现研究。",
+        en: "Research interests include AI agents, reliability evaluation, and reproducible research.",
+      },
+    },
     {
       id: "data-science",
       stage: { zh: "本硕背景", en: "Bachelor's & master's study" },

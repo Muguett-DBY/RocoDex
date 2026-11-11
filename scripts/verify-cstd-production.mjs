@@ -4,7 +4,7 @@ import path from "node:path";
 const origin = (process.env.CSTD_ORIGIN ?? "https://custard.top").replace(/\/$/, "");
 const timeoutMs = 15_000;
 const schoolNames = /monash|莫纳什|university of sydney|悉尼大学|FIT\d{4}/i;
-const doctoralStatements = /博士|博\s*0|\bph\.?\s*d\.?\b|doctoral|doctorate|year[\s-]*zero/i;
+const outdatedDoctoralStatus = /博\s*0|博士零年级|year[\s-]*(?:0\b|zero\b)|preparing for doctoral study/i;
 const performanceContract = JSON.parse(
   readFileSync(path.resolve("src/sites/personal-homepage/content/performance-contract.json"), "utf8"),
 );
@@ -44,7 +44,11 @@ for (const { path, language, marker } of htmlSurfaces) {
   if (!new RegExp(`<html[^>]*\\blang=["']${language}["']`, "i").test(body)) throw new Error(`${path} has the wrong server-rendered html lang`);
   if (!body.includes(marker)) throw new Error(`${path} is missing the expected localized identity`);
   if (schoolNames.test(body) || /"(?:alumniOf|homeLocation)"\s*:/.test(body)) throw new Error(`${path} exposes school or residence details`);
-  if (doctoralStatements.test(body)) throw new Error(`${path} exposes a removed doctoral status`);
+  if (outdatedDoctoralStatus.test(body)) throw new Error(`${path} exposes an outdated doctoral status`);
+  if (["/", "/about", "/resume", "/now", "/en", "/en/about", "/en/resume", "/en/now"].includes(path)) {
+    const studyStatus = language === "zh-CN" ? "人工智能博士一年级" : "first-year PhD student in artificial intelligence";
+    if (!body.includes(studyStatus)) throw new Error(`${path} is missing the current study status`);
+  }
   htmlResponses.set(path, response);
 }
 
@@ -52,7 +56,10 @@ for (const [locale, prefix] of [["zh", ""], ["en", "/en"]]) {
   const resume = await (await get(`${prefix}/resume.json`)).json();
   if (resume.schemaVersion !== 2 || resume.locale !== locale) throw new Error(`${locale} public resume schema is invalid`);
   if (schoolNames.test(JSON.stringify(resume)) || "location" in resume.person || resume.education.some((entry) => "school" in entry || "period" in entry)) throw new Error(`${locale} public resume discloses private profile details`);
-  if (doctoralStatements.test(JSON.stringify(resume))) throw new Error(`${locale} public resume exposes a removed doctoral status`);
+  if (outdatedDoctoralStatus.test(JSON.stringify(resume))) throw new Error(`${locale} public resume exposes an outdated doctoral status`);
+  const phdStage = locale === "zh" ? "博士一年级" : "PhD Year 1";
+  const phdField = locale === "zh" ? "人工智能" : "Artificial Intelligence";
+  if (!resume.education.some((entry) => entry.stage === phdStage && entry.field === phdField)) throw new Error(`${locale} public resume is missing the current doctoral study`);
   if (!resume.person.title.includes(locale === "zh" ? "数据科学" : "Data science")) throw new Error(`${locale} public resume has an outdated identity`);
   if (resume.timeline.length !== 74 || new Set(resume.timeline.map((entry) => entry.date.slice(0, 4))).size !== 7) throw new Error(`${locale} timeline is incomplete`);
   if (resume.timeline.some((entry) => !entry.datePrecision || !entry.learning || !entry.practice || !entry.outputs?.length)) throw new Error(`${locale} timeline lacks detailed records`);
