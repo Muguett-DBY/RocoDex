@@ -90,13 +90,13 @@ jobs:
         run: npm run typecheck
       - name: Unit and integration tests
         run: npm test
-      - name: Build both sites
+      - name: Build the personal site
         run: npm run build
       - name: Report personal homepage bundle boundaries
         run: npm run verify:personal-bundle
 
   e2e:
-    name: E2E / ${{ matrix.surface }}
+    name: E2E / personal
     needs: [boundaries, quality, install_policy]
     runs-on: ubuntu-latest
     container:
@@ -104,10 +104,6 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.64.1-noble
       options: --user 1001 --shm-size=1g
     timeout-minutes: 25
-    strategy:
-      fail-fast: false
-      matrix:
-        surface: [personal, rocodex]
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -127,7 +123,7 @@ jobs:
           # Only test files changed: let Playwright select their affected tests.
           # Application, dependency and build changes still run the full suite.
           if git diff --quiet "$TEST_BASE" HEAD -- . ':!e2e/**' ':!.github/workflows/ci.yml'; then
-            npm run test:e2e:${{ matrix.surface }} -- --only-changed="$TEST_BASE" --pass-with-no-tests
+            npm run test:e2e -- --only-changed="$TEST_BASE" --pass-with-no-tests
           else
-            npm run test:e2e:${{ matrix.surface }}
+            npm run test:e2e
           fi

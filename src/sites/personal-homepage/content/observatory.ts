@@ -1,4 +1,4 @@
-import { cstdContentHealth, type CstdContentHealthSnapshot } from "./content-health";
+import { createCstdContentHealth, type CstdContentHealthSnapshot } from "./content-health";
 import { createCstdDigest } from "./digest";
 import { cstdStudioSnapshot } from "./studio-status";
 import { cstdPerformanceContract } from "./performance-contract";
@@ -91,6 +91,7 @@ export function createCstdEngineeringObservatory(
   environment: ObservatoryEnvironment = process.env,
   now = new Date(),
 ): CstdEngineeringObservatory {
+  const cstdContentHealth = createCstdContentHealth(now);
   const commit = environment.VERCEL_GIT_COMMIT_SHA ?? environment.GITHUB_SHA ?? "working-tree";
   const buildLinked = /^[a-f0-9]{7,40}$/i.test(commit);
   const deploymentEnvironment = resolveEnvironment(environment.VERCEL_ENV);

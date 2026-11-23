@@ -29,7 +29,7 @@ export function AtelierProjectCover({ entry, locale }: { entry: CstdCaseStudy; l
         <>
           <div className="atelier-cover-label"><span>{kind === "rocodex" ? "ROCODEX" : "CSTD ALPHA"}</span><span>{kind === "rocodex" ? "PRODUCT / 01" : "RESEARCH / 02"}</span></div>
           <div className="atelier-cover-browser">
-            <div className="atelier-cover-browser-bar" aria-hidden="true"><i /><i /><i /><span>{kind === "rocodex" ? "rocodex.custard.top" : "alpha.custard.top"}</span></div>
+            <div className="atelier-cover-browser-bar" aria-hidden="true"><i /><i /><i /><span>{kind === "rocodex" ? "RocoDex" : "alpha.custard.top"}</span></div>
             <div className="atelier-cover-screen"><Image src={entry.image.src} alt={entry.image.alt[locale]} fill sizes="(min-width: 1024px) 52vw, 92vw" className="atelier-cover-image" style={{ objectPosition: entry.image.position ?? "50% 50%" }} /></div>
           </div>
           <div className="atelier-cover-caption"><strong>{kind === "rocodex" ? (isZh ? "两个站点，一套系统。" : "Two sites. One system.") : (isZh ? "让研究，有据可查。" : "Research, with a record.")}</strong><span>{kind === "rocodex" ? "Next.js · React · TypeScript" : "Evidence · DCF · Versioning"}</span></div>

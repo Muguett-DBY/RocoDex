@@ -213,7 +213,9 @@ test.describe("CSTD technical archive", () => {
 
     const healthResponse = await request.get("/content-health.json", { headers });
     expect(healthResponse.status()).toBe(200);
-    expect((await healthResponse.json()).score).toBe(100);
+    const contentHealth = await healthResponse.json();
+    expect(contentHealth.issues).toMatchObject({ missingLocalePairs: 0, brokenRelations: [], orphanedEntries: [] });
+    expect(contentHealth.score).toBe(Math.max(0, 100 - contentHealth.issues.staleArtifacts.length * 2));
 
     const performanceResponse = await request.get("/performance.json", { headers });
     expect(performanceResponse.status()).toBe(200);

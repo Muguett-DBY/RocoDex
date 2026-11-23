@@ -7,9 +7,7 @@ const repositoryRoot = path.resolve(fileURLToPath(new URL("../../", import.meta.
 const sourceRoot = path.join(repositoryRoot, "src");
 
 function sourcePath(relativePath: string) {
-  return relativePath.startsWith("app/(rocodex)/")
-    ? path.join(repositoryRoot, "archive/rocodex/app", relativePath.slice("app/(rocodex)/".length))
-    : path.join(sourceRoot, relativePath);
+  return path.join(sourceRoot, relativePath);
 }
 
 function readSource(relativePath: string) {
@@ -25,28 +23,19 @@ function collectSourceFiles(directory: string): string[] {
 }
 
 describe("site architecture boundaries", () => {
-  it("keeps each website behind an explicit route group", () => {
+  it("keeps both homepage locales behind explicit route groups", () => {
     expect(existsSync(sourcePath("app/(personal)/page.tsx"))).toBe(true);
     expect(existsSync(sourcePath("app/(personal-en)/en/page.tsx"))).toBe(true);
     expect(existsSync(sourcePath("app/(personal)/layout.tsx"))).toBe(true);
     expect(existsSync(sourcePath("app/(personal-en)/layout.tsx"))).toBe(true);
-    expect(existsSync(sourcePath("app/(rocodex)/page.tsx"))).toBe(true);
-    expect(existsSync(sourcePath("app/(rocodex)/layout.tsx"))).toBe(true);
   });
 
-  it("gives every site-owned root document the correct language and providers", () => {
+  it("gives both homepage layouts the correct language and providers", () => {
     expect(readSource("app/(personal)/layout.tsx")).toContain('<html lang="zh-CN"');
     expect(readSource("app/(personal-en)/layout.tsx")).toContain('<html lang="en-AU"');
     expect(readSource("app/(personal)/layout.tsx")).not.toContain("AuthProvider");
     expect(readSource("app/(personal-en)/layout.tsx")).not.toContain("AuthProvider");
-    expect(readSource("app/(rocodex)/layout.tsx")).toContain('<html lang="zh-CN"');
-    expect(readSource("app/(rocodex)/layout.tsx")).not.toContain("AuthProvider");
     expect(existsSync(sourcePath("app/layout.tsx"))).toBe(false);
-  });
-
-  it("keeps the archived RocoDex not-found document independent", () => {
-    expect(readSource("app/(rocodex)/not-found.tsx")).toContain("RocoDexNotFound");
-    expect(readSource("app/(rocodex)/layout.tsx")).not.toContain("AuthProvider");
   });
 
   it("owns personal homepage code inside one site module", () => {
@@ -71,20 +60,26 @@ describe("site architecture boundaries", () => {
     expect(expectedFiles.filter((file) => !existsSync(sourcePath(file)))).toEqual([]);
   });
 
-  it("keeps RocoDex route ownership explicit without moving its stable domain modules", () => {
-    expect(existsSync(sourcePath("sites/rocodex/metadata.ts"))).toBe(true);
-    expect(existsSync(sourcePath("sites/rocodex/sitemap.ts"))).toBe(true);
-
-    const rootLevelRocoDexRoutes = [
-      "app/page.tsx",
-      "app/creatures",
-      "app/guides",
-      "app/pvp-teams",
-      "app/collection",
-      "app/compare",
+  it("keeps the retired encyclopedia out of the homepage export", () => {
+    const retiredPaths = [
+      "archive/rocodex/app",
+      "src/sites/rocodex",
+      "src/app/(rocodex)",
+      "src/app/page.tsx",
+      "src/app/creatures",
+      "src/app/guides",
+      "src/app/pvp-teams",
+      "src/app/collection",
+      "src/app/compare",
+      "src/app/data-status",
+      "src/app/discover",
+      "src/app/matchups",
+      "src/app/rkti",
+      "src/app/skills",
+      "public/images/creatures",
+      "public/images/pvp",
     ];
-
-    expect(rootLevelRocoDexRoutes.filter((route) => existsSync(sourcePath(route)))).toEqual([]);
+    expect(retiredPaths.filter((file) => existsSync(path.join(repositoryRoot, file)))).toEqual([]);
   });
 
   it("exposes personal homepage internals only through public entry points", () => {
@@ -109,7 +104,7 @@ describe("site architecture boundaries", () => {
     expect(violations).toEqual([]);
   });
 
-  it("does not let personal homepage production code import RocoDex modules", () => {
+  it("keeps homepage production imports out of the former encyclopedia directories", () => {
     const personalSiteRoot = sourcePath("sites/personal-homepage");
     const forbiddenImports = /from\s+["']@\/(?:components|data|hooks|lib|types)\//;
     const violations = collectSourceFiles(personalSiteRoot)
@@ -147,7 +142,7 @@ describe("site architecture boundaries", () => {
     expect(voxelPageSource).toContain("getVoxelPortfolio(locale)");
   });
 
-  it("removes the former personal-site files from generic RocoDex folders", () => {
+  it("keeps the former monolithic homepage files retired", () => {
     const legacyFiles = [
       "components/cstd-landing.tsx",
       "components/cstd-immersive-scene.tsx",

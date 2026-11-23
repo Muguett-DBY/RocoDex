@@ -39,8 +39,6 @@
   ],
   "exclude": [
     "node_modules",
-    "archive/rocodex/.next",
-    "archive/rocodex/out",
     "output"
   ]
 }

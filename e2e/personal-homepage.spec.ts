@@ -38,7 +38,10 @@ test("CSTD presents a clear portfolio before optional visual enhancement", async
   await expect(page.locator('[data-cstd-home-replay="alpha-race"]')).toHaveCount(1);
   await expect(page.locator("[data-cstd-knowledge-lens]")).toHaveCount(1);
   await expect(page.locator("[data-cstd-knowledge-card]")).toHaveCount(4);
-  await expect(page.locator("[data-cstd-content-health]")).toHaveAttribute("data-cstd-content-health-score", "100");
+  const healthResponse = await page.request.get("/content-health.json");
+  expect(healthResponse.ok()).toBe(true);
+  const { score } = await healthResponse.json();
+  await expect(page.locator("[data-cstd-content-health]")).toHaveAttribute("data-cstd-content-health-score", String(score));
   await expect(page.locator("[data-cstd-scene-director]")).toHaveCount(0);
   await expect(page.locator("[data-cstd-global-hud]")).toHaveCount(0);
   await expect(page.getByRole("searchbox")).toHaveCount(0);
@@ -270,7 +273,8 @@ test("CSTD exposes audience routes, evidence APIs, feeds, and worker assets", as
   expect(observatory.provenance.contract).toBe("cstd.engineering-observatory/v2");
   expect(observatory.verification).toHaveLength(4);
   const contentHealth = readJson("/content-health.json");
-  expect(contentHealth).toMatchObject({ status: "healthy", score: 100 });
+  expect(contentHealth.issues).toMatchObject({ missingLocalePairs: 0, brokenRelations: [], orphanedEntries: [] });
+  expect(contentHealth.score).toBe(Math.max(0, 100 - contentHealth.issues.staleArtifacts.length * 2));
   const performance = readJson("/performance.json");
   expect(performance).toMatchObject({
     release: "CSTD-17.0",

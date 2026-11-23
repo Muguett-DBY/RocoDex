@@ -1,12 +1,12 @@
 # 个人主页运行说明
 
-生产站点：https://custard.top；英文：https://custard.top/en。RocoDex 静态存档：https://rocodex.custard.top。
+生产站点为 [custard.top](https://custard.top)，默认跳转到[英文主页](https://custard.top/en)，也可直接访问[中文主页](https://custard.top/zh)。
 
 ## 静态交付
 
-页面、JSON、RSS、站点地图、机器人规则和分享图片均在构建时生成。Cloudflare 根据域名返回对应站点的文件，无 Next.js 后台、OpenNext 缓存层、登录会话、自建指标上报或数据库调用。
+页面、JSON、RSS、站点地图、机器人规则和分享图片均在构建时生成，由 Cloudflare Workers Static Assets 直接返回。
 
-中文首页固定为 /，英文固定为 /en，使用页面上的语言链接切换。页面不会按 Cookie 或 Accept-Language 改变，同一个 URL 可以直接缓存。安全响应头与媒体缓存由构建生成的 _headers 提供。
+中文首页使用 `/zh`，英文首页使用 `/en`，访客可通过页面上的语言链接切换。根路径 `/` 固定跳转至 `/en`，同一个 URL 始终返回同一种语言。安全响应头与媒体缓存由构建生成的 `_headers` 提供。
 
 ## 性能与费用
 

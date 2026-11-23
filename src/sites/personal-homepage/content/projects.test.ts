@@ -7,7 +7,7 @@ describe("CSTD project evidence", () => {
   test("provides complete case-study evidence for every live project", () => {
     const liveProjects = cstdProjects.filter((project) => project.status === "Live");
 
-    expect(liveProjects).toHaveLength(5);
+    expect(liveProjects).toHaveLength(4);
     for (const project of liveProjects) {
       expect(project.evidence.role.length).toBeGreaterThan(4);
       expect(project.evidence.problem.length).toBeGreaterThan(8);
@@ -30,6 +30,6 @@ describe("CSTD project evidence", () => {
     const ids = cstdProjects.map((project) => project.id);
 
     expect(new Set(ids).size).toBe(ids.length);
-    expect(ids).toEqual(["rocodex", "photography", "alpha", "design", "crm", "incubator"]);
+    expect(ids).toEqual(["photography", "alpha", "design", "crm", "incubator"]);
   });
 });

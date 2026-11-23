@@ -3,7 +3,7 @@ import { getCstdLinkTargetProps } from "./link-target";
 
 describe("CSTD link target policy", () => {
   it("opens external project links in a separate tab with a safe referrer policy", () => {
-    expect(getCstdLinkTargetProps("https://rocodex.custard.top")).toEqual({
+    expect(getCstdLinkTargetProps("https://shoot.custard.top")).toEqual({
       target: "_blank",
       rel: "noreferrer",
     });

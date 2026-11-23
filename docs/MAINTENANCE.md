@@ -1,6 +1,6 @@
 # 维护与发布
 
-本仓库主要维护 custard.top。RocoDex 以静态存档保留。生产使用 Cloudflare Workers Static Assets 的纯静态托管，没有自定义 Worker 脚本；控制台仍会显示项目名称，但页面请求不运行 Next.js 后台。
+本仓库维护个人主页 custard.top。生产使用 Cloudflare Workers Static Assets 的纯静态托管，页面请求直接从静态资源返回。原 RocoDex 图鉴站已退役。
 
 ## 本地
 
@@ -9,10 +9,9 @@
 ```sh
 npm ci
 npm run dev
-npm run dev:rocodex
 ```
 
-个人主页 localhost:3000，存档 localhost:3001。没有账号、Redis、AUTH_SECRET 等运行配置。
+开发预览位于 localhost:3000。构建静态站无需账号、Redis 或 AUTH_SECRET 等运行配置。
 
 ## 验证
 
@@ -25,21 +24,20 @@ npm test
 npm run build
 npm run audit:dependencies
 npm run test:e2e:personal
-npm run test:e2e:rocodex
 ```
 
-build 分别导出两个站点，检查个人主页资源预算，再写入静态托管规则。浏览器测试针对真实静态托管，覆盖直接访问、深层导航、语言切换与图鉴功能。两个测试配置使用不同端口与报告目录，避免互相覆盖。
+构建将个人主页导出到 `out/`，检查资源预算，再写入静态托管规则。浏览器测试通过静态托管覆盖直接访问、深层导航、语言切换和个人主页交互。
 
 ## 发布
 
-GitHub Actions 运行验证；推送本身不会自动发布。验证通过后执行 npm run cf:deploy，发布个人主页与静态存档。已完成构建时可分别执行 npx wrangler deploy 和 npx wrangler deploy --config archive/rocodex/wrangler.jsonc，避免重复构建。
+GitHub Actions 运行验证。验证通过后执行 `npm run cf:deploy`，构建并发布个人主页。已完成构建时可执行 `npx wrangler deploy`，直接上传 `out/`。
 
-发布后运行 npm run verify:live:cstd，并检查 rocodex.custard.top 的图鉴详情、查询参数与静态 404。确认两个项目均没有后台脚本、数据库绑定和定时任务。
+发布后执行 `npm run verify:live:cstd`。脚本检查站点页面、元数据、静态资源与深层路由。
 
 custard.top 根路径默认跳转至 /en，中文主页位于 /zh。语言切换使用明确的页面地址。
 
-www.custard.top 的规范域名跳转使用 Cloudflare 域名重定向规则；不为跳转运行 Next.js。/cstd 旧路径兼容在静态 _redirects 中。
+www.custard.top 的规范域名跳转使用 Cloudflare 域名重定向规则。/cstd 旧路径由静态 `_redirects` 兼容。
 
-默认主页的正式滚动版式使用 public/cstd-scroll/cstd-editorial.css，动效使用懒加载的 GSAP。没有哈希而缓存一年的样式修改后，要递增组件引用中的 ?v= 版本参数。
+默认主页的正式滚动版式使用 `public/cstd-scroll/cstd-editorial.css`，动效使用懒加载的 GSAP。没有哈希而缓存一年的样式修改后，要递增组件引用中的 `?v=` 版本参数。
 
-内容维护见 src/sites/personal-homepage/content/README.md，视觉约束见 docs/cstd-visual-system.md。历史工程札记可能描述此前的双站共用后台，当前部署以本文与 wrangler 配置为准。
+内容维护见 `src/sites/personal-homepage/content/README.md`，视觉约束见 `docs/cstd-visual-system.md`。历史工程札记记录了此前的部署，当前配置以本文与 `wrangler.jsonc` 为准。

@@ -1832,9 +1832,9 @@ export const generatedCstdCaseStudies = [
   },
   {
     "publicationStatus": "published",
-    "revision": 2,
+    "revision": 3,
     "publishedAt": "2026-01-01",
-    "updatedAt": "2026-08-27",
+    "updatedAt": "2026-11-24",
     "slug": "rocodex-platform",
     "projectId": "rocodex",
     "year": "2026",
@@ -1847,8 +1847,8 @@ export const generatedCstdCaseStudies = [
       "en": "Domain boundaries / content product"
     },
     "summary": {
-      "zh": "个人主站和 RocoDex 共用一个 Next.js 部署，但域名、认证、内容模块和回归测试各自负责，互不越界。",
-      "en": "The portfolio and RocoDex share one Next.js deployment while hosts, auth, content modules, and regression suites remain separately owned."
+      "zh": "RocoDex 图鉴现已下线。本案例记录个人主站与图鉴共用 Next.js 时，如何隔离域名、认证、内容和回归测试。",
+      "en": "The RocoDex encyclopedia has been retired. This case study shows how a shared Next.js deployment kept hosts, authentication, content, and regression tests separate."
     },
     "film": {
       "durationSeconds": 96,
@@ -2029,22 +2029,6 @@ export const generatedCstdCaseStudies = [
     ],
     "artifacts": [
       {
-        "kind": "production",
-        "label": {
-          "zh": "生产系统",
-          "en": "Production system"
-        },
-        "detail": {
-          "zh": "公开可访问的实际运行界面。",
-          "en": "The publicly reachable running product."
-        },
-        "href": {
-          "zh": "https://rocodex.custard.top",
-          "en": "https://rocodex.custard.top"
-        },
-        "verifiedAt": "2026-08-09"
-      },
-      {
         "kind": "note",
         "label": {
           "zh": "一个 Next.js 部署，两个真正独立的网站",
@@ -2177,10 +2161,9 @@ export const generatedCstdCaseStudies = [
       }
     ],
     "status": {
-      "zh": "持续上线",
-      "en": "Live and evolving"
-    },
-    "liveHref": "https://rocodex.custard.top"
+      "zh": "图鉴已下线",
+      "en": "Encyclopedia retired"
+    }
   }
 ] as const satisfies readonly CstdCaseStudy[];
 
@@ -2873,15 +2856,14 @@ export const generatedCstdProofMesh = [
       "edge-operations"
     ],
     "verifiedAt": "2026-08-09",
-    "artifactCount": 7,
+    "artifactCount": 6,
     "artifactKinds": [
       "ci",
       "lab",
       "note",
-      "production",
       "release"
     ],
-    "coverageScore": 100,
+    "coverageScore": 96,
     "status": "verified"
   }
 ] as const satisfies readonly CstdProofMeshEntry[];

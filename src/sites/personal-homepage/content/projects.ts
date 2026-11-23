@@ -32,38 +32,6 @@ export type CstdProject = {
 
 export const cstdProjects: readonly CstdProject[] = [
   {
-    id: "rocodex",
-    title: "洛克图鉴 / RocoDex",
-    kicker: "Data app",
-    status: "Live",
-    href: "https://rocodex.custard.top",
-    action: "打开图鉴",
-    softAction: "查看 PVP 阵容",
-    softHref: "https://rocodex.custard.top/pvp-teams",
-    icon: "sparkles",
-    tone: "mint",
-    category: "data",
-    description:
-      "面向《洛克王国世界》的中文精灵资料库，支持搜索筛选、精灵对比、PVP 阵容探索、技能浏览和洛克性格测试。",
-    preview: {
-      src: "/cstd-projects/rocodex.png",
-      alt: "RocoDex 中文精灵资料库首页界面",
-      position: "center top",
-    },
-    metrics: [
-      ["347", "只精灵"],
-      ["402", "个形态"],
-      ["PVP", "阵容与攻略"],
-    ],
-    tags: ["Next.js 16", "Tailwind", "Upstash Redis", "Cloudflare DNS"],
-    evidence: {
-      role: "产品设计、数据整理与全栈开发",
-      problem: "中文资料分散，精灵、技能与阵容信息难以在同一条路径中检索和比较。",
-      outcome: "交付可搜索、可筛选、可收藏、可对比并连接攻略与 PVP 阵容的完整资料入口。",
-      current: "持续维护数据与玩法工具",
-    },
-  },
-  {
     id: "photography",
     title: "奶黄包摄影",
     kicker: "Photography",

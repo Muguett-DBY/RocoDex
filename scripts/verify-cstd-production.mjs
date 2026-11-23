@@ -102,7 +102,14 @@ if (!/^fnv1a32:[a-f0-9]{8}$/.test(payloads["/studio.json"].provenance?.digest ??
 if (payloads["/topics.json"].entries?.length !== 5) throw new Error("Topic manifest does not contain five paths");
 if (payloads["/observatory.json"].provenance?.contract !== "cstd.engineering-observatory/v2") throw new Error("Engineering observatory contract is missing");
 if (payloads["/observatory.json"].verification?.length !== 4) throw new Error("Engineering observatory gates are incomplete");
-if (payloads["/content-health.json"].score !== 100) throw new Error("Published content health is not 100");
+const contentHealth = payloads["/content-health.json"];
+const { brokenRelations, missingLocalePairs, orphanedEntries, staleArtifacts } = contentHealth.issues ?? {};
+if (missingLocalePairs !== 0 || !Array.isArray(brokenRelations) || brokenRelations.length !== 0 || !Array.isArray(orphanedEntries) || orphanedEntries.length !== 0) {
+  throw new Error("Published content has missing translations, broken relations, or orphaned entries");
+}
+if (!Array.isArray(staleArtifacts) || contentHealth.score !== Math.max(0, 100 - staleArtifacts.length * 2)) {
+  throw new Error("Published content health does not match its freshness report");
+}
 for (const [name, expected] of Object.entries(performanceContract.budgets)) {
   const actual = payloads["/performance.json"].budgets?.[name];
   if (actual !== expected) throw new Error(`Performance budget ${name} is ${actual}; expected ${expected}`);
@@ -137,4 +144,4 @@ if (!sitemapBody.includes('hreflang="zh-CN"') || !sitemapBody.includes('hreflang
 const worker = await get("/cstd-case-worker.js");
 if (!(await worker.text()).includes('"crm-lock"')) throw new Error("Production Worker is missing the CRM lock capsule");
 
-console.log(`CSTD production smoke OK: ${origin}, ${htmlSurfaces.length} bilingual HTML surfaces, ${jsonEndpoints.length} public contracts, 0 browser-language cases, 2 private-detail-free resumes with 74 detailed timeline entries, localized manifests/feed/sitemap, 5 experience acts, 5 topics, 4 proof capsules, content health 100.`);
+console.log(`CSTD production smoke OK: ${origin}, ${htmlSurfaces.length} bilingual HTML surfaces, ${jsonEndpoints.length} public contracts, 0 browser-language cases, 2 private-detail-free resumes with 74 detailed timeline entries, localized manifests/feed/sitemap, 5 experience acts, 5 topics, 4 proof capsules, content health ${contentHealth.score}.`);
