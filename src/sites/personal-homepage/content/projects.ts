@@ -6,7 +6,7 @@ export type CstdProject = {
   id: string;
   title: string;
   kicker: string;
-  status: "Live" | "Next";
+  status: "Live" | "Offline" | "Next";
   href: string;
   action: string;
   softAction?: string;
@@ -65,9 +65,9 @@ export const cstdProjects: readonly CstdProject[] = [
     id: "alpha",
     title: "CSTD Alpha",
     kicker: "Investment research",
-    status: "Live",
-    href: "https://alpha.custard.top",
-    action: "打开 Alpha",
+    status: "Offline",
+    href: "/work/alpha-research-system",
+    action: "查看案例",
     icon: "trending-up",
     tone: "teal",
     category: "research",
@@ -88,16 +88,16 @@ export const cstdProjects: readonly CstdProject[] = [
       role: "研究框架、交互设计与工程实现",
       problem: "公司研究常在主体识别、数据核验、评分口径和报告结构之间反复切换。",
       outcome: "形成从主体确认到评分、估值与图表报告的结构化研究工作流。",
-      current: "聚焦 A 股量化估值能力",
+      current: "已下线，保留研究系统案例。",
     },
   },
   {
     id: "design",
     title: "私人 AI 创作工作台",
     kicker: "AI creation",
-    status: "Live",
-    href: "https://design.custard.top",
-    action: "打开工作台",
+    status: "Offline",
+    href: "/work/creative-workbench",
+    action: "查看案例",
     icon: "bot",
     tone: "violet",
     category: "creative",
@@ -118,16 +118,16 @@ export const cstdProjects: readonly CstdProject[] = [
       role: "产品架构、生成流程与全栈开发",
       problem: "对话、图片、视频和素材文件分散在不同工具中，长期创作上下文难以连续保存。",
       outcome: "交付私有访问的一体化工作台，并把生成记录与素材资产纳入同一套管理流程。",
-      current: "持续扩展创作与素材能力",
+      current: "已下线，保留创作工作台案例。",
     },
   },
   {
     id: "crm",
     title: "产业园区招商 CRM",
     kicker: "CRM system",
-    status: "Live",
-    href: "https://cfzzs.custard.top",
-    action: "打开 CRM",
+    status: "Offline",
+    href: "/work/cfzzs-crm",
+    action: "查看案例",
     icon: "building",
     tone: "amber",
     category: "operations",
@@ -148,7 +148,7 @@ export const cstdProjects: readonly CstdProject[] = [
       role: "业务建模、权限设计与全栈交付",
       problem: "招商线索、联系人、空间资源和跟进状态分散，权限边界与过程追踪不清晰。",
       outcome: "交付覆盖线索全周期、空间资源、导入导出、软删除恢复和角色权限的运营系统。",
-      current: "生产环境持续验证与迭代",
+      current: "已下线，保留招商系统案例。",
     },
   },
   {

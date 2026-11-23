@@ -63,7 +63,7 @@ export const cstdSystems = [
     district: { zh: "AI 与智能体工程", en: "AI / agent engineering" },
     title: { zh: "AI 创作与研究工具", en: "AI creation and research tools" },
     summary: { zh: "把对话、生成和资料沉淀设计为可以回看、可以继续的个人工作流。", en: "Turn chats, generated media, and saved context into personal workflows you can revisit and resume." },
-    evidence: { zh: "私有 AI 工作台与 Alpha 研究工具均已独立部署。", en: "The private AI workbench and Alpha research system are independently deployed." },
+    evidence: { zh: "私有 AI 工作台与 Alpha 研究工具曾各自部署，现可查看案例。", en: "The workbench and Alpha ran as separate deployments. Their case studies remain available." },
     relation: { zh: "把模型能力限制在可追踪、可恢复、可复查的产品工作流中。", en: "Constrain model capability inside traceable, recoverable, and reviewable product workflows." },
     stack: ["React", "Streaming UI", "D1 / R2", "Pyodide", "Cloudflare Pages"],
     evidenceLinks: [

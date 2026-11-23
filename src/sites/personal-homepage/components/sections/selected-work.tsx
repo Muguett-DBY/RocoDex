@@ -43,7 +43,7 @@ export function SelectedWork({ narrativeMode, locale }: { narrativeMode: CstdNar
           </div>
           <p className="border-l border-black/20 pl-6 text-sm leading-7 text-[#465156] md:text-base md:leading-8">
             <ThemeCopy
-              neon={locale === "zh" ? "首页先给你看结果：什么做成了，为什么这样做，现在哪里能打开。完整拆解留给案例页。" : "The homepage starts with outcomes: what shipped, why it was shaped that way, and where it runs now. The full teardown lives in the case archive."}
+              neon={locale === "zh" ? "首页先给你看结果：什么做成了，为什么这样做，现在还能查到哪些记录。完整拆解留给案例页。" : "The homepage starts with outcomes: what shipped, why it was shaped that way, and where to find the evidence. The full teardown lives in the case archive."}
               underworld={locale === "zh" ? "这里不陈列未经试炼的样品。每件作品只留下结果、关键取舍和仍可核验的锻造记录。" : "Nothing leaves this forge untested. Each work keeps its outcome, decisive trade-off, and an inspectable record of how it was made."}
               astral={locale === "zh" ? "这里不写注定胜利的英雄故事。每段旅程只留下当时的局势、真正做过的选择，以及现在仍能核验的结果。" : "These are not tales of inevitable victory. Each journey keeps the situation, the choice that was actually made, and the outcome you can still verify."}
             />
@@ -54,6 +54,8 @@ export function SelectedWork({ narrativeMode, locale }: { narrativeMode: CstdNar
           {cases.map((entry, index) => {
             const proof = cstdProofMesh.find((candidate) => candidate.caseSlug === entry.slug);
             const project = cstdProjects.find((candidate) => candidate.id === entry.projectId);
+            const caseHref = getCaseStudyPath(entry, locale);
+            const projectHref = project ? getLocalizedCstdHref(project.href, locale) : null;
             const featured = index === 0;
             return (
               <article
@@ -75,11 +77,11 @@ export function SelectedWork({ narrativeMode, locale }: { narrativeMode: CstdNar
                   <h3 className={clsx("mt-4 font-semibold leading-tight text-white", featured ? "text-3xl md:text-5xl" : "text-2xl md:text-3xl")}>{entry.title[locale]}</h3>
                   <p className={clsx("mt-3 line-clamp-2 text-sm leading-6 text-[#b5bdc0]", !featured && "lg:hidden")}>{entry.summary[locale]}</p>
                   <div className={clsx("flex items-center justify-between gap-5 border-t border-white/15 pt-4", featured ? "mt-5" : "mt-4")}>
-                    <CstdLink href={getCaseStudyPath(entry, locale)} className="inline-flex items-center gap-2 font-mono text-xs font-black text-[#f4d431] transition-[gap,color] hover:gap-4 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f4d431]">
+                    <CstdLink href={caseHref} className="inline-flex items-center gap-2 font-mono text-xs font-black text-[#f4d431] transition-[gap,color] hover:gap-4 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#f4d431]">
                       {locale === "zh" ? "打开案例" : "Open case"} <ArrowRight aria-hidden="true" className="h-4 w-4" />
                     </CstdLink>
-                    {project?.href ? (
-                      <a href={project.href} {...getCstdLinkTargetProps(project.href)} aria-label={locale === "zh" ? `打开 ${entry.title.zh}` : `Open ${entry.title.en}`} title={locale === "zh" ? `打开 ${entry.title.zh}` : `Open ${entry.title.en}`} className="flex h-10 w-10 items-center justify-center border border-white/20 text-[#aab3b6] transition-colors hover:border-[#24e0ff] hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#24e0ff]">
+                    {projectHref && projectHref !== caseHref ? (
+                      <a href={projectHref} {...getCstdLinkTargetProps(projectHref)} aria-label={locale === "zh" ? `打开 ${entry.title.zh}` : `Open ${entry.title.en}`} title={locale === "zh" ? `打开 ${entry.title.zh}` : `Open ${entry.title.en}`} className="flex h-10 w-10 items-center justify-center border border-white/20 text-[#aab3b6] transition-colors hover:border-[#24e0ff] hover:text-[#24e0ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-[#24e0ff]">
                         <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                       </a>
                     ) : null}

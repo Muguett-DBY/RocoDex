@@ -203,20 +203,20 @@ export const generatedCstdCaseStudies = [
     ],
     "artifacts": [
       {
-        "kind": "production",
+        "kind": "release",
         "label": {
-          "zh": "生产系统",
-          "en": "Production system"
+          "zh": "研究任务发布检查",
+          "en": "Research-job publication checks"
         },
         "detail": {
-          "zh": "公开可访问的实际运行界面。",
-          "en": "The publicly reachable running product."
+          "zh": "源码保留了防止过期研究回调覆盖新结果的修复。",
+          "en": "The source commit shows how stale research callbacks are prevented from overwriting newer results."
         },
         "href": {
-          "zh": "https://alpha.custard.top",
-          "en": "https://alpha.custard.top"
+          "zh": "https://github.com/Muguett-DBY/cstd-alpha/commit/17c0b82c7555c34e80c4674bf9487f442f37b792",
+          "en": "https://github.com/Muguett-DBY/cstd-alpha/commit/17c0b82c7555c34e80c4674bf9487f442f37b792"
         },
-        "verifiedAt": "2026-08-09"
+        "verifiedAt": "2026-11-24"
       },
       {
         "kind": "note",
@@ -319,10 +319,9 @@ export const generatedCstdCaseStudies = [
       }
     ],
     "status": {
-      "zh": "私有生产系统",
-      "en": "Private production system"
-    },
-    "liveHref": "https://alpha.custard.top"
+      "zh": "站点已下线",
+      "en": "Site offline"
+    }
   },
   {
     "publicationStatus": "published",
@@ -503,8 +502,8 @@ export const generatedCstdCaseStudies = [
           "en": "Operations"
         },
         "detail": {
-          "zh": "GitHub Actions 自动部署到 Cloudflare Pages。",
-          "en": "GitHub Actions deploy automatically to Cloudflare Pages."
+          "zh": "曾通过 GitHub Actions 部署到 Cloudflare Pages。",
+          "en": "The original site was deployed to Cloudflare Pages through GitHub Actions."
         }
       }
     ],
@@ -521,20 +520,20 @@ export const generatedCstdCaseStudies = [
     ],
     "artifacts": [
       {
-        "kind": "production",
+        "kind": "release",
         "label": {
-          "zh": "生产系统",
-          "en": "Production system"
+          "zh": "租赁流程与端到端测试",
+          "en": "Leasing flows and end-to-end tests"
         },
         "detail": {
-          "zh": "公开可访问的实际运行界面。",
-          "en": "The publicly reachable running product."
+          "zh": "源码保留了租赁流程的实现与验收测试。",
+          "en": "The source commit preserves the leasing workflow and its acceptance tests."
         },
         "href": {
-          "zh": "https://cfzzs.custard.top",
-          "en": "https://cfzzs.custard.top"
+          "zh": "https://github.com/Muguett-DBY/ZJDCRM/commit/82cd120e6ef8be8a1fe73cb30e175a35ba7c4eab",
+          "en": "https://github.com/Muguett-DBY/ZJDCRM/commit/82cd120e6ef8be8a1fe73cb30e175a35ba7c4eab"
         },
-        "verifiedAt": "2026-08-09"
+        "verifiedAt": "2026-11-24"
       },
       {
         "kind": "note",
@@ -605,10 +604,9 @@ export const generatedCstdCaseStudies = [
       }
     ],
     "status": {
-      "zh": "线上运行",
-      "en": "Live"
-    },
-    "liveHref": "https://cfzzs.custard.top"
+      "zh": "站点已下线",
+      "en": "Site offline"
+    }
   },
   {
     "publicationStatus": "published",
@@ -889,8 +887,8 @@ export const generatedCstdCaseStudies = [
       }
     ],
     "status": {
-      "zh": "私有生产系统",
-      "en": "Private production system"
+      "zh": "站点已下线",
+      "en": "Site offline"
     }
   },
   {
@@ -2724,12 +2722,12 @@ export const generatedCstdProofMesh = [
       "research-models",
       "data-systems"
     ],
-    "verifiedAt": "2026-08-09",
+    "verifiedAt": "2026-11-24",
     "artifactCount": 5,
     "artifactKinds": [
       "lab",
       "note",
-      "production"
+      "release"
     ],
     "coverageScore": 80,
     "status": "verified"
@@ -2747,12 +2745,12 @@ export const generatedCstdProofMesh = [
       "product-surfaces",
       "data-systems"
     ],
-    "verifiedAt": "2026-08-09",
+    "verifiedAt": "2026-11-24",
     "artifactCount": 3,
     "artifactKinds": [
       "lab",
       "note",
-      "production"
+      "release"
     ],
     "coverageScore": 80,
     "status": "verified"
