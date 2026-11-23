@@ -33,7 +33,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npm run build && npx wrangler dev --local-protocol https --port ${port}`,
+    command: `npm run build && npx wrangler dev --ip 127.0.0.1 --local-protocol https --port ${port}`,
     url: `${baseURL}/status.json`,
     reuseExistingServer: !process.env.CI,
     ignoreHTTPSErrors: true,

@@ -1,7 +1,4 @@
-export {
-  isPersonalSiteHost,
-  PERSONAL_SITE_SECURITY_HEADERS,
-} from "./infrastructure/routing";
+export { PERSONAL_SITE_SECURITY_HEADERS } from "./infrastructure/routing";
 export { getPersonalHomepageSitemapEntries } from "./infrastructure/sitemap";
 export { serializeCstdRss } from "./infrastructure/rss";
 export { createCstdJsonFeed } from "./infrastructure/json-feed";

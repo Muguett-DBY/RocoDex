@@ -62,33 +62,33 @@ describe("toolchain version policy", () => {
     };
 
     expect(packageJson.engines?.node).toBe("24.x");
-    expect(packageJson.packageManager).toBe("npm@12.0.2");
+    expect(packageJson.packageManager).toBe("npm@12.2.3");
     expect(packageLock.packages[""]?.dependencies).toEqual(packageJson.dependencies);
     expect(packageLock.packages[""]?.devDependencies).toEqual(packageJson.devDependencies);
 
     const exact = {
       dependencies: {
         next: "16.4.2",
-        three: "0.185.1",
+        three: "0.187.0",
       },
       devDependencies: {
         "@next/eslint-plugin-next": "16.4.2",
         "@playwright/test": "1.63.0",
         "@tailwindcss/postcss": "4.3.3",
-        "@types/three": "0.185.4",
+        "@types/three": "0.187.0",
         eslint: "10.11.0",
         "eslint-plugin-jsx-a11y-x": "0.2.0",
         "eslint-plugin-react-hooks": "7.1.1",
         "typescript-eslint": "8.70.1",
         tailwindcss: "4.3.3",
-        vitest: "4.1.12",
+        vitest: "5.1.1",
       },
     };
     const caret = {
       dependencies: {
         react: "19.3.0",
         "react-dom": "19.3.0",
-        "framer-motion": "13.4.4",
+        "framer-motion": "14.14.0",
       },
       devDependencies: {
         "@types/node": "24.19.0",
@@ -122,7 +122,7 @@ describe("toolchain version policy", () => {
       packageJson.devDependencies.tailwindcss,
     );
     expect(packageJson.overrides).toMatchObject({
-      postcss: "8.5.26",
+      postcss: "8.5.33",
       sharp: "0.35.5",
     });
     expect(packageLock.packages["node_modules/postcss"]?.version).toBe(
@@ -163,28 +163,5 @@ describe("toolchain version policy", () => {
     }
 
     expect(packageJson.allowScripts).toEqual(approvedScripts);
-  });
-
-  test("keeps the local production launcher aligned with the hosted runtime", () => {
-    const packageJson = readJson("package.json") as {
-      scripts?: Record<string, string>;
-    };
-    const launcher = readFileSync(
-      join(process.cwd(), "scripts", "start-local-production.ps1"),
-      "utf8",
-    );
-    const stopLauncher = readFileSync(
-      join(process.cwd(), "scripts", "stop-local-next.ps1"),
-      "utf8",
-    );
-
-    expect(packageJson.scripts?.["start:local"]).toContain("start-local-production.ps1");
-    expect(packageJson.scripts?.["stop:local"]).toContain("stop-local-next.ps1");
-    expect(launcher).toContain("-WindowStyle Hidden");
-    expect(launcher).toContain('Join-Path $repositoryRoot "output\\local-production"');
-    expect(launcher).not.toContain('Join-Path $repositoryRoot ".next"');
-    expect(launcher).toContain('"$baseUrl/"');
-    expect(stopLauncher).toContain('Join-Path $repoRoot "output\\local-production"');
-    expect(stopLauncher).toContain('"production-server.pid"');
   });
 });

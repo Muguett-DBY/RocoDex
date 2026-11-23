@@ -1,20 +1,26 @@
 $ErrorActionPreference = "Stop"
+$repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
+Import-Module (Join-Path $PSScriptRoot "local-production-runtime.psm1")
 
-$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-$escapedRepoRoot = $repoRoot.Replace("\", "\\")
-$runtimeRoot = Join-Path $repoRoot "output\local-production"
-
-$processes = Get-CimInstance Win32_Process -Filter "name = 'node.exe'" |
-  Where-Object {
-    $_.CommandLine -and
-    $_.CommandLine -like "*next*" -and
-    $_.CommandLine -like "*$repoRoot*"
+$lock = Enter-CustardLocalServerLock -RepositoryRoot $repositoryRoot
+try {
+  $processes = @(Get-CustardRuntimeProcesses)
+  $servers = @($processes | Where-Object { Get-CustardServerKind -Process $_ -RepositoryRoot $repositoryRoot })
+  foreach ($server in $servers) {
+    $serverParent = $servers | Where-Object {
+      $_.ProcessId -eq $server.ParentProcessId -and $_.CreationDate -le $server.CreationDate
+    }
+    if ($serverParent) {
+      continue
+    }
+    Stop-CustardRuntimeTree -RootProcess $server -Processes $processes
+    $kind = Get-CustardServerKind -Process $server -RepositoryRoot $repositoryRoot
+    Write-Output "Stopped local $kind process $($server.ProcessId)."
   }
 
-foreach ($process in $processes) {
-  Stop-Process -Id $process.ProcessId -Force -ErrorAction SilentlyContinue
-  Write-Host "Stopped local Next process $($process.ProcessId) for $escapedRepoRoot"
+  $runtimeRoot = Join-Path $repositoryRoot "output\local-production"
+  Remove-Item -LiteralPath (Join-Path $runtimeRoot "production-server.pid"), (Join-Path $runtimeRoot "production-server.port") -Force -ErrorAction SilentlyContinue
+} finally {
+  $lock.ReleaseMutex()
+  $lock.Dispose()
 }
-
-Remove-Item -LiteralPath (Join-Path $runtimeRoot "production-server.pid") -Force -ErrorAction SilentlyContinue
-Remove-Item -LiteralPath (Join-Path $runtimeRoot "production-server.port") -Force -ErrorAction SilentlyContinue

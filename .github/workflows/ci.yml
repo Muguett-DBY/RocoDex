@@ -40,8 +40,9 @@ jobs:
           cache: npm
       - name: Install with the project package manager
         run: |
-          npm exec --yes --package=npm@12.0.2 -- npm --version
-          npm exec --yes --package=npm@12.0.2 -- npm ci --strict-allow-scripts --no-audit --no-fund
+          PACKAGE_MANAGER=$(node -p 'require("./package.json").packageManager')
+          npm exec --yes --package="$PACKAGE_MANAGER" -- npm --version
+          npm exec --yes --package="$PACKAGE_MANAGER" -- npm ci --strict-allow-scripts --no-audit --no-fund
       - name: Check the installed Worker runtime
         run: ./node_modules/.bin/workerd --version
 
@@ -96,12 +97,16 @@ jobs:
         run: npm run verify:personal-bundle
 
   e2e:
-    name: E2E / personal
+    name: E2E / ${{ matrix.browser }}
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [desktop-chromium, mobile-chromium]
     needs: [boundaries, quality, install_policy]
     runs-on: ubuntu-latest
     container:
       # Keep this version aligned with @playwright/test in package.json.
-      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      image: mcr.microsoft.com/playwright:v1.65.1-noble
       options: --user 1001 --shm-size=1g
     timeout-minutes: 25
     steps:
@@ -118,12 +123,13 @@ jobs:
         run: npm ci
       - name: Run isolated browser suite
         env:
+          BROWSER_PROJECT: ${{ matrix.browser }}
           TEST_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
           # Only test files changed: let Playwright select their affected tests.
           # Application, dependency and build changes still run the full suite.
           if git diff --quiet "$TEST_BASE" HEAD -- . ':!e2e/**' ':!.github/workflows/ci.yml'; then
-            npm run test:e2e -- --only-changed="$TEST_BASE" --pass-with-no-tests
+            npm run test:e2e -- --project="$BROWSER_PROJECT" --only-changed="$TEST_BASE" --pass-with-no-tests
           else
-            npm run test:e2e
+            npm run test:e2e -- --project="$BROWSER_PROJECT"
           fi

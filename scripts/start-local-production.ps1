@@ -1,61 +1,102 @@
 param(
+  [ValidateRange(1, 65535)]
   [int]$Port = 3200
 )
 
 $ErrorActionPreference = "Stop"
 $repositoryRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
-$staticIndex = Join-Path $repositoryRoot "out\index.html"
+Import-Module (Join-Path $PSScriptRoot "local-production-runtime.psm1")
 
-if (-not (Test-Path -LiteralPath $staticIndex)) {
+$staticStatus = Join-Path $repositoryRoot "out\status.json"
+if (-not (Test-Path -LiteralPath $staticStatus -PathType Leaf)) {
   throw "Missing production build. Run npm run build first."
 }
 
-while (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {
-  $Port += 1
+$node = Get-Command node.exe -CommandType Application | Select-Object -First 1
+$wranglerCli = Join-Path $repositoryRoot "node_modules\wrangler\bin\wrangler.js"
+if (-not (Test-Path -LiteralPath $wranglerCli -PathType Leaf)) {
+  throw "Missing Wrangler. Run npm ci first."
 }
 
-$node = Get-Command node -ErrorAction Stop
-$nextCli = Join-Path $repositoryRoot "node_modules\wrangler\bin\wrangler.js"
-$logRoot = Join-Path $repositoryRoot "output\local-production"
-New-Item -ItemType Directory -Force -Path $logRoot | Out-Null
-$stdout = Join-Path $logRoot "local-production-$Port.stdout.log"
-$stderr = Join-Path $logRoot "local-production-$Port.stderr.log"
-$baseUrl = "http://127.0.0.1:$Port"
+$lock = Enter-CustardLocalServerLock -RepositoryRoot $repositoryRoot
+try {
+  $logRoot = Join-Path $repositoryRoot "output\local-production"
+  $pidPath = Join-Path $logRoot "production-server.pid"
+  $portPath = Join-Path $logRoot "production-server.port"
+  New-Item -ItemType Directory -Force -Path $logRoot | Out-Null
 
+  $savedPid = 0
+  if ([int]::TryParse((Get-Content -LiteralPath $pidPath -Raw -ErrorAction SilentlyContinue), [ref]$savedPid) -and $savedPid -gt 0) {
+    $existing = Get-CimInstance -ClassName Win32_Process -Filter "ProcessId = $savedPid"
+    if ($existing -and (Get-CustardServerKind -Process $existing -RepositoryRoot $repositoryRoot) -eq "Wrangler") {
+      throw "A background preview is already running for this checkout. Run npm run stop:local before starting another."
+    }
+  }
+  Remove-Item -LiteralPath $pidPath, $portPath -Force -ErrorAction SilentlyContinue
 
-$process = Start-Process `
-  -FilePath $node.Source `
-  -ArgumentList @($nextCli, "dev", "--ip", "127.0.0.1", "--port", "$Port") `
-  -WorkingDirectory $repositoryRoot `
-  -WindowStyle Hidden `
-  -RedirectStandardOutput $stdout `
-  -RedirectStandardError $stderr `
-  -PassThru
+  while (Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue) {
+    if ($Port -eq 65535) {
+      throw "No preview port is available from the requested port through 65535."
+    }
+    $Port += 1
+  }
 
-$deadline = (Get-Date).AddSeconds(60)
-$ready = $false
-do {
-  Start-Sleep -Milliseconds 500
+  $stdout = Join-Path $logRoot "local-production-$Port.stdout.log"
+  $stderr = Join-Path $logRoot "local-production-$Port.stderr.log"
+  $baseUrl = "http://127.0.0.1:$Port"
+  $arguments = '"{0}" dev --ip 127.0.0.1 --port {1}' -f $wranglerCli, $Port
+
+  $startup = @{
+    FilePath = $node.Source
+    ArgumentList = $arguments
+    WorkingDirectory = $repositoryRoot
+    WindowStyle = "Hidden"
+    RedirectStandardOutput = $stdout
+    RedirectStandardError = $stderr
+    PassThru = $true
+  }
+  $process = Start-Process @startup
+
+  $deadline = (Get-Date).AddSeconds(60)
+  $ready = $false
   try {
-    $response = Invoke-WebRequest -UseBasicParsing "$baseUrl/" -TimeoutSec 2
-    $ready = $response.StatusCode -eq 200
+    do {
+      Start-Sleep -Milliseconds 500
+      try {
+        $response = Invoke-WebRequest -UseBasicParsing "$baseUrl/status.json" -TimeoutSec 2
+      } catch {
+        continue
+      }
+      if ($response.StatusCode -eq 200) {
+        $allProcesses = @(Get-CustardRuntimeProcesses)
+        $server = $allProcesses | Where-Object ProcessId -eq $process.Id
+        if ($server -and (Get-CustardServerKind -Process $server -RepositoryRoot $repositoryRoot) -eq "Wrangler") {
+          $ownedIds = @(Get-CustardRuntimeTree -RootProcess $server -Processes $allProcesses | ForEach-Object ProcessId)
+          $ready = [bool](Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue |
+            Where-Object { $_.OwningProcess -in $ownedIds })
+        }
+      }
+    } until ($ready -or $process.HasExited -or (Get-Date) -gt $deadline)
+
+    if (-not $ready) {
+      throw "Local production server failed on port $Port. See $stdout and $stderr."
+    }
+
+    Set-Content -LiteralPath $pidPath -Value $process.Id -Encoding ascii
+    Set-Content -LiteralPath $portPath -Value $Port -Encoding ascii
   } catch {
-    $ready = $false
+    $allProcesses = @(Get-CustardRuntimeProcesses)
+    $server = $allProcesses | Where-Object ProcessId -eq $process.Id
+    if ($server -and (Get-CustardServerKind -Process $server -RepositoryRoot $repositoryRoot) -eq "Wrangler") {
+      Stop-CustardRuntimeTree -RootProcess $server -Processes $allProcesses
+    }
+    Remove-Item -LiteralPath $pidPath, $portPath -Force -ErrorAction SilentlyContinue
+    throw
   }
-} until ($ready -or $process.HasExited -or (Get-Date) -gt $deadline)
 
-if (-not $ready) {
-  if (-not $process.HasExited) {
-    Stop-Process -Id $process.Id
-  }
-  Get-Content -LiteralPath $stdout -ErrorAction SilentlyContinue
-  Get-Content -LiteralPath $stderr -ErrorAction SilentlyContinue
-  throw "Local production server failed to start on port $Port."
+  Write-Output "Local production server is ready at $baseUrl/"
+  Write-Output "Process $($process.Id). Logs are in $logRoot."
+} finally {
+  $lock.ReleaseMutex()
+  $lock.Dispose()
 }
-
-Set-Content -LiteralPath (Join-Path $logRoot "production-server.pid") -Value $process.Id
-Set-Content -LiteralPath (Join-Path $logRoot "production-server.port") -Value $Port
-
-Write-Output "Local production server: $baseUrl/"
-Write-Output "PID: $($process.Id)"
-Write-Output "Logs: $stdout | $stderr"

@@ -13,6 +13,8 @@ npm run dev
 
 开发预览位于 localhost:3000。构建静态站无需账号、Redis 或 AUTH_SECRET 等运行配置。
 
+Windows 上可在构建后运行 npm run start:local，在后台以 Wrangler 预览静态输出。脚本输出实际端口和日志位置，默认从 3200 起。npm run stop:local 只停止当前工作副本的 Wrangler 预览和 Next 开发进程。依赖重装前可运行 npm run ci:local。
+
 ## 验证
 
 ```sh

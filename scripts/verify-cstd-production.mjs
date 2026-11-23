@@ -45,6 +45,14 @@ for (const language of ["en-AU", "zh-CN"]) {
     throw new Error("The default entry does not select English");
   }
 }
+for (const retiredPath of ["/rocodex", "/creatures", "/images/creatures/001-01.png"]) {
+  const retiredResponse = await fetch(origin + retiredPath, {
+    redirect: "manual",
+    signal: AbortSignal.timeout(timeoutMs),
+  });
+  if (retiredResponse.status !== 404) throw new Error("Retired site route should return 404: " + retiredPath);
+}
+
 const htmlResponses = new Map();
 for (const { path, language, marker } of htmlSurfaces) {
   const response = await get(path);

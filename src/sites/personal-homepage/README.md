@@ -12,9 +12,9 @@
 - `infrastructure/`：apex Host 路由和个人 sitemap。
 - `index.ts`：React 公开入口。
 - `metadata.ts`：Next Metadata 公开入口。
-- `server.ts`：proxy、robots 与 sitemap 可用的服务端入口。
+- `server.ts`：robots、sitemap 与静态导出脚本使用的服务端入口。
 
-外部代码不要直接导入内部子目录。新增个人主站功能时优先在本模块内完成；只有两个站点都需要且语义一致的无产品逻辑代码，才进入 `src/sites/shared`。
+外部代码不要直接导入内部子目录。新增个人主站功能时优先在本模块内完成；只有无产品逻辑的共享基础设施代码，才进入 `src/sites/shared`。
 
 Three.js、React Three Fiber 与 Postprocessing 只能从异步全量渲染器加载；Lite WebGL 和原生 WebGPU 信号层保持独立 chunk。首页默认只渲染版本化静态主视觉，用户主动开启增强视觉后才按 `full / lite / image` 能力挂载 GPU 运行时；文档隐藏时必须停止连续帧循环。不要把 GPU 包静态导入页面、深度页面或共享布局。
 
@@ -46,7 +46,7 @@ Cloudflare 的 asset-first 路由、媒体构建检查和 apex Host 路由都必
 
 ## 运行时观测
 
-- 首页入口在无 `cstd-locale` cookie 时按浏览器 `Accept-Language` 的权重协商中英文，兼容中文脚本和英文地区变体；缺少可用语言时回退中文。手动选择优先，显式中英文链接保持原语言。入口响应使用 `Vary: Accept-Language, Cookie` 与 `private, no-store`，避免串用其他访客的语言；切换后完整导航，避免预加载恢复旧语言。
+- Cloudflare 通过静态重定向将根路径 / 导向 /en；/zh 提供中文版本。显式语言链接决定页面语言，不依赖 Cookie 或 Accept-Language。
 - 公开个人资料以 `content/profile.ts` 为唯一来源，展示昵称、专业、当前就读阶段、研究兴趣与项目能力。学校、个人所在地和就读区间不进入页面、搜索结构化数据或 `resume.json`。履历 JSON schema 2 使用 `stage` / `field` 表达就读阶段与专业。
 - 代理边缘 404 与 React not-found 页共用 `infrastructure/not-found.ts` 的同一份文案。
 
@@ -80,7 +80,7 @@ Cloudflare 的 asset-first 路由、媒体构建检查和 apex Host 路由都必
 
 ## 验证
 
-生产使用 Next.js 静态导出，个人主页公开路径直接对应源码，无 Host 改写或 OpenNext 缓存层。两个站点分别发布静态文件，见 docs/architecture.md。
+生产使用 Next.js 静态导出，个人主页公开路径直接对应源码，无 Host 改写或 OpenNext 缓存层。部署只发布个人站 out/，见 docs/architecture.md。
 
 ```bash
 npm run content:check
@@ -96,4 +96,4 @@ npm run verify:cstd
 npm run verify:cstd:release
 ```
 
-`verify:cstd` 是本地完整质量门；`verify:cstd:release` 在此基础上验证发布候选和线上生产契约。CI 将 Host/模块边界、静态质量与构建、CSTD E2E、RocoDex E2E 分成独立状态。`resume.json` 与 `en/resume.json` 是机器可读履历入口；访问统计使用平台现成能力，已移除自建遥测后台。
+`verify:cstd` 是本地完整质量门；`verify:cstd:release` 在此基础上验证发布候选和线上生产契约。CI 独立验证模块边界、静态质量与构建，以及桌面和移动端的浏览器测试。`resume.json` 与 `en/resume.json` 是机器可读履历入口；访问统计使用平台现成能力，已移除自建遥测后台。

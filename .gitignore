@@ -1,7 +1,5 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
+# Installed dependencies and package manager state
+/node_modules/
 /.pnp
 .pnp.*
 .yarn/*
@@ -10,134 +8,62 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
+# Build and test output
+/.next/
+/out/
+/build/
+/coverage/
 /playwright-report/
 /test-results/
 /.playwright-cli/
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-*.tsbuildinfo
-next-env.d.ts
-
-# data extraction cache
-/bwiki_cache/
-
-# extracted data
-/bwiki_extracted.json
-
-# debug output
-/output_summary.txt
-/debug_template.txt
-/field_names.txt
-/merge_preview.json
-
-# vercel
-.vercel
-
-# database
-/data/
-
-/src/generated/prisma
-
-# codex account switching tools (moved to E:\DEV\codex-tools)
-*.ps1
-!scripts/start-local-production.ps1
-!scripts/stop-local-next.ps1
-switch_*.py
-check_*.py
-compare_*.py
-test_*.py
-comprehensive_check.py
-do_switch.py
-fix_sync.py
-read_only_check*.py
-unify_configs.py
-full_db_check.py
-sync_and_switch.py
-sync_config.py
-*.txt
-!requirements.txt
-!LICENSE.txt
-!public/fonts/cstd/licenses/*.txt
-!src/app/robots.txt/
-!src/app/robots.txt/*.ts
-!src/app/(personal)/cstd/llms.txt/
-!src/app/(personal)/cstd/llms.txt/route.ts
-!src/app/(personal-en)/cstd/en/llms.txt/
-!src/app/(personal-en)/cstd/en/llms.txt/route.ts
-!src/app/.well-known/security.txt/
-!src/app/.well-known/security.txt/route.ts
-
-# codex output & reports
+/.output/
 /output/
-/debug.log
-ccswitch_*
-switch_result*
-post_exit_*
-skill_plugin_*
+next-env.d.ts
+*.tsbuildinfo
 
-# opencode
-.opencode/
-
-# Cloudflare Workers build artifacts
-.open-next/
-.wrangler/
-
-# Local state and private artifacts
-/.agent/
+# Deployment tools and local credentials
+/.vercel/
 /.open-next/
 /.wrangler/
-/.venv/
-/node_modules/
-__pycache__/
-*.pyc
-.env
-.env.*
+/data/
+.env*
 !.env.example
-.dev.vars
-.dev.vars.*
+.dev.vars*
 !.dev.vars.example
+*.pem
 *.key
 *.p12
 gitleaks-report.json
 secret-scan.json
 
-# Local state and private artifacts
-!scripts/check_repository_hygiene.py
+# Local assistant configuration, notes and runtimes
+/.agent/
+/.agents/
+/.zcode/
+/.opencode/
+/.reasonix/
+/skills-lock.json
+/.venv/
+__pycache__/
+*.pyc
 
-# scroll-craft 构建工作区：保留设计文档与源，生成物不入库（公开资产在 public/cstd-flight）
+# Historical visual QA, reproducible from the retained scripts
+/lab/contrast/shots-live/
+/lab/contrast/live-contrast-*.json
+/lab/contrast/folio-truth.json
+/lab/contrast/regression-live.json
+/lab/contrast/folio-strip.mjs
+/lab/refactor/after/
+/lab/refactor/final2/
+/lab/refactor/review/
+/lab/refactor/probe-*.txt
+
+# Scrollcraft work output; published assets are under public/
 scrollcraft/builds/*/out/
 scrollcraft/builds/*/lab/
 scrollcraft/builds/*/assets/
 
-# Windows reserved name accidentally created by 2>nul style redirects in Git Bash
+# OS and debug artifacts
+.DS_Store
+*.log
 nul
-
-!src/app/(personal)/llms.txt/
-!src/app/(personal)/llms.txt/route.ts
-!src/app/(personal-en)/en/llms.txt/
-!src/app/(personal-en)/en/llms.txt/route.ts
